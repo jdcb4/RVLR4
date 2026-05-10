@@ -9,14 +9,14 @@ Mobile-first **party game hub** with **multi-device multiplayer** (join codes + 
 Games:
 
 - **Who What Where** — networked timed turns + shared lobby (`/` → `/room/:code`).
-- **Hat Game** — multiplayer lobby scaffolding (gameplay wiring tracked separately).
-- **Imposter** — multiplayer lobby scaffolding (gameplay wiring tracked separately).
+- **Hat Game** — full networked match flow from lobby through results (`HatMultiplayerView`).
+- **Imposter** — full networked match flow from lobby through results (`ImposterMultiplayerView`).
 
 ## Important folders
 
 - `server/` — Express routes + Socket.IO handlers + in-memory room store.
 - `src/app` — router, root layout, smoke tests.
-- `src/features/multiplayer` — join/host UX (`MultiplayerHomePage`, `EnterNamePage`, `RoomPage`) plus networked WWW shell (`WhoWhatWhereMultiplayerView`).
+- `src/features/multiplayer` — join/host UX (`MultiplayerHomePage`, `EnterNamePage`, `RoomPage`) plus networked shells (`WhoWhatWhereMultiplayerView`, `HatMultiplayerView`, `ImposterMultiplayerView`).
 - `src/features/whowhatwhere` — WWW UI + `useGameController` (`WwwLandingScreen`, `WwwReviewTeamsScreen`, …).
 - `src/features/hat-game` — Hat Game web UI + `useHatGameApp`; per-screen builders under `screens/` (`hatLandingScreen`, `hatInGameRouter`, …), wired by `buildHatGameScreen` in `HatGameWebScreens.tsx`.
 - `src/features/imposter` — Imposter UI + `useImposterApp`; `ImposterWebScreens.tsx` routes steps; screen modules under `screens/`.

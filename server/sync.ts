@@ -8,6 +8,7 @@ import {
   projectHatSessionForViewer,
   shouldShowHatTurnFooter,
 } from "./hatViews.ts";
+import { buildImposterSyncDto, type ImposterSyncDto } from "./imposterViews.ts";
 import type { GameKind, Room, RoomPhase, RoomPlayer } from "./roomStore.ts";
 import {
   canReturnSkippedWords,
@@ -53,6 +54,8 @@ export type HatSyncDto = {
   readonly canReturnSkipped: boolean;
 };
 
+export type { ImposterSyncDto };
+
 export type RoomSyncPayload = {
   readonly code: string;
   readonly gameKind: GameKind;
@@ -64,6 +67,7 @@ export type RoomSyncPayload = {
   readonly lobby: LobbyDto | null;
   readonly www: WhoWhatWhereSyncDto | null;
   readonly hat: HatSyncDto | null;
+  readonly imposter: ImposterSyncDto | null;
 };
 
 function lobbyPlayers(room: Room): LobbyPlayerDto[] {
@@ -131,6 +135,12 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     };
   }
 
+  let imposter: ImposterSyncDto | null = null;
+
+  if (room.gameKind === "imposter" && room.phase === "playing" && room.imposterSnapshot) {
+    imposter = buildImposterSyncDto(room.imposterSnapshot, viewerPlayerId);
+  }
+
   return {
     code: room.code,
     gameKind: room.gameKind,
@@ -142,5 +152,6 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     lobby,
     www,
     hat,
+    imposter,
   };
 }

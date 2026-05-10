@@ -14,7 +14,11 @@ import {
   startHatMatch,
 } from "./hatRuntime.ts";
 import {
-  assertLobbyReadyForImposterStart,
+  applyImposterDispatch,
+  type ImposterDispatchAction,
+  startImposterMatch,
+} from "./imposterRuntime.ts";
+import {
   hostPatchHatPrefs,
   hostPatchImposterCounts,
   hostPatchWwwSettings,
@@ -376,10 +380,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         } else if (room.gameKind === "hat") {
           startHatMatch(room);
         } else if (room.gameKind === "imposter") {
-          assertLobbyReadyForImposterStart(room);
-          throw new Error(
-            "Imposter multiplayer sync is almost ready — update coming soon.",
-          );
+          startImposterMatch(room);
         }
 
         await broadcastRoom(io, store, room.code);
@@ -391,6 +392,25 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         });
       }
     });
+
+    socket.on(
+      "imposter:dispatch",
+      async (payload: ImposterDispatchAction, ack?: SocketAck) => {
+        try {
+          const { room, actor } = requireActor(socket, store);
+
+          applyImposterDispatch(room, actor.id, actor.isHost, payload);
+          await broadcastRoom(io, store, room.code);
+          ack?.({ ok: true });
+        } catch (error) {
+          ack?.({
+            ok: false,
+            error:
+              error instanceof Error ? error.message : "Unable to update Imposter round.",
+          });
+        }
+      },
+    );
 
     socket.on("www:markReady", async (_payload: unknown, ack?: SocketAck) => {
       try {

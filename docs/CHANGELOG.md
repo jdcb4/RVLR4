@@ -2,6 +2,10 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.13.0 - 2026-05-10
+
+- **Imposter (online):** Full networked match from lobby through results — `lobby:startGame` calls **`startImposterMatch`**, per-viewer sync via **`buildImposterSyncDto`** (scrubbed roles + reveal rotation hints), Socket.IO **`imposter:dispatch`** for reveal steps and host-only guide transitions, and **`ImposterMultiplayerView`** on `/room/:code`.
+
 ## 0.12.0 - 2026-05-10
 
 - **Hat Game (online):** Full networked match flow — `lobby:startGame` builds a **`HatGameSession`** from the lobby roster with **server-generated celebrity clues** (from `clueSuggestions.json`), Socket.IO **`hat:*`** actions wrapping `applyHatGameAction`, **describer-only** clue text with masked payloads for teammates/observers, server **turn expiry ticker**, and **`HatMultiplayerView`** in `/room/:code`.

@@ -21,6 +21,7 @@ import { TeamCountOptionGroup } from "@/components/setup/TeamCountOptionGroup";
 import { Button } from "@/components/ui/button";
 import type { SharedTeamCount } from "@/config/teamRoster";
 import { HatMultiplayerView } from "@/features/multiplayer/HatMultiplayerView";
+import { ImposterMultiplayerView } from "@/features/multiplayer/ImposterMultiplayerView";
 import { captainPlayerIdForTeam } from "@/features/multiplayer/lobbyCaptain";
 import { WhoWhatWhereMultiplayerView } from "@/features/multiplayer/WhoWhatWhereMultiplayerView";
 import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
@@ -121,6 +122,17 @@ export function RoomPage() {
   if (sync.phase === "playing" && sync.gameKind === "hat" && sync.hat) {
     return (
       <HatMultiplayerView emitWithAck={emitWithAck} payload={sync.hat} />
+    );
+  }
+
+  if (sync.phase === "playing" && sync.gameKind === "imposter" && sync.imposter) {
+    return (
+      <ImposterMultiplayerView
+        emitWithAck={emitWithAck}
+        isHost={sync.you.isHost}
+        payload={sync.imposter}
+        viewerPlayerId={sync.you.playerId}
+      />
     );
   }
 

@@ -1,5 +1,6 @@
 import type { HatGameSession } from "@/domain/hat-game/types";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
+import type { ImposterSnapshot } from "@/features/imposter/imposterAppTypes";
 
 /** Mirrors `server/sync.ts` — lightweight typing without a shared package boundary. */
 export type LobbyPlayerDto = {
@@ -42,6 +43,13 @@ export type HatSyncDto = {
   readonly canReturnSkipped: boolean;
 };
 
+/** Mirrors `server/sync.ts` — scrubbed snapshot + reveal rotation hints for the viewer. */
+export type ImposterSyncDto = {
+  readonly snapshot: ImposterSnapshot;
+  readonly revealSubjectId: string | null;
+  readonly revealSubjectIsImposter: boolean;
+};
+
 export type RoomSyncPayload = {
   readonly code: string;
   readonly gameKind: "whowhatwhere" | "hat" | "imposter";
@@ -53,4 +61,5 @@ export type RoomSyncPayload = {
   readonly lobby: LobbyDto | null;
   readonly www: WhoWhatWhereSyncDto | null;
   readonly hat: HatSyncDto | null;
+  readonly imposter: ImposterSyncDto | null;
 };
