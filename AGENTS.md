@@ -45,6 +45,8 @@ pnpm run lint
 pnpm run build
 ```
 
+For Socket.IO, room sync, or `server/` changes, also walk [`docs/MULTIPLAYER_QA.md`](docs/MULTIPLAYER_QA.md) with two browsers (or note why skipped).
+
 For significant implementation changes, also run Fallow and consider its feedback:
 
 ```bash
@@ -61,6 +63,7 @@ pnpm dlx fallow --no-cache --format human
 - `docs/VERSIONING.md` — version rules.
 - `docs/DECISIONS.md` — durable decisions (ADR-lite).
 - `docs/ROADMAP.md` — future ideas only.
+- `docs/MULTIPLAYER_QA.md` — manual multiplayer regression matrix (two browsers) before shipping sync-heavy changes.
 - `docs/CHANGELOG.md` — notable changes by version.
 - `docs/DEPLOYMENT.md` — deploy instructions.
 - `docs/AGENT_REFERENCE.md` — detailed agent reference (load when relevant).

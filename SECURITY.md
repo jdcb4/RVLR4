@@ -12,7 +12,8 @@ These rules apply to all contributors, including AI agents.
 
 - Never commit secrets, API keys, tokens, certificates, or production credentials.
 - Use `.env.local` for local secrets. It is gitignored.
-- Validate every environment variable through a Zod schema in `src/config/env.ts` (or the equivalent path in this project) so missing or malformed values fail fast at startup.
+- Validate every environment variable through a Zod schema in `src/config/env.ts` (client) or `server/env.ts` (Node) so missing or malformed values fail fast at startup.
+- Optional **`MULTIPLAYER_DEBUG`** on the server logs `[multiplayer]` lifecycle events for troubleshooting. Do not collect or ship those logs without consent; they may include room codes and player IDs (never session secrets).
 
 ### Dependencies
 

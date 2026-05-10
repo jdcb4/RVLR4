@@ -26,6 +26,7 @@ import {
   hostSetTeamName,
   movePlayerToTeam,
 } from "./lobbyControl.ts";
+import { mpDebug } from "./multiplayerDebug.ts";
 import type { Room } from "./roomStore.ts";
 import { RoomStore } from "./roomStore.ts";
 
@@ -73,6 +74,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           player.disconnectedAt = null;
           await socket.join(roomChannel(code.toUpperCase()));
           await broadcastRoom(io, store, code);
+          mpDebug("session bound", { code: code.toUpperCase(), playerId: player.id });
           ack?.({ ok: true });
         } catch (error) {
           ack?.({
@@ -382,6 +384,11 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         } else if (room.gameKind === "imposter") {
           startImposterMatch(room);
         }
+
+        mpDebug("match started", {
+          code: room.code,
+          gameKind: room.gameKind,
+        });
 
         await broadcastRoom(io, store, room.code);
         ack?.({ ok: true });

@@ -11,6 +11,8 @@ pnpm run start
 
 `pnpm run start` listens on port **3001** by default (`PORT` env var overrides this). Open http://127.0.0.1:3001/.
 
+Optional diagnostics on the same shell: `MULTIPLAYER_DEBUG=1 pnpm run start` (Windows PowerShell: `$env:MULTIPLAYER_DEBUG='1'; pnpm run start`).
+
 **Note:** `pnpm run preview` only exercises the static bundle without multiplayer APIs.
 
 ## Docker
@@ -38,11 +40,14 @@ Open http://127.0.0.1:3001/.
 
 The container runs **Node + tsx** so the same process can serve static assets and Socket.IO. Set `CLIENT_ORIGIN` if you terminate TLS on another host and need an explicit browser origin allow-list.
 
+Optional: set **`MULTIPLAYER_DEBUG=1`** in the container environment to print `[multiplayer]` diagnostics (room created/joined, session bind, match started). Use only while troubleshooting — logs may include player IDs and room codes (never secrets).
+
 ## Railway / generic Node hosts
 
 1. Set **start command** to `pnpm run start` (install dependencies with `pnpm install --frozen-lockfile` during build).
 2. Expose the HTTP port Railway assigns; map it to `PORT` (already read by the server).
 3. Optional: `CLIENT_ORIGIN=https://your-host` when you need strict CORS.
+4. Optional: `MULTIPLAYER_DEBUG=1` for `[multiplayer]` server logs while diagnosing issues (room codes and player IDs may appear; never secrets).
 
 Because state is **in-memory**, expect rooms to reset when the dyno restarts.
 

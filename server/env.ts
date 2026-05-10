@@ -8,6 +8,14 @@ const ServerEnvSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3001),
   /** Allowed browser origins for CORS + Socket.IO (comma-separated). */
   CLIENT_ORIGIN: z.string().optional(),
+  /**
+   * When true, emit `[multiplayer]` console lines for room lifecycle (no secrets).
+   * Set `MULTIPLAYER_DEBUG=1` or `true`.
+   */
+  MULTIPLAYER_DEBUG: z
+    .string()
+    .optional()
+    .transform((value) => value === "1" || value?.toLowerCase() === "true"),
 });
 
 export type ServerEnv = z.infer<typeof ServerEnvSchema>;

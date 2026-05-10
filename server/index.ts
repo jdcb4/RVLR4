@@ -9,6 +9,7 @@ import { Server } from "socket.io";
 import { loadServerEnv } from "./env.ts";
 import { startHatTurnTicker } from "./hatTicker.ts";
 import { registerHttpRoutes } from "./httpRoutes.ts";
+import { initMultiplayerDebug } from "./multiplayerDebug.ts";
 import { RoomStore } from "./roomStore.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
 import { startWhoWhatWhereTurnTicker } from "./wwwTicker.ts";
@@ -16,6 +17,7 @@ import { startWhoWhatWhereTurnTicker } from "./wwwTicker.ts";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const env = loadServerEnv(process.env);
+initMultiplayerDebug(env.MULTIPLAYER_DEBUG);
 const store = new RoomStore();
 
 const app = express();
@@ -66,4 +68,7 @@ const port = env.PORT;
 
 server.listen(port, () => {
   console.log(`Multiplayer server listening on ${port}`);
+  if (env.MULTIPLAYER_DEBUG) {
+    console.log("[multiplayer] debug logging enabled (MULTIPLAYER_DEBUG)");
+  }
 });

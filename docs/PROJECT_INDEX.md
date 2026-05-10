@@ -69,5 +69,6 @@ Games:
 - [`docs/DECISIONS.md`](DECISIONS.md) — durable decisions (ADR-lite).
 - [`docs/ROADMAP.md`](ROADMAP.md) — future ideas only, not active work.
 - [`docs/CHANGELOG.md`](CHANGELOG.md) — notable changes by version.
+- [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) — manual regression checklist for Socket.IO / rooms (use before releases).
 - [`docs/DEPLOYMENT.md`](DEPLOYMENT.md) — deploy instructions.
 - [`SECURITY.md`](../SECURITY.md) — security rules.

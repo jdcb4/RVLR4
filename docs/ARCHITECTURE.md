@@ -1,4 +1,4 @@
-# Architecture — JDPassNPlay
+# Architecture — JD Multiplayer Games
 
 ## Runtime shape
 
@@ -72,7 +72,7 @@ Zod is the validation default. Validate every external input: forms, URL params,
 
 ## Configuration
 
-Environment variables flow through a Zod schema in `src/config/env.ts`. Missing or malformed values must fail fast at startup.
+Environment variables flow through Zod: **`src/config/env.ts`** (Vite client) and **`server/env.ts`** (Node server). Missing or malformed values must fail fast at startup.
 
 ## Testing
 

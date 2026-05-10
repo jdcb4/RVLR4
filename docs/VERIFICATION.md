@@ -21,6 +21,8 @@ For significant implementation changes, run Fallow and consider its feedback bef
 pnpm dlx fallow --no-cache --format human
 ```
 
+Before releasing multiplayer/socket-heavy changes, also walk [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) with two browsers (see `README.md`).
+
 The default combined run includes **health** (cyclomatic / CRAP heuristics). Large React hooks and game reducers often trigger those thresholds without indicating a bug. To check only **unused dependencies, dead exports, and duplication** (the issues most actionable in small fixes), use:
 
 ```bash
@@ -43,12 +45,11 @@ These may report false positives for framework entrypoints, plugin-loaded files,
 
 ## Preset-specific checks
 
-> Add preset-specific verification commands here as the project introduces them. Examples:
->
-> - `pnpm run docker:build` — required for changes affecting the Docker image.
-> - `pnpm run build:pages` — required for changes affecting GitHub Pages.
-> - `pnpm run wrangler:deploy --dry-run` — required for Cloudflare Workers config changes.
-> - `pnpm run db:migrate` followed by re-running the test suite — required for schema changes.
+| Change area | Command / follow-up |
+| --- | --- |
+| Docker image (`Dockerfile`, server static assets, runtime port) | `pnpm run docker:build` |
+| GitHub Pages base path / SPA fallback | `pnpm run build:pages` |
+| Socket.IO / room sync / multiplayer UX | Manual matrix in [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) |
 
 ## Environment
 

@@ -36,6 +36,8 @@ See `docs/PROJECT_INDEX.md` for the full list and `docs/DEPLOYMENT.md` for deplo
 
 All durable docs live under `/docs`. Start with `docs/PROJECT_INDEX.md`.
 
+**Multiplayer regression:** before releases or large server/client sync changes, walk through [`docs/MULTIPLAYER_QA.md`](docs/MULTIPLAYER_QA.md) (two browsers). Optional server diagnostics: start Node with `MULTIPLAYER_DEBUG=1` to log `[multiplayer]` room lifecycle lines (never includes secrets).
+
 ## License
 
 Copyright (c) 2026.

@@ -1,6 +1,7 @@
 import type { Express } from "express";
 
 import { normalizeRoomCode } from "./codes.ts";
+import { mpDebug } from "./multiplayerDebug.ts";
 import type { GameKind } from "./roomStore.ts";
 import { RoomStore } from "./roomStore.ts";
 
@@ -21,6 +22,8 @@ export function registerHttpRoutes(app: Express, store: RoomStore) {
         typeof body.hostName === "string" ? body.hostName : "Host";
 
       const { room, hostPlayer } = store.createRoom({ gameKind, hostName });
+
+      mpDebug("room created", { code: room.code, gameKind: room.gameKind });
 
       response.status(201).json({
         code: room.code,
@@ -57,6 +60,12 @@ export function registerHttpRoutes(app: Express, store: RoomStore) {
       const name = typeof body.name === "string" ? body.name : "Player";
 
       const { room, player } = store.joinRoom({ code, name });
+
+      mpDebug("player joined", {
+        code: room.code,
+        gameKind: room.gameKind,
+        playerCount: room.players.size,
+      });
 
       response.status(200).json({
         code: room.code,

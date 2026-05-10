@@ -2,6 +2,11 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.13.1 - 2026-05-10
+
+- **Phase 4 — polish:** Manual multiplayer QA matrix ([`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md)); preset verification table updated in [`docs/VERIFICATION.md`](VERIFICATION.md); README, AGENTS, PROJECT_INDEX, ARCHITECTURE (title + env/config split), DEPLOYMENT, and SECURITY cross-linked or extended.
+- **Server:** Optional **`MULTIPLAYER_DEBUG`** (`server/env.ts`) enables `[multiplayer]` lifecycle logs via `mpDebug` — room create/join (HTTP), session bind, match start — **no secrets** (`server/multiplayerDebug.ts`).
+
 ## 0.13.0 - 2026-05-10
 
 - **Imposter (online):** Full networked match from lobby through results — `lobby:startGame` calls **`startImposterMatch`**, per-viewer sync via **`buildImposterSyncDto`** (scrubbed roles + reveal rotation hints), Socket.IO **`imposter:dispatch`** for reveal steps and host-only guide transitions, and **`ImposterMultiplayerView`** on `/room/:code`.
