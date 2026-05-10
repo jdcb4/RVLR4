@@ -2,6 +2,11 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.11.1 - 2026-05-10
+
+- **Who What Where (online):** Single footer step between turns — **Start turn** only (no separate “Describer ready” tap); waiting players see **Waiting on {name}, from {team}**.
+- **Tooling:** `pnpm run smoke:server-imports` loads `server/roomStore` with `@/` aliases via `tsx` (avoids fragile `tsx -e` on Windows).
+
 ## 0.11.0 - 2026-05-10
 
 - **Multiplayer foundation:** Express HTTP API (`POST /api/rooms`, `GET /api/rooms/:code`, `POST /api/rooms/:code/join`) plus **Socket.IO** (`session:bind`, `room:sync`, lobby + WWW gameplay events). Authoritative in-memory rooms keyed by six-character codes (`server/`).

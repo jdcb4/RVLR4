@@ -20,7 +20,8 @@ export async function startWhoWhatWhereMatch(room: Room) {
   validateWhoWhatWhereLobby(room, setups);
 
   room.wwwMatch = createMatch(setups, room.wwwSettings);
-  room.wwwReadyReveal = false;
+  /** One step before each turn: show “Start turn” (no separate “describer ready” tap). */
+  room.wwwReadyReveal = true;
   room.phase = "playing";
 }
 
@@ -33,10 +34,6 @@ export async function applyWhoWhatWhereStartTurn(room: Room) {
 
   if (!match || match.stage !== "ready") {
     throw new Error("The game is not waiting on a new turn.");
-  }
-
-  if (!room.wwwReadyReveal) {
-    throw new Error("Confirm the describer is ready first.");
   }
 
   const { wordDeck } = await import("@/data/words.generated");
@@ -70,7 +67,8 @@ export function applyWhoWhatWhereEndTurn(room: Room, actorId: string) {
   const match = requireActiveTurn(room);
   assertActorIsDescriber(match, actorId);
   room.wwwMatch = endTurn(match);
-  room.wwwReadyReveal = false;
+  /** Next describer can go straight to Start turn (same as initial ready state). */
+  room.wwwReadyReveal = true;
 }
 
 export function applyWhoWhatWhereFinalScores(room: Room) {

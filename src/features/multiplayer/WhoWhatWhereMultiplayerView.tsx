@@ -11,7 +11,7 @@ import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActio
 import { GameResultActions } from "@/components/GameResultActions";
 import { GameShell } from "@/components/GameShell";
 import { IconCheck, IconSkipForward } from "@/components/icons";
-import { canQueueSkipped } from "@/domain/whowhatwhere/game";
+import { canQueueSkipped, getActiveContext } from "@/domain/whowhatwhere/game";
 import {
   FinalTurnRecapScreen,
 } from "@/features/whowhatwhere/results/FinalTurnRecapScreen";
@@ -66,29 +66,14 @@ export function WhoWhatWhereMultiplayerView({
   let footer: ReactNode | undefined;
 
   if (match.stage === "ready") {
+    const waitingContext = getActiveContext(match);
+
     if (role !== "describer") {
       footer = (
         <PrimaryFooterButton
           disabled
-          label="Waiting on describer"
+          label={`Waiting on ${waitingContext.describer.name}, from ${waitingContext.team.name}`}
           onClick={() => {}}
-        />
-      );
-    } else if (!payload.readyReveal) {
-      footer = (
-        <PrimaryFooterButton
-          disabled={busy}
-          label="Describer ready"
-          onClick={async () => {
-            setBusy(true);
-            const ack = await emitWithAck("www:markReady");
-
-            if (ack?.ok === false) {
-              setError(ack.error ?? "");
-            }
-
-            setBusy(false);
-          }}
         />
       );
     } else {
@@ -177,7 +162,7 @@ export function WhoWhatWhereMultiplayerView({
     body = (
       <ReadyScreen
         error={error}
-        handoffRevealed={payload.readyReveal}
+        handoffRevealed
         match={match}
         presentation="multiplayer"
       />
