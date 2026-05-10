@@ -20,8 +20,15 @@ export type ImposterPlayer = {
 export type ImposterRoundState = {
   readonly secretWord: string;
   readonly imposterPlayerIds: readonly string[];
+  /** Pass-and-play: single-phone sequential reveal. */
   revealPlayerIndex: number;
   revealRevealed: boolean;
+  /**
+   * Multiplayer: everyone reveals on their own device at once.
+   * When present, `revealPlayerIndex` / `revealRevealed` are ignored by the server.
+   */
+  parallelRoleSeen?: Record<string, boolean>;
+  parallelRevealDone?: Record<string, boolean>;
 };
 
 export type ImposterSnapshot = {
@@ -30,6 +37,8 @@ export type ImposterSnapshot = {
   imposterCount: number;
   players: ImposterPlayer[];
   round: ImposterRoundState | null;
+  /** Random starter for the clue circle (set when leaving parallel reveal). */
+  cluesStartPlayerId?: string | null;
 };
 
 export type ImposterStoragePayload = {

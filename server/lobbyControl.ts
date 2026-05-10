@@ -1,6 +1,5 @@
 import { IMPOSTER_MAX_PLAYERS, IMPOSTER_MIN_PLAYERS } from "@/config/imposterDefaults";
 import { MAX_PLAYERS_PER_TEAM } from "@/config/teamRoster";
-import { clampImposterCount } from "@/domain/imposter/round";
 import { createTeamSetups, validateSetup } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, TeamSetup } from "@/domain/whowhatwhere/types";
 
@@ -198,15 +197,10 @@ export function hostPatchHatPrefs(room: Room, patch: {
 }
 
 export function hostPatchImposterCounts(room: Room, patch: {
-  readonly imposterPlayerCount?: number;
   readonly imposterImposterCount?: number;
 }) {
   if (room.gameKind !== "imposter") {
     throw new Error("Imposter settings only.");
-  }
-
-  if (patch.imposterPlayerCount !== undefined) {
-    room.imposterPlayerCount = patch.imposterPlayerCount;
   }
 
   if (patch.imposterImposterCount !== undefined) {
@@ -214,10 +208,6 @@ export function hostPatchImposterCounts(room: Room, patch: {
   }
 
   clampImposterLobbyCounts(room);
-
-  if (room.players.size > room.imposterPlayerCount) {
-    throw new Error("Lower the roster size after players leave.");
-  }
 }
 
 export function assertLobbyReadyForImposterStart(room: Room) {
@@ -234,19 +224,6 @@ export function assertLobbyReadyForImposterStart(room: Room) {
   }
 
   clampImposterLobbyCounts(room);
-
-  if (room.players.size !== room.imposterPlayerCount) {
-    throw new Error("Adjust the roster size so it matches the players in this room.");
-  }
-
-  const clampedImposters = clampImposterCount(
-    room.imposterPlayerCount,
-    room.imposterImposterCount,
-  );
-
-  if (clampedImposters !== room.imposterImposterCount) {
-    room.imposterImposterCount = clampedImposters;
-  }
 }
 
 export function validateWhoWhatWhereLobby(

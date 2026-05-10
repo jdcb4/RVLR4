@@ -8,7 +8,7 @@ import {
   SecondaryFooterButton,
 } from "@/components/game/GameFooterButtons";
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
-import { GameResultActions } from "@/components/GameResultActions";
+import { PassAndPlayGameResultActions } from "@/components/GameResultActions";
 import { GameShell } from "@/components/GameShell";
 import { IconCheck, IconSkipForward } from "@/components/icons";
 import { canQueueSkipped, getActiveContext } from "@/domain/whowhatwhere/game";
@@ -219,7 +219,7 @@ function buildSlides(): readonly SlideSpec[] {
       wwwContent: () => <ResultsScreen match={wwwResults} />,
       wwwFooter: () =>
         footerWrap(
-          <GameResultActions
+          <PassAndPlayGameResultActions
             onNewGame={noop}
             onPickAnotherGame={noop}
             onReplay={noop}

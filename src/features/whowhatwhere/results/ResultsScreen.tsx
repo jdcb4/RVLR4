@@ -6,8 +6,11 @@ import type { MatchState } from "@/domain/whowhatwhere/types";
 
 export function ResultsScreen({
   match,
+  showConfetti = true,
 }: {
   readonly match: MatchState;
+  /** Multiplayer: confetti only on winning team's devices. */
+  readonly showConfetti?: boolean;
 }) {
   const vm = mapFinalResultsFromWww(match);
 
@@ -23,7 +26,7 @@ export function ResultsScreen({
 
   return (
     <section className="relative flex flex-1 flex-col pb-4">
-      <ResultsConfetti />
+      {showConfetti ? <ResultsConfetti /> : null}
       <div className="relative z-10">
         <GamePanel title="Final Results">
           <FinalResultsBody vm={vm} />

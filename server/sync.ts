@@ -36,6 +36,8 @@ export type LobbyDto = {
   readonly imposterPlayerCount: number;
   readonly imposterImposterCount: number;
   readonly players: readonly LobbyPlayerDto[];
+  /** Hat only — each player's six famous-figure drafts. */
+  readonly hatClueDrafts: Record<string, readonly string[]>;
 };
 
 export type WhoWhatWhereSyncDto = {
@@ -68,6 +70,10 @@ export type RoomSyncPayload = {
   readonly www: WhoWhatWhereSyncDto | null;
   readonly hat: HatSyncDto | null;
   readonly imposter: ImposterSyncDto | null;
+  readonly replay: {
+    readonly offerActive: boolean;
+    readonly acceptedIds: readonly string[];
+  };
 };
 
 function lobbyPlayers(room: Room): LobbyPlayerDto[] {
@@ -95,6 +101,7 @@ function buildLobbyDto(room: Room): LobbyDto {
     imposterPlayerCount: room.imposterPlayerCount,
     imposterImposterCount: room.imposterImposterCount,
     players: lobbyPlayers(room),
+    hatClueDrafts: room.hatClueDrafts ?? {},
   };
 }
 
@@ -153,5 +160,9 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     www,
     hat,
     imposter,
+    replay: {
+      offerActive: Boolean(room.replayOfferActive),
+      acceptedIds: room.replayAcceptedPlayerIds ?? [],
+    },
   };
 }

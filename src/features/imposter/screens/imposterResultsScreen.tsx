@@ -1,7 +1,7 @@
 import type { NavigateFunction } from "react-router-dom";
 
 import { GamePanel } from "@/components/game/GamePanel";
-import { GameResultActions } from "@/components/GameResultActions";
+import { PassAndPlayGameResultActions } from "@/components/GameResultActions";
 import type { ScreenModel } from "@/features/imposter/imposterAppTypes";
 import type { ImposterAppController } from "@/features/imposter/useImposterApp";
 
@@ -47,7 +47,7 @@ export function imposterResultsScreen(
       </GamePanel>
     ),
     actions: (
-      <GameResultActions
+      <PassAndPlayGameResultActions
         onNewGame={() => controller.newGameKeepGameType()}
         onPickAnotherGame={() => navigate("/")}
         onReplay={() => controller.replaySamePlayers()}

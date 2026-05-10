@@ -168,9 +168,15 @@ const config: Config = {
             opacity: "0.28",
           },
         },
+        /** Hat spectator: quick pulses when the round phase changes mid-turn */
+        "hat-phase-flash": {
+          "0%, 100%": { opacity: "1", filter: "brightness(1)" },
+          "50%": { opacity: "0.55", filter: "brightness(1.35)" },
+        },
       },
       animation: {
         "confetti-fall": "confetti-fall linear forwards",
+        "hat-phase-flash": "hat-phase-flash 0.22s ease-in-out 5",
       },
     },
   },

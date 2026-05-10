@@ -9,17 +9,23 @@ import { GameResultActions } from "@/components/GameResultActions";
 import { GameShell } from "@/components/GameShell";
 import { IMPOSTER_ROLE_CARD_COPY } from "@/config/imposterDefaults";
 import { IMPOSTER_NOTICE_CLASS } from "@/features/imposter/screens/imposterScreenTokens";
+import { buildMultiplayerReplayUi } from "@/multiplayer/replayUi";
 import type { ImposterSyncDto } from "@/multiplayer/roomTypes";
 
 export function ImposterMultiplayerView({
   payload,
   viewerPlayerId,
   isHost,
+  replaySync,
   emitWithAck,
 }: {
   readonly payload: ImposterSyncDto;
   readonly viewerPlayerId: string;
   readonly isHost: boolean;
+  readonly replaySync: {
+    readonly offerActive: boolean;
+    readonly acceptedIds: readonly string[];
+  };
   readonly emitWithAck: (
     event: string,
     body?: unknown,
@@ -46,26 +52,58 @@ export function ImposterMultiplayerView({
   let footer: ReactNode | undefined;
 
   if (step === "reveal" && round && revealSubjectId) {
-    const canInteract = viewerPlayerId === revealSubjectId;
+    const parallelMaps =
+      round.parallelRoleSeen !== undefined &&
+      round.parallelRevealDone !== undefined;
 
-    if (!round.revealRevealed) {
-      footer = (
-        <PrimaryFooterButton
-          disabled={busy || !canInteract}
-          label={`${snapshot.players[round.revealPlayerIndex]?.name ?? "Player"} ready`}
-          onClick={() => void dispatch({ type: "reveal-show-role" })}
-        />
-      );
+    if (parallelMaps) {
+      const seen = round.parallelRoleSeen![viewerPlayerId] === true;
+      const done = round.parallelRevealDone![viewerPlayerId] === true;
+
+      if (!seen) {
+        footer = (
+          <PrimaryFooterButton
+            disabled={busy}
+            label="Reveal my role"
+            onClick={() => void dispatch({ type: "reveal-show-role" })}
+          />
+        );
+      } else if (!done) {
+        footer = (
+          <PrimaryFooterButton
+            disabled={busy}
+            label="Continue"
+            onClick={() => void dispatch({ type: "reveal-confirm-next" })}
+          />
+        );
+      } else {
+        footer = (
+          <PrimaryFooterButton disabled label="Waiting for other players…" onClick={() => {}} />
+        );
+      }
     } else {
-      const isLast = round.revealPlayerIndex >= snapshot.players.length - 1;
+      /** Pass-and-play style sequential reveal (single shared phone). */
+      const canInteract = viewerPlayerId === revealSubjectId;
 
-      footer = (
-        <PrimaryFooterButton
-          disabled={busy || !canInteract}
-          label={isLast ? "Continue to clues" : "Confirm and pass on"}
-          onClick={() => void dispatch({ type: "reveal-confirm-next" })}
-        />
-      );
+      if (!round.revealRevealed) {
+        footer = (
+          <PrimaryFooterButton
+            disabled={busy || !canInteract}
+            label={`${snapshot.players[round.revealPlayerIndex]?.name ?? "Player"} ready`}
+            onClick={() => void dispatch({ type: "reveal-show-role" })}
+          />
+        );
+      } else {
+        const isLast = round.revealPlayerIndex >= snapshot.players.length - 1;
+
+        footer = (
+          <PrimaryFooterButton
+            disabled={busy || !canInteract}
+            label={isLast ? "Continue to clues" : "Confirm and pass on"}
+            onClick={() => void dispatch({ type: "reveal-confirm-next" })}
+          />
+        );
+      }
     }
   } else if (step === "guidePregame") {
     footer = (
@@ -94,9 +132,14 @@ export function ImposterMultiplayerView({
   } else if (step === "results") {
     footer = (
       <GameResultActions
-        onNewGame={() => navigate("/")}
         onPickAnotherGame={() => navigate("/")}
-        onReplay={() => navigate("/")}
+        replay={buildMultiplayerReplayUi({
+          offerActive: replaySync.offerActive,
+          acceptedIds: replaySync.acceptedIds,
+          viewerId: viewerPlayerId,
+          isHost,
+          emitWithAck,
+        })}
       />
     );
   }
@@ -104,51 +147,111 @@ export function ImposterMultiplayerView({
   let body: ReactNode;
 
   if (step === "reveal" && round && revealSubjectId) {
-    const subject = snapshot.players[round.revealPlayerIndex];
-    const isViewerTurn = viewerPlayerId === revealSubjectId;
+    const parallelMaps =
+      round.parallelRoleSeen !== undefined &&
+      round.parallelRevealDone !== undefined;
 
-    if (!isViewerTurn) {
-      body = (
-        <GamePanel title="Reveal roles">
-          <p className={IMPOSTER_NOTICE_CLASS}>
-            Waiting for{" "}
-            <span className="font-semibold text-foreground">{subject?.name}</span>{" "}
-            to finish this reveal step on their device.
-          </p>
-        </GamePanel>
-      );
-    } else if (!round.revealRevealed) {
-      body = (
-        <GamePanel
-          eyebrow={`Secret role ${round.revealPlayerIndex + 1} of ${snapshot.players.length}`}
-          subtitle="Only you should look when it is your step."
-          title={`Reveal — ${subject?.name ?? "Player"}`}
-        >
-          <p className={IMPOSTER_NOTICE_CLASS}>
-            When you are ready in private, tap the footer button to see your role.
-          </p>
-        </GamePanel>
-      );
+    if (parallelMaps) {
+      const seen = round.parallelRoleSeen![viewerPlayerId] === true;
+      const done = round.parallelRevealDone![viewerPlayerId] === true;
+      const viewerName =
+        snapshot.players.find((player) => player.id === viewerPlayerId)?.name ??
+        "Player";
+
+      if (!seen) {
+        body = (
+          <GamePanel
+            eyebrow={`Secret role • player ${snapshot.players.findIndex((player) => player.id === viewerPlayerId) + 1} of ${snapshot.players.length}`}
+            subtitle="Only you should look at your phone for this step."
+            title={`Reveal — ${viewerName}`}
+          >
+            <p className={IMPOSTER_NOTICE_CLASS}>
+              When you are somewhere private, tap below to see whether you know the secret
+              word or you are the imposter.
+            </p>
+          </GamePanel>
+        );
+      } else if (!done) {
+        body = (
+          <GamePanel
+            eyebrow={revealSubjectIsImposter ? "Your role" : "Remember this"}
+            subtitle={
+              revealSubjectIsImposter
+                ? "Blend in during clues — the crew does not know who you are."
+                : "Give a clue that proves you know the word without handing it to imposters."
+            }
+            title={viewerName}
+          >
+            {revealSubjectIsImposter ? (
+              <TurnPlayHighlight>{IMPOSTER_ROLE_CARD_COPY}</TurnPlayHighlight>
+            ) : (
+              <TurnPlayHighlight>{round.secretWord}</TurnPlayHighlight>
+            )}
+          </GamePanel>
+        );
+      } else {
+        body = (
+          <GamePanel title="Reveal roles">
+            <p className={IMPOSTER_NOTICE_CLASS}>
+              You are done on this device. Wait quietly while everyone else finishes their
+              private reveal.
+            </p>
+          </GamePanel>
+        );
+      }
     } else {
-      body = (
-        <GamePanel
-          eyebrow={revealSubjectIsImposter ? "Your role" : "Remember this"}
-          subtitle={
-            revealSubjectIsImposter
-              ? "Blend in during clues — the crew does not know who you are."
-              : "Give a clue that proves you know the word without handing it to imposters."
-          }
-          title={subject?.name ?? "Player"}
-        >
-          {revealSubjectIsImposter ? (
-            <TurnPlayHighlight>{IMPOSTER_ROLE_CARD_COPY}</TurnPlayHighlight>
-          ) : (
-            <TurnPlayHighlight>{round.secretWord}</TurnPlayHighlight>
-          )}
-        </GamePanel>
-      );
+      /** Sequential reveal on one phone — only the active player interacts. */
+      const subject = snapshot.players[round.revealPlayerIndex];
+      const isViewerTurn = viewerPlayerId === revealSubjectId;
+
+      if (!isViewerTurn) {
+        body = (
+          <GamePanel title="Reveal roles">
+            <p className={IMPOSTER_NOTICE_CLASS}>
+              Waiting for{" "}
+              <span className="font-semibold text-foreground">{subject?.name}</span> to
+              finish this reveal step on their device.
+            </p>
+          </GamePanel>
+        );
+      } else if (!round.revealRevealed) {
+        body = (
+          <GamePanel
+            eyebrow={`Secret role ${round.revealPlayerIndex + 1} of ${snapshot.players.length}`}
+            subtitle="Only you should look when it is your step."
+            title={`Reveal — ${subject?.name ?? "Player"}`}
+          >
+            <p className={IMPOSTER_NOTICE_CLASS}>
+              When you are ready in private, tap the footer button to see your role.
+            </p>
+          </GamePanel>
+        );
+      } else {
+        body = (
+          <GamePanel
+            eyebrow={revealSubjectIsImposter ? "Your role" : "Remember this"}
+            subtitle={
+              revealSubjectIsImposter
+                ? "Blend in during clues — the crew does not know who you are."
+                : "Give a clue that proves you know the word without handing it to imposters."
+            }
+            title={subject?.name ?? "Player"}
+          >
+            {revealSubjectIsImposter ? (
+              <TurnPlayHighlight>{IMPOSTER_ROLE_CARD_COPY}</TurnPlayHighlight>
+            ) : (
+              <TurnPlayHighlight>{round.secretWord}</TurnPlayHighlight>
+            )}
+          </GamePanel>
+        );
+      }
     }
   } else if (step === "guidePregame") {
+    const starterName = snapshot.cluesStartPlayerId
+      ? snapshot.players.find((player) => player.id === snapshot.cluesStartPlayerId)
+          ?.name ?? "Someone"
+      : "Someone";
+
     body = (
       <GamePanel
         eyebrow="Clue round"
@@ -156,8 +259,9 @@ export function ImposterMultiplayerView({
         title="Give your clues"
       >
         <p className="text-typ-body text-foreground">
-          Go around the circle <strong>twice</strong>. On each pass, say one short clue
-          about the secret word. Imposters should try to sound like everyone else.
+          Start with <strong>{starterName}</strong> and then move left around the circle,
+          until everyone has gone twice. On each pass, say one short clue about the secret
+          word. Imposters should try to sound like everyone else.
         </p>
         <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>
           When two full rounds of clues are done, the host taps the footer when you are
@@ -199,8 +303,8 @@ export function ImposterMultiplayerView({
           The next screen shows who was secretly the imposter and what the word was.
         </p>
         <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>
-          Are all players okay moving on — including anyone who should look away until
-          you say so?
+          Are all players okay moving on — including anyone who should look away until you
+          say so?
         </p>
         {!isHost ? (
           <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>Waiting on host to continue.</p>

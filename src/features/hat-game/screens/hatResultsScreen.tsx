@@ -4,7 +4,7 @@ import { FinalResultsBody } from "@/components/game/final-results/FinalResultsBo
 import { ResultsConfetti } from "@/components/game/final-results/ResultsConfetti";
 import { mapFinalResultsFromHat } from "@/components/game/final-results/viewModel";
 import { GamePanel } from "@/components/game/GamePanel";
-import { GameResultActions } from "@/components/GameResultActions";
+import { PassAndPlayGameResultActions } from "@/components/GameResultActions";
 import type { HatGameSession } from "@/domain/hat-game/types";
 import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
 import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
@@ -33,7 +33,7 @@ export function hatResultsScreen(
       </section>
     ),
     actions: (
-      <GameResultActions
+      <PassAndPlayGameResultActions
         onNewGame={() => void controller.startNewGame()}
         onPickAnotherGame={() => navigate("/")}
         onReplay={controller.playAgain}

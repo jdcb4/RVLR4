@@ -1,12 +1,15 @@
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { BetweenTurnsLayout } from "@/components/game/BetweenTurnsLayout";
 import { FinalResultsBody } from "@/components/game/final-results/FinalResultsBody";
 import { ResultsConfetti } from "@/components/game/final-results/ResultsConfetti";
-import { mapFinalResultsFromHat } from "@/components/game/final-results/viewModel";
+import {
+  mapFinalResultsFromHat,
+  viewerHatTeamIsWinner,
+} from "@/components/game/final-results/viewModel";
 import { FINAL_TURN_RECAP_NEXT_STEPS } from "@/components/game/finalTurnRecapCopy";
 import {
   FooterOutlineIconTextButton,
@@ -32,13 +35,95 @@ import { formatCountdown, getCountdownSeconds } from "@/domain/hat-game/time";
 import type { HatGameSession } from "@/domain/hat-game/types";
 import { HatScoreboard } from "@/features/hat-game/screens/HatScoreboard";
 import { HAT_NOTICE_CLASS } from "@/features/hat-game/screens/hatScreenTokens";
+import { cn } from "@/lib/utils";
+import { buildMultiplayerReplayUi } from "@/multiplayer/replayUi";
 import type { HatSyncDto } from "@/multiplayer/roomTypes";
+import { playMultiplayerToneCue } from "@/services/multiplayerTone";
+
+/** Border + background tint for each Hat phase (Describe / One Word / Charades). */
+function hatPhaseSpectatorStyles(phaseNumber: number): string {
+  switch (phaseNumber) {
+    case 1:
+      return "border-sky-500 bg-sky-500/15 text-sky-950 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)] dark:border-sky-400 dark:bg-sky-500/25 dark:text-sky-50";
+    case 2:
+      return "border-amber-500 bg-amber-500/15 text-amber-950 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)] dark:border-amber-400 dark:bg-amber-500/25 dark:text-amber-50";
+    case 3:
+      return "border-violet-500 bg-violet-500/15 text-violet-950 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)] dark:border-violet-400 dark:bg-violet-500/25 dark:text-violet-50";
+    default:
+      return "border-border bg-muted/40 text-foreground";
+  }
+}
+
+/**
+ * Large phase readout for guessers / observers. Flashes when `phaseNumber` changes mid-turn
+ * (synced from the host device).
+ */
+function HatSpectatorPhaseBanner({
+  phaseNumber,
+  phaseName,
+  instruction,
+}: {
+  readonly phaseNumber: number;
+  readonly phaseName: string;
+  readonly instruction: string;
+}) {
+  const prevPhaseRef = useRef<number | undefined>(undefined);
+  const [runFlash, setRunFlash] = useState(false);
+
+  useLayoutEffect(() => {
+    const prev = prevPhaseRef.current;
+    prevPhaseRef.current = phaseNumber;
+
+    if (prev !== undefined && prev !== phaseNumber) {
+      setRunFlash(true);
+    }
+  }, [phaseNumber]);
+
+  useEffect(() => {
+    if (!runFlash) {
+      return undefined;
+    }
+
+    /** Matches `animate-hat-phase-flash` duration (5 × 0.22s); clears state if animation did not run. */
+    const id = window.setTimeout(() => {
+      setRunFlash(false);
+    }, 1250);
+
+    return () => window.clearTimeout(id);
+  }, [runFlash]);
+
+  return (
+    <div
+      aria-live="polite"
+      className={cn(
+        "rounded-2xl border-2 px-4 py-3 transition-colors",
+        hatPhaseSpectatorStyles(phaseNumber),
+        runFlash && "motion-safe:animate-hat-phase-flash",
+      )}
+    >
+      <p className="text-typ-overline opacity-90">Game phase</p>
+      <p className="mt-1 text-typ-panel-title font-bold tracking-tight">
+        Phase {phaseNumber}: {phaseName}
+      </p>
+      <p className="mt-2 text-typ-ui-snug opacity-95">{instruction}</p>
+    </div>
+  );
+}
 
 export function HatMultiplayerView({
   payload,
   emitWithAck,
+  viewerPlayerId,
+  isHost,
+  replaySync,
 }: {
   readonly payload: HatSyncDto;
+  readonly viewerPlayerId: string;
+  readonly isHost: boolean;
+  readonly replaySync: {
+    readonly offerActive: boolean;
+    readonly acceptedIds: readonly string[];
+  };
   readonly emitWithAck: (
     event: string,
     body?: unknown,
@@ -50,6 +135,9 @@ export function HatMultiplayerView({
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(0);
+  const [showScoresPane, setShowScoresPane] = useState(false);
+  const warned10Ref = useRef<string | null>(null);
+  const timedOutRef = useRef<string | null>(null);
 
   const activeTurn = session.activeTurn;
   const endsAt = activeTurn?.endsAt;
@@ -70,6 +158,32 @@ export function HatMultiplayerView({
 
     return () => window.clearInterval(interval);
   }, [session.stage, endsAt]);
+
+  /** Timer cues for everyone (spectators/guessers included). */
+  useEffect(() => {
+    if (session.stage !== "turn" || !endsAt || !activeTurn) {
+      warned10Ref.current = null;
+      timedOutRef.current = null;
+
+      return undefined;
+    }
+
+    const interval = window.setInterval(() => {
+      const left = getCountdownSeconds(endsAt);
+
+      if (left <= 10 && left > 0 && warned10Ref.current !== activeTurn.startedAt) {
+        warned10Ref.current = activeTurn.startedAt;
+        void playMultiplayerToneCue("warn10");
+      }
+
+      if (left <= 0 && timedOutRef.current !== activeTurn.startedAt) {
+        timedOutRef.current = activeTurn.startedAt;
+        void playMultiplayerToneCue("timeout");
+      }
+    }, 400);
+
+    return () => window.clearInterval(interval);
+  }, [session.stage, endsAt, activeTurn]);
 
   const showEndTurn =
     session.stage === "turn" &&
@@ -145,6 +259,8 @@ export function HatMultiplayerView({
 
             if (ack?.ok === false) {
               setError(ack.error ?? "");
+            } else {
+              void playMultiplayerToneCue("skip");
             }
 
             setBusy(false);
@@ -160,6 +276,8 @@ export function HatMultiplayerView({
 
             if (ack?.ok === false) {
               setError(ack.error ?? "");
+            } else {
+              void playMultiplayerToneCue("correct");
             }
 
             setBusy(false);
@@ -168,28 +286,37 @@ export function HatMultiplayerView({
       </div>
     );
   } else if (session.stage === "finalSummary") {
-    footer = (
+    footer = showScoresPane ? (
+      <GameResultActions
+        onPickAnotherGame={() => navigate("/")}
+        replay={buildMultiplayerReplayUi({
+          offerActive: replaySync.offerActive,
+          acceptedIds: replaySync.acceptedIds,
+          viewerId: viewerPlayerId,
+          isHost,
+          emitWithAck,
+        })}
+      />
+    ) : (
       <PrimaryFooterButton
         disabled={busy}
         label="Final scores"
-        onClick={async () => {
-          setBusy(true);
-          const ack = await emitWithAck("hat:viewResults");
-
-          if (ack?.ok === false) {
-            setError(ack.error ?? "");
-          }
-
-          setBusy(false);
+        onClick={() => {
+          setShowScoresPane(true);
         }}
       />
     );
   } else if (session.stage === "results") {
     footer = (
       <GameResultActions
-        onNewGame={() => navigate("/")}
         onPickAnotherGame={() => navigate("/")}
-        onReplay={() => navigate("/")}
+        replay={buildMultiplayerReplayUi({
+          offerActive: replaySync.offerActive,
+          acceptedIds: replaySync.acceptedIds,
+          viewerId: viewerPlayerId,
+          isHost,
+          emitWithAck,
+        })}
       />
     );
   }
@@ -213,7 +340,9 @@ export function HatMultiplayerView({
       />
     );
   } else if (session.stage === "finalSummary") {
-    body = (
+    body = showScoresPane ? (
+      <HatFinalResultsSection session={session} viewerPlayerId={viewerPlayerId} />
+    ) : (
       <BetweenTurnsLayout
         banner={<ThatsTheLastTurnCard />}
         lastTurnCard={
@@ -227,23 +356,8 @@ export function HatMultiplayerView({
       />
     );
   } else if (session.stage === "results") {
-    const vm = session.results
-      ? mapFinalResultsFromHat(session.results)
-      : null;
-
     body = (
-      <section className="relative flex flex-1 flex-col pb-4">
-        <ResultsConfetti />
-        <div className="relative z-10">
-          <GamePanel title="Final Results">
-            {vm ? (
-              <FinalResultsBody vm={vm} />
-            ) : (
-              <p className="text-typ-body text-muted-foreground">No results yet.</p>
-            )}
-          </GamePanel>
-        </div>
-      </section>
+      <HatFinalResultsSection session={session} viewerPlayerId={viewerPlayerId} />
     );
   }
 
@@ -253,6 +367,32 @@ export function HatMultiplayerView({
         {body}
       </GameShell>
     </FooterActionLockContext.Provider>
+  );
+}
+
+function HatFinalResultsSection({
+  session,
+  viewerPlayerId,
+}: {
+  readonly session: HatGameSession;
+  readonly viewerPlayerId: string;
+}) {
+  const vm = session.results ? mapFinalResultsFromHat(session.results) : null;
+  const showConfetti = viewerHatTeamIsWinner(session, viewerPlayerId);
+
+  return (
+    <section className="relative flex flex-1 flex-col pb-4">
+      {showConfetti ? <ResultsConfetti /> : null}
+      <div className="relative z-10">
+        <GamePanel title="Final Results">
+          {vm ? (
+            <FinalResultsBody vm={vm} />
+          ) : (
+            <p className="text-typ-body text-muted-foreground">No results yet.</p>
+          )}
+        </GamePanel>
+      </div>
+    </section>
   );
 }
 
@@ -410,6 +550,12 @@ function HatTurnMultiplayerBody({
   if (payload.role === "guesser") {
     return (
       <section className="flex flex-1 flex-col gap-4 pb-4">
+        <HatSpectatorPhaseBanner
+          instruction={phase.instruction}
+          phaseName={phase.name}
+          phaseNumber={session.phaseNumber}
+        />
+
         <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
           <p className="text-typ-panel-title font-semibold">Guess with your team</p>
           <p className="mt-2 text-typ-ui-snug text-muted-foreground">
@@ -417,15 +563,25 @@ function HatTurnMultiplayerBody({
             together.
           </p>
           <p className="mt-4 font-mono text-typ-display text-foreground">••••••</p>
-          <p className="mt-2 text-typ-ui text-muted-foreground">
-            Phase:{" "}
-            <span className="font-semibold text-foreground">{phase.name}</span>
-          </p>
-          <div className="mt-4">
-            <Metric
-              label="Time left"
-              value={formatCountdown(secondsLeft)}
-            />
+        </div>
+
+        <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+          <p className="text-typ-overline text-muted-foreground">Turn snapshot</p>
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <Metric label="Time left" value={formatCountdown(secondsLeft)} />
+            <Metric label="Turn score" value={String(activeTurn.score)} />
+            <Metric label="Describer" value={context.activeDescriberName} />
+          </div>
+          <div className="mt-4 border-t border-border pt-4">
+            <p className="text-typ-ui font-semibold text-foreground">Standings</p>
+            <ul className="mt-2 space-y-1 text-typ-ui text-muted-foreground">
+              {session.teams.map((team) => (
+                <li className="flex justify-between gap-2" key={team.id}>
+                  <span>{team.name}</span>
+                  <span className="font-semibold text-foreground">{team.score}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
@@ -434,11 +590,37 @@ function HatTurnMultiplayerBody({
 
   return (
     <section className="flex flex-1 flex-col gap-4 pb-4">
+      <HatSpectatorPhaseBanner
+        instruction={phase.instruction}
+        phaseName={phase.name}
+        phaseNumber={session.phaseNumber}
+      />
+
       <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
         <p className="text-typ-panel-title font-semibold">Sit tight</p>
         <p className="mt-2 text-typ-ui-snug text-muted-foreground">
           Another team is describing right now. Wait for your bench to rotate in.
         </p>
+      </div>
+
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+        <p className="text-typ-overline text-muted-foreground">Turn snapshot</p>
+        <div className="mt-3 grid grid-cols-2 gap-3">
+          <Metric label="Time left" value={formatCountdown(secondsLeft)} />
+          <Metric label="Turn score" value={String(activeTurn.score)} />
+          <Metric label="Describer" value={context.activeDescriberName} />
+        </div>
+        <div className="mt-4 border-t border-border pt-4">
+          <p className="text-typ-ui font-semibold text-foreground">Standings</p>
+          <ul className="mt-2 space-y-1 text-typ-ui text-muted-foreground">
+            {session.teams.map((team) => (
+              <li className="flex justify-between gap-2" key={team.id}>
+                <span>{team.name}</span>
+                <span className="font-semibold text-foreground">{team.score}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

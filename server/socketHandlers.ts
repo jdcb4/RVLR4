@@ -1,9 +1,11 @@
 import type { Server } from "socket.io";
 
+import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
 import type { GameSettings } from "@/domain/whowhatwhere/types";
 
 import { broadcastRoom, roomChannel } from "./broadcast.ts";
 import { captainPlayerIdForTeam } from "./captain.ts";
+import { pickSuggestedHatClue } from "./hatClues.ts";
 import {
   applyHatEndTurn,
   applyHatMarkCorrect,
@@ -28,7 +30,7 @@ import {
 } from "./lobbyControl.ts";
 import { mpDebug } from "./multiplayerDebug.ts";
 import type { Room } from "./roomStore.ts";
-import { RoomStore } from "./roomStore.ts";
+import { resetLobbyAfterReplay, RoomStore } from "./roomStore.ts";
 import {
   applyWhoWhatWhereCorrect,
   applyWhoWhatWhereEndTurn,
@@ -428,6 +430,166 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         }
       },
     );
+
+    socket.on(
+      "lobby:hatSetClueCell",
+      async (
+        payload: { clueIndex?: number; value?: unknown },
+        ack?: SocketAck,
+      ) => {
+        try {
+          const { room, actor } = requireActor(socket, store);
+
+          if (room.gameKind !== "hat" || room.phase !== "lobby") {
+            throw new Error("Clues can only be edited in the Hat lobby.");
+          }
+
+          const clueIndex = Number(payload.clueIndex);
+
+          if (
+            clueIndex !== clueIndex ||
+            clueIndex < 0 ||
+            clueIndex >= GAME_DEFAULTS.cluesPerPlayer
+          ) {
+            throw new Error("Invalid clue slot.");
+          }
+
+          room.hatClueDrafts ??= {};
+          const row = [
+            ...(room.hatClueDrafts[actor.id] ??
+              Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "")),
+          ];
+          row[clueIndex] = String(payload.value ?? "").slice(
+            0,
+            GAME_DEFAULTS.maxClueLength,
+          );
+          room.hatClueDrafts[actor.id] = row;
+
+          await broadcastRoom(io, store, room.code);
+          ack?.({ ok: true });
+        } catch (error) {
+          ack?.({
+            ok: false,
+            error:
+              error instanceof Error ? error.message : "Unable to update clue.",
+          });
+        }
+      },
+    );
+
+    socket.on(
+      "lobby:hatSuggestClue",
+      async (payload: { clueIndex?: number }, ack?: SocketAck) => {
+        try {
+          const { room, actor } = requireActor(socket, store);
+
+          if (room.gameKind !== "hat" || room.phase !== "lobby") {
+            throw new Error("Clues can only be edited in the Hat lobby.");
+          }
+
+          const clueIndex = Number(payload.clueIndex);
+
+          if (
+            clueIndex !== clueIndex ||
+            clueIndex < 0 ||
+            clueIndex >= GAME_DEFAULTS.cluesPerPlayer
+          ) {
+            throw new Error("Invalid clue slot.");
+          }
+
+          room.hatClueDrafts ??= {};
+          const suggestion = pickSuggestedHatClue(room.hatClueDrafts, Math.random);
+          const row = [
+            ...(room.hatClueDrafts[actor.id] ??
+              Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "")),
+          ];
+          row[clueIndex] = suggestion;
+          room.hatClueDrafts[actor.id] = row;
+
+          await broadcastRoom(io, store, room.code);
+          ack?.({ ok: true });
+        } catch (error) {
+          ack?.({
+            ok: false,
+            error:
+              error instanceof Error ? error.message : "Unable to suggest a clue.",
+          });
+        }
+      },
+    );
+
+    function canOfferReplay(activeRoom: Room): boolean {
+      if (activeRoom.phase !== "playing") {
+        return false;
+      }
+
+      if (activeRoom.gameKind === "whowhatwhere") {
+        const stage = activeRoom.wwwMatch?.stage;
+        // Let the host offer replay as soon as the match is over (per-device "final scores" is local).
+        return stage === "results" || stage === "finalSummary";
+      }
+
+      if (activeRoom.gameKind === "hat") {
+        const stage = activeRoom.hatSession?.stage;
+        return stage === "results" || stage === "finalSummary";
+      }
+
+      if (activeRoom.gameKind === "imposter") {
+        return activeRoom.imposterSnapshot?.step === "results";
+      }
+
+      return false;
+    }
+
+    socket.on("game:hostOfferReplay", async (_payload: unknown, ack?: SocketAck) => {
+      try {
+        const { room, actor } = requireActor(socket, store);
+
+        if (!actor.isHost) {
+          throw new Error("Only the host can offer a replay.");
+        }
+
+        if (!canOfferReplay(room)) {
+          throw new Error("Replay is not available yet.");
+        }
+
+        room.replayOfferActive = true;
+        room.replayAcceptedPlayerIds = [actor.id];
+        await broadcastRoom(io, store, room.code);
+        ack?.({ ok: true });
+      } catch (error) {
+        ack?.({
+          ok: false,
+          error: error instanceof Error ? error.message : "Unable to offer replay.",
+        });
+      }
+    });
+
+    socket.on("game:acceptReplay", async (_payload: unknown, ack?: SocketAck) => {
+      try {
+        const { room, actor } = requireActor(socket, store);
+
+        if (!room.replayOfferActive) {
+          throw new Error("The host has not offered a replay yet.");
+        }
+
+        const accepted = new Set(room.replayAcceptedPlayerIds ?? []);
+        accepted.add(actor.id);
+        room.replayAcceptedPlayerIds = [...accepted];
+
+        if (room.replayAcceptedPlayerIds.length === room.players.size) {
+          resetLobbyAfterReplay(room);
+        }
+
+        await broadcastRoom(io, store, room.code);
+        ack?.({ ok: true });
+      } catch (error) {
+        ack?.({
+          ok: false,
+          error: error instanceof Error ? error.message : "Unable to accept replay.",
+        });
+      }
+    });
 
     socket.on("www:markReady", async (_payload: unknown, ack?: SocketAck) => {
       try {

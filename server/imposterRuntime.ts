@@ -2,6 +2,7 @@ import { getImposterWordList } from "@/data/imposterWordList";
 import { dealImposterRound } from "@/domain/imposter/round";
 import type {
   ImposterPlayer,
+  ImposterRoundState,
   ImposterSnapshot,
   ImposterStep,
 } from "@/features/imposter/imposterAppTypes";
@@ -15,6 +16,33 @@ export type ImposterDispatchAction =
   | { readonly type: "guide-pregame-done" }
   | { readonly type: "guide-prediscussion-done" }
   | { readonly type: "guide-warning-done" };
+
+function parallelMaps(playerIds: readonly string[]): {
+  readonly parallelRoleSeen: Record<string, boolean>;
+  readonly parallelRevealDone: Record<string, boolean>;
+} {
+  const parallelRoleSeen = Object.fromEntries(playerIds.map((id) => [id, false]));
+  const parallelRevealDone = Object.fromEntries(playerIds.map((id) => [id, false]));
+
+  return { parallelRoleSeen, parallelRevealDone };
+}
+
+function allTrue(ids: readonly string[], map: Record<string, boolean> | undefined): boolean {
+  if (!map) {
+    return false;
+  }
+
+  return ids.every((id) => map[id] === true);
+}
+
+function pickCluesStarter(
+  players: readonly ImposterPlayer[],
+  rng: () => number,
+): string {
+  const index = Math.floor(rng() * players.length);
+
+  return players[index]?.id ?? players[0]!.id;
+}
 
 export function startImposterMatch(room: Room) {
   assertLobbyReadyForImposterStart(room);
@@ -37,17 +65,25 @@ export function startImposterMatch(room: Room) {
     rng: Math.random,
   });
 
+  const ids = players.map((player) => player.id);
+  const { parallelRoleSeen, parallelRevealDone } = parallelMaps(ids);
+
+  const round: ImposterRoundState = {
+    secretWord: deal.secretWord,
+    imposterPlayerIds: [...deal.imposterPlayerIds],
+    revealPlayerIndex: 0,
+    revealRevealed: false,
+    parallelRoleSeen,
+    parallelRevealDone,
+  };
+
   room.imposterSnapshot = {
     step: "reveal",
     playerCount: players.length,
     imposterCount: room.imposterImposterCount,
     players,
-    round: {
-      secretWord: deal.secretWord,
-      imposterPlayerIds: [...deal.imposterPlayerIds],
-      revealPlayerIndex: 0,
-      revealRevealed: false,
-    },
+    round,
+    cluesStartPlayerId: null,
   };
   room.phase = "playing";
 }
@@ -80,6 +116,23 @@ export function applyImposterDispatch(
         throw new Error("Reveal is not active.");
       }
 
+      const round = snap.round;
+
+      if (round.parallelRoleSeen) {
+        room.imposterSnapshot = {
+          ...snap,
+          round: {
+            ...round,
+            parallelRoleSeen: {
+              ...round.parallelRoleSeen,
+              [actorId]: true,
+            },
+          },
+        };
+
+        return;
+      }
+
       const subject = snap.players[snap.round.revealPlayerIndex];
 
       if (!subject || subject.id !== actorId) {
@@ -101,6 +154,43 @@ export function applyImposterDispatch(
         throw new Error("Reveal is not active.");
       }
 
+      const round = snap.round;
+
+      if (round.parallelRevealDone && round.parallelRoleSeen) {
+        if (!round.parallelRoleSeen[actorId]) {
+          throw new Error("Reveal your role first.");
+        }
+
+        const ids = snap.players.map((player) => player.id);
+        const nextDone = { ...round.parallelRevealDone, [actorId]: true };
+
+        if (!allTrue(ids, nextDone)) {
+          room.imposterSnapshot = {
+            ...snap,
+            round: {
+              ...round,
+              parallelRevealDone: nextDone,
+            },
+          };
+
+          return;
+        }
+
+        const starter = pickCluesStarter(snap.players, Math.random);
+
+        room.imposterSnapshot = {
+          ...snap,
+          step: "guidePregame",
+          cluesStartPlayerId: starter,
+          round: {
+            ...round,
+            parallelRevealDone: nextDone,
+          },
+        };
+
+        return;
+      }
+
       const subject = snap.players[snap.round.revealPlayerIndex];
 
       if (!subject || subject.id !== actorId) {
@@ -117,6 +207,7 @@ export function applyImposterDispatch(
         room.imposterSnapshot = {
           ...snap,
           step: "guidePregame",
+          cluesStartPlayerId: pickCluesStarter(snap.players, Math.random),
         };
 
         return;

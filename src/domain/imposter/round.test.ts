@@ -9,9 +9,9 @@ import {
 } from "./round";
 
 describe("maxImpostersForPlayers", () => {
-  it("caps reasonably for small groups", () => {
+  it("allows only one imposter below six players", () => {
     expect(maxImpostersForPlayers(4)).toBe(1);
-    expect(maxImpostersForPlayers(5)).toBe(2);
+    expect(maxImpostersForPlayers(5)).toBe(1);
     expect(maxImpostersForPlayers(6)).toBe(2);
   });
 

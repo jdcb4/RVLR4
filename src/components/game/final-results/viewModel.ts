@@ -1,4 +1,4 @@
-import type { HatGameResults } from "@/domain/hat-game/types";
+import type { HatGameResults, HatGameSession } from "@/domain/hat-game/types";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 
 /** One row in the shared final leaderboard (sorted high → low). */
@@ -80,6 +80,23 @@ export function mapFinalResultsFromWww(match: MatchState): FinalResultsViewModel
   };
 }
 
+/** True if this viewer's team is among WWW winners (for confetti on device). */
+export function viewerWwwTeamIsWinner(match: MatchState, viewerPlayerId: string): boolean {
+  const results = match.results;
+
+  if (!results) {
+    return false;
+  }
+
+  const teamId = match.players.find((player) => player.id === viewerPlayerId)?.teamId;
+
+  if (!teamId) {
+    return false;
+  }
+
+  return results.winnerTeamIds.includes(teamId);
+}
+
 /** Maps Hat Game session results into the same podium layout (no phase labels). */
 export function mapFinalResultsFromHat(results: HatGameResults): FinalResultsViewModel {
   const ordered = sortedLeaderboard(results.leaderboard);
@@ -122,4 +139,24 @@ export function mapFinalResultsFromHat(results: HatGameResults): FinalResultsVie
     leaderboardRows,
     bestTurn,
   };
+}
+
+/** True if this viewer's Hat team is among winners (confetti on their device). */
+export function viewerHatTeamIsWinner(
+  session: HatGameSession,
+  viewerPlayerId: string,
+): boolean {
+  const results = session.results;
+
+  if (!results) {
+    return false;
+  }
+
+  const teamId = session.players.find((player) => player.id === viewerPlayerId)?.teamId;
+
+  if (!teamId) {
+    return false;
+  }
+
+  return results.winnerTeamIds.includes(teamId);
 }

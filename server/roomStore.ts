@@ -1,15 +1,12 @@
 import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
-import {
-  IMPOSTER_MAX_PLAYERS,
-  IMPOSTER_MIN_PLAYERS,
-} from "@/config/imposterDefaults";
+import { IMPOSTER_MAX_PLAYERS } from "@/config/imposterDefaults";
 import {
   MAX_PLAYERS_PER_TEAM,
   MIN_PLAYERS_PER_TEAM,
   TEAM_COUNT_OPTIONS,
 } from "@/config/teamRoster";
 import type { HatGameSession } from "@/domain/hat-game/types";
-import { clampImposterCount, defaultImposterCount } from "@/domain/imposter/round";
+import { clampImposterCount, defaultImposterCount, shuffleWithRng } from "@/domain/imposter/round";
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
 import type { ImposterSnapshot } from "@/features/imposter/imposterAppTypes";
@@ -63,6 +60,12 @@ export type Room = {
   hatSession?: HatGameSession | null;
   /** Present once Imposter leaves the lobby — mirrors the solo app snapshot shape. */
   imposterSnapshot?: ImposterSnapshot | null;
+  /** Hat lobby: each player's six famous-figure drafts before the match starts. */
+  hatClueDrafts?: Record<string, string[]>;
+  /** Results replay: host offered to play again in the same room. */
+  replayOfferActive?: boolean;
+  /** Player ids who accepted rematch in the current offer round. */
+  replayAcceptedPlayerIds?: string[];
 };
 
 const MAX_ROOMS = 500;
@@ -76,8 +79,9 @@ function initialTeamNames(teamCount: number): string[] {
     ? (teamCount as 2 | 3 | 4)
     : 2;
   const setups = createTeamSetups(safeCount);
+  const names = setups.map((team) => team.name);
 
-  return setups.map((team) => team.name);
+  return shuffleWithRng(names, Math.random);
 }
 
 export class RoomStore {
@@ -135,6 +139,7 @@ export class RoomStore {
       hatSkipsPerTurn: GAME_DEFAULTS.skipsPerTurn,
       imposterPlayerCount: 6,
       imposterImposterCount: defaultImposterCount(6),
+      ...(args.gameKind === "hat" ? { hatClueDrafts: {} as Record<string, string[]> } : {}),
     };
 
     const hostPlayer: RoomPlayer = {
@@ -148,6 +153,18 @@ export class RoomStore {
     };
 
     room.players.set(hostId, hostPlayer);
+
+    if (args.gameKind === "hat" && room.hatClueDrafts) {
+      room.hatClueDrafts[hostId] = Array.from(
+        { length: GAME_DEFAULTS.cluesPerPlayer },
+        () => "",
+      );
+    }
+
+    if (args.gameKind === "imposter") {
+      clampImposterLobbyCounts(room);
+    }
+
     this.roomsByCode.set(code, room);
 
     return { room, hostPlayer };
@@ -197,6 +214,18 @@ export class RoomStore {
     }
 
     room.players.set(playerId, player);
+
+    if (room.gameKind === "hat") {
+      room.hatClueDrafts ??= {};
+      room.hatClueDrafts[playerId] = Array.from(
+        { length: GAME_DEFAULTS.cluesPerPlayer },
+        () => "",
+      );
+    }
+
+    if (room.gameKind === "imposter") {
+      clampImposterLobbyCounts(room);
+    }
 
     return { room, player };
   }
@@ -294,20 +323,37 @@ function previewCountsAfterJoin(room: Room, newPlayerTeamIndex: number): number[
   return counts;
 }
 
-/** Host adjusts Imposter counts using the same clamps as the solo app. */
+/** Keeps Imposter counts aligned with actual lobby size (no manual roster target). */
 export function clampImposterLobbyCounts(room: Room): void {
   if (room.gameKind !== "imposter") {
     return;
   }
 
-  room.imposterPlayerCount = Math.min(
-    IMPOSTER_MAX_PLAYERS,
-    Math.max(IMPOSTER_MIN_PLAYERS, room.imposterPlayerCount),
-  );
+  room.imposterPlayerCount = room.players.size;
+
   room.imposterImposterCount = clampImposterCount(
-    room.imposterPlayerCount,
+    room.players.size,
     room.imposterImposterCount,
   );
+}
+
+export function resetLobbyAfterReplay(room: Room): void {
+  room.phase = "lobby";
+  room.wwwMatch = undefined;
+  room.hatSession = undefined;
+  room.imposterSnapshot = undefined;
+  room.wwwReadyReveal = undefined;
+  room.hatReadyReveal = undefined;
+  room.replayOfferActive = undefined;
+  room.replayAcceptedPlayerIds = undefined;
+
+  for (const player of room.players.values()) {
+    player.ready = false;
+  }
+
+  if (room.gameKind === "imposter") {
+    clampImposterLobbyCounts(room);
+  }
 }
 
 /** Validates minimum players per team when starting (called from game layer). */

@@ -12,7 +12,7 @@ import {
   SecondaryFooterButton,
 } from "@/components/game/GameFooterButtons";
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
-import { GameResultActions } from "@/components/GameResultActions";
+import { PassAndPlayGameResultActions } from "@/components/GameResultActions";
 import { GameShell } from "@/components/GameShell";
 import { IconCheck, IconSkipForward } from "@/components/icons";
 import { teamRosterAdvanceLabel } from "@/components/team-setup/teamRosterLabels";
@@ -162,7 +162,7 @@ export function WhoWhatWhereApp() {
     );
   } else if (game.match && game.activeMode === "results") {
     footer = wrap(
-      <GameResultActions
+      <PassAndPlayGameResultActions
         onNewGame={game.backToSetup}
         onPickAnotherGame={() => navigate("/")}
         onReplay={game.playAgain}

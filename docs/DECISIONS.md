@@ -99,3 +99,13 @@ When adding a new entry, append to the bottom and keep the most recent decisions
 **Reasoning:** Keeps offline-only deployment simple; host-entered words were ruled out; the resolver gives one extension point without shipping unused controls.
 
 **Rejected alternatives:** Inline hard-coded arrays in domain only — harder to swap for a larger asset later; letting hosts type words — out of scope for trust/simplicity.
+
+---
+
+## 2026-05-10: Tone.js for multiplayer game cues
+
+**Decision:** Use the **`tone`** package and a small `src/services/multiplayerTone.ts` helper to play short synthesized cues (correct, skip, 10 seconds left, time up) on multiplayer turn screens.
+
+**Reasoning:** Consistent cross-device feedback without shipping audio asset files; matches existing “bell-like” feedback intent from single-player experiments.
+
+**Rejected alternatives:** Bundling WAV/MP3 clips — larger repo and cache busting; Web Audio API raw oscillators — more bespoke code than needed.

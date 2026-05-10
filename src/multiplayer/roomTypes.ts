@@ -21,6 +21,7 @@ export type LobbyDto = {
   readonly imposterPlayerCount: number;
   readonly imposterImposterCount: number;
   readonly players: readonly LobbyPlayerDto[];
+  readonly hatClueDrafts: Record<string, readonly string[]>;
 };
 
 export type WhoWhatWherePeerRole = "describer" | "guesser" | "observer";
@@ -62,4 +63,8 @@ export type RoomSyncPayload = {
   readonly www: WhoWhatWhereSyncDto | null;
   readonly hat: HatSyncDto | null;
   readonly imposter: ImposterSyncDto | null;
+  readonly replay: {
+    readonly offerActive: boolean;
+    readonly acceptedIds: readonly string[];
+  };
 };

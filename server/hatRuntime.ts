@@ -8,7 +8,7 @@ import { getHatGameSetupError } from "@/domain/hat-game/setup";
 import type { HatGameAction, HatGameSession } from "@/domain/hat-game/types";
 import type { TeamSetup } from "@/domain/whowhatwhere/types";
 
-import { buildServerHatClueSubmissions } from "./hatClues.ts";
+import { buildHatClueSubmissionsFromLobby } from "./hatClues.ts";
 import { buildTeamSetupsFromLobby } from "./lobbyHelpers.ts";
 import { assertTeamLobbyReady, type Room } from "./roomStore.ts";
 
@@ -82,7 +82,7 @@ export function startHatMatch(room: Room) {
     throw new Error(setupError);
   }
 
-  const clueSubmissions = buildServerHatClueSubmissions(players, Math.random);
+  const clueSubmissions = buildHatClueSubmissionsFromLobby(players, room.hatClueDrafts);
 
   const session = createHatGameSession({
     players,

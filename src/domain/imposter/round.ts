@@ -23,6 +23,10 @@ export function maxImpostersForPlayers(playerCount: number): number {
   if (playerCount < IMPOSTER_MIN_PLAYERS) {
     return 1;
   }
+  /** Only one imposter until there are at least six players at the table. */
+  if (playerCount < 6) {
+    return 1;
+  }
   const fromFormula = Math.floor((playerCount - 1) / 2);
   return Math.min(2, Math.max(1, fromFormula));
 }
