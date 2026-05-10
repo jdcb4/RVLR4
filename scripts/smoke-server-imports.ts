@@ -4,5 +4,6 @@
  */
 import "../server/roomStore.ts";
 import "../server/imposterRuntime.ts";
+import "../server/wwwRuntime.ts";
 
 console.log("ok");

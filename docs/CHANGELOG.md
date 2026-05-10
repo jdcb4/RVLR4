@@ -2,6 +2,11 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.13.3 - 2026-05-10
+
+- **Fix:** `registerSocketHandlers` now imports Who What Where helpers from `wwwRuntime.ts` (including `startWhoWhatWhereMatch`) and **awaits** `startWhoWhatWhereMatch` so starting a WWW game works.
+- **Tooling:** `smoke:server-imports` also loads `server/wwwRuntime.ts`.
+
 ## 0.13.2 - 2026-05-10
 
 - **Fix:** `imposterRuntime` imported `assertLobbyReadyForImposterStart` from the wrong module (`roomStore`); it now imports from `lobbyControl` so the dev server starts and `/api/rooms` works again.

@@ -29,6 +29,16 @@ import {
 import { mpDebug } from "./multiplayerDebug.ts";
 import type { Room } from "./roomStore.ts";
 import { RoomStore } from "./roomStore.ts";
+import {
+  applyWhoWhatWhereCorrect,
+  applyWhoWhatWhereEndTurn,
+  applyWhoWhatWhereFinalScores,
+  applyWhoWhatWhereReturnSkipped,
+  applyWhoWhatWhereSkip,
+  applyWhoWhatWhereStartTurn,
+  markReadyGate,
+  startWhoWhatWhereMatch,
+} from "./wwwRuntime.ts";
 
 type SocketAck = (payload?: { ok?: boolean; error?: string }) => void;
 
@@ -378,7 +388,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         ensureLobbyEveryoneReady(room);
 
         if (room.gameKind === "whowhatwhere") {
-          startWhoWhatWhereMatch(room);
+          await startWhoWhatWhereMatch(room);
         } else if (room.gameKind === "hat") {
           startHatMatch(room);
         } else if (room.gameKind === "imposter") {
