@@ -1,0 +1,44 @@
+import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
+
+/** Mirrors `server/sync.ts` — lightweight typing without a shared package boundary. */
+export type LobbyPlayerDto = {
+  readonly id: string;
+  readonly name: string;
+  readonly isHost: boolean;
+  readonly teamIndex: number | null;
+  readonly ready: boolean;
+  readonly disconnectedAt: number | null;
+};
+
+export type LobbyDto = {
+  readonly teamCount: number;
+  readonly teamNames: readonly string[];
+  readonly wwwSettings: GameSettings;
+  readonly hatTurnDurationSeconds: number;
+  readonly hatSkipsPerTurn: number;
+  readonly imposterPlayerCount: number;
+  readonly imposterImposterCount: number;
+  readonly players: readonly LobbyPlayerDto[];
+};
+
+export type WhoWhatWherePeerRole = "describer" | "guesser" | "observer";
+
+export type WhoWhatWhereSyncDto = {
+  readonly match: MatchState;
+  readonly role: WhoWhatWherePeerRole;
+  readonly readyReveal: boolean;
+  readonly showTurnFooter: boolean;
+  readonly canReturnSkipped: boolean;
+};
+
+export type RoomSyncPayload = {
+  readonly code: string;
+  readonly gameKind: "whowhatwhere" | "hat" | "imposter";
+  readonly phase: "lobby" | "playing" | "ended";
+  readonly you: {
+    readonly playerId: string;
+    readonly isHost: boolean;
+  };
+  readonly lobby: LobbyDto | null;
+  readonly www: WhoWhatWhereSyncDto | null;
+};

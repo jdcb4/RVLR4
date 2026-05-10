@@ -1,0 +1,48 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    "schedule:weekly"
+  ],
+  "timezone": "UTC",
+  "prConcurrentLimit": 5,
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "dev dependencies (non-major)"
+    },
+    {
+      "matchPackagePatterns": ["^@types/"],
+      "groupName": "type definitions"
+    },
+    {
+      "matchPackageNames": ["typescript", "eslint", "prettier", "vitest", "vite"],
+      "groupName": "core toolchain"
+    },
+    {
+      "matchPackagePatterns": ["^@?react"],
+      "groupName": "react"
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "labels": ["major-update"]
+    }
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 5am on monday"]
+  },
+  "vulnerabilityAlerts": {
+    "labels": ["security"]
+  }
+}

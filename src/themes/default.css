@@ -1,0 +1,31 @@
+/**
+ * Default semantic theme — blends and opacity live here only.
+ * Primitives (--primary, --muted, …) are defined in src/index.css.
+ * Components use Tailwind `semantic-*` utilities (see docs/THEMING.md).
+ */
+:root {
+    --semantic-primary-soft-bg: hsl(var(--primary) / 0.05);
+    --semantic-primary-well-bg: hsl(var(--primary) / 0.15);
+    --semantic-primary-border: hsl(var(--primary) / 0.4);
+    --semantic-primary-hover: hsl(var(--primary) / 0.9);
+
+    --semantic-secondary-hover: hsl(var(--secondary) / 0.8);
+
+    --semantic-accent-hover-wash: hsl(var(--accent) / 0.3);
+
+    --semantic-muted-panel-bg: hsl(var(--muted) / 0.2);
+
+    --semantic-border-faint: hsl(var(--border) / 0.6);
+    --semantic-border-muted: hsl(var(--border) / 0.7);
+
+    --semantic-surface-elevated: hsl(var(--background) / 0.95);
+
+    --semantic-destructive-border-soft: hsl(var(--destructive) / 0.3);
+    --semantic-destructive-surface-soft: hsl(var(--destructive) / 0.1);
+
+    --semantic-scrim: hsl(0 0% 0% / 0.45);
+
+    /* Dev UI gallery chrome — distinct from app surfaces; swappable per future game themes */
+    --semantic-gallery-chrome: 222 47% 11%;
+    --semantic-gallery-foreground: 210 40% 98%;
+  }

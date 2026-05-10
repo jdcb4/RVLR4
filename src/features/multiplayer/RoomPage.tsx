@@ -1,0 +1,586 @@
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { QRCode } from "react-qr-code";
+import { useNavigate, useParams } from "react-router-dom";
+
+import {
+  PrimaryFooterButton,
+  SecondaryFooterButton,
+} from "@/components/game/GameFooterButtons";
+import { GameShell } from "@/components/GameShell";
+import {
+  IconArrowLeftRight,
+  IconArrowRightToLine,
+  IconCheck,
+  IconClipboard,
+  IconCrown,
+  IconPencil,
+  IconQrCode,
+  IconX,
+} from "@/components/icons";
+import { TeamCountOptionGroup } from "@/components/setup/TeamCountOptionGroup";
+import { Button } from "@/components/ui/button";
+import type { SharedTeamCount } from "@/config/teamRoster";
+import { captainPlayerIdForTeam } from "@/features/multiplayer/lobbyCaptain";
+import { WhoWhatWhereMultiplayerView } from "@/features/multiplayer/WhoWhatWhereMultiplayerView";
+import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
+import { cn } from "@/lib/utils";
+import type { LobbyDto, LobbyPlayerDto } from "@/multiplayer/roomTypes";
+import { useRoomChannel } from "@/multiplayer/useRoomChannel";
+
+function shareUrl(code: string) {
+  const url = new URL(window.location.origin);
+
+  url.pathname = "/name";
+  url.searchParams.set("intent", "join");
+  url.searchParams.set("code", code);
+
+  return url.toString();
+}
+
+export function RoomPage() {
+  const navigate = useNavigate();
+  const params = useParams();
+  const code = params.code?.toUpperCase();
+  const { sync, bindError, emitWithAck, connected } = useRoomChannel(code, Boolean(code));
+  const [startError, setStartError] = useState<string | null>(null);
+  const [qrToastOpen, setQrToastOpen] = useState(false);
+  const [copiedToast, setCopiedToast] = useState(false);
+  const copyToastTimer = useRef<number | null>(null);
+
+  const joinLink = useMemo(() => (code ? shareUrl(code) : ""), [code]);
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(joinLink);
+      setCopiedToast(true);
+
+      if (copyToastTimer.current) {
+        window.clearTimeout(copyToastTimer.current);
+      }
+
+      copyToastTimer.current = window.setTimeout(() => {
+        setCopiedToast(false);
+      }, 2200);
+    } catch {
+      setStartError("Clipboard blocked — copy manually.");
+    }
+  };
+
+  const handleStartGame = async () => {
+    setStartError(null);
+    const ack = await emitWithAck("lobby:startGame");
+
+    if (ack?.ok === false) {
+      setStartError(ack.error ?? "Unable to start yet.");
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (copyToastTimer.current) {
+        window.clearTimeout(copyToastTimer.current);
+      }
+    };
+  }, []);
+
+  if (!code) {
+    return (
+      <GameShell footer={null} title="Room">
+        <p className="text-typ-body-relaxed text-muted-foreground">Missing room code.</p>
+      </GameShell>
+    );
+  }
+
+  if (bindError) {
+    return (
+      <GameShell
+        footer={
+          <PrimaryFooterButton label="Back to home" onClick={() => navigate("/")} />
+        }
+        title="Reconnect"
+      >
+        <p className="text-typ-body-relaxed text-destructive">{bindError}</p>
+        <p className="mt-2 text-typ-ui text-muted-foreground">
+          If you just left, ask the host for the code and join again with the same display name if the room is still in the lobby.
+        </p>
+      </GameShell>
+    );
+  }
+
+  if (!sync) {
+    return (
+      <GameShell footer={null} title="Connecting">
+        <p className="text-typ-body-relaxed text-muted-foreground">
+          {connected ? "Syncing your table..." : "Connecting to the host..."}
+        </p>
+      </GameShell>
+    );
+  }
+
+  if (sync.phase === "playing" && sync.gameKind === "whowhatwhere" && sync.www) {
+    return (
+      <WhoWhatWhereMultiplayerView emitWithAck={emitWithAck} payload={sync.www} />
+    );
+  }
+
+  if (sync.phase === "lobby" && sync.lobby) {
+    const lobby = sync.lobby;
+    const isHost = sync.you.isHost;
+    const myId = sync.you.playerId;
+    const isTeamGame = sync.gameKind === "whowhatwhere" || sync.gameKind === "hat";
+
+    return (
+      <>
+        <GameShell
+          footer={
+            isHost ? (
+              <div className="flex w-full flex-col gap-2">
+                <SecondaryFooterButton
+                  label="Start game (everyone must ready up)"
+                  onClick={() => {
+                    void handleStartGame();
+                  }}
+                />
+              </div>
+            ) : (
+              <PlayerReadyBar
+                emitWithAck={emitWithAck}
+                ready={
+                  lobby.players.find((player) => player.id === myId)?.ready ?? false
+                }
+              />
+            )
+          }
+          title="Lobby"
+        >
+          <div className="flex flex-col gap-4 pb-6">
+            <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+              <p className="text-typ-overline text-primary">Share code</p>
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+                <span className="font-mono text-typ-display font-bold tracking-[0.25em]">
+                  {sync.code}
+                </span>
+                <span className="flex items-center gap-2">
+                  <Button
+                    aria-label="Copy invite link"
+                    size="icon"
+                    variant="outline"
+                    onClick={() => void handleCopyLink()}
+                  >
+                    <IconClipboard className="size-5" />
+                  </Button>
+                  <Button
+                    aria-label="Show QR code"
+                    size="icon"
+                    variant="outline"
+                    onClick={() => setQrToastOpen(true)}
+                  >
+                    <IconQrCode className="size-5" />
+                  </Button>
+                </span>
+              </div>
+              <p className="mt-2 text-typ-ui-snug text-muted-foreground">
+                Connection: {connected ? "live" : "reconnecting..."}
+              </p>
+            </section>
+
+            {copiedToast ? (
+              <div
+                className="fixed bottom-24 left-1/2 z-40 max-w-sm -translate-x-1/2 rounded-xl border border-border bg-card px-4 py-3 text-typ-ui shadow-lg"
+                role="status"
+              >
+                Link copied to clipboard
+              </div>
+            ) : null}
+
+            {isTeamGame ? (
+              <LobbyTeamsSection
+                emitWithAck={emitWithAck}
+                isHost={isHost}
+                lobby={lobby}
+                myPlayerId={myId}
+              />
+            ) : (
+              <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+                <p className="text-typ-card-title font-semibold">Players</p>
+                <ul className="mt-3 space-y-2 text-typ-ui">
+                  {lobby.players.map((player) => (
+                    <li className="flex items-center gap-2" key={player.id}>
+                      {player.ready ? (
+                        <IconCheck aria-hidden className="size-4 shrink-0 text-emerald-600" />
+                      ) : (
+                        <span aria-hidden className="inline-block size-4 shrink-0" />
+                      )}
+                      <span>
+                        {player.name}
+                        {player.isHost ? (
+                          <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-typ-ui text-muted-foreground">
+                            Host
+                          </span>
+                        ) : null}
+                        {player.disconnectedAt ? (
+                          <span className="ml-2 text-destructive">Away</span>
+                        ) : null}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {sync.gameKind === "whowhatwhere" && isHost ? (
+              <details className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+                <summary className="cursor-pointer text-typ-card-title font-semibold">
+                  Who What Where settings
+                </summary>
+                <div className="mt-4">
+                  <SettingsScreen
+                    embedded
+                    settings={lobby.wwwSettings}
+                    onChange={(next) => {
+                      void emitWithAck("lobby:hostPatchWwwSettings", { patch: next });
+                    }}
+                  />
+                </div>
+              </details>
+            ) : null}
+
+            {sync.gameKind === "hat" && isHost ? (
+              <details className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+                <summary className="cursor-pointer text-typ-card-title font-semibold">
+                  Number of teams
+                </summary>
+                <div className="mt-4">
+                  <TeamCountOptionGroup
+                    value={lobby.teamCount as SharedTeamCount}
+                    onChange={(count) => {
+                      void emitWithAck("lobby:hostSetTeamCount", { teamCount: count });
+                    }}
+                  />
+                </div>
+              </details>
+            ) : null}
+
+            {startError ? (
+              <p className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-typ-ui text-destructive">
+                {startError}
+              </p>
+            ) : null}
+          </div>
+        </GameShell>
+
+        {qrToastOpen ? (
+          <div
+            className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-black/50 px-4 py-8"
+            role="dialog"
+            onClick={() => setQrToastOpen(false)}
+          >
+            <div
+              className="w-full max-w-sm cursor-default rounded-2xl border border-border bg-card p-5 shadow-xl"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <p className="text-typ-card-title font-semibold">Scan to join</p>
+                <Button
+                  aria-label="Close"
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => setQrToastOpen(false)}
+                >
+                  <IconX className="size-5" />
+                </Button>
+              </div>
+              <p className="mt-1 text-typ-ui-snug text-muted-foreground">
+                Opens the name screen with this room code filled in.
+              </p>
+              <div className="mt-4 flex justify-center rounded-xl bg-white p-4">
+                <QRCode size={200} value={joinLink} />
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </>
+    );
+  }
+
+  return (
+    <GameShell footer={null} title="Room">
+      <p className="text-typ-ui text-muted-foreground">Waiting for host instructions...</p>
+    </GameShell>
+  );
+}
+
+function LobbyTeamsSection({
+  lobby,
+  myPlayerId,
+  isHost,
+  emitWithAck,
+}: {
+  readonly lobby: LobbyDto;
+  readonly myPlayerId: string;
+  readonly isHost: boolean;
+  readonly emitWithAck: (
+    event: string,
+    body?: unknown,
+  ) => Promise<{ ok?: boolean; error?: string } | undefined>;
+}) {
+  const [editingTeamIndex, setEditingTeamIndex] = useState<number | null>(null);
+  const [editDraft, setEditDraft] = useState("");
+  /** Host-only: which player is being assigned via the move-team dialog. */
+  const [hostMoveTarget, setHostMoveTarget] = useState<LobbyPlayerDto | null>(null);
+  const [hostMoveTeamPick, setHostMoveTeamPick] = useState(0);
+
+  const myTeamIndex = lobby.players.find((p) => p.id === myPlayerId)?.teamIndex ?? 0;
+
+  const openEdit = (teamIndex: number) => {
+    setEditingTeamIndex(teamIndex);
+    setEditDraft(lobby.teamNames[teamIndex] ?? `Team ${teamIndex + 1}`);
+  };
+
+  const submitRename = async (event: FormEvent) => {
+    event.preventDefault();
+
+    if (editingTeamIndex === null) {
+      return;
+    }
+
+    const trimmed = editDraft.trim().slice(0, 24);
+
+    if (isHost) {
+      await emitWithAck("lobby:hostSetTeamName", {
+        teamIndex: editingTeamIndex,
+        name: trimmed,
+      });
+    } else {
+      await emitWithAck("lobby:captainSetTeamName", {
+        teamIndex: editingTeamIndex,
+        name: trimmed,
+      });
+    }
+
+    setEditingTeamIndex(null);
+  };
+
+  const openHostMovePlayer = (player: LobbyPlayerDto) => {
+    setHostMoveTarget(player);
+    setHostMoveTeamPick(player.teamIndex ?? 0);
+  };
+
+  const closeHostMovePlayer = () => {
+    setHostMoveTarget(null);
+  };
+
+  const confirmHostMovePlayer = () => {
+    if (!hostMoveTarget) {
+      return;
+    }
+
+    void emitWithAck("lobby:hostMovePlayer", {
+      playerId: hostMoveTarget.id,
+      teamIndex: hostMoveTeamPick,
+    });
+    closeHostMovePlayer();
+  };
+
+  return (
+    <>
+      <div className="flex flex-col gap-4">
+      {Array.from({ length: lobby.teamCount }).map((_, teamIndex) => {
+        const captainId = captainPlayerIdForTeam(lobby, teamIndex);
+        const displayName = lobby.teamNames[teamIndex] ?? `Team ${teamIndex + 1}`;
+        const canRename =
+          isHost || (captainId !== undefined && captainId === myPlayerId);
+        const showJoinArrow = myTeamIndex !== teamIndex;
+
+        return (
+          <section
+            className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+            key={teamIndex}
+          >
+            <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-3 py-2">
+              <div className="min-w-0 flex-1">
+                {editingTeamIndex === teamIndex ? (
+                  <form className="flex flex-wrap items-center gap-2" onSubmit={submitRename}>
+                    <input
+                      autoFocus
+                      className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1 text-typ-ui"
+                      maxLength={24}
+                      value={editDraft}
+                      onChange={(event) => setEditDraft(event.target.value)}
+                    />
+                    <Button size="sm" type="submit" variant="default">
+                      Save
+                    </Button>
+                    <Button
+                      size="sm"
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setEditingTeamIndex(null)}
+                    >
+                      Cancel
+                    </Button>
+                  </form>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <p className="truncate text-typ-card-title font-semibold">{displayName}</p>
+                    {canRename ? (
+                      <button
+                        aria-label={`Rename ${displayName}`}
+                        className="shrink-0 rounded-lg p-1 text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                        type="button"
+                        onClick={() => openEdit(teamIndex)}
+                      >
+                        <IconPencil className="size-4" />
+                      </button>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+              {showJoinArrow ? (
+                <button
+                  aria-label={`Join ${displayName}`}
+                  className="shrink-0 rounded-xl border border-input bg-background p-2 text-primary shadow-sm transition hover:bg-accent"
+                  type="button"
+                  onClick={() =>
+                    void emitWithAck(
+                      isHost ? "lobby:hostMovePlayer" : "lobby:moveSelf",
+                      isHost
+                        ? { playerId: myPlayerId, teamIndex }
+                        : { teamIndex },
+                    )
+                  }
+                >
+                  <IconArrowRightToLine className="size-5" />
+                </button>
+              ) : (
+                <span className="shrink-0 rounded-xl border border-dashed border-muted-foreground/40 px-2 py-1 text-typ-ui text-muted-foreground">
+                  Your team
+                </span>
+              )}
+            </div>
+            <ul className="divide-y divide-border px-3 py-1">
+              {lobby.players
+                .filter((player) => (player.teamIndex ?? 0) === teamIndex)
+                .map((player) => (
+                  <li
+                    className="flex items-center gap-2 py-2 text-typ-ui"
+                    key={player.id}
+                  >
+                    {player.ready ? (
+                      <IconCheck aria-hidden className="size-4 shrink-0 text-emerald-600" />
+                    ) : (
+                      <span aria-hidden className="inline-block size-4 shrink-0" />
+                    )}
+                    {captainId === player.id ? (
+                      <span className="inline-flex shrink-0" title="Team captain">
+                        <IconCrown className="size-4 text-amber-600" />
+                      </span>
+                    ) : (
+                      <span aria-hidden className="inline-block size-4 shrink-0" />
+                    )}
+                    <span className="min-w-0 flex-1">
+                      {player.name}
+                      {player.isHost ? (
+                        <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-typ-ui text-muted-foreground">
+                          Host
+                        </span>
+                      ) : null}
+                      {player.disconnectedAt ? (
+                        <span className="ml-2 text-destructive">Away</span>
+                      ) : null}
+                    </span>
+                    {isHost ? (
+                      <button
+                        aria-label={`Choose team for ${player.name}`}
+                        className="shrink-0 rounded-lg p-1.5 text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                        type="button"
+                        onClick={() => openHostMovePlayer(player)}
+                      >
+                        <IconArrowLeftRight className="size-4" />
+                      </button>
+                    ) : null}
+                  </li>
+                ))}
+              {lobby.players.filter((p) => (p.teamIndex ?? 0) === teamIndex).length === 0 ? (
+                <li className="py-3 text-typ-ui text-muted-foreground">No players yet</li>
+              ) : null}
+            </ul>
+          </section>
+        );
+      })}
+      </div>
+
+      {hostMoveTarget ? (
+        <div
+          className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-black/50 px-4 py-8"
+          role="dialog"
+          onClick={closeHostMovePlayer}
+        >
+          <div
+            className="w-full max-w-md cursor-default rounded-2xl border border-border bg-card p-5 shadow-xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <p className="text-typ-card-title font-semibold leading-snug">
+              What team do you want to move {hostMoveTarget.name} to?
+            </p>
+            <label className="mt-4 block text-typ-ui font-medium" htmlFor="host-move-team">
+              Team
+            </label>
+            <select
+              className="mt-2 w-full rounded-xl border border-input bg-background px-3 py-2 text-typ-ui"
+              id="host-move-team"
+              value={hostMoveTeamPick}
+              onChange={(event) => setHostMoveTeamPick(Number(event.target.value))}
+            >
+              {Array.from({ length: lobby.teamCount }).map((_, idx) => {
+                const label = lobby.teamNames[idx] ?? `Team ${idx + 1}`;
+
+                return (
+                  <option key={idx} value={idx}>
+                    {label}
+                  </option>
+                );
+              })}
+            </select>
+            <div className="mt-5 flex flex-wrap justify-end gap-2">
+              <Button type="button" variant="outline" onClick={closeHostMovePlayer}>
+                Cancel
+              </Button>
+              <Button type="button" onClick={confirmHostMovePlayer}>
+                Move
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function PlayerReadyBar({
+  ready,
+  emitWithAck,
+}: {
+  readonly ready: boolean;
+  readonly emitWithAck: (
+    event: string,
+    body?: unknown,
+  ) => Promise<{ ok?: boolean; error?: string } | undefined>;
+}) {
+  return (
+    <Button
+      className={cn(
+        "flex h-12 w-full min-w-0 items-center justify-center gap-2 rounded-xl text-typ-ui font-semibold shadow-sm transition-colors",
+        ready
+          ? "border border-emerald-700/30 bg-emerald-600 text-white hover:bg-emerald-700"
+          : "bg-primary text-primary-foreground hover:bg-semantic-primary-hover",
+      )}
+      type="button"
+      onClick={() => {
+        void emitWithAck("lobby:setReady", { ready: !ready });
+      }}
+    >
+      {ready ? "Tap again if not ready" : "Mark ready"}
+    </Button>
+  );
+}
