@@ -1,5 +1,13 @@
+import type { HatGameSession } from "@/domain/hat-game/types";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 
+import {
+  canHatReturnSkipped,
+  classifyHatRole,
+  type HatPeerRole,
+  projectHatSessionForViewer,
+  shouldShowHatTurnFooter,
+} from "./hatViews.ts";
 import type { GameKind, Room, RoomPhase, RoomPlayer } from "./roomStore.ts";
 import {
   canReturnSkippedWords,
@@ -37,6 +45,14 @@ export type WhoWhatWhereSyncDto = {
   readonly canReturnSkipped: boolean;
 };
 
+export type HatSyncDto = {
+  readonly session: HatGameSession;
+  readonly role: HatPeerRole;
+  readonly readyReveal: boolean;
+  readonly showTurnFooter: boolean;
+  readonly canReturnSkipped: boolean;
+};
+
 export type RoomSyncPayload = {
   readonly code: string;
   readonly gameKind: GameKind;
@@ -47,6 +63,7 @@ export type RoomSyncPayload = {
   };
   readonly lobby: LobbyDto | null;
   readonly www: WhoWhatWhereSyncDto | null;
+  readonly hat: HatSyncDto | null;
 };
 
 function lobbyPlayers(room: Room): LobbyPlayerDto[] {
@@ -100,6 +117,20 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     };
   }
 
+  let hat: HatSyncDto | null = null;
+
+  if (room.gameKind === "hat" && room.hatSession) {
+    const projected = projectHatSessionForViewer(room.hatSession, viewerPlayerId);
+
+    hat = {
+      session: projected,
+      role: classifyHatRole(room.hatSession, viewerPlayerId),
+      readyReveal: Boolean(room.hatReadyReveal),
+      showTurnFooter: shouldShowHatTurnFooter(room.hatSession, viewerPlayerId),
+      canReturnSkipped: canHatReturnSkipped(room.hatSession, viewerPlayerId),
+    };
+  }
+
   return {
     code: room.code,
     gameKind: room.gameKind,
@@ -110,5 +141,6 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     },
     lobby,
     www,
+    hat,
   };
 }

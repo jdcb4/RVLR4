@@ -5,6 +5,15 @@ import type { GameSettings } from "@/domain/whowhatwhere/types";
 import { broadcastRoom, roomChannel } from "./broadcast.ts";
 import { captainPlayerIdForTeam } from "./captain.ts";
 import {
+  applyHatEndTurn,
+  applyHatMarkCorrect,
+  applyHatReturnSkipped,
+  applyHatSkipClue,
+  applyHatStartTurn,
+  applyHatViewResults,
+  startHatMatch,
+} from "./hatRuntime.ts";
+import {
   assertLobbyReadyForImposterStart,
   hostPatchHatPrefs,
   hostPatchImposterCounts,
@@ -15,16 +24,6 @@ import {
 } from "./lobbyControl.ts";
 import type { Room } from "./roomStore.ts";
 import { RoomStore } from "./roomStore.ts";
-import {
-  applyWhoWhatWhereCorrect,
-  applyWhoWhatWhereEndTurn,
-  applyWhoWhatWhereFinalScores,
-  applyWhoWhatWhereReturnSkipped,
-  applyWhoWhatWhereSkip,
-  applyWhoWhatWhereStartTurn,
-  markReadyGate,
-  startWhoWhatWhereMatch,
-} from "./wwwRuntime.ts";
 
 type SocketAck = (payload?: { ok?: boolean; error?: string }) => void;
 
@@ -375,9 +374,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         if (room.gameKind === "whowhatwhere") {
           startWhoWhatWhereMatch(room);
         } else if (room.gameKind === "hat") {
-          throw new Error(
-            "Hat Game multiplayer sync is almost ready — update coming soon.",
-          );
+          startHatMatch(room);
         } else if (room.gameKind === "imposter") {
           assertLobbyReadyForImposterStart(room);
           throw new Error(
@@ -515,6 +512,124 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       try {
         const { room } = requireActor(socket, store);
         applyWhoWhatWhereFinalScores(room);
+        await broadcastRoom(io, store, room.code);
+        ack?.({ ok: true });
+      } catch (error) {
+        ack?.({
+          ok: false,
+          error: error instanceof Error ? error.message : "Unable to show final scores.",
+        });
+      }
+    });
+
+    socket.on("hat:startTurn", async (_payload: unknown, ack?: SocketAck) => {
+      try {
+        const { room, actor } = requireActor(socket, store);
+
+        if (room.gameKind !== "hat" || room.phase !== "playing") {
+          throw new Error("Hat Game is not in progress.");
+        }
+
+        applyHatStartTurn(room, actor.id);
+        await broadcastRoom(io, store, room.code);
+        ack?.({ ok: true });
+      } catch (error) {
+        ack?.({
+          ok: false,
+          error: error instanceof Error ? error.message : "Unable to start the turn.",
+        });
+      }
+    });
+
+    socket.on("hat:endTurn", async (_payload: unknown, ack?: SocketAck) => {
+      try {
+        const { room, actor } = requireActor(socket, store);
+
+        if (room.gameKind !== "hat" || room.phase !== "playing") {
+          throw new Error("Hat Game is not in progress.");
+        }
+
+        applyHatEndTurn(room, actor.id);
+        await broadcastRoom(io, store, room.code);
+        ack?.({ ok: true });
+      } catch (error) {
+        ack?.({
+          ok: false,
+          error: error instanceof Error ? error.message : "Unable to end the turn.",
+        });
+      }
+    });
+
+    socket.on("hat:markCorrect", async (_payload: unknown, ack?: SocketAck) => {
+      try {
+        const { room, actor } = requireActor(socket, store);
+
+        if (room.gameKind !== "hat" || room.phase !== "playing") {
+          throw new Error("Hat Game is not in progress.");
+        }
+
+        applyHatMarkCorrect(room, actor.id);
+        await broadcastRoom(io, store, room.code);
+        ack?.({ ok: true });
+      } catch (error) {
+        ack?.({
+          ok: false,
+          error: error instanceof Error ? error.message : "Unable to score that clue.",
+        });
+      }
+    });
+
+    socket.on("hat:skipClue", async (_payload: unknown, ack?: SocketAck) => {
+      try {
+        const { room, actor } = requireActor(socket, store);
+
+        if (room.gameKind !== "hat" || room.phase !== "playing") {
+          throw new Error("Hat Game is not in progress.");
+        }
+
+        applyHatSkipClue(room, actor.id);
+        await broadcastRoom(io, store, room.code);
+        ack?.({ ok: true });
+      } catch (error) {
+        ack?.({
+          ok: false,
+          error: error instanceof Error ? error.message : "Unable to skip this clue.",
+        });
+      }
+    });
+
+    socket.on(
+      "hat:returnSkipped",
+      async (payload: { poolIndex?: number }, ack?: SocketAck) => {
+        try {
+          const { room, actor } = requireActor(socket, store);
+
+          if (room.gameKind !== "hat" || room.phase !== "playing") {
+            throw new Error("Hat Game is not in progress.");
+          }
+
+          applyHatReturnSkipped(room, actor.id, payload?.poolIndex);
+          await broadcastRoom(io, store, room.code);
+          ack?.({ ok: true });
+        } catch (error) {
+          ack?.({
+            ok: false,
+            error:
+              error instanceof Error ? error.message : "Unable to recall a skip.",
+          });
+        }
+      },
+    );
+
+    socket.on("hat:viewResults", async (_payload: unknown, ack?: SocketAck) => {
+      try {
+        const { room } = requireActor(socket, store);
+
+        if (room.gameKind !== "hat" || room.phase !== "playing") {
+          throw new Error("Hat Game is not in progress.");
+        }
+
+        applyHatViewResults(room);
         await broadcastRoom(io, store, room.code);
         ack?.({ ok: true });
       } catch (error) {

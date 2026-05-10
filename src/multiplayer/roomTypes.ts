@@ -1,3 +1,4 @@
+import type { HatGameSession } from "@/domain/hat-game/types";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
 
 /** Mirrors `server/sync.ts` — lightweight typing without a shared package boundary. */
@@ -31,6 +32,16 @@ export type WhoWhatWhereSyncDto = {
   readonly canReturnSkipped: boolean;
 };
 
+export type HatPeerRole = "describer" | "guesser" | "observer";
+
+export type HatSyncDto = {
+  readonly session: HatGameSession;
+  readonly role: HatPeerRole;
+  readonly readyReveal: boolean;
+  readonly showTurnFooter: boolean;
+  readonly canReturnSkipped: boolean;
+};
+
 export type RoomSyncPayload = {
   readonly code: string;
   readonly gameKind: "whowhatwhere" | "hat" | "imposter";
@@ -41,4 +52,5 @@ export type RoomSyncPayload = {
   };
   readonly lobby: LobbyDto | null;
   readonly www: WhoWhatWhereSyncDto | null;
+  readonly hat: HatSyncDto | null;
 };

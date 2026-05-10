@@ -53,8 +53,10 @@ export type Room = {
   /** Imposter lobby — host-controlled roster size. */
   imposterPlayerCount: number;
   imposterImposterCount: number;
-  /** Mirrors the pass-and-play “Describer ready” gate before loading words. */
+  /** Mirrors Who What Where ready-handoff for Hat Game (online). */
   wwwReadyReveal?: boolean;
+  /** Hat Game: single-step “Start turn” between rounds when true while `stage === 'ready'`. */
+  hatReadyReveal?: boolean;
   /** Present once the Who What Where match begins — authoritative server copy. */
   wwwMatch?: MatchState | null;
   /** Present once the Hat Game session begins — authoritative server copy. */

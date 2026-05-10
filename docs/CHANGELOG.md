@@ -2,6 +2,10 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.12.0 - 2026-05-10
+
+- **Hat Game (online):** Full networked match flow — `lobby:startGame` builds a **`HatGameSession`** from the lobby roster with **server-generated celebrity clues** (from `clueSuggestions.json`), Socket.IO **`hat:*`** actions wrapping `applyHatGameAction`, **describer-only** clue text with masked payloads for teammates/observers, server **turn expiry ticker**, and **`HatMultiplayerView`** in `/room/:code`.
+
 ## 0.11.1 - 2026-05-10
 
 - **Who What Where (online):** Single footer step between turns — **Start turn** only (no separate “Describer ready” tap); waiting players see **Waiting on {name}, from {team}**.

@@ -7,6 +7,7 @@ import express from "express";
 import { Server } from "socket.io";
 
 import { loadServerEnv } from "./env.ts";
+import { startHatTurnTicker } from "./hatTicker.ts";
 import { registerHttpRoutes } from "./httpRoutes.ts";
 import { RoomStore } from "./roomStore.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
@@ -59,6 +60,7 @@ const io = new Server(server, {
 
 registerSocketHandlers(io, store);
 startWhoWhatWhereTurnTicker(io, store);
+startHatTurnTicker(io, store);
 
 const port = env.PORT;
 
