@@ -6,7 +6,8 @@ import type {
   ImposterStep,
 } from "@/features/imposter/imposterAppTypes";
 
-import { assertLobbyReadyForImposterStart, type Room } from "./roomStore.ts";
+import { assertLobbyReadyForImposterStart } from "./lobbyControl.ts";
+import type { Room } from "./roomStore.ts";
 
 export type ImposterDispatchAction =
   | { readonly type: "reveal-show-role" }

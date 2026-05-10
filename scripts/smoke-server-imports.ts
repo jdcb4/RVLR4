@@ -1,7 +1,8 @@
 /**
- * Quick runtime check that `server/roomStore.ts` loads with `@/*` path aliases
+ * Quick runtime check that core server modules load with `@/*` path aliases
  * (same resolution as `pnpm run dev:server` / `tsx` with `server/tsconfig.json`).
  */
 import "../server/roomStore.ts";
+import "../server/imposterRuntime.ts";
 
 console.log("ok");

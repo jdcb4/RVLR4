@@ -2,6 +2,11 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.13.2 - 2026-05-10
+
+- **Fix:** `imposterRuntime` imported `assertLobbyReadyForImposterStart` from the wrong module (`roomStore`); it now imports from `lobbyControl` so the dev server starts and `/api/rooms` works again.
+- **Tooling:** `pnpm run smoke:server-imports` also loads `server/imposterRuntime.ts` to catch similar export mismatches early.
+
 ## 0.13.1 - 2026-05-10
 
 - **Phase 4 — polish:** Manual multiplayer QA matrix ([`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md)); preset verification table updated in [`docs/VERIFICATION.md`](VERIFICATION.md); README, AGENTS, PROJECT_INDEX, ARCHITECTURE (title + env/config split), DEPLOYMENT, and SECURITY cross-linked or extended.
