@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.7 - 2026-05-11
+
+- **Tests:** `server/socketSmoke.test.ts` — first end-to-end Socket.IO
+  integration test. Boots an in-process HTTP + Socket.IO server, walks 1 host +
+  3 guests through HTTP create/join, `session:bind`, ready handoff, and
+  `lobby:startGame`, asserting every client receives a `phase: "playing"` sync
+  with a Who What Where match. A second case proves the Zod wrapper rejects
+  malformed payloads (string in a boolean field) with the canonical
+  `"Invalid request."` error.
+
 ## 0.14.6 - 2026-05-11
 
 - **Tests:** `server/roomStore.test.ts` — 24 cases covering `createRoom`
