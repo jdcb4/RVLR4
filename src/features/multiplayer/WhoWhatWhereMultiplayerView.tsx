@@ -1,16 +1,12 @@
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { viewerWwwTeamIsWinner } from "@/components/game/final-results/viewModel";
 import {
   PrimaryFooterButton,
   SecondaryFooterButton,
 } from "@/components/game/GameFooterButtons";
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
-import { GameResultActions } from "@/components/GameResultActions";
-import { GameShell } from "@/components/GameShell";
 import { IconCheck, IconSkipForward } from "@/components/icons";
 import { Metric } from "@/components/Metric";
 import { formatWwwTurnClock } from "@/domain/whowhatwhere/formatClock";
@@ -21,13 +17,15 @@ import {
 } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 import {
+  MultiplayerEndGameActions,
+  MultiplayerGameShell,
+} from "@/features/multiplayer/MultiplayerGameShell";
+import {
   FinalTurnRecapScreen,
 } from "@/features/whowhatwhere/results/FinalTurnRecapScreen";
 import { ResultsScreen } from "@/features/whowhatwhere/results/ResultsScreen";
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
 import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
-import { leaveMultiplayerRoomForHub } from "@/multiplayer/leaveRoomForHub";
-import { buildMultiplayerReplayUi } from "@/multiplayer/replayUi";
 import type { WhoWhatWhereSyncDto } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
 import { playMultiplayerToneCue } from "@/services/multiplayerTone";
@@ -65,7 +63,6 @@ export function WhoWhatWhereMultiplayerView({
     body?: unknown,
   ) => Promise<{ ok?: boolean; error?: string } | undefined>;
 }) {
-  const navigate = useNavigate();
   const match = payload.match;
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -204,18 +201,11 @@ export function WhoWhatWhereMultiplayerView({
     );
   } else if (match.stage === "finalSummary") {
     footer = showScoresPane ? (
-      <GameResultActions
-        onPickAnotherGame={() => {
-          void leaveMultiplayerRoomForHub(emitWithAck, navigate);
-        }}
-        replay={buildMultiplayerReplayUi({
-          offerActive: replaySync.offerActive,
-          acceptedIds: replaySync.acceptedIds,
-          cancelledByDisconnect: replaySync.cancelledByDisconnect,
-          viewerId: viewerPlayerId,
-          isHost,
-          emitWithAck,
-        })}
+      <MultiplayerEndGameActions
+        emitWithAck={emitWithAck}
+        isHost={isHost}
+        replaySync={replaySync}
+        viewerPlayerId={viewerPlayerId}
       />
     ) : (
       <PrimaryFooterButton
@@ -228,18 +218,11 @@ export function WhoWhatWhereMultiplayerView({
     );
   } else if (match.stage === "results") {
     footer = (
-      <GameResultActions
-        onPickAnotherGame={() => {
-          void leaveMultiplayerRoomForHub(emitWithAck, navigate);
-        }}
-        replay={buildMultiplayerReplayUi({
-          offerActive: replaySync.offerActive,
-          acceptedIds: replaySync.acceptedIds,
-          cancelledByDisconnect: replaySync.cancelledByDisconnect,
-          viewerId: viewerPlayerId,
-          isHost,
-          emitWithAck,
-        })}
+      <MultiplayerEndGameActions
+        emitWithAck={emitWithAck}
+        isHost={isHost}
+        replaySync={replaySync}
+        viewerPlayerId={viewerPlayerId}
       />
     );
   }
@@ -303,11 +286,9 @@ export function WhoWhatWhereMultiplayerView({
   }
 
   return (
-    <FooterActionLockContext.Provider value={false}>
-      <GameShell footer={footer} headerRight={headerRight} title="Who What Where">
-        {body}
-      </GameShell>
-    </FooterActionLockContext.Provider>
+    <MultiplayerGameShell footer={footer} headerRight={headerRight} title="Who What Where">
+      {body}
+    </MultiplayerGameShell>
   );
 }
 

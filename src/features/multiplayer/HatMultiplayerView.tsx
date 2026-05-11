@@ -1,8 +1,6 @@
 import type { ReactNode } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { BetweenTurnsLayout } from "@/components/game/BetweenTurnsLayout";
 import { FinalResultsBody } from "@/components/game/final-results/FinalResultsBody";
 import { ResultsConfetti } from "@/components/game/final-results/ResultsConfetti";
@@ -23,8 +21,6 @@ import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { ReadyProgressCard } from "@/components/game/ReadyProgressCard";
 import { ThatsTheLastTurnCard } from "@/components/game/ThatsTheLastTurnCard";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
-import { GameResultActions } from "@/components/GameResultActions";
-import { GameShell } from "@/components/GameShell";
 import { IconCheck, IconSkipForward } from "@/components/icons";
 import { Metric } from "@/components/Metric";
 import {
@@ -34,9 +30,11 @@ import {
 import { formatCountdown, getCountdownSeconds } from "@/domain/hat-game/time";
 import type { HatGameSession } from "@/domain/hat-game/types";
 import { HatScoreboard } from "@/features/hat-game/screens/HatScoreboard";
+import {
+  MultiplayerEndGameActions,
+  MultiplayerGameShell,
+} from "@/features/multiplayer/MultiplayerGameShell";
 import { cn } from "@/lib/utils";
-import { leaveMultiplayerRoomForHub } from "@/multiplayer/leaveRoomForHub";
-import { buildMultiplayerReplayUi } from "@/multiplayer/replayUi";
 import type { HatSyncDto } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
 import { playSoundCue } from "@/services/hatGameSound";
@@ -132,7 +130,6 @@ export function HatMultiplayerView({
     body?: unknown,
   ) => Promise<{ ok?: boolean; error?: string } | undefined>;
 }) {
-  const navigate = useNavigate();
   const session = payload.session;
   const role = payload.role;
   const [error, setError] = useState("");
@@ -295,18 +292,11 @@ export function HatMultiplayerView({
     );
   } else if (session.stage === "finalSummary") {
     footer = showScoresPane ? (
-      <GameResultActions
-        onPickAnotherGame={() => {
-          void leaveMultiplayerRoomForHub(emitWithAck, navigate);
-        }}
-        replay={buildMultiplayerReplayUi({
-          offerActive: replaySync.offerActive,
-          acceptedIds: replaySync.acceptedIds,
-          cancelledByDisconnect: replaySync.cancelledByDisconnect,
-          viewerId: viewerPlayerId,
-          isHost,
-          emitWithAck,
-        })}
+      <MultiplayerEndGameActions
+        emitWithAck={emitWithAck}
+        isHost={isHost}
+        replaySync={replaySync}
+        viewerPlayerId={viewerPlayerId}
       />
     ) : (
       <PrimaryFooterButton
@@ -319,18 +309,11 @@ export function HatMultiplayerView({
     );
   } else if (session.stage === "results") {
     footer = (
-      <GameResultActions
-        onPickAnotherGame={() => {
-          void leaveMultiplayerRoomForHub(emitWithAck, navigate);
-        }}
-        replay={buildMultiplayerReplayUi({
-          offerActive: replaySync.offerActive,
-          acceptedIds: replaySync.acceptedIds,
-          cancelledByDisconnect: replaySync.cancelledByDisconnect,
-          viewerId: viewerPlayerId,
-          isHost,
-          emitWithAck,
-        })}
+      <MultiplayerEndGameActions
+        emitWithAck={emitWithAck}
+        isHost={isHost}
+        replaySync={replaySync}
+        viewerPlayerId={viewerPlayerId}
       />
     );
   }
@@ -381,11 +364,9 @@ export function HatMultiplayerView({
   }
 
   return (
-    <FooterActionLockContext.Provider value={false}>
-      <GameShell footer={footer} headerRight={headerRight} title="Hat Game">
-        {body}
-      </GameShell>
-    </FooterActionLockContext.Provider>
+    <MultiplayerGameShell footer={footer} headerRight={headerRight} title="Hat Game">
+      {body}
+    </MultiplayerGameShell>
   );
 }
 

@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.8 - 2026-05-11
+
+- **Refactor:** `MultiplayerGameShell` and `MultiplayerEndGameActions`
+  (`src/features/multiplayer/MultiplayerGameShell.tsx`) replace the duplicated
+  `<FooterActionLockContext.Provider><GameShell>…</GameShell></FooterActionLockContext.Provider>`
+  wrapper and the duplicated `GameResultActions` + `buildMultiplayerReplayUi`
+  block across `HatMultiplayerView`, `WhoWhatWhereMultiplayerView`, and
+  `ImposterMultiplayerView`. No intended UX change.
+- **Fallow:** clone groups 31 → 18, duplicated lines 1109 → 638 (-42%),
+  functions above complexity threshold 115 → 69.
+
 ## 0.14.7 - 2026-05-11
 
 - **Tests:** `server/socketSmoke.test.ts` — first end-to-end Socket.IO

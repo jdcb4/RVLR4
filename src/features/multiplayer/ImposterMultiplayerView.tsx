@@ -1,18 +1,17 @@
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { ImposterRemindMeCard } from "@/components/game/ImposterRemindMeCard";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
-import { GameResultActions } from "@/components/GameResultActions";
-import { GameShell } from "@/components/GameShell";
 import { IMPOSTER_ROLE_CARD_COPY } from "@/config/imposterDefaults";
 import { IMPOSTER_NOTICE_CLASS } from "@/features/imposter/screens/imposterScreenTokens";
-import { leaveMultiplayerRoomForHub } from "@/multiplayer/leaveRoomForHub";
-import { buildMultiplayerReplayUi } from "@/multiplayer/replayUi";
+import {
+  MultiplayerEndGameActions,
+  MultiplayerGameShell,
+} from "@/features/multiplayer/MultiplayerGameShell";
 import type { ImposterSyncDto } from "@/multiplayer/roomTypes";
 import { playMultiplayerToneCue } from "@/services/multiplayerTone";
 export function ImposterMultiplayerView({
@@ -35,7 +34,6 @@ export function ImposterMultiplayerView({
     body?: unknown,
   ) => Promise<{ ok?: boolean; error?: string } | undefined>;
 }) {
-  const navigate = useNavigate();
   const { snapshot, revealSubjectId, revealSubjectIsImposter } = payload;
   const round = snapshot.round;
   const step = snapshot.step;
@@ -144,18 +142,11 @@ export function ImposterMultiplayerView({
     );
   } else if (step === "results") {
     footer = (
-      <GameResultActions
-        onPickAnotherGame={() => {
-          void leaveMultiplayerRoomForHub(emitWithAck, navigate);
-        }}
-        replay={buildMultiplayerReplayUi({
-          offerActive: replaySync.offerActive,
-          acceptedIds: replaySync.acceptedIds,
-          cancelledByDisconnect: replaySync.cancelledByDisconnect,
-          viewerId: viewerPlayerId,
-          isHost,
-          emitWithAck,
-        })}
+      <MultiplayerEndGameActions
+        emitWithAck={emitWithAck}
+        isHost={isHost}
+        replaySync={replaySync}
+        viewerPlayerId={viewerPlayerId}
       />
     );
   }
@@ -411,8 +402,8 @@ export function ImposterMultiplayerView({
   }
 
   return (
-    <GameShell footer={footer} title="Imposter">
+    <MultiplayerGameShell footer={footer} title="Imposter">
       {body}
-    </GameShell>
+    </MultiplayerGameShell>
   );
 }
