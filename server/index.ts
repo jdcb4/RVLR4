@@ -68,8 +68,10 @@ startRoomIdleSweeper(io, store);
 
 const port = env.PORT;
 
-server.listen(port, () => {
-  console.log(`Multiplayer server listening on ${port}`);
+// Bind to all interfaces (0.0.0.0) so Docker / Railway can route traffic to the container.
+// Listening only on localhost would make the service unreachable from outside the container.
+server.listen(port, "0.0.0.0", () => {
+  console.log(`Multiplayer server listening on 0.0.0.0:${port}`);
   if (env.MULTIPLAYER_DEBUG) {
     console.log("[multiplayer] debug logging enabled (MULTIPLAYER_DEBUG)");
   }
