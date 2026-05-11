@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.9 - 2026-05-11
+
+- **Multiplayer UX:** `RoomPage` now surfaces a polite "Reconnecting…" banner
+  after the socket has been disconnected for 2s (debounced — short blips don't
+  flash). Priority order: server-shutdown banner (0.14.5) > reconnecting
+  banner. Both render across every render path; fatal `bindError` keeps its
+  existing full-page screen.
+
 ## 0.14.8 - 2026-05-11
 
 - **Refactor:** `MultiplayerGameShell` and `MultiplayerEndGameActions`

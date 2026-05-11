@@ -251,6 +251,32 @@ export function RoomPage() {
     };
   }, []);
 
+  // Delay the "Reconnecting..." banner so a transient blip during a real
+  // navigation/hot-reload does not flash a misleading status. Two seconds
+  // matches the eye's threshold for "this is taking a while" without being
+  // long enough to hide a real outage.
+  const [showOfflineBanner, setShowOfflineBanner] = useState(false);
+
+  useEffect(() => {
+    if (connected) {
+      setShowOfflineBanner(false);
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => {
+      setShowOfflineBanner(true);
+    }, 2000);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [connected]);
+
+  // Banner priority: bindError (fatal — full screen elsewhere) > shutdown
+  // (server is about to disconnect) > offline (transient drop). bindError
+  // doesn't render here because the `if (bindError)` branch below renders its
+  // own full-page screen with the same message — shutdown/offline still get
+  // wrapped by `wrapWithBanners`.
   const shutdownBanner = shuttingDown ? (
     <div
       aria-live="polite"
@@ -261,9 +287,21 @@ export function RoomPage() {
     </div>
   ) : null;
 
+  const offlineBanner =
+    !shuttingDown && showOfflineBanner ? (
+      <div
+        aria-live="polite"
+        className="fixed inset-x-0 top-0 z-50 bg-muted px-4 py-2 text-center text-typ-ui text-muted-foreground shadow-md"
+        role="status"
+      >
+        Reconnecting…
+      </div>
+    ) : null;
+
   const wrapWithBanners = (body: React.ReactNode) => (
     <>
       {shutdownBanner}
+      {offlineBanner}
       {body}
     </>
   );
@@ -363,6 +401,7 @@ export function RoomPage() {
     return (
       <>
         {shutdownBanner}
+        {offlineBanner}
         <GameShell
           footer={
             isHost ? (
