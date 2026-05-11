@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.2 - 2026-05-11
+
+- **Refactor:** `server/socketHandle.ts` — `registerHandler` wrapper centralizes
+  the try/ack/`requireActor` pattern shared by every Socket.IO listener;
+  `socketHandlers.ts` migrated. No behaviour change. Removes ~120 lines of
+  per-handler `try { … } catch { ack({ok:false, …}) }` boilerplate flagged by
+  Fallow as the largest in-file clone family.
+
 ## 0.14.1 - 2026-05-11
 
 - **Deploy:** `Dockerfile` no longer sets `NODE_ENV=production` before `pnpm install` / `pnpm run build`. With production set first, pnpm skipped **devDependencies**, so **`tsc` was missing** on Railway (`sh: tsc: not found`). `NODE_ENV=production` is applied **after** the Vite build so the runtime image still runs in production mode.

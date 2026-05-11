@@ -35,6 +35,7 @@ import {
   resetLobbyAfterReplay,
   RoomStore,
 } from "./roomStore.ts";
+import { registerHandler, type SocketAck } from "./socketHandle.ts";
 import {
   applyWhoWhatWhereCorrect,
   applyWhoWhatWhereEndTurn,
@@ -46,8 +47,6 @@ import {
   startWhoWhatWhereMatch,
 } from "./wwwRuntime.ts";
 
-type SocketAck = (payload?: { ok?: boolean; error?: string }) => void;
-
 function ensureLobbyEveryoneReady(room: Room) {
   for (const player of room.players.values()) {
     if (player.isHost) {
@@ -58,6 +57,33 @@ function ensureLobbyEveryoneReady(room: Room) {
       throw new Error("Waiting for everyone to ready up.");
     }
   }
+}
+
+function canOfferReplay(activeRoom: Room): boolean {
+  if (activeRoom.phase !== "playing") {
+    return false;
+  }
+
+  if (activeRoom.replayCancelledByDisconnect) {
+    return false;
+  }
+
+  if (activeRoom.gameKind === "whowhatwhere") {
+    const stage = activeRoom.wwwMatch?.stage;
+    // Let the host offer replay as soon as the match is over (per-device "final scores" is local).
+    return stage === "results" || stage === "finalSummary";
+  }
+
+  if (activeRoom.gameKind === "hat") {
+    const stage = activeRoom.hatSession?.stage;
+    return stage === "results" || stage === "finalSummary";
+  }
+
+  if (activeRoom.gameKind === "imposter") {
+    return activeRoom.imposterSnapshot?.step === "results";
+  }
+
+  return false;
 }
 
 export function registerSocketHandlers(io: Server, store: RoomStore) {
@@ -101,10 +127,12 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    socket.on("room:optOutResume", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
-
+    registerHandler<unknown>(
+      socket,
+      store,
+      "room:optOutResume",
+      "Unable to update resume state.",
+      async ({ room, actor }) => {
         if (room.phase !== "playing") {
           throw new Error("Nothing to leave right now.");
         }
@@ -120,297 +148,208 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         }
 
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to update resume state.",
-        });
-      }
-    });
+      },
+    );
 
-    socket.on(
+    registerHandler<{ ready?: boolean }>(
+      socket,
+      store,
       "lobby:setReady",
-      async (payload: { ready?: boolean }, ack?: SocketAck) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-          actor.ready = Boolean(payload.ready);
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to update ready state.",
-          });
-        }
+      "Unable to update ready state.",
+      async ({ room, actor }, payload) => {
+        actor.ready = Boolean(payload.ready);
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ name?: string }>(
+      socket,
+      store,
       "lobby:setName",
-      async (payload: { name?: string }, ack?: SocketAck) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (room.phase !== "lobby") {
-            throw new Error("Names are locked once the match begins.");
-          }
-
-          actor.name = String(payload.name ?? "").trim().slice(0, 32) || actor.name;
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to rename player.",
-          });
+      "Unable to rename player.",
+      async ({ room, actor }, payload) => {
+        if (room.phase !== "lobby") {
+          throw new Error("Names are locked once the match begins.");
         }
+
+        actor.name = String(payload.name ?? "").trim().slice(0, 32) || actor.name;
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ teamIndex?: number }>(
+      socket,
+      store,
       "lobby:moveSelf",
-      async (payload: { teamIndex?: number }, ack?: SocketAck) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (room.phase !== "lobby") {
-            throw new Error("Teams are locked once the match begins.");
-          }
-
-          movePlayerToTeam({
-            room,
-            actorId: actor.id,
-            targetPlayerId: actor.id,
-            teamIndex: Number(payload.teamIndex),
-            mode: "self",
-          });
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to move teams.",
-          });
+      "Unable to move teams.",
+      async ({ room, actor }, payload) => {
+        if (room.phase !== "lobby") {
+          throw new Error("Teams are locked once the match begins.");
         }
+
+        movePlayerToTeam({
+          room,
+          actorId: actor.id,
+          targetPlayerId: actor.id,
+          teamIndex: Number(payload.teamIndex),
+          mode: "self",
+        });
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ playerId?: string; teamIndex?: number }>(
+      socket,
+      store,
       "lobby:hostMovePlayer",
-      async (
-        payload: { playerId?: string; teamIndex?: number },
-        ack?: SocketAck,
-      ) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (!actor.isHost) {
-            throw new Error("Only the host can assign teams.");
-          }
-
-          if (room.phase !== "lobby") {
-            throw new Error("Teams are locked once the match begins.");
-          }
-
-          if (!payload.playerId) {
-            throw new Error("Missing player.");
-          }
-
-          movePlayerToTeam({
-            room,
-            actorId: actor.id,
-            targetPlayerId: payload.playerId,
-            teamIndex: Number(payload.teamIndex),
-            mode: "host",
-          });
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to move player.",
-          });
+      "Unable to move player.",
+      async ({ room, actor }, payload) => {
+        if (!actor.isHost) {
+          throw new Error("Only the host can assign teams.");
         }
+
+        if (room.phase !== "lobby") {
+          throw new Error("Teams are locked once the match begins.");
+        }
+
+        if (!payload.playerId) {
+          throw new Error("Missing player.");
+        }
+
+        movePlayerToTeam({
+          room,
+          actorId: actor.id,
+          targetPlayerId: payload.playerId,
+          teamIndex: Number(payload.teamIndex),
+          mode: "host",
+        });
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ teamCount?: number }>(
+      socket,
+      store,
       "lobby:hostSetTeamCount",
-      async (payload: { teamCount?: number }, ack?: SocketAck) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (!actor.isHost) {
-            throw new Error("Only the host can change team counts.");
-          }
-
-          if (room.phase !== "lobby") {
-            throw new Error("Team counts are locked once the match begins.");
-          }
-
-          hostSetTeamCount(room, Number(payload.teamCount));
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error:
-              error instanceof Error ? error.message : "Unable to update team count.",
-          });
+      "Unable to update team count.",
+      async ({ room, actor }, payload) => {
+        if (!actor.isHost) {
+          throw new Error("Only the host can change team counts.");
         }
+
+        if (room.phase !== "lobby") {
+          throw new Error("Team counts are locked once the match begins.");
+        }
+
+        hostSetTeamCount(room, Number(payload.teamCount));
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ teamIndex?: number; name?: string }>(
+      socket,
+      store,
       "lobby:hostSetTeamName",
-      async (
-        payload: { teamIndex?: number; name?: string },
-        ack?: SocketAck,
-      ) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (!actor.isHost) {
-            throw new Error("Only the host can rename teams.");
-          }
-
-          if (room.phase !== "lobby") {
-            throw new Error("Team names are locked once the match begins.");
-          }
-
-          hostSetTeamName(room, Number(payload.teamIndex), String(payload.name ?? ""));
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to rename team.",
-          });
+      "Unable to rename team.",
+      async ({ room, actor }, payload) => {
+        if (!actor.isHost) {
+          throw new Error("Only the host can rename teams.");
         }
+
+        if (room.phase !== "lobby") {
+          throw new Error("Team names are locked once the match begins.");
+        }
+
+        hostSetTeamName(room, Number(payload.teamIndex), String(payload.name ?? ""));
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ teamIndex?: number; name?: string }>(
+      socket,
+      store,
       "lobby:captainSetTeamName",
-      async (
-        payload: { teamIndex?: number; name?: string },
-        ack?: SocketAck,
-      ) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (room.phase !== "lobby") {
-            throw new Error("Team names are locked once the match begins.");
-          }
-
-          const teamIndex = Number(payload.teamIndex);
-          const captainId = captainPlayerIdForTeam(room.players.values(), teamIndex);
-
-          if (!captainId || captainId !== actor.id) {
-            throw new Error("Only your team captain can rename this team.");
-          }
-
-          hostSetTeamName(room, teamIndex, String(payload.name ?? ""));
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to rename team.",
-          });
+      "Unable to rename team.",
+      async ({ room, actor }, payload) => {
+        if (room.phase !== "lobby") {
+          throw new Error("Team names are locked once the match begins.");
         }
+
+        const teamIndex = Number(payload.teamIndex);
+        const captainId = captainPlayerIdForTeam(room.players.values(), teamIndex);
+
+        if (!captainId || captainId !== actor.id) {
+          throw new Error("Only your team captain can rename this team.");
+        }
+
+        hostSetTeamName(room, teamIndex, String(payload.name ?? ""));
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ patch?: Partial<GameSettings> }>(
+      socket,
+      store,
       "lobby:hostPatchWwwSettings",
-      async (payload: { patch?: Partial<GameSettings> }, ack?: SocketAck) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (!actor.isHost) {
-            throw new Error("Only the host can change settings.");
-          }
-
-          if (room.phase !== "lobby") {
-            throw new Error("Settings are locked once the match begins.");
-          }
-
-          hostPatchWwwSettings(room, payload.patch ?? {});
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to update settings.",
-          });
+      "Unable to update settings.",
+      async ({ room, actor }, payload) => {
+        if (!actor.isHost) {
+          throw new Error("Only the host can change settings.");
         }
+
+        if (room.phase !== "lobby") {
+          throw new Error("Settings are locked once the match begins.");
+        }
+
+        hostPatchWwwSettings(room, payload.patch ?? {});
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ hatTurnDurationSeconds?: number; hatSkipsPerTurn?: number }>(
+      socket,
+      store,
       "lobby:hostPatchHatPrefs",
-      async (
-        payload: { hatTurnDurationSeconds?: number; hatSkipsPerTurn?: number },
-        ack?: SocketAck,
-      ) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (!actor.isHost) {
-            throw new Error("Only the host can change settings.");
-          }
-
-          if (room.phase !== "lobby") {
-            throw new Error("Settings are locked once the match begins.");
-          }
-
-          hostPatchHatPrefs(room, payload);
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to update settings.",
-          });
+      "Unable to update settings.",
+      async ({ room, actor }, payload) => {
+        if (!actor.isHost) {
+          throw new Error("Only the host can change settings.");
         }
+
+        if (room.phase !== "lobby") {
+          throw new Error("Settings are locked once the match begins.");
+        }
+
+        hostPatchHatPrefs(room, payload);
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ imposterPlayerCount?: number; imposterImposterCount?: number }>(
+      socket,
+      store,
       "lobby:hostPatchImposterCounts",
-      async (
-        payload: { imposterPlayerCount?: number; imposterImposterCount?: number },
-        ack?: SocketAck,
-      ) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (!actor.isHost) {
-            throw new Error("Only the host can change roster targets.");
-          }
-
-          if (room.phase !== "lobby") {
-            throw new Error("Counts are locked once the match begins.");
-          }
-
-          hostPatchImposterCounts(room, payload);
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to update counts.",
-          });
+      "Unable to update counts.",
+      async ({ room, actor }, payload) => {
+        if (!actor.isHost) {
+          throw new Error("Only the host can change roster targets.");
         }
+
+        if (room.phase !== "lobby") {
+          throw new Error("Counts are locked once the match begins.");
+        }
+
+        hostPatchImposterCounts(room, payload);
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on("lobby:startGame", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
-
+    registerHandler<unknown>(
+      socket,
+      store,
+      "lobby:startGame",
+      "Unable to start the game.",
+      async ({ room, actor }) => {
         if (!actor.isHost) {
           throw new Error("Only the host can start the match.");
         }
@@ -435,152 +374,94 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         });
 
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to start the game.",
-        });
-      }
-    });
+      },
+    );
 
-    socket.on(
+    registerHandler<ImposterDispatchAction>(
+      socket,
+      store,
       "imposter:dispatch",
-      async (payload: ImposterDispatchAction, ack?: SocketAck) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          applyImposterDispatch(room, actor.id, actor.isHost, payload);
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error:
-              error instanceof Error ? error.message : "Unable to update Imposter round.",
-          });
-        }
+      "Unable to update Imposter round.",
+      async ({ room, actor }, payload) => {
+        applyImposterDispatch(room, actor.id, actor.isHost, payload);
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ clueIndex?: number; value?: unknown }>(
+      socket,
+      store,
       "lobby:hatSetClueCell",
-      async (
-        payload: { clueIndex?: number; value?: unknown },
-        ack?: SocketAck,
-      ) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (room.gameKind !== "hat" || room.phase !== "lobby") {
-            throw new Error("Clues can only be edited in the Hat lobby.");
-          }
-
-          const clueIndex = Number(payload.clueIndex);
-
-          if (
-            clueIndex !== clueIndex ||
-            clueIndex < 0 ||
-            clueIndex >= GAME_DEFAULTS.cluesPerPlayer
-          ) {
-            throw new Error("Invalid clue slot.");
-          }
-
-          room.hatClueDrafts ??= {};
-          const row = [
-            ...(room.hatClueDrafts[actor.id] ??
-              Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "")),
-          ];
-          row[clueIndex] = String(payload.value ?? "").slice(
-            0,
-            GAME_DEFAULTS.maxClueLength,
-          );
-          room.hatClueDrafts[actor.id] = row;
-
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error:
-              error instanceof Error ? error.message : "Unable to update clue.",
-          });
+      "Unable to update clue.",
+      async ({ room, actor }, payload) => {
+        if (room.gameKind !== "hat" || room.phase !== "lobby") {
+          throw new Error("Clues can only be edited in the Hat lobby.");
         }
+
+        const clueIndex = Number(payload.clueIndex);
+
+        if (
+          clueIndex !== clueIndex ||
+          clueIndex < 0 ||
+          clueIndex >= GAME_DEFAULTS.cluesPerPlayer
+        ) {
+          throw new Error("Invalid clue slot.");
+        }
+
+        room.hatClueDrafts ??= {};
+        const row = [
+          ...(room.hatClueDrafts[actor.id] ??
+            Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "")),
+        ];
+        row[clueIndex] = String(payload.value ?? "").slice(
+          0,
+          GAME_DEFAULTS.maxClueLength,
+        );
+        room.hatClueDrafts[actor.id] = row;
+
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    socket.on(
+    registerHandler<{ clueIndex?: number }>(
+      socket,
+      store,
       "lobby:hatSuggestClue",
-      async (payload: { clueIndex?: number }, ack?: SocketAck) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (room.gameKind !== "hat" || room.phase !== "lobby") {
-            throw new Error("Clues can only be edited in the Hat lobby.");
-          }
-
-          const clueIndex = Number(payload.clueIndex);
-
-          if (
-            clueIndex !== clueIndex ||
-            clueIndex < 0 ||
-            clueIndex >= GAME_DEFAULTS.cluesPerPlayer
-          ) {
-            throw new Error("Invalid clue slot.");
-          }
-
-          room.hatClueDrafts ??= {};
-          const suggestion = pickSuggestedHatClue(room.hatClueDrafts, Math.random);
-          const row = [
-            ...(room.hatClueDrafts[actor.id] ??
-              Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "")),
-          ];
-          row[clueIndex] = suggestion;
-          room.hatClueDrafts[actor.id] = row;
-
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error:
-              error instanceof Error ? error.message : "Unable to suggest a clue.",
-          });
+      "Unable to suggest a clue.",
+      async ({ room, actor }, payload) => {
+        if (room.gameKind !== "hat" || room.phase !== "lobby") {
+          throw new Error("Clues can only be edited in the Hat lobby.");
         }
+
+        const clueIndex = Number(payload.clueIndex);
+
+        if (
+          clueIndex !== clueIndex ||
+          clueIndex < 0 ||
+          clueIndex >= GAME_DEFAULTS.cluesPerPlayer
+        ) {
+          throw new Error("Invalid clue slot.");
+        }
+
+        room.hatClueDrafts ??= {};
+        const suggestion = pickSuggestedHatClue(room.hatClueDrafts, Math.random);
+        const row = [
+          ...(room.hatClueDrafts[actor.id] ??
+            Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "")),
+        ];
+        row[clueIndex] = suggestion;
+        room.hatClueDrafts[actor.id] = row;
+
+        await broadcastRoom(io, store, room.code);
       },
     );
 
-    function canOfferReplay(activeRoom: Room): boolean {
-      if (activeRoom.phase !== "playing") {
-        return false;
-      }
-
-      if (activeRoom.replayCancelledByDisconnect) {
-        return false;
-      }
-
-      if (activeRoom.gameKind === "whowhatwhere") {
-        const stage = activeRoom.wwwMatch?.stage;
-        // Let the host offer replay as soon as the match is over (per-device "final scores" is local).
-        return stage === "results" || stage === "finalSummary";
-      }
-
-      if (activeRoom.gameKind === "hat") {
-        const stage = activeRoom.hatSession?.stage;
-        return stage === "results" || stage === "finalSummary";
-      }
-
-      if (activeRoom.gameKind === "imposter") {
-        return activeRoom.imposterSnapshot?.step === "results";
-      }
-
-      return false;
-    }
-
-    socket.on("game:hostOfferReplay", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
-
+    registerHandler<unknown>(
+      socket,
+      store,
+      "game:hostOfferReplay",
+      "Unable to offer replay.",
+      async ({ room, actor }) => {
         if (!actor.isHost) {
           throw new Error("Only the host can offer a replay.");
         }
@@ -592,19 +473,15 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         room.replayOfferActive = true;
         room.replayAcceptedPlayerIds = [actor.id];
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to offer replay.",
-        });
-      }
-    });
+      },
+    );
 
-    socket.on("game:acceptReplay", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
-
+    registerHandler<unknown>(
+      socket,
+      store,
+      "game:acceptReplay",
+      "Unable to accept replay.",
+      async ({ room, actor }) => {
         if (!room.replayOfferActive) {
           throw new Error("The host has not offered a replay yet.");
         }
@@ -618,18 +495,15 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         }
 
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to accept replay.",
-        });
-      }
-    });
+      },
+    );
 
-    socket.on("www:markReady", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
+    registerHandler<unknown>(
+      socket,
+      store,
+      "www:markReady",
+      "Unable to update readiness.",
+      async ({ room, actor }) => {
         const match = room.wwwMatch;
 
         if (!match || match.stage !== "ready") {
@@ -644,18 +518,15 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
 
         markReadyGate(room);
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to update readiness.",
-        });
-      }
-    });
+      },
+    );
 
-    socket.on("www:startTurn", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
+    registerHandler<unknown>(
+      socket,
+      store,
+      "www:startTurn",
+      "Unable to start the turn.",
+      async ({ room, actor }) => {
         const match = room.wwwMatch;
 
         if (!match || match.stage !== "ready") {
@@ -670,210 +541,157 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
 
         await applyWhoWhatWhereStartTurn(room);
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to start the turn.",
-        });
-      }
-    });
-
-    socket.on("www:correct", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
-        applyWhoWhatWhereCorrect(room, actor.id);
-        await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to score that word.",
-        });
-      }
-    });
-
-    socket.on("www:skip", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
-        applyWhoWhatWhereSkip(room, actor.id);
-        await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to skip.",
-        });
-      }
-    });
-
-    socket.on(
-      "www:returnSkipped",
-      async (payload: { skippedWordId?: string }, ack?: SocketAck) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (!payload.skippedWordId) {
-            throw new Error("Missing skipped word.");
-          }
-
-          applyWhoWhatWhereReturnSkipped(room, actor.id, payload.skippedWordId);
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to recall a skip.",
-          });
-        }
       },
     );
 
-    socket.on("www:endTurn", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
+    registerHandler<unknown>(
+      socket,
+      store,
+      "www:correct",
+      "Unable to score that word.",
+      async ({ room, actor }) => {
+        applyWhoWhatWhereCorrect(room, actor.id);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler<unknown>(
+      socket,
+      store,
+      "www:skip",
+      "Unable to skip.",
+      async ({ room, actor }) => {
+        applyWhoWhatWhereSkip(room, actor.id);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler<{ skippedWordId?: string }>(
+      socket,
+      store,
+      "www:returnSkipped",
+      "Unable to recall a skip.",
+      async ({ room, actor }, payload) => {
+        if (!payload.skippedWordId) {
+          throw new Error("Missing skipped word.");
+        }
+
+        applyWhoWhatWhereReturnSkipped(room, actor.id, payload.skippedWordId);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler<unknown>(
+      socket,
+      store,
+      "www:endTurn",
+      "Unable to end the turn.",
+      async ({ room, actor }) => {
         applyWhoWhatWhereEndTurn(room, actor.id);
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to end the turn.",
-        });
-      }
-    });
+      },
+    );
 
-    socket.on("www:finalScores", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room } = requireActor(socket, store);
+    registerHandler<unknown>(
+      socket,
+      store,
+      "www:finalScores",
+      "Unable to show final scores.",
+      async ({ room }) => {
         applyWhoWhatWhereFinalScores(room);
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to show final scores.",
-        });
-      }
-    });
+      },
+    );
 
-    socket.on("hat:startTurn", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
-
+    registerHandler<unknown>(
+      socket,
+      store,
+      "hat:startTurn",
+      "Unable to start the turn.",
+      async ({ room, actor }) => {
         if (room.gameKind !== "hat" || room.phase !== "playing") {
           throw new Error("Hat Game is not in progress.");
         }
 
         applyHatStartTurn(room, actor.id);
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to start the turn.",
-        });
-      }
-    });
+      },
+    );
 
-    socket.on("hat:endTurn", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
-
+    registerHandler<unknown>(
+      socket,
+      store,
+      "hat:endTurn",
+      "Unable to end the turn.",
+      async ({ room, actor }) => {
         if (room.gameKind !== "hat" || room.phase !== "playing") {
           throw new Error("Hat Game is not in progress.");
         }
 
         applyHatEndTurn(room, actor.id);
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to end the turn.",
-        });
-      }
-    });
+      },
+    );
 
-    socket.on("hat:markCorrect", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
-
+    registerHandler<unknown>(
+      socket,
+      store,
+      "hat:markCorrect",
+      "Unable to score that clue.",
+      async ({ room, actor }) => {
         if (room.gameKind !== "hat" || room.phase !== "playing") {
           throw new Error("Hat Game is not in progress.");
         }
 
         applyHatMarkCorrect(room, actor.id);
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to score that clue.",
-        });
-      }
-    });
+      },
+    );
 
-    socket.on("hat:skipClue", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room, actor } = requireActor(socket, store);
-
+    registerHandler<unknown>(
+      socket,
+      store,
+      "hat:skipClue",
+      "Unable to skip this clue.",
+      async ({ room, actor }) => {
         if (room.gameKind !== "hat" || room.phase !== "playing") {
           throw new Error("Hat Game is not in progress.");
         }
 
         applyHatSkipClue(room, actor.id);
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to skip this clue.",
-        });
-      }
-    });
-
-    socket.on(
-      "hat:returnSkipped",
-      async (payload: { poolIndex?: number }, ack?: SocketAck) => {
-        try {
-          const { room, actor } = requireActor(socket, store);
-
-          if (room.gameKind !== "hat" || room.phase !== "playing") {
-            throw new Error("Hat Game is not in progress.");
-          }
-
-          applyHatReturnSkipped(room, actor.id, payload?.poolIndex);
-          await broadcastRoom(io, store, room.code);
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error:
-              error instanceof Error ? error.message : "Unable to recall a skip.",
-          });
-        }
       },
     );
 
-    socket.on("hat:viewResults", async (_payload: unknown, ack?: SocketAck) => {
-      try {
-        const { room } = requireActor(socket, store);
+    registerHandler<{ poolIndex?: number }>(
+      socket,
+      store,
+      "hat:returnSkipped",
+      "Unable to recall a skip.",
+      async ({ room, actor }, payload) => {
+        if (room.gameKind !== "hat" || room.phase !== "playing") {
+          throw new Error("Hat Game is not in progress.");
+        }
 
+        applyHatReturnSkipped(room, actor.id, payload?.poolIndex);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler<unknown>(
+      socket,
+      store,
+      "hat:viewResults",
+      "Unable to show final scores.",
+      async ({ room }) => {
         if (room.gameKind !== "hat" || room.phase !== "playing") {
           throw new Error("Hat Game is not in progress.");
         }
 
         applyHatViewResults(room);
         await broadcastRoom(io, store, room.code);
-        ack?.({ ok: true });
-      } catch (error) {
-        ack?.({
-          ok: false,
-          error: error instanceof Error ? error.message : "Unable to show final scores.",
-        });
-      }
-    });
+      },
+    );
 
     socket.on("disconnect", async () => {
       try {
@@ -905,30 +723,4 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       }
     });
   });
-}
-
-function requireActor(
-  socket: { data: { roomCode?: string; playerId?: string } },
-  store: RoomStore,
-) {
-  const code = socket.data.roomCode;
-  const playerId = socket.data.playerId;
-
-  if (!code || !playerId) {
-    throw new Error("Join the room before sending commands.");
-  }
-
-  const room = store.getRoom(code);
-
-  if (!room) {
-    throw new Error("That room no longer exists.");
-  }
-
-  const actor = room.players.get(playerId);
-
-  if (!actor) {
-    throw new Error("Player record missing.");
-  }
-
-  return { room, actor };
 }
