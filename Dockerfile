@@ -18,4 +18,5 @@ ENV NODE_ENV=production
 
 EXPOSE 3001
 
-CMD ["pnpm", "exec", "tsx", "server/index.ts"]
+# tsx must load server/tsconfig.json so `@/*` → `src/*` resolves (same as dev:server).
+CMD ["pnpm", "exec", "tsx", "--tsconfig", "server/tsconfig.json", "server/index.ts"]

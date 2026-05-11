@@ -22,7 +22,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "start": "tsx server/index.ts",
+    "start": "tsx --tsconfig server/tsconfig.json server/index.ts",
     "verify": "pnpm run typecheck && pnpm run lint && pnpm test && pnpm run build",
     "smoke:server-imports": "tsx --tsconfig server/tsconfig.json scripts/smoke-server-imports.ts",
     "fallow:hygiene": "pnpm dlx fallow --no-cache --format human --only dead-code,dupes",
