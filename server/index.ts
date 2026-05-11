@@ -83,3 +83,37 @@ server.listen(port, "0.0.0.0", () => {
     console.log("[multiplayer] debug logging enabled (MULTIPLAYER_DEBUG)");
   }
 });
+
+// Graceful shutdown: Railway/Docker send SIGTERM on deploy. Without this the
+// process is killed mid-match and clients see a generic disconnect. The
+// `server:shuttingDown` emit gives each room a chance to surface a friendly
+// banner (see src/multiplayer/useRoomChannel.ts) before the socket dies.
+let shuttingDown = false;
+
+function shutdown(signal: string) {
+  if (shuttingDown) {
+    return;
+  }
+  shuttingDown = true;
+
+  console.log(`[server] received ${signal}, shutting down`);
+  io.emit("server:shuttingDown");
+
+  // Give connected clients ~500ms to receive the event before closing.
+  setTimeout(() => {
+    io.close(() => {
+      server.close(() => {
+        process.exit(0);
+      });
+    });
+  }, 500);
+
+  // Hard exit if anything hangs past 5s.
+  setTimeout(() => {
+    console.error("[server] shutdown timed out, forcing exit");
+    process.exit(1);
+  }, 5000).unref();
+}
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));

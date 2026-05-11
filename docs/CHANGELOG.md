@@ -2,6 +2,20 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.5 - 2026-05-11
+
+- **Server:** `SIGTERM` / `SIGINT` trigger a 500ms graceful shutdown
+  (`server/index.ts`) — the server emits `server:shuttingDown`, then closes
+  `io` and the HTTP server before exiting. Hard exit after 5s if anything
+  hangs. Railway/Docker redeploys no longer kill in-flight matches without
+  notice.
+- **Client:** `useRoomChannel` listens for `server:shuttingDown` and exposes
+  `shuttingDown: boolean`. Reconnecting clears the flag.
+- **Multiplayer UX:** `RoomPage` shows a fixed top banner — "The server is
+  restarting — keep this tab open, the room will reopen in a moment." — while
+  `shuttingDown` is true, across every render path (lobby, playing, ended,
+  reconnect).
+
 ## 0.14.4 - 2026-05-11
 
 - **Server (deploy hardening):** `CLIENT_ORIGIN` is now **required** in

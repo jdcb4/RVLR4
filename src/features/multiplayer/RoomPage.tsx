@@ -181,7 +181,10 @@ export function RoomPage() {
   const navigate = useNavigate();
   const params = useParams();
   const code = params.code?.toUpperCase();
-  const { sync, bindError, emitWithAck, connected } = useRoomChannel(code, Boolean(code));
+  const { sync, bindError, emitWithAck, connected, shuttingDown } = useRoomChannel(
+    code,
+    Boolean(code),
+  );
   const playingBookmarkCommittedRef = useRef(false);
 
   useEffect(() => {
@@ -248,16 +251,33 @@ export function RoomPage() {
     };
   }, []);
 
+  const shutdownBanner = shuttingDown ? (
+    <div
+      aria-live="polite"
+      className="fixed inset-x-0 top-0 z-50 bg-primary px-4 py-2 text-center text-typ-ui text-primary-foreground shadow-md"
+      role="status"
+    >
+      The server is restarting — keep this tab open, the room will reopen in a moment.
+    </div>
+  ) : null;
+
+  const wrapWithBanners = (body: React.ReactNode) => (
+    <>
+      {shutdownBanner}
+      {body}
+    </>
+  );
+
   if (!code) {
-    return (
+    return wrapWithBanners(
       <GameShell footer={null} title="Room">
         <p className="text-typ-body-relaxed text-muted-foreground">Missing room code.</p>
-      </GameShell>
+      </GameShell>,
     );
   }
 
   if (bindError) {
-    return (
+    return wrapWithBanners(
       <GameShell
         footer={
           <PrimaryFooterButton label="Back to home" onClick={() => navigate("/")} />
@@ -273,53 +293,53 @@ export function RoomPage() {
   }
 
   if (!sync) {
-    return (
+    return wrapWithBanners(
       <GameShell footer={null} title="Connecting">
         <p className="text-typ-body-relaxed text-muted-foreground">
           {connected ? "Syncing your table..." : "Connecting to the host..."}
         </p>
-      </GameShell>
+      </GameShell>,
     );
   }
 
   if (sync.phase === "playing" && sync.gameKind === "hat" && sync.hat) {
-    return (
+    return wrapWithBanners(
       <HatMultiplayerView
         emitWithAck={emitWithAck}
         isHost={sync.you.isHost}
         payload={sync.hat}
         replaySync={sync.replay}
         viewerPlayerId={sync.you.playerId}
-      />
+      />,
     );
   }
 
   if (sync.phase === "playing" && sync.gameKind === "imposter" && sync.imposter) {
-    return (
+    return wrapWithBanners(
       <ImposterMultiplayerView
         emitWithAck={emitWithAck}
         isHost={sync.you.isHost}
         payload={sync.imposter}
         replaySync={sync.replay}
         viewerPlayerId={sync.you.playerId}
-      />
+      />,
     );
   }
 
   if (sync.phase === "playing" && sync.gameKind === "whowhatwhere" && sync.www) {
-    return (
+    return wrapWithBanners(
       <WhoWhatWhereMultiplayerView
         emitWithAck={emitWithAck}
         isHost={sync.you.isHost}
         payload={sync.www}
         replaySync={sync.replay}
         viewerPlayerId={sync.you.playerId}
-      />
+      />,
     );
   }
 
   if (sync.phase === "ended") {
-    return (
+    return wrapWithBanners(
       <GameShell
         footer={
           <PrimaryFooterButton label="Back to home" onClick={() => navigate("/")} />
@@ -330,7 +350,7 @@ export function RoomPage() {
           This room is finished — everyone left from the score screen or the match was
           cleared. You can host or join a new game from the home page.
         </p>
-      </GameShell>
+      </GameShell>,
     );
   }
 
@@ -342,6 +362,7 @@ export function RoomPage() {
 
     return (
       <>
+        {shutdownBanner}
         <GameShell
           footer={
             isHost ? (
@@ -526,10 +547,10 @@ export function RoomPage() {
     );
   }
 
-  return (
+  return wrapWithBanners(
     <GameShell footer={null} title="Room">
       <p className="text-typ-ui text-muted-foreground">Waiting for host instructions...</p>
-    </GameShell>
+    </GameShell>,
   );
 }
 

@@ -60,6 +60,12 @@ export type RoomChannelHandle = {
   readonly sync: RoomSyncPayload | null;
   readonly connected: boolean;
   readonly bindError: string | null;
+  /**
+   * True after the server emits `server:shuttingDown` (graceful shutdown on
+   * SIGTERM/SIGINT). UI should show a "server restarting" banner; the socket
+   * will disconnect shortly after.
+   */
+  readonly shuttingDown: boolean;
   readonly emitWithAck: (
     event: string,
     payload?: unknown,
@@ -74,6 +80,7 @@ export function useRoomChannel(
   const [sync, setSync] = useState<RoomSyncPayload | null>(null);
   const [connected, setConnected] = useState(false);
   const [bindError, setBindError] = useState<string | null>(null);
+  const [shuttingDown, setShuttingDown] = useState(false);
 
   const socket = useMemo(() => {
     if (!socketRef.current) {
@@ -100,15 +107,24 @@ export function useRoomChannel(
       setSync(payload);
     };
 
-    socket.on("connect", () => {
+    const handleConnect = () => {
       setConnected(true);
-    });
+      // Reconnected — the server is back. Clear any stale shutdown banner.
+      setShuttingDown(false);
+    };
 
-    socket.on("disconnect", () => {
+    const handleDisconnect = () => {
       setConnected(false);
-    });
+    };
 
+    const handleShutdown = () => {
+      setShuttingDown(true);
+    };
+
+    socket.on("connect", handleConnect);
+    socket.on("disconnect", handleDisconnect);
     socket.on("room:sync", handleSync);
+    socket.on("server:shuttingDown", handleShutdown);
 
     if (!socket.connected) {
       socket.connect();
@@ -131,7 +147,10 @@ export function useRoomChannel(
     );
 
     return () => {
+      socket.off("connect", handleConnect);
+      socket.off("disconnect", handleDisconnect);
       socket.off("room:sync", handleSync);
+      socket.off("server:shuttingDown", handleShutdown);
     };
   }, [code, enabled, socket]);
 
@@ -154,6 +173,7 @@ export function useRoomChannel(
     sync,
     connected,
     bindError,
+    shuttingDown,
     emitWithAck,
   };
 }
