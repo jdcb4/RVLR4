@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.6 - 2026-05-11
+
+- **Tests:** `server/roomStore.test.ts` — 24 cases covering `createRoom`
+  (team-game/Hat/Imposter shapes, name trimming, fallback, unique codes),
+  `joinRoom` (team-balancing, Imposter capacity, lobby-phase enforcement, Hat
+  clue draft seeding, team overflow rejection), `authenticate` (happy/wrong
+  secret/unknown room/unknown player), `computeResumeEligible`,
+  `archiveRoomAfterAllPlayersOptedOut`, and `peek`. First server-side test
+  coverage of room lifecycle invariants.
+
 ## 0.14.5 - 2026-05-11
 
 - **Server:** `SIGTERM` / `SIGINT` trigger a 500ms graceful shutdown
