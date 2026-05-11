@@ -15,11 +15,7 @@ import {
   applyHatViewResults,
   startHatMatch,
 } from "./hatRuntime.ts";
-import {
-  applyImposterDispatch,
-  type ImposterDispatchAction,
-  startImposterMatch,
-} from "./imposterRuntime.ts";
+import { applyImposterDispatch, startImposterMatch } from "./imposterRuntime.ts";
 import {
   hostPatchHatPrefs,
   hostPatchImposterCounts,
@@ -36,6 +32,7 @@ import {
   RoomStore,
 } from "./roomStore.ts";
 import { registerHandler, type SocketAck } from "./socketHandle.ts";
+import { sessionBindSchema } from "./socketSchemas.ts";
 import {
   applyWhoWhatWhereCorrect,
   applyWhoWhatWhereEndTurn,
@@ -90,21 +87,24 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
   io.on("connection", (socket) => {
     socket.on(
       "session:bind",
-      async (
-        payload: { code?: string; playerId?: string; secret?: string },
-        ack?: SocketAck,
-      ) => {
+      async (rawPayload: unknown, ack?: SocketAck) => {
         try {
-          const code = payload.code?.trim();
+          const parsed = sessionBindSchema.safeParse(rawPayload);
 
-          if (!code || !payload.playerId || !payload.secret) {
+          if (!parsed.success) {
+            throw new Error("Missing session details.");
+          }
+
+          const code = parsed.data.code.trim();
+
+          if (!code) {
             throw new Error("Missing session details.");
           }
 
           const player = store.authenticate({
             code,
-            playerId: payload.playerId,
-            secret: payload.secret,
+            playerId: parsed.data.playerId,
+            secret: parsed.data.secret,
           });
 
           if (!player) {
@@ -127,7 +127,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "room:optOutResume",
@@ -151,7 +151,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ ready?: boolean }>(
+    registerHandler(
       socket,
       store,
       "lobby:setReady",
@@ -162,7 +162,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ name?: string }>(
+    registerHandler(
       socket,
       store,
       "lobby:setName",
@@ -177,7 +177,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ teamIndex?: number }>(
+    registerHandler(
       socket,
       store,
       "lobby:moveSelf",
@@ -198,7 +198,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ playerId?: string; teamIndex?: number }>(
+    registerHandler(
       socket,
       store,
       "lobby:hostMovePlayer",
@@ -227,7 +227,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ teamCount?: number }>(
+    registerHandler(
       socket,
       store,
       "lobby:hostSetTeamCount",
@@ -246,7 +246,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ teamIndex?: number; name?: string }>(
+    registerHandler(
       socket,
       store,
       "lobby:hostSetTeamName",
@@ -265,7 +265,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ teamIndex?: number; name?: string }>(
+    registerHandler(
       socket,
       store,
       "lobby:captainSetTeamName",
@@ -287,7 +287,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ patch?: Partial<GameSettings> }>(
+    registerHandler(
       socket,
       store,
       "lobby:hostPatchWwwSettings",
@@ -301,12 +301,14 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           throw new Error("Settings are locked once the match begins.");
         }
 
-        hostPatchWwwSettings(room, payload.patch ?? {});
+        // Schema is `z.unknown()` — `hostPatchWwwSettings` validates field-by-field internally.
+        const { patch } = (payload ?? {}) as { patch?: Partial<GameSettings> };
+        hostPatchWwwSettings(room, patch ?? {});
         await broadcastRoom(io, store, room.code);
       },
     );
 
-    registerHandler<{ hatTurnDurationSeconds?: number; hatSkipsPerTurn?: number }>(
+    registerHandler(
       socket,
       store,
       "lobby:hostPatchHatPrefs",
@@ -320,12 +322,19 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           throw new Error("Settings are locked once the match begins.");
         }
 
-        hostPatchHatPrefs(room, payload);
+        // Schema is `z.unknown()` — `hostPatchHatPrefs` validates field-by-field internally.
+        hostPatchHatPrefs(
+          room,
+          (payload ?? {}) as {
+            hatTurnDurationSeconds?: number;
+            hatSkipsPerTurn?: number;
+          },
+        );
         await broadcastRoom(io, store, room.code);
       },
     );
 
-    registerHandler<{ imposterPlayerCount?: number; imposterImposterCount?: number }>(
+    registerHandler(
       socket,
       store,
       "lobby:hostPatchImposterCounts",
@@ -339,12 +348,19 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           throw new Error("Counts are locked once the match begins.");
         }
 
-        hostPatchImposterCounts(room, payload);
+        // Schema is `z.unknown()` — `hostPatchImposterCounts` validates field-by-field internally.
+        hostPatchImposterCounts(
+          room,
+          (payload ?? {}) as {
+            imposterPlayerCount?: number;
+            imposterImposterCount?: number;
+          },
+        );
         await broadcastRoom(io, store, room.code);
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "lobby:startGame",
@@ -377,7 +393,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<ImposterDispatchAction>(
+    registerHandler(
       socket,
       store,
       "imposter:dispatch",
@@ -388,7 +404,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ clueIndex?: number; value?: unknown }>(
+    registerHandler(
       socket,
       store,
       "lobby:hatSetClueCell",
@@ -423,7 +439,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ clueIndex?: number }>(
+    registerHandler(
       socket,
       store,
       "lobby:hatSuggestClue",
@@ -456,7 +472,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "game:hostOfferReplay",
@@ -476,7 +492,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "game:acceptReplay",
@@ -498,7 +514,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "www:markReady",
@@ -521,7 +537,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "www:startTurn",
@@ -544,7 +560,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "www:correct",
@@ -555,7 +571,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "www:skip",
@@ -566,7 +582,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ skippedWordId?: string }>(
+    registerHandler(
       socket,
       store,
       "www:returnSkipped",
@@ -581,7 +597,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "www:endTurn",
@@ -592,7 +608,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "www:finalScores",
@@ -603,7 +619,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "hat:startTurn",
@@ -618,7 +634,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "hat:endTurn",
@@ -633,7 +649,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "hat:markCorrect",
@@ -648,7 +664,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "hat:skipClue",
@@ -663,7 +679,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<{ poolIndex?: number }>(
+    registerHandler(
       socket,
       store,
       "hat:returnSkipped",
@@ -678,7 +694,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler<unknown>(
+    registerHandler(
       socket,
       store,
       "hat:viewResults",

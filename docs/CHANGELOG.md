@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.3 - 2026-05-11
+
+- **Server (hardening):** All Socket.IO event payloads now validated through Zod
+  in `server/socketSchemas.ts`. The `registerHandler` wrapper rejects malformed
+  payloads with `{ ok: false, error: "Invalid request." }` before any state
+  mutation. `session:bind` uses `sessionBindSchema`. Complex payloads
+  (`lobby:hostPatch*`) still defer to existing inner field validation in
+  `server/lobbyControl.ts`; the schema layer guarantees they at least arrive as
+  objects.
+
 ## 0.14.2 - 2026-05-11
 
 - **Refactor:** `server/socketHandle.ts` — `registerHandler` wrapper centralizes

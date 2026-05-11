@@ -1,6 +1,11 @@
 import type { Socket } from "socket.io";
 
 import type { Room, RoomPlayer, RoomStore } from "./roomStore.ts";
+import {
+  type SocketEventName,
+  type SocketPayload,
+  socketSchemas,
+} from "./socketSchemas.ts";
 
 export type SocketAck = (payload?: { ok?: boolean; error?: string }) => void;
 
@@ -39,24 +44,37 @@ export function requireActor(
 
 /**
  * Registers a Socket.IO handler that:
+ * - validates `rawPayload` against the schema declared for `event` in
+ *   `server/socketSchemas.ts` (rejects with "Invalid request." on failure),
  * - looks up the actor + room from `socket.data`,
  * - awaits `fn`,
  * - acks `{ ok: true }` on success or `{ ok: false, error }` on throw.
  *
  * `fallbackErrorMessage` is what the client sees if the thrown value is not an Error.
  */
-export function registerHandler<TPayload>(
+export function registerHandler<E extends SocketEventName>(
   socket: Socket,
   store: RoomStore,
-  event: string,
+  event: E,
   fallbackErrorMessage: string,
-  fn: (ctx: HandlerContext, payload: TPayload) => Promise<void> | void,
+  fn: (ctx: HandlerContext, payload: SocketPayload<E>) => Promise<void> | void,
 ) {
-  socket.on(event, async (payload: TPayload, ack?: SocketAck) => {
+  const schema = socketSchemas[event];
+
+  socket.on(event as string, async (rawPayload: unknown, ack?: SocketAck) => {
     try {
+      const parsed = schema.safeParse(rawPayload);
+
+      if (!parsed.success) {
+        throw new Error("Invalid request.");
+      }
+
       const { room, actor } = requireActor(socket, store);
 
-      await fn({ socket, store, room, actor }, payload);
+      await fn(
+        { socket, store, room, actor },
+        parsed.data as SocketPayload<E>,
+      );
       ack?.({ ok: true });
     } catch (error) {
       ack?.({
