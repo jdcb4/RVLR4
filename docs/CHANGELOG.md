@@ -2,6 +2,20 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.4 - 2026-05-11
+
+- **Server (deploy hardening):** `CLIENT_ORIGIN` is now **required** in
+  production. `loadServerEnv` fails fast via `superRefine` when
+  `NODE_ENV=production` and the variable is unset or whitespace-only. Removes
+  the previous fallback that resolved CORS to `cors({ origin: true })`
+  (allow-any) in that situation. Development without `CLIENT_ORIGIN` still
+  defaults to `http://localhost:5173`.
+- **Tests:** `server/env.test.ts` locks in the new behaviour (5 cases:
+  defaults, production happy path, missing/empty CLIENT_ORIGIN refused,
+  `MULTIPLAYER_DEBUG` coercion).
+- **Docs:** `docs/DEPLOYMENT.md` documents the requirement under a new
+  "Required production env vars" section and on the Railway checklist.
+
 ## 0.14.3 - 2026-05-11
 
 - **Server (hardening):** All Socket.IO event payloads now validated through Zod

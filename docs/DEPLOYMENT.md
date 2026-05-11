@@ -38,7 +38,7 @@ docker run --rm -p 3001:3001 jdcb4/jd-multiplayer-games:latest
 
 Open http://127.0.0.1:3001/.
 
-The container runs **Node + tsx** so the same process can serve static assets and Socket.IO. Set `CLIENT_ORIGIN` if you terminate TLS on another host and need an explicit browser origin allow-list.
+The container runs **Node + tsx** so the same process can serve static assets and Socket.IO. **`CLIENT_ORIGIN` is required in production** — see [Required production env vars](#required-production-env-vars) below.
 
 Optional: set **`MULTIPLAYER_DEBUG=1`** in the container environment to print `[multiplayer]` diagnostics (room created/joined, session bind, match started). Use only while troubleshooting — logs may include player IDs and room codes (never secrets).
 
@@ -46,7 +46,7 @@ Optional: set **`MULTIPLAYER_DEBUG=1`** in the container environment to print `[
 
 1. Set **start command** to `pnpm run start` (install dependencies with `pnpm install --frozen-lockfile` during build).
 2. Expose the HTTP port Railway assigns; map it to `PORT` (already read by the server).
-3. Optional: `CLIENT_ORIGIN=https://your-host` when you need strict CORS.
+3. **Required:** `CLIENT_ORIGIN=https://your-host` — the server refuses to start in production without it. Comma-separate multiple origins.
 4. Optional: `MULTIPLAYER_DEBUG=1` for `[multiplayer]` server logs while diagnosing issues (room codes and player IDs may appear; never secrets).
 
 Because state is **in-memory**, expect rooms to reset when the dyno restarts.
@@ -65,6 +65,20 @@ Repository setup (one-time):
 The Pages base path is set in `vite.config.ts` and must match the **repository name** in the site URL (case-sensitive), e.g. `/JDPassNPlay/` for `github.com/jdcb4/JDPassNPlay`. If you rename the repo, update `base` and run `pnpm run build:pages` to verify.
 
 Direct visits to client routes (e.g. `/JDPassNPlay/games/hat`) need GitHub to serve `index.html`; the workflow copies `dist/index.html` to `dist/404.html` after build for that fallback.
+
+## Required production env vars
+
+- **`CLIENT_ORIGIN`** — comma-separated allow-list of browser origins
+  (e.g. `https://app.example.com,https://www.example.com`). The server refuses
+  to start (`loadServerEnv` throws a `ZodError`) when `NODE_ENV=production` and
+  this variable is missing or empty. There is no implicit "allow any origin"
+  fallback — set it explicitly even for single-host deployments.
+
+Optional:
+
+- **`PORT`** — defaults to `3001`.
+- **`MULTIPLAYER_DEBUG`** — set to `1` or `true` to enable `[multiplayer]`
+  lifecycle logging.
 
 ## Verification before deploy
 

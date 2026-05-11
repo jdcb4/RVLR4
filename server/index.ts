@@ -25,11 +25,18 @@ const app = express();
 app.use(express.json());
 
 const allowedOrigins =
-  env.CLIENT_ORIGIN?.split(",").map((origin) => origin.trim()).filter(Boolean) ??
-  (env.NODE_ENV === "production" ? [] : ["http://localhost:5173"]);
+  env.CLIENT_ORIGIN?.split(",").map((origin) => origin.trim()).filter(Boolean) ?? [];
 
-const corsOrigin =
-  allowedOrigins.length > 0 ? allowedOrigins : true;
+// Production: `loadServerEnv` guarantees `allowedOrigins.length > 0` (see env.ts
+// `superRefine`). Development falls back to Vite's dev server on 5173.
+// Test or local runs without CLIENT_ORIGIN refuse all browser origins — explicit
+// rather than allow-any.
+const corsOrigin: string[] | false =
+  allowedOrigins.length > 0
+    ? allowedOrigins
+    : env.NODE_ENV === "development"
+      ? ["http://localhost:5173"]
+      : false;
 
 app.use(
   cors({
