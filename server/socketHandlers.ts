@@ -30,7 +30,11 @@ import {
 } from "./lobbyControl.ts";
 import { mpDebug } from "./multiplayerDebug.ts";
 import type { Room } from "./roomStore.ts";
-import { resetLobbyAfterReplay, RoomStore } from "./roomStore.ts";
+import {
+  archiveRoomAfterAllPlayersOptedOut,
+  resetLobbyAfterReplay,
+  RoomStore,
+} from "./roomStore.ts";
 import {
   applyWhoWhatWhereCorrect,
   applyWhoWhatWhereEndTurn,
@@ -96,6 +100,34 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         }
       },
     );
+
+    socket.on("room:optOutResume", async (_payload: unknown, ack?: SocketAck) => {
+      try {
+        const { room, actor } = requireActor(socket, store);
+
+        if (room.phase !== "playing") {
+          throw new Error("Nothing to leave right now.");
+        }
+
+        actor.optedOutOfResume = true;
+
+        const everyoneLeftForHub = [...room.players.values()].every(
+          (player) => player.optedOutOfResume,
+        );
+
+        if (everyoneLeftForHub) {
+          archiveRoomAfterAllPlayersOptedOut(room);
+        }
+
+        await broadcastRoom(io, store, room.code);
+        ack?.({ ok: true });
+      } catch (error) {
+        ack?.({
+          ok: false,
+          error: error instanceof Error ? error.message : "Unable to update resume state.",
+        });
+      }
+    });
 
     socket.on(
       "lobby:setReady",
@@ -523,6 +555,10 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         return false;
       }
 
+      if (activeRoom.replayCancelledByDisconnect) {
+        return false;
+      }
+
       if (activeRoom.gameKind === "whowhatwhere") {
         const stage = activeRoom.wwwMatch?.stage;
         // Let the host offer replay as soon as the match is over (per-device "final scores" is local).
@@ -856,6 +892,13 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         }
 
         player.disconnectedAt = Date.now();
+
+        if (room.replayOfferActive) {
+          room.replayOfferActive = undefined;
+          room.replayAcceptedPlayerIds = undefined;
+          room.replayCancelledByDisconnect = true;
+        }
+
         await broadcastRoom(io, store, code);
       } catch {
         // ignore disconnect broadcast failures

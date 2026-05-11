@@ -27,6 +27,9 @@ export function playHatGameActionSoundEffects(
   if (action.type === "skip-clue") {
     playCue("skip");
   }
+  if (action.type === "return-skipped-clue") {
+    playCue("return-skipped");
+  }
   if (previousSession.stage === "turn" && nextSession.stage !== "turn") {
     const turnCueKey =
       previousSession.activeTurn?.startedAt ?? previousSession.activeTurn?.endsAt ?? "";

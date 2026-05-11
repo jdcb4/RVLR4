@@ -30,6 +30,10 @@ import { captainPlayerIdForTeam } from "@/features/multiplayer/lobbyCaptain";
 import { WhoWhatWhereMultiplayerView } from "@/features/multiplayer/WhoWhatWhereMultiplayerView";
 import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
 import { cn } from "@/lib/utils";
+import {
+  clearActiveGameBookmark,
+  writeActiveGameBookmark,
+} from "@/multiplayer/activeGameBookmark";
 import type { LobbyDto, LobbyPlayerDto } from "@/multiplayer/roomTypes";
 import { useRoomChannel } from "@/multiplayer/useRoomChannel";
 
@@ -178,6 +182,31 @@ export function RoomPage() {
   const params = useParams();
   const code = params.code?.toUpperCase();
   const { sync, bindError, emitWithAck, connected } = useRoomChannel(code, Boolean(code));
+  const playingBookmarkCommittedRef = useRef(false);
+
+  useEffect(() => {
+    if (!sync) {
+      return undefined;
+    }
+
+    if (sync.phase === "lobby" || sync.phase === "ended") {
+      playingBookmarkCommittedRef.current = false;
+      clearActiveGameBookmark();
+
+      return undefined;
+    }
+
+    if (sync.phase === "playing" && !playingBookmarkCommittedRef.current) {
+      playingBookmarkCommittedRef.current = true;
+      writeActiveGameBookmark({
+        code: sync.code,
+        gameKind: sync.gameKind,
+        startedAtIso: new Date().toISOString(),
+      });
+    }
+
+    return undefined;
+  }, [sync]);
   const [startError, setStartError] = useState<string | null>(null);
   const [qrToastOpen, setQrToastOpen] = useState(false);
   const [copiedToast, setCopiedToast] = useState(false);
@@ -286,6 +315,22 @@ export function RoomPage() {
         replaySync={sync.replay}
         viewerPlayerId={sync.you.playerId}
       />
+    );
+  }
+
+  if (sync.phase === "ended") {
+    return (
+      <GameShell
+        footer={
+          <PrimaryFooterButton label="Back to home" onClick={() => navigate("/")} />
+        }
+        title="Table closed"
+      >
+        <p className="text-typ-body-relaxed text-muted-foreground">
+          This room is finished — everyone left from the score screen or the match was
+          cleared. You can host or join a new game from the home page.
+        </p>
+      </GameShell>
     );
   }
 

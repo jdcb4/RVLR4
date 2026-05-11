@@ -4,6 +4,7 @@ import type { MultiplayerReplayUi } from "@/components/GameResultActions";
 export function buildMultiplayerReplayUi(args: {
   readonly offerActive: boolean;
   readonly acceptedIds: readonly string[];
+  readonly cancelledByDisconnect: boolean;
   readonly viewerId: string;
   readonly isHost: boolean;
   readonly emitWithAck: (
@@ -11,7 +12,15 @@ export function buildMultiplayerReplayUi(args: {
     body?: unknown,
   ) => Promise<{ ok?: boolean; error?: string } | undefined>;
 }): MultiplayerReplayUi {
-  const { offerActive, acceptedIds, viewerId, isHost, emitWithAck } = args;
+  const { offerActive, acceptedIds, cancelledByDisconnect, viewerId, isHost, emitWithAck } =
+    args;
+
+  if (cancelledByDisconnect) {
+    return {
+      mode: "inactive",
+      label: "Replay disabled — a player left the room.",
+    };
+  }
 
   if (!offerActive && isHost) {
     return {

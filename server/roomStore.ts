@@ -27,6 +27,11 @@ export type RoomPlayer = {
   teamIndex: number | null;
   ready: boolean;
   disconnectedAt: number | null;
+  /**
+   * True after this device taps “Pick another game” on final results — they are done with this table.
+   * Used with {@link computeResumeEligible} so the hub does not offer a dead resume row.
+   */
+  optedOutOfResume: boolean;
 };
 
 export type TeamGameKind = Exclude<GameKind, "imposter">;
@@ -37,6 +42,8 @@ export type Room = {
   hostId: string;
   readonly players: Map<string, RoomPlayer>;
   readonly createdAt: number;
+  /** Updated whenever the room is broadcast after a meaningful change (see `broadcastRoom`). */
+  lastActivityAt: number;
   phase: RoomPhase;
   /** 2–4 for team games; Imposter stores `0` (unused). */
   teamCount: number;
@@ -66,6 +73,8 @@ export type Room = {
   replayOfferActive?: boolean;
   /** Player ids who accepted rematch in the current offer round. */
   replayAcceptedPlayerIds?: string[];
+  /** Set when a disconnect cancels an in-flight replay offer so clients stop waiting. */
+  replayCancelledByDisconnect?: boolean;
 };
 
 const MAX_ROOMS = 500;
@@ -103,6 +112,7 @@ export class RoomStore {
       hostName: host?.name ?? "Host",
       playerCount: room.players.size,
       phase: room.phase,
+      resumeEligible: computeResumeEligible(room),
     };
   }
 
@@ -131,6 +141,7 @@ export class RoomStore {
       hostId,
       players: new Map(),
       createdAt: Date.now(),
+      lastActivityAt: Date.now(),
       phase: "lobby",
       teamCount: isTeamGame(args.gameKind) ? baseTeams : 0,
       teamNames: isTeamGame(args.gameKind) ? initialTeamNames(baseTeams) : [],
@@ -150,6 +161,7 @@ export class RoomStore {
       teamIndex: isTeamGame(args.gameKind) ? 0 : null,
       ready: false,
       disconnectedAt: null,
+      optedOutOfResume: false,
     };
 
     room.players.set(hostId, hostPlayer);
@@ -193,6 +205,7 @@ export class RoomStore {
       teamIndex: null,
       ready: false,
       disconnectedAt: null,
+      optedOutOfResume: false,
     };
 
     if (room.gameKind === "imposter") {
@@ -236,6 +249,15 @@ export class RoomStore {
     return this.roomsByCode.get(code) ?? null;
   }
 
+  /** Marks the room as recently active (used by `broadcastRoom` after mutations). */
+  touchRoomActivity(codeInput: string): void {
+    const room = this.getRoom(codeInput);
+
+    if (room) {
+      room.lastActivityAt = Date.now();
+    }
+  }
+
   authenticate(args: {
     code: string;
     playerId: string;
@@ -273,7 +295,41 @@ export type PublicRoomSummary = {
   readonly hostName: string;
   readonly playerCount: number;
   readonly phase: RoomPhase;
+  /** False when everyone is away or everyone left via “Pick another game” — hide hub resume. */
+  readonly resumeEligible: boolean;
 };
+
+/** Hub resume row: in-progress table with at least one connected player who has not left for the hub. */
+export function computeResumeEligible(room: Room): boolean {
+  if (room.phase !== "playing" || room.players.size === 0) {
+    return false;
+  }
+
+  const players = [...room.players.values()];
+  const someoneConnected = players.some((player) => player.disconnectedAt === null);
+
+  if (!someoneConnected) {
+    return false;
+  }
+
+  return players.some((player) => !player.optedOutOfResume);
+}
+
+/**
+ * Close the in-memory match after everyone tapped “Pick another game” (no one left to resume).
+ * Keeps the room row briefly so reconnecting clients see `phase: ended` instead of a hard 404.
+ */
+export function archiveRoomAfterAllPlayersOptedOut(room: Room): void {
+  room.phase = "ended";
+  room.wwwMatch = undefined;
+  room.hatSession = undefined;
+  room.imposterSnapshot = undefined;
+  room.wwwReadyReveal = undefined;
+  room.hatReadyReveal = undefined;
+  room.replayOfferActive = undefined;
+  room.replayAcceptedPlayerIds = undefined;
+  room.replayCancelledByDisconnect = undefined;
+}
 
 function pickSmallestTeamIndex(room: Room): number {
   const counts = Array.from({ length: room.teamCount }, () => 0);
@@ -346,9 +402,11 @@ export function resetLobbyAfterReplay(room: Room): void {
   room.hatReadyReveal = undefined;
   room.replayOfferActive = undefined;
   room.replayAcceptedPlayerIds = undefined;
+  room.replayCancelledByDisconnect = undefined;
 
   for (const player of room.players.values()) {
     player.ready = false;
+    player.optedOutOfResume = false;
   }
 
   if (room.gameKind === "imposter") {

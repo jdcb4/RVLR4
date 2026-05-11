@@ -48,6 +48,19 @@ describe("playHatGameActionSoundEffects", () => {
     expect(playCue).toHaveBeenCalledWith("correct");
   });
 
+  it("plays return-skipped on return-skipped-clue", () => {
+    const playCue = vi.fn();
+    const session = stubSession({ stage: "turn", phaseNumber: 1 });
+    playHatGameActionSoundEffects(
+      session,
+      session,
+      { type: "return-skipped-clue", payload: { poolIndex: 0 } },
+      { current: null },
+      playCue,
+    );
+    expect(playCue).toHaveBeenCalledWith("return-skipped");
+  });
+
   it("plays turn-end once per distinct active-turn key when leaving turn stage", () => {
     const playCue = vi.fn();
     const turnRef = { current: null as string | null };

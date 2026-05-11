@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.0 - 2026-05-10
+
+- **Server — room lifecycle:** `Room.lastActivityAt` bumped from `broadcastRoom`; **`startRoomIdleSweeper`** (`server/roomSweep.ts`) removes rooms after **30 minutes** without sync activity **or** **10 minutes** with every player disconnected (still soft-only: whole room delete, then `disconnectSockets` on `room:{code}`).
+- **Server — hub resume:** `RoomPlayer.optedOutOfResume`, socket **`room:optOutResume`**, **`archiveRoomAfterAllPlayersOptedOut`** (`phase: ended`, snapshots cleared). **`GET /api/rooms/:code`** adds **`resumeEligible`** (needs an in-progress match, a connected player, and someone who has not left for the hub). Sync only builds WWW/Hat payloads when **`phase === "playing"`**.
+- **Client — hub:** **`leaveMultiplayerRoomForHub`** clears the active-game bookmark and emits opt-out; landing uses **`resumeEligible`**; **`RoomPage`** handles **`ended`** with a short “table closed” message.
+- **Imposter (online):** **`scrubRoundForViewer`** restores **secret word** and **self imposter id** after parallel reveal for guide rounds so the clue **Remind me** card can flip to real copy. **`ImposterRemindMeCard`**, next-step cards, and **`phaseAdvance`** tone between steps.
+- **Hat (online):** Describer gets the **spectator phase banner**; timer row spans full width; **return-skipped** Web Audio cue (multiplayer + `hatGameActionSound`); **`HatLastTurnCard`** hides skipped clue chips (WWW unchanged). Shared **`multiplayerUpNextHeadingTitle`** for “You’re up next” / “Your team is up next” / team name on ready + footers.
+- **WWW (online):** Shared **`formatWwwTurnClock`** for describer/guesser timer shape; **return-skipped** sound on restore; **finalSummary** final scores play win/lose tones; ready/footer up-next copy aligned with Hat.
+
 ## 0.13.3 - 2026-05-10
 
 - **Fix:** `registerSocketHandlers` now imports Who What Where helpers from `wwwRuntime.ts` (including `startWhoWhatWhereMatch`) and **awaits** `startWhoWhatWhereMatch` so starting a WWW game works.

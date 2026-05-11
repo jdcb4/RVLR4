@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 /**
  * Shared vertical stack for **Between turns (ready)** and **Final turn recap** on WWW and Hat.
+ * Visual order: optional banner → last turn → scoreboard → heading (“Up next”) → progress → next steps.
  * Slots are optional except `nextSteps` when that card is shown — omit unused slots per screen.
  */
 export type BetweenTurnsLayoutProps = {
@@ -37,10 +38,10 @@ export function BetweenTurnsLayout({
     <section className="relative flex flex-1 flex-col gap-4 pb-4">
       {confetti}
       {banner}
-      {heading}
       {lastTurnCard}
-      {progressCard}
       {scoreboard}
+      {heading}
+      {progressCard}
       {nextSteps}
       {tail}
     </section>

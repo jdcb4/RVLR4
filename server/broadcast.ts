@@ -14,6 +14,9 @@ export async function broadcastRoom(io: Server, store: RoomStore, code: string) 
     return;
   }
 
+  // Any successful sync means the room state changed in a meaningful way — keep idle TTL fresh.
+  store.touchRoomActivity(code);
+
   const sockets = await io.in(roomChannel(code)).fetchSockets();
 
   for (const socket of sockets) {

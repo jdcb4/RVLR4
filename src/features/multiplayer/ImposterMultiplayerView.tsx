@@ -1,17 +1,20 @@
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
+import { ImposterRemindMeCard } from "@/components/game/ImposterRemindMeCard";
+import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
 import { GameResultActions } from "@/components/GameResultActions";
 import { GameShell } from "@/components/GameShell";
 import { IMPOSTER_ROLE_CARD_COPY } from "@/config/imposterDefaults";
 import { IMPOSTER_NOTICE_CLASS } from "@/features/imposter/screens/imposterScreenTokens";
+import { leaveMultiplayerRoomForHub } from "@/multiplayer/leaveRoomForHub";
 import { buildMultiplayerReplayUi } from "@/multiplayer/replayUi";
 import type { ImposterSyncDto } from "@/multiplayer/roomTypes";
-
+import { playMultiplayerToneCue } from "@/services/multiplayerTone";
 export function ImposterMultiplayerView({
   payload,
   viewerPlayerId,
@@ -25,6 +28,7 @@ export function ImposterMultiplayerView({
   readonly replaySync: {
     readonly offerActive: boolean;
     readonly acceptedIds: readonly string[];
+    readonly cancelledByDisconnect: boolean;
   };
   readonly emitWithAck: (
     event: string,
@@ -37,6 +41,15 @@ export function ImposterMultiplayerView({
   const step = snapshot.step;
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const prevStepRef = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (prevStepRef.current !== undefined && prevStepRef.current !== step) {
+      void playMultiplayerToneCue("phaseAdvance");
+    }
+
+    prevStepRef.current = step;
+  }, [step]);
 
   const dispatch = async (action: { readonly type: string }) => {
     setBusy(true);
@@ -132,10 +145,13 @@ export function ImposterMultiplayerView({
   } else if (step === "results") {
     footer = (
       <GameResultActions
-        onPickAnotherGame={() => navigate("/")}
+        onPickAnotherGame={() => {
+          void leaveMultiplayerRoomForHub(emitWithAck, navigate);
+        }}
         replay={buildMultiplayerReplayUi({
           offerActive: replaySync.offerActive,
           acceptedIds: replaySync.acceptedIds,
+          cancelledByDisconnect: replaySync.cancelledByDisconnect,
           viewerId: viewerPlayerId,
           isHost,
           emitWithAck,
@@ -169,6 +185,9 @@ export function ImposterMultiplayerView({
               When you are somewhere private, tap below to see whether you know the secret
               word or you are the imposter.
             </p>
+            <div className="mt-6">
+              <ReadyNextStepsCard primaryText="When you are in private, tap Reveal my role in the footer. The table cannot start the clue round until everyone has looked." />
+            </div>
           </GamePanel>
         );
       } else if (!done) {
@@ -187,6 +206,16 @@ export function ImposterMultiplayerView({
             ) : (
               <TurnPlayHighlight>{round.secretWord}</TurnPlayHighlight>
             )}
+            <div className="mt-6">
+              <ReadyNextStepsCard
+                primaryText={
+                  <>
+                    You must remember your role. Once you have memorised it, tap{" "}
+                    <strong>Continue</strong>. The game will start once everybody is ready.
+                  </>
+                }
+              />
+            </div>
           </GamePanel>
         );
       } else {
@@ -224,6 +253,9 @@ export function ImposterMultiplayerView({
             <p className={IMPOSTER_NOTICE_CLASS}>
               When you are ready in private, tap the footer button to see your role.
             </p>
+            <div className="mt-6">
+              <ReadyNextStepsCard primaryText="When you are in private, use the footer button on this screen. Wait quietly if it is not your turn yet." />
+            </div>
           </GamePanel>
         );
       } else {
@@ -242,6 +274,17 @@ export function ImposterMultiplayerView({
             ) : (
               <TurnPlayHighlight>{round.secretWord}</TurnPlayHighlight>
             )}
+            <div className="mt-6">
+              <ReadyNextStepsCard
+                primaryText={
+                  <>
+                    You must remember your role. Once you have memorised it, use the footer
+                    button to pass the phone or continue. The game moves on once everyone has
+                    confirmed.
+                  </>
+                }
+              />
+            </div>
           </GamePanel>
         );
       }
@@ -263,10 +306,15 @@ export function ImposterMultiplayerView({
           until everyone has gone twice. On each pass, say one short clue about the secret
           word. Imposters should try to sound like everyone else.
         </p>
-        <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>
-          When two full rounds of clues are done, the host taps the footer when you are
-          ready to discuss.
-        </p>
+        <div className="mt-6 space-y-4">
+          <ReadyNextStepsCard primaryText="Once you have finished two rounds of guesses the host must move you on to the next phase." />
+          {snapshot.round ? (
+            <ImposterRemindMeCard
+              isImposter={snapshot.round.imposterPlayerIds.includes(viewerPlayerId)}
+              secretWord={snapshot.round.secretWord}
+            />
+          ) : null}
+        </div>
         {!isHost ? (
           <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>Waiting on host to continue.</p>
         ) : null}
@@ -287,6 +335,9 @@ export function ImposterMultiplayerView({
           After voting is settled, the host taps below before anyone reads the phone again
           for the reveal.
         </p>
+        <div className="mt-6">
+          <ReadyNextStepsCard primaryText="Once you have finished voting the host must move you on to the next phase." />
+        </div>
         {!isHost ? (
           <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>Waiting on host to continue.</p>
         ) : null}
@@ -306,6 +357,9 @@ export function ImposterMultiplayerView({
           Are all players okay moving on — including anyone who should look away until you
           say so?
         </p>
+        <div className="mt-6">
+          <ReadyNextStepsCard primaryText="When you are ready, the host should tap Reveal in the footer to show the imposter(s) and the secret word on everyone's phones." />
+        </div>
         {!isHost ? (
           <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>Waiting on host to continue.</p>
         ) : null}
@@ -340,6 +394,9 @@ export function ImposterMultiplayerView({
               {round.secretWord}
             </p>
           </div>
+        </div>
+        <div className="mt-8">
+          <ReadyNextStepsCard primaryText="Compare notes at the table. Use Pick another game in the footer when your group is ready to leave this room." />
         </div>
       </GamePanel>
     );

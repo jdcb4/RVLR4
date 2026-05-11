@@ -17,7 +17,6 @@ export function HatLastTurnCard({
   };
 }) {
   const correct = summary.clues.filter((entry) => entry.status === "correct");
-  const skipped = summary.clues.filter((entry) => entry.status === "skipped");
 
   return (
     <div className={READY_RECAP_PANEL_CLASS}>
@@ -35,19 +34,17 @@ export function HatLastTurnCard({
           {summary.nextPhaseName ? `. Next: ${summary.nextPhaseName}.` : "."}
         </p>
       ) : null}
-      <ClueWords correct={correct} skipped={skipped} />
+      <ClueWords correct={correct} />
     </div>
   );
 }
 
 function ClueWords({
   correct,
-  skipped,
 }: {
   readonly correct: readonly ClueHistoryEntry[];
-  readonly skipped: readonly ClueHistoryEntry[];
 }) {
-  if (correct.length === 0 && skipped.length === 0) {
+  if (correct.length === 0) {
     return null;
   }
 
@@ -58,7 +55,6 @@ function ClueWords({
       </summary>
       <div className="mt-2 max-h-28 space-y-2 overflow-y-auto text-typ-micro">
         <ClueChipGroup label="Correct" clues={correct} />
-        <ClueChipGroup label="Skipped" clues={skipped} />
       </div>
     </details>
   );

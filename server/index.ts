@@ -11,6 +11,7 @@ import { startHatTurnTicker } from "./hatTicker.ts";
 import { registerHttpRoutes } from "./httpRoutes.ts";
 import { initMultiplayerDebug } from "./multiplayerDebug.ts";
 import { RoomStore } from "./roomStore.ts";
+import { startRoomIdleSweeper } from "./roomSweep.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
 import { startWhoWhatWhereTurnTicker } from "./wwwTicker.ts";
 
@@ -63,6 +64,7 @@ const io = new Server(server, {
 registerSocketHandlers(io, store);
 startWhoWhatWhereTurnTicker(io, store);
 startHatTurnTicker(io, store);
+startRoomIdleSweeper(io, store);
 
 const port = env.PORT;
 

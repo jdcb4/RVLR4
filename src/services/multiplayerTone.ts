@@ -18,7 +18,14 @@ async function ensureTone(): Promise<boolean> {
 
 /** Fire-and-forget cue — safe to call from React handlers / effects. */
 export async function playMultiplayerToneCue(
-  name: "correct" | "skip" | "warn10" | "timeout",
+  name:
+    | "correct"
+    | "skip"
+    | "warn10"
+    | "timeout"
+    | "victory"
+    | "defeat"
+    | "phaseAdvance",
 ): Promise<void> {
   const ok = await ensureTone();
   if (!ok) {
@@ -47,6 +54,19 @@ export async function playMultiplayerToneCue(
     }
     case "timeout": {
       synth.triggerAttackRelease(["G4", "D4"], "8n", now);
+      break;
+    }
+    case "victory": {
+      synth.triggerAttackRelease(["C5", "E5", "G5", "C6"], "8n", now);
+      synth.triggerAttackRelease(["E5", "G5"], "8n", now + 0.12);
+      break;
+    }
+    case "defeat": {
+      synth.triggerAttackRelease(["E4", "D4", "C4"], "4n", now);
+      break;
+    }
+    case "phaseAdvance": {
+      synth.triggerAttackRelease(["C5", "G5"], "16n", now);
       break;
     }
     default: {

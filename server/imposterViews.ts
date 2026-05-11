@@ -31,21 +31,30 @@ function scrubRoundForViewer(
 
     let secretWordOut = "";
 
-    if (
-      snapshot.step === "reveal" &&
-      roleSeen &&
-      !revealDone &&
-      !viewerIsImposter
-    ) {
-      secretWordOut = round.secretWord;
+    /**
+     * Crew sees the secret word only after they have opened their private card (`roleSeen`),
+     * and either on the in-reveal “remember” step or again in later phases (e.g. clue-round
+     * “Remind me” card). Never send the word to imposters.
+     */
+    if (!viewerIsImposter && roleSeen) {
+      const onRevealMemoryCard = snapshot.step === "reveal" && !revealDone;
+      const postRevealGuideOrPlay =
+        revealDone && snapshot.step !== "results";
+
+      if (onRevealMemoryCard || postRevealGuideOrPlay) {
+        secretWordOut = round.secretWord;
+      }
     }
+
+    /** After they peek, imposters can tell they are imposter from ids; never list other imposters. */
+    const scrubbedImposterIds = viewerIsImposter && roleSeen ? [viewerId] : [];
 
     return {
       ...snapshot,
       round: {
         ...round,
         secretWord: secretWordOut,
-        imposterPlayerIds: roleSeen && !revealDone && viewerIsImposter ? [viewerId] : [],
+        imposterPlayerIds: scrubbedImposterIds,
       },
     };
   }

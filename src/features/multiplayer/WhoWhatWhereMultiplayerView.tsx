@@ -13,6 +13,7 @@ import { GameResultActions } from "@/components/GameResultActions";
 import { GameShell } from "@/components/GameShell";
 import { IconCheck, IconSkipForward } from "@/components/icons";
 import { Metric } from "@/components/Metric";
+import { formatWwwTurnClock } from "@/domain/whowhatwhere/formatClock";
 import {
   canQueueSkipped,
   getActiveContext,
@@ -25,16 +26,23 @@ import {
 import { ResultsScreen } from "@/features/whowhatwhere/results/ResultsScreen";
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
 import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
+import { leaveMultiplayerRoomForHub } from "@/multiplayer/leaveRoomForHub";
 import { buildMultiplayerReplayUi } from "@/multiplayer/replayUi";
 import type { WhoWhatWhereSyncDto } from "@/multiplayer/roomTypes";
+import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
 import { playMultiplayerToneCue } from "@/services/multiplayerTone";
+import { playSound } from "@/services/whowhatwhereSound";
 
-function formatSeconds(totalSeconds: number): string {
-  const safe = Math.max(0, Math.floor(totalSeconds));
-  const minutes = Math.floor(safe / 60);
-  const seconds = safe % 60;
+function wwwOutcomeTone(match: MatchState, viewerPlayerId: string): "none" | "win" | "lose" {
+  const hasResults =
+    Boolean(match.results) &&
+    (match.stage === "results" || match.stage === "finalSummary");
 
-  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  if (!hasResults) {
+    return "none";
+  }
+
+  return viewerWwwTeamIsWinner(match, viewerPlayerId) ? "win" : "lose";
 }
 
 export function WhoWhatWhereMultiplayerView({
@@ -50,6 +58,7 @@ export function WhoWhatWhereMultiplayerView({
   readonly replaySync: {
     readonly offerActive: boolean;
     readonly acceptedIds: readonly string[];
+    readonly cancelledByDisconnect: boolean;
   };
   readonly emitWithAck: (
     event: string,
@@ -123,14 +132,18 @@ export function WhoWhatWhereMultiplayerView({
 
   if (match.stage === "ready") {
     const waitingContext = getActiveContext(match);
+    const viewerTeamId = match.players.find((player) => player.id === viewerPlayerId)?.teamId;
+    const nextTeamLabel = multiplayerUpNextHeadingTitle({
+      viewerPlayerId,
+      viewerTeamId,
+      nextTeamId: waitingContext.team.id,
+      nextDescriberPlayerId: waitingContext.describer.id,
+      nextTeamDisplayName: waitingContext.team.name,
+    });
 
     if (role !== "describer") {
       footer = (
-        <PrimaryFooterButton
-          disabled
-          label={`Waiting on ${waitingContext.describer.name}, from ${waitingContext.team.name}`}
-          onClick={() => {}}
-        />
+        <PrimaryFooterButton disabled label={nextTeamLabel} onClick={() => {}} />
       );
     } else {
       footer = (
@@ -192,10 +205,13 @@ export function WhoWhatWhereMultiplayerView({
   } else if (match.stage === "finalSummary") {
     footer = showScoresPane ? (
       <GameResultActions
-        onPickAnotherGame={() => navigate("/")}
+        onPickAnotherGame={() => {
+          void leaveMultiplayerRoomForHub(emitWithAck, navigate);
+        }}
         replay={buildMultiplayerReplayUi({
           offerActive: replaySync.offerActive,
           acceptedIds: replaySync.acceptedIds,
+          cancelledByDisconnect: replaySync.cancelledByDisconnect,
           viewerId: viewerPlayerId,
           isHost,
           emitWithAck,
@@ -213,10 +229,13 @@ export function WhoWhatWhereMultiplayerView({
   } else if (match.stage === "results") {
     footer = (
       <GameResultActions
-        onPickAnotherGame={() => navigate("/")}
+        onPickAnotherGame={() => {
+          void leaveMultiplayerRoomForHub(emitWithAck, navigate);
+        }}
         replay={buildMultiplayerReplayUi({
           offerActive: replaySync.offerActive,
           acceptedIds: replaySync.acceptedIds,
+          cancelledByDisconnect: replaySync.cancelledByDisconnect,
           viewerId: viewerPlayerId,
           isHost,
           emitWithAck,
@@ -229,15 +248,14 @@ export function WhoWhatWhereMultiplayerView({
 
   if (match.stage === "ready") {
     body = (
-      <>
-        {role !== "describer" ? <ReadySpectatorSnapshot match={match} /> : null}
-        <ReadyScreen
-          error={error}
-          handoffRevealed
-          match={match}
-          presentation="multiplayer"
-        />
-      </>
+      <ReadyScreen
+        error={error}
+        handoffRevealed
+        match={match}
+        presentation="multiplayer"
+        viewerPlayerId={viewerPlayerId}
+        viewerRole={role}
+      />
     );
   } else if (match.stage === "turn" && match.activeTurn) {
     if (role === "describer") {
@@ -253,6 +271,8 @@ export function WhoWhatWhereMultiplayerView({
 
             if (ack?.ok === false) {
               setError(ack.error ?? "");
+            } else {
+              playSound("returnSkipped");
             }
           }}
         />
@@ -261,9 +281,12 @@ export function WhoWhatWhereMultiplayerView({
       body = <GuessOrObserveTurn match={match} role={role} />;
     }
   } else if (match.stage === "finalSummary") {
+    const outcomeTone = wwwOutcomeTone(match, viewerPlayerId);
+
     body = showScoresPane ? (
       <ResultsScreen
         match={match}
+        outcomeTone={outcomeTone}
         showConfetti={viewerWwwTeamIsWinner(match, viewerPlayerId)}
       />
     ) : (
@@ -273,6 +296,7 @@ export function WhoWhatWhereMultiplayerView({
     body = (
       <ResultsScreen
         match={match}
+        outcomeTone={wwwOutcomeTone(match, viewerPlayerId)}
         showConfetti={viewerWwwTeamIsWinner(match, viewerPlayerId)}
       />
     );
@@ -284,25 +308,6 @@ export function WhoWhatWhereMultiplayerView({
         {body}
       </GameShell>
     </FooterActionLockContext.Provider>
-  );
-}
-
-function ReadySpectatorSnapshot({ match }: { readonly match: MatchState }) {
-  const context = getActiveContext(match);
-
-  return (
-    <section className="mb-4 rounded-2xl border border-border bg-muted/20 p-4 shadow-sm">
-      <p className="text-typ-overline text-muted-foreground">This round</p>
-      <div className="mt-3 grid grid-cols-2 gap-3">
-        <Metric label="Describer" value={context.describer.name} />
-        <Metric label="Team up" value={context.team.name} />
-        <Metric
-          label="Round"
-          value={`${Math.min(match.roundNumber, match.settings.totalRounds)} / ${match.settings.totalRounds}`}
-        />
-        <Metric label="Category focus" value="—" />
-      </div>
-    </section>
   );
 }
 
@@ -344,7 +349,7 @@ function GuessOrObserveTurn({
       <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
         <p className="text-typ-overline text-muted-foreground">Turn snapshot</p>
         <div className="mt-3 grid grid-cols-2 gap-3">
-          <Metric label="Time left" value={formatSeconds(secondsLeft)} />
+          <Metric label="Time left" value={formatWwwTurnClock(secondsLeft)} />
           <Metric label="Turn score" value={String(activeTurn.score)} />
           <Metric label="Category" value={activeTurn.category} />
           <Metric label="Describer" value={context.describer.name} />

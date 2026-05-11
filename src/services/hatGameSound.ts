@@ -11,6 +11,7 @@ export type SoundCue =
   | "turn-end"
   | "correct"
   | "skip"
+  | "return-skipped"
   | "phase-one-word"
   | "phase-charades";
 
@@ -88,6 +89,10 @@ const toneCues: Record<
     { frequency: 784, offset: 0.12, duration: 0.12 },
   ],
   skip: [{ frequency: 196, offset: 0, duration: 0.14, kind: "sawtooth" }],
+  "return-skipped": [
+    { frequency: 330, offset: 0, duration: 0.06 },
+    { frequency: 440, offset: 0.07, duration: 0.08 },
+  ],
 };
 
 export function playSoundCue(cue: SoundCue) {

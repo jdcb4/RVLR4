@@ -116,7 +116,7 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
 
   let www: WhoWhatWhereSyncDto | null = null;
 
-  if (room.gameKind === "whowhatwhere" && room.wwwMatch) {
+  if (room.gameKind === "whowhatwhere" && room.phase === "playing" && room.wwwMatch) {
     const projected = projectWhoWhatWhereMatch(room.wwwMatch, viewerPlayerId);
 
     www = {
@@ -130,7 +130,7 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
 
   let hat: HatSyncDto | null = null;
 
-  if (room.gameKind === "hat" && room.hatSession) {
+  if (room.gameKind === "hat" && room.phase === "playing" && room.hatSession) {
     const projected = projectHatSessionForViewer(room.hatSession, viewerPlayerId);
 
     hat = {
@@ -163,6 +163,7 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     replay: {
       offerActive: Boolean(room.replayOfferActive),
       acceptedIds: room.replayAcceptedPlayerIds ?? [],
+      cancelledByDisconnect: Boolean(room.replayCancelledByDisconnect),
     },
   };
 }
