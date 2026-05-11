@@ -17,7 +17,7 @@ describe("setup domain", () => {
 
     expect(settings.selectedCategories).toEqual(["What", "Who", "Where"]);
     expect(settings.difficultyMode).toBe("easy");
-    expect(settings.hints).toEqual({ enabled: false, perTurnLimit: 3 });
+    expect(settings.hints).toEqual({ enabled: false, perTurnLimit: 0 });
   });
 
   it("keeps at least one selected category", () => {

@@ -38,6 +38,7 @@ import {
   applyWhoWhatWhereEndTurn,
   applyWhoWhatWhereFinalScores,
   applyWhoWhatWhereReturnSkipped,
+  applyWhoWhatWhereRevealHint,
   applyWhoWhatWhereSkip,
   applyWhoWhatWhereStartTurn,
   markReadyGate,
@@ -593,6 +594,17 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         }
 
         applyWhoWhatWhereReturnSkipped(room, actor.id, payload.skippedWordId);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
+      "www:revealHint",
+      "Unable to reveal hint.",
+      async ({ room, actor }) => {
+        applyWhoWhatWhereRevealHint(room, actor.id);
         await broadcastRoom(io, store, room.code);
       },
     );

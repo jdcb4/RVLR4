@@ -2,6 +2,30 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.0 - 2026-05-12
+
+- **Who What Where:** New **Hints per turn** setting (0–3, defaults to **0**)
+  exposed in Game settings (legacy + lobby). When > 0, the describer sees a
+  **Hint** button under the current word with a remaining-count badge. Tapping
+  reveals the bundled hint from `words.generated` and consumes one of the
+  turn's hint slots. The button greys out when the per-turn budget hits 0 or
+  when the hint for the current word is already revealed. Hints reset on every
+  new turn and on every word change (correct / skip / return-skipped).
+- **Domain:** `revealHint(match)` in `src/domain/whowhatwhere/game.ts` is the
+  single source of truth; `ActiveTurn` gains `hintsRemaining` and
+  `currentWordHintRevealed`. Engine tests cover the no-op-when-zero,
+  decrement-and-reveal, double-tap-idempotent, reset-on-word-change, and
+  budget-exhausted paths.
+- **Multiplayer:** New `www:revealHint` Socket.IO event (Zod-validated, empty
+  payload) handled by `applyWhoWhatWhereRevealHint` on the server; only the
+  active describer can invoke it. Existing `scrubActiveTurn` in
+  `server/wwwViews.ts` already empties `.hint` for non-describers, so the
+  reveal stays describer-only across the wire.
+- **Persistence:** `whowhatwherePersistence.normalizeMatch` backfills
+  `hintsRemaining` and `currentWordHintRevealed` for in-flight saved games
+  predating this version.
+- **Hat Game:** Unchanged — hints are Who What Where only.
+
 ## 0.14.10 - 2026-05-11
 
 - **A11y:** `src/index.css` adds a `@media (prefers-reduced-motion: reduce)`

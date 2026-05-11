@@ -245,6 +245,13 @@ export function WhoWhatWhereMultiplayerView({
       body = (
         <ActiveTurnScreen
           match={match}
+          onRevealHint={async () => {
+            const ack = await emitWithAck("www:revealHint");
+
+            if (ack?.ok === false) {
+              setError(ack.error ?? "");
+            }
+          }}
           onReturnSkipped={async (skippedWordId) => {
             if (!payload.canReturnSkipped) {
               return;

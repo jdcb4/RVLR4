@@ -4,6 +4,7 @@ import {
   endTurn,
   getActiveContext,
   returnSkippedWord,
+  revealHint,
   showResults,
   skipWord,
   startTurn,
@@ -61,6 +62,12 @@ export function applyWhoWhatWhereReturnSkipped(
   const match = requireActiveTurn(room);
   assertActorIsDescriber(match, actorId);
   room.wwwMatch = returnSkippedWord(match, skippedWordId);
+}
+
+export function applyWhoWhatWhereRevealHint(room: Room, actorId: string) {
+  const match = requireActiveTurn(room);
+  assertActorIsDescriber(match, actorId);
+  room.wwwMatch = revealHint(match);
 }
 
 export function applyWhoWhatWhereEndTurn(room: Room, actorId: string) {

@@ -4,6 +4,7 @@ import { FooterOutlineIconTextButton } from "@/components/game/GameFooterButtons
 import { GamePanel } from "@/components/game/GamePanel";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
 import { Metric } from "@/components/Metric";
+import { Button } from "@/components/ui/button";
 import { formatWwwTurnClock } from "@/domain/whowhatwhere/formatClock";
 import {
   getActiveContext,
@@ -16,9 +17,15 @@ import { playSound } from "@/services/whowhatwhereSound";
 export function ActiveTurnScreen({
   match,
   onReturnSkipped,
+  onRevealHint,
 }: {
   readonly match: MatchState;
   readonly onReturnSkipped: (skippedWordId: string) => void;
+  /**
+   * Reveal the hint for the current word. Optional so callers without hints
+   * enabled can omit it; when omitted the hint button is hidden entirely.
+   */
+  readonly onRevealHint?: () => void;
 }) {
   const [, setTick] = useState(0);
   const activeTurn = match.activeTurn!;
@@ -26,6 +33,12 @@ export function ActiveTurnScreen({
   const currentWord = getCurrentWord(activeTurn);
   const secondsLeft = getSecondsLeft(activeTurn);
   const warningPlayedForTurn = useRef<string | null>(null);
+  const hintsConfigured = match.settings.hints.perTurnLimit > 0;
+  const hintsRemaining = activeTurn.hintsRemaining;
+  const hintRevealed = activeTurn.currentWordHintRevealed;
+  const hintText = currentWord?.hint ?? "";
+  const canShowHintButton = hintsConfigured && Boolean(onRevealHint);
+  const hintButtonDisabled = hintsRemaining <= 0 || hintRevealed || !currentWord;
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -55,6 +68,32 @@ export function ActiveTurnScreen({
         <TurnPlayHighlight>
           {currentWord?.word ?? "No word"}
         </TurnPlayHighlight>
+
+        {canShowHintButton && (
+          <div className="flex flex-col items-center gap-2">
+            <Button
+              aria-label={
+                hintRevealed
+                  ? "Hint already revealed for this word"
+                  : `Reveal hint (${hintsRemaining} left)`
+              }
+              disabled={hintButtonDisabled}
+              size="sm"
+              variant="outline"
+              onClick={() => onRevealHint?.()}
+            >
+              Hint ({hintsRemaining} left)
+            </Button>
+            {hintRevealed && hintText.length > 0 && (
+              <p
+                aria-live="polite"
+                className="rounded-md border border-dashed border-border bg-muted/40 px-3 py-2 text-center text-typ-ui italic text-muted-foreground"
+              >
+                {hintText}
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-3">
           <Metric label="Time left" value={formatWwwTurnClock(secondsLeft)} />

@@ -85,6 +85,7 @@ export const socketSchemas = {
   "www:correct": ignoredPayloadSchema,
   "www:skip": ignoredPayloadSchema,
   "www:returnSkipped": z.object({ skippedWordId: z.string().min(1).max(128) }),
+  "www:revealHint": ignoredPayloadSchema,
   "www:endTurn": ignoredPayloadSchema,
   "www:finalScores": ignoredPayloadSchema,
   "hat:startTurn": ignoredPayloadSchema,

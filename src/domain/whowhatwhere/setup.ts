@@ -22,7 +22,7 @@ export function createDefaultSettings(): GameSettings {
     difficultyMode: "easy",
     hints: {
       enabled: false,
-      perTurnLimit: 3,
+      perTurnLimit: 0,
     },
   };
 }

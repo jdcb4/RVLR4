@@ -7,6 +7,7 @@ import {
   endTurn,
   isTurnExpired,
   returnSkippedWord,
+  revealHint,
   showResults,
   skipWord,
   startTurn,
@@ -285,6 +286,11 @@ export function useGameController() {
         currentMatch
           ? returnSkippedWord(currentMatch, skippedWordId)
           : currentMatch,
+      );
+    },
+    revealHint: () => {
+      setMatch((currentMatch) =>
+        currentMatch ? revealHint(currentMatch) : currentMatch,
       );
     },
     endTurn: () => {

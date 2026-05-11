@@ -2,7 +2,12 @@ import { GamePanel } from "@/components/game/GamePanel";
 import { OptionButton, OptionGroup } from "@/components/setup/OptionGroup";
 import { TeamCountOptionGroup } from "@/components/setup/TeamCountOptionGroup";
 import { toggleCategory } from "@/domain/whowhatwhere/setup";
-import { CATEGORIES, type GameSettings } from "@/domain/whowhatwhere/types";
+import {
+  CATEGORIES,
+  type GameSettings,
+  HINT_LIMIT_OPTIONS,
+  type HintLimit,
+} from "@/domain/whowhatwhere/types";
 
 export function SettingsScreen({
   settings,
@@ -74,6 +79,24 @@ export function SettingsScreen({
               }
             >
               {skip.label}
+            </OptionButton>
+          ))}
+        </OptionGroup>
+
+        <OptionGroup label="Hints per turn">
+          {HINT_LIMIT_OPTIONS.map((value) => (
+            <OptionButton
+              key={value}
+              selected={settings.hints.perTurnLimit === value}
+              onClick={() =>
+                setSetting("hints", {
+                  ...settings.hints,
+                  perTurnLimit: value as HintLimit,
+                  enabled: value > 0,
+                })
+              }
+            >
+              {value}
             </OptionButton>
           ))}
         </OptionGroup>

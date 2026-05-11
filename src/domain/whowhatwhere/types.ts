@@ -6,10 +6,18 @@ type Stage = "ready" | "turn" | "finalSummary" | "results";
 type WordSource = "main" | "skipped";
 type WordStatus = "correct" | "skipped";
 
-type HintSettings = {
+/**
+ * Per-turn hint allowance. `perTurnLimit` is the only user-facing knob (0-3).
+ * `enabled` is kept for legacy persisted settings; the engine treats
+ * `perTurnLimit > 0` as the source of truth.
+ */
+export type HintSettings = {
   readonly enabled: boolean;
-  readonly perTurnLimit: number;
+  readonly perTurnLimit: 0 | 1 | 2 | 3;
 };
+
+export const HINT_LIMIT_OPTIONS = [0, 1, 2, 3] as const;
+export type HintLimit = (typeof HINT_LIMIT_OPTIONS)[number];
 
 export type GameSettings = {
   readonly teamCount: 2 | 3 | 4;
@@ -79,6 +87,10 @@ export type ActiveTurn = {
   readonly skippedWords: readonly SkippedWord[];
   readonly nextSkippedWordId: number;
   readonly wordHistory: readonly WordHistoryEntry[];
+  /** Remaining hints the describer can reveal this turn. Resets to the per-turn limit on `startTurn`. */
+  readonly hintsRemaining: number;
+  /** True after the describer reveals a hint for the current word; resets when the word changes. */
+  readonly currentWordHintRevealed: boolean;
 };
 
 export type LastTurnSummary = {

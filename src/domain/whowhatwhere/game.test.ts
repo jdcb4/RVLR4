@@ -7,6 +7,7 @@ import {
   getActiveContext,
   getCurrentWord,
   returnSkippedWord,
+  revealHint,
   showResults,
   skipWord,
   startTurn,
@@ -89,6 +90,105 @@ describe("game domain", () => {
     expect(results.results?.bestTurn?.describerName).toBe("Mozart");
     expect(results.lastTurnSummary?.finalWord?.word).toMatch(/^What /);
     expect(showResults(results).stage).toBe("results");
+  });
+
+  it("initializes hint state from settings and is a no-op when limit is 0", () => {
+    const match = startTurn(
+      createMatch(createTeamSetups(2), createDefaultSettings()),
+      wordsFor("What"),
+      now,
+      () => 0,
+    );
+
+    // Default settings: perTurnLimit 0 → no hints available.
+    expect(match.activeTurn?.hintsRemaining).toBe(0);
+    expect(match.activeTurn?.currentWordHintRevealed).toBe(false);
+
+    const tryReveal = revealHint(match);
+    expect(tryReveal.activeTurn?.hintsRemaining).toBe(0);
+    expect(tryReveal.activeTurn?.currentWordHintRevealed).toBe(false);
+  });
+
+  it("revealHint decrements hintsRemaining and reveals current word, idempotent on second tap", () => {
+    const settings = {
+      ...createDefaultSettings(),
+      hints: { enabled: true, perTurnLimit: 2 as const },
+    };
+    const match = startTurn(
+      createMatch(createTeamSetups(2), settings),
+      wordsFor("What"),
+      now,
+      () => 0,
+    );
+
+    expect(match.activeTurn?.hintsRemaining).toBe(2);
+
+    const afterReveal = revealHint(match);
+    expect(afterReveal.activeTurn?.hintsRemaining).toBe(1);
+    expect(afterReveal.activeTurn?.currentWordHintRevealed).toBe(true);
+
+    // Second tap on the same word is a no-op — only one consumption per word.
+    const afterSecondTap = revealHint(afterReveal);
+    expect(afterSecondTap.activeTurn?.hintsRemaining).toBe(1);
+    expect(afterSecondTap.activeTurn?.currentWordHintRevealed).toBe(true);
+  });
+
+  it("hint reveal resets on word change (correct, skip, returnSkipped)", () => {
+    const settings = {
+      ...createDefaultSettings(),
+      hints: { enabled: true, perTurnLimit: 3 as const },
+    };
+    let match = startTurn(
+      createMatch(createTeamSetups(2), settings),
+      wordsFor("What"),
+      now,
+      () => 0,
+    );
+
+    match = revealHint(match);
+    expect(match.activeTurn?.currentWordHintRevealed).toBe(true);
+    match = correctWord(match, new Date("2026-05-05T10:00:01.000Z"));
+    expect(match.activeTurn?.currentWordHintRevealed).toBe(false);
+
+    match = revealHint(match);
+    expect(match.activeTurn?.currentWordHintRevealed).toBe(true);
+    match = skipWord(match, new Date("2026-05-05T10:00:02.000Z"));
+    expect(match.activeTurn?.currentWordHintRevealed).toBe(false);
+
+    // After two reveals the budget should be 1 remaining (3 - 2).
+    expect(match.activeTurn?.hintsRemaining).toBe(1);
+
+    const skippedId = match.activeTurn?.skippedWords[0]?.id;
+    match = revealHint(match);
+    expect(match.activeTurn?.currentWordHintRevealed).toBe(true);
+
+    match = returnSkippedWord(match, skippedId);
+    expect(match.activeTurn?.currentWordHintRevealed).toBe(false);
+    // returnSkipped should not consume a hint slot; reveal counter is now 0 used after skip undo.
+    expect(match.activeTurn?.hintsRemaining).toBe(0);
+  });
+
+  it("revealHint is a no-op once the turn budget hits 0", () => {
+    const settings = {
+      ...createDefaultSettings(),
+      hints: { enabled: true, perTurnLimit: 1 as const },
+    };
+    let match = startTurn(
+      createMatch(createTeamSetups(2), settings),
+      wordsFor("What"),
+      now,
+      () => 0,
+    );
+
+    match = revealHint(match);
+    match = correctWord(match, new Date("2026-05-05T10:00:01.000Z"));
+
+    expect(match.activeTurn?.hintsRemaining).toBe(0);
+
+    // New word, no hints left — no change.
+    const exhausted = revealHint(match);
+    expect(exhausted.activeTurn?.hintsRemaining).toBe(0);
+    expect(exhausted.activeTurn?.currentWordHintRevealed).toBe(false);
   });
 
   it("fails to start when no selected category words exist", () => {

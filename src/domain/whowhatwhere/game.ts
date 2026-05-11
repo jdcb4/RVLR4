@@ -137,6 +137,8 @@ export function startTurn(
       skippedWords: [],
       nextSkippedWordId: 1,
       wordHistory: [],
+      hintsRemaining: match.settings.hints.perTurnLimit,
+      currentWordHintRevealed: false,
     },
     wordReserves: {
       ...match.wordReserves,
@@ -203,6 +205,7 @@ export function correctWord(match: MatchState, now = new Date()): MatchState {
       activeTurn.currentWordSource === "main"
         ? activeTurn.queueIndex + 1
         : activeTurn.queueIndex,
+    currentWordHintRevealed: false,
   };
 
   return primeNextWord({ ...match, activeTurn: nextTurn });
@@ -238,6 +241,7 @@ export function skipWord(match: MatchState, now = new Date()): MatchState {
         skippedWords: [...activeTurn.skippedWords, activeTurn.currentSkippedWord],
         currentSkippedWord: null,
         currentWordSource: "main",
+        currentWordHintRevealed: false,
       },
     });
   }
@@ -257,6 +261,7 @@ export function skipWord(match: MatchState, now = new Date()): MatchState {
       nextSkippedWordId: activeTurn.nextSkippedWordId + 1,
       queueIndex: activeTurn.queueIndex + 1,
       currentWordSource: "main",
+      currentWordHintRevealed: false,
     },
   });
 }
@@ -297,6 +302,40 @@ export function returnSkippedWord(
       skippedWords: shouldReturnCurrent
         ? [...waitingWithoutTarget, activeTurn.currentSkippedWord!]
         : waitingWithoutTarget,
+      currentWordHintRevealed: false,
+    },
+  };
+}
+
+/**
+ * Reveal the hint for the current word, consuming one of this turn's hint slots.
+ * No-op when:
+ * - no turn is running,
+ * - all hints have already been used this turn,
+ * - the hint for the current word is already revealed (idempotent on double-tap),
+ * - or there is no current word to hint.
+ */
+export function revealHint(match: MatchState): MatchState {
+  if (match.stage !== "turn" || !match.activeTurn) {
+    return match;
+  }
+
+  const activeTurn = match.activeTurn;
+
+  if (activeTurn.currentWordHintRevealed || activeTurn.hintsRemaining <= 0) {
+    return match;
+  }
+
+  if (!getCurrentWord(activeTurn)) {
+    return match;
+  }
+
+  return {
+    ...match,
+    activeTurn: {
+      ...activeTurn,
+      hintsRemaining: activeTurn.hintsRemaining - 1,
+      currentWordHintRevealed: true,
     },
   };
 }

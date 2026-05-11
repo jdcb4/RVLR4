@@ -111,9 +111,11 @@ function normalizeSettings(settings: Partial<GameSettings>): GameSettings {
 }
 
 function normalizeMatch(match: MatchState): MatchState {
+  const settings = normalizeSettings(match.settings);
+
   return {
     ...match,
-    settings: normalizeSettings(match.settings),
+    settings,
     turnSummaries: match.turnSummaries ?? [],
     results: match.results
       ? {
@@ -121,5 +123,13 @@ function normalizeMatch(match: MatchState): MatchState {
           bestTurn: match.results.bestTurn ?? null,
         }
       : null,
+    activeTurn: match.activeTurn
+      ? {
+          ...match.activeTurn,
+          hintsRemaining:
+            match.activeTurn.hintsRemaining ?? settings.hints.perTurnLimit,
+          currentWordHintRevealed: match.activeTurn.currentWordHintRevealed ?? false,
+        }
+      : match.activeTurn,
   };
 }

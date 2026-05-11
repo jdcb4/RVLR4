@@ -226,6 +226,7 @@ export function WhoWhatWhereApp() {
         game.match.activeTurn ? (
           <ActiveTurnScreen
             match={game.match}
+            onRevealHint={game.revealHint}
             onReturnSkipped={game.returnSkipped}
           />
         ) : null}
