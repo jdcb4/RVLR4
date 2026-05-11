@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.10 - 2026-05-11
+
+- **A11y:** `src/index.css` adds a `@media (prefers-reduced-motion: reduce)`
+  rule that disables the `.animate-confetti-fall` animation. Users with the
+  OS-level reduced-motion setting enabled no longer see the falling-confetti
+  animation on the final results screen (the spans still render, they just
+  stay put). Confetti is decorative, so silencing it removes vestibular load
+  without removing meaning.
+
 ## 0.14.9 - 2026-05-11
 
 - **Multiplayer UX:** `RoomPage` now surfaces a polite "Reconnecting…" banner

@@ -121,3 +121,12 @@
 .keyboard-safe-input {
   scroll-margin-bottom: 9rem;
 }
+
+/* Accessibility: honour the OS reduced-motion preference. The confetti on
+ * final results is purely decorative — silencing the falling animation
+ * removes vestibular load without removing the elements themselves. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-confetti-fall {
+    animation: none !important;
+  }
+}
