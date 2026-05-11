@@ -2,6 +2,10 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.14.1 - 2026-05-11
+
+- **Deploy:** `Dockerfile` no longer sets `NODE_ENV=production` before `pnpm install` / `pnpm run build`. With production set first, pnpm skipped **devDependencies**, so **`tsc` was missing** on Railway (`sh: tsc: not found`). `NODE_ENV=production` is applied **after** the Vite build so the runtime image still runs in production mode.
+
 ## 0.14.0 - 2026-05-10
 
 - **Server — room lifecycle:** `Room.lastActivityAt` bumped from `broadcastRoom`; **`startRoomIdleSweeper`** (`server/roomSweep.ts`) removes rooms after **30 minutes** without sync activity **or** **10 minutes** with every player disconnected (still soft-only: whole room delete, then `disconnectSockets` on `room:{code}`).

@@ -3,16 +3,18 @@
 FROM node:22-alpine AS runtime
 WORKDIR /app
 
-ENV NODE_ENV=production
 ENV PORT=3001
 
 RUN corepack enable
 
 COPY package.json pnpm-lock.yaml ./
+# Install must run without NODE_ENV=production so devDependencies (TypeScript, Vite) exist for `pnpm run build`.
 RUN pnpm install --frozen-lockfile
 
 COPY . .
 RUN pnpm run build
+
+ENV NODE_ENV=production
 
 EXPOSE 3001
 
