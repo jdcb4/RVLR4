@@ -87,13 +87,13 @@ export const socketSchemas = {
   "www:returnSkipped": z.object({ skippedWordId: z.string().min(1).max(128) }),
   "www:revealHint": ignoredPayloadSchema,
   "www:endTurn": ignoredPayloadSchema,
-  "www:finalScores": ignoredPayloadSchema,
+  "www:showFinalScores": ignoredPayloadSchema,
   "hat:startTurn": ignoredPayloadSchema,
   "hat:endTurn": ignoredPayloadSchema,
-  "hat:markCorrect": ignoredPayloadSchema,
-  "hat:skipClue": ignoredPayloadSchema,
+  "hat:correct": ignoredPayloadSchema,
+  "hat:skip": ignoredPayloadSchema,
   "hat:returnSkipped": z.object({ poolIndex: z.number().int().min(0).max(255) }),
-  "hat:viewResults": ignoredPayloadSchema,
+  "hat:showFinalScores": ignoredPayloadSchema,
 } as const;
 
 export type SocketEventName = keyof typeof socketSchemas;

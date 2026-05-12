@@ -623,7 +623,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
     registerHandler(
       socket,
       store,
-      "www:finalScores",
+      "www:showFinalScores",
       "Unable to show final scores.",
       async ({ room }) => {
         applyWhoWhatWhereShowFinalScores(room);
@@ -664,7 +664,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
     registerHandler(
       socket,
       store,
-      "hat:markCorrect",
+      "hat:correct",
       "Unable to score that clue.",
       async ({ room, actor }) => {
         if (room.gameKind !== "hat" || room.phase !== "playing") {
@@ -679,7 +679,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
     registerHandler(
       socket,
       store,
-      "hat:skipClue",
+      "hat:skip",
       "Unable to skip this clue.",
       async ({ room, actor }) => {
         if (room.gameKind !== "hat" || room.phase !== "playing") {
@@ -709,7 +709,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
     registerHandler(
       socket,
       store,
-      "hat:viewResults",
+      "hat:showFinalScores",
       "Unable to show final scores.",
       async ({ room }) => {
         if (room.gameKind !== "hat" || room.phase !== "playing") {

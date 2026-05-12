@@ -2,6 +2,19 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.0 - 2026-05-12
+
+- **Refactor (naming N4c — WIRE FORMAT):** Rename Socket.IO events to
+  match the aligned `apply*` server symbols. **Old clients will not be
+  compatible with new servers.** Schedule as a single deploy.
+  - `hat:markCorrect` → `hat:correct`
+  - `hat:skipClue` → `hat:skip`
+  - `hat:viewResults` → `hat:showFinalScores`
+  - `www:finalScores` → `www:showFinalScores`
+- Touches `server/socketSchemas.ts`, `server/socketHandlers.ts`, and the
+  Hat multiplayer client emit calls in
+  `src/features/hat-game/multiplayer/HatMultiplayerView.tsx`.
+
 ## 0.15.15 - 2026-05-12
 
 - **Refactor (naming N4a/b):** Align cross-game `apply*` verb-noun pairs

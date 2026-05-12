@@ -269,7 +269,7 @@ export function HatMultiplayerView({
           label="Skip"
           onClick={async () => {
             setBusy(true);
-            const ack = await emitWithAck("hat:skipClue");
+            const ack = await emitWithAck("hat:skip");
 
             if (ack?.ok === false) {
               setError(ack.error ?? "");
@@ -286,7 +286,7 @@ export function HatMultiplayerView({
           label="Correct"
           onClick={async () => {
             setBusy(true);
-            const ack = await emitWithAck("hat:markCorrect");
+            const ack = await emitWithAck("hat:correct");
 
             if (ack?.ok === false) {
               setError(ack.error ?? "");
