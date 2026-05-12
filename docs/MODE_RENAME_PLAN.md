@@ -138,11 +138,11 @@ Likely targets (audit snapshot, will be re-confirmed by Fallow):
 - **Per-screen landing builders** (`hatLandingScreen.tsx` vs
   `imposterLandingScreen.tsx` — 43-line clone) — extract a shared
   `buildGameLandingScreen({ title, resume, footerActions })`.
-- **`useHatGameApp` / `useImposterApp` overlap** — 32-line clone, likely a
+- **`useHatSingleplayerApp` / `useImposterSingleplayerApp` overlap** — 32-line clone, likely a
   small shared hook (e.g. action-lock timing).
 
 Stop after each Fallow pass to re-prioritize. **Do not** try to refactor
-`RoomPage.tsx`, `ImposterMultiplayerView.tsx`, or `useHatGameApp.ts`
+`RoomPage.tsx`, `ImposterMultiplayerView.tsx`, or `useHatSingleplayerApp.ts`
 wholesale — those are deferred from the original audit and need their own
 plan.
 

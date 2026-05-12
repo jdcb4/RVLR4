@@ -2,6 +2,23 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.13 - 2026-05-12
+
+- **Refactor (naming N2):** Add `Singleplayer` modifier to every
+  pass-and-play app, hook, controller type, and app-types module that has
+  a multiplayer counterpart, per `docs/NAMING.md`:
+  - Apps: `HatGameApp` / `ImposterApp` / `WhoWhatWhereApp` →
+    `HatSingleplayerApp` / `ImposterSingleplayerApp` /
+    `WhoWhatWhereSingleplayerApp`.
+  - Hooks: `useHatGameApp` / `useImposterApp` / `useGameController` →
+    `useHatSingleplayerApp` / `useImposterSingleplayerApp` /
+    `useWhoWhatWhereSingleplayerApp`.
+  - Controller types + screen builder names follow.
+- 10 files renamed in place. Domain types `HatGameSession`,
+  `HatGameAction`, `HatGameConfig`, `HatGamePhaseMeta` are kept (NAMING.md
+  §1 exception list).
+- No behaviour change.
+
 ## 0.15.12 - 2026-05-12
 
 - **Refactor (naming N1):** Drop `Www` / `www` short forms in favour of
@@ -42,8 +59,8 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 ## 0.15.9 - 2026-05-12
 
 - **Refactor:** Two shared hooks under `src/features/game-app-hooks/`
-  replace duplicated state/effects between `useHatGameApp` and
-  `useImposterApp`:
+  replace duplicated state/effects between `useHatSingleplayerApp` and
+  `useImposterSingleplayerApp`:
   - `useFooterActionLockOnKeyChange(key)` — owns the per-game footer-lock
     timer that was inlined identically in both controllers.
   - `useAutoHidePopup(open, onClose)` — five-second auto-hide for the info
@@ -396,7 +413,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 
 ## 0.2.9 - 2026-05-10
 
-- **Hat Game (UI):** Moved dispatch sound cues into `hatGameActionSound.ts` with unit tests; `useHatGameApp` delegates to `playHatGameActionSoundEffects` after a successful engine transition.
+- **Hat Game (UI):** Moved dispatch sound cues into `hatGameActionSound.ts` with unit tests; `useHatSingleplayerApp` delegates to `playHatGameActionSoundEffects` after a successful engine transition.
 
 ## 0.2.8 - 2026-05-10
 

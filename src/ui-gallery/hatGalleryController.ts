@@ -1,7 +1,7 @@
 import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
 import type { Player, Team } from "@/domain/hat-game/types";
-import type { AppSnapshot, StoragePayload } from "@/features/hat-game/hatGameAppTypes";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { AppSnapshot, StoragePayload } from "@/features/hat-game/hatSingleplayerAppTypes";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 import {
   getGalleryHatSetup,
   hatGallerySessionFinalTurnRecap,
@@ -47,7 +47,7 @@ export function createHatGalleryController(
     readonly secondsRemaining?: number;
     readonly savedRecord?: StoragePayload | null;
   } = {},
-): HatGameAppController {
+): HatSingleplayerAppController {
   const normalized = normalizeGallerySnapshot(snapshot);
   const { activeTeam, activeTeamPlayers } = galleryActiveTeam(normalized);
   const turnActive =

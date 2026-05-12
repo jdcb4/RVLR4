@@ -2,11 +2,11 @@ import type { NavigateFunction } from "react-router-dom";
 
 import { GamePanel } from "@/components/game/GamePanel";
 import { PassAndPlayGameResultActions } from "@/components/GameResultActions";
-import type { ScreenModel } from "@/features/imposter/imposterAppTypes";
-import type { ImposterAppController } from "@/features/imposter/useImposterApp";
+import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTypes";
+import type { ImposterSingleplayerAppController } from "@/features/imposter/useImposterSingleplayerApp";
 
 export function imposterResultsScreen(
-  controller: ImposterAppController,
+  controller: ImposterSingleplayerAppController,
   navigate: NavigateFunction,
 ): ScreenModel {
   const round = controller.snapshot.round;

@@ -4,11 +4,11 @@ import {
 } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
-import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
+import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
 import { HAT_CLUE_INPUT_CLASS, HAT_NOTICE_CLASS } from "@/features/hat-game/screens/hatScreenTokens";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
-export function hatClueEntryScreen(controller: HatGameAppController): ScreenModel {
+export function hatClueEntryScreen(controller: HatSingleplayerAppController): ScreenModel {
   const player = controller.snapshot.players[controller.snapshot.clueEntryIndex];
   if (!player) {
     return { content: null };

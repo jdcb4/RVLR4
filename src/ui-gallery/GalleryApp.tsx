@@ -12,8 +12,8 @@ import { PassAndPlayGameResultActions } from "@/components/GameResultActions";
 import { GameShell } from "@/components/GameShell";
 import { IconCheck, IconSkipForward } from "@/components/icons";
 import { canQueueSkipped, getActiveContext } from "@/domain/whowhatwhere/game";
-import { buildHatGameScreen } from "@/features/hat-game/HatGameWebScreens";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import { buildHatSingleplayerScreen } from "@/features/hat-game/HatSingleplayerWebScreens";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 import { FinalTurnRecapScreen } from "@/features/whowhatwhere/results/FinalTurnRecapScreen";
 import { ResultsScreen } from "@/features/whowhatwhere/results/ResultsScreen";
 import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
@@ -44,7 +44,7 @@ function footerWrap(node: ReactNode) {
 
 type SlideSpec = {
   readonly label: string;
-  readonly hat: () => HatGameAppController;
+  readonly hat: () => HatSingleplayerAppController;
   readonly wwwContent: () => ReactNode;
   readonly wwwFooter?: () => ReactNode;
   readonly wwwShowEndTurn?: boolean;
@@ -235,7 +235,7 @@ function GalleryChrome() {
 
   const slide = slides[index]!;
   const hatController = slide.hat();
-  const hatScreen = buildHatGameScreen(hatController, navigate);
+  const hatScreen = buildHatSingleplayerScreen(hatController, navigate);
 
   const hatShowEndTurn =
     hatController.snapshot.step === "game" &&

@@ -1,6 +1,6 @@
 import type { NavigateFunction } from "react-router-dom";
 
-import type { ScreenModel } from "@/features/imposter/imposterAppTypes";
+import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTypes";
 import { imposterLandingScreen } from "@/features/imposter/screens/imposterLandingScreen";
 import { imposterLoadingScreen } from "@/features/imposter/screens/imposterLoadingScreen";
 import { imposterResultsScreen } from "@/features/imposter/screens/imposterResultsScreen";
@@ -11,11 +11,11 @@ import { imposterRoundGuidePreDiscussionScreen } from "@/features/imposter/scree
 import { imposterRoundGuidePregameScreen } from "@/features/imposter/screens/imposterRoundGuidePregameScreen";
 import { imposterRoundGuideRevealWarningScreen } from "@/features/imposter/screens/imposterRoundGuideRevealWarningScreen";
 import { imposterSettingsScreen } from "@/features/imposter/screens/imposterSettingsScreen";
-import type { ImposterAppController } from "@/features/imposter/useImposterApp";
+import type { ImposterSingleplayerAppController } from "@/features/imposter/useImposterSingleplayerApp";
 
 /** Routes Imposter UI from controller state — one module per screen under `screens/`. */
 export function buildImposterScreen(
-  controller: ImposterAppController,
+  controller: ImposterSingleplayerAppController,
   navigate: NavigateFunction,
 ): ScreenModel {
   if (!controller.loaded) {

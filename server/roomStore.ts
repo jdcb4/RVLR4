@@ -9,7 +9,7 @@ import type { HatGameSession } from "@/domain/hat-game/types";
 import { clampImposterCount, defaultImposterCount, shuffleWithRng } from "@/domain/imposter/round";
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
-import type { ImposterSnapshot } from "@/features/imposter/imposterAppTypes";
+import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 
 import { generateRoomCode, normalizeRoomCode } from "./codes.ts";
 import { generateSecretToken } from "./secrets.ts";

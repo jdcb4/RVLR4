@@ -6,12 +6,12 @@ import {
 } from "@/components/AppInfoOverlay";
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { GameShell } from "@/components/GameShell";
-import { buildImposterScreen } from "@/features/imposter/ImposterWebScreens";
-import { useImposterApp } from "@/features/imposter/useImposterApp";
+import { buildImposterScreen } from "@/features/imposter/ImposterSingleplayerWebScreens";
+import { useImposterSingleplayerApp } from "@/features/imposter/useImposterSingleplayerApp";
 
-export function ImposterApp() {
+export function ImposterSingleplayerApp() {
   const navigate = useNavigate();
-  const controller = useImposterApp();
+  const controller = useImposterSingleplayerApp();
   const screen = buildImposterScreen(controller, navigate);
 
   const showAppInfo = controller.loaded;

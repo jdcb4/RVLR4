@@ -1,4 +1,4 @@
-import type { ImposterSnapshot } from "@/features/imposter/imposterAppTypes";
+import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 
 export type ImposterSyncDto = {
   readonly snapshot: ImposterSnapshot;

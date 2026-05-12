@@ -144,8 +144,8 @@ See §3.2 for the proposed renames.
 
 `use<Subject>` PascalCase subject, no `App`/`Controller` suffix variance:
 
-- `useGameController` in WWW is the odd one out (`useHatGameApp`,
-  `useImposterApp` are the parallel pair). Rename to `useWhoWhatWhereApp`.
+- `useWhoWhatWhereSingleplayerApp` in WWW is the odd one out (`useHatSingleplayerApp`,
+  `useImposterSingleplayerApp` are the parallel pair). Rename to `useWhoWhatWhereApp`.
 - Shared utility hooks describe the behavior: `useAutoHidePopup`,
   `useFooterActionLockOnKeyChange`, `useRoomChannel`. Keep.
 
@@ -155,7 +155,7 @@ See §3.2 for the proposed renames.
 |---|---|---|
 | React component (one default-ish export) | `PascalCase.tsx` | `HatMultiplayerView.tsx`, `RoomPage.tsx` |
 | Screen *builder* function (returns `ScreenModel`) | `camelCase.tsx` | `hatLandingScreen.tsx`, `imposterResultsScreen.tsx` |
-| Hooks, utilities, types | `camelCase.ts` | `useHatGameApp.ts`, `viewModel.ts` |
+| Hooks, utilities, types | `camelCase.ts` | `useHatSingleplayerApp.ts`, `viewModel.ts` |
 | Folders | `kebab-case` | `hat-game/`, `team-setup/`, `final-results/` |
 
 Today's data: 55 PascalCase .tsx (✅), 26 camelCase .tsx (mostly screen
@@ -192,15 +192,15 @@ check.
 
 | Symbol | Current | Recommended | Why |
 |---|---|---|---|
-| `HatGameApp` (component) | mixed | rename to `HatApp` | parallel to `WhoWhatWhereApp`, `ImposterApp` |
-| `HatGameWebScreens` (file + export) | mixed | rename to `HatWebScreens` | parallel to `ImposterWebScreens` |
+| `HatSingleplayerApp` (component) | mixed | rename to `HatApp` | parallel to `WhoWhatWhereSingleplayerApp`, `ImposterSingleplayerApp` |
+| `HatSingleplayerWebScreens` (file + export) | mixed | rename to `HatWebScreens` | parallel to `ImposterSingleplayerWebScreens` |
 | `HatGameSession` (type) | mixed | **keep** | "session" is the domain concept; `HatGame` here reads naturally |
 | `HatGameAction` (type) | mixed | **keep** | same |
 | `HatGameConfig` (type) | mixed | **keep** | same |
 | `HatGamePhaseMeta` (type) | mixed | **keep** | same |
-| `useHatGameApp` (hook) | mixed | rename to `useHatApp` | parallel to `useImposterApp` |
+| `useHatSingleplayerApp` (hook) | mixed | rename to `useHatApp` | parallel to `useImposterSingleplayerApp` |
 | `hatGameActionSound` (file) | mixed | keep file, but tighten symbol names |
-| `hatGameAppTypes` (file) | mixed | rename to `hatAppTypes` | parallel to `imposterAppTypes` |
+| `hatSingleplayerAppTypes` (file) | mixed | rename to `hatAppTypes` | parallel to `imposterSingleplayerAppTypes` |
 | `hatGameDefaults` (file) | mixed | rename to `hatDefaults` | parallel to `imposterDefaults` |
 | `hatGameSound`, `hatGameStorage` (files) | mixed | rename to `hatSound`, `hatStorage` | parallel to `imposterGameStorage`… wait |
 
@@ -248,8 +248,8 @@ to match. See §5 for sequencing.
 
 | Current | Recommended |
 |---|---|
-| `useGameController` | `useWhoWhatWhereApp` (parallel to `useHatGameApp` / `useImposterApp`) |
-| `hatGameAppTypes.ts` | `hatAppTypes.ts` (drop `Game`, match `imposterAppTypes.ts`) |
+| `useWhoWhatWhereSingleplayerApp` | `useWhoWhatWhereApp` (parallel to `useHatSingleplayerApp` / `useImposterSingleplayerApp`) |
+| `hatSingleplayerAppTypes.ts` | `hatAppTypes.ts` (drop `Game`, match `imposterSingleplayerAppTypes.ts`) |
 | `LegacyHubPage` already renamed to `PassNPlayHubPage` in 0.15.6 ✅ | — |
 | `mpDebug` (server) / `MULTIPLAYER_DEBUG` (env var) | **Keep.** `MULTIPLAYER_DEBUG` is wire-facing config; renaming touches deploy docs. |
 
@@ -262,7 +262,7 @@ to match. See §5 for sequencing.
 - All `build*` factories — 13 functions.
 - All `load*` / `save*` / `clear*` storage helpers.
 - All `<Game>MultiplayerView` components (3/3 parallel).
-- All `<Game>App` top-level components (3/3, modulo `HatGameApp`'s `Game`).
+- All `<Game>App` top-level components (3/3, modulo `HatSingleplayerApp`'s `Game`).
 - `ResultsScreen` / `FinalTurnRecapScreen` naming.
 - File-case conventions (PascalCase for components, camelCase for the rest,
   kebab-case for folders).
@@ -296,8 +296,8 @@ Version bump: PATCH (refactor, no behavior change).
 
 ### Step N2 — Drop `Game` suffix from Hat where it's redundant
 
-- Renames: `HatGameApp` → `HatApp`, `useHatGameApp` → `useHatApp`,
-  `HatGameWebScreens` → `HatWebScreens`, `hatGameAppTypes.ts` →
+- Renames: `HatSingleplayerApp` → `HatApp`, `useHatSingleplayerApp` → `useHatApp`,
+  `HatSingleplayerWebScreens` → `HatWebScreens`, `hatSingleplayerAppTypes.ts` →
   `hatAppTypes.ts`, `hatGameDefaults.ts` → `hatDefaults.ts`,
   `hatGameSound.ts` → `hatSound.ts`, `hatGameStorage.ts` → `hatStorage.ts`,
   `imposterGameStorage.ts` → `imposterStorage.ts`.
@@ -307,9 +307,9 @@ Version bump: PATCH (refactor, no behavior change).
 
 Version bump: PATCH.
 
-### Step N3 — Rename `useGameController` → `useWhoWhatWhereApp`
+### Step N3 — Rename `useWhoWhatWhereSingleplayerApp` → `useWhoWhatWhereApp`
 
-- Single rename + ~15 importers in `WhoWhatWhereApp.tsx` and tests.
+- Single rename + ~15 importers in `WhoWhatWhereSingleplayerApp.tsx` and tests.
 - Smallest commit.
 
 Version bump: PATCH.

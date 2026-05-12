@@ -24,14 +24,14 @@ import { TeamSetupScreen } from "@/features/whowhatwhere/setup/TeamSetupScreen";
 import { WhoWhatWhereReviewTeamsScreen } from "@/features/whowhatwhere/setup/WhoWhatWhereReviewTeamsScreen";
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
 import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
-import { useGameController } from "@/features/whowhatwhere/useGameController";
+import { useWhoWhatWhereSingleplayerApp } from "@/features/whowhatwhere/useWhoWhatWhereSingleplayerApp";
 import { WhoWhatWhereLandingScreen } from "@/features/whowhatwhere/WhoWhatWhereLandingScreen";
 
 import packageJson from "../../../package.json";
 
-export function WhoWhatWhereApp() {
+export function WhoWhatWhereSingleplayerApp() {
   const navigate = useNavigate();
-  const game = useGameController();
+  const game = useWhoWhatWhereSingleplayerApp();
   const [showAppInfo, setShowAppInfo] = useState(false);
 
   useEffect(() => {

@@ -83,7 +83,7 @@ function firstCamelWord(name: string): string | null {
 
 function tokenMatches(name: string, tokens: readonly string[]): string[] {
   // Case-insensitive substring match, but emit the canonical token when found.
-  // Examples: "useHatGameApp" -> ["hatGame", "hat"]; "WhoWhatWhereLandingScreen" -> ["Www"].
+  // Examples: "useHatSingleplayerApp" -> ["hatGame", "hat"]; "WhoWhatWhereLandingScreen" -> ["Www"].
   const hits = new Set<string>();
   for (const token of tokens) {
     if (name.includes(token)) {

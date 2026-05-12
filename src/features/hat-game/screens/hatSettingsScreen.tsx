@@ -3,10 +3,10 @@ import { GamePanel } from "@/components/game/GamePanel";
 import { OptionButton, OptionGroup } from "@/components/setup/OptionGroup";
 import { TeamCountOptionGroup } from "@/components/setup/TeamCountOptionGroup";
 import type { SharedTeamCount } from "@/config/teamRoster";
-import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
-export function hatSettingsScreen(controller: HatGameAppController): ScreenModel {
+export function hatSettingsScreen(controller: HatSingleplayerAppController): ScreenModel {
   return {
     content: (
       <GamePanel

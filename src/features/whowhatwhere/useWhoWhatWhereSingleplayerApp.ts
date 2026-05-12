@@ -34,7 +34,7 @@ type AppMode =
   | "finalSummary"
   | "results";
 
-export function useGameController() {
+export function useWhoWhatWhereSingleplayerApp() {
   const initialSetup = useMemo(() => loadSetup(), []);
   const [settings, setSettings] = useState(initialSetup.settings);
   const [teamSetups, setTeamSetups] = useState(initialSetup.teams);

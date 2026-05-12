@@ -7,13 +7,13 @@ import {
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
 import { GameShell } from "@/components/GameShell";
-import { buildHatGameScreen } from "@/features/hat-game/HatGameWebScreens";
-import { useHatGameApp } from "@/features/hat-game/useHatGameApp";
+import { buildHatSingleplayerScreen } from "@/features/hat-game/HatSingleplayerWebScreens";
+import { useHatSingleplayerApp } from "@/features/hat-game/useHatSingleplayerApp";
 
-export function HatGameApp() {
+export function HatSingleplayerApp() {
   const navigate = useNavigate();
-  const controller = useHatGameApp();
-  const screen = buildHatGameScreen(controller, navigate);
+  const controller = useHatSingleplayerApp();
+  const screen = buildHatSingleplayerScreen(controller, navigate);
 
   const showAppInfo = controller.loaded;
   const showEndTurn =

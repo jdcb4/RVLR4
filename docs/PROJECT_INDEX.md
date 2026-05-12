@@ -21,9 +21,9 @@ Games:
 - `src/app` — router, root layout, smoke tests.
 - `src/features/multiplayer` — Multi-Device mode **shell**: join/host UX (`MultiplayerHomePage`, `EnterNamePage`, `RoomPage`, `MultiplayerGameShell`, `lobbyCaptain`). Per-game multiplayer views live next to their pass-and-play counterparts (see below).
 - `src/features/passnplay` — Pass-and-Play hub (`PassNPlayHubPage`) at `/passnplay` (alias `/legacy` redirects here).
-- `src/features/whowhatwhere` — Who What Where: pass-and-play UI + `useGameController` (`WhoWhatWhereLandingScreen`, `WhoWhatWhereReviewTeamsScreen`, …); networked shell at `multiplayer/WhoWhatWhereMultiplayerView.tsx`.
-- `src/features/hat-game` — Hat Game: pass-and-play web UI + `useHatGameApp`; per-screen builders under `screens/` wired by `buildHatGameScreen` in `HatGameWebScreens.tsx`; networked shell at `multiplayer/HatMultiplayerView.tsx`.
-- `src/features/imposter` — Imposter: pass-and-play UI + `useImposterApp`; `ImposterWebScreens.tsx` routes steps; screen modules under `screens/`; networked shell at `multiplayer/ImposterMultiplayerView.tsx`.
+- `src/features/whowhatwhere` — Who What Where: pass-and-play UI + `useWhoWhatWhereSingleplayerApp` (`WhoWhatWhereLandingScreen`, `WhoWhatWhereReviewTeamsScreen`, …); networked shell at `multiplayer/WhoWhatWhereMultiplayerView.tsx`.
+- `src/features/hat-game` — Hat Game: pass-and-play web UI + `useHatSingleplayerApp`; per-screen builders under `screens/` wired by `buildHatSingleplayerScreen` in `HatSingleplayerWebScreens.tsx`; networked shell at `multiplayer/HatMultiplayerView.tsx`.
+- `src/features/imposter` — Imposter: pass-and-play UI + `useImposterSingleplayerApp`; `ImposterSingleplayerWebScreens.tsx` routes steps; screen modules under `screens/`; networked shell at `multiplayer/ImposterMultiplayerView.tsx`.
 - `src/domain/whowhatwhere` — WhoWhatWhere rules (framework-free).
 - `src/domain/hat-game` — Hat Game engine + setup helpers.
 - `src/domain/imposter` — Imposter dealing and setup validation (social outcomes only in real life).

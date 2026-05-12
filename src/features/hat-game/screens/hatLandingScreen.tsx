@@ -1,8 +1,8 @@
 import { buildGameLandingScreen } from "@/components/game/buildGameLandingScreen";
-import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
-export function hatLandingScreen(controller: HatGameAppController): ScreenModel {
+export function hatLandingScreen(controller: HatSingleplayerAppController): ScreenModel {
   return buildGameLandingScreen({
     controller,
     subtitle:

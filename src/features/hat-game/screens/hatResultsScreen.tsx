@@ -6,11 +6,11 @@ import { mapFinalResultsFromHat } from "@/components/game/final-results/viewMode
 import { GamePanel } from "@/components/game/GamePanel";
 import { PassAndPlayGameResultActions } from "@/components/GameResultActions";
 import type { HatGameSession } from "@/domain/hat-game/types";
-import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
 export function hatResultsScreen(
-  controller: HatGameAppController,
+  controller: HatSingleplayerAppController,
   session: HatGameSession,
   navigate: NavigateFunction,
 ): ScreenModel {

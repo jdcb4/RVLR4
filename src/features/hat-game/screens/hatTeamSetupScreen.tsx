@@ -3,10 +3,10 @@ import { GamePanel } from "@/components/game/GamePanel";
 import { teamRosterAdvanceLabel } from "@/components/team-setup/teamRosterLabels";
 import { TeamRosterSetupScreen } from "@/components/team-setup/TeamRosterSetupScreen";
 import { hatStateToRosterRows } from "@/domain/hat-game/setup";
-import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
-export function hatTeamSetupScreen(controller: HatGameAppController): ScreenModel {
+export function hatTeamSetupScreen(controller: HatSingleplayerAppController): ScreenModel {
   const rosterRows = hatStateToRosterRows(
     controller.snapshot.teams,
     controller.snapshot.players,

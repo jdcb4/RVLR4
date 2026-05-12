@@ -4,11 +4,11 @@ import {
   SecondaryFooterButton,
 } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
-import type { ScreenModel } from "@/features/imposter/imposterAppTypes";
-import type { ImposterAppController } from "@/features/imposter/useImposterApp";
+import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTypes";
+import type { ImposterSingleplayerAppController } from "@/features/imposter/useImposterSingleplayerApp";
 
 export function imposterRosterScreen(
-  controller: ImposterAppController,
+  controller: ImposterSingleplayerAppController,
 ): ScreenModel {
   return {
     content: (

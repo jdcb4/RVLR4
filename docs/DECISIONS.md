@@ -149,7 +149,7 @@ case.
   var; the wire-facing env var rename is deploy-affecting. No semantic
   gain.
 - *No `Singleplayer*` modifier, just bare names on the older side* — keeps
-  the existing asymmetry; agents reading `WhoWhatWhereApp` in isolation
+  the existing asymmetry; agents reading `WhoWhatWhereSingleplayerApp` in isolation
   can't tell which mode they're in without opening the file.
 
 **Supersedes:** N/A — this is the first naming-conventions decision.

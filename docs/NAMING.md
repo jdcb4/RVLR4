@@ -60,7 +60,7 @@ mode. The `server/` location is the modifier.
 ### Why `Singleplayer*` even though the implementation is single-device?
 
 The pass-and-play code shipped first and accreted bare names
-(`WhoWhatWhereApp`, `useHatGameApp`). When the multiplayer counterpart
+(`WhoWhatWhereSingleplayerApp`, `useHatSingleplayerApp`). When the multiplayer counterpart
 arrived, `Multiplayer*` modifiers were added on the new side only — but
 the older bare names now read ambiguously when grepping or reviewing.
 Adding `Singleplayer*` to the older side gives true symmetry. `pnpm run

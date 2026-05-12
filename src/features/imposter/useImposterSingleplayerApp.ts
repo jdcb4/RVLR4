@@ -16,7 +16,7 @@ import type {
   ImposterSnapshot,
   ImposterStep,
   ImposterStoragePayload,
-} from "@/features/imposter/imposterAppTypes";
+} from "@/features/imposter/imposterSingleplayerAppTypes";
 import { formatSavedAt } from "@/lib/formatSavedAt";
 import {
   clearImposterSavedState,
@@ -54,9 +54,9 @@ const isStoragePayload = (value: unknown): value is ImposterStoragePayload =>
       "lastSavedAt" in value,
   );
 
-export type ImposterAppController = ReturnType<typeof useImposterApp>;
+export type ImposterSingleplayerAppController = ReturnType<typeof useImposterSingleplayerApp>;
 
-export function useImposterApp() {
+export function useImposterSingleplayerApp() {
   const [snapshot, setSnapshot] = useState<ImposterSnapshot>(() =>
     createInitialSnapshot("landing"),
   );

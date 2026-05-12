@@ -1,18 +1,18 @@
 import type { NavigateFunction } from "react-router-dom";
 
-import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
+import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
 import { hatActiveTurnScreen } from "@/features/hat-game/screens/hatActiveTurnScreen";
 import { hatFinalTurnRecapScreen } from "@/features/hat-game/screens/hatFinalTurnRecapScreen";
 import { hatReadyScreen } from "@/features/hat-game/screens/hatReadyScreen";
 import { hatResultsScreen } from "@/features/hat-game/screens/hatResultsScreen";
 import { hatReviewTeamsScreen } from "@/features/hat-game/screens/hatReviewTeamsScreen";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
 /**
  * Routes `step === "game"` by session stage — between turns, timed turn, recap, results.
  */
 export function hatInGameScreen(
-  controller: HatGameAppController,
+  controller: HatSingleplayerAppController,
   navigate: NavigateFunction,
 ): ScreenModel {
   const session = controller.snapshot.session;

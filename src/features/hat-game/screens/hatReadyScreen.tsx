@@ -9,12 +9,12 @@ import {
   getHatGamePhaseMeta,
 } from "@/domain/hat-game/engine";
 import type { HatGameSession } from "@/domain/hat-game/types";
-import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
+import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
 import { HatScoreboard } from "@/features/hat-game/screens/HatScoreboard";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
 export function hatReadyScreen(
-  controller: HatGameAppController,
+  controller: HatSingleplayerAppController,
   session: HatGameSession,
 ): ScreenModel {
   const context = getHatGameContext(session);

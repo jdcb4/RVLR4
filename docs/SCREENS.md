@@ -15,7 +15,7 @@ Implementation hints refer to components under `src/features/` unless noted.
 
 ## Who What Where (`/games/whowhatwhere`)
 
-Rendered inside **`GameShell`**. Flow is driven by `useGameController`: **`landing`** first (with optional **`pendingMatch`** resume card), then setup vs live **`match`**.
+Rendered inside **`GameShell`**. Flow is driven by `useWhoWhatWhereSingleplayerApp`: **`landing`** first (with optional **`pendingMatch`** resume card), then setup vs live **`match`**.
 
 | Name | Description |
 |------|-------------|
@@ -32,7 +32,7 @@ Rendered inside **`GameShell`**. Flow is driven by `useGameController`: **`landi
 
 ## Hat Game (`/games/hat`)
 
-Rendered inside **`GameShell`**. Shell step is **`AppSnapshot.step`** (`hatGameAppTypes`). When step is **`game`**, **`HatGameSession.stage`** selects the in-play screen.
+Rendered inside **`GameShell`**. Shell step is **`AppSnapshot.step`** (`hatSingleplayerAppTypes`). When step is **`game`**, **`HatGameSession.stage`** selects the in-play screen.
 
 | Name | Description |
 |------|-------------|
@@ -48,13 +48,13 @@ Rendered inside **`GameShell`**. Shell step is **`AppSnapshot.step`** (`hatGameA
 | **Final turn recap** | Last turn of the match: **That’s the last turn**, **`HatLastTurnCard`**, **Next steps**; footer **Final scores** → **`stage === "results"`**. Session **`stage === "finalSummary"`**. |
 | **Final results** | Same shared podium UI as WWW (**`FinalResultsBody`** via **`mapFinalResultsFromHat`**); session **`stage === "results"`**. |
 
-Screen assembly: **`buildHatGameScreen`** in `HatGameWebScreens.tsx` routes **`AppSnapshot.step`** and delegates to modules under **`features/hat-game/screens/`** (same file-per-screen idea as Who What Where). **`HatGameApp`** adds shell chrome, error strip, and **`AppInfoOverlay`**.
+Screen assembly: **`buildHatSingleplayerScreen`** in `HatSingleplayerWebScreens.tsx` routes **`AppSnapshot.step`** and delegates to modules under **`features/hat-game/screens/`** (same file-per-screen idea as Who What Where). **`HatSingleplayerApp`** adds shell chrome, error strip, and **`AppInfoOverlay`**.
 
 ---
 
 ## Imposter (`/games/imposter`)
 
-Rendered inside **`GameShell`**. Flow is driven by **`ImposterSnapshot.step`** (`imposterAppTypes`). Winner/final-guess rules stay at the table — the app only orchestrates timing and reveals.
+Rendered inside **`GameShell`**. Flow is driven by **`ImposterSnapshot.step`** (`imposterSingleplayerAppTypes`). Winner/final-guess rules stay at the table — the app only orchestrates timing and reveals.
 
 | Name | Description |
 |------|-------------|
@@ -70,7 +70,7 @@ Rendered inside **`GameShell`**. Flow is driven by **`ImposterSnapshot.step`** (
 | **Round guide — reveal warning** | Confirm group is ready for spoilers; footer **Reveal**. Component: `imposterRoundGuideRevealWarningScreen`. |
 | **Round reveal / results** | Shows imposter name(s) + secret word from stored round; footer **`GameResultActions`** (Pick another / Replay / New game). Component: `imposterResultsScreen`. |
 
-Screen assembly: **`buildImposterScreen`** in `ImposterWebScreens.tsx`. **`ImposterApp`** adds shell chrome, error strip, and **`AppInfoOverlay`**.
+Screen assembly: **`buildImposterScreen`** in `ImposterSingleplayerWebScreens.tsx`. **`ImposterSingleplayerApp`** adds shell chrome, error strip, and **`AppInfoOverlay`**.
 
 ---
 

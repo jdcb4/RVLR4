@@ -13,12 +13,12 @@ import {
 } from "@/domain/hat-game/engine";
 import { formatCountdown } from "@/domain/hat-game/time";
 import type { HatGameSession } from "@/domain/hat-game/types";
-import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
+import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
 import { HAT_NOTICE_CLASS } from "@/features/hat-game/screens/hatScreenTokens";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
 export function hatActiveTurnScreen(
-  controller: HatGameAppController,
+  controller: HatSingleplayerAppController,
   session: HatGameSession,
 ): ScreenModel {
   const context = getHatGameContext(session);

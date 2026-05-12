@@ -8,7 +8,7 @@ This document compares player-facing UX **between the two shipped games** (Who W
 
 Both games share a deliberate **hub-and-flow** pattern: [`GameShell`](../src/components/GameShell.tsx) (home icon, title, scroll body, sticky footer), [`GamePanel`](../src/components/game/GamePanel.tsx) for card chrome, [`PrimaryFooterButton` / `SecondaryFooterButton`](../src/components/game/GameFooterButtons.tsx), and typography/theme tokens (`text-typ-*`, `semantic-*`). **Final results** and much of **between-turns** / **final turn recap** are strongly aligned through shared `components/game/` building blocks.
 
-The largest **structural** difference is runtime shape: WWW uses many focused screen modules under `features/whowhatwhere/`; Hat centralizes almost all UI in [`HatGameWebScreens.tsx`](../src/features/hat-game/HatGameWebScreens.tsx) plus [`HatGameApp.tsx`](../src/features/hat-game/HatGameApp.tsx). Hat also has **exclusive** setup steps (private clue entry). WWW has **richer** word-game settings (categories, rounds, hints) that have no Hat counterpart.
+The largest **structural** difference is runtime shape: WWW uses many focused screen modules under `features/whowhatwhere/`; Hat centralizes almost all UI in [`HatSingleplayerWebScreens.tsx`](../src/features/hat-game/HatSingleplayerWebScreens.tsx) plus [`HatSingleplayerApp.tsx`](../src/features/hat-game/HatSingleplayerApp.tsx). Hat also has **exclusive** setup steps (private clue entry). WWW has **richer** word-game settings (categories, rounds, hints) that have no Hat counterpart.
 
 ---
 
@@ -45,7 +45,7 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 
 | Dimension | Who What Where | Hat Game |
 |-----------|----------------|----------|
-| **Code organization** | Many small screen files | Single large `HatGameWebScreens` builder |
+| **Code organization** | Many small screen files | Single large `HatSingleplayerWebScreens` builder |
 | **Settings depth** | Word categories, rounds, hint controls | Team count, turn length, skips only |
 | **Pre-play path** | Review → **Start the game** → match | Review → **Clue entry** (multi-step) → match |
 | **Ready strip** | Round x/y | Phase name + number |
@@ -53,7 +53,7 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 | **Active turn primary content** | Mystery words + category | Famous-figure clues + phase |
 | **Skip return UI** | WWW word chips / queue | Hat outline buttons per skipped clue |
 | **Sound / timers** | WWW-specific sound hooks | Hat phase cues + countdown helpers |
-| **Footer wiring** | `WhoWhatWhereApp` centralizes modes | `ScreenModel.actions` returned from `buildHatGameScreen` |
+| **Footer wiring** | `WhoWhatWhereSingleplayerApp` centralizes modes | `ScreenModel.actions` returned from `buildHatSingleplayerScreen` |
 
 ---
 
@@ -92,7 +92,7 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 | **Ready screen** | `ReadyScreen` | `renderReady` | Shared pieces; **no** single `BetweenTurnsScreen` component. |
 | **Active turn** | `ActiveTurnScreen` | `renderTurn` | Large bespoke layouts; shared atoms only. |
 | **Scoreboard adapter** | `Scoreboard` (WWW-specific mapping) | `HatScoreboard` local helper | Both delegate to `GameScoreboard`; thin wrappers could stay or merge into props factories. |
-| **Footer orchestration** | `WhoWhatWhereApp` | `buildHatGameScreen` + `HatGameApp` | Different patterns; equivalent outcomes. |
+| **Footer orchestration** | `WhoWhatWhereSingleplayerApp` | `buildHatSingleplayerScreen` + `HatSingleplayerApp` | Different patterns; equivalent outcomes. |
 
 ---
 
@@ -111,7 +111,7 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 **Lower priority / risk of over-abstraction**
 
 - **Unified `SettingsScreen`**: Hat and WWW settings diverge in **domain** (word categories vs none). A single component would carry many conditional branches; current split is readable.
-- **One mega-screen-builder for both games**: Would couple unrelated state machines (`useGameController` vs `useHatGameApp`). Not recommended.
+- **One mega-screen-builder for both games**: Would couple unrelated state machines (`useWhoWhatWhereSingleplayerApp` vs `useHatSingleplayerApp`). Not recommended.
 
 **Already at a good balance**
 
@@ -124,7 +124,7 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 
 1. **Keep** domain-specific last-turn and active-turn content in separate modules or slots; **avoid** merging WWW/Hat turn engines.
 2. **Between-turns spacing/order** — adjust **`BetweenTurnsLayout`** once to affect WWW ready/recap and Hat ready/recap together.
-3. **Document** footer label sources (`WhoWhatWhereApp` vs `ScreenModel.actions`) in [`ARCHITECTURE.md`](ARCHITECTURE.md) if onboarding friction appears — behavior is equivalent but discovery differs.
+3. **Document** footer label sources (`WhoWhatWhereSingleplayerApp` vs `ScreenModel.actions`) in [`ARCHITECTURE.md`](ARCHITECTURE.md) if onboarding friction appears — behavior is equivalent but discovery differs.
 4. **Hat-only** clue-entry flow remains intentionally separate; treating it as a third “setup track” in docs (already in `SCREENS.md`) is enough unless a second game adds similar private-entry steps.
 
 ---

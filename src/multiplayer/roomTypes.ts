@@ -1,6 +1,6 @@
 import type { HatGameSession } from "@/domain/hat-game/types";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
-import type { ImposterSnapshot } from "@/features/imposter/imposterAppTypes";
+import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 
 /** Mirrors `server/sync.ts` — lightweight typing without a shared package boundary. */
 export type LobbyPlayerDto = {

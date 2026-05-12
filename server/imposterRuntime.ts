@@ -5,7 +5,7 @@ import type {
   ImposterRoundState,
   ImposterSnapshot,
   ImposterStep,
-} from "@/features/imposter/imposterAppTypes";
+} from "@/features/imposter/imposterSingleplayerAppTypes";
 
 import { assertLobbyReadyForImposterStart } from "./lobbyControl.ts";
 import type { Room } from "./roomStore.ts";

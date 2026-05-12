@@ -2,12 +2,12 @@ import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
 import { IMPOSTER_ROLE_CARD_COPY } from "@/config/imposterDefaults";
-import type { ScreenModel } from "@/features/imposter/imposterAppTypes";
+import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTypes";
 import { IMPOSTER_NOTICE_CLASS } from "@/features/imposter/screens/imposterScreenTokens";
-import type { ImposterAppController } from "@/features/imposter/useImposterApp";
+import type { ImposterSingleplayerAppController } from "@/features/imposter/useImposterSingleplayerApp";
 
 export function imposterRevealScreen(
-  controller: ImposterAppController,
+  controller: ImposterSingleplayerAppController,
 ): ScreenModel {
   const { snapshot } = controller;
   const round = snapshot.round;

@@ -1,5 +1,5 @@
 import { GamePanel } from "@/components/game/GamePanel";
-import type { ScreenModel } from "@/features/imposter/imposterAppTypes";
+import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTypes";
 
 export function imposterLoadingScreen(): ScreenModel {
   return {

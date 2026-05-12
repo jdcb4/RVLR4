@@ -2,8 +2,8 @@ import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { OptionButton, OptionGroup } from "@/components/setup/OptionGroup";
 import { IMPOSTER_MAX_PLAYERS, IMPOSTER_MIN_PLAYERS } from "@/config/imposterDefaults";
-import type { ScreenModel } from "@/features/imposter/imposterAppTypes";
-import type { ImposterAppController } from "@/features/imposter/useImposterApp";
+import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTypes";
+import type { ImposterSingleplayerAppController } from "@/features/imposter/useImposterSingleplayerApp";
 
 const PLAYER_COUNT_OPTIONS = Array.from(
   { length: IMPOSTER_MAX_PLAYERS - IMPOSTER_MIN_PLAYERS + 1 },
@@ -11,7 +11,7 @@ const PLAYER_COUNT_OPTIONS = Array.from(
 );
 
 export function imposterSettingsScreen(
-  controller: ImposterAppController,
+  controller: ImposterSingleplayerAppController,
 ): ScreenModel {
   const imposterOptions = Array.from(
     { length: controller.maxImposters },

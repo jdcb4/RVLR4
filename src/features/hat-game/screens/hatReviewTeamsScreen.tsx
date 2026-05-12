@@ -5,10 +5,10 @@ import {
 import { GamePanel } from "@/components/game/GamePanel";
 import { reviewDisplayRowsFromHat } from "@/components/game/reviewTeamMappers";
 import { ReviewTeamsPanel } from "@/components/game/ReviewTeamsPanel";
-import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
-export function hatReviewTeamsScreen(controller: HatGameAppController): ScreenModel {
+export function hatReviewTeamsScreen(controller: HatSingleplayerAppController): ScreenModel {
   return {
     content: (
       <section className="keyboard-safe-form flex flex-1 flex-col gap-4 pb-4">

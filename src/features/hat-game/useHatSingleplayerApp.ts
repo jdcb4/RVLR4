@@ -21,7 +21,7 @@ import type { ClueSubmissionMap, HatGameAction } from "@/domain/hat-game/types";
 import { useAutoHidePopup } from "@/features/game-app-hooks/useAutoHidePopup";
 import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
 import { playHatGameActionSoundEffects } from "@/features/hat-game/hatGameActionSound";
-import type { AppSnapshot, AppStep, StoragePayload } from "@/features/hat-game/hatGameAppTypes";
+import type { AppSnapshot, AppStep, StoragePayload } from "@/features/hat-game/hatSingleplayerAppTypes";
 import { formatSavedAt } from "@/lib/formatSavedAt";
 import { playSoundCue } from "@/services/hatGameSound";
 import {
@@ -102,7 +102,7 @@ const chooseSuggestion = (used: string[]) => {
   return source[Math.floor(Math.random() * source.length)] ?? '';
 };
 
-export function useHatGameApp() {
+export function useHatSingleplayerApp() {
   const [snapshot, setSnapshot] = useState<AppSnapshot>(() => createInitialSnapshot('landing'));
   const [savedRecord, setSavedRecord] = useState<StoragePayload | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -512,5 +512,5 @@ export function useHatGameApp() {
   };
 }
 
-export type HatGameAppController = ReturnType<typeof useHatGameApp>;
+export type HatSingleplayerAppController = ReturnType<typeof useHatSingleplayerApp>;
 

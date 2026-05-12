@@ -5,11 +5,11 @@ import { HatLastTurnCard } from "@/components/game/HatLastTurnCard";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { ThatsTheLastTurnCard } from "@/components/game/ThatsTheLastTurnCard";
 import type { HatGameSession } from "@/domain/hat-game/types";
-import type { ScreenModel } from "@/features/hat-game/hatGameAppTypes";
-import type { HatGameAppController } from "@/features/hat-game/useHatGameApp";
+import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
+import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
 export function hatFinalTurnRecapScreen(
-  controller: HatGameAppController,
+  controller: HatSingleplayerAppController,
   session: HatGameSession,
 ): ScreenModel {
   const previousTurn = session.lastTurnSummary;
