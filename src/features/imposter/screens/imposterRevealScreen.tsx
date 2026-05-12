@@ -1,5 +1,6 @@
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
+import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
 import { IMPOSTER_ROLE_CARD_COPY } from "@/config/imposterDefaults";
 import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTypes";
@@ -54,21 +55,28 @@ export function imposterRevealScreen(
 
   return {
     content: (
-      <GamePanel
-        eyebrow={isImposter ? "Your role" : "Remember this"}
-        subtitle={
-          isImposter
-            ? "Blend in during clues — the crew does not know who you are."
-            : "Give a clue that proves you know the word without handing it to imposters."
-        }
-        title={player.name}
-      >
-        {isImposter ? (
-          <TurnPlayHighlight>{IMPOSTER_ROLE_CARD_COPY}</TurnPlayHighlight>
-        ) : (
-          <TurnPlayHighlight>{round.secretWord}</TurnPlayHighlight>
-        )}
-      </GamePanel>
+      <>
+        <GamePanel
+          eyebrow={isImposter ? "Your role" : "Remember this"}
+          subtitle={
+            isImposter
+              ? "Blend in during clues — the crew does not know who you are."
+              : "This is the secret word. Make sure you remember it."
+          }
+          title={player.name}
+        >
+          {isImposter ? (
+            <TurnPlayHighlight>{IMPOSTER_ROLE_CARD_COPY}</TurnPlayHighlight>
+          ) : (
+            <TurnPlayHighlight>{round.secretWord}</TurnPlayHighlight>
+          )}
+        </GamePanel>
+        <div className="mt-4">
+          <ReadyNextStepsCard
+            primaryText="Once you have memorised this, hit the button below and pass on to the next person."
+          />
+        </div>
+      </>
     ),
     actions: (
       <PrimaryFooterButton

@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.13 - 2026-05-12
+
+- **Imposter (Pass-and-Play):** Reveal screen for non-imposters had the
+  wrong subtitle copy ("Give a clue that proves you know the word…"),
+  describing the *clue* phase. Replaced with "This is the secret word.
+  Make sure you remember it." so the prompt matches the moment.
+- **Imposter (Pass-and-Play):** Added a `ReadyNextStepsCard` under the
+  role/word reveal: "Once you have memorised this, hit the button below
+  and pass on to the next person." Matches the Hat-Game between-turns
+  pattern.
+
 ## 0.16.12 - 2026-05-12
 
 - **Fix (confetti z-index):** `ResultsConfetti` was `z-[9]`, which sits
