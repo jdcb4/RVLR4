@@ -9,7 +9,7 @@ React Router drives:
 - `/` — multiplayer launcher (**Join** + **Host**).
 - `/name` — display name entry + REST host/join handshake.
 - `/room/:code` — lobby + networked gameplay shell for the selected title.
-- `/legacy` — legacy pass-and-play picker pointing at `/games/*`.
+- `/passnplay` — Pass-and-Play mode picker pointing at `/games/*` (alias: `/legacy` redirects here for older shared links).
 - `/games/whowhatwhere`, `/games/hat`, `/games/imposter` — legacy single-device flows.
 
 Runtime multiplayer state lives **only in the Node process RAM** (rooms keyed by short codes). Clients reconnect with per-player secrets stored in **`sessionStorage`** (`jd-multiplayer:*`).

@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.2 - 2026-05-12
+
+- **Router:** Pass-and-Play hub moves from `/legacy` to **`/passnplay`**;
+  `/legacy` keeps working as a permanent redirect so shared links survive.
+- **Internal links:** Home page "Just one phone?" card now targets
+  `/passnplay`.
+- **Docs:** `docs/ARCHITECTURE.md` and `docs/PROJECT_INDEX.md` describe the
+  two modes as peers and note the redirect.
+
 ## 0.15.1 - 2026-05-12
 
 - **Home (UX):** "Legacy pass-and-play" reframed as **Pass-and-Play mode**.

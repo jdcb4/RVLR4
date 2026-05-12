@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { RootLayout } from "@/app/RootLayout";
 import { HatGameApp } from "@/features/hat-game/HatGameApp";
@@ -18,7 +18,9 @@ export const router = createBrowserRouter(
       element: <RootLayout />,
       children: [
         { index: true, element: <MultiplayerHomePage /> },
-        { path: "legacy", element: <LegacyHubPage /> },
+        { path: "passnplay", element: <LegacyHubPage /> },
+        // Permanent redirect for shared links that pre-date the rename.
+        { path: "legacy", element: <Navigate replace to="/passnplay" /> },
         { path: "name", element: <EnterNamePage /> },
         { path: "room/:code", element: <RoomPage /> },
         { path: "games/whowhatwhere", element: <WhoWhatWhereApp /> },

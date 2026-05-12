@@ -4,7 +4,10 @@ The first stop for navigating this project.
 
 ## What this project is
 
-Mobile-first **party game hub** with **multi-device multiplayer** (join codes + Socket.IO) plus legacy **pass-and-play** flows preserved under `/legacy` and `/games/*`.
+Mobile-first **party game hub** with two first-class play modes:
+
+- **Multi-Device mode** (default) — join codes + Socket.IO; landing at `/`.
+- **Pass-and-Play mode** — single-device flows at `/passnplay` (alias `/legacy` redirects for back-compat) → `/games/*`.
 
 Games:
 

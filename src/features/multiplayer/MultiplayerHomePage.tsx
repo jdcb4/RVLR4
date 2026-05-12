@@ -141,7 +141,7 @@ export function MultiplayerHomePage() {
         <Link
           aria-label="Switch to Pass-and-Play mode"
           className="mb-8 flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          to="/legacy"
+          to="/passnplay"
         >
           <div className="min-w-0 flex-1">
             <p className="text-typ-overline font-medium uppercase text-muted-foreground">
