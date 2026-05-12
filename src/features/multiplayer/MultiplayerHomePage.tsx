@@ -2,11 +2,11 @@ import { type FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
-  IconChevronRight,
   IconMask,
   IconSparkles,
   IconTheatre,
 } from "@/components/icons";
+import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 import {
   clearActiveGameBookmark,
   readActiveGameBookmark,
@@ -138,25 +138,6 @@ export function MultiplayerHomePage() {
           </p>
         </header>
 
-        <Link
-          aria-label="Switch to Pass-and-Play mode"
-          className="mb-8 flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          to="/passnplay"
-        >
-          <div className="min-w-0 flex-1">
-            <p className="text-typ-overline font-medium uppercase text-muted-foreground">
-              Just one phone?
-            </p>
-            <p className="mt-1 text-typ-card-title font-semibold">
-              Use Pass-and-Play mode
-            </p>
-            <p className="mt-1 text-typ-ui-snug text-muted-foreground">
-              Hand the device around the table — no codes, no second devices needed.
-            </p>
-          </div>
-          <IconChevronRight aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />
-        </Link>
-
         {resume ? (
           <section className="mb-10 rounded-2xl border border-primary/30 bg-semantic-primary-soft-bg p-4 shadow-sm">
             <h2 className="text-typ-card-title font-semibold">Resume your game</h2>
@@ -244,6 +225,13 @@ export function MultiplayerHomePage() {
           </ul>
         </section>
 
+        <ModeSwitchCard
+          ariaLabel="Switch to Pass-and-Play mode"
+          description="Hand the device around the table — no codes, no second devices needed."
+          eyebrow="Just one phone?"
+          title="Use Pass-and-Play mode"
+          to="/passnplay"
+        />
       </div>
     </div>
   );

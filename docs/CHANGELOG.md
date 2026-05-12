@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.4 - 2026-05-12
+
+- **Mode-switch navigation:** The "Use Pass-and-Play mode" card moves from
+  under the Multi-Device landing header to the **bottom of the page**, keeping
+  the join/host flow as the dominant content above the fold.
+- **Pass-and-Play hub:** Now shows a mirroring **"Use Multi-Device mode"** card
+  in the same bottom position, with the inline header switch-link removed for
+  consistency.
+- **Refactor:** Shared `src/components/ModeSwitchCard.tsx` drives both
+  surfaces so the layout stays in sync.
+
 ## 0.15.3 - 2026-05-12
 
 - **Pass-and-Play final results:** Collapses the previous three actions

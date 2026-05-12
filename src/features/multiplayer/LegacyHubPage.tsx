@@ -5,6 +5,7 @@ import {
   IconSparkles,
   IconTheatre,
 } from "@/components/icons";
+import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 
 const games = [
   {
@@ -44,11 +45,8 @@ export function LegacyHubPage() {
           </p>
           <h1 className="mt-2 text-typ-display font-bold">Party games, one phone</h1>
           <p className="mx-auto mt-4 max-w-prose text-typ-body-relaxed text-muted-foreground">
-            One phone, passed around the table. Want everyone on their own device?{" "}
-            <Link className="font-medium text-primary underline-offset-4 hover:underline" to="/">
-              Switch to Multi-Device mode
-            </Link>
-            .
+            <span className="font-semibold text-foreground">Pass-and-Play mode</span> — one phone,
+            passed around the table. Same scoring, no second devices needed.
           </p>
         </header>
 
@@ -76,6 +74,14 @@ export function LegacyHubPage() {
             );
           })}
         </ul>
+
+        <ModeSwitchCard
+          ariaLabel="Switch to Multi-Device mode"
+          description="Host on one phone and let everyone join with a short code from their own device."
+          eyebrow="Everyone has a phone?"
+          title="Use Multi-Device mode"
+          to="/"
+        />
       </div>
     </div>
   );
