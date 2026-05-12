@@ -129,17 +129,17 @@ export function MultiplayerHomePage() {
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <div className="safe-screen mx-auto w-full max-w-md px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
-        <header className="py-8 text-center">
+        <header className="py-6 text-center">
           <p className="font-medium uppercase text-typ-overline text-primary">JD Party Games</p>
           <h1 className="mt-2 text-typ-display font-bold">Party games, every phone</h1>
-          <p className="mx-auto mt-4 max-w-prose text-typ-body-relaxed text-muted-foreground">
+          <p className="mx-auto mt-3 max-w-prose text-typ-body-relaxed text-muted-foreground">
             <span className="font-semibold text-foreground">Multi-Device mode</span> — host on one
-            phone, everyone joins with a short code. Same scoring you already know, now simultaneous.
+            phone, everyone joins with a short code.
           </p>
         </header>
 
         {resume ? (
-          <section className="mb-10 rounded-2xl border border-primary/30 bg-semantic-primary-soft-bg p-4 shadow-sm">
+          <section className="mb-4 rounded-2xl border border-primary/30 bg-semantic-primary-soft-bg p-4 shadow-sm">
             <h2 className="text-typ-card-title font-semibold">Resume your game</h2>
             <p className="mt-1 text-typ-ui-snug text-muted-foreground">
               This table is still in progress and your browser still has your seat saved.
@@ -161,14 +161,10 @@ export function MultiplayerHomePage() {
           </section>
         ) : null}
 
-        <section className="mb-10 rounded-2xl border border-border bg-card p-4 shadow-sm">
+        <section className="mb-4 rounded-2xl border border-border bg-card p-4 shadow-sm">
           <h2 className="text-typ-card-title font-semibold">Join a room</h2>
-          <p className="mt-1 text-typ-ui-snug text-muted-foreground">
-            Ask the host for their six-character code. You do not need to pick the game - the code
-            tells the app which table you are joining.
-          </p>
-          <form className="mt-4 flex flex-col gap-3" onSubmit={handleJoinSubmit}>
-            <label className="text-typ-ui font-medium" htmlFor="join-code">
+          <form className="mt-3 flex flex-col gap-3" onSubmit={handleJoinSubmit}>
+            <label className="sr-only" htmlFor="join-code">
               Join code
             </label>
             <input
@@ -178,7 +174,7 @@ export function MultiplayerHomePage() {
               id="join-code"
               inputMode="text"
               maxLength={8}
-              placeholder="e.g. ABC123"
+              placeholder="Join code. e.g. ABC123"
               value={joinCode}
               onChange={(event) => setJoinCode(event.target.value)}
             />
@@ -192,31 +188,30 @@ export function MultiplayerHomePage() {
           </form>
         </section>
 
-        <section>
-          <h2 className="mb-3 text-typ-card-title font-semibold">Host a room</h2>
-          <p className="mb-4 text-typ-ui-snug text-muted-foreground">
-            Pick the game you want to facilitate. You will get a join code to share after entering your
-            name.
+        <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+          <h2 className="text-typ-card-title font-semibold">Host a room</h2>
+          <p className="mt-1 text-typ-ui-snug text-muted-foreground">
+            Pick a game, then share the code with friends.
           </p>
-          <ul className="grid gap-4 pb-12">
+          <ul className="mt-3 grid gap-3">
             {games.map((game) => {
               const Icon = game.icon;
 
               return (
                 <li key={game.id}>
                   <button
-                    className="flex w-full gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="flex w-full gap-4 rounded-xl border border-border bg-background p-3 text-left shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     type="button"
                     onClick={() =>
                       navigate(`/name?intent=host&game=${encodeURIComponent(game.id)}`)
                     }
                   >
-                    <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-semantic-primary-well-bg text-primary">
-                      <Icon className="size-7" />
+                    <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-semantic-primary-well-bg text-primary">
+                      <Icon className="size-6" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="text-typ-card-title font-semibold">{game.title}</h3>
-                      <p className="mt-1 text-typ-ui-snug text-muted-foreground">{game.description}</p>
+                      <p className="mt-0.5 text-typ-ui-snug text-muted-foreground">{game.description}</p>
                     </div>
                   </button>
                 </li>

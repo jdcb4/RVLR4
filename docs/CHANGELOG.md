@@ -2,6 +2,27 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.7 - 2026-05-12
+
+- **Multi-Device landing (compact):** Major above-the-fold tightening so
+  the page fits on a single mobile viewport:
+  - Header copy trimmed ("Same scoring you already know, now simultaneous"
+    dropped); top + bottom padding reduced.
+  - "Ask the host for their six-character code..." paragraph removed.
+  - Visible "Join code" label hidden (now `sr-only` for screen readers);
+    placeholder reads `Join code. e.g. ABC123`.
+  - Host-section intro shortened to "Pick a game, then share the code with
+    friends."
+  - Host section now wrapped in a matching card; per-game buttons become
+    inner rows inside the card (smaller icons + tighter padding) so the
+    visual separator between Join/Host is the card chrome itself, not
+    whitespace.
+  - Inter-section gaps reduced from `mb-10` (40px) to `mb-4` (16px);
+    `ModeSwitchCard` top margin from `mt-8` to `mt-4`.
+- **Pass-and-Play hub:** Matching treatment — header padding trimmed,
+  games list wrapped in a single card with an intro line + inner game
+  rows for visual parity with Multi-Device.
+
 ## 0.16.6 - 2026-05-12
 
 - **Home UX (icons):** Three new game-specific icons replace the generic

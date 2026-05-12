@@ -23,7 +23,7 @@ export function ModeSwitchCard({
   return (
     <Link
       aria-label={ariaLabel}
-      className="mt-8 flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       to={to}
     >
       <div className="min-w-0 flex-1">
