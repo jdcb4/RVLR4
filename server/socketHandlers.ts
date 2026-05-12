@@ -7,12 +7,12 @@ import { broadcastRoom, roomChannel } from "./broadcast.ts";
 import { captainPlayerIdForTeam } from "./captain.ts";
 import { pickSuggestedHatClue } from "./hatClues.ts";
 import {
+  applyHatCorrect,
   applyHatEndTurn,
-  applyHatMarkCorrect,
   applyHatReturnSkipped,
-  applyHatSkipClue,
+  applyHatShowFinalScores,
+  applyHatSkip,
   applyHatStartTurn,
-  applyHatViewResults,
   startHatMatch,
 } from "./hatRuntime.ts";
 import { applyImposterDispatch, startImposterMatch } from "./imposterRuntime.ts";
@@ -36,9 +36,9 @@ import { sessionBindSchema } from "./socketSchemas.ts";
 import {
   applyWhoWhatWhereCorrect,
   applyWhoWhatWhereEndTurn,
-  applyWhoWhatWhereFinalScores,
   applyWhoWhatWhereReturnSkipped,
   applyWhoWhatWhereRevealHint,
+  applyWhoWhatWhereShowFinalScores,
   applyWhoWhatWhereSkip,
   applyWhoWhatWhereStartTurn,
   markReadyGate,
@@ -626,7 +626,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       "www:finalScores",
       "Unable to show final scores.",
       async ({ room }) => {
-        applyWhoWhatWhereFinalScores(room);
+        applyWhoWhatWhereShowFinalScores(room);
         await broadcastRoom(io, store, room.code);
       },
     );
@@ -671,7 +671,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           throw new Error("Hat Game is not in progress.");
         }
 
-        applyHatMarkCorrect(room, actor.id);
+        applyHatCorrect(room, actor.id);
         await broadcastRoom(io, store, room.code);
       },
     );
@@ -686,7 +686,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           throw new Error("Hat Game is not in progress.");
         }
 
-        applyHatSkipClue(room, actor.id);
+        applyHatSkip(room, actor.id);
         await broadcastRoom(io, store, room.code);
       },
     );
@@ -716,7 +716,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           throw new Error("Hat Game is not in progress.");
         }
 
-        applyHatViewResults(room);
+        applyHatShowFinalScores(room);
         await broadcastRoom(io, store, room.code);
       },
     );

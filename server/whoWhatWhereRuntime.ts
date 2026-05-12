@@ -78,7 +78,7 @@ export function applyWhoWhatWhereEndTurn(room: Room, actorId: string) {
   room.wwwReadyReveal = true;
 }
 
-export function applyWhoWhatWhereFinalScores(room: Room) {
+export function applyWhoWhatWhereShowFinalScores(room: Room) {
   const match = room.wwwMatch;
 
   if (!match) {

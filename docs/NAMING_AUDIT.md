@@ -32,7 +32,7 @@ but inconsistent on three axes:
    though the UX label is now **Multi-Device mode** (renamed in 0.15.1–
    0.15.6). One canonical decision needed; either is defensible.
 3. **Cross-game parallel actions** sometimes use different verbs/nouns for
-   the same concept (e.g. `applyHatMarkCorrect` vs `applyWhoWhatWhereCorrect`).
+   the same concept (e.g. `applyHatCorrect` vs `applyWhoWhatWhereCorrect`).
    This is the original "startHatGame vs commenceWhoWhatWhere" class of
    issue you flagged.
 
@@ -131,12 +131,12 @@ apply<Game><Verb><Object>
 
 | Concept | Hat | WhoWhatWhere | Status |
 |---|---|---|---|
-| Mark current word correct | `applyHatMarkCorrect` | `applyWhoWhatWhereCorrect` | ❌ Hat has extra `Mark` |
-| Skip the current word/clue | `applyHatSkipClue` | `applyWhoWhatWhereSkip` | ❌ Hat has extra `Clue` |
+| Mark current word correct | `applyHatCorrect` | `applyWhoWhatWhereCorrect` | ❌ Hat has extra `Mark` |
+| Skip the current word/clue | `applyHatSkip` | `applyWhoWhatWhereSkip` | ❌ Hat has extra `Clue` |
 | Return a skipped word | `applyHatReturnSkipped` | `applyWhoWhatWhereReturnSkipped` | ✅ |
 | Start the turn | `applyHatStartTurn` | `applyWhoWhatWhereStartTurn` | ✅ |
 | End the turn | `applyHatEndTurn` | `applyWhoWhatWhereEndTurn` | ✅ |
-| Show final scores | `applyHatViewResults` | `applyWhoWhatWhereFinalScores` | ❌ different action words |
+| Show final scores | `applyHatShowFinalScores` | `applyWhoWhatWhereShowFinalScores` | ❌ different action words |
 
 See §3.2 for the proposed renames.
 
@@ -234,9 +234,9 @@ No renames needed.
 
 | Hat name | WWW name | Concept | Fix |
 |---|---|---|---|
-| `applyHatMarkCorrect` | `applyWhoWhatWhereCorrect` | mark current correct | **Pick `Correct`** — rename Hat to `applyHatCorrect` (drop `Mark`) |
-| `applyHatSkipClue` | `applyWhoWhatWhereSkip` | skip current | **Pick `Skip`** — rename Hat to `applyHatSkip` (drop `Clue`) |
-| `applyHatViewResults` | `applyWhoWhatWhereFinalScores` | move to final-results stage | **Pick a single verb-noun.** Recommend `applyHatShowFinalScores` + `applyWhoWhatWhereShowFinalScores` so both express "transition the match to the final-scores stage." (`ViewResults` reads as a UI action; `FinalScores` is a stage noun.) |
+| `applyHatCorrect` | `applyWhoWhatWhereCorrect` | mark current correct | **Pick `Correct`** — rename Hat to `applyHatCorrect` (drop `Mark`) |
+| `applyHatSkip` | `applyWhoWhatWhereSkip` | skip current | **Pick `Skip`** — rename Hat to `applyHatSkip` (drop `Clue`) |
+| `applyHatShowFinalScores` | `applyWhoWhatWhereShowFinalScores` | move to final-results stage | **Pick a single verb-noun.** Recommend `applyHatShowFinalScores` + `applyWhoWhatWhereShowFinalScores` so both express "transition the match to the final-scores stage." (`ViewResults` reads as a UI action; `FinalScores` is a stage noun.) |
 
 These also affect socket event names (`hat:markCorrect`, `hat:skipClue`,
 `hat:viewResults`, `www:correct`, `www:skip`, `www:finalScores`) — **wire
@@ -320,11 +320,11 @@ Two sub-commits — each touches one wire-format edge so they're separately
 revertable:
 
 - **N4a** — Drop verb extras on `apply` handlers (no wire change):
-  `applyHatMarkCorrect` → `applyHatCorrect`,
-  `applyHatSkipClue` → `applyHatSkip`.
+  `applyHatCorrect` → `applyHatCorrect`,
+  `applyHatSkip` → `applyHatSkip`.
 - **N4b** — Align "show final scores" action name:
-  `applyHatViewResults` → `applyHatShowFinalScores` and
-  `applyWhoWhatWhereFinalScores` → `applyWhoWhatWhereShowFinalScores`.
+  `applyHatShowFinalScores` → `applyHatShowFinalScores` and
+  `applyWhoWhatWhereShowFinalScores` → `applyWhoWhatWhereShowFinalScores`.
 - **N4c** (wire-format) — Rename Socket.IO events to match:
   `hat:markCorrect` → `hat:correct`, `hat:skipClue` → `hat:skip`,
   `hat:viewResults` → `hat:showFinalScores`,

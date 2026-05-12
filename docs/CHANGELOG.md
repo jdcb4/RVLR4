@@ -2,6 +2,18 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.15 - 2026-05-12
+
+- **Refactor (naming N4a/b):** Align cross-game `apply*` verb-noun pairs
+  per `docs/NAMING.md` §4. Server-side TypeScript symbols only —
+  Socket.IO wire-format event names are unchanged (N4c follows):
+  - `applyHatMarkCorrect` → `applyHatCorrect` (matches
+    `applyWhoWhatWhereCorrect`).
+  - `applyHatSkipClue` → `applyHatSkip` (matches `applyWhoWhatWhereSkip`).
+  - `applyHatViewResults` → `applyHatShowFinalScores`.
+  - `applyWhoWhatWhereFinalScores` → `applyWhoWhatWhereShowFinalScores`.
+- No behaviour change.
+
 ## 0.15.14 - 2026-05-12
 
 - **Refactor (naming N3):** Drop redundant `Game` from Hat/Imposter

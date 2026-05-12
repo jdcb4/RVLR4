@@ -122,12 +122,12 @@ export function applyHatExpireTurn(room: Room) {
   runHatAction(room, { type: "end-turn" });
 }
 
-export function applyHatMarkCorrect(room: Room, actorId: string) {
+export function applyHatCorrect(room: Room, actorId: string) {
   assertHatDescriber(room, actorId);
   runHatAction(room, { type: "mark-correct" });
 }
 
-export function applyHatSkipClue(room: Room, actorId: string) {
+export function applyHatSkip(room: Room, actorId: string) {
   assertHatDescriber(room, actorId);
   runHatAction(room, { type: "skip-clue" });
 }
@@ -140,7 +140,7 @@ export function applyHatReturnSkipped(room: Room, actorId: string, poolIndex?: n
   });
 }
 
-export function applyHatViewResults(room: Room) {
+export function applyHatShowFinalScores(room: Room) {
   const session = requireHatSession(room);
 
   if (session.stage !== "finalSummary") {
