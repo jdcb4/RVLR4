@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.12 - 2026-05-12
+
+- **Fix (confetti z-index):** `ResultsConfetti` was `z-[9]`, which sits
+  below the sticky `GameShell` footer (`z-20`) and a couple of fixed
+  banners. The falling pieces visibly disappeared behind the footer.
+  Bumped to `z-40` — above gameplay UI and the footer, still below the
+  full-screen modals at `z-50` (AppInfoOverlay, QR toast, server-
+  shutdown banner).
+
 ## 0.16.11 - 2026-05-12
 
 - **Multi-Device names:**
