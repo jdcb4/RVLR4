@@ -13,8 +13,8 @@ import {
 } from "@/domain/hat-game/engine";
 import { formatCountdown } from "@/domain/hat-game/time";
 import type { HatGameSession } from "@/domain/hat-game/types";
+import { HatPhaseBanner } from "@/features/hat-game/HatPhaseBanner";
 import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
-import { HAT_NOTICE_CLASS } from "@/features/hat-game/screens/hatScreenTokens";
 import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
 export function hatActiveTurnScreen(
@@ -29,27 +29,30 @@ export function hatActiveTurnScreen(
 
   return {
     content: (
-      <GamePanel
-        subtitle={`${context.activeDescriberName} is presenting`}
-        title={`${context.activeTeam?.name ?? "Team"} guessing`}
-      >
-        <TurnPlayHighlight>{currentClue}</TurnPlayHighlight>
-        <div className="grid grid-cols-2 gap-3">
-          <Metric
-            label="Time left"
-            value={formatCountdown(controller.secondsRemaining)}
-          />
-          <Metric label="Phase" value={phase.name} />
-          <Metric label="Score" value={String(activeTurn?.score ?? 0)} />
-          <Metric
-            label="Skipped waiting"
-            value={String(activeTurn?.skippedClues.length ?? 0)}
-          />
-        </div>
-        <p className={HAT_NOTICE_CLASS}>
-          Phase {session.phaseNumber}: {phase.name}. {phase.instruction}
-        </p>
-        {activeTurn?.skippedClues.length ? (
+      <div className="flex flex-1 flex-col gap-4 pb-4">
+        <HatPhaseBanner
+          instruction={phase.instruction}
+          phaseName={phase.name}
+          phaseNumber={session.phaseNumber}
+        />
+        <GamePanel
+          subtitle={`${context.activeDescriberName} is presenting`}
+          title={`${context.activeTeam?.name ?? "Team"} guessing`}
+        >
+          <TurnPlayHighlight>{currentClue}</TurnPlayHighlight>
+          <div className="grid grid-cols-2 gap-3">
+            <Metric
+              label="Time left"
+              value={formatCountdown(controller.secondsRemaining)}
+            />
+            <Metric label="Phase" value={phase.name} />
+            <Metric label="Score" value={String(activeTurn?.score ?? 0)} />
+            <Metric
+              label="Skipped waiting"
+              value={String(activeTurn?.skippedClues.length ?? 0)}
+            />
+          </div>
+          {activeTurn?.skippedClues.length ? (
           <div className="rounded-lg border border-dashed border-border p-3">
             <p className="mb-2 text-typ-ui font-semibold">Skipped famous figures</p>
             <p className="mb-3 text-typ-ui text-muted-foreground">
@@ -71,8 +74,9 @@ export function hatActiveTurnScreen(
               ))}
             </div>
           </div>
-        ) : null}
-      </GamePanel>
+          ) : null}
+        </GamePanel>
+      </div>
     ),
     actions: (
       <>

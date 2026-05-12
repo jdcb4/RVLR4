@@ -2,6 +2,18 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.15 - 2026-05-12
+
+- **Hat (Pass-and-Play):** The colored phase banner used by Hat
+  Multi-Device now also appears at the top of the in-turn screen in
+  Pass-and-Play, so the describer gets the same prominent
+  Phase-X-Name + instruction card.
+- **Refactor:** Extracted the banner into a shared
+  `src/features/hat-game/HatPhaseBanner.tsx` (was a local
+  `HatSpectatorPhaseBanner` inside `HatMultiplayerView`). Both modes
+  render the same component; Pass-and-Play drops the redundant
+  "Phase X: name. instruction" notice paragraph below it.
+
 ## 0.16.14 - 2026-05-12
 
 - **Hat (Multi-Device):** Phase-transition audio cues now fire on every
