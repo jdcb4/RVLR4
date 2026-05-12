@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { FOOTER_ACTION_LOCK_MS } from "@/components/footerActionLockContext";
 import { IMPOSTER_MAX_PLAYERS, IMPOSTER_MIN_PLAYERS } from "@/config/imposterDefaults";
 import { getImposterWordList } from "@/data/imposterWordList";
 import {
@@ -10,6 +9,8 @@ import {
   getImposterSetupError,
   maxImpostersForPlayers,
 } from "@/domain/imposter/round";
+import { useAutoHidePopup } from "@/features/game-app-hooks/useAutoHidePopup";
+import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
 import type {
   ImposterPlayer,
   ImposterSnapshot,
@@ -65,7 +66,6 @@ export function useImposterApp() {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState("");
   const [confirmNewGame, setConfirmNewGame] = useState(false);
-  const [footerActionsLocked, setFooterActionsLocked] = useState(false);
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const snapshotRef = useRef(snapshot);
 
@@ -130,19 +130,8 @@ export function useImposterApp() {
     confirmNewGame ? "confirm" : "ok",
   ].join(":");
 
-  useEffect(() => {
-    setFooterActionsLocked(true);
-    const timeout = setTimeout(() => setFooterActionsLocked(false), FOOTER_ACTION_LOCK_MS);
-    return () => clearTimeout(timeout);
-  }, [actionLockKey]);
-
-  useEffect(() => {
-    if (!showInfoPopup) {
-      return undefined;
-    }
-    const timeout = setTimeout(() => setShowInfoPopup(false), 5000);
-    return () => clearTimeout(timeout);
-  }, [showInfoPopup]);
+  const footerActionsLocked = useFooterActionLockOnKeyChange(actionLockKey);
+  useAutoHidePopup(showInfoPopup, () => setShowInfoPopup(false));
 
   const startNewGame = async () => {
     setConfirmNewGame(false);

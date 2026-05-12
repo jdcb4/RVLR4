@@ -2,6 +2,18 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.9 - 2026-05-12
+
+- **Refactor:** Two shared hooks under `src/features/game-app-hooks/`
+  replace duplicated state/effects between `useHatGameApp` and
+  `useImposterApp`:
+  - `useFooterActionLockOnKeyChange(key)` — owns the per-game footer-lock
+    timer that was inlined identically in both controllers.
+  - `useAutoHidePopup(open, onClose)` — five-second auto-hide for the info
+    popup, also inlined identically in both.
+- Both controllers shed their local `footerActionsLocked` state +
+  matching `useEffect` blocks. Fallow: 513 → 491 duplicated lines.
+
 ## 0.15.8 - 2026-05-12
 
 - **Refactor:** `src/components/game/buildGameLandingScreen.tsx` replaces the

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { FOOTER_ACTION_LOCK_MS } from "@/components/footerActionLockContext";
 import { GAME_DEFAULTS, type HatGameConfig } from "@/config/hatGameDefaults";
 import { MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 import clueSuggestions from "@/data/clueSuggestions.json";
@@ -19,6 +18,8 @@ import {
 } from "@/domain/hat-game/setup";
 import { getCountdownSeconds } from "@/domain/hat-game/time";
 import type { ClueSubmissionMap, HatGameAction } from "@/domain/hat-game/types";
+import { useAutoHidePopup } from "@/features/game-app-hooks/useAutoHidePopup";
+import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
 import { playHatGameActionSoundEffects } from "@/features/hat-game/hatGameActionSound";
 import type { AppSnapshot, AppStep, StoragePayload } from "@/features/hat-game/hatGameAppTypes";
 import { formatSavedAt } from "@/lib/formatSavedAt";
@@ -108,7 +109,6 @@ export function useHatGameApp() {
   const [error, setError] = useState('');
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [confirmNewGame, setConfirmNewGame] = useState(false);
-  const [footerActionsLocked, setFooterActionsLocked] = useState(false);
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const warningCueTurnRef = useRef<string | null>(null);
   const turnEndCueTurnRef = useRef<string | null>(null);
@@ -253,19 +253,8 @@ export function useHatGameApp() {
     confirmNewGame ? 'confirm-new' : 'normal'
   ].join(':');
 
-  useEffect(() => {
-    setFooterActionsLocked(true);
-    const timeout = setTimeout(() => setFooterActionsLocked(false), FOOTER_ACTION_LOCK_MS);
-    return () => clearTimeout(timeout);
-  }, [actionLockKey]);
-
-  useEffect(() => {
-    if (!showInfoPopup) {
-      return undefined;
-    }
-    const timeout = setTimeout(() => setShowInfoPopup(false), 5000);
-    return () => clearTimeout(timeout);
-  }, [showInfoPopup]);
+  const footerActionsLocked = useFooterActionLockOnKeyChange(actionLockKey);
+  useAutoHidePopup(showInfoPopup, () => setShowInfoPopup(false));
 
   const startNewGame = async () => {
     setConfirmNewGame(false);
