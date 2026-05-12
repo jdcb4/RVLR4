@@ -2,6 +2,45 @@ import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import clueSuggestions from "@/data/clueSuggestions.json";
 import type { ClueSubmissionMap, Player } from "@/domain/hat-game/types";
 
+import type { Room } from "./roomStore.ts";
+
+/**
+ * Validates a Hat clue-cell edit (used by `lobby:hatSetClueCell` and
+ * `lobby:hatSuggestClue`). Asserts the lobby is in the right phase, parses
+ * and bounds-checks the clue index, and returns the actor's current draft
+ * row (a fresh empty one if they haven't written anything yet).
+ *
+ * Mutates `room.hatClueDrafts` to ensure the bag exists. Caller writes the
+ * new value into the returned `row` and assigns it back.
+ */
+export function loadHatClueDraftSlot(
+  room: Room,
+  actorId: string,
+  rawClueIndex: unknown,
+): { row: string[]; clueIndex: number } {
+  if (room.gameKind !== "hat" || room.phase !== "lobby") {
+    throw new Error("Clues can only be edited in the Hat lobby.");
+  }
+
+  const clueIndex = Number(rawClueIndex);
+
+  if (
+    Number.isNaN(clueIndex) ||
+    clueIndex < 0 ||
+    clueIndex >= GAME_DEFAULTS.cluesPerPlayer
+  ) {
+    throw new Error("Invalid clue slot.");
+  }
+
+  room.hatClueDrafts ??= {};
+  const row = [
+    ...(room.hatClueDrafts[actorId] ??
+      Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "")),
+  ];
+
+  return { row, clueIndex };
+}
+
 /**
  * Builds Hat clue pools from lobby drafts — each player must have filled six figures.
  */

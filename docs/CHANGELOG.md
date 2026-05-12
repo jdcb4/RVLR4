@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.5 - 2026-05-12
+
+- **Refactor (server):** Extract `loadHatClueDraftSlot` helper in
+  `server/hatClues.ts` — owns the lobby-phase guard, clueIndex parsing +
+  bounds check, and draft-row initialization that `lobby:hatSetClueCell`
+  and `lobby:hatSuggestClue` both performed inline. Each handler shrinks
+  from ~21 to ~6 lines.
+
 ## 0.16.4 - 2026-05-12
 
 - **Refactor:** Extract a local `HatSpectatorTurnSnapshotCard` component

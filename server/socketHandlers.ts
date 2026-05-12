@@ -5,7 +5,7 @@ import type { GameSettings } from "@/domain/whowhatwhere/types";
 
 import { broadcastRoom, roomChannel } from "./broadcast.ts";
 import { captainPlayerIdForTeam } from "./captain.ts";
-import { pickSuggestedHatClue } from "./hatClues.ts";
+import { loadHatClueDraftSlot, pickSuggestedHatClue } from "./hatClues.ts";
 import {
   applyHatCorrect,
   applyHatEndTurn,
@@ -411,30 +411,16 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       "lobby:hatSetClueCell",
       "Unable to update clue.",
       async ({ room, actor }, payload) => {
-        if (room.gameKind !== "hat" || room.phase !== "lobby") {
-          throw new Error("Clues can only be edited in the Hat lobby.");
-        }
-
-        const clueIndex = Number(payload.clueIndex);
-
-        if (
-          clueIndex !== clueIndex ||
-          clueIndex < 0 ||
-          clueIndex >= GAME_DEFAULTS.cluesPerPlayer
-        ) {
-          throw new Error("Invalid clue slot.");
-        }
-
-        room.hatClueDrafts ??= {};
-        const row = [
-          ...(room.hatClueDrafts[actor.id] ??
-            Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "")),
-        ];
+        const { row, clueIndex } = loadHatClueDraftSlot(
+          room,
+          actor.id,
+          payload.clueIndex,
+        );
         row[clueIndex] = String(payload.value ?? "").slice(
           0,
           GAME_DEFAULTS.maxClueLength,
         );
-        room.hatClueDrafts[actor.id] = row;
+        room.hatClueDrafts![actor.id] = row;
 
         await broadcastRoom(io, store, room.code);
       },
@@ -446,28 +432,13 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       "lobby:hatSuggestClue",
       "Unable to suggest a clue.",
       async ({ room, actor }, payload) => {
-        if (room.gameKind !== "hat" || room.phase !== "lobby") {
-          throw new Error("Clues can only be edited in the Hat lobby.");
-        }
-
-        const clueIndex = Number(payload.clueIndex);
-
-        if (
-          clueIndex !== clueIndex ||
-          clueIndex < 0 ||
-          clueIndex >= GAME_DEFAULTS.cluesPerPlayer
-        ) {
-          throw new Error("Invalid clue slot.");
-        }
-
-        room.hatClueDrafts ??= {};
-        const suggestion = pickSuggestedHatClue(room.hatClueDrafts, Math.random);
-        const row = [
-          ...(room.hatClueDrafts[actor.id] ??
-            Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "")),
-        ];
-        row[clueIndex] = suggestion;
-        room.hatClueDrafts[actor.id] = row;
+        const { row, clueIndex } = loadHatClueDraftSlot(
+          room,
+          actor.id,
+          payload.clueIndex,
+        );
+        row[clueIndex] = pickSuggestedHatClue(room.hatClueDrafts!, Math.random);
+        room.hatClueDrafts![actor.id] = row;
 
         await broadcastRoom(io, store, room.code);
       },
