@@ -18,23 +18,23 @@ import { FinalTurnRecapScreen } from "@/features/whowhatwhere/results/FinalTurnR
 import { ResultsScreen } from "@/features/whowhatwhere/results/ResultsScreen";
 import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
 import { TeamSetupScreen } from "@/features/whowhatwhere/setup/TeamSetupScreen";
-import { WwwReviewTeamsScreen } from "@/features/whowhatwhere/setup/WwwReviewTeamsScreen";
+import { WhoWhatWhereReviewTeamsScreen } from "@/features/whowhatwhere/setup/WhoWhatWhereReviewTeamsScreen";
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
 import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
-import { WwwLandingScreen } from "@/features/whowhatwhere/WwwLandingScreen";
+import { WhoWhatWhereLandingScreen } from "@/features/whowhatwhere/WhoWhatWhereLandingScreen";
 import {
   createHatGalleryController,
   hatGallerySnapshots,
 } from "@/ui-gallery/hatGalleryController";
 import {
-  wwwGalleryMatchActiveFrozen,
-  wwwGalleryMatchFinalSummary,
-  wwwGalleryMatchFresh,
-  wwwGalleryMatchReadyWithSummary,
-  wwwGalleryMatchResults,
-  wwwGallerySettings,
-  wwwGalleryTeamSetups,
-} from "@/ui-gallery/wwwGallerySessions";
+  whoWhatWhereGalleryMatchActiveFrozen,
+  whoWhatWhereGalleryMatchFinalSummary,
+  whoWhatWhereGalleryMatchFresh,
+  whoWhatWhereGalleryMatchReadyWithSummary,
+  whoWhatWhereGalleryMatchResults,
+  whoWhatWhereGallerySettings,
+  whoWhatWhereGalleryTeamSetups,
+} from "@/ui-gallery/whoWhatWhereGallerySessions";
 
 const noop = () => undefined;
 
@@ -51,24 +51,24 @@ type SlideSpec = {
 };
 
 /** Shared demo settings object so `SettingsScreen` stays controlled without changing values. */
-const demoWwwSettings = wwwGallerySettings();
+const demoWwwSettings = whoWhatWhereGallerySettings();
 
 /** Precomputed WWW domain states (deterministic; matches slide pairing). */
-const wwwFresh = wwwGalleryMatchFresh();
-const wwwAfterTurn = wwwGalleryMatchReadyWithSummary();
-const wwwActive = wwwGalleryMatchActiveFrozen();
-const wwwFinal = wwwGalleryMatchFinalSummary();
-const wwwResults = wwwGalleryMatchResults();
+const wwwFresh = whoWhatWhereGalleryMatchFresh();
+const wwwAfterTurn = whoWhatWhereGalleryMatchReadyWithSummary();
+const wwwActive = whoWhatWhereGalleryMatchActiveFrozen();
+const wwwFinal = whoWhatWhereGalleryMatchFinalSummary();
+const wwwResults = whoWhatWhereGalleryMatchResults();
 
 function buildSlides(): readonly SlideSpec[] {
-  const teams = wwwGalleryTeamSetups();
+  const teams = whoWhatWhereGalleryTeamSetups();
 
   return [
     {
       label: "Hat landing · WWW landing",
       hat: () => createHatGalleryController(hatGallerySnapshots.landing),
       wwwContent: () => (
-        <WwwLandingScreen
+        <WhoWhatWhereLandingScreen
           confirmDiscardPending={false}
           pendingMatch={null}
           onResume={noop}
@@ -129,7 +129,7 @@ function buildSlides(): readonly SlideSpec[] {
     {
       label: "Review teams · Review teams",
       hat: () => createHatGalleryController(hatGallerySnapshots.review),
-      wwwContent: () => <WwwReviewTeamsScreen teams={teams} />,
+      wwwContent: () => <WhoWhatWhereReviewTeamsScreen teams={teams} />,
       wwwFooter: () =>
         footerWrap(
           <>

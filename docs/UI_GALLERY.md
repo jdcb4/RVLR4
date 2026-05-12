@@ -19,5 +19,5 @@ Opens the dev server on port **5174** with **`/gallery.html`** (see `vite.ui-gal
 
 - Source lives under `src/ui-gallery/`.
 - Hat previews reuse `buildHatGameScreen` with a lightweight mock controller (`hatGalleryController.ts`).
-- Who What Where previews reuse real screen components (`WwwLandingScreen`, `SettingsScreen`, `TeamSetupScreen`, `WwwReviewTeamsScreen`, `ReadyScreen`, etc.) backed by `src/ui-gallery/wwwGallerySessions.ts`.
+- Who What Where previews reuse real screen components (`WhoWhatWhereLandingScreen`, `SettingsScreen`, `TeamSetupScreen`, `WhoWhatWhereReviewTeamsScreen`, `ReadyScreen`, etc.) backed by `src/ui-gallery/whoWhatWhereGallerySessions.ts`.
 - Previews use `pointer-events-none` so taps do nothing.

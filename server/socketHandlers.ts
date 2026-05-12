@@ -19,7 +19,7 @@ import { applyImposterDispatch, startImposterMatch } from "./imposterRuntime.ts"
 import {
   hostPatchHatPrefs,
   hostPatchImposterCounts,
-  hostPatchWwwSettings,
+  hostPatchWhoWhatWhereSettings,
   hostSetTeamCount,
   hostSetTeamName,
   movePlayerToTeam,
@@ -43,7 +43,7 @@ import {
   applyWhoWhatWhereStartTurn,
   markReadyGate,
   startWhoWhatWhereMatch,
-} from "./wwwRuntime.ts";
+} from "./whoWhatWhereRuntime.ts";
 
 function ensureLobbyEveryoneReady(room: Room) {
   for (const player of room.players.values()) {
@@ -291,7 +291,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
     registerHandler(
       socket,
       store,
-      "lobby:hostPatchWwwSettings",
+      "lobby:hostPatchWhoWhatWhereSettings",
       "Unable to update settings.",
       async ({ room, actor }, payload) => {
         if (!actor.isHost) {
@@ -302,9 +302,9 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           throw new Error("Settings are locked once the match begins.");
         }
 
-        // Schema is `z.unknown()` — `hostPatchWwwSettings` validates field-by-field internally.
+        // Schema is `z.unknown()` — `hostPatchWhoWhatWhereSettings` validates field-by-field internally.
         const { patch } = (payload ?? {}) as { patch?: Partial<GameSettings> };
-        hostPatchWwwSettings(room, patch ?? {});
+        hostPatchWhoWhatWhereSettings(room, patch ?? {});
         await broadcastRoom(io, store, room.code);
       },
     );

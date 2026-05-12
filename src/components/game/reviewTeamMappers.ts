@@ -17,7 +17,7 @@ export function reviewDisplayRowsFromHat(
 }
 
 /** Build rows for `ReviewTeamsPanel` from WWW setup teams. */
-export function reviewDisplayRowsFromWww(
+export function reviewDisplayRowsFromWhoWhatWhere(
   teams: readonly TeamSetup[],
 ): ReviewTeamDisplayRow[] {
   return teams.map((team) => ({

@@ -74,7 +74,7 @@ format break for marginal clarity. Reject.
 
 **`Www*` and `www*` short forms are eliminated.** They obscure
 search-ability and don't shorten code meaningfully on a screen
-(`WhoWhatWhereLastTurnCard` vs `WwwLastTurnCard` — 8 chars).
+(`WhoWhatWhereLastTurnCard` vs `WhoWhatWhereLastTurnCard` — 8 chars).
 
 ### 2.2 Mode names
 
@@ -214,17 +214,17 @@ currently include `Game`. Decide one: drop `Game` from both →
 
 | Current | Recommended |
 |---|---|
-| `WwwLandingScreen` (component) | `WhoWhatWhereLandingScreen` |
-| `WwwReviewTeamsScreen` (component) | `WhoWhatWhereReviewTeamsScreen` |
-| `WwwLastTurnCard` (component) | `WhoWhatWhereLastTurnCard` |
-| `wwwGallerySettings`, `wwwGalleryTeamSetups`, `wwwGalleryMatch*` (5 consts in `wwwGallerySessions.ts`) | `whoWhatWhereGallery*` |
-| `formatWwwTurnClock` (fn) | `formatWhoWhatWhereTurnClock` |
-| `hostPatchWwwSettings` (fn) | `hostPatchWhoWhatWhereSettings` |
-| `mapFinalResultsFromWww` (fn) | `mapFinalResultsFromWhoWhatWhere` |
-| `viewerWwwTeamIsWinner` (fn) | `viewerWhoWhatWhereTeamIsWinner` |
-| `reviewDisplayRowsFromWww` (fn) | `reviewDisplayRowsFromWhoWhatWhere` |
-| `wwwGallerySessions.ts` (file) | `whoWhatWhereGallerySessions.ts` |
-| `server/wwwRuntime.ts`, `wwwTicker.ts`, `wwwViews.ts` (files) | `whoWhatWhereRuntime.ts`, etc. |
+| `WhoWhatWhereLandingScreen` (component) | `WhoWhatWhereLandingScreen` |
+| `WhoWhatWhereReviewTeamsScreen` (component) | `WhoWhatWhereReviewTeamsScreen` |
+| `WhoWhatWhereLastTurnCard` (component) | `WhoWhatWhereLastTurnCard` |
+| `whoWhatWhereGallerySettings`, `whoWhatWhereGalleryTeamSetups`, `wwwGalleryMatch*` (5 consts in `whoWhatWhereGallerySessions.ts`) | `whoWhatWhereGallery*` |
+| `formatWhoWhatWhereTurnClock` (fn) | `formatWhoWhatWhereTurnClock` |
+| `hostPatchWhoWhatWhereSettings` (fn) | `hostPatchWhoWhatWhereSettings` |
+| `mapFinalResultsFromWhoWhatWhere` (fn) | `mapFinalResultsFromWhoWhatWhere` |
+| `viewerWhoWhatWhereTeamIsWinner` (fn) | `viewerWhoWhatWhereTeamIsWinner` |
+| `reviewDisplayRowsFromWhoWhatWhere` (fn) | `reviewDisplayRowsFromWhoWhatWhere` |
+| `whoWhatWhereGallerySessions.ts` (file) | `whoWhatWhereGallerySessions.ts` |
+| `server/whoWhatWhereRuntime.ts`, `whoWhatWhereTicker.ts`, `whoWhatWhereViews.ts` (files) | `whoWhatWhereRuntime.ts`, etc. |
 
 #### Imposter — already canonical ✅
 

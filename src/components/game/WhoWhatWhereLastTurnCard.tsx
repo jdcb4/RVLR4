@@ -1,7 +1,7 @@
 import { READY_RECAP_PANEL_CLASS } from "@/components/game/readySharedClasses";
 import type { LastTurnSummary, WordHistoryEntry } from "@/domain/whowhatwhere/types";
 
-export function WwwLastTurnCard({
+export function WhoWhatWhereLastTurnCard({
   summary,
 }: {
   readonly summary: LastTurnSummary | null;

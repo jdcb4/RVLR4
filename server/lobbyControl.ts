@@ -162,7 +162,7 @@ function rebalanceOverflow(room: Room) {
   }
 }
 
-export function hostPatchWwwSettings(room: Room, patch: Partial<GameSettings>) {
+export function hostPatchWhoWhatWhereSettings(room: Room, patch: Partial<GameSettings>) {
   if (room.gameKind !== "whowhatwhere") {
     throw new Error("Settings apply to Who What Where only.");
   }

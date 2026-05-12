@@ -16,7 +16,7 @@ import {
   projectWhoWhatWhereMatch,
   shouldShowWhoWhatWhereTurnFooter,
   type WhoWhatWherePeerRole,
-} from "./wwwViews.ts";
+} from "./whoWhatWhereViews.ts";
 
 export type LobbyPlayerDto = {
   readonly id: string;

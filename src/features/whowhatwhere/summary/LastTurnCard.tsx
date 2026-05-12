@@ -1,1 +1,1 @@
-export { WwwLastTurnCard as LastTurnCard } from "@/components/game/WwwLastTurnCard";
+export { WhoWhatWhereLastTurnCard as LastTurnCard } from "@/components/game/WhoWhatWhereLastTurnCard";

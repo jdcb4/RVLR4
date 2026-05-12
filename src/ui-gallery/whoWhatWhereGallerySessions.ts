@@ -12,29 +12,29 @@ import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
 const galleryNow = new Date("2026-05-10T12:00:00.000Z");
 const tick = new Date("2026-05-10T12:00:03.000Z");
 
-export function wwwGallerySettings(): GameSettings {
+export function whoWhatWhereGallerySettings(): GameSettings {
   return createDefaultSettings();
 }
 
-export function wwwGalleryTeamSetups() {
+export function whoWhatWhereGalleryTeamSetups() {
   return createTeamSetups(2);
 }
 
 /** First ready screen — no prior turn recap. */
-export function wwwGalleryMatchFresh(): MatchState {
+export function whoWhatWhereGalleryMatchFresh(): MatchState {
   return createMatch(createTeamSetups(2), createDefaultSettings());
 }
 
 /** Ready screen showing `LastTurnCard` content. */
-export function wwwGalleryMatchReadyWithSummary(): MatchState {
-  let match = startTurn(wwwGalleryMatchFresh(), wordDeck, galleryNow, () => 0);
+export function whoWhatWhereGalleryMatchReadyWithSummary(): MatchState {
+  let match = startTurn(whoWhatWhereGalleryMatchFresh(), wordDeck, galleryNow, () => 0);
   match = correctWord(match, tick);
   return endTurn(match);
 }
 
 /** Timer frozen far ahead so the Active Turn screen does not emit warning sounds while browsing. */
-export function wwwGalleryMatchActiveFrozen(): MatchState {
-  const match = startTurn(wwwGalleryMatchFresh(), wordDeck, galleryNow, () => 0);
+export function whoWhatWhereGalleryMatchActiveFrozen(): MatchState {
+  const match = startTurn(whoWhatWhereGalleryMatchFresh(), wordDeck, galleryNow, () => 0);
   const endsAt = new Date(galleryNow.getTime() + 120 * 60 * 1000).toISOString();
   const activeTurn = match.activeTurn
     ? { ...match.activeTurn, endsAt, startedAt: galleryNow.toISOString() }
@@ -43,7 +43,7 @@ export function wwwGalleryMatchActiveFrozen(): MatchState {
 }
 
 /** End of match — stage `finalSummary` (Final turn recap), results payload present but not yet “revealed”. */
-export function wwwGalleryMatchFinalSummary(): MatchState {
+export function whoWhatWhereGalleryMatchFinalSummary(): MatchState {
   const settings = { ...createDefaultSettings(), totalRounds: 1 as const };
   let match = createMatch(createTeamSetups(2), settings);
   match = startTurn(match, wordDeck, galleryNow, () => 0);
@@ -53,6 +53,6 @@ export function wwwGalleryMatchFinalSummary(): MatchState {
   return match;
 }
 
-export function wwwGalleryMatchResults(): MatchState {
-  return showResults(wwwGalleryMatchFinalSummary());
+export function whoWhatWhereGalleryMatchResults(): MatchState {
+  return showResults(whoWhatWhereGalleryMatchFinalSummary());
 }

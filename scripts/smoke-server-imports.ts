@@ -5,6 +5,6 @@
  */
 import "../server/roomStore.ts";
 import "../server/imposterRuntime.ts";
-import "../server/wwwRuntime.ts";
+import "../server/whoWhatWhereRuntime.ts";
 
 console.log("ok");

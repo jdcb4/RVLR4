@@ -5,7 +5,7 @@ import { GamePanel } from "@/components/game/GamePanel";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
 import { Metric } from "@/components/Metric";
 import { Button } from "@/components/ui/button";
-import { formatWwwTurnClock } from "@/domain/whowhatwhere/formatClock";
+import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
 import {
   getActiveContext,
   getCurrentWord,
@@ -96,7 +96,7 @@ export function ActiveTurnScreen({
         )}
 
         <div className="grid grid-cols-2 gap-3">
-          <Metric label="Time left" value={formatWwwTurnClock(secondsLeft)} />
+          <Metric label="Time left" value={formatWhoWhatWhereTurnClock(secondsLeft)} />
           <Metric label="Category" value={activeTurn.category} />
           <Metric label="Score" value={String(activeTurn.score)} />
           <Metric

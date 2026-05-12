@@ -1,17 +1,17 @@
 import { GamePanel } from "@/components/game/GamePanel";
-import { reviewDisplayRowsFromWww } from "@/components/game/reviewTeamMappers";
+import { reviewDisplayRowsFromWhoWhatWhere } from "@/components/game/reviewTeamMappers";
 import { ReviewTeamsPanel } from "@/components/game/ReviewTeamsPanel";
 import type { TeamSetup } from "@/domain/whowhatwhere/types";
 
 /**
  * Post-roster, pre-round checkpoint — aligned with Hat Game “Review teams” layout.
  */
-export function WwwReviewTeamsScreen({
+export function WhoWhatWhereReviewTeamsScreen({
   teams,
 }: {
   readonly teams: readonly TeamSetup[];
 }) {
-  const rows = reviewDisplayRowsFromWww(teams);
+  const rows = reviewDisplayRowsFromWhoWhatWhere(teams);
 
   return (
     <section className="keyboard-safe-form flex flex-1 flex-col gap-4 pb-4">

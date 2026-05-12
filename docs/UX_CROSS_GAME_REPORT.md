@@ -16,10 +16,10 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 
 | Screen type (informal) | Who What Where | Hat Game | Parity / notes |
 |------------------------|----------------|----------|----------------|
-| **Landing** | `WwwLandingScreen` | `renderLanding` | **High** — same `GamePanel` + `ResumeGameCard` + discard copy pattern; different titles/subtitles. |
+| **Landing** | `WhoWhatWhereLandingScreen` | `renderLanding` | **High** — same `GamePanel` + `ResumeGameCard` + discard copy pattern; different titles/subtitles. |
 | **Game settings** | `SettingsScreen` | `renderSettings` | **Medium** — shared `TeamCountOptionGroup`, turn length, skips; **WWW-only**: rounds, categories, difficulty, hints. |
 | **Team roster (per team)** | `TeamSetupScreen` | `renderTeamEditor` | **High** — both wrap [`TeamRosterSetupScreen`](../src/components/team-setup/TeamRosterSetupScreen.tsx); same eyebrow/subtitle pattern; footer labels via `teamRosterAdvanceLabel`. |
-| **Review teams** | `WwwReviewTeamsScreen` | `renderReview` | **High** — shared [`ReviewTeamsPanel`](../src/components/game/ReviewTeamsPanel.tsx) + [`reviewTeamMappers`](../src/components/game/reviewTeamMappers.ts); **different** next-step copy and primary footer (**Start the game** vs **Start famous figure entry**). |
+| **Review teams** | `WhoWhatWhereReviewTeamsScreen` | `renderReview` | **High** — shared [`ReviewTeamsPanel`](../src/components/game/ReviewTeamsPanel.tsx) + [`reviewTeamMappers`](../src/components/game/reviewTeamMappers.ts); **different** next-step copy and primary footer (**Start the game** vs **Start famous figure entry**). |
 | **Clue / word prep** | *(none — goes to review → round)* | Clue handoff + clue form | **Hat-only** — pass-and-play private entry; no WWW equivalent. |
 | **Between turns (ready)** | `ReadyScreen` | `renderReady` | **High** — shared stack: [`ReadyProgressCard`](../src/components/game/ReadyProgressCard.tsx), [`GameScoreboard`](../src/components/game/GameScoreboard.tsx), [`ReadyNextStepsCard`](../src/components/game/ReadyNextStepsCard.tsx); domain-specific [`LastTurnCard`](../src/features/whowhatwhere/summary/LastTurnCard.tsx) vs [`HatLastTurnCard`](../src/components/game/HatLastTurnCard.tsx) (WWW shows **Round**, Hat **Phase**). |
 | **Active turn** | `ActiveTurnScreen` | `renderTurn` | **Medium** — both use [`TurnPlayHighlight`](../src/components/game/TurnPlayHighlight.tsx), [`Metric`](../src/components/Metric.tsx), Skip/Correct footers; **WWW**: word queue, categories, **End turn** in header; **Hat**: phase label in metrics, skipped-clue return rows, **End turn** in header. |
@@ -74,7 +74,7 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 | `TurnPlayHighlight` | `components/game/TurnPlayHighlight.tsx` | Big reveal line |
 | `GameScoreboard` | `components/game/GameScoreboard.tsx` | Score list + highlight |
 | `ReadyProgressCard`, `ReadyNextStepsCard` | `components/game/` | Between-turns strips |
-| `WwwLastTurnCard` / `HatLastTurnCard` | `components/game/` | Last-turn recap bodies |
+| `WhoWhatWhereLastTurnCard` / `HatLastTurnCard` | `components/game/` | Last-turn recap bodies |
 | `ThatsTheLastTurnCard`, recap copy | `components/game/` | Final-turn recap banner |
 | `FinalResultsBody` + blocks + confetti | `components/game/final-results/` | Results podium |
 | `GameResultActions` | `components/GameResultActions.tsx` | Post-results triple actions |
@@ -85,10 +85,10 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 
 | Pattern | WWW | Hat | Note |
 |---------|-----|-----|------|
-| **Landing screen** | `WwwLandingScreen` | Inline in `renderLanding` | Same UX recipe; two implementations. |
+| **Landing screen** | `WhoWhatWhereLandingScreen` | Inline in `renderLanding` | Same UX recipe; two implementations. |
 | **Settings body** | `SettingsScreen` | `renderSettings` | Shared controls at leaf level; **no** single `SettingsPanel` wrapper. |
 | **Team setup wrapper** | `TeamSetupScreen` | `renderTeamEditor` | Both use `TeamRosterSetupScreen`; outer `GamePanel` duplicated in spirit. |
-| **Review + next steps** | `WwwReviewTeamsScreen` | `renderReview` | Two `GamePanel` stacks; copy differs. |
+| **Review + next steps** | `WhoWhatWhereReviewTeamsScreen` | `renderReview` | Two `GamePanel` stacks; copy differs. |
 | **Ready screen** | `ReadyScreen` | `renderReady` | Shared pieces; **no** single `BetweenTurnsScreen` component. |
 | **Active turn** | `ActiveTurnScreen` | `renderTurn` | Large bespoke layouts; shared atoms only. |
 | **Scoreboard adapter** | `Scoreboard` (WWW-specific mapping) | `HatScoreboard` local helper | Both delegate to `GameScoreboard`; thin wrappers could stay or merge into props factories. |
@@ -102,7 +102,7 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 
 1. **`BetweenTurnsLayout`** — Slots: `heading`, `lastTurnCard`, `progressCard`, `scoreboard`, `nextSteps`, optional `banner` / `confetti` / `tail`. Used by **`ReadyScreen`**, **`FinalTurnRecapScreen`**, **`hatReadyScreen`**, **`hatFinalTurnRecapScreen`**.
 
-2. **`LandingScreenLayout`** — `title`, `subtitle`, `resumeSlot`, `confirmDestructiveSlot`; optional **`wrapInKeyboardSafeSection`** (WWW `true`, Hat `false`). **`WwwLandingScreen`** and **`hatLandingScreen`** compose it.
+2. **`LandingScreenLayout`** — `title`, `subtitle`, `resumeSlot`, `confirmDestructiveSlot`; optional **`wrapInKeyboardSafeSection`** (WWW `true`, Hat `false`). **`WhoWhatWhereLandingScreen`** and **`hatLandingScreen`** compose it.
 
 **Worth considering (medium value)**
 

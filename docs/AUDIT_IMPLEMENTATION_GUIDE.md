@@ -253,7 +253,7 @@ export const socketSchemas = {
     teamIndex: z.number().int().min(0).max(3),
     name: z.string().max(40),
   }),
-  "lobby:hostPatchWwwSettings": z.unknown(), // delegate to existing hostPatchWwwSettings validation
+  "lobby:hostPatchWhoWhatWhereSettings": z.unknown(), // delegate to existing hostPatchWhoWhatWhereSettings validation
   "lobby:hostPatchHatPrefs": z.unknown(),    // ditto
   "lobby:hostPatchImposterCounts": z.unknown(),
   "lobby:startGame": z.object({}).optional(),
@@ -288,7 +288,7 @@ export type SocketPayload<E extends SocketEventName> = z.infer<
 >;
 ```
 
-For events marked `z.unknown()`, **do not** weaken the existing inner validation in `hostPatchWwwSettings`, `hostPatchHatPrefs`, `applyImposterDispatch`, etc. The plan is to lift those into real schemas later; for now, preserve current behaviour.
+For events marked `z.unknown()`, **do not** weaken the existing inner validation in `hostPatchWhoWhatWhereSettings`, `hostPatchHatPrefs`, `applyImposterDispatch`, etc. The plan is to lift those into real schemas later; for now, preserve current behaviour.
 
 Before you ship, audit every `payload.X` access in `socketHandlers.ts` (use `Grep` for `payload\.`) and reconcile each one with a schema field. If a handler reads a field that doesn't exist in the schema, the schema is wrong — fix the schema, don't drop the field.
 

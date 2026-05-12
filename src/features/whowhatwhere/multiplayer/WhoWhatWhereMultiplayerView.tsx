@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import { viewerWwwTeamIsWinner } from "@/components/game/final-results/viewModel";
+import { viewerWhoWhatWhereTeamIsWinner } from "@/components/game/final-results/viewModel";
 import {
   PrimaryFooterButton,
   SecondaryFooterButton,
@@ -9,7 +9,7 @@ import {
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
 import { IconCheck, IconSkipForward } from "@/components/icons";
 import { Metric } from "@/components/Metric";
-import { formatWwwTurnClock } from "@/domain/whowhatwhere/formatClock";
+import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
 import {
   canQueueSkipped,
   getActiveContext,
@@ -40,7 +40,7 @@ function wwwOutcomeTone(match: MatchState, viewerPlayerId: string): "none" | "wi
     return "none";
   }
 
-  return viewerWwwTeamIsWinner(match, viewerPlayerId) ? "win" : "lose";
+  return viewerWhoWhatWhereTeamIsWinner(match, viewerPlayerId) ? "win" : "lose";
 }
 
 export function WhoWhatWhereMultiplayerView({
@@ -287,7 +287,7 @@ export function WhoWhatWhereMultiplayerView({
       <ResultsScreen
         match={match}
         outcomeTone={outcomeTone}
-        showConfetti={viewerWwwTeamIsWinner(match, viewerPlayerId)}
+        showConfetti={viewerWhoWhatWhereTeamIsWinner(match, viewerPlayerId)}
       />
     ) : (
       <FinalTurnRecapScreen match={match} />
@@ -297,7 +297,7 @@ export function WhoWhatWhereMultiplayerView({
       <ResultsScreen
         match={match}
         outcomeTone={wwwOutcomeTone(match, viewerPlayerId)}
-        showConfetti={viewerWwwTeamIsWinner(match, viewerPlayerId)}
+        showConfetti={viewerWhoWhatWhereTeamIsWinner(match, viewerPlayerId)}
       />
     );
   }
@@ -347,7 +347,7 @@ function GuessOrObserveTurn({
       <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
         <p className="text-typ-overline text-muted-foreground">Turn snapshot</p>
         <div className="mt-3 grid grid-cols-2 gap-3">
-          <Metric label="Time left" value={formatWwwTurnClock(secondsLeft)} />
+          <Metric label="Time left" value={formatWhoWhatWhereTurnClock(secondsLeft)} />
           <Metric label="Turn score" value={String(activeTurn.score)} />
           <Metric label="Category" value={activeTurn.category} />
           <Metric label="Describer" value={context.describer.name} />

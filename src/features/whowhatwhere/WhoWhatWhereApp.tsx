@@ -21,11 +21,11 @@ import { FinalTurnRecapScreen } from "@/features/whowhatwhere/results/FinalTurnR
 import { ResultsScreen } from "@/features/whowhatwhere/results/ResultsScreen";
 import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
 import { TeamSetupScreen } from "@/features/whowhatwhere/setup/TeamSetupScreen";
-import { WwwReviewTeamsScreen } from "@/features/whowhatwhere/setup/WwwReviewTeamsScreen";
+import { WhoWhatWhereReviewTeamsScreen } from "@/features/whowhatwhere/setup/WhoWhatWhereReviewTeamsScreen";
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
 import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
 import { useGameController } from "@/features/whowhatwhere/useGameController";
-import { WwwLandingScreen } from "@/features/whowhatwhere/WwwLandingScreen";
+import { WhoWhatWhereLandingScreen } from "@/features/whowhatwhere/WhoWhatWhereLandingScreen";
 
 import packageJson from "../../../package.json";
 
@@ -179,7 +179,7 @@ export function WhoWhatWhereApp() {
         />
 
         {game.activeMode === "landing" ? (
-          <WwwLandingScreen
+          <WhoWhatWhereLandingScreen
             confirmDiscardPending={game.confirmDiscardPending}
             pendingMatch={game.pendingMatch}
             onResume={game.resumePendingMatch}
@@ -205,7 +205,7 @@ export function WhoWhatWhereApp() {
         ) : null}
 
         {game.activeMode === "review" ? (
-          <WwwReviewTeamsScreen teams={game.teamSetups} />
+          <WhoWhatWhereReviewTeamsScreen teams={game.teamSetups} />
         ) : null}
 
         {!game.pendingMatch &&

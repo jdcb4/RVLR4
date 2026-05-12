@@ -13,7 +13,7 @@ import { initMultiplayerDebug } from "./multiplayerDebug.ts";
 import { RoomStore } from "./roomStore.ts";
 import { startRoomIdleSweeper } from "./roomSweep.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
-import { startWhoWhatWhereTurnTicker } from "./wwwTicker.ts";
+import { startWhoWhatWhereTurnTicker } from "./whoWhatWhereTicker.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

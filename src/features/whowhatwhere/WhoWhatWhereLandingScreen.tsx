@@ -7,7 +7,7 @@ import type { PersistedMatch } from "@/services/whowhatwherePersistence";
  * Entry screen for Who What Where — mirrors Hat Game landing layout (description + optional resume card).
  * Footer actions (Start game / Start new game / discard confirm) live in `GameShell`.
  */
-export function WwwLandingScreen({
+export function WhoWhatWhereLandingScreen({
   pendingMatch,
   confirmDiscardPending,
   onResume,

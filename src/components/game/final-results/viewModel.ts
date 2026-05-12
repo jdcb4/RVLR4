@@ -88,7 +88,7 @@ function buildFinalResultsVm(
 }
 
 /** Maps Who What Where match results into the shared podium layout. */
-export function mapFinalResultsFromWww(match: MatchState): FinalResultsViewModel | null {
+export function mapFinalResultsFromWhoWhatWhere(match: MatchState): FinalResultsViewModel | null {
   const results = match.results;
   if (!results) {
     return null;
@@ -106,7 +106,7 @@ export function mapFinalResultsFromWww(match: MatchState): FinalResultsViewModel
 }
 
 /** True if this viewer's team is among WWW winners (for confetti on device). */
-export function viewerWwwTeamIsWinner(match: MatchState, viewerPlayerId: string): boolean {
+export function viewerWhoWhatWhereTeamIsWinner(match: MatchState, viewerPlayerId: string): boolean {
   const results = match.results;
 
   if (!results) {

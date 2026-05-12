@@ -521,7 +521,7 @@ export function RoomPage() {
                     embedded
                     settings={lobby.wwwSettings}
                     onChange={(next) => {
-                      void emitWithAck("lobby:hostPatchWwwSettings", { patch: next });
+                      void emitWithAck("lobby:hostPatchWhoWhatWhereSettings", { patch: next });
                     }}
                   />
                 </div>

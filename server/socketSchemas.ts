@@ -65,10 +65,10 @@ export const socketSchemas = {
     teamIndex: teamIndexSchema,
     name: z.string().max(64),
   }),
-  // hostPatchWwwSettings/HatPrefs/ImposterCounts have inner validation in
+  // hostPatchWhoWhatWhereSettings/HatPrefs/ImposterCounts have inner validation in
   // server/lobbyControl.ts that throws on bad fields. Keep that as the source
   // of truth rather than duplicating it here.
-  "lobby:hostPatchWwwSettings": z.unknown(),
+  "lobby:hostPatchWhoWhatWhereSettings": z.unknown(),
   "lobby:hostPatchHatPrefs": z.unknown(),
   "lobby:hostPatchImposterCounts": z.unknown(),
   "lobby:startGame": ignoredPayloadSchema,

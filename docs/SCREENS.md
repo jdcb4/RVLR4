@@ -19,10 +19,10 @@ Rendered inside **`GameShell`**. Flow is driven by `useGameController`: **`landi
 
 | Name | Description |
 |------|-------------|
-| **Landing** | Game description; if **`pendingMatch`**, a **`ResumeGameCard`** with **Resume game** in-card and **Start new game** in the footer (plus discard confirm when replacing a save). Component: `WwwLandingScreen`. |
+| **Landing** | Game description; if **`pendingMatch`**, a **`ResumeGameCard`** with **Resume game** in-card and **Start new game** in the footer (plus discard confirm when replacing a save). Component: `WhoWhatWhereLandingScreen`. |
 | **Game settings** | Team count, turn length, rounds, skips, word categories. Component: `SettingsScreen`. |
 | **Team roster (per team)** | One step per team: name team and players (`teamStep` advances through teams). Primary advance (**Next team** / **Finalise teams**) is in the shell footer. Component: `TeamSetupScreen`. |
-| **Review teams** | Read-only roster recap plus **Next steps** card before the round starts; **Edit teams** / **Start the game** in the footer. Component: `WwwReviewTeamsScreen`. |
+| **Review teams** | Read-only roster recap plus **Next steps** card before the round starts; **Edit teams** / **Start the game** in the footer. Component: `WhoWhatWhereReviewTeamsScreen`. |
 | **Between turns (ready)** | Heading, last-turn recap (`LastTurnCard`), round strip (`ReadyProgressCard`), scoreboard (highlights team that just played), **Next steps** card; footer **`[Describer] Ready`** → **Start turn** (`readyHandoffRevealed`). Component: `ReadyScreen`. |
 | **Active turn** | Current word, timer/metrics, Skip/Correct, skipped-word queue; **End turn** in header. Component: `ActiveTurnScreen`. |
 | **Final turn recap** | Like **Between turns (ready)** but no following turn: **That’s the last turn** banner, **`LastTurnCard`** recap only, **Next steps** toward overall scores; footer **Final scores**. Match **`stage === "finalSummary"`**. Component: **`FinalTurnRecapScreen`**. |

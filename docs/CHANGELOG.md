@@ -2,6 +2,22 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.12 - 2026-05-12
+
+- **Refactor (naming N1):** Drop `Www` / `www` short forms in favour of
+  long-form `WhoWhatWhere` / `whoWhatWhere`, per `docs/NAMING.md`:
+  - 3 component renames (`WwwLastTurnCard`, `WwwReviewTeamsScreen`,
+    `WwwLandingScreen`).
+  - 5 function renames (`formatWwwTurnClock`, `hostPatchWwwSettings`,
+    `mapFinalResultsFromWww`, `viewerWwwTeamIsWinner`,
+    `reviewDisplayRowsFromWww`).
+  - 7 gallery-const renames (`wwwGallery*`).
+  - 7 file renames including `server/wwwRuntime.ts` etc. and the
+    `src/ui-gallery/wwwGallerySessions.ts` data file.
+  - Wire-format Socket.IO event prefix `www:` is **unchanged** — it's the
+    case-folded `GameKind` literal per `docs/NAMING.md` §4.
+- No behaviour change.
+
 ## 0.15.11 - 2026-05-12
 
 - **Docs / tooling:** New `docs/NAMING.md` documents the canonical
@@ -16,7 +32,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 ## 0.15.10 - 2026-05-12
 
 - **Refactor:** Final-results view-model collapses the 30-line clone between
-  `mapFinalResultsFromWww` and `mapFinalResultsFromHat` into a shared
+  `mapFinalResultsFromWhoWhatWhere` and `mapFinalResultsFromHat` into a shared
   `buildFinalResultsVm(results, bestTurn)`. The only delta between the two
   mappers (`bestTurn.scoreDelta` vs `bestTurn.score`) is resolved at the
   caller; the leaderboard sort, podium row mapping, and tie/winner copy run
@@ -141,7 +157,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 - **Multiplayer:** New `www:revealHint` Socket.IO event (Zod-validated, empty
   payload) handled by `applyWhoWhatWhereRevealHint` on the server; only the
   active describer can invoke it. Existing `scrubActiveTurn` in
-  `server/wwwViews.ts` already empties `.hint` for non-describers, so the
+  `server/whoWhatWhereViews.ts` already empties `.hint` for non-describers, so the
   reveal stays describer-only across the wire.
 - **Persistence:** `whowhatwherePersistence.normalizeMatch` backfills
   `hintsRemaining` and `currentWordHintRevealed` for in-flight saved games
@@ -253,12 +269,12 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 - **Client — hub:** **`leaveMultiplayerRoomForHub`** clears the active-game bookmark and emits opt-out; landing uses **`resumeEligible`**; **`RoomPage`** handles **`ended`** with a short “table closed” message.
 - **Imposter (online):** **`scrubRoundForViewer`** restores **secret word** and **self imposter id** after parallel reveal for guide rounds so the clue **Remind me** card can flip to real copy. **`ImposterRemindMeCard`**, next-step cards, and **`phaseAdvance`** tone between steps.
 - **Hat (online):** Describer gets the **spectator phase banner**; timer row spans full width; **return-skipped** Web Audio cue (multiplayer + `hatGameActionSound`); **`HatLastTurnCard`** hides skipped clue chips (WWW unchanged). Shared **`multiplayerUpNextHeadingTitle`** for “You’re up next” / “Your team is up next” / team name on ready + footers.
-- **WWW (online):** Shared **`formatWwwTurnClock`** for describer/guesser timer shape; **return-skipped** sound on restore; **finalSummary** final scores play win/lose tones; ready/footer up-next copy aligned with Hat.
+- **WWW (online):** Shared **`formatWhoWhatWhereTurnClock`** for describer/guesser timer shape; **return-skipped** sound on restore; **finalSummary** final scores play win/lose tones; ready/footer up-next copy aligned with Hat.
 
 ## 0.13.3 - 2026-05-10
 
-- **Fix:** `registerSocketHandlers` now imports Who What Where helpers from `wwwRuntime.ts` (including `startWhoWhatWhereMatch`) and **awaits** `startWhoWhatWhereMatch` so starting a WWW game works.
-- **Tooling:** `smoke:server-imports` also loads `server/wwwRuntime.ts`.
+- **Fix:** `registerSocketHandlers` now imports Who What Where helpers from `whoWhatWhereRuntime.ts` (including `startWhoWhatWhereMatch`) and **awaits** `startWhoWhatWhereMatch` so starting a WWW game works.
+- **Tooling:** `smoke:server-imports` also loads `server/whoWhatWhereRuntime.ts`.
 
 ## 0.13.2 - 2026-05-10
 
@@ -307,7 +323,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 ## 0.9.0 - 2026-05-10
 
 - **Final results (WWW + Hat):** Shared **`FinalResultsBody`** — hero winner/tie callout, **Final Leaderboard** with primary tint for winners + podium-ish ranks 2–3, **Best turn** card (player prominent, large score, team muted). **`ResultsConfetti`** (Tailwind **`confetti-fall`** keyframes; no new deps). **`GamePanel`** title **Final Results** on both games; Hat drops phase subtitle.
-- **Shared mapping:** `mapFinalResultsFromWww` / `mapFinalResultsFromHat` in **`final-results/viewModel.ts`**.
+- **Shared mapping:** `mapFinalResultsFromWhoWhatWhere` / `mapFinalResultsFromHat` in **`final-results/viewModel.ts`**.
 
 ## 0.8.0 - 2026-05-10
 
@@ -319,11 +335,11 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 
 - **Between turns (WWW + Hat):** Shared stack — heading (`GamePanel`), **`LastTurnCard`** / **`HatLastTurnCard`** (expandable Words), **`ReadyProgressCard`** (Round or Phase), **`GameScoreboard`** (ring highlights **last turn’s team**, not upcoming), **`ReadyNextStepsCard`**. WWW ready removes back button and round categories blurb; footer primary **`[Describer name] Ready`**.
 - **Review teams:** WWW **Next steps** copy starts at “After you start…”; primary footer **`Start the game`**. Hat **Next steps** uses **`text-typ-body`** to match WWW.
-- **Shared components:** **`WwwLastTurnCard`**, **`HatLastTurnCard`**, **`ReadyProgressCard`**, **`ReadyNextStepsCard`**, **`readySharedClasses`**; **`GameScoreboard`** prop renamed to **`highlightTeamId`**.
+- **Shared components:** **`WhoWhatWhereLastTurnCard`**, **`HatLastTurnCard`**, **`ReadyProgressCard`**, **`ReadyNextStepsCard`**, **`readySharedClasses`**; **`GameScoreboard`** prop renamed to **`highlightTeamId`**.
 
 ## 0.6.0 - 2026-05-10
 
-- **Who What Where:** **`WwwLandingScreen`** (hub-style landing + optional **`ResumeGameCard`**); footer primary **Start game** / **Start new game** (discard confirm). **`WwwReviewTeamsScreen`** after roster steps (**Review teams** + **Next steps** cards); **`review`** mode before creating the match.
+- **Who What Where:** **`WhoWhatWhereLandingScreen`** (hub-style landing + optional **`ResumeGameCard`**); footer primary **Start game** / **Start new game** (discard confirm). **`WhoWhatWhereReviewTeamsScreen`** after roster steps (**Review teams** + **Next steps** cards); **`review`** mode before creating the match.
 - **Hat Game:** Landing matches WWW (**ResumeGameCard**, footer **Start new game**); **`Game settings`** title with turn length + skips; **`AppSnapshot`** stores setup prefs for **`createHatGameSession`**; **Review teams** uses shared **`ReviewTeamsPanel`** + **Next steps** card.
 - **Shared:** **`TeamRosterSetupScreen`** — players + **Add player** in body only; primary Next/Start lives in **`GameShell`** footer (`teamRosterAdvanceLabel`). **`ResumeGameCard`**, **`ReviewTeamsPanel`**, **`reviewTeamMappers`**, **`formatSavedAt`** lib helper.
 - **Removed:** `ResumePrompt.tsx` (replaced by landing flow).
