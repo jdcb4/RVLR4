@@ -2,6 +2,18 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.1 - 2026-05-12
+
+- **Home (UX):** "Legacy pass-and-play" reframed as **Pass-and-Play mode**.
+  The home page replaces the small footer link with a prominent secondary
+  card directly under the header — "Just one phone? Use Pass-and-Play mode" —
+  so the alternative mode is one tap from the landing screen instead of
+  buried below the host cards. Multi-Device remains the default mode.
+- **Pass-and-Play hub:** copy drops "Legacy" framing; the back-link now
+  reads "Switch to Multi-Device mode".
+- **Plan:** New `docs/MODE_RENAME_PLAN.md` captures the broader rename +
+  structural refactor sequence; this release ships step 2.
+
 ## 0.15.0 - 2026-05-12
 
 - **Who What Where:** New **Hints per turn** setting (0–3, defaults to **0**)

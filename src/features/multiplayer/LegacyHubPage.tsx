@@ -33,20 +33,20 @@ const games = [
   },
 ] as const;
 
-/** Original pass-and-play launcher preserved for quick solo sessions while multiplayer ships feature-complete. */
+/** Pass-and-Play hub — pick a game when you have one phone to share around the table. */
 export function LegacyHubPage() {
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <div className="safe-screen mx-auto w-full max-w-md px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
         <header className="py-8 text-center">
           <p className="font-medium uppercase text-typ-overline text-primary">
-            Legacy pass-and-play
+            Pass-and-Play mode
           </p>
           <h1 className="mt-2 text-typ-display font-bold">Party games, one phone</h1>
           <p className="mx-auto mt-4 max-w-prose text-typ-body-relaxed text-muted-foreground">
-            These flows keep the original single-device rhythm. Prefer multiplayer? Head back to{" "}
+            One phone, passed around the table. Want everyone on their own device?{" "}
             <Link className="font-medium text-primary underline-offset-4 hover:underline" to="/">
-              the new lobby
+              Switch to Multi-Device mode
             </Link>
             .
           </p>

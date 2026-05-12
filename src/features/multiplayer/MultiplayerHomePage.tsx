@@ -2,6 +2,7 @@ import { type FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
+  IconChevronRight,
   IconMask,
   IconSparkles,
   IconTheatre,
@@ -129,13 +130,32 @@ export function MultiplayerHomePage() {
     <div className="min-h-dvh bg-background text-foreground">
       <div className="safe-screen mx-auto w-full max-w-md px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
         <header className="py-8 text-center">
-          <p className="font-medium uppercase text-typ-overline text-primary">JD Multiplayer Games</p>
+          <p className="font-medium uppercase text-typ-overline text-primary">JD Party Games</p>
           <h1 className="mt-2 text-typ-display font-bold">Party games, every phone</h1>
           <p className="mx-auto mt-4 max-w-prose text-typ-body-relaxed text-muted-foreground">
-            Host on one device, everyone joins with a short code. Same scoring you already know, now
-            simultaneous instead of pass-and-play.
+            <span className="font-semibold text-foreground">Multi-Device mode</span> — host on one
+            phone, everyone joins with a short code. Same scoring you already know, now simultaneous.
           </p>
         </header>
+
+        <Link
+          aria-label="Switch to Pass-and-Play mode"
+          className="mb-8 flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          to="/legacy"
+        >
+          <div className="min-w-0 flex-1">
+            <p className="text-typ-overline font-medium uppercase text-muted-foreground">
+              Just one phone?
+            </p>
+            <p className="mt-1 text-typ-card-title font-semibold">
+              Use Pass-and-Play mode
+            </p>
+            <p className="mt-1 text-typ-ui-snug text-muted-foreground">
+              Hand the device around the table — no codes, no second devices needed.
+            </p>
+          </div>
+          <IconChevronRight aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />
+        </Link>
 
         {resume ? (
           <section className="mb-10 rounded-2xl border border-primary/30 bg-semantic-primary-soft-bg p-4 shadow-sm">
@@ -224,13 +244,6 @@ export function MultiplayerHomePage() {
           </ul>
         </section>
 
-        <p className="pb-8 text-center text-typ-ui text-muted-foreground">
-          Looking for the classic single-device flow?{" "}
-          <Link className="font-medium text-primary underline-offset-4 hover:underline" to="/legacy">
-            Open legacy pass-and-play hub
-          </Link>
-          .
-        </p>
       </div>
     </div>
   );
