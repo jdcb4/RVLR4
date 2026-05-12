@@ -2,6 +2,12 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.16 - 2026-05-12
+
+- **Landing (both modes):** Top brand overline unified to
+  "RVLRY: JD's Parlour Game Collection" (was "JD Party Games" on
+  Multi-Device and "Pass-and-Play mode" on the hub).
+
 ## 0.16.15 - 2026-05-12
 
 - **Hat (Pass-and-Play):** The colored phase banner used by Hat
