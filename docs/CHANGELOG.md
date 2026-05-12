@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.2 - 2026-05-12
+
+- **Refactor:** New `MultiplayerSkipCorrectFooter` component
+  (`src/features/multiplayer/`) replaces the 18-line Skip + Correct
+  button-pair clone shared by Hat and WhoWhatWhere multi-device turn
+  screens. Owns the click-handler boilerplate (busy, error, success tone)
+  so call sites are five props instead of 36 lines.
+
 ## 0.16.1 - 2026-05-12
 
 - **Tooling (naming N5):** `scripts/audit-names.mts` learns to recognize

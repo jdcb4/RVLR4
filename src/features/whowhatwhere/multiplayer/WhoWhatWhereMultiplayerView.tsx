@@ -2,12 +2,8 @@ import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
 import { viewerWhoWhatWhereTeamIsWinner } from "@/components/game/final-results/viewModel";
-import {
-  PrimaryFooterButton,
-  SecondaryFooterButton,
-} from "@/components/game/GameFooterButtons";
+import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
-import { IconCheck, IconSkipForward } from "@/components/icons";
 import { Metric } from "@/components/Metric";
 import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
 import {
@@ -20,6 +16,7 @@ import {
   MultiplayerEndGameActions,
   MultiplayerGameShell,
 } from "@/features/multiplayer/MultiplayerGameShell";
+import { MultiplayerSkipCorrectFooter } from "@/features/multiplayer/MultiplayerSkipCorrectFooter";
 import {
   FinalTurnRecapScreen,
 } from "@/features/whowhatwhere/results/FinalTurnRecapScreen";
@@ -172,42 +169,15 @@ export function WhoWhatWhereMultiplayerView({
     }
   } else if (match.stage === "turn" && match.activeTurn && payload.showTurnFooter) {
     footer = (
-      <div className="flex w-full flex-col gap-2">
-        <SecondaryFooterButton
-          disabled={busy || !canQueueSkipped(match.activeTurn)}
-          icon={<IconSkipForward className="size-5" />}
-          label="Skip"
-          onClick={async () => {
-            setBusy(true);
-            const ack = await emitWithAck("www:skip");
-
-            if (ack?.ok === false) {
-              setError(ack.error ?? "");
-            } else {
-              void playMultiplayerToneCue("skip");
-            }
-
-            setBusy(false);
-          }}
-        />
-        <PrimaryFooterButton
-          disabled={busy}
-          icon={<IconCheck className="size-5" />}
-          label="Correct"
-          onClick={async () => {
-            setBusy(true);
-            const ack = await emitWithAck("www:correct");
-
-            if (ack?.ok === false) {
-              setError(ack.error ?? "");
-            } else {
-              void playMultiplayerToneCue("correct");
-            }
-
-            setBusy(false);
-          }}
-        />
-      </div>
+      <MultiplayerSkipCorrectFooter
+        busy={busy}
+        correctEvent="www:correct"
+        emitWithAck={emitWithAck}
+        setBusy={setBusy}
+        setError={setError}
+        skipDisabled={!canQueueSkipped(match.activeTurn)}
+        skipEvent="www:skip"
+      />
     );
   } else if (match.stage === "finalSummary") {
     footer = showScoresPane ? (

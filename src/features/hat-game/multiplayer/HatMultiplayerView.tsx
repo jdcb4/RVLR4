@@ -12,7 +12,6 @@ import { FINAL_TURN_RECAP_NEXT_STEPS } from "@/components/game/finalTurnRecapCop
 import {
   FooterOutlineIconTextButton,
   PrimaryFooterButton,
-  SecondaryFooterButton,
 } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
@@ -21,7 +20,6 @@ import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { ReadyProgressCard } from "@/components/game/ReadyProgressCard";
 import { ThatsTheLastTurnCard } from "@/components/game/ThatsTheLastTurnCard";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
-import { IconCheck, IconSkipForward } from "@/components/icons";
 import { Metric } from "@/components/Metric";
 import {
   getHatGameContext,
@@ -34,6 +32,7 @@ import {
   MultiplayerEndGameActions,
   MultiplayerGameShell,
 } from "@/features/multiplayer/MultiplayerGameShell";
+import { MultiplayerSkipCorrectFooter } from "@/features/multiplayer/MultiplayerSkipCorrectFooter";
 import { cn } from "@/lib/utils";
 import type { HatSyncDto } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
@@ -262,42 +261,15 @@ export function HatMultiplayerView({
     payload.showTurnFooter
   ) {
     footer = (
-      <div className="flex w-full flex-col gap-2">
-        <SecondaryFooterButton
-          disabled={busy || (activeTurn.skipsRemaining ?? 0) <= 0}
-          icon={<IconSkipForward className="size-5" />}
-          label="Skip"
-          onClick={async () => {
-            setBusy(true);
-            const ack = await emitWithAck("hat:skip");
-
-            if (ack?.ok === false) {
-              setError(ack.error ?? "");
-            } else {
-              void playMultiplayerToneCue("skip");
-            }
-
-            setBusy(false);
-          }}
-        />
-        <PrimaryFooterButton
-          disabled={busy}
-          icon={<IconCheck className="size-5" />}
-          label="Correct"
-          onClick={async () => {
-            setBusy(true);
-            const ack = await emitWithAck("hat:correct");
-
-            if (ack?.ok === false) {
-              setError(ack.error ?? "");
-            } else {
-              void playMultiplayerToneCue("correct");
-            }
-
-            setBusy(false);
-          }}
-        />
-      </div>
+      <MultiplayerSkipCorrectFooter
+        busy={busy}
+        correctEvent="hat:correct"
+        emitWithAck={emitWithAck}
+        setBusy={setBusy}
+        setError={setError}
+        skipDisabled={(activeTurn.skipsRemaining ?? 0) <= 0}
+        skipEvent="hat:skip"
+      />
     );
   } else if (session.stage === "finalSummary") {
     footer = showScoresPane ? (
