@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.6 - 2026-05-12
+
+- **Home UX (icons):** Three new game-specific icons replace the generic
+  Sparkles / Theatre / Mask trio on both Multi-Device and Pass-and-Play
+  landings:
+  - `IconQuestionMark` — Who What Where (a `?` glyph)
+  - `IconTopHat` — Hat Game (classic top hat: brim, crown, band)
+  - `IconDisguise` — Imposter (round glasses + handlebar mustache)
+- Old icons stay exported in `src/components/icons.tsx` for other surfaces
+  / future use.
+
 ## 0.16.5 - 2026-05-12
 
 - **Refactor (server):** Extract `loadHatClueDraftSlot` helper in

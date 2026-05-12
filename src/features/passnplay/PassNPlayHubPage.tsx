@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
 import {
-  IconMask,
-  IconSparkles,
-  IconTheatre,
+  IconDisguise,
+  IconQuestionMark,
+  IconTopHat,
 } from "@/components/icons";
 import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 
@@ -14,7 +14,7 @@ const games = [
     description:
       "Teams race to describe mystery words across What, Who, and Where categories before the timer runs out.",
     to: "/games/whowhatwhere",
-    icon: IconSparkles,
+    icon: IconQuestionMark,
   },
   {
     id: "hat",
@@ -22,7 +22,7 @@ const games = [
     description:
       "Celebrity-style clues in three phases using your own figure list.",
     to: "/games/hat",
-    icon: IconTheatre,
+    icon: IconTopHat,
   },
   {
     id: "imposter",
@@ -30,7 +30,7 @@ const games = [
     description:
       "Hidden roles and one secret word - pass the phone for private reveals.",
     to: "/games/imposter",
-    icon: IconMask,
+    icon: IconDisguise,
   },
 ] as const;
 

@@ -2,9 +2,9 @@ import { type FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
-  IconMask,
-  IconSparkles,
-  IconTheatre,
+  IconDisguise,
+  IconQuestionMark,
+  IconTopHat,
 } from "@/components/icons";
 import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 import {
@@ -19,20 +19,20 @@ const games = [
     title: "Who What Where",
     description:
       "Teams race to describe mystery words across What, Who, and Where categories before the timer runs out.",
-    icon: IconSparkles,
+    icon: IconQuestionMark,
   },
   {
     id: "hat",
     title: "Hat Game",
     description: "Celebrity-style clues in three phases using your own figure list.",
-    icon: IconTheatre,
+    icon: IconTopHat,
   },
   {
     id: "imposter",
     title: "Imposter",
     description:
       "Hidden roles and one secret word - timed clues, discussion, and the big reveal.",
-    icon: IconMask,
+    icon: IconDisguise,
   },
 ] as const;
 

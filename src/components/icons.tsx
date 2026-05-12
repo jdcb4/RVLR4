@@ -193,3 +193,46 @@ export function IconMask(props: IconProps) {
     </svg>
   );
 }
+
+/** Classic top hat (brim + crown + band) — used for Hat Game. */
+export function IconTopHat(props: IconProps) {
+  return (
+    <svg {...iconProps(props)}>
+      {/* Brim */}
+      <path d="M3 19h18" />
+      {/* Crown (sides + flat top) */}
+      <path d="M7 19V6h10v13" />
+      {/* Hat band */}
+      <path d="M7 14h10" />
+    </svg>
+  );
+}
+
+/**
+ * Classic Groucho-style disguise — round glasses + a handlebar mustache.
+ * Used for Imposter.
+ */
+export function IconDisguise(props: IconProps) {
+  return (
+    <svg {...iconProps(props)}>
+      {/* Left lens */}
+      <circle cx="7" cy="10" r="3" />
+      {/* Right lens */}
+      <circle cx="17" cy="10" r="3" />
+      {/* Nose bridge */}
+      <path d="M10 10h4" />
+      {/* Handlebar mustache with center divot */}
+      <path d="M6 16c2-1 4-1 6 1c2-2 4-2 6-1" />
+    </svg>
+  );
+}
+
+/** Question mark glyph (curl + dot) — used for Who What Where. */
+export function IconQuestionMark(props: IconProps) {
+  return (
+    <svg {...iconProps(props)}>
+      <path d="M9 9a3 3 0 1 1 3 3v2" />
+      <circle cx="12" cy="18" r="0.5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
