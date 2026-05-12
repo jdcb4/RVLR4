@@ -35,7 +35,7 @@ const games = [
 ] as const;
 
 /** Pass-and-Play hub — pick a game when you have one phone to share around the table. */
-export function LegacyHubPage() {
+export function PassNPlayHubPage() {
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <div className="safe-screen mx-auto w-full max-w-md px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">

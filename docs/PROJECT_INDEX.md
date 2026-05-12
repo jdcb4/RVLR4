@@ -19,7 +19,8 @@ Games:
 
 - `server/` — Express routes + Socket.IO handlers + in-memory room store.
 - `src/app` — router, root layout, smoke tests.
-- `src/features/multiplayer` — join/host UX (`MultiplayerHomePage`, `EnterNamePage`, `RoomPage`) plus networked shells (`WhoWhatWhereMultiplayerView`, `HatMultiplayerView`, `ImposterMultiplayerView`).
+- `src/features/multiplayer` — Multi-Device mode shell: join/host UX (`MultiplayerHomePage`, `EnterNamePage`, `RoomPage`) plus networked per-game shells (`WhoWhatWhereMultiplayerView`, `HatMultiplayerView`, `ImposterMultiplayerView`).
+- `src/features/passnplay` — Pass-and-Play hub (`PassNPlayHubPage`) at `/passnplay` (alias `/legacy` redirects here).
 - `src/features/whowhatwhere` — WWW UI + `useGameController` (`WwwLandingScreen`, `WwwReviewTeamsScreen`, …).
 - `src/features/hat-game` — Hat Game web UI + `useHatGameApp`; per-screen builders under `screens/` (`hatLandingScreen`, `hatInGameRouter`, …), wired by `buildHatGameScreen` in `HatGameWebScreens.tsx`.
 - `src/features/imposter` — Imposter UI + `useImposterApp`; `ImposterWebScreens.tsx` routes steps; screen modules under `screens/`.

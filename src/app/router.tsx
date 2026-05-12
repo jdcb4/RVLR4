@@ -4,9 +4,9 @@ import { RootLayout } from "@/app/RootLayout";
 import { HatGameApp } from "@/features/hat-game/HatGameApp";
 import { ImposterApp } from "@/features/imposter/ImposterApp";
 import { EnterNamePage } from "@/features/multiplayer/EnterNamePage";
-import { LegacyHubPage } from "@/features/multiplayer/LegacyHubPage";
 import { MultiplayerHomePage } from "@/features/multiplayer/MultiplayerHomePage";
 import { RoomPage } from "@/features/multiplayer/RoomPage";
+import { PassNPlayHubPage } from "@/features/passnplay/PassNPlayHubPage";
 import { WhoWhatWhereApp } from "@/features/whowhatwhere/WhoWhatWhereApp";
 
 const baseUrl = import.meta.env.BASE_URL;
@@ -18,7 +18,7 @@ export const router = createBrowserRouter(
       element: <RootLayout />,
       children: [
         { index: true, element: <MultiplayerHomePage /> },
-        { path: "passnplay", element: <LegacyHubPage /> },
+        { path: "passnplay", element: <PassNPlayHubPage /> },
         // Permanent redirect for shared links that pre-date the rename.
         { path: "legacy", element: <Navigate replace to="/passnplay" /> },
         { path: "name", element: <EnterNamePage /> },

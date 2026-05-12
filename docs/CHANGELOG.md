@@ -2,6 +2,18 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.6 - 2026-05-12
+
+- **Refactor (file layout):**
+  - `src/features/multiplayer/LegacyHubPage.tsx` →
+    `src/features/passnplay/PassNPlayHubPage.tsx`; component renamed from
+    `LegacyHubPage` to `PassNPlayHubPage`.
+  - Removed orphan `src/features/home/HomePage.tsx` (unused since the
+    Multi-Device landing took over `/`).
+  - `docs/PROJECT_INDEX.md` lists `src/features/passnplay` as a peer of
+    `src/features/multiplayer`.
+- No UX change.
+
 ## 0.15.5 - 2026-05-12
 
 - **Multi-Device WhoWhatWhere + Hat:** End-turn cue now fires on every
