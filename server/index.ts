@@ -27,16 +27,32 @@ app.use(express.json());
 const allowedOrigins =
   env.CLIENT_ORIGIN?.split(",").map((origin) => origin.trim()).filter(Boolean) ?? [];
 
-// Production: `loadServerEnv` guarantees `allowedOrigins.length > 0` (see env.ts
-// `superRefine`). Development falls back to Vite's dev server on 5173.
-// Test or local runs without CLIENT_ORIGIN refuse all browser origins — explicit
-// rather than allow-any.
-const corsOrigin: string[] | false =
+/**
+ * Pick the `origin` setting passed to `cors()` and Socket.IO.
+ *
+ * - Explicit `CLIENT_ORIGIN` → use that list (strict).
+ * - Development without `CLIENT_ORIGIN` → allow Vite's dev server.
+ * - Production without `CLIENT_ORIGIN` → allow-any (`true`) with a loud
+ *   warning at boot. We used to fail-fast here (v0.14.4) but Railway-style
+ *   deployments don't know their own public origin at container start, so
+ *   refusing to boot just put the service in a crashloop. Operators can
+ *   tighten by setting `CLIENT_ORIGIN` in their platform config; see
+ *   `docs/DEPLOYMENT.md`.
+ */
+const corsOrigin: string[] | boolean =
   allowedOrigins.length > 0
     ? allowedOrigins
     : env.NODE_ENV === "development"
       ? ["http://localhost:5173"]
-      : false;
+      : true;
+
+if (env.NODE_ENV === "production" && allowedOrigins.length === 0) {
+  console.warn(
+    "[server] CLIENT_ORIGIN is not set — accepting all browser origins. " +
+      "Set CLIENT_ORIGIN=https://your-host (comma-separated list allowed) " +
+      "to lock CORS down. See docs/DEPLOYMENT.md.",
+  );
+}
 
 app.use(
   cors({

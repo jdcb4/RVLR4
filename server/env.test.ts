@@ -24,21 +24,23 @@ describe("loadServerEnv", () => {
     );
   });
 
-  it("refuses to load in production when CLIENT_ORIGIN is missing", () => {
-    expect(() =>
-      loadServerEnv({
-        NODE_ENV: "production",
-      }),
-    ).toThrow(/CLIENT_ORIGIN/);
+  it("loads in production without CLIENT_ORIGIN (warning printed at boot, not a parse error)", () => {
+    // Railway / similar platforms don't know their public origin at container
+    // start; we warn instead of fail-fast — see server/index.ts for the warn.
+    const env = loadServerEnv({ NODE_ENV: "production" });
+
+    expect(env.NODE_ENV).toBe("production");
+    expect(env.CLIENT_ORIGIN).toBeUndefined();
   });
 
-  it("refuses to load in production when CLIENT_ORIGIN is empty/whitespace", () => {
-    expect(() =>
-      loadServerEnv({
-        NODE_ENV: "production",
-        CLIENT_ORIGIN: "   ,  ",
-      }),
-    ).toThrow(/CLIENT_ORIGIN/);
+  it("loads in production with an empty/whitespace CLIENT_ORIGIN", () => {
+    const env = loadServerEnv({
+      NODE_ENV: "production",
+      CLIENT_ORIGIN: "   ,  ",
+    });
+
+    expect(env.NODE_ENV).toBe("production");
+    expect(env.CLIENT_ORIGIN).toBe("   ,  ");
   });
 
   it("coerces MULTIPLAYER_DEBUG from '1' and 'true'", () => {

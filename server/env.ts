@@ -1,44 +1,27 @@
 import { z } from "zod";
 
 /**
- * Server-side environment (Node). Validated at startup so misconfiguration fails fast.
+ * Server-side environment (Node). Validated at startup so misconfiguration
+ * fails fast on shape errors (bad PORT, unknown NODE_ENV).
  *
- * In production, `CLIENT_ORIGIN` is **required** — there is no implicit
- * allow-any fallback. See `docs/DEPLOYMENT.md`.
+ * `CLIENT_ORIGIN` is *optional* even in production: a missing value falls
+ * back to allow-any CORS with a loud warning at boot (see `server/index.ts`).
+ * Set it explicitly for stricter posture — see `docs/DEPLOYMENT.md`.
  */
-const ServerEnvSchema = z
-  .object({
-    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-    PORT: z.coerce.number().int().positive().default(3001),
-    /** Allowed browser origins for CORS + Socket.IO (comma-separated). */
-    CLIENT_ORIGIN: z.string().optional(),
-    /**
-     * When true, emit `[multiplayer]` console lines for room lifecycle (no secrets).
-     * Set `MULTIPLAYER_DEBUG=1` or `true`.
-     */
-    MULTIPLAYER_DEBUG: z
-      .string()
-      .optional()
-      .transform((value) => value === "1" || value?.toLowerCase() === "true"),
-  })
-  .superRefine((env, ctx) => {
-    if (env.NODE_ENV !== "production") {
-      return;
-    }
-
-    const origins = env.CLIENT_ORIGIN?.split(",")
-      .map((origin) => origin.trim())
-      .filter(Boolean);
-
-    if (!origins || origins.length === 0) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["CLIENT_ORIGIN"],
-        message:
-          "CLIENT_ORIGIN must be set in production (comma-separated list of allowed browser origins).",
-      });
-    }
-  });
+const ServerEnvSchema = z.object({
+  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  PORT: z.coerce.number().int().positive().default(3001),
+  /** Allowed browser origins for CORS + Socket.IO (comma-separated). Optional. */
+  CLIENT_ORIGIN: z.string().optional(),
+  /**
+   * When true, emit `[multiplayer]` console lines for room lifecycle (no secrets).
+   * Set `MULTIPLAYER_DEBUG=1` or `true`.
+   */
+  MULTIPLAYER_DEBUG: z
+    .string()
+    .optional()
+    .transform((value) => value === "1" || value?.toLowerCase() === "true"),
+});
 
 export type ServerEnv = z.infer<typeof ServerEnvSchema>;
 

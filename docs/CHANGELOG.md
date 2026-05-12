@@ -2,6 +2,23 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.17 - 2026-05-12
+
+- **Hotfix (Railway):** Reverted the v0.14.4 fail-fast `superRefine` that
+  required `CLIENT_ORIGIN` in production. The strict rule put Railway-style
+  deployments into a crash-loop because the container doesn't know its
+  public origin at startup. Behaviour now matches pre-v0.14.4:
+  - `CLIENT_ORIGIN` set → strict allow-list (unchanged).
+  - `NODE_ENV=production` with no `CLIENT_ORIGIN` → allow-any CORS with a
+    loud warning at boot (`[server] CLIENT_ORIGIN is not set — accepting
+    all browser origins...`). The security signal stays visible in logs.
+  - Development without `CLIENT_ORIGIN` → fallback to `http://localhost:5173`.
+- **Tests:** `server/env.test.ts` rewritten — the two "refuses to load"
+  cases are replaced with "loads with a warning at boot" assertions.
+- **Docs:** `docs/DEPLOYMENT.md` reframed `CLIENT_ORIGIN` as recommended
+  rather than required; "Required production env vars" section renamed to
+  "Production env vars".
+
 ## 0.16.16 - 2026-05-12
 
 - **Landing (both modes):** Top brand overline unified to
