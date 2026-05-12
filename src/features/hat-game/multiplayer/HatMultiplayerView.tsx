@@ -585,29 +585,12 @@ function HatTurnMultiplayerBody({
           <p className="mt-4 font-mono text-typ-display text-foreground">••••••</p>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-          <p className="text-typ-overline text-muted-foreground">Turn snapshot</p>
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            <Metric label="Time left" value={formatCountdown(secondsLeft)} />
-            <Metric label="Turn score" value={String(activeTurn.score)} />
-            <Metric
-              className="col-span-2"
-              label="Describer"
-              value={context.activeDescriberName}
-            />
-          </div>
-          <div className="mt-4 border-t border-border pt-4">
-            <p className="text-typ-ui font-semibold text-foreground">Standings</p>
-            <ul className="mt-2 space-y-1 text-typ-ui text-muted-foreground">
-              {session.teams.map((team) => (
-                <li className="flex justify-between gap-2" key={team.id}>
-                  <span>{team.name}</span>
-                  <span className="font-semibold text-foreground">{team.score}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <HatSpectatorTurnSnapshotCard
+          activeTurn={activeTurn}
+          context={context}
+          secondsLeft={secondsLeft}
+          teams={session.teams}
+        />
       </section>
     );
   }
@@ -627,29 +610,54 @@ function HatTurnMultiplayerBody({
         </p>
       </div>
 
-      <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-        <p className="text-typ-overline text-muted-foreground">Turn snapshot</p>
-        <div className="mt-3 grid grid-cols-2 gap-3">
-          <Metric label="Time left" value={formatCountdown(secondsLeft)} />
-          <Metric label="Turn score" value={String(activeTurn.score)} />
-          <Metric
-            className="col-span-2"
-            label="Describer"
-            value={context.activeDescriberName}
-          />
-        </div>
-        <div className="mt-4 border-t border-border pt-4">
-          <p className="text-typ-ui font-semibold text-foreground">Standings</p>
-          <ul className="mt-2 space-y-1 text-typ-ui text-muted-foreground">
-            {session.teams.map((team) => (
-              <li className="flex justify-between gap-2" key={team.id}>
-                <span>{team.name}</span>
-                <span className="font-semibold text-foreground">{team.score}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <HatSpectatorTurnSnapshotCard
+        activeTurn={activeTurn}
+        context={context}
+        secondsLeft={secondsLeft}
+        teams={session.teams}
+      />
     </section>
+  );
+}
+
+/**
+ * Shared "Turn snapshot" card for guesser + spectator Hat multi-device views.
+ * Time, score, describer, and current standings.
+ */
+function HatSpectatorTurnSnapshotCard({
+  activeTurn,
+  context,
+  secondsLeft,
+  teams,
+}: {
+  readonly activeTurn: { readonly score: number };
+  readonly context: { readonly activeDescriberName: string };
+  readonly secondsLeft: number;
+  readonly teams: readonly { readonly id: string; readonly name: string; readonly score: number }[];
+}) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+      <p className="text-typ-overline text-muted-foreground">Turn snapshot</p>
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        <Metric label="Time left" value={formatCountdown(secondsLeft)} />
+        <Metric label="Turn score" value={String(activeTurn.score)} />
+        <Metric
+          className="col-span-2"
+          label="Describer"
+          value={context.activeDescriberName}
+        />
+      </div>
+      <div className="mt-4 border-t border-border pt-4">
+        <p className="text-typ-ui font-semibold text-foreground">Standings</p>
+        <ul className="mt-2 space-y-1 text-typ-ui text-muted-foreground">
+          {teams.map((team) => (
+            <li className="flex justify-between gap-2" key={team.id}>
+              <span>{team.name}</span>
+              <span className="font-semibold text-foreground">{team.score}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }

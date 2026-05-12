@@ -2,6 +2,13 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.4 - 2026-05-12
+
+- **Refactor:** Extract a local `HatSpectatorTurnSnapshotCard` component
+  in `HatMultiplayerView.tsx` (time-left / turn-score / describer / live
+  standings). Replaces the 29-line block that was inlined identically in
+  the guesser and spectator branches.
+
 ## 0.16.3 - 2026-05-12
 
 - **Refactor:** New `singleplayerLifecycle.ts` factory module under
