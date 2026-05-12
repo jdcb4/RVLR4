@@ -2,6 +2,13 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.8 - 2026-05-12
+
+- **Mobile padding:** Outer horizontal padding bumped from `px-4` (16px) to
+  `px-5` (20px) on `GameShell`, `MultiplayerHomePage`, and
+  `PassNPlayHubPage`. Cards no longer sit flush against the phone viewport
+  edge; `EnterNamePage` and `RoomPage` inherit the change via `GameShell`.
+
 ## 0.16.7 - 2026-05-12
 
 - **Multi-Device landing (compact):** Major above-the-fold tightening so
