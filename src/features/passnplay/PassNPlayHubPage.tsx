@@ -5,6 +5,7 @@ import {
   IconQuestionMark,
   IconTopHat,
 } from "@/components/icons";
+import { LandingAttribution } from "@/components/LandingAttribution";
 import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 
 const games = [
@@ -88,6 +89,8 @@ export function PassNPlayHubPage() {
           title="Use Multi-Device mode"
           to="/"
         />
+
+        <LandingAttribution />
       </div>
     </div>
   );

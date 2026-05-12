@@ -2,6 +2,13 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.10 - 2026-05-12
+
+- **Landing (both modes):** Discrete footer attribution — "by jdcb4 ·
+  v{package.version}" — rendered via new shared `LandingAttribution`
+  component. Reads the current version from `package.json` so it stays
+  in sync with releases.
+
 ## 0.16.9 - 2026-05-12
 
 - **Fix (mobile padding):** The `.safe-screen` rule in `src/index.css`

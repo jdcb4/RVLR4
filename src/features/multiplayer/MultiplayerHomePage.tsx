@@ -6,6 +6,7 @@ import {
   IconQuestionMark,
   IconTopHat,
 } from "@/components/icons";
+import { LandingAttribution } from "@/components/LandingAttribution";
 import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 import {
   clearActiveGameBookmark,
@@ -227,6 +228,8 @@ export function MultiplayerHomePage() {
           title="Use Pass-and-Play mode"
           to="/passnplay"
         />
+
+        <LandingAttribution />
       </div>
     </div>
   );
