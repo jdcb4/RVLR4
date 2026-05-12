@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.1 - 2026-05-12
+
+- **Tooling (naming N5):** `scripts/audit-names.mts` learns to recognize
+  the `Singleplayer` / `singleplayer` mode tokens introduced in 0.15.13.
+  Final audit shows symmetric coverage — `Multiplayer*` (11) ↔
+  `Singleplayer*` (9) — and zero `Www*` short-form regressions. The full
+  naming-conventions ADR landed in 0.15.11 (originally tracked as N5
+  in the plan).
+
 ## 0.16.0 - 2026-05-12
 
 - **Refactor (naming N4c — WIRE FORMAT):** Rename Socket.IO events to

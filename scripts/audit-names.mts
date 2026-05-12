@@ -41,6 +41,8 @@ const GAME_TOKENS = [
 const MODE_TOKENS = [
   "Multiplayer",
   "multiplayer",
+  "Singleplayer",
+  "singleplayer",
   "MultiDevice",
   "multiDevice",
   "PassNPlay",
