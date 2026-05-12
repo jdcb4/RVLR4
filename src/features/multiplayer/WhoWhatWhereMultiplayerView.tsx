@@ -77,11 +77,10 @@ export function WhoWhatWhereMultiplayerView({
     Boolean(match.activeTurn) &&
     payload.showTurnFooter;
 
-  /** Timer cues for everyone (spectators included). */
+  /** 10-second warning while a turn is running (everyone, spectators included). */
   useEffect(() => {
     if (match.stage !== "turn" || !match.activeTurn) {
       warned10Ref.current = null;
-      timedOutRef.current = null;
 
       return undefined;
     }
@@ -94,14 +93,25 @@ export function WhoWhatWhereMultiplayerView({
         warned10Ref.current = turn.startedAt;
         void playMultiplayerToneCue("warn10");
       }
-
-      if (left <= 0 && timedOutRef.current !== turn.startedAt) {
-        timedOutRef.current = turn.startedAt;
-        void playMultiplayerToneCue("timeout");
-      }
     }, 400);
 
     return () => window.clearInterval(interval);
+  }, [match.stage, match.activeTurn]);
+
+  /**
+   * End-of-turn cue for everyone — fires whenever the match leaves stage
+   * `turn`, regardless of cause (manual end-turn tap, timer expiry, last word,
+   * disconnect cleanup). Replaces the earlier local timer-expiry-only sound so
+   * a describer who taps End turn before the clock hits zero still gets the
+   * audible beat.
+   */
+  useEffect(() => {
+    if (timedOutRef.current && match.stage !== "turn") {
+      void playMultiplayerToneCue("timeout");
+      timedOutRef.current = null;
+    } else if (!timedOutRef.current && match.stage === "turn") {
+      timedOutRef.current = match.activeTurn?.startedAt ?? "turn";
+    }
   }, [match.stage, match.activeTurn]);
 
   const headerRight = (

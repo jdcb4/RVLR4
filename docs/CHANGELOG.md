@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.5 - 2026-05-12
+
+- **Multi-Device WhoWhatWhere + Hat:** End-turn cue now fires on every
+  transition out of stage `turn` — manual End-turn tap, timer expiry, or
+  running out of words — instead of only when the local timer hit zero.
+  A describer who ends the turn early still gets the audible beat, and the
+  whole table hears it in sync via the server's sync push. The 10-second
+  warning cue is unchanged.
+
 ## 0.15.4 - 2026-05-12
 
 - **Mode-switch navigation:** The "Use Pass-and-Play mode" card moves from

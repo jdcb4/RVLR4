@@ -159,11 +159,10 @@ export function HatMultiplayerView({
     return () => window.clearInterval(interval);
   }, [session.stage, endsAt]);
 
-  /** Timer cues for everyone (spectators/guessers included). */
+  /** 10-second warning while a turn is running (everyone, spectators included). */
   useEffect(() => {
     if (session.stage !== "turn" || !endsAt || !activeTurn) {
       warned10Ref.current = null;
-      timedOutRef.current = null;
 
       return undefined;
     }
@@ -175,15 +174,25 @@ export function HatMultiplayerView({
         warned10Ref.current = activeTurn.startedAt;
         void playMultiplayerToneCue("warn10");
       }
-
-      if (left <= 0 && timedOutRef.current !== activeTurn.startedAt) {
-        timedOutRef.current = activeTurn.startedAt;
-        void playMultiplayerToneCue("timeout");
-      }
     }, 400);
 
     return () => window.clearInterval(interval);
   }, [session.stage, endsAt, activeTurn]);
+
+  /**
+   * End-of-turn cue for everyone — fires whenever the session leaves stage
+   * `turn`, regardless of cause (manual End turn tap, timer expiry, ran out
+   * of words). Replaces the earlier timer-expiry-only trigger so a describer
+   * who taps End turn before the clock hits zero still gets the audible beat.
+   */
+  useEffect(() => {
+    if (timedOutRef.current && session.stage !== "turn") {
+      void playMultiplayerToneCue("timeout");
+      timedOutRef.current = null;
+    } else if (!timedOutRef.current && session.stage === "turn") {
+      timedOutRef.current = activeTurn?.startedAt ?? "turn";
+    }
+  }, [session.stage, activeTurn]);
 
   const showEndTurn =
     session.stage === "turn" &&
