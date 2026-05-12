@@ -1,6 +1,6 @@
 {
   "name": "jd-multiplayer-games",
-  "version": "0.15.10",
+  "version": "0.15.11",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.12.0",
@@ -25,6 +25,7 @@
     "start": "tsx --tsconfig server/tsconfig.json server/index.ts",
     "verify": "pnpm run typecheck && pnpm run lint && pnpm test && pnpm run build",
     "smoke:server-imports": "tsx --tsconfig server/tsconfig.json scripts/smoke-server-imports.ts",
+    "audit:names": "tsx scripts/audit-names.mts",
     "fallow:hygiene": "pnpm dlx fallow --no-cache --format human --only dead-code,dupes",
     "docker:build": "docker build -t jdcb4/jd-multiplayer-games:$(node -p \"require('./package.json').version\") -t jdcb4/jd-multiplayer-games:latest ."
   },

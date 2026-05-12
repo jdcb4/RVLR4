@@ -109,3 +109,47 @@ When adding a new entry, append to the bottom and keep the most recent decisions
 **Reasoning:** Consistent cross-device feedback without shipping audio asset files; matches existing “bell-like” feedback intent from single-player experiments.
 
 **Rejected alternatives:** Bundling WAV/MP3 clips — larger repo and cache busting; Web Audio API raw oscillators — more bespoke code than needed.
+
+---
+
+## 2026-05-12: Naming conventions — game tokens, mode modifiers, parallel actions
+
+**Decision:** Adopt the conventions documented in
+[`docs/NAMING.md`](NAMING.md). The three load-bearing choices:
+
+1. **Hat short form `Hat*` / `hat*`** is canonical (matches the wire-format
+   `GameKind` literal `"hat"`). `HatGame*` survives only on four domain
+   types where it reads more naturally: `HatGameSession`, `HatGameAction`,
+   `HatGameConfig`, `HatGamePhaseMeta`. `Www*` / `www*` short forms are
+   banned; long-form `WhoWhatWhere*` is canonical.
+2. **`Multiplayer*` is the code modifier for the Multi-Device mode.** The
+   UX label changed to "Multi-Device mode" in 0.15.x but in code we keep
+   `Multiplayer*` because that's what the implementation actually is
+   (networked rooms via Socket.IO). Renaming offers no semantic gain.
+3. **`Singleplayer*` is a new modifier added to pass-and-play symbols** that
+   have a multiplayer counterpart (per-game apps, hooks, app-type modules).
+   Originally the pass-and-play side shipped first with bare names; adding
+   `Singleplayer*` gives true symmetry when reading code in isolation.
+
+**Reasoning:** the codebase has accumulated three forms for the same Hat
+game, two forms for Who What Where, and asymmetric mode modifiers. Without
+a documented convention, every new contributor (human or agent) picks a
+form at random. Locking the conventions plus surfacing them via
+`pnpm run audit:names` prevents drift; a minimal `@typescript-eslint/
+naming-convention` rule (typeLike PascalCase) catches the categorical
+case.
+
+**Rejected alternatives:**
+
+- *Canonical `HatGame*` everywhere* — would force renaming the wire-format
+  literal `"hat"` → `"hatGame"`, breaking the server↔client contract for
+  no clarity gain.
+- *Rename `Multiplayer*` → `MultiDevice*` in code* — touches `~11`
+  symbols, `src/multiplayer/` folder, and the `MULTIPLAYER_DEBUG` env
+  var; the wire-facing env var rename is deploy-affecting. No semantic
+  gain.
+- *No `Singleplayer*` modifier, just bare names on the older side* — keeps
+  the existing asymmetry; agents reading `WhoWhatWhereApp` in isolation
+  can't tell which mode they're in without opening the file.
+
+**Supersedes:** N/A — this is the first naming-conventions decision.

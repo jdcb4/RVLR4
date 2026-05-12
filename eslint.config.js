@@ -30,6 +30,13 @@ export default tseslint.config(
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
+      // Minimal naming rule — types/interfaces/classes are PascalCase. Stronger
+      // project-specific conventions (game tokens, mode modifiers, cross-game
+      // parallel actions) are checked by `pnpm run audit:names`, see docs/NAMING.md.
+      "@typescript-eslint/naming-convention": [
+        "error",
+        { selector: "typeLike", format: ["PascalCase"] },
+      ],
     },
   },
   prettier,

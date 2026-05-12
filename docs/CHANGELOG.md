@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.11 - 2026-05-12
+
+- **Docs / tooling:** New `docs/NAMING.md` documents the canonical
+  game-token, mode-modifier (`Multiplayer*` / `Singleplayer*`), and verb
+  conventions. Recorded as an ADR in `docs/DECISIONS.md`. `pnpm run
+  audit:names` re-walks every export and emits a JSON-Lines inventory for
+  re-audit. Minimal `@typescript-eslint/naming-convention` rule enforces
+  PascalCase on type-like declarations; project-specific patterns are
+  enforced by the audit script, not the linter.
+- No code renames in this release. Steps N1–N5 follow.
+
 ## 0.15.10 - 2026-05-12
 
 - **Refactor:** Final-results view-model collapses the 30-line clone between
