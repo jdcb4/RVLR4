@@ -23,11 +23,11 @@ import { Button } from "@/components/ui/button";
 import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
 import type { SharedTeamCount } from "@/config/teamRoster";
 import { maxImpostersForPlayers } from "@/domain/imposter/round";
+import { HatMultiplayerView } from "@/features/hat-game/multiplayer/HatMultiplayerView";
 import { HAT_CLUE_INPUT_CLASS } from "@/features/hat-game/screens/hatScreenTokens";
-import { HatMultiplayerView } from "@/features/multiplayer/HatMultiplayerView";
-import { ImposterMultiplayerView } from "@/features/multiplayer/ImposterMultiplayerView";
+import { ImposterMultiplayerView } from "@/features/imposter/multiplayer/ImposterMultiplayerView";
 import { captainPlayerIdForTeam } from "@/features/multiplayer/lobbyCaptain";
-import { WhoWhatWhereMultiplayerView } from "@/features/multiplayer/WhoWhatWhereMultiplayerView";
+import { WhoWhatWhereMultiplayerView } from "@/features/whowhatwhere/multiplayer/WhoWhatWhereMultiplayerView";
 import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
 import { cn } from "@/lib/utils";
 import {

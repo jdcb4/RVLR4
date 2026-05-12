@@ -2,6 +2,21 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.7 - 2026-05-12
+
+- **Refactor (file layout):** Per-game multi-device views move next to their
+  pass-and-play counterparts:
+  - `features/multiplayer/HatMultiplayerView.tsx` →
+    `features/hat-game/multiplayer/HatMultiplayerView.tsx`
+  - `features/multiplayer/WhoWhatWhereMultiplayerView.tsx` →
+    `features/whowhatwhere/multiplayer/WhoWhatWhereMultiplayerView.tsx`
+  - `features/multiplayer/ImposterMultiplayerView.tsx` →
+    `features/imposter/multiplayer/ImposterMultiplayerView.tsx`
+- `features/multiplayer/` keeps the mode-shell concerns: `RoomPage`,
+  `EnterNamePage`, `MultiplayerHomePage`, `MultiplayerGameShell`,
+  `lobbyCaptain`.
+- `docs/PROJECT_INDEX.md` reflects the new layout. No UX change.
+
 ## 0.15.6 - 2026-05-12
 
 - **Refactor (file layout):**
