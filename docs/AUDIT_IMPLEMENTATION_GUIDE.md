@@ -218,7 +218,7 @@ One schema per event. Use the existing `Number()` / `String()` / range checks in
 ```ts
 import { z } from "zod";
 
-import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
+import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import { TEAM_COUNT_OPTIONS } from "@/config/teamRoster";
 
 const teamCountSchema = z

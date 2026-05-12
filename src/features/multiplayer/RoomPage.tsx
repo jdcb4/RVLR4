@@ -20,7 +20,7 @@ import {
 } from "@/components/icons";
 import { TeamCountOptionGroup } from "@/components/setup/TeamCountOptionGroup";
 import { Button } from "@/components/ui/button";
-import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
+import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import type { SharedTeamCount } from "@/config/teamRoster";
 import { maxImpostersForPlayers } from "@/domain/imposter/round";
 import { HatMultiplayerView } from "@/features/hat-game/multiplayer/HatMultiplayerView";

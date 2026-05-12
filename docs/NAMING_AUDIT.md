@@ -199,12 +199,12 @@ check.
 | `HatGameConfig` (type) | mixed | **keep** | same |
 | `HatGamePhaseMeta` (type) | mixed | **keep** | same |
 | `useHatSingleplayerApp` (hook) | mixed | rename to `useHatApp` | parallel to `useImposterSingleplayerApp` |
-| `hatGameActionSound` (file) | mixed | keep file, but tighten symbol names |
+| `hatActionSound` (file) | mixed | keep file, but tighten symbol names |
 | `hatSingleplayerAppTypes` (file) | mixed | rename to `hatAppTypes` | parallel to `imposterSingleplayerAppTypes` |
-| `hatGameDefaults` (file) | mixed | rename to `hatDefaults` | parallel to `imposterDefaults` |
-| `hatGameSound`, `hatGameStorage` (files) | mixed | rename to `hatSound`, `hatStorage` | parallel to `imposterGameStorage`… wait |
+| `hatDefaults` (file) | mixed | rename to `hatDefaults` | parallel to `imposterDefaults` |
+| `hatSound`, `hatStorage` (files) | mixed | rename to `hatSound`, `hatStorage` | parallel to `imposterStorage`… wait |
 
-**Edge case: `imposterGameStorage.ts` vs `hatGameStorage.ts`.** Both
+**Edge case: `imposterStorage.ts` vs `hatStorage.ts`.** Both
 currently include `Game`. Decide one: drop `Game` from both →
 `hatStorage.ts`, `imposterStorage.ts`. (Recommended.)
 
@@ -298,9 +298,9 @@ Version bump: PATCH (refactor, no behavior change).
 
 - Renames: `HatSingleplayerApp` → `HatApp`, `useHatSingleplayerApp` → `useHatApp`,
   `HatSingleplayerWebScreens` → `HatWebScreens`, `hatSingleplayerAppTypes.ts` →
-  `hatAppTypes.ts`, `hatGameDefaults.ts` → `hatDefaults.ts`,
-  `hatGameSound.ts` → `hatSound.ts`, `hatGameStorage.ts` → `hatStorage.ts`,
-  `imposterGameStorage.ts` → `imposterStorage.ts`.
+  `hatAppTypes.ts`, `hatDefaults.ts` → `hatDefaults.ts`,
+  `hatSound.ts` → `hatSound.ts`, `hatStorage.ts` → `hatStorage.ts`,
+  `imposterStorage.ts` → `imposterStorage.ts`.
 - **Keep** `HatGameSession`, `HatGameAction`, `HatGameConfig`,
   `HatGamePhaseMeta` — those types live in the domain layer and read
   better with `Game` in the name.

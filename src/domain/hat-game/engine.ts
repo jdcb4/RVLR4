@@ -1,4 +1,4 @@
-import { GAME_DEFAULTS, type HatGameConfig } from "@/config/hatGameDefaults";
+import { GAME_DEFAULTS, type HatGameConfig } from "@/config/hatDefaults";
 
 import {
   buildLeaderboard,

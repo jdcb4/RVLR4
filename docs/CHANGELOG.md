@@ -2,6 +2,21 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.14 - 2026-05-12
+
+- **Refactor (naming N3):** Drop redundant `Game` from Hat/Imposter
+  helper file basenames, per `docs/NAMING.md`:
+  - `src/config/hatGameDefaults.ts` → `hatDefaults.ts`
+  - `src/services/hatGameSound.ts` → `hatSound.ts`
+  - `src/services/hatGameStorage.ts` → `hatStorage.ts`
+  - `src/services/imposterGameStorage.ts` → `imposterStorage.ts`
+  - `src/features/hat-game/hatGameActionSound.ts` (+ `.test.ts`) →
+    `hatActionSound.ts` (+ `.test.ts`)
+  - `playHatGameActionSoundEffects` → `playHatActionSoundEffects`.
+- **Kept** (NAMING.md §1 exception list): `HatGameSession`,
+  `HatGameAction`, `HatGameConfig`, `HatGamePhaseMeta` domain types.
+- No behaviour change.
+
 ## 0.15.13 - 2026-05-12
 
 - **Refactor (naming N2):** Add `Singleplayer` modifier to every
@@ -285,7 +300,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 - **Server — hub resume:** `RoomPlayer.optedOutOfResume`, socket **`room:optOutResume`**, **`archiveRoomAfterAllPlayersOptedOut`** (`phase: ended`, snapshots cleared). **`GET /api/rooms/:code`** adds **`resumeEligible`** (needs an in-progress match, a connected player, and someone who has not left for the hub). Sync only builds WWW/Hat payloads when **`phase === "playing"`**.
 - **Client — hub:** **`leaveMultiplayerRoomForHub`** clears the active-game bookmark and emits opt-out; landing uses **`resumeEligible`**; **`RoomPage`** handles **`ended`** with a short “table closed” message.
 - **Imposter (online):** **`scrubRoundForViewer`** restores **secret word** and **self imposter id** after parallel reveal for guide rounds so the clue **Remind me** card can flip to real copy. **`ImposterRemindMeCard`**, next-step cards, and **`phaseAdvance`** tone between steps.
-- **Hat (online):** Describer gets the **spectator phase banner**; timer row spans full width; **return-skipped** Web Audio cue (multiplayer + `hatGameActionSound`); **`HatLastTurnCard`** hides skipped clue chips (WWW unchanged). Shared **`multiplayerUpNextHeadingTitle`** for “You’re up next” / “Your team is up next” / team name on ready + footers.
+- **Hat (online):** Describer gets the **spectator phase banner**; timer row spans full width; **return-skipped** Web Audio cue (multiplayer + `hatActionSound`); **`HatLastTurnCard`** hides skipped clue chips (WWW unchanged). Shared **`multiplayerUpNextHeadingTitle`** for “You’re up next” / “Your team is up next” / team name on ready + footers.
 - **WWW (online):** Shared **`formatWhoWhatWhereTurnClock`** for describer/guesser timer shape; **return-skipped** sound on restore; **finalSummary** final scores play win/lose tones; ready/footer up-next copy aligned with Hat.
 
 ## 0.13.3 - 2026-05-10
@@ -413,7 +428,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 
 ## 0.2.9 - 2026-05-10
 
-- **Hat Game (UI):** Moved dispatch sound cues into `hatGameActionSound.ts` with unit tests; `useHatSingleplayerApp` delegates to `playHatGameActionSoundEffects` after a successful engine transition.
+- **Hat Game (UI):** Moved dispatch sound cues into `hatActionSound.ts` with unit tests; `useHatSingleplayerApp` delegates to `playHatActionSoundEffects` after a successful engine transition.
 
 ## 0.2.8 - 2026-05-10
 

@@ -1,6 +1,6 @@
 import type { Server } from "socket.io";
 
-import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
+import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import type { GameSettings } from "@/domain/whowhatwhere/types";
 
 import { broadcastRoom, roomChannel } from "./broadcast.ts";

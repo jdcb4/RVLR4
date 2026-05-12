@@ -1,4 +1,4 @@
-import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
+import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import {
   MAX_PLAYERS_PER_TEAM,
   MIN_PLAYERS_PER_TEAM,

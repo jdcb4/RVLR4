@@ -16,7 +16,7 @@ Working list from `pnpm dlx fallow --no-cache --format human` (session start). I
 ## Deferred / monitor (not blocking)
 
 - **Optional native package:** Fallow postinstall may warn about `@fallow-cli/win32-x64-msvc`; optional binary install — environmental, not a code defect.
-- **Complexity / large functions:** `applyHatGameAction` and Hat Game dispatch sounds were refactored into smaller helpers (`engine.ts`, `hatGameActionSound.ts`). Remaining Fallow health hits (large hooks, screen builders, etc.) — tackle opportunistically.
+- **Complexity / large functions:** `applyHatGameAction` and Hat Game dispatch sounds were refactored into smaller helpers (`engine.ts`, `hatActionSound.ts`). Remaining Fallow health hits (large hooks, screen builders, etc.) — tackle opportunistically.
 
 ## Verification
 

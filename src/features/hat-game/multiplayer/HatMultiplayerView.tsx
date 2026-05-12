@@ -37,7 +37,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { HatSyncDto } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
-import { playSoundCue } from "@/services/hatGameSound";
+import { playSoundCue } from "@/services/hatSound";
 import { playMultiplayerToneCue } from "@/services/multiplayerTone";
 
 /** Border + background tint for each Hat phase (Describe / One Word / Charades). */

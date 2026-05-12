@@ -1,4 +1,4 @@
-import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
+import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import type { Player, Team } from "@/domain/hat-game/types";
 import type { AppSnapshot, StoragePayload } from "@/features/hat-game/hatSingleplayerAppTypes";
 import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";

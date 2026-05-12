@@ -3,7 +3,7 @@ import {
   PrimaryFooterButton,
 } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
-import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
+import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
 import { HAT_CLUE_INPUT_CLASS, HAT_NOTICE_CLASS } from "@/features/hat-game/screens/hatScreenTokens";
 import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";

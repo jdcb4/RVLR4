@@ -22,7 +22,7 @@ import {
   clearImposterSavedState,
   loadImposterSavedState,
   saveImposterState,
-} from "@/services/imposterGameStorage";
+} from "@/services/imposterStorage";
 
 import packageJson from "../../../package.json";
 

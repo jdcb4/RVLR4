@@ -1,5 +1,5 @@
 import type { HatGameAction, HatGameSession } from "@/domain/hat-game/types";
-import type { SoundCue } from "@/services/hatGameSound";
+import type { SoundCue } from "@/services/hatSound";
 
 /**
  * Ref object compatible with `useRef<string | null>` — we avoid importing React
@@ -11,7 +11,7 @@ export type StringOrNullRef = { current: string | null };
  * Plays Web Audio cues after a successful `applyHatGameAction` result.
  * Keeps the same order and conditions as the in-app flow (including turn-end dedupe).
  */
-export function playHatGameActionSoundEffects(
+export function playHatActionSoundEffects(
   previousSession: HatGameSession,
   nextSession: HatGameSession,
   action: HatGameAction,

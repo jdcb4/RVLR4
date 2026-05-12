@@ -1,4 +1,4 @@
-import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
+import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import clueSuggestions from "@/data/clueSuggestions.json";
 import type { ClueSubmissionMap, Player } from "@/domain/hat-game/types";
 

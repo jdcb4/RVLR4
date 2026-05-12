@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { GAME_DEFAULTS, type HatGameConfig } from "@/config/hatGameDefaults";
+import { GAME_DEFAULTS, type HatGameConfig } from "@/config/hatDefaults";
 import { MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 import clueSuggestions from "@/data/clueSuggestions.json";
 import {
@@ -20,15 +20,15 @@ import { getCountdownSeconds } from "@/domain/hat-game/time";
 import type { ClueSubmissionMap, HatGameAction } from "@/domain/hat-game/types";
 import { useAutoHidePopup } from "@/features/game-app-hooks/useAutoHidePopup";
 import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
-import { playHatGameActionSoundEffects } from "@/features/hat-game/hatGameActionSound";
+import { playHatActionSoundEffects } from "@/features/hat-game/hatActionSound";
 import type { AppSnapshot, AppStep, StoragePayload } from "@/features/hat-game/hatSingleplayerAppTypes";
 import { formatSavedAt } from "@/lib/formatSavedAt";
-import { playSoundCue } from "@/services/hatGameSound";
+import { playSoundCue } from "@/services/hatSound";
 import {
   clearSavedState,
   loadSavedState,
   saveState,
-} from "@/services/hatGameStorage";
+} from "@/services/hatStorage";
 
 import packageJson from "../../../package.json";
 
@@ -188,7 +188,7 @@ export function useHatSingleplayerApp() {
       return;
     }
 
-    playHatGameActionSoundEffects(previousSession, result, action, turnEndCueTurnRef, playSoundCue);
+    playHatActionSoundEffects(previousSession, result, action, turnEndCueTurnRef, playSoundCue);
 
     setError('');
     setSnapshot((current) => ({

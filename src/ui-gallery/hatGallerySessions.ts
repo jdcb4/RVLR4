@@ -1,4 +1,4 @@
-import { GAME_DEFAULTS } from "@/config/hatGameDefaults";
+import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import { applyHatGameAction, createHatGameSession } from "@/domain/hat-game/engine";
 import { buildDefaultSetup } from "@/domain/hat-game/setup";
 import type { ClueSubmissionMap, HatGameSession } from "@/domain/hat-game/types";
