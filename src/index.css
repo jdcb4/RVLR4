@@ -106,10 +106,19 @@
   }
 }
 
-/* iOS / notched devices — keep content inside safe areas */
+/*
+ * Mobile-first horizontal padding for the page shell.
+ *
+ * Combines a base inset (so cards never hug the viewport edge on plain
+ * non-notched phones) with `env(safe-area-inset-*)` so notched devices push
+ * content further in. Using `max()` instead of a plain `env()` rule fixes a
+ * regression where this rule, sitting outside a Tailwind layer, silently
+ * overrode Tailwind `px-*` utilities with `0px` on devices that report no
+ * safe-area inset.
+ */
 .safe-screen {
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
 }
 
 /* When the mobile keyboard opens, keep inputs visible above the footer */

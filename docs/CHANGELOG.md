@@ -2,6 +2,18 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.9 - 2026-05-12
+
+- **Fix (mobile padding):** The `.safe-screen` rule in `src/index.css`
+  silently overrode Tailwind `px-*` utilities with `0px` on non-notched
+  mobile viewports, because `env(safe-area-inset-*)` resolves to `0` there
+  and the rule sits outside a Tailwind layer (so it wins on cascade). That's
+  why the `px-4` → `px-5` bump in v0.16.8 did nothing visually.
+- The rule now combines both with `max(1.5rem, env(safe-area-inset-*))`,
+  giving 24px breathing room everywhere and respecting notched-device
+  insets when they're larger. Removed the now-redundant `px-5` Tailwind
+  class from the three `safe-screen` call sites.
+
 ## 0.16.8 - 2026-05-12
 
 - **Mobile padding:** Outer horizontal padding bumped from `px-4` (16px) to

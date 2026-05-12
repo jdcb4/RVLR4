@@ -128,7 +128,7 @@ export function MultiplayerHomePage() {
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
-      <div className="safe-screen mx-auto w-full max-w-md px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
+      <div className="safe-screen mx-auto w-full max-w-md pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
         <header className="py-6 text-center">
           <p className="font-medium uppercase text-typ-overline text-primary">JD Party Games</p>
           <h1 className="mt-2 text-typ-display font-bold">Party games, every phone</h1>

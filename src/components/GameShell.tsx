@@ -22,7 +22,7 @@ export function GameShell({
 }) {
   return (
     <div className="min-h-dvh bg-background text-foreground">
-      <div className="safe-screen mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
+      <div className="safe-screen mx-auto flex min-h-dvh w-full max-w-md flex-col pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
         <header className="flex items-center justify-between gap-2 border-b border-semantic-border-muted py-3">
           <Link
             aria-label="Back to game picker"
