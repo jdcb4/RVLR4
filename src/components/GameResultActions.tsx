@@ -50,15 +50,19 @@ export function GameResultActions({
   );
 }
 
-/** Pass-and-play hub actions (three buttons). */
+/**
+ * Pass-and-play final results actions — two buttons, mirroring the multi-device
+ * shape:
+ * - `Pick another game` returns to the Pass-and-Play hub.
+ * - `Play again` returns to this game's settings screen with the same prefs as
+ *   before, so the user can confirm or tweak and start the next match.
+ */
 export function PassAndPlayGameResultActions({
   onPickAnotherGame,
-  onReplay,
-  onNewGame,
+  onPlayAgain,
 }: {
   readonly onPickAnotherGame: () => void;
-  readonly onReplay: () => void;
-  readonly onNewGame: () => void;
+  readonly onPlayAgain: () => void;
 }) {
   return (
     <div className="mt-auto grid w-full max-w-full gap-3">
@@ -70,16 +74,8 @@ export function PassAndPlayGameResultActions({
       >
         Pick another game
       </Button>
-      <Button className="h-12 w-full" onClick={onReplay} type="button">
-        Replay
-      </Button>
-      <Button
-        className="h-12 w-full"
-        variant="secondary"
-        onClick={onNewGame}
-        type="button"
-      >
-        New game
+      <Button className="h-12 w-full" onClick={onPlayAgain} type="button">
+        Play again
       </Button>
     </div>
   );

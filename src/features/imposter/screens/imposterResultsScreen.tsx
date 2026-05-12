@@ -48,9 +48,8 @@ export function imposterResultsScreen(
     ),
     actions: (
       <PassAndPlayGameResultActions
-        onNewGame={() => controller.newGameKeepGameType()}
-        onPickAnotherGame={() => navigate("/")}
-        onReplay={() => controller.replaySamePlayers()}
+        onPickAnotherGame={() => navigate("/passnplay")}
+        onPlayAgain={() => controller.newGameKeepGameType()}
       />
     ),
   };

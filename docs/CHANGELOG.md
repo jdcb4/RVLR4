@@ -2,6 +2,19 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.3 - 2026-05-12
+
+- **Pass-and-Play final results:** Collapses the previous three actions
+  (`Pick another game` / `Replay` / `New game`) into **two**, matching the
+  Multi-Device shape:
+  - `Pick another game` — back to the Pass-and-Play hub at `/passnplay`.
+  - `Play again` — back to **the settings screen** for the current game with
+    the user's previous prefs intact, ready to tweak and start.
+- **WhoWhatWhere:** New `playAgainFromSettings` controller action lands on the
+  `settings` mode (was `landing`); the legacy `playAgain` / `backToSetup`
+  remain in the controller for resume + back-button paths and may be cleaned
+  up in a later Fallow pass.
+
 ## 0.15.2 - 2026-05-12
 
 - **Router:** Pass-and-Play hub moves from `/legacy` to **`/passnplay`**;

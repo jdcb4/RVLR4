@@ -163,9 +163,8 @@ export function WhoWhatWhereApp() {
   } else if (game.match && game.activeMode === "results") {
     footer = wrap(
       <PassAndPlayGameResultActions
-        onNewGame={game.backToSetup}
-        onPickAnotherGame={() => navigate("/")}
-        onReplay={game.playAgain}
+        onPickAnotherGame={() => navigate("/passnplay")}
+        onPlayAgain={game.playAgainFromSettings}
       />,
     );
   }

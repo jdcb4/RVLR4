@@ -236,6 +236,17 @@ export function useGameController() {
     setMode("landing");
   };
 
+  /**
+   * "Play again" entry point from final results — clears the finished match
+   * and lands on the settings screen with the user's previous prefs intact, so
+   * they can tweak teams / categories before starting the next match.
+   */
+  const playAgainFromSettings = () => {
+    clearMatch();
+    setMatch(null);
+    setMode("settings");
+  };
+
   const playAgain = () => {
     setMatch(createMatch(teamSetups, settings));
   };
@@ -268,6 +279,7 @@ export function useGameController() {
     startNextTurn,
     backToSetup,
     playAgain,
+    playAgainFromSettings,
     correct: () => {
       playSound("correct");
       setMatch((currentMatch) =>

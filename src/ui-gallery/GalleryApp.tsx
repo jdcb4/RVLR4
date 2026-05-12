@@ -220,9 +220,8 @@ function buildSlides(): readonly SlideSpec[] {
       wwwFooter: () =>
         footerWrap(
           <PassAndPlayGameResultActions
-            onNewGame={noop}
             onPickAnotherGame={noop}
-            onReplay={noop}
+            onPlayAgain={noop}
           />,
         ),
     },

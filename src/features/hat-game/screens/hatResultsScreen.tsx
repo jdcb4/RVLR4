@@ -34,9 +34,8 @@ export function hatResultsScreen(
     ),
     actions: (
       <PassAndPlayGameResultActions
-        onNewGame={() => void controller.startNewGame()}
-        onPickAnotherGame={() => navigate("/")}
-        onReplay={controller.playAgain}
+        onPickAnotherGame={() => navigate("/passnplay")}
+        onPlayAgain={() => void controller.startNewGame()}
       />
     ),
   };
