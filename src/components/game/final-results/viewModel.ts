@@ -25,19 +25,34 @@ export type FinalResultsViewModel = {
   readonly bestTurn: FinalBestTurnVm | null;
 };
 
-function sortedLeaderboard<T extends { teamId: string; teamName: string; score: number }>(
+type SharedLeaderboardEntry = {
+  readonly teamId: string;
+  readonly teamName: string;
+  readonly score: number;
+};
+
+type SharedResults = {
+  readonly leaderboard: readonly SharedLeaderboardEntry[];
+  readonly winnerTeamIds: readonly string[];
+  readonly isTie: boolean;
+};
+
+function sortedLeaderboard<T extends SharedLeaderboardEntry>(
   entries: readonly T[],
 ): T[] {
   return [...entries].sort((left, right) => right.score - left.score);
 }
 
-/** Maps Who What Where match results into the shared podium layout. */
-export function mapFinalResultsFromWww(match: MatchState): FinalResultsViewModel | null {
-  const results = match.results;
-  if (!results) {
-    return null;
-  }
-
+/**
+ * Shared final-results mapper for any game with a leaderboard + optional
+ * best-turn. WWW and Hat both produce the same podium layout — they only
+ * differ in which field on `bestTurn` holds the score (`scoreDelta` vs
+ * `score`), so callers supply the resolved best-turn VM directly.
+ */
+function buildFinalResultsVm(
+  results: SharedResults,
+  bestTurn: FinalBestTurnVm | null,
+): FinalResultsViewModel {
   const ordered = sortedLeaderboard(results.leaderboard);
   const leaderboardRows: FinalLeaderboardRowVm[] = ordered.map((entry, index) => ({
     rank: index + 1,
@@ -63,6 +78,22 @@ export function mapFinalResultsFromWww(match: MatchState): FinalResultsViewModel
     heroSubline = winnerLabels.length > 1 ? winnerLabels.slice(1).join(" · ") : undefined;
   }
 
+  return {
+    heroHeadline,
+    heroSubline,
+    isTie: results.isTie,
+    leaderboardRows,
+    bestTurn,
+  };
+}
+
+/** Maps Who What Where match results into the shared podium layout. */
+export function mapFinalResultsFromWww(match: MatchState): FinalResultsViewModel | null {
+  const results = match.results;
+  if (!results) {
+    return null;
+  }
+
   const bestTurn = results.bestTurn
     ? {
         playerName: results.bestTurn.describerName,
@@ -71,13 +102,7 @@ export function mapFinalResultsFromWww(match: MatchState): FinalResultsViewModel
       }
     : null;
 
-  return {
-    heroHeadline,
-    heroSubline,
-    isTie: results.isTie,
-    leaderboardRows,
-    bestTurn,
-  };
+  return buildFinalResultsVm(results, bestTurn);
 }
 
 /** True if this viewer's team is among WWW winners (for confetti on device). */
@@ -99,31 +124,6 @@ export function viewerWwwTeamIsWinner(match: MatchState, viewerPlayerId: string)
 
 /** Maps Hat Game session results into the same podium layout (no phase labels). */
 export function mapFinalResultsFromHat(results: HatGameResults): FinalResultsViewModel {
-  const ordered = sortedLeaderboard(results.leaderboard);
-  const leaderboardRows: FinalLeaderboardRowVm[] = ordered.map((entry, index) => ({
-    rank: index + 1,
-    teamId: entry.teamId,
-    teamName: entry.teamName,
-    score: entry.score,
-    isWinner: results.winnerTeamIds.includes(entry.teamId),
-  }));
-
-  const winnerLabels = ordered
-    .filter((entry) => results.winnerTeamIds.includes(entry.teamId))
-    .map((entry) => entry.teamName);
-
-  let heroHeadline: string;
-  let heroSubline: string | undefined;
-
-  if (results.isTie) {
-    heroHeadline = "It's a tie!";
-    heroSubline =
-      winnerLabels.length > 0 ? winnerLabels.join(" · ") : "Shared top score";
-  } else {
-    heroHeadline = winnerLabels[0] ?? "Winner";
-    heroSubline = winnerLabels.length > 1 ? winnerLabels.slice(1).join(" · ") : undefined;
-  }
-
   const bestTurn = results.bestTurn
     ? {
         playerName: results.bestTurn.describerName,
@@ -132,13 +132,7 @@ export function mapFinalResultsFromHat(results: HatGameResults): FinalResultsVie
       }
     : null;
 
-  return {
-    heroHeadline,
-    heroSubline,
-    isTie: results.isTie,
-    leaderboardRows,
-    bestTurn,
-  };
+  return buildFinalResultsVm(results, bestTurn);
 }
 
 /** True if this viewer's Hat team is among winners (confetti on their device). */

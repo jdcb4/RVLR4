@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.10 - 2026-05-12
+
+- **Refactor:** Final-results view-model collapses the 30-line clone between
+  `mapFinalResultsFromWww` and `mapFinalResultsFromHat` into a shared
+  `buildFinalResultsVm(results, bestTurn)`. The only delta between the two
+  mappers (`bestTurn.scoreDelta` vs `bestTurn.score`) is resolved at the
+  caller; the leaderboard sort, podium row mapping, and tie/winner copy run
+  through one code path. Fallow: 17 → 16 clone groups, 491 → 431 duplicated
+  lines.
+
 ## 0.15.9 - 2026-05-12
 
 - **Refactor:** Two shared hooks under `src/features/game-app-hooks/`
