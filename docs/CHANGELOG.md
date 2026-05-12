@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.3 - 2026-05-12
+
+- **Refactor:** New `singleplayerLifecycle.ts` factory module under
+  `src/features/game-app-hooks/` consolidates the `startNewGame` and
+  `resumeSavedGame` shapes that Hat and Imposter singleplayer controllers
+  re-implemented identically. `makeSingleplayerStartNewGame` owns the
+  setConfirm → drop record → clear storage → reset snapshot sequence;
+  `makeSingleplayerResumeSavedGame` owns the no-record guard plus the
+  optional snapshot normalizer (Hat passes one, Imposter doesn't).
+
 ## 0.16.2 - 2026-05-12
 
 - **Refactor:** New `MultiplayerSkipCorrectFooter` component

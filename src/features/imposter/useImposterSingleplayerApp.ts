@@ -9,6 +9,10 @@ import {
   getImposterSetupError,
   maxImpostersForPlayers,
 } from "@/domain/imposter/round";
+import {
+  makeSingleplayerResumeSavedGame,
+  makeSingleplayerStartNewGame,
+} from "@/features/game-app-hooks/singleplayerLifecycle";
 import { useAutoHidePopup } from "@/features/game-app-hooks/useAutoHidePopup";
 import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
 import type {
@@ -133,22 +137,21 @@ export function useImposterSingleplayerApp() {
   const footerActionsLocked = useFooterActionLockOnKeyChange(actionLockKey);
   useAutoHidePopup(showInfoPopup, () => setShowInfoPopup(false));
 
-  const startNewGame = async () => {
-    setConfirmNewGame(false);
-    setSavedRecord(null);
-    setError("");
-    await clearImposterSavedState();
-    setSnapshot(createInitialSnapshot("settings"));
-  };
+  const startNewGame = makeSingleplayerStartNewGame({
+    clearSavedState: clearImposterSavedState,
+    resetSnapshot: () => createInitialSnapshot("settings"),
+    setConfirmNewGame,
+    setError,
+    setSavedRecord,
+    setSnapshot,
+  });
 
-  const resumeSavedGame = () => {
-    if (!savedRecord) {
-      return;
-    }
-    setConfirmNewGame(false);
-    setError("");
-    setSnapshot(savedRecord.snapshot);
-  };
+  const resumeSavedGame = makeSingleplayerResumeSavedGame({
+    savedRecord,
+    setConfirmNewGame,
+    setError,
+    setSnapshot,
+  });
 
   const updatePlayerCount = (count: number) => {
     if (count < IMPOSTER_MIN_PLAYERS || count > IMPOSTER_MAX_PLAYERS) {

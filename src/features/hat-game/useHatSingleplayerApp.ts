@@ -18,6 +18,10 @@ import {
 } from "@/domain/hat-game/setup";
 import { getCountdownSeconds } from "@/domain/hat-game/time";
 import type { ClueSubmissionMap, HatGameAction } from "@/domain/hat-game/types";
+import {
+  makeSingleplayerResumeSavedGame,
+  makeSingleplayerStartNewGame,
+} from "@/features/game-app-hooks/singleplayerLifecycle";
 import { useAutoHidePopup } from "@/features/game-app-hooks/useAutoHidePopup";
 import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
 import { playHatActionSoundEffects } from "@/features/hat-game/hatActionSound";
@@ -256,22 +260,22 @@ export function useHatSingleplayerApp() {
   const footerActionsLocked = useFooterActionLockOnKeyChange(actionLockKey);
   useAutoHidePopup(showInfoPopup, () => setShowInfoPopup(false));
 
-  const startNewGame = async () => {
-    setConfirmNewGame(false);
-    setSavedRecord(null);
-    setError('');
-    await clearSavedState();
-    setSnapshot(createInitialSnapshot("settings"));
-  };
+  const startNewGame = makeSingleplayerStartNewGame({
+    clearSavedState,
+    resetSnapshot: () => createInitialSnapshot("settings"),
+    setConfirmNewGame,
+    setError,
+    setSavedRecord,
+    setSnapshot,
+  });
 
-  const resumeSavedGame = () => {
-    if (!savedRecord) {
-      return;
-    }
-    setConfirmNewGame(false);
-    setError('');
-    setSnapshot(normalizeSnapshotStep(savedRecord.snapshot));
-  };
+  const resumeSavedGame = makeSingleplayerResumeSavedGame({
+    normalize: normalizeSnapshotStep,
+    savedRecord,
+    setConfirmNewGame,
+    setError,
+    setSnapshot,
+  });
 
   const exitToLanding = () => {
     setConfirmNewGame(false);
