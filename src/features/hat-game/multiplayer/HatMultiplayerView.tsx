@@ -137,6 +137,7 @@ export function HatMultiplayerView({
   const [showScoresPane, setShowScoresPane] = useState(false);
   const warned10Ref = useRef<string | null>(null);
   const timedOutRef = useRef<string | null>(null);
+  const prevPhaseRef = useRef<number | null>(null);
 
   const activeTurn = session.activeTurn;
   const endsAt = activeTurn?.endsAt;
@@ -192,6 +193,28 @@ export function HatMultiplayerView({
       timedOutRef.current = activeTurn?.startedAt ?? "turn";
     }
   }, [session.stage, activeTurn]);
+
+  /**
+   * Phase-transition cue for everyone — when the sync pushes a new
+   * `phaseNumber` (Describe → One Word → Charades), play the matching
+   * bundled WAV. Same audio assets the single-player Hat Game uses, so
+   * the moment lands consistently across modes.
+   */
+  useEffect(() => {
+    const prev = prevPhaseRef.current;
+    const next = session.phaseNumber;
+    prevPhaseRef.current = next;
+
+    if (prev === null || prev === next) {
+      return;
+    }
+
+    if (next === 2) {
+      playSoundCue("phase-one-word");
+    } else if (next === 3) {
+      playSoundCue("phase-charades");
+    }
+  }, [session.phaseNumber]);
 
   const showEndTurn =
     session.stage === "turn" &&

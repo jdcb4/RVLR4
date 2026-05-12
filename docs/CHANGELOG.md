@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.14 - 2026-05-12
+
+- **Hat (Multi-Device):** Phase-transition audio cues now fire on every
+  device when the server pushes a new `phaseNumber` (Describe → One Word
+  → Charades). Uses the same bundled `OneWord.wav` / `Charades.wav`
+  assets the single-player Hat Game already plays via
+  `playSoundCue("phase-one-word")` / `"phase-charades"`. New `useEffect`
+  in `HatMultiplayerView` watches `session.phaseNumber` with a ref so it
+  fires once per transition, not on every render.
+
 ## 0.16.13 - 2026-05-12
 
 - **Imposter (Pass-and-Play):** Reveal screen for non-imposters had the
