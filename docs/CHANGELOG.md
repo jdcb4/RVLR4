@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.15.8 - 2026-05-12
+
+- **Refactor:** `src/components/game/buildGameLandingScreen.tsx` replaces the
+  43-line clone between Hat and Imposter landing screens (largest cross-game
+  clone Fallow flagged). Per-game landing modules now just supply the copy
+  and their controller. Fallow: clones 18 → 17, duplicated lines 638 → 513
+  (-20%).
+
 ## 0.15.7 - 2026-05-12
 
 - **Refactor (file layout):** Per-game multi-device views move next to their
