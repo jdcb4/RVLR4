@@ -2,6 +2,19 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.16.11 - 2026-05-12
+
+- **Multi-Device names:**
+  - New flat distinctive-name pool in `src/data/multiplayerDisplayNames.json`
+    (~60 self-contained nicknames — `Captain Custard`, `Madame Mirth`,
+    `Banjo Beatrix`, …). Replaces the previous "{team} {member}" concat
+    (`Legends Gawain`, `Astronauts Sally`) which wasn't useful in a flat
+    Multi-Device lobby. Pass-and-Play setup still uses the team-bound
+    `namePacks.json`.
+  - `EnterNamePage` persists the user's last-used display name to
+    `localStorage` and prepopulates the input on the next host/join so
+    repeat sessions don't have to retype.
+
 ## 0.16.10 - 2026-05-12
 
 - **Landing (both modes):** Discrete footer attribution — "by jdcb4 ·

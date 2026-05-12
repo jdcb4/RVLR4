@@ -3,17 +3,32 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameShell } from "@/components/GameShell";
-import namePacks from "@/data/namePacks.json";
+import multiplayerDisplayNames from "@/data/multiplayerDisplayNames.json";
 import { persistSession } from "@/multiplayer/useRoomChannel";
 
 type Intent = "host" | "join";
 
-function pickRandomName() {
-  const pack = namePacks[Math.floor(Math.random() * namePacks.length)]!;
-  const choices = pack.playerNames;
-  const name = choices[Math.floor(Math.random() * choices.length)]!;
+const LAST_NAME_KEY = "jd-multiplayer:last-display-name";
 
-  return `${pack.teamName} ${name}`;
+function pickRandomName(): string {
+  const names = multiplayerDisplayNames as readonly string[];
+  return names[Math.floor(Math.random() * names.length)] ?? "Player";
+}
+
+function loadLastName(): string {
+  try {
+    return (localStorage.getItem(LAST_NAME_KEY) ?? "").slice(0, 32);
+  } catch {
+    return "";
+  }
+}
+
+function saveLastName(value: string): void {
+  try {
+    localStorage.setItem(LAST_NAME_KEY, value.slice(0, 32));
+  } catch {
+    // Private browsing / quota: persist is best-effort.
+  }
 }
 
 export function EnterNamePage() {
@@ -24,7 +39,7 @@ export function EnterNamePage() {
   const joinCode = searchParams.get("code");
   const hostGame = searchParams.get("game");
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(() => loadLastName());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<{
@@ -132,6 +147,7 @@ export function EnterNamePage() {
           playerId: payload.playerId,
           secret: payload.secret,
         });
+        saveLastName(trimmed);
         navigate(`/room/${payload.code}`);
       } else if (intent === "join") {
         if (!joinCode) {
@@ -162,6 +178,7 @@ export function EnterNamePage() {
           playerId: payload.playerId,
           secret: payload.secret,
         });
+        saveLastName(trimmed);
         navigate(`/room/${payload.code}`);
       } else {
         throw new Error("Open this page from the home screen.");
