@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.4 - 2026-05-14
+
+- **Refactor (multiplayer entry):** Extracted shared room-entry response parsing
+  for host/join submission in `EnterNamePage`, removing the duplicated
+  response validation/session persistence branch.
+- **Refactor (multiplayer labels):** Moved game-kind display labels into a
+  shared `gameKindLabel` helper used by both the home page and name-entry
+  preview/copy.
+- **Tests:** Added room-entry response and game-label coverage.
+
 ## 0.17.3 - 2026-05-14
 
 - **Refactor (Imposter controller):** Extracted setup validation and fresh
