@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.8 - 2026-05-14
+
+- **Refactor (shared game UI):** Extracted `TeamStandingsList` and reused it in
+  Hat and Who What Where multiplayer turn snapshots.
+- **Refactor (Hat singleplayer):** Centralized Hat session creation for clue
+  completion and replay paths.
+- **Refactor (server handlers):** Shared the host/lobby settings guard across
+  Who What Where and Hat settings patch handlers. Fallow hygiene now reports no
+  dead code and no duplicate code.
+- **Tests:** Added `TeamStandingsList` coverage.
+
 ## 0.17.7 - 2026-05-14
 
 - **Refactor (Imposter multiplayer):** Split `ImposterMultiplayerView` into a

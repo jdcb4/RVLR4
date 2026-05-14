@@ -4,22 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import { viewerWhoWhatWhereTeamIsWinner } from "@/components/game/final-results/viewModel";
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
+import { TeamStandingsList } from "@/components/game/TeamStandingsList";
 import { Metric } from "@/components/Metric";
 import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
-import {
-  canQueueSkipped,
-  getActiveContext,
-  getSecondsLeft,
-} from "@/domain/whowhatwhere/game";
+import { canQueueSkipped, getActiveContext, getSecondsLeft } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 import {
   MultiplayerEndGameActions,
   MultiplayerGameShell,
 } from "@/features/multiplayer/MultiplayerGameShell";
 import { MultiplayerSkipCorrectFooter } from "@/features/multiplayer/MultiplayerSkipCorrectFooter";
-import {
-  FinalTurnRecapScreen,
-} from "@/features/whowhatwhere/results/FinalTurnRecapScreen";
+import { FinalTurnRecapScreen } from "@/features/whowhatwhere/results/FinalTurnRecapScreen";
 import { ResultsScreen } from "@/features/whowhatwhere/results/ResultsScreen";
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
 import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
@@ -30,8 +25,7 @@ import { playSound } from "@/services/whowhatwhereSound";
 
 function wwwOutcomeTone(match: MatchState, viewerPlayerId: string): "none" | "win" | "lose" {
   const hasResults =
-    Boolean(match.results) &&
-    (match.stage === "results" || match.stage === "finalSummary");
+    Boolean(match.results) && (match.stage === "results" || match.stage === "finalSummary");
 
   if (!hasResults) {
     return "none";
@@ -69,10 +63,7 @@ export function WhoWhatWhereMultiplayerView({
 
   const role = payload.role;
 
-  const showEndTurn =
-    match.stage === "turn" &&
-    Boolean(match.activeTurn) &&
-    payload.showTurnFooter;
+  const showEndTurn = match.stage === "turn" && Boolean(match.activeTurn) && payload.showTurnFooter;
 
   /** 10-second warning while a turn is running (everyone, spectators included). */
   useEffect(() => {
@@ -146,9 +137,7 @@ export function WhoWhatWhereMultiplayerView({
     });
 
     if (role !== "describer") {
-      footer = (
-        <PrimaryFooterButton disabled label={nextTeamLabel} onClick={() => {}} />
-      );
+      footer = <PrimaryFooterButton disabled label={nextTeamLabel} onClick={() => {}} />;
     } else {
       footer = (
         <PrimaryFooterButton
@@ -324,14 +313,7 @@ function GuessOrObserveTurn({
         </div>
         <div className="mt-4 border-t border-border pt-4">
           <p className="text-typ-ui font-semibold text-foreground">Standings</p>
-          <ul className="mt-2 space-y-1 text-typ-ui text-muted-foreground">
-            {match.teams.map((team) => (
-              <li className="flex justify-between gap-2" key={team.id}>
-                <span>{team.name}</span>
-                <span className="font-semibold text-foreground">{team.score}</span>
-              </li>
-            ))}
-          </ul>
+          <TeamStandingsList teams={match.teams} />
         </div>
       </div>
     </section>

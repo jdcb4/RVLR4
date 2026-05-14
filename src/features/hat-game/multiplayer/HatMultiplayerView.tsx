@@ -15,6 +15,7 @@ import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActio
 import { HatLastTurnCard } from "@/components/game/HatLastTurnCard";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { ReadyProgressCard } from "@/components/game/ReadyProgressCard";
+import { TeamStandingsList } from "@/components/game/TeamStandingsList";
 import { ThatsTheLastTurnCard } from "@/components/game/ThatsTheLastTurnCard";
 import { Metric } from "@/components/Metric";
 import { getHatGameContext, getHatGamePhaseMeta } from "@/domain/hat-game/engine";
@@ -528,14 +529,7 @@ function HatSpectatorTurnSnapshotCard({
       </div>
       <div className="mt-4 border-t border-border pt-4">
         <p className="text-typ-ui font-semibold text-foreground">Standings</p>
-        <ul className="mt-2 space-y-1 text-typ-ui text-muted-foreground">
-          {teams.map((team) => (
-            <li className="flex justify-between gap-2" key={team.id}>
-              <span>{team.name}</span>
-              <span className="font-semibold text-foreground">{team.score}</span>
-            </li>
-          ))}
-        </ul>
+        <TeamStandingsList teams={teams} />
       </div>
     </div>
   );
