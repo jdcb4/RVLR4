@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.2 - 2026-05-14
+
+- **Refactor (Hat active turns):** Extracted shared `HatActiveTurnPanel` for the
+  phase banner, clue highlight, metrics, and skipped-famous-figures return list.
+  Pass-and-Play and Multi-Device describer turns now share that presentation
+  primitive while keeping their own action dispatch/Socket.IO wiring.
+- **Tests:** Added `HatActiveTurnPanel` coverage for the shared metrics and
+  skipped-clue callback.
+
 ## 0.17.1 - 2026-05-14
 
 - **Refactor (server hygiene):** Removed unused public exports from

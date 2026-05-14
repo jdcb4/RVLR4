@@ -9,24 +9,18 @@ import {
   viewerHatTeamIsWinner,
 } from "@/components/game/final-results/viewModel";
 import { FINAL_TURN_RECAP_NEXT_STEPS } from "@/components/game/finalTurnRecapCopy";
-import {
-  FooterOutlineIconTextButton,
-  PrimaryFooterButton,
-} from "@/components/game/GameFooterButtons";
+import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
 import { HatLastTurnCard } from "@/components/game/HatLastTurnCard";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { ReadyProgressCard } from "@/components/game/ReadyProgressCard";
 import { ThatsTheLastTurnCard } from "@/components/game/ThatsTheLastTurnCard";
-import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
 import { Metric } from "@/components/Metric";
-import {
-  getHatGameContext,
-  getHatGamePhaseMeta,
-} from "@/domain/hat-game/engine";
+import { getHatGameContext, getHatGamePhaseMeta } from "@/domain/hat-game/engine";
 import { formatCountdown, getCountdownSeconds } from "@/domain/hat-game/time";
 import type { HatGameSession } from "@/domain/hat-game/types";
+import { HatActiveTurnPanel } from "@/features/hat-game/HatActiveTurnPanel";
 import { HatPhaseBanner } from "@/features/hat-game/HatPhaseBanner";
 import { HatScoreboard } from "@/features/hat-game/screens/HatScoreboard";
 import {
@@ -146,10 +140,7 @@ export function HatMultiplayerView({
     }
   }, [session.phaseNumber]);
 
-  const showEndTurn =
-    session.stage === "turn" &&
-    Boolean(activeTurn) &&
-    payload.showTurnFooter;
+  const showEndTurn = session.stage === "turn" && Boolean(activeTurn) && payload.showTurnFooter;
 
   const headerRight = (
     <GameScreenHeaderActions
@@ -187,9 +178,7 @@ export function HatMultiplayerView({
         nextTeamDisplayName: context.activeTeam?.name ?? "Team",
       });
 
-      footer = (
-        <PrimaryFooterButton disabled label={readyFooterLabel} onClick={() => {}} />
-      );
+      footer = <PrimaryFooterButton disabled label={readyFooterLabel} onClick={() => {}} />;
     } else {
       footer = (
         <PrimaryFooterButton
@@ -208,11 +197,7 @@ export function HatMultiplayerView({
         />
       );
     }
-  } else if (
-    session.stage === "turn" &&
-    activeTurn &&
-    payload.showTurnFooter
-  ) {
+  } else if (session.stage === "turn" && activeTurn && payload.showTurnFooter) {
     footer = (
       <MultiplayerSkipCorrectFooter
         busy={busy}
@@ -282,19 +267,13 @@ export function HatMultiplayerView({
       <BetweenTurnsLayout
         banner={<ThatsTheLastTurnCard />}
         lastTurnCard={
-          session.lastTurnSummary ? (
-            <HatLastTurnCard summary={session.lastTurnSummary} />
-          ) : null
+          session.lastTurnSummary ? <HatLastTurnCard summary={session.lastTurnSummary} /> : null
         }
-        nextSteps={
-          <ReadyNextStepsCard primaryText={FINAL_TURN_RECAP_NEXT_STEPS} />
-        }
+        nextSteps={<ReadyNextStepsCard primaryText={FINAL_TURN_RECAP_NEXT_STEPS} />}
       />
     );
   } else if (session.stage === "results") {
-    body = (
-      <HatFinalResultsSection session={session} viewerPlayerId={viewerPlayerId} />
-    );
+    body = <HatFinalResultsSection session={session} viewerPlayerId={viewerPlayerId} />;
   }
 
   return (
@@ -358,9 +337,7 @@ function HatReadyMultiplayerBody({
 
   const viewerTeamId = session.players.find((player) => player.id === viewerPlayerId)?.teamId;
   const nextTeamId = context.activeTeamId;
-  const viewerOnNextTeam = Boolean(
-    viewerTeamId && nextTeamId && viewerTeamId === nextTeamId,
-  );
+  const viewerOnNextTeam = Boolean(viewerTeamId && nextTeamId && viewerTeamId === nextTeamId);
   const nextTeamName = context.activeTeam?.name ?? "Team";
 
   const upNextPanel = (
@@ -380,24 +357,22 @@ function HatReadyMultiplayerBody({
   if (role === "describer") {
     nextStepsPrimary = (
       <>
-        It&apos;s your turn. When you&apos;re ready, tap <strong>Start turn</strong> in the
-        footer.
+        It&apos;s your turn. When you&apos;re ready, tap <strong>Start turn</strong> in the footer.
       </>
     );
   } else if (viewerOnNextTeam) {
     nextStepsPrimary = (
       <>
         Your team is up now. Get ready to guess when{" "}
-        <span className="font-semibold text-foreground">{context.activeDescriberName}</span>{" "}
-        starts the turn.
+        <span className="font-semibold text-foreground">{context.activeDescriberName}</span> starts
+        the turn.
       </>
     );
   } else {
     nextStepsPrimary = (
       <>
-        <span className="font-semibold text-foreground">{nextTeamName}</span> is up next.
-        Waiting for{" "}
-        <span className="font-semibold text-foreground">{context.activeDescriberName}</span> to
+        <span className="font-semibold text-foreground">{nextTeamName}</span> is up next. Waiting
+        for <span className="font-semibold text-foreground">{context.activeDescriberName}</span> to
         start the turn.
       </>
     );
@@ -406,9 +381,7 @@ function HatReadyMultiplayerBody({
   return (
     <BetweenTurnsLayout
       heading={upNextPanel}
-      lastTurnCard={
-        previousTurn ? <HatLastTurnCard summary={previousTurn} /> : null
-      }
+      lastTurnCard={previousTurn ? <HatLastTurnCard summary={previousTurn} /> : null}
       nextSteps={<ReadyNextStepsCard primaryText={nextStepsPrimary} />}
       progressCard={
         <ReadyProgressCard label="Phase">
@@ -451,72 +424,30 @@ function HatTurnMultiplayerBody({
   const phase = getHatGamePhaseMeta(session.phaseNumber);
   const activeTurn = session.activeTurn!;
 
-  const currentClue =
-    activeTurn.clueQueue[activeTurn.queueIndex]?.text ?? "Loading";
-
   if (payload.role === "describer") {
     return (
-      <section className="flex flex-1 flex-col gap-4 pb-4">
-        <HatPhaseBanner
-          instruction={phase.instruction}
-          phaseName={phase.name}
-          phaseNumber={session.phaseNumber}
-        />
+      <HatActiveTurnPanel
+        onReturnSkipped={async (poolIndex) => {
+          if (!payload.canReturnSkipped || busy) {
+            return;
+          }
 
-        <GamePanel
-          subtitle={`${context.activeDescriberName} is presenting`}
-          title={`${context.activeTeam?.name ?? "Team"} guessing`}
-        >
-          <TurnPlayHighlight>{currentClue}</TurnPlayHighlight>
-          <div className="grid grid-cols-2 gap-3">
-            <Metric
-              className="col-span-2"
-              label="Time left"
-              value={formatCountdown(secondsLeft)}
-            />
-            <Metric label="Score" value={String(activeTurn.score)} />
-            <Metric
-              label="Skipped waiting"
-              value={String(activeTurn.skippedClues.length)}
-            />
-          </div>
-        {activeTurn.skippedClues.length ? (
-          <div className="rounded-lg border border-dashed border-border p-3">
-            <p className="mb-2 text-typ-ui font-semibold">Skipped famous figures</p>
-            <p className="mb-3 text-typ-ui text-muted-foreground">
-              Pick a waiting word to return to it now.
-            </p>
-            <div className="grid gap-2">
-              {activeTurn.skippedClues.map((clue) => (
-                <FooterOutlineIconTextButton
-                  key={clue.poolIndex}
-                  icon={<span aria-hidden="true">↶</span>}
-                  label={clue.text}
-                  onClick={async () => {
-                    if (!payload.canReturnSkipped || busy) {
-                      return;
-                    }
+          setBusy(true);
+          const ack = await emitWithAck("hat:returnSkipped", {
+            poolIndex,
+          });
 
-                    setBusy(true);
-                    const ack = await emitWithAck("hat:returnSkipped", {
-                      poolIndex: clue.poolIndex,
-                    });
+          if (ack?.ok === false) {
+            setError(ack.error ?? "");
+          } else {
+            playSoundCue("return-skipped");
+          }
 
-                    if (ack?.ok === false) {
-                      setError(ack.error ?? "");
-                    } else {
-                      playSoundCue("return-skipped");
-                    }
-
-                    setBusy(false);
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        ) : null}
-        </GamePanel>
-      </section>
+          setBusy(false);
+        }}
+        secondsRemaining={secondsLeft}
+        session={session}
+      />
     );
   }
 
@@ -532,8 +463,7 @@ function HatTurnMultiplayerBody({
         <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
           <p className="text-typ-panel-title font-semibold">Guess with your team</p>
           <p className="mt-2 text-typ-ui-snug text-muted-foreground">
-            You do not see the secret name. Listen to your describer and shout guesses
-            together.
+            You do not see the secret name. Listen to your describer and shout guesses together.
           </p>
           <p className="mt-4 font-mono text-typ-display text-foreground">••••••</p>
         </div>
@@ -594,11 +524,7 @@ function HatSpectatorTurnSnapshotCard({
       <div className="mt-3 grid grid-cols-2 gap-3">
         <Metric label="Time left" value={formatCountdown(secondsLeft)} />
         <Metric label="Turn score" value={String(activeTurn.score)} />
-        <Metric
-          className="col-span-2"
-          label="Describer"
-          value={context.activeDescriberName}
-        />
+        <Metric className="col-span-2" label="Describer" value={context.activeDescriberName} />
       </div>
       <div className="mt-4 border-t border-border pt-4">
         <p className="text-typ-ui font-semibold text-foreground">Standings</p>
