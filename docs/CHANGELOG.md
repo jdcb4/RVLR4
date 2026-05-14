@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.3 - 2026-05-14
+
+- **Refactor (Imposter controller):** Extracted setup validation and fresh
+  reveal-round creation into `imposterRoundFlow`. The singleplayer controller
+  now uses one `startRevealRound` path for both first-round start and replay,
+  removing the Fallow clone family in `useImposterSingleplayerApp`.
+- **Tests:** Added pure coverage for Imposter snapshot validation and reveal
+  round creation.
+
 ## 0.17.2 - 2026-05-14
 
 - **Refactor (Hat active turns):** Extracted shared `HatActiveTurnPanel` for the
