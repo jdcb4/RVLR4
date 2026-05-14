@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.5 - 2026-05-14
+
+- **Refactor (Who What Where singleplayer):** Split footer selection and active
+  screen rendering out of `WhoWhatWhereSingleplayerApp` into
+  `WhoWhatWhereSingleplayerChrome`, leaving the app component focused on shell,
+  header, info overlay, and controller wiring.
+- **Tests:** Added landing-footer coverage for the moved saved-game discard and
+  fresh-start actions.
+
 ## 0.17.4 - 2026-05-14
 
 - **Refactor (multiplayer entry):** Extracted shared room-entry response parsing
