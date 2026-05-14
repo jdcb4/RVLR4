@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.12 - 2026-05-15
+
+- **Refactor (multiplayer lobby):** Split the shared lobby shell into
+  extracted invite/share, team roster, and game-specific setup sections.
+  `RoomLobbyView` now focuses on lobby page composition and ready/start wiring.
+- **Tests:** Added focused lobby team coverage for captain team renaming and
+  host player reassignment through the team picker dialog.
+
 ## 0.17.11 - 2026-05-15
 
 - **Refactor (Who What Where multiplayer):** Split
