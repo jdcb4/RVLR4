@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.6 - 2026-05-14
+
+- **Refactor (multiplayer lobby):** Extracted lobby rendering, QR invite dialog,
+  ready footer, team roster controls, and per-game lobby setup panels from
+  `RoomPage` into `RoomLobbyView`. `RoomPage` now keeps connection state,
+  banners, room binding, and phase routing.
+- **Tests:** Added `RoomLobbyView` coverage for non-host ready toggling and
+  host start-game wiring.
+
 ## 0.17.5 - 2026-05-14
 
 - **Refactor (Who What Where singleplayer):** Split footer selection and active
