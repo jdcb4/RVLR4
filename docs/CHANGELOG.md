@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.9 - 2026-05-15
+
+- **Refactor (Hat multiplayer):** Split `HatMultiplayerView` into a shell,
+  cue/timer hook, extracted body routing, and extracted footer routing. The
+  main view now focuses on composition and socket-bound header action wiring.
+- **Tests:** Added Hat multiplayer coverage for the extracted ready footer
+  start-turn dispatch and passive guesser turn snapshot rendering.
+
 ## 0.17.8 - 2026-05-14
 
 - **Refactor (shared game UI):** Extracted `TeamStandingsList` and reused it in
