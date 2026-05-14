@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.7 - 2026-05-14
+
+- **Refactor (Imposter multiplayer):** Split `ImposterMultiplayerView` into a
+  thin shell plus dedicated body, footer, and reveal-progress primitives. The
+  original view now owns only tone cues, socket dispatch, and shell
+  composition.
+- **Tests:** Added Imposter multiplayer coverage for parallel reveal progress,
+  private reveal rendering, revealed-word rendering, and footer continuation
+  dispatch.
+
 ## 0.17.6 - 2026-05-14
 
 - **Refactor (multiplayer lobby):** Extracted lobby rendering, QR invite dialog,
