@@ -1,11 +1,11 @@
 import type { Dispatch, SetStateAction } from "react";
 
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
-import { getHatGameContext } from "@/domain/hat-game/engine";
-import type { HatGameSession } from "@/domain/hat-game/types";
+import { canQueueSkipped, getActiveContext } from "@/domain/whowhatwhere/game";
+import type { MatchState } from "@/domain/whowhatwhere/types";
 import { MultiplayerEndGameActions } from "@/features/multiplayer/MultiplayerGameShell";
 import { MultiplayerSkipCorrectFooter } from "@/features/multiplayer/MultiplayerSkipCorrectFooter";
-import type { HatSyncDto } from "@/multiplayer/roomTypes";
+import type { WhoWhatWherePeerRole } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
 
 type EmitWithAck = (
@@ -19,40 +19,40 @@ type ReplaySync = {
   readonly cancelledByDisconnect: boolean;
 };
 
-export function HatMultiplayerFooter({
-  session,
-  payload,
+export function WhoWhatWhereMultiplayerFooter({
+  match,
+  role,
   viewerPlayerId,
   isHost,
   replaySync,
   busy,
   showScoresPane,
+  showTurnFooter,
   emitWithAck,
   setBusy,
   setError,
   onShowScoresPane,
 }: {
-  readonly session: HatGameSession;
-  readonly payload: HatSyncDto;
+  readonly match: MatchState;
+  readonly role: WhoWhatWherePeerRole;
   readonly viewerPlayerId: string;
   readonly isHost: boolean;
   readonly replaySync: ReplaySync;
   readonly busy: boolean;
   readonly showScoresPane: boolean;
+  readonly showTurnFooter: boolean;
   readonly emitWithAck: EmitWithAck;
   readonly setBusy: Dispatch<SetStateAction<boolean>>;
   readonly setError: (message: string) => void;
   readonly onShowScoresPane: () => void;
 }) {
-  const activeTurn = session.activeTurn;
-
-  if (session.stage === "ready") {
+  if (match.stage === "ready") {
     return (
       <ReadyFooter
         busy={busy}
         emitWithAck={emitWithAck}
-        role={payload.role}
-        session={session}
+        match={match}
+        role={role}
         setBusy={setBusy}
         setError={setError}
         viewerPlayerId={viewerPlayerId}
@@ -60,21 +60,21 @@ export function HatMultiplayerFooter({
     );
   }
 
-  if (session.stage === "turn" && activeTurn && payload.showTurnFooter) {
+  if (match.stage === "turn" && match.activeTurn && showTurnFooter) {
     return (
       <MultiplayerSkipCorrectFooter
         busy={busy}
-        correctEvent="hat:correct"
+        correctEvent="www:correct"
         emitWithAck={emitWithAck}
         setBusy={setBusy}
         setError={setError}
-        skipDisabled={(activeTurn.skipsRemaining ?? 0) <= 0}
-        skipEvent="hat:skip"
+        skipDisabled={!canQueueSkipped(match.activeTurn)}
+        skipEvent="www:skip"
       />
     );
   }
 
-  if (session.stage === "finalSummary") {
+  if (match.stage === "finalSummary") {
     return showScoresPane ? (
       <MultiplayerEndGameActions
         emitWithAck={emitWithAck}
@@ -87,7 +87,7 @@ export function HatMultiplayerFooter({
     );
   }
 
-  if (session.stage === "results") {
+  if (match.stage === "results") {
     return (
       <MultiplayerEndGameActions
         emitWithAck={emitWithAck}
@@ -102,7 +102,7 @@ export function HatMultiplayerFooter({
 }
 
 function ReadyFooter({
-  session,
+  match,
   role,
   viewerPlayerId,
   busy,
@@ -110,8 +110,8 @@ function ReadyFooter({
   setBusy,
   setError,
 }: {
-  readonly session: HatGameSession;
-  readonly role: HatSyncDto["role"];
+  readonly match: MatchState;
+  readonly role: WhoWhatWherePeerRole;
   readonly viewerPlayerId: string;
   readonly busy: boolean;
   readonly emitWithAck: EmitWithAck;
@@ -122,7 +122,7 @@ function ReadyFooter({
     return (
       <PrimaryFooterButton
         disabled
-        label={readyFooterLabel(session, viewerPlayerId)}
+        label={readyFooterLabel(match, viewerPlayerId)}
         onClick={() => {}}
       />
     );
@@ -131,10 +131,10 @@ function ReadyFooter({
   return (
     <PrimaryFooterButton
       disabled={busy}
-      label={busy ? "Loading..." : "Start turn"}
+      label={busy ? "Loading words" : "Start turn"}
       onClick={async () => {
         setBusy(true);
-        const ack = await emitWithAck("hat:startTurn");
+        const ack = await emitWithAck("www:startTurn");
 
         if (ack?.ok === false) {
           setError(ack.error ?? "");
@@ -146,15 +146,15 @@ function ReadyFooter({
   );
 }
 
-function readyFooterLabel(session: HatGameSession, viewerPlayerId: string) {
-  const context = getHatGameContext(session);
-  const viewerTeamId = session.players.find((player) => player.id === viewerPlayerId)?.teamId;
+function readyFooterLabel(match: MatchState, viewerPlayerId: string) {
+  const waitingContext = getActiveContext(match);
+  const viewerTeamId = match.players.find((player) => player.id === viewerPlayerId)?.teamId;
 
   return multiplayerUpNextHeadingTitle({
     viewerPlayerId,
     viewerTeamId,
-    nextTeamId: context.activeTeamId,
-    nextDescriberPlayerId: context.activeDescriberId,
-    nextTeamDisplayName: context.activeTeam?.name ?? "Team",
+    nextTeamId: waitingContext.team.id,
+    nextDescriberPlayerId: waitingContext.describer.id,
+    nextTeamDisplayName: waitingContext.team.name,
   });
 }

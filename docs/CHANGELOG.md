@@ -2,6 +2,18 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.11 - 2026-05-15
+
+- **Refactor (Who What Where multiplayer):** Split
+  `WhoWhatWhereMultiplayerView` into a shell, cue hook, extracted body routing,
+  and extracted footer routing. The main view now focuses on socket-bound
+  header action wiring and shell composition.
+- **Refactor (shared multiplayer endgame):** Removed the duplicate Hat
+  multiplayer end-game footer wrapper now that the shared
+  `MultiplayerEndGameActions` primitive is used directly.
+- **Tests:** Added Who What Where multiplayer coverage for the extracted ready
+  footer start-turn dispatch and passive guesser turn snapshot rendering.
+
 ## 0.17.10 - 2026-05-15
 
 - **Refactor (RoomPage):** Extracted room connection banners, active-game
