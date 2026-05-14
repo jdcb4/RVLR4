@@ -7,7 +7,9 @@ import simpleImportSort from "eslint-plugin-simple-import-sort";
 import prettier from "eslint-config-prettier";
 
 export default tseslint.config(
-  { ignores: ["dist", "build", "coverage", ".turbo", ".wrangler", "**/*.generated.*"] },
+  {
+    ignores: ["dist", "build", "coverage", ".claude", ".turbo", ".wrangler", "**/*.generated.*"],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],

@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.1 - 2026-05-14
+
+- **Refactor (server hygiene):** Removed unused public exports from
+  `server/hatClues.ts`, `server/socketHandle.ts`, and `server/roomStore.ts`.
+  Fallow dead-code findings are now clean.
+- **Refactor (room store):** Centralized repeated team-counting and active
+  match cleanup paths used by joins, lobby readiness, archive, and replay reset.
+  Added focused `roomStore` tests for replay reset and team lobby readiness.
+- **Tooling:** Ignored local `.claude/` workspace metadata in git, ESLint, and
+  Vitest so deterministic checks do not scan scratch worktrees.
+
 ## 0.17.0 - 2026-05-14
 
 - **Landing (both modes):** Reduced clutter. The top now reads just
@@ -22,7 +33,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
   `src/config/env.ts`, and the `mode === "github-pages"` branch in
   `vite.config.ts`. Updated `docs/DEPLOYMENT.md`, `docs/PROJECT_INDEX.md`,
   `docs/VERIFICATION.md`, and `docs/ARCHITECTURE.md` to reflect that Docker
-  + Railway are the supported deploy targets.
+  - Railway are the supported deploy targets.
 
 ## 0.16.17 - 2026-05-12
 
@@ -33,7 +44,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
   - `CLIENT_ORIGIN` set → strict allow-list (unchanged).
   - `NODE_ENV=production` with no `CLIENT_ORIGIN` → allow-any CORS with a
     loud warning at boot (`[server] CLIENT_ORIGIN is not set — accepting
-    all browser origins...`). The security signal stays visible in logs.
+all browser origins...`). The security signal stays visible in logs.
   - Development without `CLIENT_ORIGIN` → fallback to `http://localhost:5173`.
 - **Tests:** `server/env.test.ts` rewritten — the two "refuses to load"
   cases are replaced with "loads with a warning at boot" assertions.
@@ -73,7 +84,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 
 - **Imposter (Pass-and-Play):** Reveal screen for non-imposters had the
   wrong subtitle copy ("Give a clue that proves you know the word…"),
-  describing the *clue* phase. Replaced with "This is the secret word.
+  describing the _clue_ phase. Replaced with "This is the secret word.
   Make sure you remember it." so the prompt matches the moment.
 - **Imposter (Pass-and-Play):** Added a `ReadyNextStepsCard` under the
   role/word reveal: "Once you have memorised this, hit the button below
@@ -280,7 +291,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 - **Docs / tooling:** New `docs/NAMING.md` documents the canonical
   game-token, mode-modifier (`Multiplayer*` / `Singleplayer*`), and verb
   conventions. Recorded as an ADR in `docs/DECISIONS.md`. `pnpm run
-  audit:names` re-walks every export and emits a JSON-Lines inventory for
+audit:names` re-walks every export and emits a JSON-Lines inventory for
   re-audit. Minimal `@typescript-eslint/naming-convention` rule enforces
   PascalCase on type-like declarations; project-specific patterns are
   enforced by the audit script, not the linter.

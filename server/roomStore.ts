@@ -34,7 +34,7 @@ export type RoomPlayer = {
   optedOutOfResume: boolean;
 };
 
-export type TeamGameKind = Exclude<GameKind, "imposter">;
+type TeamGameKind = Exclude<GameKind, "imposter">;
 
 export type Room = {
   readonly code: string;
@@ -91,6 +91,29 @@ function initialTeamNames(teamCount: number): string[] {
   const names = setups.map((team) => team.name);
 
   return shuffleWithRng(names, Math.random);
+}
+
+function countTeamPlayers(room: Room): number[] {
+  const counts = Array.from({ length: room.teamCount }, () => 0);
+
+  for (const player of room.players.values()) {
+    if (player.teamIndex !== null && player.teamIndex >= 0 && player.teamIndex < counts.length) {
+      counts[player.teamIndex] += 1;
+    }
+  }
+
+  return counts;
+}
+
+function clearActiveMatchState(room: Room): void {
+  room.wwwMatch = undefined;
+  room.hatSession = undefined;
+  room.imposterSnapshot = undefined;
+  room.wwwReadyReveal = undefined;
+  room.hatReadyReveal = undefined;
+  room.replayOfferActive = undefined;
+  room.replayAcceptedPlayerIds = undefined;
+  room.replayCancelledByDisconnect = undefined;
 }
 
 export class RoomStore {
@@ -167,10 +190,7 @@ export class RoomStore {
     room.players.set(hostId, hostPlayer);
 
     if (args.gameKind === "hat" && room.hatClueDrafts) {
-      room.hatClueDrafts[hostId] = Array.from(
-        { length: GAME_DEFAULTS.cluesPerPlayer },
-        () => "",
-      );
+      room.hatClueDrafts[hostId] = Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "");
     }
 
     if (args.gameKind === "imposter") {
@@ -182,10 +202,7 @@ export class RoomStore {
     return { room, hostPlayer };
   }
 
-  joinRoom(args: {
-    code: string;
-    name: string;
-  }): { room: Room; player: RoomPlayer } {
+  joinRoom(args: { code: string; name: string }): { room: Room; player: RoomPlayer } {
     const code = normalizeRoomCode(args.code);
     const room = this.roomsByCode.get(code);
 
@@ -219,9 +236,7 @@ export class RoomStore {
 
       for (const count of nextCounts) {
         if (count > MAX_PLAYERS_PER_TEAM) {
-          throw new Error(
-            `Teams can have at most ${MAX_PLAYERS_PER_TEAM} players for this game.`,
-          );
+          throw new Error(`Teams can have at most ${MAX_PLAYERS_PER_TEAM} players for this game.`);
         }
       }
     }
@@ -230,10 +245,7 @@ export class RoomStore {
 
     if (room.gameKind === "hat") {
       room.hatClueDrafts ??= {};
-      room.hatClueDrafts[playerId] = Array.from(
-        { length: GAME_DEFAULTS.cluesPerPlayer },
-        () => "",
-      );
+      room.hatClueDrafts[playerId] = Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "");
     }
 
     if (room.gameKind === "imposter") {
@@ -258,11 +270,7 @@ export class RoomStore {
     }
   }
 
-  authenticate(args: {
-    code: string;
-    playerId: string;
-    secret: string;
-  }): RoomPlayer | null {
+  authenticate(args: { code: string; playerId: string; secret: string }): RoomPlayer | null {
     const room = this.getRoom(args.code);
 
     if (!room) {
@@ -321,28 +329,11 @@ export function computeResumeEligible(room: Room): boolean {
  */
 export function archiveRoomAfterAllPlayersOptedOut(room: Room): void {
   room.phase = "ended";
-  room.wwwMatch = undefined;
-  room.hatSession = undefined;
-  room.imposterSnapshot = undefined;
-  room.wwwReadyReveal = undefined;
-  room.hatReadyReveal = undefined;
-  room.replayOfferActive = undefined;
-  room.replayAcceptedPlayerIds = undefined;
-  room.replayCancelledByDisconnect = undefined;
+  clearActiveMatchState(room);
 }
 
 function pickSmallestTeamIndex(room: Room): number {
-  const counts = Array.from({ length: room.teamCount }, () => 0);
-
-  for (const player of room.players.values()) {
-    if (
-      player.teamIndex !== null &&
-      player.teamIndex >= 0 &&
-      player.teamIndex < counts.length
-    ) {
-      counts[player.teamIndex] += 1;
-    }
-  }
+  const counts = countTeamPlayers(room);
 
   let bestIndex = 0;
   let bestCount = counts[0] ?? 0;
@@ -360,17 +351,7 @@ function pickSmallestTeamIndex(room: Room): number {
 }
 
 function previewCountsAfterJoin(room: Room, newPlayerTeamIndex: number): number[] {
-  const counts = Array.from({ length: room.teamCount }, () => 0);
-
-  for (const player of room.players.values()) {
-    if (
-      player.teamIndex !== null &&
-      player.teamIndex >= 0 &&
-      player.teamIndex < counts.length
-    ) {
-      counts[player.teamIndex] += 1;
-    }
-  }
+  const counts = countTeamPlayers(room);
 
   if (newPlayerTeamIndex >= 0 && newPlayerTeamIndex < counts.length) {
     counts[newPlayerTeamIndex] += 1;
@@ -387,22 +368,12 @@ export function clampImposterLobbyCounts(room: Room): void {
 
   room.imposterPlayerCount = room.players.size;
 
-  room.imposterImposterCount = clampImposterCount(
-    room.players.size,
-    room.imposterImposterCount,
-  );
+  room.imposterImposterCount = clampImposterCount(room.players.size, room.imposterImposterCount);
 }
 
 export function resetLobbyAfterReplay(room: Room): void {
   room.phase = "lobby";
-  room.wwwMatch = undefined;
-  room.hatSession = undefined;
-  room.imposterSnapshot = undefined;
-  room.wwwReadyReveal = undefined;
-  room.hatReadyReveal = undefined;
-  room.replayOfferActive = undefined;
-  room.replayAcceptedPlayerIds = undefined;
-  room.replayCancelledByDisconnect = undefined;
+  clearActiveMatchState(room);
 
   for (const player of room.players.values()) {
     player.ready = false;
@@ -420,17 +391,7 @@ export function assertTeamLobbyReady(room: Room): void {
     return;
   }
 
-  const counts = Array.from({ length: room.teamCount }, () => 0);
-
-  for (const player of room.players.values()) {
-    if (
-      player.teamIndex !== null &&
-      player.teamIndex >= 0 &&
-      player.teamIndex < counts.length
-    ) {
-      counts[player.teamIndex] += 1;
-    }
-  }
+  const counts = countTeamPlayers(room);
 
   for (let index = 0; index < counts.length; index += 1) {
     const count = counts[index] ?? 0;
