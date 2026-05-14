@@ -3,65 +3,16 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
-import { createDefaultSettings } from "@/domain/whowhatwhere/setup";
 import { RoomLobbyView } from "@/features/multiplayer/RoomLobbyView";
-import type { LobbyDto, RoomSyncPayload } from "@/multiplayer/roomTypes";
+import { buildLobby, buildRoomSync } from "@/features/multiplayer/testRoomSync";
+import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
 
 type AckResult = { ok?: boolean; error?: string } | undefined;
 
-const lobby: LobbyDto = {
-  teamCount: 0,
-  teamNames: [],
-  wwwSettings: createDefaultSettings(),
-  hatTurnDurationSeconds: 60,
-  hatSkipsPerTurn: 3,
-  imposterPlayerCount: 2,
-  imposterImposterCount: 1,
-  players: [
-    {
-      id: "host",
-      name: "Host",
-      isHost: true,
-      teamIndex: null,
-      ready: true,
-      disconnectedAt: null,
-    },
-    {
-      id: "me",
-      name: "Me",
-      isHost: false,
-      teamIndex: null,
-      ready: false,
-      disconnectedAt: null,
-    },
-  ],
-  hatClueDrafts: {},
-};
-
-function buildSync(overrides: Partial<RoomSyncPayload> = {}): RoomSyncPayload {
-  return {
-    code: "ABC123",
-    gameKind: "imposter",
-    phase: "lobby",
-    you: {
-      playerId: "me",
-      isHost: false,
-    },
-    lobby,
-    www: null,
-    hat: null,
-    imposter: null,
-    replay: {
-      offerActive: false,
-      acceptedIds: [],
-      cancelledByDisconnect: false,
-    },
-    ...overrides,
-  };
-}
+const lobby = buildLobby();
 
 function renderLobbyView({
-  sync = buildSync(),
+  sync = buildRoomSync(),
   emitWithAck = vi.fn(async () => ({ ok: true })),
   onStartGame = vi.fn(async () => undefined),
 }: {
@@ -110,7 +61,7 @@ describe("RoomLobbyView", () => {
     const onStartGame = vi.fn(async () => undefined);
 
     renderLobbyView({
-      sync: buildSync({
+      sync: buildRoomSync({
         you: {
           playerId: "host",
           isHost: true,

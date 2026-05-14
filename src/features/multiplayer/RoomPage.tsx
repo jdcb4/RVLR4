@@ -1,24 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameShell } from "@/components/GameShell";
 import { HatMultiplayerView } from "@/features/hat-game/multiplayer/HatMultiplayerView";
 import { ImposterMultiplayerView } from "@/features/imposter/multiplayer/ImposterMultiplayerView";
+import { RoomConnectionBanners } from "@/features/multiplayer/RoomConnectionBanners";
 import { RoomLobbyView } from "@/features/multiplayer/RoomLobbyView";
+import { useActiveRoomBookmark } from "@/features/multiplayer/useActiveRoomBookmark";
+import { useRoomInviteControls } from "@/features/multiplayer/useRoomInviteControls";
 import { WhoWhatWhereMultiplayerView } from "@/features/whowhatwhere/multiplayer/WhoWhatWhereMultiplayerView";
-import { clearActiveGameBookmark, writeActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
+import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
 import { useRoomChannel } from "@/multiplayer/useRoomChannel";
 
-function shareUrl(code: string) {
-  const url = new URL(window.location.origin);
-
-  url.pathname = "/name";
-  url.searchParams.set("intent", "join");
-  url.searchParams.set("code", code);
-
-  return url.toString();
-}
+type EmitWithAck = (
+  event: string,
+  body?: unknown,
+) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 export function RoomPage() {
   const navigate = useNavigate();
@@ -28,168 +25,54 @@ export function RoomPage() {
     code,
     Boolean(code),
   );
-  const playingBookmarkCommittedRef = useRef(false);
+  const invite = useRoomInviteControls({ code, emitWithAck, sync });
 
-  useEffect(() => {
-    if (!sync) {
-      return undefined;
-    }
+  useActiveRoomBookmark(sync);
 
-    if (sync.phase === "lobby" || sync.phase === "ended") {
-      playingBookmarkCommittedRef.current = false;
-      clearActiveGameBookmark();
-
-      return undefined;
-    }
-
-    if (sync.phase === "playing" && !playingBookmarkCommittedRef.current) {
-      playingBookmarkCommittedRef.current = true;
-      writeActiveGameBookmark({
-        code: sync.code,
-        gameKind: sync.gameKind,
-        startedAtIso: new Date().toISOString(),
-      });
-    }
-
-    return undefined;
-  }, [sync]);
-  const [startError, setStartError] = useState<string | null>(null);
-  const [qrToastOpen, setQrToastOpen] = useState(false);
-  const [copiedToast, setCopiedToast] = useState(false);
-  const copyToastTimer = useRef<number | null>(null);
-
-  const joinLink = useMemo(() => (code ? shareUrl(code) : ""), [code]);
-
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(joinLink);
-      setCopiedToast(true);
-
-      if (copyToastTimer.current) {
-        window.clearTimeout(copyToastTimer.current);
-      }
-
-      copyToastTimer.current = window.setTimeout(() => {
-        setCopiedToast(false);
-      }, 2200);
-    } catch {
-      setStartError("Clipboard blocked — copy manually.");
-    }
-  };
-
-  /**
-   * Native share-sheet (iOS / Android / Edge desktop). Fires the OS share
-   * UI so the host can send the join link via Messages, WhatsApp, etc.
-   * Browsers that don't expose `navigator.share` fall back to copying the
-   * link to the clipboard so the button is never inert.
-   */
-  const canNativeShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
-
-  const handleShareLink = async () => {
-    if (!joinLink) {
-      return;
-    }
-
-    if (canNativeShare) {
-      try {
-        await navigator.share({
-          title: "Join my RVLRY room",
-          text: `Join my game on RVLRY — code ${sync?.code ?? ""}`,
-          url: joinLink,
-        });
-      } catch {
-        // User cancelled or share unavailable mid-flight — silent.
-      }
-      return;
-    }
-
-    await handleCopyLink();
-  };
-
-  const handleStartGame = async () => {
-    setStartError(null);
-    const ack = await emitWithAck("lobby:startGame");
-
-    if (ack?.ok === false) {
-      setStartError(ack.error ?? "Unable to start yet.");
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (copyToastTimer.current) {
-        window.clearTimeout(copyToastTimer.current);
-      }
-    };
-  }, []);
-
-  // Delay the "Reconnecting..." banner so a transient blip during a real
-  // navigation/hot-reload does not flash a misleading status. Two seconds
-  // matches the eye's threshold for "this is taking a while" without being
-  // long enough to hide a real outage.
-  const [showOfflineBanner, setShowOfflineBanner] = useState(false);
-
-  useEffect(() => {
-    if (connected) {
-      setShowOfflineBanner(false);
-      return undefined;
-    }
-
-    const timer = window.setTimeout(() => {
-      setShowOfflineBanner(true);
-    }, 2000);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [connected]);
-
-  // Banner priority: bindError (fatal — full screen elsewhere) > shutdown
-  // (server is about to disconnect) > offline (transient drop). bindError
-  // doesn't render here because the `if (bindError)` branch below renders its
-  // own full-page screen with the same message — shutdown/offline still get
-  // wrapped by `wrapWithBanners`.
-  const shutdownBanner = shuttingDown ? (
-    <div
-      aria-live="polite"
-      className="fixed inset-x-0 top-0 z-50 bg-primary px-4 py-2 text-center text-typ-ui text-primary-foreground shadow-md"
-      role="status"
-    >
-      The server is restarting — keep this tab open, the room will reopen in a moment.
-    </div>
-  ) : null;
-
-  const offlineBanner =
-    !shuttingDown && showOfflineBanner ? (
-      <div
-        aria-live="polite"
-        className="fixed inset-x-0 top-0 z-50 bg-muted px-4 py-2 text-center text-typ-ui text-muted-foreground shadow-md"
-        role="status"
-      >
-        Reconnecting…
-      </div>
-    ) : null;
-
-  const wrapWithBanners = (body: React.ReactNode) => (
-    <>
-      {shutdownBanner}
-      {offlineBanner}
-      {body}
-    </>
+  return (
+    <RoomConnectionBanners connected={connected} shuttingDown={shuttingDown}>
+      <RoomPageContent
+        bindError={bindError}
+        code={code}
+        connected={connected}
+        emitWithAck={emitWithAck}
+        invite={invite}
+        sync={sync}
+        onBackHome={() => navigate("/")}
+      />
+    </RoomConnectionBanners>
   );
+}
 
+export function RoomPageContent({
+  code,
+  bindError,
+  sync,
+  connected,
+  invite,
+  emitWithAck,
+  onBackHome,
+}: {
+  readonly code: string | undefined;
+  readonly bindError: string | null;
+  readonly sync: RoomSyncPayload | null;
+  readonly connected: boolean;
+  readonly invite: ReturnType<typeof useRoomInviteControls>;
+  readonly emitWithAck: EmitWithAck;
+  readonly onBackHome: () => void;
+}) {
   if (!code) {
-    return wrapWithBanners(
+    return (
       <GameShell footer={null} title="Room">
         <p className="text-typ-body-relaxed text-muted-foreground">Missing room code.</p>
-      </GameShell>,
+      </GameShell>
     );
   }
 
   if (bindError) {
-    return wrapWithBanners(
+    return (
       <GameShell
-        footer={<PrimaryFooterButton label="Back to home" onClick={() => navigate("/")} />}
+        footer={<PrimaryFooterButton label="Back to home" onClick={onBackHome} />}
         title="Reconnect"
       >
         <p className="text-typ-body-relaxed text-destructive">{bindError}</p>
@@ -197,94 +80,132 @@ export function RoomPage() {
           If you just left, ask the host for the code and join again with the same display name if
           the room is still in the lobby.
         </p>
-      </GameShell>,
+      </GameShell>
     );
   }
 
   if (!sync) {
-    return wrapWithBanners(
+    return (
       <GameShell footer={null} title="Connecting">
         <p className="text-typ-body-relaxed text-muted-foreground">
           {connected ? "Syncing your table..." : "Connecting to the host..."}
         </p>
-      </GameShell>,
+      </GameShell>
     );
   }
 
-  if (sync.phase === "playing" && sync.gameKind === "hat" && sync.hat) {
-    return wrapWithBanners(
+  return (
+    <SyncedRoomContent
+      connected={connected}
+      emitWithAck={emitWithAck}
+      invite={invite}
+      sync={sync}
+      onBackHome={onBackHome}
+    />
+  );
+}
+
+export function SyncedRoomContent({
+  sync,
+  connected,
+  invite,
+  emitWithAck,
+  onBackHome,
+}: {
+  readonly sync: RoomSyncPayload;
+  readonly connected: boolean;
+  readonly invite: ReturnType<typeof useRoomInviteControls>;
+  readonly emitWithAck: EmitWithAck;
+  readonly onBackHome: () => void;
+}) {
+  if (sync.phase === "ended") {
+    return (
+      <GameShell
+        footer={<PrimaryFooterButton label="Back to home" onClick={onBackHome} />}
+        title="Table closed"
+      >
+        <p className="text-typ-body-relaxed text-muted-foreground">
+          This room is finished - everyone left from the score screen or the match was cleared. You
+          can host or join a new game from the home page.
+        </p>
+      </GameShell>
+    );
+  }
+
+  if (sync.phase === "playing") {
+    return <PlayingRoomView emitWithAck={emitWithAck} sync={sync} />;
+  }
+
+  if (sync.phase === "lobby" && sync.lobby) {
+    return (
+      <RoomLobbyView
+        canNativeShare={invite.canNativeShare}
+        connected={connected}
+        copiedToast={invite.copiedToast}
+        emitWithAck={emitWithAck}
+        joinLink={invite.joinLink}
+        lobby={sync.lobby}
+        qrToastOpen={invite.qrToastOpen}
+        startError={invite.startError}
+        sync={sync}
+        onCloseQrToast={invite.closeQrToast}
+        onCopyLink={invite.copyLink}
+        onOpenQrToast={invite.openQrToast}
+        onShareLink={invite.shareLink}
+        onStartGame={invite.startGame}
+      />
+    );
+  }
+
+  return (
+    <GameShell footer={null} title="Room">
+      <p className="text-typ-ui text-muted-foreground">Waiting for host instructions...</p>
+    </GameShell>
+  );
+}
+
+export function PlayingRoomView({
+  sync,
+  emitWithAck,
+}: {
+  readonly sync: RoomSyncPayload;
+  readonly emitWithAck: EmitWithAck;
+}) {
+  const gameView = {
+    hat: sync.hat ? (
       <HatMultiplayerView
         emitWithAck={emitWithAck}
         isHost={sync.you.isHost}
         payload={sync.hat}
         replaySync={sync.replay}
         viewerPlayerId={sync.you.playerId}
-      />,
-    );
-  }
-
-  if (sync.phase === "playing" && sync.gameKind === "imposter" && sync.imposter) {
-    return wrapWithBanners(
+      />
+    ) : null,
+    imposter: sync.imposter ? (
       <ImposterMultiplayerView
         emitWithAck={emitWithAck}
         isHost={sync.you.isHost}
         payload={sync.imposter}
         replaySync={sync.replay}
         viewerPlayerId={sync.you.playerId}
-      />,
-    );
-  }
-
-  if (sync.phase === "playing" && sync.gameKind === "whowhatwhere" && sync.www) {
-    return wrapWithBanners(
+      />
+    ) : null,
+    whowhatwhere: sync.www ? (
       <WhoWhatWhereMultiplayerView
         emitWithAck={emitWithAck}
         isHost={sync.you.isHost}
         payload={sync.www}
         replaySync={sync.replay}
         viewerPlayerId={sync.you.playerId}
-      />,
-    );
-  }
+      />
+    ) : null,
+  }[sync.gameKind];
 
-  if (sync.phase === "ended") {
-    return wrapWithBanners(
-      <GameShell
-        footer={<PrimaryFooterButton label="Back to home" onClick={() => navigate("/")} />}
-        title="Table closed"
-      >
-        <p className="text-typ-body-relaxed text-muted-foreground">
-          This room is finished — everyone left from the score screen or the match was cleared. You
-          can host or join a new game from the home page.
-        </p>
-      </GameShell>,
-    );
-  }
-
-  if (sync.phase === "lobby" && sync.lobby) {
-    return wrapWithBanners(
-      <RoomLobbyView
-        canNativeShare={canNativeShare}
-        connected={connected}
-        copiedToast={copiedToast}
-        emitWithAck={emitWithAck}
-        joinLink={joinLink}
-        lobby={sync.lobby}
-        qrToastOpen={qrToastOpen}
-        startError={startError}
-        sync={sync}
-        onCloseQrToast={() => setQrToastOpen(false)}
-        onCopyLink={handleCopyLink}
-        onOpenQrToast={() => setQrToastOpen(true)}
-        onShareLink={handleShareLink}
-        onStartGame={handleStartGame}
-      />,
-    );
-  }
-
-  return wrapWithBanners(
-    <GameShell footer={null} title="Room">
-      <p className="text-typ-ui text-muted-foreground">Waiting for host instructions...</p>
-    </GameShell>,
+  return (
+    gameView ?? (
+      <GameShell footer={null} title="Room">
+        <p className="text-typ-ui text-muted-foreground">Waiting for host instructions...</p>
+      </GameShell>
+    )
   );
 }

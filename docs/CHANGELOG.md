@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.10 - 2026-05-15
+
+- **Refactor (RoomPage):** Extracted room connection banners, active-game
+  bookmark effects, invite/share controls, share URL creation, and synced
+  phase rendering out of `RoomPage`.
+- **Tests:** Added room share URL coverage and focused routing coverage for
+  missing-code, ended-room, and missing playing-payload states. Shared
+  multiplayer room sync test fixtures now back both room page and lobby tests.
+
 ## 0.17.9 - 2026-05-15
 
 - **Refactor (Hat multiplayer):** Split `HatMultiplayerView` into a shell,
