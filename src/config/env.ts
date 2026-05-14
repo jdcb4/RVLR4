@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const EnvSchema = z.object({
-  MODE: z.enum(["development", "production", "test", "github-pages"]),
+  MODE: z.enum(["development", "production", "test"]),
   BASE_URL: z.string(),
 });
 

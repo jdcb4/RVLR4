@@ -51,21 +51,6 @@ Optional: set **`MULTIPLAYER_DEBUG=1`** in the container environment to print `[
 
 Because state is **in-memory**, expect rooms to reset when the dyno restarts.
 
-## GitHub Pages
-
-The workflow is `.github/workflows/pages.yml`.
-
-Repository setup (one-time):
-
-1. Push the project to GitHub.
-2. Open `Settings → Pages`.
-3. Set `Build and deployment` source to `GitHub Actions`.
-4. Push to `main` (or run the workflow manually).
-
-The Pages base path is set in `vite.config.ts` and must match the **repository name** in the site URL (case-sensitive), e.g. `/JDPassNPlay/` for `github.com/jdcb4/JDPassNPlay`. If you rename the repo, update `base` and run `pnpm run build:pages` to verify.
-
-Direct visits to client routes (e.g. `/JDPassNPlay/games/hat`) need GitHub to serve `index.html`; the workflow copies `dist/index.html` to `dist/404.html` after build for that fallback.
-
 ## Production env vars
 
 - **`CLIENT_ORIGIN`** — comma-separated allow-list of browser origins
@@ -83,12 +68,6 @@ Direct visits to client routes (e.g. `/JDPassNPlay/games/hat`) need GitHub to se
 
 ```bash
 pnpm run verify
-```
-
-For Pages-specific changes also run:
-
-```bash
-pnpm run build:pages
 ```
 
 For Docker-specific changes also run:

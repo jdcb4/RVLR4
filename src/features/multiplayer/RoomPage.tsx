@@ -16,6 +16,7 @@ import {
   IconCrown,
   IconPencil,
   IconQrCode,
+  IconShare,
   IconX,
 } from "@/components/icons";
 import { TeamCountOptionGroup } from "@/components/setup/TeamCountOptionGroup";
@@ -234,6 +235,36 @@ export function RoomPage() {
     }
   };
 
+  /**
+   * Native share-sheet (iOS / Android / Edge desktop). Fires the OS share
+   * UI so the host can send the join link via Messages, WhatsApp, etc.
+   * Browsers that don't expose `navigator.share` fall back to copying the
+   * link to the clipboard so the button is never inert.
+   */
+  const canNativeShare =
+    typeof navigator !== "undefined" && typeof navigator.share === "function";
+
+  const handleShareLink = async () => {
+    if (!joinLink) {
+      return;
+    }
+
+    if (canNativeShare) {
+      try {
+        await navigator.share({
+          title: "Join my RVLRY room",
+          text: `Join my game on RVLRY — code ${sync?.code ?? ""}`,
+          url: joinLink,
+        });
+      } catch {
+        // User cancelled or share unavailable mid-flight — silent.
+      }
+      return;
+    }
+
+    await handleCopyLink();
+  };
+
   const handleStartGame = async () => {
     setStartError(null);
     const ack = await emitWithAck("lobby:startGame");
@@ -439,6 +470,18 @@ export function RoomPage() {
                     onClick={() => void handleCopyLink()}
                   >
                     <IconClipboard className="size-5" />
+                  </Button>
+                  <Button
+                    aria-label={
+                      canNativeShare
+                        ? "Share invite link"
+                        : "Share invite link (falls back to copy)"
+                    }
+                    size="icon"
+                    variant="outline"
+                    onClick={() => void handleShareLink()}
+                  >
+                    <IconShare className="size-5" />
                   </Button>
                   <Button
                     aria-label="Show QR code"

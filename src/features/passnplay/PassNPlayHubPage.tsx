@@ -41,13 +41,9 @@ export function PassNPlayHubPage() {
     <div className="min-h-dvh bg-background text-foreground">
       <div className="safe-screen mx-auto w-full max-w-md pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
         <header className="py-6 text-center">
-          <p className="font-medium uppercase text-typ-overline text-primary">
-            RVLRY: JD's Parlour Game Collection
-          </p>
-          <h1 className="mt-2 text-typ-display font-bold">Party games, one phone</h1>
-          <p className="mx-auto mt-3 max-w-prose text-typ-body-relaxed text-muted-foreground">
-            <span className="font-semibold text-foreground">Pass-and-Play mode</span> — one phone,
-            passed around the table.
+          <h1 className="text-typ-display font-bold tracking-tight text-primary">RVLRY</h1>
+          <p className="mx-auto mt-2 max-w-prose text-typ-body-relaxed text-muted-foreground">
+            <span className="font-semibold text-foreground">Pass-and-Play mode</span> — share a phone
           </p>
         </header>
 

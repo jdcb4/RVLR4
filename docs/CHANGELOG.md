@@ -2,6 +2,28 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.0 - 2026-05-14
+
+- **Landing (both modes):** Reduced clutter. The top now reads just
+  **"RVLRY"** in a large primary-coloured heading, followed by one
+  descriptive line per mode: "Multi-Device mode — everyone bring a phone"
+  and "Pass-and-Play mode — share a phone".
+- **Multi-Device home:** Dropped the "Pick a game, then share the code with
+  friends" subtitle under "Host a room". The game cards speak for
+  themselves.
+- **Multi-Device lobby:** New **share** button next to the existing copy +
+  QR controls. Tap it on mobile to open the native share sheet (iOS / Android
+  / Edge desktop) via `navigator.share`. Browsers without the Web Share API
+  fall back to copying the link, so the button is never inert. New
+  `IconShare` glyph in `src/components/icons.tsx`.
+- **Build / docs:** Removed the GitHub Pages deployment path — the
+  `pages.yml` workflow, the `copy-github-pages-404.mjs` script, the
+  `build:pages` pnpm script, the `github-pages` MODE entry in
+  `src/config/env.ts`, and the `mode === "github-pages"` branch in
+  `vite.config.ts`. Updated `docs/DEPLOYMENT.md`, `docs/PROJECT_INDEX.md`,
+  `docs/VERIFICATION.md`, and `docs/ARCHITECTURE.md` to reflect that Docker
+  + Railway are the supported deploy targets.
+
 ## 0.16.17 - 2026-05-12
 
 - **Hotfix (Railway):** Reverted the v0.14.4 fail-fast `superRefine` that

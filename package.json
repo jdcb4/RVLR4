@@ -1,6 +1,6 @@
 {
   "name": "jd-multiplayer-games",
-  "version": "0.16.17",
+  "version": "0.17.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.12.0",
@@ -13,7 +13,6 @@
     "dev:server": "tsx watch --tsconfig server/tsconfig.json server/index.ts",
     "ui-gallery": "vite --config vite.ui-gallery.config.ts",
     "build": "tsc -b && vite build",
-    "build:pages": "tsc -b && vite build --mode github-pages && node scripts/copy-github-pages-404.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

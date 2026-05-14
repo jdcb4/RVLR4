@@ -11,7 +11,8 @@ describe("MultiplayerHomePage", () => {
         <MultiplayerHomePage />
       </MemoryRouter>,
     );
-    expect(screen.getByRole("heading", { name: /Party games, every phone/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /RVLRY/i })).toBeInTheDocument();
+    expect(screen.getByText(/Multi-Device mode/i)).toBeInTheDocument();
     expect(screen.getByText(/Who What Where/i)).toBeInTheDocument();
     expect(screen.getByText(/Hat Game/i)).toBeInTheDocument();
     expect(screen.getByText(/Imposter/i)).toBeInTheDocument();

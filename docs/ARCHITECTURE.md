@@ -16,7 +16,7 @@ Runtime multiplayer state lives **only in the Node process RAM** (rooms keyed by
 
 Legacy solo flows still persist in **`localStorage`** where applicable. Web Audio cues remain client-side.
 
-Deploy targets: **Docker (`pnpm run docker:build`)**, **Railway/Node** (see `docs/DEPLOYMENT.md`), and optional static **GitHub Pages** for legacy-only assets.
+Deploy targets: **Docker (`pnpm run docker:build`)** and **Railway/Node** (see `docs/DEPLOYMENT.md`).
 
 ## Module boundaries
 

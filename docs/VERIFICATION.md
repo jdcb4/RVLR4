@@ -48,7 +48,6 @@ These may report false positives for framework entrypoints, plugin-loaded files,
 | Change area | Command / follow-up |
 | --- | --- |
 | Docker image (`Dockerfile`, server static assets, runtime port) | `pnpm run docker:build` |
-| GitHub Pages base path / SPA fallback | `pnpm run build:pages` |
 | Socket.IO / room sync / multiplayer UX | Manual matrix in [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) |
 
 ## Environment

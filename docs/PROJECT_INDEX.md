@@ -53,7 +53,6 @@ Games:
 | `pnpm test`             | Vitest once.                                             |
 | `pnpm run test:watch`   | Vitest in watch mode.                                    |
 | `pnpm run build`        | Production build.                                        |
-| `pnpm run build:pages` | GitHub Pages build (`base` + `404.html` for SPA).         |
 | `pnpm run verify`       | Typecheck + lint + test + build (commit gate).           |
 | `pnpm run fallow:hygiene` | Fallow dead-code + duplication only (see `docs/VERIFICATION.md`). |
 | `pnpm dlx fallow ...`   | Full Fallow scan (dead-code, duplication, health metrics). |

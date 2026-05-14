@@ -131,11 +131,9 @@ export function MultiplayerHomePage() {
     <div className="min-h-dvh bg-background text-foreground">
       <div className="safe-screen mx-auto w-full max-w-md pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
         <header className="py-6 text-center">
-          <p className="font-medium uppercase text-typ-overline text-primary">RVLRY: JD's Parlour Game Collection</p>
-          <h1 className="mt-2 text-typ-display font-bold">Party games, every phone</h1>
-          <p className="mx-auto mt-3 max-w-prose text-typ-body-relaxed text-muted-foreground">
-            <span className="font-semibold text-foreground">Multi-Device mode</span> — host on one
-            phone, everyone joins with a short code.
+          <h1 className="text-typ-display font-bold tracking-tight text-primary">RVLRY</h1>
+          <p className="mx-auto mt-2 max-w-prose text-typ-body-relaxed text-muted-foreground">
+            <span className="font-semibold text-foreground">Multi-Device mode</span> — everyone bring a phone
           </p>
         </header>
 
@@ -191,9 +189,6 @@ export function MultiplayerHomePage() {
 
         <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
           <h2 className="text-typ-card-title font-semibold">Host a room</h2>
-          <p className="mt-1 text-typ-ui-snug text-muted-foreground">
-            Pick a game, then share the code with friends.
-          </p>
           <ul className="mt-3 grid gap-3">
             {games.map((game) => {
               const Icon = game.icon;
