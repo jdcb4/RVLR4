@@ -1,17 +1,11 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import {
-  IconDisguise,
-  IconQuestionMark,
-  IconTopHat,
-} from "@/components/icons";
+import { IconDisguise, IconQuestionMark, IconTopHat } from "@/components/icons";
 import { LandingAttribution } from "@/components/LandingAttribution";
 import { ModeSwitchCard } from "@/components/ModeSwitchCard";
-import {
-  clearActiveGameBookmark,
-  readActiveGameBookmark,
-} from "@/multiplayer/activeGameBookmark";
+import { clearActiveGameBookmark, readActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
+import { gameKindLabel } from "@/multiplayer/gameKindLabel";
 import { loadSession } from "@/multiplayer/useRoomChannel";
 
 const games = [
@@ -31,27 +25,10 @@ const games = [
   {
     id: "imposter",
     title: "Imposter",
-    description:
-      "Hidden roles and one secret word - timed clues, discussion, and the big reveal.",
+    description: "Hidden roles and one secret word - timed clues, discussion, and the big reveal.",
     icon: IconDisguise,
   },
 ] as const;
-
-function gameKindLabel(kind: string): string {
-  if (kind === "whowhatwhere") {
-    return "Who What Where";
-  }
-
-  if (kind === "hat") {
-    return "Hat Game";
-  }
-
-  if (kind === "imposter") {
-    return "Imposter";
-  }
-
-  return kind;
-}
 
 export function MultiplayerHomePage() {
   const navigate = useNavigate();
@@ -133,7 +110,8 @@ export function MultiplayerHomePage() {
         <header className="py-6 text-center">
           <h1 className="text-typ-display font-bold tracking-tight text-primary">RVLRY</h1>
           <p className="mx-auto mt-2 max-w-prose text-typ-body-relaxed text-muted-foreground">
-            <span className="font-semibold text-foreground">Multi-Device mode</span> — everyone bring a phone
+            <span className="font-semibold text-foreground">Multi-Device mode</span> — everyone
+            bring a phone
           </p>
         </header>
 
@@ -207,7 +185,9 @@ export function MultiplayerHomePage() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="text-typ-card-title font-semibold">{game.title}</h3>
-                      <p className="mt-0.5 text-typ-ui-snug text-muted-foreground">{game.description}</p>
+                      <p className="mt-0.5 text-typ-ui-snug text-muted-foreground">
+                        {game.description}
+                      </p>
                     </div>
                   </button>
                 </li>

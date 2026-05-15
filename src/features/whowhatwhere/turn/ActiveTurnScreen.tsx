@@ -12,7 +12,7 @@ import {
   getSecondsLeft,
 } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
-import { playSound } from "@/services/whowhatwhereSound";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 export function ActiveTurnScreen({
   match,
@@ -52,7 +52,7 @@ export function ActiveTurnScreen({
         warningPlayedForTurn.current !== activeTurn.startedAt
       ) {
         warningPlayedForTurn.current = activeTurn.startedAt;
-        playSound("warning");
+        void playGameSoundEffect("warn10");
       }
     }, 250);
 

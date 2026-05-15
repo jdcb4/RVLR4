@@ -4,7 +4,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameShell } from "@/components/GameShell";
 import multiplayerDisplayNames from "@/data/multiplayerDisplayNames.json";
+import { gameKindLabel } from "@/multiplayer/gameKindLabel";
 import { persistSession } from "@/multiplayer/useRoomChannel";
+
+import { readRoomEntrySession, type RoomEntrySession } from "./roomEntryResponse";
 
 type Intent = "host" | "join";
 
@@ -115,6 +118,12 @@ export function EnterNamePage() {
     setLoading(true);
 
     try {
+      const enterRoom = (session: RoomEntrySession) => {
+        persistSession(session);
+        saveLastName(trimmed);
+        navigate(`/room/${session.code}`);
+      };
+
       if (intent === "host") {
         if (!hostGame) {
           throw new Error("Missing game selection.");
@@ -131,24 +140,7 @@ export function EnterNamePage() {
           }),
         });
 
-        const payload = (await response.json()) as {
-          code?: string;
-          playerId?: string;
-          secret?: string;
-          error?: string;
-        };
-
-        if (!response.ok || !payload.code || !payload.playerId || !payload.secret) {
-          throw new Error(payload.error ?? "Unable to create a room.");
-        }
-
-        persistSession({
-          code: payload.code,
-          playerId: payload.playerId,
-          secret: payload.secret,
-        });
-        saveLastName(trimmed);
-        navigate(`/room/${payload.code}`);
+        enterRoom(await readRoomEntrySession(response, "Unable to create a room."));
       } else if (intent === "join") {
         if (!joinCode) {
           throw new Error("Missing join code.");
@@ -162,24 +154,7 @@ export function EnterNamePage() {
           body: JSON.stringify({ name: trimmed }),
         });
 
-        const payload = (await response.json()) as {
-          code?: string;
-          playerId?: string;
-          secret?: string;
-          error?: string;
-        };
-
-        if (!response.ok || !payload.code || !payload.playerId || !payload.secret) {
-          throw new Error(payload.error ?? "Unable to join this room.");
-        }
-
-        persistSession({
-          code: payload.code,
-          playerId: payload.playerId,
-          secret: payload.secret,
-        });
-        saveLastName(trimmed);
-        navigate(`/room/${payload.code}`);
+        enterRoom(await readRoomEntrySession(response, "Unable to join this room."));
       } else {
         throw new Error("Open this page from the home screen.");
       }
@@ -205,13 +180,7 @@ export function EnterNamePage() {
       footer={
         <PrimaryFooterButton
           disabled={loading}
-          label={
-            loading
-              ? "Working..."
-              : intent === "host"
-                ? "Host the game"
-                : "Join the lobby"
-          }
+          label={loading ? "Working..." : intent === "host" ? "Host the game" : "Join the lobby"}
           onClick={() => formRef.current?.requestSubmit()}
         />
       }
@@ -229,11 +198,7 @@ export function EnterNamePage() {
             <p className="mt-2 text-typ-ui-snug text-muted-foreground">
               You are hosting{" "}
               <span className="font-semibold text-foreground">
-                {hostGame === "whowhatwhere"
-                  ? "Who What Where"
-                  : hostGame === "hat"
-                    ? "Hat Game"
-                    : "Imposter"}
+                {gameKindLabel(hostGame ?? "this game")}
               </span>
               . Everyone else will use your join code after you reach the lobby.
             </p>
@@ -243,11 +208,7 @@ export function EnterNamePage() {
               <p>
                 Game:{" "}
                 <span className="font-semibold text-foreground">
-                  {preview.gameKind === "whowhatwhere"
-                    ? "Who What Where"
-                    : preview.gameKind === "hat"
-                      ? "Hat Game"
-                      : "Imposter"}
+                  {gameKindLabel(preview.gameKind)}
                 </span>
               </p>
               <p>

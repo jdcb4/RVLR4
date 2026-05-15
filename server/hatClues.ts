@@ -24,11 +24,7 @@ export function loadHatClueDraftSlot(
 
   const clueIndex = Number(rawClueIndex);
 
-  if (
-    Number.isNaN(clueIndex) ||
-    clueIndex < 0 ||
-    clueIndex >= GAME_DEFAULTS.cluesPerPlayer
-  ) {
+  if (Number.isNaN(clueIndex) || clueIndex < 0 || clueIndex >= GAME_DEFAULTS.cluesPerPlayer) {
     throw new Error("Invalid clue slot.");
   }
 
@@ -52,9 +48,7 @@ export function buildHatClueSubmissionsFromLobby(
 
   for (const player of players) {
     const row = drafts?.[player.id];
-    const clues =
-      row ??
-      Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "");
+    const clues = row ?? Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "");
 
     if (
       clues.length !== GAME_DEFAULTS.cluesPerPlayer ||
@@ -73,50 +67,11 @@ export function buildHatClueSubmissionsFromLobby(
   return map;
 }
 
-/**
- * @deprecated Online matches use `buildHatClueSubmissionsFromLobby`; solo quick-fill only.
- */
-export function buildServerHatClueSubmissions(
-  players: Player[],
-  rng: () => number,
-): ClueSubmissionMap {
-  const list = clueSuggestions as string[];
-
-  const pickOne = () => {
-    if (list.length === 0) {
-      return "Mystery figure";
-    }
-
-    const index = Math.floor(rng() * list.length);
-
-    return list[index] ?? "Mystery figure";
-  };
-
-  const map: ClueSubmissionMap = {};
-
-  for (const player of players) {
-    const clues: string[] = [];
-
-    for (let index = 0; index < GAME_DEFAULTS.cluesPerPlayer; index += 1) {
-      clues.push(pickOne());
-    }
-
-    map[player.id] = { clues };
-  }
-
-  return map;
-}
-
 /** Random unused celebrity suggestion for lightning-fill (Hat lobby). */
-export function pickSuggestedHatClue(
-  drafts: Record<string, string[]>,
-  rng: () => number,
-): string {
+export function pickSuggestedHatClue(drafts: Record<string, string[]>, rng: () => number): string {
   const list = clueSuggestions as string[];
   const used = new Set(
-    Object.values(drafts).flatMap((row) =>
-      row.map((entry) => entry.trim()).filter(Boolean),
-    ),
+    Object.values(drafts).flatMap((row) => row.map((entry) => entry.trim()).filter(Boolean)),
   );
   const candidates = list.filter((entry) => !used.has(entry));
   const pool = candidates.length > 0 ? candidates : list;

@@ -4,9 +4,7 @@ import { IMPOSTER_MAX_PLAYERS, IMPOSTER_MIN_PLAYERS } from "@/config/imposterDef
 import { getImposterWordList } from "@/data/imposterWordList";
 import {
   clampImposterCount,
-  dealImposterRound,
   defaultImposterCount,
-  getImposterSetupError,
   maxImpostersForPlayers,
 } from "@/domain/imposter/round";
 import {
@@ -15,8 +13,13 @@ import {
 } from "@/features/game-app-hooks/singleplayerLifecycle";
 import { useAutoHidePopup } from "@/features/game-app-hooks/useAutoHidePopup";
 import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
+import {
+  createImposterRevealRound,
+  validateImposterSnapshotSetup,
+} from "@/features/imposter/imposterRoundFlow";
 import type {
   ImposterPlayer,
+  ImposterRoundState,
   ImposterSnapshot,
   ImposterStep,
   ImposterStoragePayload,
@@ -49,13 +52,22 @@ const createInitialSnapshot = (step: ImposterStep = "landing"): ImposterSnapshot
   round: null,
 });
 
+const startRevealStep = (
+  snapshot: ImposterSnapshot,
+  round: ImposterRoundState,
+): ImposterSnapshot => ({
+  ...snapshot,
+  step: "reveal",
+  round,
+});
+
 const isStoragePayload = (value: unknown): value is ImposterStoragePayload =>
   Boolean(
     value &&
-      typeof value === "object" &&
-      "schemaVersion" in value &&
-      "snapshot" in value &&
-      "lastSavedAt" in value,
+    typeof value === "object" &&
+    "schemaVersion" in value &&
+    "snapshot" in value &&
+    "lastSavedAt" in value,
   );
 
 export type ImposterSingleplayerAppController = ReturnType<typeof useImposterSingleplayerApp>;
@@ -64,9 +76,7 @@ export function useImposterSingleplayerApp() {
   const [snapshot, setSnapshot] = useState<ImposterSnapshot>(() =>
     createInitialSnapshot("landing"),
   );
-  const [savedRecord, setSavedRecord] = useState<ImposterStoragePayload | null>(
-    null,
-  );
+  const [savedRecord, setSavedRecord] = useState<ImposterStoragePayload | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState("");
   const [confirmNewGame, setConfirmNewGame] = useState(false);
@@ -179,12 +189,40 @@ export function useImposterSingleplayerApp() {
     setError("");
   };
 
+  const startRevealRound = ({
+    current,
+    emptyWordBankError,
+    fallbackError,
+  }: {
+    readonly current: ImposterSnapshot;
+    readonly emptyWordBankError?: string;
+    readonly fallbackError: string;
+  }) => {
+    const err = validateImposterSnapshotSetup(current);
+    if (err) {
+      setError(err);
+      return;
+    }
+    const wordBank = getImposterWordList();
+    if (emptyWordBankError && wordBank.length === 0) {
+      setError(emptyWordBankError);
+      return;
+    }
+    setError("");
+    try {
+      const round = createImposterRevealRound({
+        snapshot: current,
+        wordBank,
+        rng: Math.random,
+      });
+      setSnapshot((s) => startRevealStep(s, round));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : fallbackError);
+    }
+  };
+
   const confirmSettingsNext = () => {
-    const err = getImposterSetupError({
-      playerCount: snapshot.playerCount,
-      imposterCount: snapshot.imposterCount,
-      playerNames: snapshot.players.map((p) => p.name),
-    });
+    const err = validateImposterSnapshotSetup(snapshot);
     if (err) {
       setError(err);
       return;
@@ -208,11 +246,7 @@ export function useImposterSingleplayerApp() {
   };
 
   const confirmRosterNext = () => {
-    const err = getImposterSetupError({
-      playerCount: snapshot.playerCount,
-      imposterCount: snapshot.imposterCount,
-      playerNames: snapshot.players.map((p) => p.name),
-    });
+    const err = validateImposterSnapshotSetup(snapshot);
     if (err) {
       setError(err);
       return;
@@ -222,42 +256,11 @@ export function useImposterSingleplayerApp() {
   };
 
   const confirmReviewStartRound = () => {
-    const current = snapshotRef.current;
-    const err = getImposterSetupError({
-      playerCount: current.playerCount,
-      imposterCount: current.imposterCount,
-      playerNames: current.players.map((p) => p.name),
+    startRevealRound({
+      current: snapshotRef.current,
+      emptyWordBankError: "No words available. Add words to the app word list.",
+      fallbackError: "Could not start round.",
     });
-    if (err) {
-      setError(err);
-      return;
-    }
-    const wordBank = getImposterWordList();
-    if (wordBank.length === 0) {
-      setError("No words available. Add words to the app word list.");
-      return;
-    }
-    setError("");
-    try {
-      const deal = dealImposterRound({
-        playerIds: current.players.map((p) => p.id),
-        imposterCount: current.imposterCount,
-        wordBank,
-        rng: Math.random,
-      });
-      setSnapshot((s) => ({
-        ...s,
-        step: "reveal",
-        round: {
-          secretWord: deal.secretWord,
-          imposterPlayerIds: [...deal.imposterPlayerIds],
-          revealPlayerIndex: 0,
-          revealRevealed: false,
-        },
-      }));
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not start round.");
-    }
   };
 
   const revealShowRole = () => {
@@ -302,47 +305,17 @@ export function useImposterSingleplayerApp() {
     setError("");
   };
 
-  const goGuidePrediscussion = () =>
-    setSnapshot((s) => ({ ...s, step: "guidePrediscussion" }));
+  const goGuidePrediscussion = () => setSnapshot((s) => ({ ...s, step: "guidePrediscussion" }));
 
-  const goGuideWarning = () =>
-    setSnapshot((s) => ({ ...s, step: "guideWarning" }));
+  const goGuideWarning = () => setSnapshot((s) => ({ ...s, step: "guideWarning" }));
 
   const goResults = () => setSnapshot((s) => ({ ...s, step: "results" }));
 
   const replaySamePlayers = () => {
-    setError("");
-    const current = snapshotRef.current;
-    const err = getImposterSetupError({
-      playerCount: current.playerCount,
-      imposterCount: current.imposterCount,
-      playerNames: current.players.map((p) => p.name),
+    startRevealRound({
+      current: snapshotRef.current,
+      fallbackError: "Could not replay.",
     });
-    if (err) {
-      setError(err);
-      return;
-    }
-    const wordBank = getImposterWordList();
-    try {
-      const deal = dealImposterRound({
-        playerIds: current.players.map((p) => p.id),
-        imposterCount: current.imposterCount,
-        wordBank,
-        rng: Math.random,
-      });
-      setSnapshot((s) => ({
-        ...s,
-        step: "reveal",
-        round: {
-          secretWord: deal.secretWord,
-          imposterPlayerIds: [...deal.imposterPlayerIds],
-          revealPlayerIndex: 0,
-          revealRevealed: false,
-        },
-      }));
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not replay.");
-    }
   };
 
   const newGameKeepGameType = () => {

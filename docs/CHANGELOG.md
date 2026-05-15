@@ -2,6 +2,132 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.13 - 2026-05-15
+
+- **Branding:** Renamed the browser/app chrome from `JDPassNPlay` to `RVLRY`.
+- **Fix (singleplayer setup):** Let the Who What Where and Hat Game team-name
+  cards wrap their content instead of stretching to the bottom of the screen.
+- **Refactor (sound effects):** Added a shared game sound service based on the
+  multiplayer Who What Where cues and routed correct, skip, return skipped,
+  ten-second warning, timeout, and result cues through it across games/modes.
+- **Tests:** Added coverage for the RVLRY app metadata and legacy-to-shared
+  sound cue mappings.
+
+## 0.17.12 - 2026-05-15
+
+- **Refactor (multiplayer lobby):** Split the shared lobby shell into
+  extracted invite/share, team roster, and game-specific setup sections.
+  `RoomLobbyView` now focuses on lobby page composition and ready/start wiring.
+- **Tests:** Added focused lobby team coverage for captain team renaming and
+  host player reassignment through the team picker dialog.
+
+## 0.17.11 - 2026-05-15
+
+- **Refactor (Who What Where multiplayer):** Split
+  `WhoWhatWhereMultiplayerView` into a shell, cue hook, extracted body routing,
+  and extracted footer routing. The main view now focuses on socket-bound
+  header action wiring and shell composition.
+- **Refactor (shared multiplayer endgame):** Removed the duplicate Hat
+  multiplayer end-game footer wrapper now that the shared
+  `MultiplayerEndGameActions` primitive is used directly.
+- **Tests:** Added Who What Where multiplayer coverage for the extracted ready
+  footer start-turn dispatch and passive guesser turn snapshot rendering.
+
+## 0.17.10 - 2026-05-15
+
+- **Refactor (RoomPage):** Extracted room connection banners, active-game
+  bookmark effects, invite/share controls, share URL creation, and synced
+  phase rendering out of `RoomPage`.
+- **Tests:** Added room share URL coverage and focused routing coverage for
+  missing-code, ended-room, and missing playing-payload states. Shared
+  multiplayer room sync test fixtures now back both room page and lobby tests.
+
+## 0.17.9 - 2026-05-15
+
+- **Refactor (Hat multiplayer):** Split `HatMultiplayerView` into a shell,
+  cue/timer hook, extracted body routing, and extracted footer routing. The
+  main view now focuses on composition and socket-bound header action wiring.
+- **Tests:** Added Hat multiplayer coverage for the extracted ready footer
+  start-turn dispatch and passive guesser turn snapshot rendering.
+
+## 0.17.8 - 2026-05-14
+
+- **Refactor (shared game UI):** Extracted `TeamStandingsList` and reused it in
+  Hat and Who What Where multiplayer turn snapshots.
+- **Refactor (Hat singleplayer):** Centralized Hat session creation for clue
+  completion and replay paths.
+- **Refactor (server handlers):** Shared the host/lobby settings guard across
+  Who What Where and Hat settings patch handlers. Fallow hygiene now reports no
+  dead code and no duplicate code.
+- **Tests:** Added `TeamStandingsList` coverage.
+
+## 0.17.7 - 2026-05-14
+
+- **Refactor (Imposter multiplayer):** Split `ImposterMultiplayerView` into a
+  thin shell plus dedicated body, footer, and reveal-progress primitives. The
+  original view now owns only tone cues, socket dispatch, and shell
+  composition.
+- **Tests:** Added Imposter multiplayer coverage for parallel reveal progress,
+  private reveal rendering, revealed-word rendering, and footer continuation
+  dispatch.
+
+## 0.17.6 - 2026-05-14
+
+- **Refactor (multiplayer lobby):** Extracted lobby rendering, QR invite dialog,
+  ready footer, team roster controls, and per-game lobby setup panels from
+  `RoomPage` into `RoomLobbyView`. `RoomPage` now keeps connection state,
+  banners, room binding, and phase routing.
+- **Tests:** Added `RoomLobbyView` coverage for non-host ready toggling and
+  host start-game wiring.
+
+## 0.17.5 - 2026-05-14
+
+- **Refactor (Who What Where singleplayer):** Split footer selection and active
+  screen rendering out of `WhoWhatWhereSingleplayerApp` into
+  `WhoWhatWhereSingleplayerChrome`, leaving the app component focused on shell,
+  header, info overlay, and controller wiring.
+- **Tests:** Added landing-footer coverage for the moved saved-game discard and
+  fresh-start actions.
+
+## 0.17.4 - 2026-05-14
+
+- **Refactor (multiplayer entry):** Extracted shared room-entry response parsing
+  for host/join submission in `EnterNamePage`, removing the duplicated
+  response validation/session persistence branch.
+- **Refactor (multiplayer labels):** Moved game-kind display labels into a
+  shared `gameKindLabel` helper used by both the home page and name-entry
+  preview/copy.
+- **Tests:** Added room-entry response and game-label coverage.
+
+## 0.17.3 - 2026-05-14
+
+- **Refactor (Imposter controller):** Extracted setup validation and fresh
+  reveal-round creation into `imposterRoundFlow`. The singleplayer controller
+  now uses one `startRevealRound` path for both first-round start and replay,
+  removing the Fallow clone family in `useImposterSingleplayerApp`.
+- **Tests:** Added pure coverage for Imposter snapshot validation and reveal
+  round creation.
+
+## 0.17.2 - 2026-05-14
+
+- **Refactor (Hat active turns):** Extracted shared `HatActiveTurnPanel` for the
+  phase banner, clue highlight, metrics, and skipped-famous-figures return list.
+  Pass-and-Play and Multi-Device describer turns now share that presentation
+  primitive while keeping their own action dispatch/Socket.IO wiring.
+- **Tests:** Added `HatActiveTurnPanel` coverage for the shared metrics and
+  skipped-clue callback.
+
+## 0.17.1 - 2026-05-14
+
+- **Refactor (server hygiene):** Removed unused public exports from
+  `server/hatClues.ts`, `server/socketHandle.ts`, and `server/roomStore.ts`.
+  Fallow dead-code findings are now clean.
+- **Refactor (room store):** Centralized repeated team-counting and active
+  match cleanup paths used by joins, lobby readiness, archive, and replay reset.
+  Added focused `roomStore` tests for replay reset and team lobby readiness.
+- **Tooling:** Ignored local `.claude/` workspace metadata in git, ESLint, and
+  Vitest so deterministic checks do not scan scratch worktrees.
+
 ## 0.17.0 - 2026-05-14
 
 - **Landing (both modes):** Reduced clutter. The top now reads just
@@ -22,7 +148,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
   `src/config/env.ts`, and the `mode === "github-pages"` branch in
   `vite.config.ts`. Updated `docs/DEPLOYMENT.md`, `docs/PROJECT_INDEX.md`,
   `docs/VERIFICATION.md`, and `docs/ARCHITECTURE.md` to reflect that Docker
-  + Railway are the supported deploy targets.
+  - Railway are the supported deploy targets.
 
 ## 0.16.17 - 2026-05-12
 
@@ -33,7 +159,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
   - `CLIENT_ORIGIN` set → strict allow-list (unchanged).
   - `NODE_ENV=production` with no `CLIENT_ORIGIN` → allow-any CORS with a
     loud warning at boot (`[server] CLIENT_ORIGIN is not set — accepting
-    all browser origins...`). The security signal stays visible in logs.
+all browser origins...`). The security signal stays visible in logs.
   - Development without `CLIENT_ORIGIN` → fallback to `http://localhost:5173`.
 - **Tests:** `server/env.test.ts` rewritten — the two "refuses to load"
   cases are replaced with "loads with a warning at boot" assertions.
@@ -73,7 +199,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 
 - **Imposter (Pass-and-Play):** Reveal screen for non-imposters had the
   wrong subtitle copy ("Give a clue that proves you know the word…"),
-  describing the *clue* phase. Replaced with "This is the secret word.
+  describing the _clue_ phase. Replaced with "This is the secret word.
   Make sure you remember it." so the prompt matches the moment.
 - **Imposter (Pass-and-Play):** Added a `ReadyNextStepsCard` under the
   role/word reveal: "Once you have memorised this, hit the button below
@@ -280,7 +406,7 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
 - **Docs / tooling:** New `docs/NAMING.md` documents the canonical
   game-token, mode-modifier (`Multiplayer*` / `Singleplayer*`), and verb
   conventions. Recorded as an ADR in `docs/DECISIONS.md`. `pnpm run
-  audit:names` re-walks every export and emits a JSON-Lines inventory for
+audit:names` re-walks every export and emits a JSON-Lines inventory for
   re-audit. Minimal `@typescript-eslint/naming-convention` rule enforces
   PascalCase on type-like declarations; project-specific patterns are
   enforced by the audit script, not the linter.

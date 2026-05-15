@@ -15,7 +15,7 @@ export function hatTeamSetupScreen(controller: HatSingleplayerAppController): Sc
   return {
     content: (
       <GamePanel
-        className="flex min-h-0 flex-1 flex-col"
+        className="flex min-h-0 flex-col"
         eyebrow={`Team ${controller.snapshot.teamEditIndex + 1} of ${controller.snapshot.teamCount}`}
         subtitle="Edit the roster below. At least two players per team; add seats if needed."
         title="Name this team"

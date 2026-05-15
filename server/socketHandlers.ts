@@ -25,7 +25,7 @@ import {
   movePlayerToTeam,
 } from "./lobbyControl.ts";
 import { mpDebug } from "./multiplayerDebug.ts";
-import type { Room } from "./roomStore.ts";
+import type { Room, RoomPlayer } from "./roomStore.ts";
 import {
   archiveRoomAfterAllPlayersOptedOut,
   resetLobbyAfterReplay,
@@ -54,6 +54,16 @@ function ensureLobbyEveryoneReady(room: Room) {
     if (!player.ready) {
       throw new Error("Waiting for everyone to ready up.");
     }
+  }
+}
+
+function ensureHostCanChangeLobbySettings(room: Room, actor: RoomPlayer) {
+  if (!actor.isHost) {
+    throw new Error("Only the host can change settings.");
+  }
+
+  if (room.phase !== "lobby") {
+    throw new Error("Settings are locked once the match begins.");
   }
 }
 
@@ -86,47 +96,44 @@ function canOfferReplay(activeRoom: Room): boolean {
 
 export function registerSocketHandlers(io: Server, store: RoomStore) {
   io.on("connection", (socket) => {
-    socket.on(
-      "session:bind",
-      async (rawPayload: unknown, ack?: SocketAck) => {
-        try {
-          const parsed = sessionBindSchema.safeParse(rawPayload);
+    socket.on("session:bind", async (rawPayload: unknown, ack?: SocketAck) => {
+      try {
+        const parsed = sessionBindSchema.safeParse(rawPayload);
 
-          if (!parsed.success) {
-            throw new Error("Missing session details.");
-          }
-
-          const code = parsed.data.code.trim();
-
-          if (!code) {
-            throw new Error("Missing session details.");
-          }
-
-          const player = store.authenticate({
-            code,
-            playerId: parsed.data.playerId,
-            secret: parsed.data.secret,
-          });
-
-          if (!player) {
-            throw new Error("Unable to restore this session.");
-          }
-
-          socket.data.roomCode = code.toUpperCase();
-          socket.data.playerId = player.id;
-          player.disconnectedAt = null;
-          await socket.join(roomChannel(code.toUpperCase()));
-          await broadcastRoom(io, store, code);
-          mpDebug("session bound", { code: code.toUpperCase(), playerId: player.id });
-          ack?.({ ok: true });
-        } catch (error) {
-          ack?.({
-            ok: false,
-            error: error instanceof Error ? error.message : "Unable to bind session.",
-          });
+        if (!parsed.success) {
+          throw new Error("Missing session details.");
         }
-      },
-    );
+
+        const code = parsed.data.code.trim();
+
+        if (!code) {
+          throw new Error("Missing session details.");
+        }
+
+        const player = store.authenticate({
+          code,
+          playerId: parsed.data.playerId,
+          secret: parsed.data.secret,
+        });
+
+        if (!player) {
+          throw new Error("Unable to restore this session.");
+        }
+
+        socket.data.roomCode = code.toUpperCase();
+        socket.data.playerId = player.id;
+        player.disconnectedAt = null;
+        await socket.join(roomChannel(code.toUpperCase()));
+        await broadcastRoom(io, store, code);
+        mpDebug("session bound", { code: code.toUpperCase(), playerId: player.id });
+        ack?.({ ok: true });
+      } catch (error) {
+        ack?.({
+          ok: false,
+          error: error instanceof Error ? error.message : "Unable to bind session.",
+        });
+      }
+    });
 
     registerHandler(
       socket,
@@ -173,7 +180,10 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           throw new Error("Names are locked once the match begins.");
         }
 
-        actor.name = String(payload.name ?? "").trim().slice(0, 32) || actor.name;
+        actor.name =
+          String(payload.name ?? "")
+            .trim()
+            .slice(0, 32) || actor.name;
         await broadcastRoom(io, store, room.code);
       },
     );
@@ -294,13 +304,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       "lobby:hostPatchWhoWhatWhereSettings",
       "Unable to update settings.",
       async ({ room, actor }, payload) => {
-        if (!actor.isHost) {
-          throw new Error("Only the host can change settings.");
-        }
-
-        if (room.phase !== "lobby") {
-          throw new Error("Settings are locked once the match begins.");
-        }
+        ensureHostCanChangeLobbySettings(room, actor);
 
         // Schema is `z.unknown()` — `hostPatchWhoWhatWhereSettings` validates field-by-field internally.
         const { patch } = (payload ?? {}) as { patch?: Partial<GameSettings> };
@@ -315,13 +319,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       "lobby:hostPatchHatPrefs",
       "Unable to update settings.",
       async ({ room, actor }, payload) => {
-        if (!actor.isHost) {
-          throw new Error("Only the host can change settings.");
-        }
-
-        if (room.phase !== "lobby") {
-          throw new Error("Settings are locked once the match begins.");
-        }
+        ensureHostCanChangeLobbySettings(room, actor);
 
         // Schema is `z.unknown()` — `hostPatchHatPrefs` validates field-by-field internally.
         hostPatchHatPrefs(
@@ -411,15 +409,8 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       "lobby:hatSetClueCell",
       "Unable to update clue.",
       async ({ room, actor }, payload) => {
-        const { row, clueIndex } = loadHatClueDraftSlot(
-          room,
-          actor.id,
-          payload.clueIndex,
-        );
-        row[clueIndex] = String(payload.value ?? "").slice(
-          0,
-          GAME_DEFAULTS.maxClueLength,
-        );
+        const { row, clueIndex } = loadHatClueDraftSlot(room, actor.id, payload.clueIndex);
+        row[clueIndex] = String(payload.value ?? "").slice(0, GAME_DEFAULTS.maxClueLength);
         room.hatClueDrafts![actor.id] = row;
 
         await broadcastRoom(io, store, room.code);
@@ -432,11 +423,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       "lobby:hatSuggestClue",
       "Unable to suggest a clue.",
       async ({ room, actor }, payload) => {
-        const { row, clueIndex } = loadHatClueDraftSlot(
-          room,
-          actor.id,
-          payload.clueIndex,
-        );
+        const { row, clueIndex } = loadHatClueDraftSlot(room, actor.id, payload.clueIndex);
         row[clueIndex] = pickSuggestedHatClue(room.hatClueDrafts!, Math.random);
         room.hatClueDrafts![actor.id] = row;
 
@@ -543,16 +530,10 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       },
     );
 
-    registerHandler(
-      socket,
-      store,
-      "www:skip",
-      "Unable to skip.",
-      async ({ room, actor }) => {
-        applyWhoWhatWhereSkip(room, actor.id);
-        await broadcastRoom(io, store, room.code);
-      },
-    );
+    registerHandler(socket, store, "www:skip", "Unable to skip.", async ({ room, actor }) => {
+      applyWhoWhatWhereSkip(room, actor.id);
+      await broadcastRoom(io, store, room.code);
+    });
 
     registerHandler(
       socket,

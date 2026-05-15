@@ -5,7 +5,9 @@ import { MAX_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 
 import {
   archiveRoomAfterAllPlayersOptedOut,
+  assertTeamLobbyReady,
   computeResumeEligible,
+  resetLobbyAfterReplay,
   RoomStore,
 } from "./roomStore.ts";
 
@@ -121,9 +123,7 @@ describe("RoomStore.joinRoom", () => {
     const store = new RoomStore();
     const code = fillImposterRoom(store);
 
-    expect(() => store.joinRoom({ code, name: "Overflow" })).toThrow(
-      /Imposter room is full/,
-    );
+    expect(() => store.joinRoom({ code, name: "Overflow" })).toThrow(/Imposter room is full/);
   });
 
   it("rejects joins after the lobby has started", () => {
@@ -303,6 +303,70 @@ describe("archiveRoomAfterAllPlayersOptedOut", () => {
     expect(room.imposterSnapshot).toBeUndefined();
     expect(room.replayOfferActive).toBeUndefined();
     expect(room.replayAcceptedPlayerIds).toBeUndefined();
+  });
+});
+
+describe("resetLobbyAfterReplay", () => {
+  it("returns the room to a clean lobby and keeps players available", () => {
+    const store = new RoomStore();
+    const { room, hostPlayer } = store.createRoom({ gameKind: "hat", hostName: "Host" });
+    room.phase = "playing";
+    room.hatSession = { __dummy: true } as never;
+    room.wwwReadyReveal = true;
+    room.replayOfferActive = true;
+    room.replayAcceptedPlayerIds = [hostPlayer.id];
+    hostPlayer.ready = true;
+    hostPlayer.optedOutOfResume = true;
+
+    resetLobbyAfterReplay(room);
+
+    expect(room.phase).toBe("lobby");
+    expect(room.hatSession).toBeUndefined();
+    expect(room.wwwReadyReveal).toBeUndefined();
+    expect(room.replayOfferActive).toBeUndefined();
+    expect(room.replayAcceptedPlayerIds).toBeUndefined();
+    expect(hostPlayer.ready).toBe(false);
+    expect(hostPlayer.optedOutOfResume).toBe(false);
+  });
+});
+
+describe("assertTeamLobbyReady", () => {
+  it("accepts team games when every team has the minimum roster", () => {
+    const store = new RoomStore();
+    const { room } = store.createRoom({ gameKind: "whowhatwhere", hostName: "Host" });
+    const { player: teamOneGuest } = store.joinRoom({
+      code: room.code,
+      name: "Team one guest",
+    });
+    const { player: teamTwoGuestOne } = store.joinRoom({
+      code: room.code,
+      name: "Team two guest one",
+    });
+    const { player: teamTwoGuestTwo } = store.joinRoom({
+      code: room.code,
+      name: "Team two guest two",
+    });
+    teamOneGuest.teamIndex = 0;
+    teamTwoGuestOne.teamIndex = 1;
+    teamTwoGuestTwo.teamIndex = 1;
+
+    expect(() => assertTeamLobbyReady(room)).not.toThrow();
+  });
+
+  it("rejects team games with an understaffed team", () => {
+    const store = new RoomStore();
+    const { room } = store.createRoom({ gameKind: "hat", hostName: "Host" });
+    const { player: guest } = store.joinRoom({ code: room.code, name: "Guest" });
+    guest.teamIndex = 0;
+
+    expect(() => assertTeamLobbyReady(room)).toThrow(/Team 2 needs at least/);
+  });
+
+  it("ignores flat Imposter lobbies", () => {
+    const store = new RoomStore();
+    const { room } = store.createRoom({ gameKind: "imposter", hostName: "Host" });
+
+    expect(() => assertTeamLobbyReady(room)).not.toThrow();
   });
 });
 

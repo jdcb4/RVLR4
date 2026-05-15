@@ -3,10 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { GAME_DEFAULTS, type HatGameConfig } from "@/config/hatDefaults";
 import { MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 import clueSuggestions from "@/data/clueSuggestions.json";
-import {
-  applyHatGameAction,
-  createHatGameSession,
-} from "@/domain/hat-game/engine";
+import { applyHatGameAction, createHatGameSession } from "@/domain/hat-game/engine";
 import {
   addPlayerToHatTeam,
   applyRosterRowsToHat,
@@ -25,18 +22,19 @@ import {
 import { useAutoHidePopup } from "@/features/game-app-hooks/useAutoHidePopup";
 import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
 import { playHatActionSoundEffects } from "@/features/hat-game/hatActionSound";
-import type { AppSnapshot, AppStep, StoragePayload } from "@/features/hat-game/hatSingleplayerAppTypes";
+import type {
+  AppSnapshot,
+  AppStep,
+  StoragePayload,
+} from "@/features/hat-game/hatSingleplayerAppTypes";
 import { formatSavedAt } from "@/lib/formatSavedAt";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import { playSoundCue } from "@/services/hatSound";
-import {
-  clearSavedState,
-  loadSavedState,
-  saveState,
-} from "@/services/hatStorage";
+import { clearSavedState, loadSavedState, saveState } from "@/services/hatStorage";
 
 import packageJson from "../../../package.json";
 
-const createEmptyClues = () => Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => '');
+const createEmptyClues = () => Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "");
 
 const createInitialSnapshot = (step: AppStep = "settings"): AppSnapshot => ({
   step,
@@ -61,8 +59,7 @@ const normalizeSnapshotStep = (snapshot: AppSnapshot): AppSnapshot => {
   return {
     ...snapshot,
     step: stepFixed,
-    turnDurationSeconds:
-      snapshot.turnDurationSeconds ?? GAME_DEFAULTS.turnDurationSeconds,
+    turnDurationSeconds: snapshot.turnDurationSeconds ?? GAME_DEFAULTS.turnDurationSeconds,
     skipsPerTurn: snapshot.skipsPerTurn ?? GAME_DEFAULTS.skipsPerTurn,
   };
 };
@@ -73,44 +70,64 @@ const sessionConfigFromSnapshot = (snapshot: AppSnapshot): HatGameConfig => ({
   skipsPerTurn: snapshot.skipsPerTurn,
 });
 
+const createSessionFromSnapshot = (snapshot: AppSnapshot) =>
+  createHatGameSession({
+    players: snapshot.players,
+    teams: snapshot.teams,
+    config: sessionConfigFromSnapshot(snapshot),
+    clueSubmissions: snapshot.clueSubmissions,
+  });
+
+const withStartedGameSession = (current: AppSnapshot, sessionSource: AppSnapshot): AppSnapshot => ({
+  ...current,
+  step: "game",
+  session: createSessionFromSnapshot(sessionSource),
+  handoffRevealed: false,
+});
+
 export { formatSavedAt };
 
-const syncClueSubmissions = (players: AppSnapshot['players'], current: ClueSubmissionMap): ClueSubmissionMap =>
+const syncClueSubmissions = (
+  players: AppSnapshot["players"],
+  current: ClueSubmissionMap,
+): ClueSubmissionMap =>
   Object.fromEntries(
     players.map((player) => [
       player.id,
       {
         clues: Array.from(
           { length: GAME_DEFAULTS.cluesPerPlayer },
-          (_, index) => current[player.id]?.clues[index] ?? ''
-        )
-      }
-    ])
+          (_, index) => current[player.id]?.clues[index] ?? "",
+        ),
+      },
+    ]),
   );
 
 const isError = (value: unknown): value is { error: string } =>
-  Boolean(value && typeof value === 'object' && 'error' in value);
+  Boolean(value && typeof value === "object" && "error" in value);
 
 const isStoragePayload = (value: unknown): value is StoragePayload =>
   Boolean(
     value &&
-      typeof value === 'object' &&
-      'schemaVersion' in value &&
-      'snapshot' in value &&
-      'lastSavedAt' in value
+    typeof value === "object" &&
+    "schemaVersion" in value &&
+    "snapshot" in value &&
+    "lastSavedAt" in value,
   );
 
 const chooseSuggestion = (used: string[]) => {
-  const remaining = (clueSuggestions as string[]).filter((suggestion) => !used.includes(suggestion));
+  const remaining = (clueSuggestions as string[]).filter(
+    (suggestion) => !used.includes(suggestion),
+  );
   const source = remaining.length > 0 ? remaining : (clueSuggestions as string[]);
-  return source[Math.floor(Math.random() * source.length)] ?? '';
+  return source[Math.floor(Math.random() * source.length)] ?? "";
 };
 
 export function useHatSingleplayerApp() {
-  const [snapshot, setSnapshot] = useState<AppSnapshot>(() => createInitialSnapshot('landing'));
+  const [snapshot, setSnapshot] = useState<AppSnapshot>(() => createInitialSnapshot("landing"));
   const [savedRecord, setSavedRecord] = useState<StoragePayload | null>(null);
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [confirmNewGame, setConfirmNewGame] = useState(false);
   const [showInfoPopup, setShowInfoPopup] = useState(false);
@@ -123,33 +140,31 @@ export function useHatSingleplayerApp() {
   }, [snapshot]);
 
   useEffect(() => {
-    void loadSavedState<StoragePayload | AppSnapshot>().then((saved) => {
-      if (!saved) {
-        return;
-      }
-      const record = isStoragePayload(saved)
-        ? {
-            ...saved,
-            snapshot: normalizeSnapshotStep(saved.snapshot),
-          }
-        : {
-            schemaVersion: 1 as const,
-            lastSavedAt: new Date().toISOString(),
-            snapshot: normalizeSnapshotStep(saved),
-          };
-      // Do not offer resume after a finished game (stale storage from older builds).
-      if (
-        record.snapshot.step === "game" &&
-        record.snapshot.session?.stage === "results"
-      ) {
-        void clearSavedState();
-        return;
-      }
-      setSavedRecord(record);
-    })
-    .finally(() => {
-      setLoaded(true);
-    });
+    void loadSavedState<StoragePayload | AppSnapshot>()
+      .then((saved) => {
+        if (!saved) {
+          return;
+        }
+        const record = isStoragePayload(saved)
+          ? {
+              ...saved,
+              snapshot: normalizeSnapshotStep(saved.snapshot),
+            }
+          : {
+              schemaVersion: 1 as const,
+              lastSavedAt: new Date().toISOString(),
+              snapshot: normalizeSnapshotStep(saved),
+            };
+        // Do not offer resume after a finished game (stale storage from older builds).
+        if (record.snapshot.step === "game" && record.snapshot.session?.stage === "results") {
+          void clearSavedState();
+          return;
+        }
+        setSavedRecord(record);
+      })
+      .finally(() => {
+        setLoaded(true);
+      });
   }, []);
 
   const persistSnapshot = async (nextSnapshot: AppSnapshot) => {
@@ -157,10 +172,7 @@ export function useHatSingleplayerApp() {
       return null;
     }
     // Finished session: keep UI in memory but drop persistence so "Resume" is for mid-game only.
-    if (
-      nextSnapshot.step === "game" &&
-      nextSnapshot.session?.stage === "results"
-    ) {
+    if (nextSnapshot.step === "game" && nextSnapshot.session?.stage === "results") {
       setSavedRecord(null);
       await clearSavedState();
       return null;
@@ -176,7 +188,7 @@ export function useHatSingleplayerApp() {
   };
 
   useEffect(() => {
-    if (loaded && snapshot.step !== 'landing') {
+    if (loaded && snapshot.step !== "landing") {
       persistSnapshot(snapshot).catch(() => undefined);
     }
   }, [loaded, snapshot]);
@@ -194,16 +206,20 @@ export function useHatSingleplayerApp() {
 
     playHatActionSoundEffects(previousSession, result, action, turnEndCueTurnRef, playSoundCue);
 
-    setError('');
+    setError("");
     setSnapshot((current) => ({
       ...current,
       session: result,
-      handoffRevealed: result.stage === 'ready' ? false : current.handoffRevealed
+      handoffRevealed: result.stage === "ready" ? false : current.handoffRevealed,
     }));
   };
 
   useEffect(() => {
-    if (snapshot.step !== 'game' || snapshot.session?.stage !== 'turn' || !snapshot.session.activeTurn?.endsAt) {
+    if (
+      snapshot.step !== "game" ||
+      snapshot.session?.stage !== "turn" ||
+      !snapshot.session.activeTurn?.endsAt
+    ) {
       setSecondsRemaining(0);
       warningCueTurnRef.current = null;
       return undefined;
@@ -215,10 +231,10 @@ export function useHatSingleplayerApp() {
       setSecondsRemaining(remaining);
       if (remaining <= 10 && remaining > 0 && warningCueTurnRef.current !== turnCueKey) {
         warningCueTurnRef.current = turnCueKey;
-        playSoundCue('ten-second-warning');
+        void playGameSoundEffect("warn10");
       }
       if (remaining <= 0) {
-        dispatchGameAction({ type: 'end-turn' });
+        dispatchGameAction({ type: "end-turn" });
       }
     };
 
@@ -233,7 +249,7 @@ export function useHatSingleplayerApp() {
   ]);
 
   const activeTeam = useMemo(() => {
-    if (snapshot.step === 'team') {
+    if (snapshot.step === "team") {
       return snapshot.teams[snapshot.teamEditIndex] ?? null;
     }
     return null;
@@ -241,21 +257,21 @@ export function useHatSingleplayerApp() {
 
   const activeTeamPlayers = useMemo(
     () => (activeTeam ? snapshot.players.filter((player) => player.teamId === activeTeam.id) : []),
-    [activeTeam, snapshot.players]
+    [activeTeam, snapshot.players],
   );
 
   const actionLockKey = [
-    loaded ? 'loaded' : 'loading',
+    loaded ? "loaded" : "loading",
     snapshot.step,
     snapshot.teamEditIndex,
     snapshot.clueEntryIndex,
-    snapshot.clueEntryRevealed ? 'clue-open' : 'clue-closed',
-    snapshot.handoffRevealed ? 'handoff-open' : 'handoff-closed',
-    snapshot.session?.stage ?? 'no-session',
-    snapshot.session?.phaseNumber ?? 'no-phase',
-    snapshot.session?.activeTurn?.startedAt ?? 'no-turn',
-    confirmNewGame ? 'confirm-new' : 'normal'
-  ].join(':');
+    snapshot.clueEntryRevealed ? "clue-open" : "clue-closed",
+    snapshot.handoffRevealed ? "handoff-open" : "handoff-closed",
+    snapshot.session?.stage ?? "no-session",
+    snapshot.session?.phaseNumber ?? "no-phase",
+    snapshot.session?.activeTurn?.startedAt ?? "no-turn",
+    confirmNewGame ? "confirm-new" : "normal",
+  ].join(":");
 
   const footerActionsLocked = useFooterActionLockOnKeyChange(actionLockKey);
   useAutoHidePopup(showInfoPopup, () => setShowInfoPopup(false));
@@ -279,9 +295,9 @@ export function useHatSingleplayerApp() {
 
   const exitToLanding = () => {
     setConfirmNewGame(false);
-    setError('');
+    setError("");
     void persistSnapshot(snapshot);
-    setSnapshot((current) => ({ ...current, step: 'landing' }));
+    setSnapshot((current) => ({ ...current, step: "landing" }));
   };
 
   const updateHatTeamCountSetting = (teamCount: number) => {
@@ -337,16 +353,11 @@ export function useHatSingleplayerApp() {
     });
   };
 
-  const addPlayerToHatRosterRows = (
-    rows: readonly HatRosterTeamRow[],
-    teamId: string,
-  ) => {
+  const addPlayerToHatRosterRows = (rows: readonly HatRosterTeamRow[], teamId: string) => {
     const current = snapshotRef.current;
     const { teams, players } = applyRosterRowsToHat(rows, current.teams);
     const result = addPlayerToHatTeam(teams, players, teamId);
-    return result
-      ? hatStateToRosterRows(result.teams, result.players)
-      : [...rows];
+    return result ? hatStateToRosterRows(result.teams, result.players) : [...rows];
   };
 
   const removePlayerFromHatRosterRows = (
@@ -357,9 +368,7 @@ export function useHatSingleplayerApp() {
     const current = snapshotRef.current;
     const { teams, players } = applyRosterRowsToHat(rows, current.teams);
     const result = removePlayerFromHatTeam(teams, players, teamId, playerId);
-    return result
-      ? hatStateToRosterRows(result.teams, result.players)
-      : [...rows];
+    return result ? hatStateToRosterRows(result.teams, result.players) : [...rows];
   };
 
   const updateClue = (playerId: string, clueIndex: number, value: string) => {
@@ -368,17 +377,18 @@ export function useHatSingleplayerApp() {
       clueSubmissions: {
         ...current.clueSubmissions,
         [playerId]: {
-          clues: (current.clueSubmissions[playerId]?.clues ?? createEmptyClues()).map((clue, index) =>
-            index === clueIndex ? value.slice(0, GAME_DEFAULTS.maxClueLength) : clue
-          )
-        }
-      }
+          clues: (current.clueSubmissions[playerId]?.clues ?? createEmptyClues()).map(
+            (clue, index) =>
+              index === clueIndex ? value.slice(0, GAME_DEFAULTS.maxClueLength) : clue,
+          ),
+        },
+      },
     }));
   };
 
   const fillSuggestion = (playerId: string, clueIndex: number) => {
     const used = Object.values(snapshotRef.current.clueSubmissions).flatMap((entry) =>
-      entry.clues.map((clue) => clue.trim()).filter(Boolean)
+      entry.clues.map((clue) => clue.trim()).filter(Boolean),
     );
     updateClue(playerId, clueIndex, chooseSuggestion(used));
   };
@@ -388,14 +398,14 @@ export function useHatSingleplayerApp() {
       return;
     }
     if (!activeTeam.name.trim() || activeTeamPlayers.some((player) => !player.name.trim())) {
-      setError('Name the team and every player before continuing.');
+      setError("Name the team and every player before continuing.");
       return;
     }
-    setError('');
+    setError("");
     setSnapshot((current) => ({
       ...current,
       teamEditIndex: current.teamEditIndex + 1,
-      step: current.teamEditIndex >= current.teams.length - 1 ? 'review' : 'team'
+      step: current.teamEditIndex >= current.teams.length - 1 ? "review" : "team",
     }));
   };
 
@@ -403,12 +413,12 @@ export function useHatSingleplayerApp() {
     setSnapshot((current) => ({
       ...current,
       step: current.teamEditIndex === 0 ? "settings" : "team",
-      teamEditIndex: Math.max(0, current.teamEditIndex - 1)
+      teamEditIndex: Math.max(0, current.teamEditIndex - 1),
     }));
   };
 
   const editTeams = () => {
-    setSnapshot((current) => ({ ...current, step: 'team', teamEditIndex: 0 }));
+    setSnapshot((current) => ({ ...current, step: "team", teamEditIndex: 0 }));
   };
 
   const startClueEntry = () => {
@@ -424,12 +434,12 @@ export function useHatSingleplayerApp() {
     }
     setSnapshot((current) => ({
       ...current,
-      step: 'clues',
+      step: "clues",
       clueEntryIndex: 0,
       clueEntryRevealed: false,
-      clueSubmissions: syncClueSubmissions(current.players, current.clueSubmissions)
+      clueSubmissions: syncClueSubmissions(current.players, current.clueSubmissions),
     }));
-    setError('');
+    setError("");
   };
 
   const revealClueEntry = () => {
@@ -447,21 +457,15 @@ export function useHatSingleplayerApp() {
       return;
     }
     if (snapshot.clueEntryIndex >= snapshot.players.length - 1) {
-      const session = createHatGameSession({
-        players: snapshot.players,
-        teams: snapshot.teams,
-        config: sessionConfigFromSnapshot(snapshot),
-        clueSubmissions: snapshot.clueSubmissions
-      });
-      setSnapshot((current) => ({ ...current, step: 'game', session, handoffRevealed: false }));
+      setSnapshot((current) => withStartedGameSession(current, snapshot));
     } else {
       setSnapshot((current) => ({
         ...current,
         clueEntryIndex: current.clueEntryIndex + 1,
-        clueEntryRevealed: false
+        clueEntryRevealed: false,
       }));
     }
-    setError('');
+    setError("");
   };
 
   const revealHandoff = () => {
@@ -469,13 +473,7 @@ export function useHatSingleplayerApp() {
   };
 
   const playAgain = () => {
-    const session = createHatGameSession({
-      players: snapshot.players,
-      teams: snapshot.teams,
-      config: sessionConfigFromSnapshot(snapshot),
-      clueSubmissions: snapshot.clueSubmissions
-    });
-    setSnapshot((current) => ({ ...current, step: 'game', session, handoffRevealed: false }));
+    setSnapshot((current) => withStartedGameSession(current, snapshot));
   };
 
   return {
@@ -512,9 +510,8 @@ export function useHatSingleplayerApp() {
     confirmClues,
     revealHandoff,
     dispatchGameAction,
-    playAgain
+    playAgain,
   };
 }
 
 export type HatSingleplayerAppController = ReturnType<typeof useHatSingleplayerApp>;
-

@@ -3,7 +3,7 @@ import {
   SecondaryFooterButton,
 } from "@/components/game/GameFooterButtons";
 import { IconCheck, IconSkipForward } from "@/components/icons";
-import { playMultiplayerToneCue } from "@/services/multiplayerTone";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 type EmitWithAck = (
   event: string,
@@ -48,7 +48,7 @@ export function MultiplayerSkipCorrectFooter({
           if (ack?.ok === false) {
             setError(ack.error ?? "");
           } else {
-            void playMultiplayerToneCue("skip");
+            void playGameSoundEffect("skip");
           }
 
           setBusy(false);
@@ -65,7 +65,7 @@ export function MultiplayerSkipCorrectFooter({
           if (ack?.ok === false) {
             setError(ack.error ?? "");
           } else {
-            void playMultiplayerToneCue("correct");
+            void playGameSoundEffect("correct");
           }
 
           setBusy(false);

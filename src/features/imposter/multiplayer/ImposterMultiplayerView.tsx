@@ -1,19 +1,20 @@
-import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
-import { GamePanel } from "@/components/game/GamePanel";
-import { ImposterRemindMeCard } from "@/components/game/ImposterRemindMeCard";
-import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
-import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
-import { IMPOSTER_ROLE_CARD_COPY } from "@/config/imposterDefaults";
-import { IMPOSTER_NOTICE_CLASS } from "@/features/imposter/screens/imposterScreenTokens";
-import {
-  MultiplayerEndGameActions,
-  MultiplayerGameShell,
-} from "@/features/multiplayer/MultiplayerGameShell";
+import { MultiplayerGameShell } from "@/features/multiplayer/MultiplayerGameShell";
 import type { ImposterSyncDto } from "@/multiplayer/roomTypes";
-import { playMultiplayerToneCue } from "@/services/multiplayerTone";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
+
+import { ImposterMultiplayerBody } from "./ImposterMultiplayerBody";
+import {
+  type ImposterMultiplayerDispatch,
+  ImposterMultiplayerFooter,
+} from "./ImposterMultiplayerFooter";
+
+type EmitWithAck = (
+  event: string,
+  body?: unknown,
+) => Promise<{ ok?: boolean; error?: string } | undefined>;
+
 export function ImposterMultiplayerView({
   payload,
   viewerPlayerId,
@@ -29,27 +30,22 @@ export function ImposterMultiplayerView({
     readonly acceptedIds: readonly string[];
     readonly cancelledByDisconnect: boolean;
   };
-  readonly emitWithAck: (
-    event: string,
-    body?: unknown,
-  ) => Promise<{ ok?: boolean; error?: string } | undefined>;
+  readonly emitWithAck: EmitWithAck;
 }) {
-  const { snapshot, revealSubjectId, revealSubjectIsImposter } = payload;
-  const round = snapshot.round;
-  const step = snapshot.step;
+  const step = payload.snapshot.step;
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const prevStepRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     if (prevStepRef.current !== undefined && prevStepRef.current !== step) {
-      void playMultiplayerToneCue("phaseAdvance");
+      void playGameSoundEffect("phaseAdvance");
     }
 
     prevStepRef.current = step;
   }, [step]);
 
-  const dispatch = async (action: { readonly type: string }) => {
+  const dispatch: ImposterMultiplayerDispatch = async (action) => {
     setBusy(true);
     const ack = await emitWithAck("imposter:dispatch", action);
 
@@ -60,350 +56,26 @@ export function ImposterMultiplayerView({
     setBusy(false);
   };
 
-  let footer: ReactNode | undefined;
-
-  if (step === "reveal" && round && revealSubjectId) {
-    const parallelMaps =
-      round.parallelRoleSeen !== undefined &&
-      round.parallelRevealDone !== undefined;
-
-    if (parallelMaps) {
-      const seen = round.parallelRoleSeen![viewerPlayerId] === true;
-      const done = round.parallelRevealDone![viewerPlayerId] === true;
-
-      if (!seen) {
-        footer = (
-          <PrimaryFooterButton
-            disabled={busy}
-            label="Reveal my role"
-            onClick={() => void dispatch({ type: "reveal-show-role" })}
-          />
-        );
-      } else if (!done) {
-        footer = (
-          <PrimaryFooterButton
-            disabled={busy}
-            label="Continue"
-            onClick={() => void dispatch({ type: "reveal-confirm-next" })}
-          />
-        );
-      } else {
-        footer = (
-          <PrimaryFooterButton disabled label="Waiting for other players…" onClick={() => {}} />
-        );
-      }
-    } else {
-      /** Pass-and-play style sequential reveal (single shared phone). */
-      const canInteract = viewerPlayerId === revealSubjectId;
-
-      if (!round.revealRevealed) {
-        footer = (
-          <PrimaryFooterButton
-            disabled={busy || !canInteract}
-            label={`${snapshot.players[round.revealPlayerIndex]?.name ?? "Player"} ready`}
-            onClick={() => void dispatch({ type: "reveal-show-role" })}
-          />
-        );
-      } else {
-        const isLast = round.revealPlayerIndex >= snapshot.players.length - 1;
-
-        footer = (
-          <PrimaryFooterButton
-            disabled={busy || !canInteract}
-            label={isLast ? "Continue to clues" : "Confirm and pass on"}
-            onClick={() => void dispatch({ type: "reveal-confirm-next" })}
-          />
-        );
-      }
-    }
-  } else if (step === "guidePregame") {
-    footer = (
-      <PrimaryFooterButton
-        disabled={busy || !isHost}
-        label="Ready for discussion"
-        onClick={() => void dispatch({ type: "guide-pregame-done" })}
-      />
-    );
-  } else if (step === "guidePrediscussion") {
-    footer = (
-      <PrimaryFooterButton
-        disabled={busy || !isHost}
-        label="Vote done"
-        onClick={() => void dispatch({ type: "guide-prediscussion-done" })}
-      />
-    );
-  } else if (step === "guideWarning") {
-    footer = (
-      <PrimaryFooterButton
-        disabled={busy || !isHost}
-        label="Reveal"
-        onClick={() => void dispatch({ type: "guide-warning-done" })}
-      />
-    );
-  } else if (step === "results") {
-    footer = (
-      <MultiplayerEndGameActions
-        emitWithAck={emitWithAck}
-        isHost={isHost}
-        replaySync={replaySync}
-        viewerPlayerId={viewerPlayerId}
-      />
-    );
-  }
-
-  let body: ReactNode;
-
-  if (step === "reveal" && round && revealSubjectId) {
-    const parallelMaps =
-      round.parallelRoleSeen !== undefined &&
-      round.parallelRevealDone !== undefined;
-
-    if (parallelMaps) {
-      const seen = round.parallelRoleSeen![viewerPlayerId] === true;
-      const done = round.parallelRevealDone![viewerPlayerId] === true;
-      const viewerName =
-        snapshot.players.find((player) => player.id === viewerPlayerId)?.name ??
-        "Player";
-
-      if (!seen) {
-        body = (
-          <GamePanel
-            eyebrow={`Secret role • player ${snapshot.players.findIndex((player) => player.id === viewerPlayerId) + 1} of ${snapshot.players.length}`}
-            subtitle="Only you should look at your phone for this step."
-            title={`Reveal — ${viewerName}`}
-          >
-            <p className={IMPOSTER_NOTICE_CLASS}>
-              When you are somewhere private, tap below to see whether you know the secret
-              word or you are the imposter.
-            </p>
-            <div className="mt-6">
-              <ReadyNextStepsCard primaryText="When you are in private, tap Reveal my role in the footer. The table cannot start the clue round until everyone has looked." />
-            </div>
-          </GamePanel>
-        );
-      } else if (!done) {
-        body = (
-          <GamePanel
-            eyebrow={revealSubjectIsImposter ? "Your role" : "Remember this"}
-            subtitle={
-              revealSubjectIsImposter
-                ? "Blend in during clues — the crew does not know who you are."
-                : "Give a clue that proves you know the word without handing it to imposters."
-            }
-            title={viewerName}
-          >
-            {revealSubjectIsImposter ? (
-              <TurnPlayHighlight>{IMPOSTER_ROLE_CARD_COPY}</TurnPlayHighlight>
-            ) : (
-              <TurnPlayHighlight>{round.secretWord}</TurnPlayHighlight>
-            )}
-            <div className="mt-6">
-              <ReadyNextStepsCard
-                primaryText={
-                  <>
-                    You must remember your role. Once you have memorised it, tap{" "}
-                    <strong>Continue</strong>. The game will start once everybody is ready.
-                  </>
-                }
-              />
-            </div>
-          </GamePanel>
-        );
-      } else {
-        body = (
-          <GamePanel title="Reveal roles">
-            <p className={IMPOSTER_NOTICE_CLASS}>
-              You are done on this device. Wait quietly while everyone else finishes their
-              private reveal.
-            </p>
-          </GamePanel>
-        );
-      }
-    } else {
-      /** Sequential reveal on one phone — only the active player interacts. */
-      const subject = snapshot.players[round.revealPlayerIndex];
-      const isViewerTurn = viewerPlayerId === revealSubjectId;
-
-      if (!isViewerTurn) {
-        body = (
-          <GamePanel title="Reveal roles">
-            <p className={IMPOSTER_NOTICE_CLASS}>
-              Waiting for{" "}
-              <span className="font-semibold text-foreground">{subject?.name}</span> to
-              finish this reveal step on their device.
-            </p>
-          </GamePanel>
-        );
-      } else if (!round.revealRevealed) {
-        body = (
-          <GamePanel
-            eyebrow={`Secret role ${round.revealPlayerIndex + 1} of ${snapshot.players.length}`}
-            subtitle="Only you should look when it is your step."
-            title={`Reveal — ${subject?.name ?? "Player"}`}
-          >
-            <p className={IMPOSTER_NOTICE_CLASS}>
-              When you are ready in private, tap the footer button to see your role.
-            </p>
-            <div className="mt-6">
-              <ReadyNextStepsCard primaryText="When you are in private, use the footer button on this screen. Wait quietly if it is not your turn yet." />
-            </div>
-          </GamePanel>
-        );
-      } else {
-        body = (
-          <GamePanel
-            eyebrow={revealSubjectIsImposter ? "Your role" : "Remember this"}
-            subtitle={
-              revealSubjectIsImposter
-                ? "Blend in during clues — the crew does not know who you are."
-                : "Give a clue that proves you know the word without handing it to imposters."
-            }
-            title={subject?.name ?? "Player"}
-          >
-            {revealSubjectIsImposter ? (
-              <TurnPlayHighlight>{IMPOSTER_ROLE_CARD_COPY}</TurnPlayHighlight>
-            ) : (
-              <TurnPlayHighlight>{round.secretWord}</TurnPlayHighlight>
-            )}
-            <div className="mt-6">
-              <ReadyNextStepsCard
-                primaryText={
-                  <>
-                    You must remember your role. Once you have memorised it, use the footer
-                    button to pass the phone or continue. The game moves on once everyone has
-                    confirmed.
-                  </>
-                }
-              />
-            </div>
-          </GamePanel>
-        );
-      }
-    }
-  } else if (step === "guidePregame") {
-    const starterName = snapshot.cluesStartPlayerId
-      ? snapshot.players.find((player) => player.id === snapshot.cluesStartPlayerId)
-          ?.name ?? "Someone"
-      : "Someone";
-
-    body = (
-      <GamePanel
-        eyebrow="Clue round"
-        subtitle="Talk together at the table — this app only carries instructions."
-        title="Give your clues"
-      >
-        <p className="text-typ-body text-foreground">
-          Start with <strong>{starterName}</strong> and then move left around the circle,
-          until everyone has gone twice. On each pass, say one short clue about the secret
-          word. Imposters should try to sound like everyone else.
-        </p>
-        <div className="mt-6 space-y-4">
-          <ReadyNextStepsCard primaryText="Once you have finished two rounds of guesses the host must move you on to the next phase." />
-          {snapshot.round ? (
-            <ImposterRemindMeCard
-              isImposter={snapshot.round.imposterPlayerIds.includes(viewerPlayerId)}
-              secretWord={snapshot.round.secretWord}
-            />
-          ) : null}
-        </div>
-        {!isHost ? (
-          <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>Waiting on host to continue.</p>
-        ) : null}
-      </GamePanel>
-    );
-  } else if (step === "guidePrediscussion") {
-    body = (
-      <GamePanel
-        eyebrow="Discussion & vote"
-        subtitle="The app is not tracking votes — your group decides together."
-        title="Talk it out, then vote"
-      >
-        <p className="text-typ-body text-foreground">
-          Discuss who felt suspicious. When you are ready, vote at the table on who you
-          think is the imposter (use whatever rule your group agrees on).
-        </p>
-        <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>
-          After voting is settled, the host taps below before anyone reads the phone again
-          for the reveal.
-        </p>
-        <div className="mt-6">
-          <ReadyNextStepsCard primaryText="Once you have finished voting the host must move you on to the next phase." />
-        </div>
-        {!isHost ? (
-          <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>Waiting on host to continue.</p>
-        ) : null}
-      </GamePanel>
-    );
-  } else if (step === "guideWarning") {
-    body = (
-      <GamePanel
-        eyebrow="Big reveal"
-        subtitle="Everyone should be ready for spoilers."
-        title="About to reveal the imposter"
-      >
-        <p className="text-typ-body text-foreground">
-          The next screen shows who was secretly the imposter and what the word was.
-        </p>
-        <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>
-          Are all players okay moving on — including anyone who should look away until you
-          say so?
-        </p>
-        <div className="mt-6">
-          <ReadyNextStepsCard primaryText="When you are ready, the host should tap Reveal in the footer to show the imposter(s) and the secret word on everyone's phones." />
-        </div>
-        {!isHost ? (
-          <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>Waiting on host to continue.</p>
-        ) : null}
-      </GamePanel>
-    );
-  } else if (step === "results" && round) {
-    const imposterNames =
-      round.imposterPlayerIds
-        .map((id) => snapshot.players.find((player) => player.id === id)?.name ?? id)
-        .join(", ") ?? "—";
-
-    body = (
-      <GamePanel
-        eyebrow="Round reveal"
-        subtitle="Resolve winners together at the table."
-        title="Imposter & word"
-      >
-        <div className="space-y-6">
-          <div>
-            <p className="text-typ-overline font-semibold uppercase tracking-wide text-muted-foreground">
-              Imposter
-            </p>
-            <p className="mt-2 text-typ-display font-bold text-foreground">
-              {imposterNames}
-            </p>
-          </div>
-          <div>
-            <p className="text-typ-overline font-semibold uppercase tracking-wide text-muted-foreground">
-              Secret word
-            </p>
-            <p className="mt-2 text-typ-display font-bold text-foreground">
-              {round.secretWord}
-            </p>
-          </div>
-        </div>
-        <div className="mt-8">
-          <ReadyNextStepsCard primaryText="Compare notes at the table. Use Pick another game in the footer when your group is ready to leave this room." />
-        </div>
-      </GamePanel>
-    );
-  } else {
-    body = (
-      <GamePanel title="Imposter">
-        <p className={IMPOSTER_NOTICE_CLASS}>
-          {error || "Unexpected Imposter state — try reconnecting."}
-        </p>
-      </GamePanel>
-    );
-  }
+  const footer = (
+    <ImposterMultiplayerFooter
+      busy={busy}
+      emitWithAck={emitWithAck}
+      isHost={isHost}
+      payload={payload}
+      replaySync={replaySync}
+      viewerPlayerId={viewerPlayerId}
+      onDispatch={dispatch}
+    />
+  );
 
   return (
     <MultiplayerGameShell footer={footer} title="Imposter">
-      {body}
+      <ImposterMultiplayerBody
+        error={error}
+        isHost={isHost}
+        payload={payload}
+        viewerPlayerId={viewerPlayerId}
+      />
     </MultiplayerGameShell>
   );
 }

@@ -14,6 +14,7 @@ import {
 } from "@/domain/whowhatwhere/game";
 import { reconcileTeamSetups, validateSetup } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState, TeamSetup } from "@/domain/whowhatwhere/types";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import {
   clearMatch,
   loadMatch,
@@ -22,7 +23,6 @@ import {
   saveMatch,
   saveSetup,
 } from "@/services/whowhatwherePersistence";
-import { playSound } from "@/services/whowhatwhereSound";
 
 type AppMode =
   | "landing"
@@ -41,9 +41,7 @@ export function useWhoWhatWhereSingleplayerApp() {
   const [teamStep, setTeamStep] = useState(0);
   const [match, setMatch] = useState<MatchState | null>(null);
   const [mode, setMode] = useState<AppMode>("landing");
-  const [pendingMatch, setPendingMatch] = useState<PersistedMatch | null>(() =>
-    loadMatch(),
-  );
+  const [pendingMatch, setPendingMatch] = useState<PersistedMatch | null>(() => loadMatch());
   const [confirmDiscardPending, setConfirmDiscardPending] = useState(false);
   const [setupError, setSetupError] = useState("");
   const [turnError, setTurnError] = useState("");
@@ -82,7 +80,7 @@ export function useWhoWhatWhereSingleplayerApp() {
           return currentMatch;
         }
 
-        playSound("turnEnd");
+        void playGameSoundEffect("timeout");
         return endTurn(currentMatch);
       });
     }, 250);
@@ -90,11 +88,7 @@ export function useWhoWhatWhereSingleplayerApp() {
     return () => window.clearInterval(interval);
   }, [match?.activeTurn, match?.stage]);
 
-  const activeMode: AppMode = match
-    ? match.stage === "ready"
-      ? "ready"
-      : match.stage
-    : mode;
+  const activeMode: AppMode = match ? (match.stage === "ready" ? "ready" : match.stage) : mode;
 
   useEffect(() => {
     setReadyHandoffRevealed(false);
@@ -113,18 +107,13 @@ export function useWhoWhatWhereSingleplayerApp() {
 
   useEffect(() => {
     setFooterActionsLocked(true);
-    const timeout = window.setTimeout(
-      () => setFooterActionsLocked(false),
-      FOOTER_ACTION_LOCK_MS,
-    );
+    const timeout = window.setTimeout(() => setFooterActionsLocked(false), FOOTER_ACTION_LOCK_MS);
     return () => window.clearTimeout(timeout);
   }, [actionLockKey]);
 
   const updateSettings = (nextSettings: GameSettings) => {
     setSettings(nextSettings);
-    setTeamSetups((currentTeams) =>
-      reconcileTeamSetups(currentTeams, nextSettings.teamCount),
-    );
+    setTeamSetups((currentTeams) => reconcileTeamSetups(currentTeams, nextSettings.teamCount));
   };
 
   const goToSettingsFromLanding = () => {
@@ -134,9 +123,7 @@ export function useWhoWhatWhereSingleplayerApp() {
 
   const goToTeamSetup = () => {
     setSetupError("");
-    setTeamSetups((currentTeams) =>
-      reconcileTeamSetups(currentTeams, settings.teamCount),
-    );
+    setTeamSetups((currentTeams) => reconcileTeamSetups(currentTeams, settings.teamCount));
     setTeamStep(0);
     setMode("team");
   };
@@ -193,13 +180,9 @@ export function useWhoWhatWhereSingleplayerApp() {
     try {
       const { wordDeck } = await import("@/data/words.generated");
 
-      setMatch((currentMatch) =>
-        currentMatch ? startTurn(currentMatch, wordDeck) : currentMatch,
-      );
+      setMatch((currentMatch) => (currentMatch ? startTurn(currentMatch, wordDeck) : currentMatch));
     } catch (error) {
-      setTurnError(
-        error instanceof Error ? error.message : "Unable to start this turn.",
-      );
+      setTurnError(error instanceof Error ? error.message : "Unable to start this turn.");
     } finally {
       setIsStartingTurn(false);
     }
@@ -281,41 +264,31 @@ export function useWhoWhatWhereSingleplayerApp() {
     playAgain,
     playAgainFromSettings,
     correct: () => {
-      playSound("correct");
-      setMatch((currentMatch) =>
-        currentMatch ? correctWord(currentMatch) : currentMatch,
-      );
+      void playGameSoundEffect("correct");
+      setMatch((currentMatch) => (currentMatch ? correctWord(currentMatch) : currentMatch));
     },
     skip: () => {
-      playSound("skip");
-      setMatch((currentMatch) =>
-        currentMatch ? skipWord(currentMatch) : currentMatch,
-      );
+      void playGameSoundEffect("skip");
+      setMatch((currentMatch) => (currentMatch ? skipWord(currentMatch) : currentMatch));
     },
     returnSkipped: (skippedWordId: string) => {
-      playSound("returnSkipped");
+      void playGameSoundEffect("returnSkipped");
       setMatch((currentMatch) =>
-        currentMatch
-          ? returnSkippedWord(currentMatch, skippedWordId)
-          : currentMatch,
+        currentMatch ? returnSkippedWord(currentMatch, skippedWordId) : currentMatch,
       );
     },
     revealHint: () => {
-      setMatch((currentMatch) =>
-        currentMatch ? revealHint(currentMatch) : currentMatch,
-      );
+      setMatch((currentMatch) => (currentMatch ? revealHint(currentMatch) : currentMatch));
     },
     endTurn: () => {
-      playSound("turnEnd");
-      setMatch((currentMatch) =>
-        currentMatch ? endTurn(currentMatch) : currentMatch,
-      );
+      void playGameSoundEffect("timeout");
+      setMatch((currentMatch) => (currentMatch ? endTurn(currentMatch) : currentMatch));
     },
     viewResults: () => {
-      playSound("gameOver");
-      setMatch((currentMatch) =>
-        currentMatch ? showResults(currentMatch) : currentMatch,
-      );
+      void playGameSoundEffect("victory");
+      setMatch((currentMatch) => (currentMatch ? showResults(currentMatch) : currentMatch));
     },
   };
 }
+
+export type WhoWhatWhereSingleplayerController = ReturnType<typeof useWhoWhatWhereSingleplayerApp>;

@@ -1,11 +1,7 @@
 import type { Socket } from "socket.io";
 
 import type { Room, RoomPlayer, RoomStore } from "./roomStore.ts";
-import {
-  type SocketEventName,
-  type SocketPayload,
-  socketSchemas,
-} from "./socketSchemas.ts";
+import { type SocketEventName, type SocketPayload, socketSchemas } from "./socketSchemas.ts";
 
 export type SocketAck = (payload?: { ok?: boolean; error?: string }) => void;
 
@@ -16,10 +12,7 @@ export type HandlerContext = {
   readonly actor: RoomPlayer;
 };
 
-export function requireActor(
-  socket: Socket,
-  store: RoomStore,
-): { room: Room; actor: RoomPlayer } {
+function requireActor(socket: Socket, store: RoomStore): { room: Room; actor: RoomPlayer } {
   const code = socket.data.roomCode as string | undefined;
   const playerId = socket.data.playerId as string | undefined;
 
@@ -71,10 +64,7 @@ export function registerHandler<E extends SocketEventName>(
 
       const { room, actor } = requireActor(socket, store);
 
-      await fn(
-        { socket, store, room, actor },
-        parsed.data as SocketPayload<E>,
-      );
+      await fn({ socket, store, room, actor }, parsed.data as SocketPayload<E>);
       ack?.({ ok: true });
     } catch (error) {
       ack?.({
