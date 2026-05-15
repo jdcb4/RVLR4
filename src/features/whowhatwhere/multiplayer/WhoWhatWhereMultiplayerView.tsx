@@ -4,7 +4,7 @@ import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActio
 import { getSecondsLeft } from "@/domain/whowhatwhere/game";
 import { MultiplayerGameShell } from "@/features/multiplayer/MultiplayerGameShell";
 import type { WhoWhatWhereSyncDto } from "@/multiplayer/roomTypes";
-import { playMultiplayerToneCue } from "@/services/multiplayerTone";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 import { WhoWhatWhereMultiplayerBody } from "./WhoWhatWhereMultiplayerBody";
 import { WhoWhatWhereMultiplayerFooter } from "./WhoWhatWhereMultiplayerFooter";
@@ -112,7 +112,7 @@ function useWhoWhatWhereMultiplayerCues(payload: WhoWhatWhereSyncDto) {
 
       if (left <= 10 && left > 0 && warned10Ref.current !== turn.startedAt) {
         warned10Ref.current = turn.startedAt;
-        void playMultiplayerToneCue("warn10");
+        void playGameSoundEffect("warn10");
       }
     }, 400);
 
@@ -121,7 +121,7 @@ function useWhoWhatWhereMultiplayerCues(payload: WhoWhatWhereSyncDto) {
 
   useEffect(() => {
     if (timedOutRef.current && match.stage !== "turn") {
-      void playMultiplayerToneCue("timeout");
+      void playGameSoundEffect("timeout");
       timedOutRef.current = null;
     } else if (!timedOutRef.current && match.stage === "turn") {
       timedOutRef.current = match.activeTurn?.startedAt ?? "turn";

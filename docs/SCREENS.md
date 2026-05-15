@@ -1,4 +1,4 @@
-# Screen map — JDPassNPlay
+# Screen map — RVLRY
 
 Informal names for each player-facing screen so UX discussions and tickets can point at the same thing.  
 Implementation hints refer to components under `src/features/` unless noted.

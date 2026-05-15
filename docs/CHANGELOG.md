@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.17.13 - 2026-05-15
+
+- **Branding:** Renamed the browser/app chrome from `JDPassNPlay` to `RVLRY`.
+- **Fix (singleplayer setup):** Let the Who What Where and Hat Game team-name
+  cards wrap their content instead of stretching to the bottom of the screen.
+- **Refactor (sound effects):** Added a shared game sound service based on the
+  multiplayer Who What Where cues and routed correct, skip, return skipped,
+  ten-second warning, timeout, and result cues through it across games/modes.
+- **Tests:** Added coverage for the RVLRY app metadata and legacy-to-shared
+  sound cue mappings.
+
 ## 0.17.12 - 2026-05-15
 
 - **Refactor (multiplayer lobby):** Split the shared lobby shell into

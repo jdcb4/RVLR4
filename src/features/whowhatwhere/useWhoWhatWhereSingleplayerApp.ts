@@ -14,6 +14,7 @@ import {
 } from "@/domain/whowhatwhere/game";
 import { reconcileTeamSetups, validateSetup } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState, TeamSetup } from "@/domain/whowhatwhere/types";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import {
   clearMatch,
   loadMatch,
@@ -22,7 +23,6 @@ import {
   saveMatch,
   saveSetup,
 } from "@/services/whowhatwherePersistence";
-import { playSound } from "@/services/whowhatwhereSound";
 
 type AppMode =
   | "landing"
@@ -80,7 +80,7 @@ export function useWhoWhatWhereSingleplayerApp() {
           return currentMatch;
         }
 
-        playSound("turnEnd");
+        void playGameSoundEffect("timeout");
         return endTurn(currentMatch);
       });
     }, 250);
@@ -264,15 +264,15 @@ export function useWhoWhatWhereSingleplayerApp() {
     playAgain,
     playAgainFromSettings,
     correct: () => {
-      playSound("correct");
+      void playGameSoundEffect("correct");
       setMatch((currentMatch) => (currentMatch ? correctWord(currentMatch) : currentMatch));
     },
     skip: () => {
-      playSound("skip");
+      void playGameSoundEffect("skip");
       setMatch((currentMatch) => (currentMatch ? skipWord(currentMatch) : currentMatch));
     },
     returnSkipped: (skippedWordId: string) => {
-      playSound("returnSkipped");
+      void playGameSoundEffect("returnSkipped");
       setMatch((currentMatch) =>
         currentMatch ? returnSkippedWord(currentMatch, skippedWordId) : currentMatch,
       );
@@ -281,11 +281,11 @@ export function useWhoWhatWhereSingleplayerApp() {
       setMatch((currentMatch) => (currentMatch ? revealHint(currentMatch) : currentMatch));
     },
     endTurn: () => {
-      playSound("turnEnd");
+      void playGameSoundEffect("timeout");
       setMatch((currentMatch) => (currentMatch ? endTurn(currentMatch) : currentMatch));
     },
     viewResults: () => {
-      playSound("gameOver");
+      void playGameSoundEffect("victory");
       setMatch((currentMatch) => (currentMatch ? showResults(currentMatch) : currentMatch));
     },
   };

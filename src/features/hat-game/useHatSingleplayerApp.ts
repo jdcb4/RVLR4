@@ -28,6 +28,7 @@ import type {
   StoragePayload,
 } from "@/features/hat-game/hatSingleplayerAppTypes";
 import { formatSavedAt } from "@/lib/formatSavedAt";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import { playSoundCue } from "@/services/hatSound";
 import { clearSavedState, loadSavedState, saveState } from "@/services/hatStorage";
 
@@ -230,7 +231,7 @@ export function useHatSingleplayerApp() {
       setSecondsRemaining(remaining);
       if (remaining <= 10 && remaining > 0 && warningCueTurnRef.current !== turnCueKey) {
         warningCueTurnRef.current = turnCueKey;
-        playSoundCue("ten-second-warning");
+        void playGameSoundEffect("warn10");
       }
       if (remaining <= 0) {
         dispatchGameAction({ type: "end-turn" });

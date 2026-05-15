@@ -23,8 +23,7 @@ import { HatPhaseBanner } from "@/features/hat-game/HatPhaseBanner";
 import { HatScoreboard } from "@/features/hat-game/screens/HatScoreboard";
 import type { HatSyncDto } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
-import { playSoundCue } from "@/services/hatSound";
-import { playMultiplayerToneCue } from "@/services/multiplayerTone";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 type EmitWithAck = (
   event: string,
@@ -119,7 +118,7 @@ function HatFinalResultsSection({
     }
 
     outcomePlayedRef.current = true;
-    void playMultiplayerToneCue(showConfetti ? "victory" : "defeat");
+    void playGameSoundEffect(showConfetti ? "victory" : "defeat");
   }, [vm, showConfetti]);
 
   return (
@@ -283,7 +282,7 @@ function HatTurnMultiplayerBody({
           if (ack?.ok === false) {
             setError(ack.error ?? "");
           } else {
-            playSoundCue("return-skipped");
+            void playGameSoundEffect("returnSkipped");
           }
 
           setBusy(false);

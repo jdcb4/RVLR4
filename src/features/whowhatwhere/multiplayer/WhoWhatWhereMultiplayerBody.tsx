@@ -11,7 +11,7 @@ import { ResultsScreen } from "@/features/whowhatwhere/results/ResultsScreen";
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
 import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
 import type { WhoWhatWherePeerRole, WhoWhatWhereSyncDto } from "@/multiplayer/roomTypes";
-import { playSound } from "@/services/whowhatwhereSound";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 type EmitWithAck = (
   event: string,
@@ -121,7 +121,7 @@ function DescriberTurnBody({
         if (ack?.ok === false) {
           setError(ack.error ?? "");
         } else {
-          playSound("returnSkipped");
+          void playGameSoundEffect("returnSkipped");
         }
       }}
     />

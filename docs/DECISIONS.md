@@ -102,11 +102,11 @@ When adding a new entry, append to the bottom and keep the most recent decisions
 
 ---
 
-## 2026-05-10: Tone.js for multiplayer game cues
+## 2026-05-10: Tone.js for shared game cues
 
-**Decision:** Use the **`tone`** package and a small `src/services/multiplayerTone.ts` helper to play short synthesized cues (correct, skip, 10 seconds left, time up) on multiplayer turn screens.
+**Decision:** Use the **`tone`** package and `src/services/gameSoundEffects.ts` to play short synthesized cues (correct, skip, return skipped, 10 seconds left, time up, and result stings) consistently across games and play modes.
 
-**Reasoning:** Consistent cross-device feedback without shipping audio asset files; matches existing “bell-like” feedback intent from single-player experiments.
+**Reasoning:** Consistent cross-device feedback without shipping audio asset files; the shared service keeps the multiplayer Who What Where cue patterns as the primary source while letting single-player flows use the same sounds.
 
 **Rejected alternatives:** Bundling WAV/MP3 clips — larger repo and cache busting; Web Audio API raw oscillators — more bespoke code than needed.
 

@@ -4,8 +4,8 @@ import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActio
 import { getCountdownSeconds } from "@/domain/hat-game/time";
 import { MultiplayerGameShell } from "@/features/multiplayer/MultiplayerGameShell";
 import type { HatSyncDto } from "@/multiplayer/roomTypes";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import { playSoundCue } from "@/services/hatSound";
-import { playMultiplayerToneCue } from "@/services/multiplayerTone";
 
 import { HatMultiplayerBody } from "./HatMultiplayerBody";
 import { HatMultiplayerFooter } from "./HatMultiplayerFooter";
@@ -136,7 +136,7 @@ function useHatMultiplayerCues(payload: HatSyncDto) {
 
       if (left <= 10 && left > 0 && warned10Ref.current !== activeTurn.startedAt) {
         warned10Ref.current = activeTurn.startedAt;
-        void playMultiplayerToneCue("warn10");
+        void playGameSoundEffect("warn10");
       }
     }, 400);
 
@@ -145,7 +145,7 @@ function useHatMultiplayerCues(payload: HatSyncDto) {
 
   useEffect(() => {
     if (timedOutRef.current && session.stage !== "turn") {
-      void playMultiplayerToneCue("timeout");
+      void playGameSoundEffect("timeout");
       timedOutRef.current = null;
     } else if (!timedOutRef.current && session.stage === "turn") {
       timedOutRef.current = activeTurn?.startedAt ?? "turn";

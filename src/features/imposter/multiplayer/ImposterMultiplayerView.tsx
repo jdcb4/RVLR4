@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { MultiplayerGameShell } from "@/features/multiplayer/MultiplayerGameShell";
 import type { ImposterSyncDto } from "@/multiplayer/roomTypes";
-import { playMultiplayerToneCue } from "@/services/multiplayerTone";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 import { ImposterMultiplayerBody } from "./ImposterMultiplayerBody";
 import {
@@ -39,7 +39,7 @@ export function ImposterMultiplayerView({
 
   useEffect(() => {
     if (prevStepRef.current !== undefined && prevStepRef.current !== step) {
-      void playMultiplayerToneCue("phaseAdvance");
+      void playGameSoundEffect("phaseAdvance");
     }
 
     prevStepRef.current = step;

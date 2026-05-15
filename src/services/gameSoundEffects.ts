@@ -1,6 +1,19 @@
 /**
- * Multiplayer UI cues using Tone.js (short synth bursts — user gesture unlocks audio).
+ * Shared game sound effects. These patterns are based on the multiplayer
+ * Who What Where cues and are the canonical sounds for matching actions across
+ * games and play modes.
  */
+export type GameSoundEffect =
+  | "correct"
+  | "skip"
+  | "returnSkipped"
+  | "warn10"
+  | "timeout"
+  | "victory"
+  | "defeat"
+  | "phaseAdvance"
+  | "turnStart";
+
 let toneStarted = false;
 
 async function ensureTone(): Promise<boolean> {
@@ -16,17 +29,7 @@ async function ensureTone(): Promise<boolean> {
   }
 }
 
-/** Fire-and-forget cue — safe to call from React handlers / effects. */
-export async function playMultiplayerToneCue(
-  name:
-    | "correct"
-    | "skip"
-    | "warn10"
-    | "timeout"
-    | "victory"
-    | "defeat"
-    | "phaseAdvance",
-): Promise<void> {
+export async function playGameSoundEffect(name: GameSoundEffect): Promise<void> {
   const ok = await ensureTone();
   if (!ok) {
     return;
@@ -45,6 +48,11 @@ export async function playMultiplayerToneCue(
     }
     case "skip": {
       synth.triggerAttackRelease("A3", "16n", now);
+      break;
+    }
+    case "returnSkipped": {
+      synth.triggerAttackRelease(["E4", "A4"], "16n", now);
+      synth.triggerAttackRelease("B4", "16n", now + 0.08);
       break;
     }
     case "warn10": {
@@ -67,6 +75,10 @@ export async function playMultiplayerToneCue(
     }
     case "phaseAdvance": {
       synth.triggerAttackRelease(["C5", "G5"], "16n", now);
+      break;
+    }
+    case "turnStart": {
+      synth.triggerAttackRelease(["G4", "C5"], "16n", now);
       break;
     }
     default: {

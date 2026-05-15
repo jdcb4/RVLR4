@@ -5,7 +5,7 @@ import { ResultsConfetti } from "@/components/game/final-results/ResultsConfetti
 import { mapFinalResultsFromWhoWhatWhere } from "@/components/game/final-results/viewModel";
 import { GamePanel } from "@/components/game/GamePanel";
 import type { MatchState } from "@/domain/whowhatwhere/types";
-import { playMultiplayerToneCue } from "@/services/multiplayerTone";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 export function ResultsScreen({
   match,
@@ -27,7 +27,7 @@ export function ResultsScreen({
     }
 
     playedOutcomeRef.current = true;
-    void playMultiplayerToneCue(outcomeTone === "win" ? "victory" : "defeat");
+    void playGameSoundEffect(outcomeTone === "win" ? "victory" : "defeat");
   }, [vm, outcomeTone]);
 
   if (!vm) {
