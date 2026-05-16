@@ -2,6 +2,12 @@ import { z } from "zod";
 
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import { TEAM_COUNT_OPTIONS } from "@/config/teamRoster";
+import {
+  DRAWNGUESS_MAX_GUESS_LENGTH,
+  DRAWNGUESS_MAX_POINTS_PER_STROKE,
+  DRAWNGUESS_MAX_PROMPT_LENGTH,
+  DRAWNGUESS_MAX_STROKES,
+} from "@/domain/drawnguess/types";
 
 /**
  * Zod schemas for every Socket.IO event payload accepted by the server.
@@ -22,9 +28,7 @@ import { TEAM_COUNT_OPTIONS } from "@/config/teamRoster";
 const teamCountSchema = z
   .number()
   .int()
-  .refine((value): value is 2 | 3 | 4 =>
-    (TEAM_COUNT_OPTIONS as readonly number[]).includes(value),
-  );
+  .refine((value): value is 2 | 3 | 4 => (TEAM_COUNT_OPTIONS as readonly number[]).includes(value));
 
 // teamIndex is 0-based; max bench is 4 teams (`MAX_TEAMS` in lobbyControl.ts).
 const teamIndexSchema = z.number().int().min(0).max(3);
@@ -38,6 +42,26 @@ const clueIndexSchema = z
 const playerNameSchema = z.string().max(64);
 
 const ignoredPayloadSchema = z.unknown();
+
+const drawNGuessPointSchema = z.object({
+  x: z.number().min(0).max(1),
+  y: z.number().min(0).max(1),
+});
+
+const drawNGuessStrokeSchema = z.object({
+  id: z.string().min(1).max(128),
+  color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+  size: z.number().min(1).max(64),
+  tool: z.enum(["pen", "eraser"]),
+  points: z.array(drawNGuessPointSchema).max(DRAWNGUESS_MAX_POINTS_PER_STROKE),
+});
+
+const drawNGuessDrawingSchema = z.object({
+  format: z.literal("strokes-v1"),
+  width: z.number().int().min(1).max(4096),
+  height: z.number().int().min(1).max(4096),
+  strokes: z.array(drawNGuessStrokeSchema).max(DRAWNGUESS_MAX_STROKES),
+});
 
 const imposterDispatchSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("reveal-show-role") }),
@@ -71,6 +95,7 @@ export const socketSchemas = {
   "lobby:hostPatchWhoWhatWhereSettings": z.unknown(),
   "lobby:hostPatchHatPrefs": z.unknown(),
   "lobby:hostPatchImposterCounts": z.unknown(),
+  "lobby:hostPatchDrawNGuessSettings": z.unknown(),
   "lobby:startGame": ignoredPayloadSchema,
   "imposter:dispatch": imposterDispatchSchema,
   "lobby:hatSetClueCell": z.object({
@@ -94,13 +119,32 @@ export const socketSchemas = {
   "hat:skip": ignoredPayloadSchema,
   "hat:returnSkipped": z.object({ poolIndex: z.number().int().min(0).max(255) }),
   "hat:showFinalScores": ignoredPayloadSchema,
+  "drawnguess:updatePromptDraft": z.object({
+    text: z.string().max(DRAWNGUESS_MAX_PROMPT_LENGTH * 2),
+  }),
+  "drawnguess:submitPrompt": z.object({
+    text: z.string().max(DRAWNGUESS_MAX_PROMPT_LENGTH * 2),
+  }),
+  "drawnguess:updateDrawingDraft": z.object({ drawing: drawNGuessDrawingSchema }),
+  "drawnguess:submitDrawing": z.object({ drawing: drawNGuessDrawingSchema }),
+  "drawnguess:updateGuessDraft": z.object({
+    text: z.string().max(DRAWNGUESS_MAX_GUESS_LENGTH * 2),
+  }),
+  "drawnguess:submitGuess": z.object({
+    text: z.string().max(DRAWNGUESS_MAX_GUESS_LENGTH * 2),
+  }),
+  "drawnguess:advanceTurn": ignoredPayloadSchema,
+  "drawnguess:advanceReveal": z.object({
+    direction: z.enum(["next", "previous"]).default("next"),
+  }),
+  "drawnguess:openRevealPacket": z.object({
+    starterPlayerId: z.string().min(1).max(128),
+  }),
 } as const;
 
 export type SocketEventName = keyof typeof socketSchemas;
 
-export type SocketPayload<E extends SocketEventName> = z.infer<
-  (typeof socketSchemas)[E]
->;
+export type SocketPayload<E extends SocketEventName> = z.infer<(typeof socketSchemas)[E]>;
 
 export const sessionBindSchema = z.object({
   code: z.string().min(1).max(16),

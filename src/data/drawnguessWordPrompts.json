@@ -1,0 +1,1502 @@
+[
+  {
+    "phrase": "Apple",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Banana",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Orange",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pear",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pineapple",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Watermelon",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Strawberry",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Carrot",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Broccoli",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Mushroom",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pizza",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Hamburger",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Hot dog",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Sandwich",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Taco",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Sushi",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Donut",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cupcake",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pancakes",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Popcorn",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Coffee mug",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Teapot",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Spoon",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Fork",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Knife",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Plate",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bowl",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Toaster",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Kettle",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Microwave",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Chair",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Table",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Sofa",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bed",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Lamp",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bookshelf",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Mirror",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Clock",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Door",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Window",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "House",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Apartment",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bridge",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Road",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Tunnel",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Fence",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Mailbox",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Garden",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Fountain",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Statue",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Tree",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Flower",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cactus",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Leaf",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Mountain",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Volcano",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Island",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "River",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Waterfall",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Beach",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Sun",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Moon",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Star",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cloud",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Rainbow",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Lightning",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Snowflake",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Raindrop",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Windmill",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Lighthouse",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Car",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bus",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Train",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Plane",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Boat",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bicycle",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Motorbike",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Truck",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Taxi",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Helicopter",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Book",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pencil",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pen",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Notebook",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Scissors",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Envelope",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Backpack",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Suitcase",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Wallet",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Key",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Phone",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Laptop",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Television",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Camera",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Headphones",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Remote control",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Video game controller",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Robot",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Rocket",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Satellite",
+    "category": "Standard",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Teddy bear",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Doll",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Toy car",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Toy train",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Building blocks",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Puzzle piece",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Yo-yo",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Kite",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Balloon",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bubbles",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Crayon",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Paintbrush",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Sticker",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Storybook",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Lunchbox",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "School bag",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pencil case",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Ruler",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Glue stick",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Chalkboard",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Playground",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Slide",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Swing",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Sandpit",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Trampoline",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Treehouse",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cubby house",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Blanket fort",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pillow",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cookie",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Lollipop",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Ice cream",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Chocolate bar",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Jelly beans",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Milkshake",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cereal bowl",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Juice box",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Apple pie",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Birthday cake",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Puppy",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Kitten",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bunny",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Hamster",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Goldfish",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pony",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Duckling",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Chick",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Frog",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Turtle",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Butterfly",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Ladybug",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bee",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Snail",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Worm",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Spider",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Penguin",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Koala",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Kangaroo",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Dolphin",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Lion",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Tiger",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Elephant",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Giraffe",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Zebra",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Monkey",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Panda",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Hippo",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Crocodile",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Octopus",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Dinosaur",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Dragon",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Unicorn",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Mermaid",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Fairy",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Wizard",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pirate",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Princess",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Knight",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Superhero",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Monster",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Alien",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Ghost",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Witch",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Vampire",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Mummy",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Snowman",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Gingerbread man",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Elf",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Starfish",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Shell",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Sandcastle",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bucket",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Spade",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Beach ball",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Toy boat",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Rubber duck",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bath bubbles",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Pyjamas",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Slippers",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Crown",
+    "category": "Kids",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Soccer ball",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Basketball",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Tennis ball",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cricket ball",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Rugby ball",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Golf ball",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Volleyball",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Netball",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Baseball",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Football",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Goal",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Goal posts",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Basketball hoop",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Tennis racket",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cricket bat",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Golf club",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Hockey stick",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Baseball bat",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Ping pong paddle",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Badminton racket",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Running shoes",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Football boots",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Skates",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Helmet",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Mouthguard",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Shin pads",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Boxing gloves",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Swimming goggles",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Ski goggles",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cycling jersey",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Whistle",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Trophy",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Medal",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Scoreboard",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Stadium",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Sports field",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Track",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Court",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Swimming pool",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Gym",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Coach",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Referee",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Player",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Goalkeeper",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Captain",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Team",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Mascot",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Fans",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cheerleader",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Umpire",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Finish line",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Starting blocks",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Hurdle",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Relay baton",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cones",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Water bottle",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Towel",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Gym bag",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Yoga mat",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Dumbbell",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Surfboard",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Skateboard",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Snowboard",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Kayak",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Canoe",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Sailing boat",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Fishing rod",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bowling ball",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Dart",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Bowling pins",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Archery bow",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Target",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Climbing wall",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Punching bag",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Treadmill",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Exercise bike",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Weights bench",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Jump rope",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Balance beam",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Diving board",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Stopwatch",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Scorecard",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Team jersey",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cap",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Sweatband",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Megaphone",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Ticket booth",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Locker room",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Podium",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Net",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Corner flag",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Cricket stumps",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Wicket keeper gloves",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Golf tee",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Baseball glove",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Horse saddle",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Race car",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Rowing oar",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Rowing boat",
+    "category": "Sports",
+    "difficulty": "Easy"
+  },
+  {
+    "phrase": "Running track",
+    "category": "Sports",
+    "difficulty": "Easy"
+  }
+]

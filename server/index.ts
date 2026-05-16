@@ -6,6 +6,7 @@ import cors from "cors";
 import express from "express";
 import { Server } from "socket.io";
 
+import { startDrawNGuessTurnTicker } from "./drawnguessTicker.ts";
 import { loadServerEnv } from "./env.ts";
 import { startHatTurnTicker } from "./hatTicker.ts";
 import { registerHttpRoutes } from "./httpRoutes.ts";
@@ -25,7 +26,9 @@ const app = express();
 app.use(express.json());
 
 const allowedOrigins =
-  env.CLIENT_ORIGIN?.split(",").map((origin) => origin.trim()).filter(Boolean) ?? [];
+  env.CLIENT_ORIGIN?.split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean) ?? [];
 
 /**
  * Pick the `origin` setting passed to `cors()` and Socket.IO.
@@ -87,6 +90,7 @@ const io = new Server(server, {
 registerSocketHandlers(io, store);
 startWhoWhatWhereTurnTicker(io, store);
 startHatTurnTicker(io, store);
+startDrawNGuessTurnTicker(io, store);
 startRoomIdleSweeper(io, store);
 
 const port = env.PORT;

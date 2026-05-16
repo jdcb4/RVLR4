@@ -199,6 +199,7 @@ export function PlayingRoomView({
         viewerPlayerId={sync.you.playerId}
       />
     ) : null,
+    drawnguess: null,
   }[sync.gameKind];
 
   return (

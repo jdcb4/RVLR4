@@ -5,6 +5,8 @@ import {
   MIN_PLAYERS_PER_TEAM,
   TEAM_COUNT_OPTIONS,
 } from "@/config/teamRoster";
+import { createDefaultDrawNGuessSettings } from "@/domain/drawnguess/engine";
+import type { DrawNGuessMatch, DrawNGuessSettings } from "@/domain/drawnguess/types";
 import type { HatGameSession } from "@/domain/hat-game/types";
 import { clampImposterCount, defaultImposterCount, shuffleWithRng } from "@/domain/imposter/round";
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
@@ -14,7 +16,7 @@ import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerA
 import { generateRoomCode, normalizeRoomCode } from "./codes.ts";
 import { generateSecretToken } from "./secrets.ts";
 
-export type GameKind = "whowhatwhere" | "hat" | "imposter";
+export type GameKind = "whowhatwhere" | "hat" | "imposter" | "drawnguess";
 
 export type RoomPhase = "lobby" | "playing" | "ended";
 
@@ -34,7 +36,7 @@ export type RoomPlayer = {
   optedOutOfResume: boolean;
 };
 
-type TeamGameKind = Exclude<GameKind, "imposter">;
+type TeamGameKind = "whowhatwhere" | "hat";
 
 export type Room = {
   readonly code: string;
@@ -57,6 +59,8 @@ export type Room = {
   /** Imposter lobby — host-controlled roster size. */
   imposterPlayerCount: number;
   imposterImposterCount: number;
+  /** DrawNGuess lobby settings. */
+  drawnguessSettings: DrawNGuessSettings;
   /** Mirrors Who What Where ready-handoff for Hat Game (online). */
   wwwReadyReveal?: boolean;
   /** Hat Game: single-step “Start turn” between rounds when true while `stage === 'ready'`. */
@@ -67,6 +71,8 @@ export type Room = {
   hatSession?: HatGameSession | null;
   /** Present once Imposter leaves the lobby — mirrors the solo app snapshot shape. */
   imposterSnapshot?: ImposterSnapshot | null;
+  /** Present once DrawNGuess leaves the lobby — authoritative server copy. */
+  drawnguessMatch?: DrawNGuessMatch | null;
   /** Hat lobby: each player's six famous-figure drafts before the match starts. */
   hatClueDrafts?: Record<string, string[]>;
   /** Results replay: host offered to play again in the same room. */
@@ -109,6 +115,7 @@ function clearActiveMatchState(room: Room): void {
   room.wwwMatch = undefined;
   room.hatSession = undefined;
   room.imposterSnapshot = undefined;
+  room.drawnguessMatch = undefined;
   room.wwwReadyReveal = undefined;
   room.hatReadyReveal = undefined;
   room.replayOfferActive = undefined;
@@ -173,6 +180,7 @@ export class RoomStore {
       hatSkipsPerTurn: GAME_DEFAULTS.skipsPerTurn,
       imposterPlayerCount: 6,
       imposterImposterCount: defaultImposterCount(6),
+      drawnguessSettings: createDefaultDrawNGuessSettings(),
       ...(args.gameKind === "hat" ? { hatClueDrafts: {} as Record<string, string[]> } : {}),
     };
 
@@ -229,6 +237,8 @@ export class RoomStore {
       if (room.players.size >= IMPOSTER_MAX_PLAYERS) {
         throw new Error("This Imposter room is full.");
       }
+      player.teamIndex = null;
+    } else if (room.gameKind === "drawnguess") {
       player.teamIndex = null;
     } else {
       player.teamIndex = pickSmallestTeamIndex(room);

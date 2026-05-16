@@ -35,7 +35,7 @@ export function MultiplayerHomePage() {
   const [joinCode, setJoinCode] = useState("");
   const [resume, setResume] = useState<{
     readonly code: string;
-    readonly gameKind: "whowhatwhere" | "hat" | "imposter";
+    readonly gameKind: "whowhatwhere" | "hat" | "imposter" | "drawnguess";
     readonly startedAtIso: string;
   } | null>(null);
 

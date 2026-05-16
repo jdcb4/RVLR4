@@ -11,5 +11,9 @@ export function gameKindLabel(kind: string): string {
     return "Imposter";
   }
 
+  if (kind === "drawnguess") {
+    return "DrawNGuess";
+  }
+
   return kind;
 }

@@ -5,6 +5,20 @@ import type { GameSettings } from "@/domain/whowhatwhere/types";
 
 import { broadcastRoom, roomChannel } from "./broadcast.ts";
 import { captainPlayerIdForTeam } from "./captain.ts";
+import {
+  applyDrawNGuessAdvanceReveal,
+  applyDrawNGuessAdvanceTurn,
+  applyDrawNGuessDrawingDraft,
+  applyDrawNGuessDrawingSubmit,
+  applyDrawNGuessGuessDraft,
+  applyDrawNGuessGuessSubmit,
+  applyDrawNGuessOpenRevealPacket,
+  applyDrawNGuessPromptDraft,
+  applyDrawNGuessPromptSubmit,
+  canOfferDrawNGuessReplay,
+  patchDrawNGuessSettings,
+  startDrawNGuessMatch,
+} from "./drawnguessRuntime.ts";
 import { loadHatClueDraftSlot, pickSuggestedHatClue } from "./hatClues.ts";
 import {
   applyHatCorrect,
@@ -89,6 +103,10 @@ function canOfferReplay(activeRoom: Room): boolean {
 
   if (activeRoom.gameKind === "imposter") {
     return activeRoom.imposterSnapshot?.step === "results";
+  }
+
+  if (activeRoom.gameKind === "drawnguess") {
+    return canOfferDrawNGuessReplay(activeRoom);
   }
 
   return false;
@@ -362,6 +380,19 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
     registerHandler(
       socket,
       store,
+      "lobby:hostPatchDrawNGuessSettings",
+      "Unable to update DrawNGuess settings.",
+      async ({ room, actor }, payload) => {
+        ensureHostCanChangeLobbySettings(room, actor);
+
+        patchDrawNGuessSettings(room, payload as Parameters<typeof patchDrawNGuessSettings>[1]);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
       "lobby:startGame",
       "Unable to start the game.",
       async ({ room, actor }) => {
@@ -381,6 +412,8 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           startHatMatch(room);
         } else if (room.gameKind === "imposter") {
           startImposterMatch(room);
+        } else if (room.gameKind === "drawnguess") {
+          startDrawNGuessMatch(room);
         }
 
         mpDebug("match started", {
@@ -669,6 +702,105 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         }
 
         applyHatShowFinalScores(room);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
+      "drawnguess:updatePromptDraft",
+      "Unable to update prompt.",
+      async ({ room, actor }, payload) => {
+        applyDrawNGuessPromptDraft(room, actor.id, payload.text);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
+      "drawnguess:submitPrompt",
+      "Unable to submit prompt.",
+      async ({ room, actor }, payload) => {
+        applyDrawNGuessPromptSubmit(room, actor.id, payload.text);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
+      "drawnguess:updateDrawingDraft",
+      "Unable to update drawing.",
+      async ({ room, actor }, payload) => {
+        applyDrawNGuessDrawingDraft(room, actor.id, payload.drawing);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
+      "drawnguess:submitDrawing",
+      "Unable to submit drawing.",
+      async ({ room, actor }, payload) => {
+        applyDrawNGuessDrawingSubmit(room, actor.id, payload.drawing);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
+      "drawnguess:updateGuessDraft",
+      "Unable to update guess.",
+      async ({ room, actor }, payload) => {
+        applyDrawNGuessGuessDraft(room, actor.id, payload.text);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
+      "drawnguess:submitGuess",
+      "Unable to submit guess.",
+      async ({ room, actor }, payload) => {
+        applyDrawNGuessGuessSubmit(room, actor.id, payload.text);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
+      "drawnguess:advanceTurn",
+      "Unable to advance DrawNGuess turn.",
+      async ({ room, actor }) => {
+        applyDrawNGuessAdvanceTurn(room, actor.isHost);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
+      "drawnguess:advanceReveal",
+      "Unable to advance DrawNGuess reveal.",
+      async ({ room, actor }, payload) => {
+        applyDrawNGuessAdvanceReveal(room, actor.isHost, payload.direction);
+        await broadcastRoom(io, store, room.code);
+      },
+    );
+
+    registerHandler(
+      socket,
+      store,
+      "drawnguess:openRevealPacket",
+      "Unable to open DrawNGuess packet.",
+      async ({ room, actor }, payload) => {
+        applyDrawNGuessOpenRevealPacket(room, actor.isHost, payload.starterPlayerId);
         await broadcastRoom(io, store, room.code);
       },
     );

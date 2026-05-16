@@ -1,3 +1,4 @@
+import { createDefaultDrawNGuessSettings } from "@/domain/drawnguess/engine";
 import { createDefaultSettings } from "@/domain/whowhatwhere/setup";
 import type { LobbyDto, RoomSyncPayload } from "@/multiplayer/roomTypes";
 
@@ -10,6 +11,7 @@ export function buildLobby(overrides: Partial<LobbyDto> = {}): LobbyDto {
     hatSkipsPerTurn: 3,
     imposterPlayerCount: 2,
     imposterImposterCount: 1,
+    drawnguessSettings: createDefaultDrawNGuessSettings(),
     players: [
       {
         id: "host",
@@ -48,6 +50,7 @@ export function buildRoomSync(overrides: Partial<RoomSyncPayload> = {}): RoomSyn
     www: null,
     hat: null,
     imposter: null,
+    drawnguess: null,
     replay: {
       offerActive: false,
       acceptedIds: [],

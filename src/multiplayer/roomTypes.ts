@@ -1,3 +1,4 @@
+import type { DrawNGuessSettings, DrawNGuessSyncDto } from "@/domain/drawnguess/types";
 import type { HatGameSession } from "@/domain/hat-game/types";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
 import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
@@ -20,6 +21,7 @@ export type LobbyDto = {
   readonly hatSkipsPerTurn: number;
   readonly imposterPlayerCount: number;
   readonly imposterImposterCount: number;
+  readonly drawnguessSettings: DrawNGuessSettings;
   readonly players: readonly LobbyPlayerDto[];
   readonly hatClueDrafts: Record<string, readonly string[]>;
 };
@@ -53,7 +55,7 @@ export type ImposterSyncDto = {
 
 export type RoomSyncPayload = {
   readonly code: string;
-  readonly gameKind: "whowhatwhere" | "hat" | "imposter";
+  readonly gameKind: "whowhatwhere" | "hat" | "imposter" | "drawnguess";
   readonly phase: "lobby" | "playing" | "ended";
   readonly you: {
     readonly playerId: string;
@@ -63,6 +65,7 @@ export type RoomSyncPayload = {
   readonly www: WhoWhatWhereSyncDto | null;
   readonly hat: HatSyncDto | null;
   readonly imposter: ImposterSyncDto | null;
+  readonly drawnguess: DrawNGuessSyncDto | null;
   readonly replay: {
     readonly offerActive: boolean;
     readonly acceptedIds: readonly string[];

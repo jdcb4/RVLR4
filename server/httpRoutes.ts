@@ -6,7 +6,12 @@ import type { GameKind } from "./roomStore.ts";
 import { RoomStore } from "./roomStore.ts";
 
 function parseGameKind(value: unknown): GameKind {
-  if (value === "whowhatwhere" || value === "hat" || value === "imposter") {
+  if (
+    value === "whowhatwhere" ||
+    value === "hat" ||
+    value === "imposter" ||
+    value === "drawnguess"
+  ) {
     return value;
   }
 
@@ -18,8 +23,7 @@ export function registerHttpRoutes(app: Express, store: RoomStore) {
     try {
       const body = request.body as { gameKind?: unknown; hostName?: unknown };
       const gameKind = parseGameKind(body.gameKind);
-      const hostName =
-        typeof body.hostName === "string" ? body.hostName : "Host";
+      const hostName = typeof body.hostName === "string" ? body.hostName : "Host";
 
       const { room, hostPlayer } = store.createRoom({ gameKind, hostName });
 

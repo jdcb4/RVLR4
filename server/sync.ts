@@ -1,6 +1,8 @@
+import type { DrawNGuessSyncDto } from "@/domain/drawnguess/types";
 import type { HatGameSession } from "@/domain/hat-game/types";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 
+import { buildDrawNGuessSyncDto } from "./drawnguessViews.ts";
 import {
   canHatReturnSkipped,
   classifyHatRole,
@@ -35,6 +37,7 @@ export type LobbyDto = {
   readonly hatSkipsPerTurn: number;
   readonly imposterPlayerCount: number;
   readonly imposterImposterCount: number;
+  readonly drawnguessSettings: Room["drawnguessSettings"];
   readonly players: readonly LobbyPlayerDto[];
   /** Hat only — each player's six famous-figure drafts. */
   readonly hatClueDrafts: Record<string, readonly string[]>;
@@ -57,6 +60,7 @@ export type HatSyncDto = {
 };
 
 export type { ImposterSyncDto };
+export type { DrawNGuessSyncDto };
 
 export type RoomSyncPayload = {
   readonly code: string;
@@ -70,6 +74,7 @@ export type RoomSyncPayload = {
   readonly www: WhoWhatWhereSyncDto | null;
   readonly hat: HatSyncDto | null;
   readonly imposter: ImposterSyncDto | null;
+  readonly drawnguess: DrawNGuessSyncDto | null;
   readonly replay: {
     readonly offerActive: boolean;
     readonly acceptedIds: readonly string[];
@@ -100,6 +105,7 @@ function buildLobbyDto(room: Room): LobbyDto {
     hatSkipsPerTurn: room.hatSkipsPerTurn,
     imposterPlayerCount: room.imposterPlayerCount,
     imposterImposterCount: room.imposterImposterCount,
+    drawnguessSettings: room.drawnguessSettings,
     players: lobbyPlayers(room),
     hatClueDrafts: room.hatClueDrafts ?? {},
   };
@@ -148,6 +154,8 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     imposter = buildImposterSyncDto(room.imposterSnapshot, viewerPlayerId);
   }
 
+  const drawnguess = buildDrawNGuessSyncDto(room, viewerPlayerId);
+
   return {
     code: room.code,
     gameKind: room.gameKind,
@@ -160,6 +168,7 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     www,
     hat,
     imposter,
+    drawnguess,
     replay: {
       offerActive: Boolean(room.replayOfferActive),
       acceptedIds: room.replayAcceptedPlayerIds ?? [],

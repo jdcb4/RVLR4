@@ -2,6 +2,23 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.18.0 - 2026-05-16
+
+- **Feature foundation (DrawNGuess):** Added the pure DrawNGuess match engine
+  for packet rotation, predetermined/custom starting prompts, drawing and
+  guessing submissions, edit-before-lock replacement, timer auto-submit
+  placeholders, private/public snapshots, reveal navigation, and no-score final
+  gallery state.
+- **Server foundation (DrawNGuess):** Added in-memory room state, sync DTOs,
+  socket schemas/handlers, host settings patching, server-side turn expiry, and
+  replay availability for completed DrawNGuess matches. The game is not exposed
+  in the home picker yet.
+- **Data:** Added the cleaned Easy DrawNGuess prompt list and avatar assets for
+  the upcoming multiplayer UI.
+- **Docs/prototype:** Added the standalone DrawNGuess mobile UX prototype and
+  implementation readiness/component mapping docs.
+- **Tests:** Added DrawNGuess domain and server runtime coverage.
+
 ## 0.17.13 - 2026-05-15
 
 - **Branding:** Renamed the browser/app chrome from `JDPassNPlay` to `RVLRY`.
