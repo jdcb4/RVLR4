@@ -42,6 +42,19 @@ Environment variables are documented in `docs/DEPLOYMENT.md`. Optional diagnosti
 | I3 | Host advances guides | Pregame → discussion → warning → results |
 | I4 | Results | Imposter names + word shown; matches dealt round |
 
+## DrawNGuess
+
+| Step | Action | Expected |
+| --- | --- | --- |
+| D1 | Ready + start with predetermined prompts | Drawing turn loads; each player sees only their own assigned prompt |
+| D2 | Draw on a mobile viewport | Whiteboard accepts touch/pointer input; submit moves that player to waiting |
+| D3 | Submit all players before timer ends | Room advances automatically without host action |
+| D4 | Let timer expire with a missing or draft response | Server auto-submits the draft or a clear placeholder after the grace window |
+| D5 | Reconnect during drawing or guessing | Player returns to the same private assignment and submitted/draft state |
+| D6 | Guessing turn | Player sees only the assigned drawing and can submit/edit before deadline |
+| D7 | Presentation | Each player sees only their own book and can page through it locally |
+| D8 | Final gallery | Player selector opens any book with the page-by-page display; export/share preserves drawing aspect ratio |
+
 ## Production-shaped check (optional)
 
 ```bash

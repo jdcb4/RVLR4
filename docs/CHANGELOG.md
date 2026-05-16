@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.19.4 - 2026-05-16
+
+- **Docs:** Replaced the obsolete DrawNGuess implementation plan with a
+  current production reference and updated project, screen, architecture,
+  deployment, roadmap, and multiplayer QA docs.
+- **Cleanup:** Removed the standalone DrawNGuess prototype files now that the
+  production multiplayer implementation is in `src/features/drawnguess`.
+
 ## 0.19.3 - 2026-05-16
 
 - **UX (DrawNGuess):** Drawing and guessing rounds now play the shared

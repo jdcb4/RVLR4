@@ -1,4 +1,4 @@
-# Deployment — JD Multiplayer Games
+# Deployment — RVLRY
 
 Production cuts bundle the **Vite client** into `dist/` and run the **Express + Socket.IO** server (`server/index.ts`) so browsers share rooms through WebSockets.
 

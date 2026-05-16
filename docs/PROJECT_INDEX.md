@@ -1,4 +1,4 @@
-# Project Index — JD Multiplayer Games
+# Project Index — RVLRY
 
 The first stop for navigating this project.
 
@@ -14,7 +14,7 @@ Games:
 - **Who What Where** — networked timed turns + shared lobby (`/` → `/room/:code`).
 - **Hat Game** — full networked match flow from lobby through results (`HatMultiplayerView`).
 - **Imposter** — full networked match flow from lobby through results (`ImposterMultiplayerView`).
-- **DrawNGuess** — first production multiplayer flow from lobby through reveal and final gallery (`DrawNGuessMultiplayerView`), plus standalone UX prototype.
+- **DrawNGuess** — production multiplayer flow from lobby through drawing, guessing, presentation, and final gallery (`DrawNGuessMultiplayerView`).
 
 ## Important folders
 
@@ -25,7 +25,7 @@ Games:
 - `src/features/whowhatwhere` — Who What Where: pass-and-play UI + `useWhoWhatWhereSingleplayerApp` (`WhoWhatWhereLandingScreen`, `WhoWhatWhereReviewTeamsScreen`, …); networked shell at `multiplayer/WhoWhatWhereMultiplayerView.tsx`.
 - `src/features/hat-game` — Hat Game: pass-and-play web UI + `useHatSingleplayerApp`; per-screen builders under `screens/` wired by `buildHatSingleplayerScreen` in `HatSingleplayerWebScreens.tsx`; networked shell at `multiplayer/HatMultiplayerView.tsx`.
 - `src/features/imposter` — Imposter: pass-and-play UI + `useImposterSingleplayerApp`; `ImposterSingleplayerWebScreens.tsx` routes steps; screen modules under `screens/`; networked shell at `multiplayer/ImposterMultiplayerView.tsx`.
-- `src/features/drawnguess` — DrawNGuess production multiplayer UI, controlled whiteboard, drawing preview, reveal flipbook, and final gallery.
+- `src/features/drawnguess` — DrawNGuess production multiplayer UI, controlled whiteboard, drawing preview, local presentation books, and final gallery.
 - `src/domain/whowhatwhere` — WhoWhatWhere rules (framework-free).
 - `src/domain/hat-game` — Hat Game engine + setup helpers.
 - `src/domain/imposter` — Imposter dealing and setup validation (social outcomes only in real life).
@@ -39,7 +39,6 @@ Games:
 - `src/typography` — named font tier map (`tiers.ts`) for `text-typ-*` utilities.
 - `src/themes` — semantic color tokens (`default.css`) layered on primitives in `index.css`.
 - `docs` — durable project documentation.
-- `prototypes/drawnguess/` — standalone DrawNGuess concept mockup; open `index.html` directly. Not part of the production Vite app.
 - `scripts` — deterministic project utility scripts.
 - `gallery.html` / `src/ui-gallery/` — dev-only UI gallery (not part of default `pnpm run build`).
 
@@ -71,12 +70,12 @@ Games:
 - [`docs/TYPOGRAPHY.md`](TYPOGRAPHY.md) — named font tiers (`text-typ-*`).
 - [`docs/THEMING.md`](THEMING.md) — semantic colors (`semantic-*`) and theme layers.
 - [`docs/SCREENS.md`](SCREENS.md) — informal names for each hub/game screen (UX reference).
-- [`docs/UX_CROSS_GAME_REPORT.md`](UX_CROSS_GAME_REPORT.md) — WWW vs Hat screen parity, shared components, abstraction notes.
+- [`docs/UX_CROSS_GAME_REPORT.md`](UX_CROSS_GAME_REPORT.md) — historical WWW vs Hat screen parity and shared-component notes.
 - [`docs/VERSIONING.md`](VERSIONING.md) — version rules.
 - [`docs/DECISIONS.md`](DECISIONS.md) — durable decisions (ADR-lite).
 - [`docs/ROADMAP.md`](ROADMAP.md) — future ideas only, not active work.
 - [`docs/CHANGELOG.md`](CHANGELOG.md) — notable changes by version.
 - [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) — manual regression checklist for Socket.IO / rooms (use before releases).
 - [`docs/DEPLOYMENT.md`](DEPLOYMENT.md) — deploy instructions.
-- [`docs/DRAWNGUESS_IMPLEMENTATION_PLAN.md`](DRAWNGUESS_IMPLEMENTATION_PLAN.md) — planning notes for the proposed DrawNGuess multiplayer game.
+- [`docs/DRAWNGUESS.md`](DRAWNGUESS.md) — DrawNGuess runtime, data, socket, and QA reference.
 - [`SECURITY.md`](../SECURITY.md) — security rules.

@@ -8,5 +8,5 @@ When the user mentions a future idea that is out of scope for the current task, 
 
 ## Ideas
 
-- **Imposter** — full hidden-role flow (roles, discussion timer, voting) behind `/games/imposter` once rules are defined.
-- Optional: restore **Hat Game** phase WAV cues (`OneWord` / `Charades`) on web if you add assets and a small audio loader.
+- **DrawNGuess word packs:** expose category and difficulty filters in lobby settings. The backend already keeps `wordPackId` and prompt metadata for this.
+- **DrawNGuess sharing:** consider Web Share API support for exported books where the browser supports file sharing.

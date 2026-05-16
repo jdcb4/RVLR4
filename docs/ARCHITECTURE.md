@@ -1,4 +1,4 @@
-# Architecture — JD Multiplayer Games
+# Architecture — RVLRY
 
 ## Runtime shape
 
@@ -11,6 +11,8 @@ React Router drives:
 - `/room/:code` — lobby + networked gameplay shell for the selected title.
 - `/passnplay` — Pass-and-Play mode picker pointing at `/games/*` (alias: `/legacy` redirects here for older shared links).
 - `/games/whowhatwhere`, `/games/hat`, `/games/imposter` — legacy single-device flows.
+
+Networked game views currently cover Who What Where, Hat Game, Imposter, and DrawNGuess.
 
 Runtime multiplayer state lives **only in the Node process RAM** (rooms keyed by short codes). Clients reconnect with per-player secrets stored in **`sessionStorage`** (`jd-multiplayer:*`).
 

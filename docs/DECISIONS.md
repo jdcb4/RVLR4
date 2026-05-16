@@ -1,6 +1,6 @@
 # Decisions
 
-Durable architecture and tooling decisions for JD Multiplayer Games. ADR-lite format: each entry is dated, names the decision, the reasoning, and any rejected alternatives.
+Durable architecture and tooling decisions for RVLRY. ADR-lite format: each entry is dated, names the decision, the reasoning, and any rejected alternatives.
 
 When adding a new entry, append to the bottom and keep the most recent decisions visible. Do not delete past decisions; supersede them with a new entry that links back.
 

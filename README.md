@@ -1,6 +1,13 @@
-# JD Multiplayer Games
+# RVLRY
 
 > Vite + React UI with **Express + Socket.IO** multiplayer rooms. Legacy pass-and-play routes still exist under `/legacy` and `/games/*`.
+
+## Games
+
+- **Who What Where** — team word-description turns.
+- **Hat Game** — three-phase celebrity-style clues.
+- **Imposter** — hidden-role word reveal and guided social deduction.
+- **DrawNGuess** — simultaneous drawing/guessing books with presentation and final gallery.
 
 ## Prerequisites
 

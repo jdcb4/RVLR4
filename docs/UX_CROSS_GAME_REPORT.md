@@ -1,6 +1,6 @@
-# Cross-game UX review — Who What Where vs Hat Game
+# Historical Cross-game UX Review — Who What Where vs Hat Game
 
-This document compares player-facing UX **between the two shipped games** (Who What Where and Hat Game): what matches, what diverges, and how shared components are (or could be) structured. It reflects the codebase as of the report date and complements [`SCREENS.md`](SCREENS.md).
+This is a historical review from when Who What Where and Hat Game were the only shipped full game flows. It remains useful background for shared component decisions, but [`SCREENS.md`](SCREENS.md) and [`PROJECT_INDEX.md`](PROJECT_INDEX.md) are the current references for all games, including Imposter and DrawNGuess.
 
 ---
 
