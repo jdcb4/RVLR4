@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.19.1 - 2026-05-16
+
+- **Fix (DrawNGuess):** Final gallery packet browsing now stays local to the
+  gallery view instead of sending the whole room back into reveal mode, so
+  replay and pick-another-game actions remain available while reviewing answer
+  packets.
+- **Tests:** Added focused coverage for DrawNGuess final gallery packet access.
+
 ## 0.19.0 - 2026-05-16
 
 - **Feature (DrawNGuess):** Exposed DrawNGuess in the multiplayer game picker

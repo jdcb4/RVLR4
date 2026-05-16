@@ -160,7 +160,7 @@ function DrawNGuessBody({
   readonly onAction: (event: string, body?: unknown) => Promise<void>;
 }) {
   if (payload.public.phase === "complete") {
-    return <DrawNGuessResultsScreen payload={payload} onAction={onAction} />;
+    return <DrawNGuessResultsScreen payload={payload} />;
   }
 
   if (payload.public.phase === "reveal") {
@@ -532,43 +532,92 @@ function DrawNGuessRevealScreen({
 
 function DrawNGuessResultsScreen({
   payload,
-  onAction,
 }: {
   readonly payload: DrawNGuessSyncDto;
-  readonly onAction: (event: string, body?: unknown) => Promise<void>;
 }) {
   const packets = payload.public.packets ?? [];
   const roster = payload.public.roster;
+  const [selectedPacketId, setSelectedPacketId] = useState<string | null>(null);
+  const selectedPacket = packets.find((packet) => packet.id === selectedPacketId) ?? null;
+  const selectedOwner = roster.find((player) => player.id === selectedPacket?.starterPlayerId);
 
   return (
-    <GamePanel title="Final gallery" subtitle="Open any answer packet to present it again.">
-      <div className="grid gap-2">
-        {packets.map((packet) => {
-          const owner = roster.find((player) => player.id === packet.starterPlayerId);
-
-          return (
-            <button
-              className="flex items-center gap-3 rounded-xl border border-border bg-background p-3 text-left transition hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash"
+    <div className="space-y-4">
+      <GamePanel title="Final gallery" subtitle="Open any answer packet to present it again.">
+        <div className="grid gap-2">
+          {packets.map((packet) => (
+            <GalleryPacketButton
               key={packet.id}
-              type="button"
-              onClick={() => void onAction("drawnguess:openRevealPacket", { starterPlayerId: packet.starterPlayerId })}
-            >
-              {owner ? (
-                <PlayerAvatar avatarId={avatarIdFor(owner.avatarId)} className="size-11" name={owner.name} />
-              ) : null}
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-typ-card-title font-semibold">
-                  {owner?.name ?? "Player"}'s book
+              packet={packet}
+              roster={roster}
+              selected={packet.id === selectedPacket?.id}
+              onClick={() => setSelectedPacketId(packet.id)}
+            />
+          ))}
+        </div>
+      </GamePanel>
+
+      {selectedPacket ? (
+        <GamePanel
+          title={`${selectedOwner?.name ?? "Player"}'s book`}
+          subtitle={originalPrompt(selectedPacket)}
+        >
+          <div className="grid gap-3">
+            {selectedPacket.entries.map((entry, index) => (
+              <div
+                className="rounded-xl border border-border bg-background p-3"
+                key={`${entry.type}-${entry.createdAt}-${index}`}
+              >
+                <p className="mb-2 text-typ-ui font-semibold text-muted-foreground">
+                  Page {index + 1}: {entryTitle(entry)}
                 </p>
-                <p className="truncate text-typ-ui text-muted-foreground">
-                  {originalPrompt(packet)}
-                </p>
+                <RevealEntry entry={entry} packet={selectedPacket} />
               </div>
-            </button>
-          );
-        })}
+            ))}
+          </div>
+          <Button
+            className="w-full gap-2"
+            type="button"
+            variant="outline"
+            onClick={() => downloadChainImage(selectedPacket, selectedOwner?.name ?? "player")}
+          >
+            <IconShare className="size-5" />
+            Share chain
+          </Button>
+        </GamePanel>
+      ) : null}
+    </div>
+  );
+}
+
+function GalleryPacketButton({
+  packet,
+  roster,
+  selected,
+  onClick,
+}: {
+  readonly packet: DrawNGuessPacket;
+  readonly roster: DrawNGuessSyncDto["public"]["roster"];
+  readonly selected: boolean;
+  readonly onClick: () => void;
+}) {
+  const owner = roster.find((player) => player.id === packet.starterPlayerId);
+
+  return (
+    <button
+      className="flex items-center gap-3 rounded-xl border border-border bg-background p-3 text-left transition hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash aria-pressed:border-primary aria-pressed:bg-semantic-primary-soft-bg"
+      aria-pressed={selected}
+      type="button"
+      onClick={onClick}
+    >
+      {owner ? (
+        <PlayerAvatar avatarId={avatarIdFor(owner.avatarId)} className="size-11" name={owner.name} />
+      ) : null}
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-typ-card-title font-semibold">{owner?.name ?? "Player"}'s book</p>
+        <p className="truncate text-typ-ui text-muted-foreground">{originalPrompt(packet)}</p>
       </div>
-    </GamePanel>
+    </button>
   );
 }
 
