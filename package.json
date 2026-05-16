@@ -1,6 +1,6 @@
 {
   "name": "jd-multiplayer-games",
-  "version": "0.19.2",
+  "version": "0.19.3",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.12.0",

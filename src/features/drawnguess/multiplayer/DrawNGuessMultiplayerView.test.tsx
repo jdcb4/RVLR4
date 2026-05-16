@@ -1,11 +1,16 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { DrawNGuessSyncDto } from "@/domain/drawnguess/types";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 import { DrawNGuessMultiplayerView } from "./DrawNGuessMultiplayerView";
+
+vi.mock("@/services/gameSoundEffects", () => ({
+  playGameSoundEffect: vi.fn(async () => undefined),
+}));
 
 const completePayload: DrawNGuessSyncDto = {
   public: {
@@ -70,6 +75,59 @@ const revealPayload: DrawNGuessSyncDto = {
   },
   private: completePayload.private,
 };
+
+const drawingTurnPayload: DrawNGuessSyncDto = {
+  public: {
+    ...completePayload.public,
+    phase: "turn",
+    turnIndex: 0,
+    turnMode: "drawing",
+    startedAt: 1_000,
+    deadlineAt: 12_000,
+    submittedPlayerIds: ["host"],
+  },
+  private: {
+    assignment: {
+      mode: "drawing",
+      packetId: "packet-host",
+      starterPlayerId: "host",
+      promptText: "Lighthouse",
+    },
+    hasSubmitted: true,
+    ownSubmission: {
+      playerId: "host",
+      status: "submitted",
+      updatedAt: 1_000,
+      submittedAt: 1_000,
+      drawing: { format: "placeholder-v1", text: "No response submitted" },
+    },
+  },
+};
+
+const guessingTurnPayload: DrawNGuessSyncDto = {
+  public: {
+    ...drawingTurnPayload.public,
+    turnIndex: 1,
+    turnMode: "guessing",
+    startedAt: 21_000,
+    deadlineAt: 32_000,
+  },
+  private: {
+    assignment: {
+      mode: "guessing",
+      packetId: "packet-guest",
+      starterPlayerId: "guest",
+      drawing: { format: "placeholder-v1", text: "No response submitted" },
+    },
+    hasSubmitted: false,
+    ownSubmission: null,
+  },
+};
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.mocked(playGameSoundEffect).mockClear();
+});
 
 describe("DrawNGuessMultiplayerView", () => {
   it("opens final gallery packets locally without dispatching a room reveal event", async () => {
@@ -160,5 +218,65 @@ describe("DrawNGuessMultiplayerView", () => {
 
     expect(screen.getByText("Final gallery")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Guest's book/i })).toBeInTheDocument();
+  });
+
+  it("plays the shared 10-second warning cue once during drawing and guessing turns", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(1_000);
+
+    const view = render(
+      <MemoryRouter>
+        <DrawNGuessMultiplayerView
+          emitWithAck={vi.fn(async () => ({ ok: true }))}
+          isHost
+          payload={drawingTurnPayload}
+          replaySync={{
+            offerActive: false,
+            acceptedIds: [],
+            cancelledByDisconnect: false,
+          }}
+          viewerPlayerId="host"
+        />
+      </MemoryRouter>,
+    );
+
+    expect(playGameSoundEffect).not.toHaveBeenCalled();
+
+    await act(async () => {
+      vi.advanceTimersByTime(1_000);
+    });
+
+    expect(playGameSoundEffect).toHaveBeenCalledTimes(1);
+    expect(playGameSoundEffect).toHaveBeenCalledWith("warn10");
+
+    await act(async () => {
+      vi.advanceTimersByTime(1_000);
+    });
+
+    expect(playGameSoundEffect).toHaveBeenCalledTimes(1);
+
+    vi.setSystemTime(21_000);
+    view.rerender(
+      <MemoryRouter>
+        <DrawNGuessMultiplayerView
+          emitWithAck={vi.fn(async () => ({ ok: true }))}
+          isHost
+          payload={guessingTurnPayload}
+          replaySync={{
+            offerActive: false,
+            acceptedIds: [],
+            cancelledByDisconnect: false,
+          }}
+          viewerPlayerId="host"
+        />
+      </MemoryRouter>,
+    );
+
+    await act(async () => {
+      vi.advanceTimersByTime(1_000);
+    });
+
+    expect(playGameSoundEffect).toHaveBeenCalledTimes(2);
+    expect(playGameSoundEffect).toHaveBeenLastCalledWith("warn10");
   });
 });

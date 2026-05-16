@@ -2,6 +2,13 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.19.3 - 2026-05-16
+
+- **UX (DrawNGuess):** Drawing and guessing rounds now play the shared
+  10-second warning cue once per turn.
+- **Tests:** Added coverage for the DrawNGuess warning cue on drawing and
+  guessing turns.
+
 ## 0.19.2 - 2026-05-16
 
 - **Fix (DrawNGuess):** Turns now advance automatically as soon as every player

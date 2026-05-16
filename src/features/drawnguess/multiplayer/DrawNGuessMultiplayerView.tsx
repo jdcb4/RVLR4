@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   PrimaryFooterButton,
@@ -19,6 +19,7 @@ import {
   MultiplayerGameShell,
 } from "@/features/multiplayer/MultiplayerGameShell";
 import { type AvatarId, isAvatarId } from "@/multiplayer/avatarCatalog";
+import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 import { createBlankDrawing, renderDrawing } from "./drawingCanvas";
 import { DrawNGuessDrawingPreview } from "./DrawNGuessDrawingPreview";
@@ -57,6 +58,8 @@ export function DrawNGuessMultiplayerView({
   const [localGalleryOpen, setLocalGalleryOpen] = useState(false);
   const secondsLeft = useCountdownSeconds(payload.public.deadlineAt);
   const deadlineOpen = payload.public.deadlineAt ? Date.now() <= payload.public.deadlineAt : true;
+
+  useDrawNGuessWarningSound(payload);
 
   useEffect(() => {
     setEditing(false);
@@ -637,6 +640,39 @@ function useCountdownSeconds(deadlineAt: number | null) {
   }, [deadlineAt]);
 
   return seconds;
+}
+
+function useDrawNGuessWarningSound(payload: DrawNGuessSyncDto) {
+  const warnedForTurn = useRef<string | null>(null);
+  const { phase, turnMode, startedAt, deadlineAt } = payload.public;
+
+  useEffect(() => {
+    if (
+      phase !== "turn" ||
+      (turnMode !== "drawing" && turnMode !== "guessing") ||
+      !startedAt ||
+      !deadlineAt
+    ) {
+      warnedForTurn.current = null;
+
+      return undefined;
+    }
+
+    const warningKey = `${turnMode}:${startedAt}:${deadlineAt}`;
+    const tick = () => {
+      const secondsLeft = Math.ceil((deadlineAt - Date.now()) / 1000);
+
+      if (secondsLeft <= 10 && secondsLeft > 0 && warnedForTurn.current !== warningKey) {
+        warnedForTurn.current = warningKey;
+        void playGameSoundEffect("warn10");
+      }
+    };
+
+    tick();
+    const interval = window.setInterval(tick, 250);
+
+    return () => window.clearInterval(interval);
+  }, [deadlineAt, phase, startedAt, turnMode]);
 }
 
 function turnEyebrow(payload: DrawNGuessSyncDto) {

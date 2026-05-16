@@ -453,6 +453,7 @@ Recommended v1:
 - Server stores `turnStartedAt`, `turnDeadlineAt`, `drawingDurationMs`, and `guessDurationMs`.
 - Default durations are `drawingDurationMs = 60_000` and `guessDurationMs = 30_000`.
 - Clients render countdown from server time and tolerate drift.
+- Drawing and guessing turns play the shared 10-second warning cue once per turn.
 - Server accepts submissions until a short post-deadline grace window closes.
 - Players may edit their submitted drawing or guess until the deadline closes; the latest valid submission wins.
 - When the timer expires, server-side auto-submit fills each player's assigned packet with their partial entry or a placeholder.
