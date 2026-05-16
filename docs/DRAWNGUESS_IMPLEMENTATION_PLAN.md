@@ -97,15 +97,15 @@ export function isAvatarId(value: string): value is AvatarId;
 
 Before building gameplay screens:
 
-- [ ] Add `drawnguess` to shared room/game-kind typing, labels, home card, and room sync shape. Backend typing and sync are in place; home card remains intentionally hidden until UI is playable.
-- [ ] Add avatar catalog and validated `avatarId` to host/join REST payloads, room players, lobby DTOs, and lobby rows. Assets are saved; runtime player profile wiring remains.
-- [ ] Extend `EnterNamePage` with avatar selection while preserving the existing name-entry flow for all games.
-- [ ] Add DrawNGuess lobby settings to `GameSpecificLobbySections` using existing card/details styling.
-- [ ] Add `src/features/drawnguess/multiplayer/` with `DrawNGuessMultiplayerView`, `DrawNGuessMultiplayerBody`, and `DrawNGuessMultiplayerFooter` stubs wired into the room page only after server sync types exist.
+- [x] Add `drawnguess` to shared room/game-kind typing, labels, home card, and room sync shape.
+- [x] Add avatar catalog and validated `avatarId` to host/join REST payloads, room players, lobby DTOs, and lobby rows.
+- [x] Extend `EnterNamePage` with avatar selection while preserving the existing name-entry flow for all games.
+- [x] Add DrawNGuess lobby settings to `GameSpecificLobbySections` using existing card/details styling.
+- [x] Add `src/features/drawnguess/multiplayer/` with `DrawNGuessMultiplayerView`, production turn screens, reveal, and final gallery wired into the room page.
 - [x] Add `src/domain/drawnguess/` pure types and tests before Socket.IO handlers.
 - [x] Add a typed word-pack loader around `src/data/drawnguessWordPrompts.json`.
-- [ ] Implement `DrawNGuessWhiteboard` as a pure controlled component before connecting submissions.
-- [ ] Keep final gallery/reveal no-score; do not route through leaderboard components.
+- [x] Implement `DrawNGuessWhiteboard` as a pure controlled component before connecting submissions.
+- [x] Keep final gallery/reveal no-score; do not route through leaderboard components.
 
 ### Styling Guardrails
 

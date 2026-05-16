@@ -4,14 +4,17 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameShell } from "@/components/GameShell";
 import multiplayerDisplayNames from "@/data/multiplayerDisplayNames.json";
+import { type AvatarId,isAvatarId, pickRandomAvatarId } from "@/multiplayer/avatarCatalog";
 import { gameKindLabel } from "@/multiplayer/gameKindLabel";
 import { persistSession } from "@/multiplayer/useRoomChannel";
 
+import { AvatarPicker } from "./AvatarPicker";
 import { readRoomEntrySession, type RoomEntrySession } from "./roomEntryResponse";
 
 type Intent = "host" | "join";
 
 const LAST_NAME_KEY = "jd-multiplayer:last-display-name";
+const LAST_AVATAR_KEY = "jd-multiplayer:last-avatar";
 
 function pickRandomName(): string {
   const names = multiplayerDisplayNames as readonly string[];
@@ -34,6 +37,24 @@ function saveLastName(value: string): void {
   }
 }
 
+function loadLastAvatar(): AvatarId {
+  try {
+    const stored = localStorage.getItem(LAST_AVATAR_KEY);
+
+    return isAvatarId(stored) ? stored : pickRandomAvatarId();
+  } catch {
+    return pickRandomAvatarId();
+  }
+}
+
+function saveLastAvatar(value: AvatarId): void {
+  try {
+    localStorage.setItem(LAST_AVATAR_KEY, value);
+  } catch {
+    // Private browsing / quota: persist is best-effort.
+  }
+}
+
 export function EnterNamePage() {
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
@@ -43,6 +64,7 @@ export function EnterNamePage() {
   const hostGame = searchParams.get("game");
 
   const [name, setName] = useState(() => loadLastName());
+  const [avatarId, setAvatarId] = useState<AvatarId>(() => loadLastAvatar());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<{
@@ -121,6 +143,7 @@ export function EnterNamePage() {
       const enterRoom = (session: RoomEntrySession) => {
         persistSession(session);
         saveLastName(trimmed);
+        saveLastAvatar(avatarId);
         navigate(`/room/${session.code}`);
       };
 
@@ -137,6 +160,7 @@ export function EnterNamePage() {
           body: JSON.stringify({
             gameKind: hostGame,
             hostName: trimmed,
+            avatarId,
           }),
         });
 
@@ -151,7 +175,7 @@ export function EnterNamePage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ name: trimmed }),
+          body: JSON.stringify({ name: trimmed, avatarId }),
         });
 
         enterRoom(await readRoomEntrySession(response, "Unable to join this room."));
@@ -247,6 +271,8 @@ export function EnterNamePage() {
         >
           Generate a random name
         </button>
+
+        <AvatarPicker value={avatarId} onChange={setAvatarId} />
 
         {error ? <p className="text-typ-ui text-destructive">{error}</p> : null}
       </form>

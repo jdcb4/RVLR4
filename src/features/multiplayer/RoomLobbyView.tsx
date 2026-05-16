@@ -1,6 +1,7 @@
 import { SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameShell } from "@/components/GameShell";
 import { IconCheck } from "@/components/icons";
+import { PlayerAvatar } from "@/components/PlayerAvatar";
 import { Button } from "@/components/ui/button";
 import { GameSpecificLobbySections } from "@/features/multiplayer/GameSpecificLobbySections";
 import { LobbyInviteSection, QrJoinDialog } from "@/features/multiplayer/LobbyInviteSection";
@@ -125,6 +126,7 @@ function FlatPlayersSection({ players }: { readonly players: readonly LobbyPlaye
             ) : (
               <span aria-hidden className="inline-block size-4 shrink-0" />
             )}
+            <PlayerAvatar avatarId={player.avatarId} className="size-9" name={player.name} />
             <span>
               {player.name}
               {player.isHost ? (

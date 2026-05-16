@@ -1,7 +1,7 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { IconDisguise, IconQuestionMark, IconTopHat } from "@/components/icons";
+import { IconDisguise, IconPencil, IconQuestionMark, IconTopHat } from "@/components/icons";
 import { LandingAttribution } from "@/components/LandingAttribution";
 import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 import { clearActiveGameBookmark, readActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
@@ -27,6 +27,12 @@ const games = [
     title: "Imposter",
     description: "Hidden roles and one secret word - timed clues, discussion, and the big reveal.",
     icon: IconDisguise,
+  },
+  {
+    id: "drawnguess",
+    title: "DrawNGuess",
+    description: "Draw prompts, guess drawings, and reveal each book as the chain changes hands.",
+    icon: IconPencil,
   },
 ] as const;
 

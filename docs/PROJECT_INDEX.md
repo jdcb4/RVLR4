@@ -14,7 +14,7 @@ Games:
 - **Who What Where** — networked timed turns + shared lobby (`/` → `/room/:code`).
 - **Hat Game** — full networked match flow from lobby through results (`HatMultiplayerView`).
 - **Imposter** — full networked match flow from lobby through results (`ImposterMultiplayerView`).
-- **DrawNGuess** — backend/domain foundation and standalone UX prototype only; not exposed in the production game picker yet.
+- **DrawNGuess** — first production multiplayer flow from lobby through reveal and final gallery (`DrawNGuessMultiplayerView`), plus standalone UX prototype.
 
 ## Important folders
 
@@ -25,6 +25,7 @@ Games:
 - `src/features/whowhatwhere` — Who What Where: pass-and-play UI + `useWhoWhatWhereSingleplayerApp` (`WhoWhatWhereLandingScreen`, `WhoWhatWhereReviewTeamsScreen`, …); networked shell at `multiplayer/WhoWhatWhereMultiplayerView.tsx`.
 - `src/features/hat-game` — Hat Game: pass-and-play web UI + `useHatSingleplayerApp`; per-screen builders under `screens/` wired by `buildHatSingleplayerScreen` in `HatSingleplayerWebScreens.tsx`; networked shell at `multiplayer/HatMultiplayerView.tsx`.
 - `src/features/imposter` — Imposter: pass-and-play UI + `useImposterSingleplayerApp`; `ImposterSingleplayerWebScreens.tsx` routes steps; screen modules under `screens/`; networked shell at `multiplayer/ImposterMultiplayerView.tsx`.
+- `src/features/drawnguess` — DrawNGuess production multiplayer UI, controlled whiteboard, drawing preview, reveal flipbook, and final gallery.
 - `src/domain/whowhatwhere` — WhoWhatWhere rules (framework-free).
 - `src/domain/hat-game` — Hat Game engine + setup helpers.
 - `src/domain/imposter` — Imposter dealing and setup validation (social outcomes only in real life).

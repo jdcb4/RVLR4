@@ -16,6 +16,7 @@ export function buildLobby(overrides: Partial<LobbyDto> = {}): LobbyDto {
       {
         id: "host",
         name: "Host",
+        avatarId: "bear",
         isHost: true,
         teamIndex: null,
         ready: true,
@@ -24,6 +25,7 @@ export function buildLobby(overrides: Partial<LobbyDto> = {}): LobbyDto {
       {
         id: "me",
         name: "Me",
+        avatarId: "cat",
         isHost: false,
         teamIndex: null,
         ready: false,

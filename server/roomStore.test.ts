@@ -92,6 +92,17 @@ describe("RoomStore.createRoom", () => {
     expect(hostPlayer.name).toBe("Host");
   });
 
+  it("stores a validated host avatar", () => {
+    const store = new RoomStore();
+    const { hostPlayer } = store.createRoom({
+      gameKind: "drawnguess",
+      hostName: "Host",
+      avatarId: "frog",
+    });
+
+    expect(hostPlayer.avatarId).toBe("frog");
+  });
+
   it("generates unique room codes", () => {
     const store = new RoomStore();
     const first = store.createRoom({ gameKind: "hat", hostName: "A" }).room.code;
@@ -146,6 +157,18 @@ describe("RoomStore.joinRoom", () => {
     const { player } = store.joinRoom({ code: room.code, name: "   " });
 
     expect(player.name).toBe("Player");
+  });
+
+  it("stores a validated guest avatar", () => {
+    const store = new RoomStore();
+    const { room } = store.createRoom({ gameKind: "drawnguess", hostName: "Host" });
+    const { player } = store.joinRoom({
+      code: room.code,
+      name: "Guest",
+      avatarId: "cat",
+    });
+
+    expect(player.avatarId).toBe("cat");
   });
 
   it("seeds Hat clue drafts for each new joiner", () => {

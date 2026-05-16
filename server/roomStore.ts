@@ -12,6 +12,7 @@ import { clampImposterCount, defaultImposterCount, shuffleWithRng } from "@/doma
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
 import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
+import { type AvatarId,normalizeAvatarId } from "@/multiplayer/avatarCatalog";
 
 import { generateRoomCode, normalizeRoomCode } from "./codes.ts";
 import { generateSecretToken } from "./secrets.ts";
@@ -23,6 +24,7 @@ export type RoomPhase = "lobby" | "playing" | "ended";
 export type RoomPlayer = {
   readonly id: string;
   name: string;
+  avatarId: AvatarId;
   readonly secret: string;
   readonly isHost: boolean;
   /** Null for Imposter lobby — unused. */
@@ -146,7 +148,7 @@ export class RoomStore {
     };
   }
 
-  createRoom(args: { gameKind: GameKind; hostName: string }): {
+  createRoom(args: { gameKind: GameKind; hostName: string; avatarId?: unknown }): {
     room: Room;
     hostPlayer: RoomPlayer;
   } {
@@ -163,6 +165,7 @@ export class RoomStore {
     const hostId = crypto.randomUUID();
     const secret = generateSecretToken();
     const trimmedName = args.hostName.trim().slice(0, 32) || "Host";
+    const avatarId = normalizeAvatarId(args.avatarId);
 
     const baseTeams = 2;
     const room: Room = {
@@ -187,6 +190,7 @@ export class RoomStore {
     const hostPlayer: RoomPlayer = {
       id: hostId,
       name: trimmedName,
+      avatarId,
       secret,
       isHost: true,
       teamIndex: isTeamGame(args.gameKind) ? 0 : null,
@@ -210,7 +214,11 @@ export class RoomStore {
     return { room, hostPlayer };
   }
 
-  joinRoom(args: { code: string; name: string }): { room: Room; player: RoomPlayer } {
+  joinRoom(args: {
+    code: string;
+    name: string;
+    avatarId?: unknown;
+  }): { room: Room; player: RoomPlayer } {
     const code = normalizeRoomCode(args.code);
     const room = this.roomsByCode.get(code);
 
@@ -221,10 +229,12 @@ export class RoomStore {
     const trimmedName = args.name.trim().slice(0, 32) || "Player";
     const playerId = crypto.randomUUID();
     const secret = generateSecretToken();
+    const avatarId = normalizeAvatarId(args.avatarId);
 
     const player: RoomPlayer = {
       id: playerId,
       name: trimmedName,
+      avatarId,
       secret,
       isHost: false,
       teamIndex: null,

@@ -2,11 +2,13 @@ import type { DrawNGuessSettings, DrawNGuessSyncDto } from "@/domain/drawnguess/
 import type { HatGameSession } from "@/domain/hat-game/types";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
 import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
+import type { AvatarId } from "@/multiplayer/avatarCatalog";
 
 /** Mirrors `server/sync.ts` — lightweight typing without a shared package boundary. */
 export type LobbyPlayerDto = {
   readonly id: string;
   readonly name: string;
+  readonly avatarId: AvatarId;
   readonly isHost: boolean;
   readonly teamIndex: number | null;
   readonly ready: boolean;

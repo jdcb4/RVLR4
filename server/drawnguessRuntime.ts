@@ -59,6 +59,7 @@ export function startDrawNGuessMatch(room: Room, now = Date.now()) {
   const players = [...room.players.values()].map((player) => ({
     id: player.id,
     name: player.name,
+    avatarId: player.avatarId,
   }));
 
   room.drawnguessMatch = createDrawNGuessMatch({
@@ -146,11 +147,13 @@ export function applyDrawNGuessOpenRevealPacket(
   actorIsHost: boolean,
   starterPlayerId: string,
 ) {
-  if (!actorIsHost) {
+  const match = requireDrawNGuessMatch(room);
+
+  if (!actorIsHost && getPublicMatchSnapshot(match).phase !== "complete") {
     throw new Error("Only the host can choose reveal packets.");
   }
 
-  room.drawnguessMatch = openRevealPacket(requireDrawNGuessMatch(room), starterPlayerId);
+  room.drawnguessMatch = openRevealPacket(match, starterPlayerId);
 }
 
 export function canOfferDrawNGuessReplay(room: Room): boolean {

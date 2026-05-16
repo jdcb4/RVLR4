@@ -41,6 +41,10 @@ export function GameSpecificLobbySections({
         <ImposterLobbyCard emitWithAck={emitWithAck} isHost={isHost} lobby={lobby} />
       ) : null}
 
+      {sync.gameKind === "drawnguess" ? (
+        <DrawNGuessLobbySettingsCard emitWithAck={emitWithAck} isHost={isHost} lobby={lobby} />
+      ) : null}
+
       {sync.gameKind === "whowhatwhere" && isHost ? (
         <WhoWhatWhereSettingsCard emitWithAck={emitWithAck} lobby={lobby} />
       ) : null}
@@ -49,6 +53,120 @@ export function GameSpecificLobbySections({
         <HatTeamCountCard emitWithAck={emitWithAck} lobby={lobby} />
       ) : null}
     </>
+  );
+}
+
+function DrawNGuessLobbySettingsCard({
+  lobby,
+  isHost,
+  emitWithAck,
+}: {
+  readonly lobby: LobbyDto;
+  readonly isHost: boolean;
+  readonly emitWithAck: EmitWithAck;
+}) {
+  const settings = lobby.drawnguessSettings;
+  const drawSeconds = Math.round(settings.drawingDurationMs / 1000);
+  const guessSeconds = Math.round(settings.guessDurationMs / 1000);
+  const modeLabel =
+    settings.startingPromptMode === "predetermined" ? "Predetermined words" : "Players pick prompts";
+
+  return (
+    <details className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+      <summary className="cursor-pointer text-typ-card-title font-semibold">
+        DrawNGuess settings
+      </summary>
+      <div className="mt-4 space-y-4">
+        <p className="text-typ-ui-snug text-muted-foreground">
+          Mode: <span className="font-semibold text-foreground">{modeLabel}</span>. Drawing is{" "}
+          <span className="font-semibold text-foreground">{drawSeconds}s</span>; guessing is{" "}
+          <span className="font-semibold text-foreground">{guessSeconds}s</span>.
+        </p>
+
+        {isHost ? (
+          <>
+            <label className="block text-typ-ui font-medium" htmlFor="drawnguess-prompt-mode">
+              Starting prompts
+            </label>
+            <select
+              className="w-full rounded-xl border border-input bg-background px-3 py-2 text-typ-ui"
+              id="drawnguess-prompt-mode"
+              value={settings.startingPromptMode}
+              onChange={(event) => {
+                void emitWithAck("lobby:hostPatchDrawNGuessSettings", {
+                  startingPromptMode: event.target.value,
+                });
+              }}
+            >
+              <option value="predetermined">Predetermined words</option>
+              <option value="custom">Players pick their own prompt</option>
+            </select>
+
+            <TimerSelect
+              id="drawnguess-draw-timer"
+              label="Drawing timer"
+              seconds={drawSeconds}
+              values={[45, 60, 90, 120]}
+              onChange={(seconds) => {
+                void emitWithAck("lobby:hostPatchDrawNGuessSettings", {
+                  drawingDurationMs: seconds * 1000,
+                });
+              }}
+            />
+
+            <TimerSelect
+              id="drawnguess-guess-timer"
+              label="Guessing timer"
+              seconds={guessSeconds}
+              values={[20, 30, 45, 60]}
+              onChange={(seconds) => {
+                void emitWithAck("lobby:hostPatchDrawNGuessSettings", {
+                  guessDurationMs: seconds * 1000,
+                });
+              }}
+            />
+          </>
+        ) : (
+          <p className="text-typ-ui text-muted-foreground">
+            The host can change these before starting the game.
+          </p>
+        )}
+      </div>
+    </details>
+  );
+}
+
+function TimerSelect({
+  id,
+  label,
+  seconds,
+  values,
+  onChange,
+}: {
+  readonly id: string;
+  readonly label: string;
+  readonly seconds: number;
+  readonly values: readonly number[];
+  readonly onChange: (seconds: number) => void;
+}) {
+  return (
+    <div>
+      <label className="block text-typ-ui font-medium" htmlFor={id}>
+        {label}
+      </label>
+      <select
+        className="mt-2 w-full rounded-xl border border-input bg-background px-3 py-2 text-typ-ui"
+        id={id}
+        value={seconds}
+        onChange={(event) => onChange(Number(event.target.value))}
+      >
+        {values.map((value) => (
+          <option key={value} value={value}>
+            {value} seconds
+          </option>
+        ))}
+      </select>
+    </div>
   );
 }
 

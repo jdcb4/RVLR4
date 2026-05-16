@@ -2,6 +2,18 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.19.0 - 2026-05-16
+
+- **Feature (DrawNGuess):** Exposed DrawNGuess in the multiplayer game picker
+  and added the first production multiplayer UI for prompt entry, drawing,
+  guessing, submitted waiting states, reveal flipbook, no-score final gallery,
+  and full-chain PNG export.
+- **Feature (avatars):** Added reusable multiplayer avatar catalog, avatar
+  picker, bundled avatar display component, host/join payload validation, room
+  player persistence, lobby sync, and avatar-aware lobby rows.
+- **Feature (DrawNGuess lobby):** Added collapsible DrawNGuess settings for
+  predetermined/custom prompt mode plus drawing and guessing timers.
+
 ## 0.18.0 - 2026-05-16
 
 - **Feature foundation (DrawNGuess):** Added the pure DrawNGuess match engine

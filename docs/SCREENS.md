@@ -74,9 +74,9 @@ Screen assembly: **`buildImposterScreen`** in `ImposterSingleplayerWebScreens.ts
 
 ---
 
-## DrawNGuess (planned multiplayer)
+## DrawNGuess (multiplayer)
 
-DrawNGuess is not registered as a production route yet. The UX prototype lives at `prototypes/drawnguess/index.html`; implementation planning lives in `docs/DRAWNGUESS_IMPLEMENTATION_PLAN.md`. Production screens should use **`MultiplayerGameShell`**, **`GamePanel`**, shared footer buttons, existing room lobby chrome, typography tiers, and semantic tokens where possible.
+DrawNGuess is registered in the production multiplayer picker. The UX prototype still lives at `prototypes/drawnguess/index.html`; implementation planning lives in `docs/DRAWNGUESS_IMPLEMENTATION_PLAN.md`. Production screens use **`MultiplayerGameShell`**, **`GamePanel`**, shared footer buttons, existing room lobby chrome, typography tiers, and semantic tokens where possible.
 
 | Name                          | Description                                                                                                                                                             |
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

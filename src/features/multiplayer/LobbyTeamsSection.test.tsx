@@ -14,6 +14,7 @@ function buildTeamLobby(overrides: Partial<LobbyDto> = {}) {
       {
         id: "aaa-captain",
         name: "Captain",
+        avatarId: "bear",
         isHost: false,
         teamIndex: 0,
         ready: true,
@@ -22,6 +23,7 @@ function buildTeamLobby(overrides: Partial<LobbyDto> = {}) {
       {
         id: "host",
         name: "Host",
+        avatarId: "cat",
         isHost: true,
         teamIndex: 0,
         ready: true,
@@ -30,6 +32,7 @@ function buildTeamLobby(overrides: Partial<LobbyDto> = {}) {
       {
         id: "me",
         name: "Me",
+        avatarId: "dog",
         isHost: false,
         teamIndex: 1,
         ready: false,

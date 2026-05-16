@@ -21,11 +21,15 @@ function parseGameKind(value: unknown): GameKind {
 export function registerHttpRoutes(app: Express, store: RoomStore) {
   app.post("/api/rooms", (request, response) => {
     try {
-      const body = request.body as { gameKind?: unknown; hostName?: unknown };
+      const body = request.body as { gameKind?: unknown; hostName?: unknown; avatarId?: unknown };
       const gameKind = parseGameKind(body.gameKind);
       const hostName = typeof body.hostName === "string" ? body.hostName : "Host";
 
-      const { room, hostPlayer } = store.createRoom({ gameKind, hostName });
+      const { room, hostPlayer } = store.createRoom({
+        gameKind,
+        hostName,
+        avatarId: body.avatarId,
+      });
 
       mpDebug("room created", { code: room.code, gameKind: room.gameKind });
 
@@ -60,10 +64,10 @@ export function registerHttpRoutes(app: Express, store: RoomStore) {
   app.post("/api/rooms/:code/join", (request, response) => {
     try {
       const code = normalizeRoomCode(request.params.code ?? "");
-      const body = request.body as { name?: unknown };
+      const body = request.body as { name?: unknown; avatarId?: unknown };
       const name = typeof body.name === "string" ? body.name : "Player";
 
-      const { room, player } = store.joinRoom({ code, name });
+      const { room, player } = store.joinRoom({ code, name, avatarId: body.avatarId });
 
       mpDebug("player joined", {
         code: room.code,

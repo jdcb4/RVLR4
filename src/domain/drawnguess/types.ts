@@ -26,6 +26,7 @@ export type DrawNGuessSettings = {
 export type DrawNGuessPlayer = {
   readonly id: string;
   readonly name: string;
+  readonly avatarId?: string;
 };
 
 export type DrawNGuessWordPrompt = {

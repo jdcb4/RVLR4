@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameShell } from "@/components/GameShell";
+import { DrawNGuessMultiplayerView } from "@/features/drawnguess/multiplayer/DrawNGuessMultiplayerView";
 import { HatMultiplayerView } from "@/features/hat-game/multiplayer/HatMultiplayerView";
 import { ImposterMultiplayerView } from "@/features/imposter/multiplayer/ImposterMultiplayerView";
 import { RoomConnectionBanners } from "@/features/multiplayer/RoomConnectionBanners";
@@ -199,7 +200,15 @@ export function PlayingRoomView({
         viewerPlayerId={sync.you.playerId}
       />
     ) : null,
-    drawnguess: null,
+    drawnguess: sync.drawnguess ? (
+      <DrawNGuessMultiplayerView
+        emitWithAck={emitWithAck}
+        isHost={sync.you.isHost}
+        payload={sync.drawnguess}
+        replaySync={sync.replay}
+        viewerPlayerId={sync.you.playerId}
+      />
+    ) : null,
   }[sync.gameKind];
 
   return (

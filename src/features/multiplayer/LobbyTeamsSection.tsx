@@ -7,6 +7,7 @@ import {
   IconCrown,
   IconPencil,
 } from "@/components/icons";
+import { PlayerAvatar } from "@/components/PlayerAvatar";
 import { Button } from "@/components/ui/button";
 import { captainPlayerIdForTeam } from "@/features/multiplayer/lobbyCaptain";
 import type { LobbyDto, LobbyPlayerDto } from "@/multiplayer/roomTypes";
@@ -341,6 +342,7 @@ function LobbyTeamPlayerRow({
       ) : (
         <span aria-hidden className="inline-block size-4 shrink-0" />
       )}
+      <PlayerAvatar avatarId={player.avatarId} className="size-8" name={player.name} />
       <span className="min-w-0 flex-1">
         {player.name}
         {player.isHost ? (

@@ -23,6 +23,7 @@ import {
 export type LobbyPlayerDto = {
   readonly id: string;
   readonly name: string;
+  readonly avatarId: RoomPlayer["avatarId"];
   readonly isHost: boolean;
   readonly teamIndex: number | null;
   readonly ready: boolean;
@@ -89,6 +90,7 @@ function toLobbyPlayerDto(player: RoomPlayer): LobbyPlayerDto {
   return {
     id: player.id,
     name: player.name,
+    avatarId: player.avatarId,
     isHost: player.isHost,
     teamIndex: player.teamIndex,
     ready: player.ready,
