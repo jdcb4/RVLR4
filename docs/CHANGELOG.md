@@ -2,6 +2,20 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.19.2 - 2026-05-16
+
+- **Fix (DrawNGuess):** Turns now advance automatically as soon as every player
+  has submitted, instead of waiting for the timer or a host action.
+- **UX (DrawNGuess):** Presentation now shows each player their own locally
+  controlled book, with a Next steps card and a local path through to the final
+  gallery.
+- **UX (DrawNGuess):** Final Gallery keeps the player selector but displays
+  selected books with the same page-by-page book view used for presentation.
+- **Fix (DrawNGuess):** Full-chain image export now preserves drawing aspect
+  ratio instead of stretching sketches into the export rows.
+- **Tests:** Added coverage for immediate turn advancement and local
+  presentation/gallery book browsing.
+
 ## 0.19.1 - 2026-05-16
 
 - **Fix (DrawNGuess):** Final gallery packet browsing now stays local to the

@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { DrawNGuessDrawing } from "@/domain/drawnguess/types";
 
 import {
+  applyDrawNGuessAdvanceTurnIfComplete,
   applyDrawNGuessDrawingDraft,
   applyDrawNGuessDrawingSubmit,
   applyDrawNGuessExpireTurn,
@@ -42,6 +43,17 @@ function buildRoom() {
   const second = store.joinRoom({ code: room.code, name: "Cam" }).player;
 
   return { room, hostPlayer, first, second };
+}
+
+function expectAdvancedToGuessingWithHostDrawing(
+  room: ReturnType<typeof buildRoom>["room"],
+  hostPlayerId: string,
+) {
+  expect(room.drawnguessMatch?.activeTurn?.mode).toBe("guessing");
+  expect(room.drawnguessMatch?.packets[0]?.entries[1]).toMatchObject({
+    type: "drawing",
+    playerId: hostPlayerId,
+  });
 }
 
 describe("DrawNGuess runtime", () => {
@@ -105,11 +117,22 @@ describe("DrawNGuess runtime", () => {
         (room.drawnguessMatch?.activeTurn?.graceDeadlineAt ?? now) + 1,
       ),
     ).toBe(true);
-    expect(room.drawnguessMatch?.activeTurn?.mode).toBe("guessing");
-    expect(room.drawnguessMatch?.packets[0]?.entries[1]).toMatchObject({
-      type: "drawing",
-      playerId: hostPlayer.id,
-    });
+    expectAdvancedToGuessingWithHostDrawing(room, hostPlayer.id);
+  });
+
+  it("advances immediately after every player submits", () => {
+    const { room, hostPlayer, first, second } = buildRoom();
+    const now = Date.now();
+
+    startDrawNGuessMatch(room, now);
+    applyDrawNGuessDrawingSubmit(room, hostPlayer.id, drawing);
+    expect(applyDrawNGuessAdvanceTurnIfComplete(room, now + 1)).toBe(false);
+    applyDrawNGuessDrawingSubmit(room, first.id, drawing);
+    expect(applyDrawNGuessAdvanceTurnIfComplete(room, now + 2)).toBe(false);
+    applyDrawNGuessDrawingSubmit(room, second.id, drawing);
+    expect(applyDrawNGuessAdvanceTurnIfComplete(room, now + 3)).toBe(true);
+
+    expectAdvancedToGuessingWithHostDrawing(room, hostPlayer.id);
   });
 
   it("keeps turns open for edits until the server deadline closes", () => {

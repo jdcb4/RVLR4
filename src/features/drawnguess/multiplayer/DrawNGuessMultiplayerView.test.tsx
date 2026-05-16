@@ -61,6 +61,16 @@ const completePayload: DrawNGuessSyncDto = {
   },
 };
 
+const revealPayload: DrawNGuessSyncDto = {
+  public: {
+    ...completePayload.public,
+    phase: "reveal",
+    revealPacket: completePayload.public.packets![0]!,
+    packets: completePayload.public.packets!,
+  },
+  private: completePayload.private,
+};
+
 describe("DrawNGuessMultiplayerView", () => {
   it("opens final gallery packets locally without dispatching a room reveal event", async () => {
     const user = userEvent.setup();
@@ -83,12 +93,72 @@ describe("DrawNGuessMultiplayerView", () => {
     );
 
     await user.click(screen.getByRole("button", { name: /Host's book/i }));
+    await user.click(screen.getByRole("button", { name: /Next page/i }));
+    await user.click(screen.getByRole("button", { name: /Next page/i }));
 
-    expect(screen.getByText("Page 1: Original prompt")).toBeInTheDocument();
+    expect(screen.getByText("Page 3 of 3")).toBeInTheDocument();
     expect(screen.getByText("Beach tower")).toBeInTheDocument();
     expect(emitWithAck).not.toHaveBeenCalledWith(
       "drawnguess:openRevealPacket",
       expect.anything(),
     );
+  });
+
+  it("shows each player only their own presentation book with local page controls", async () => {
+    const user = userEvent.setup();
+    const emitWithAck = vi.fn(async () => ({ ok: true }));
+
+    render(
+      <MemoryRouter>
+        <DrawNGuessMultiplayerView
+          emitWithAck={emitWithAck}
+          isHost={false}
+          payload={revealPayload}
+          replaySync={{
+            offerActive: false,
+            acceptedIds: [],
+            cancelledByDisconnect: false,
+          }}
+          viewerPlayerId="guest"
+        />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("Guest's book")).toBeInTheDocument();
+    expect(screen.queryByText("Host's book")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /Next page/i }));
+
+    expect(screen.getByText("Dinner")).toBeInTheDocument();
+    expect(emitWithAck).not.toHaveBeenCalledWith(
+      "drawnguess:advanceReveal",
+      expect.anything(),
+    );
+  });
+
+  it("lets a player move locally from presentation to the final gallery", async () => {
+    const user = userEvent.setup();
+    const emitWithAck = vi.fn(async () => ({ ok: true }));
+
+    render(
+      <MemoryRouter>
+        <DrawNGuessMultiplayerView
+          emitWithAck={emitWithAck}
+          isHost
+          payload={revealPayload}
+          replaySync={{
+            offerActive: false,
+            acceptedIds: [],
+            cancelledByDisconnect: false,
+          }}
+          viewerPlayerId="host"
+        />
+      </MemoryRouter>,
+    );
+
+    await user.click(screen.getByRole("button", { name: /Go to Final Gallery/i }));
+
+    expect(screen.getByText("Final gallery")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Guest's book/i })).toBeInTheDocument();
   });
 });

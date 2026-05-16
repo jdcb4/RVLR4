@@ -87,8 +87,8 @@ DrawNGuess is registered in the production multiplayer picker. The UX prototype 
 | **Draw waiting**              | Submitted drawing preview, countdown, pending players, and edit-before-deadline action. Component target: `DrawNGuessWaitingPanel`.                                     |
 | **Guessing turn**             | Shows the assigned drawing and a text guess input. Component target: `DrawNGuessGuessingTurn`.                                                                          |
 | **Guess waiting**             | Submitted guess preview, countdown, pending players, and edit-before-deadline action. Component target: `DrawNGuessWaitingPanel`.                                       |
-| **Chain reveal**              | Host-paced flipbook reveal where each player presents their own starting chain; includes full-chain share/export. Component target: `DrawNGuessRevealFlipbook`.         |
-| **Final gallery**             | No-score packet gallery with access to any completed chain and shared multiplayer replay/exit actions. Component target: `DrawNGuessResultsScreen`.                     |
+| **Presentation**              | Each player sees and locally controls their own starting book, with Next steps guidance for social turn-taking before moving to the gallery. Component target: `DrawNGuessPresentationScreen`. |
+| **Final gallery**             | No-score packet gallery with access to any completed book, page-by-page book display, share/export, and shared multiplayer replay/exit actions. Component target: `DrawNGuessResultsScreen`. |
 
 ---
 

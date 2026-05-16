@@ -1,10 +1,11 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   PrimaryFooterButton,
   SecondaryFooterButton,
 } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
+import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { IconArrowLeft, IconChevronRight, IconShare } from "@/components/icons";
 import { PlayerAvatar } from "@/components/PlayerAvatar";
 import { Button } from "@/components/ui/button";
@@ -53,6 +54,7 @@ export function DrawNGuessMultiplayerView({
   const [promptDraft, setPromptDraft] = useState("");
   const [guessDraft, setGuessDraft] = useState("");
   const [drawingDraft, setDrawingDraft] = useState<DrawNGuessDrawing>(() => createBlankDrawing());
+  const [localGalleryOpen, setLocalGalleryOpen] = useState(false);
   const secondsLeft = useCountdownSeconds(payload.public.deadlineAt);
   const deadlineOpen = payload.public.deadlineAt ? Date.now() <= payload.public.deadlineAt : true;
 
@@ -63,6 +65,12 @@ export function DrawNGuessMultiplayerView({
     setGuessDraft(ownSubmission?.guessText ?? "");
     setDrawingDraft(ownSubmission?.drawing ?? createBlankDrawing());
   }, [ownSubmission, turnKey]);
+
+  useEffect(() => {
+    if (payload.public.phase !== "reveal") {
+      setLocalGalleryOpen(false);
+    }
+  }, [payload.public.phase]);
 
   const runAction = async (event: string, body?: unknown) => {
     setBusy(true);
@@ -89,6 +97,7 @@ export function DrawNGuessMultiplayerView({
       editing={editing}
       emitWithAck={emitWithAck}
       guessDraft={guessDraft}
+      localGalleryOpen={localGalleryOpen}
       isHost={isHost}
       payload={payload}
       promptDraft={promptDraft}
@@ -97,6 +106,7 @@ export function DrawNGuessMultiplayerView({
       viewerPlayerId={viewerPlayerId}
       onAction={runAction}
       onEdit={() => setEditing(true)}
+      onGoToGallery={() => setLocalGalleryOpen(true)}
     />
   );
 
@@ -107,12 +117,12 @@ export function DrawNGuessMultiplayerView({
         drawingDraft={drawingDraft}
         error={error}
         guessDraft={guessDraft}
-        isHost={isHost}
+        localGalleryOpen={localGalleryOpen}
         payload={payload}
         promptDraft={promptDraft}
         secondsLeft={secondsLeft}
         submitted={submitted}
-        onAction={runAction}
+        viewerPlayerId={viewerPlayerId}
         onDrawingChange={(next) => {
           setDrawingDraft(next);
           void runAction("drawnguess:updateDrawingDraft", { drawing: next });
@@ -136,35 +146,35 @@ function DrawNGuessBody({
   submitted,
   secondsLeft,
   error,
-  isHost,
+  localGalleryOpen,
   promptDraft,
   guessDraft,
   drawingDraft,
+  viewerPlayerId,
   onPromptChange,
   onGuessChange,
   onDrawingChange,
-  onAction,
 }: {
   readonly payload: DrawNGuessSyncDto;
   readonly assignment: DrawNGuessSyncDto["private"]["assignment"];
   readonly submitted: boolean;
   readonly secondsLeft: number | null;
   readonly error: string;
-  readonly isHost: boolean;
+  readonly localGalleryOpen: boolean;
   readonly promptDraft: string;
   readonly guessDraft: string;
   readonly drawingDraft: DrawNGuessDrawing;
+  readonly viewerPlayerId: string;
   readonly onPromptChange: (next: string) => void;
   readonly onGuessChange: (next: string) => void;
   readonly onDrawingChange: (next: DrawNGuessDrawing) => void;
-  readonly onAction: (event: string, body?: unknown) => Promise<void>;
 }) {
-  if (payload.public.phase === "complete") {
+  if (payload.public.phase === "complete" || localGalleryOpen) {
     return <DrawNGuessResultsScreen payload={payload} />;
   }
 
   if (payload.public.phase === "reveal") {
-    return <DrawNGuessRevealScreen isHost={isHost} payload={payload} onAction={onAction} />;
+    return <DrawNGuessPresentationScreen payload={payload} viewerPlayerId={viewerPlayerId} />;
   }
 
   if (!assignment) {
@@ -245,11 +255,13 @@ function DrawNGuessFooter({
   guessDraft,
   drawingDraft,
   isHost,
+  localGalleryOpen,
   replaySync,
   viewerPlayerId,
   emitWithAck,
   onAction,
   onEdit,
+  onGoToGallery,
 }: {
   readonly payload: DrawNGuessSyncDto;
   readonly submitted: boolean;
@@ -260,6 +272,7 @@ function DrawNGuessFooter({
   readonly guessDraft: string;
   readonly drawingDraft: DrawNGuessDrawing;
   readonly isHost: boolean;
+  readonly localGalleryOpen: boolean;
   readonly replaySync: {
     readonly offerActive: boolean;
     readonly acceptedIds: readonly string[];
@@ -269,8 +282,9 @@ function DrawNGuessFooter({
   readonly emitWithAck: EmitWithAck;
   readonly onAction: (event: string, body?: unknown) => Promise<void>;
   readonly onEdit: () => void;
+  readonly onGoToGallery: () => void;
 }) {
-  if (payload.public.phase === "complete") {
+  if (payload.public.phase === "complete" || localGalleryOpen) {
     return (
       <MultiplayerEndGameActions
         emitWithAck={emitWithAck}
@@ -282,17 +296,13 @@ function DrawNGuessFooter({
   }
 
   if (payload.public.phase === "reveal") {
-    return null;
+    return <PrimaryFooterButton label="Go to Final Gallery" onClick={onGoToGallery} />;
   }
 
   if (submitted) {
     return (
       <DrawNGuessSubmittedFooter
-        busy={busy}
         deadlineOpen={deadlineOpen}
-        isHost={isHost}
-        payload={payload}
-        onAction={onAction}
         onEdit={onEdit}
       />
     );
@@ -316,32 +326,15 @@ function DrawNGuessFooter({
 }
 
 function DrawNGuessSubmittedFooter({
-  payload,
-  busy,
   deadlineOpen,
-  isHost,
-  onAction,
   onEdit,
 }: {
-  readonly payload: DrawNGuessSyncDto;
-  readonly busy: boolean;
   readonly deadlineOpen: boolean;
-  readonly isHost: boolean;
-  readonly onAction: (event: string, body?: unknown) => Promise<void>;
   readonly onEdit: () => void;
 }) {
-  const allSubmitted = payload.public.submittedPlayerIds.length >= payload.public.roster.length;
-
   return (
     <div className="flex w-full flex-col gap-2">
       <SecondaryFooterButton disabled={!deadlineOpen} label="Edit response" onClick={onEdit} />
-      {isHost && allSubmitted ? (
-        <PrimaryFooterButton
-          disabled={busy}
-          label="Start next page"
-          onClick={() => void onAction("drawnguess:advanceTurn")}
-        />
-      ) : null}
     </div>
   );
 }
@@ -440,92 +433,24 @@ function DrawNGuessWaitingPanel({
   );
 }
 
-function DrawNGuessRevealScreen({
+function DrawNGuessPresentationScreen({
   payload,
-  isHost,
-  onAction,
+  viewerPlayerId,
 }: {
   readonly payload: DrawNGuessSyncDto;
-  readonly isHost: boolean;
-  readonly onAction: (event: string, body?: unknown) => Promise<void>;
+  readonly viewerPlayerId: string;
 }) {
-  const packet = payload.public.revealPacket;
-  const roster = payload.public.roster;
-  const owner = roster.find((player) => player.id === packet?.starterPlayerId) ?? roster[0];
-  const ownerIndex = Math.max(0, roster.findIndex((player) => player.id === owner?.id));
-  const entry = packet?.entries[payload.public.revealEntryIndex];
+  const packet = findPacketForPlayer(payload, viewerPlayerId);
+  const owner = payload.public.roster.find((player) => player.id === packet?.starterPlayerId);
 
   if (!packet || !owner) {
-    return <GamePanel title="Reveal" subtitle="Waiting for the first completed book." />;
+    return <GamePanel title="Presentation" subtitle="Waiting for your completed book." />;
   }
-
-  const previousOwner = roster[(ownerIndex - 1 + roster.length) % roster.length];
-  const nextOwner = roster[(ownerIndex + 1) % roster.length];
 
   return (
     <div className="space-y-4">
-      <p className="text-typ-ui text-muted-foreground">
-        Take turns presenting the responses to your prompt.
-      </p>
-      <div className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm">
-        <BookButton
-          disabled={!isHost || !previousOwner}
-          label="Previous book"
-          onClick={() => previousOwner && void onAction("drawnguess:openRevealPacket", { starterPlayerId: previousOwner.id })}
-        >
-          <IconArrowLeft className="size-5" />
-        </BookButton>
-        <div className="flex min-w-0 items-center gap-3">
-          <PlayerAvatar avatarId={avatarIdFor(owner.avatarId)} className="size-12" name={owner.name} />
-          <div className="min-w-0 text-center">
-            <p className="truncate text-typ-card-title font-semibold">{owner.name}</p>
-            <p className="text-typ-ui text-muted-foreground">Original prompt</p>
-          </div>
-        </div>
-        <BookButton
-          disabled={!isHost || !nextOwner}
-          label="Next book"
-          onClick={() => nextOwner && void onAction("drawnguess:openRevealPacket", { starterPlayerId: nextOwner.id })}
-        >
-          <IconChevronRight className="size-5" />
-        </BookButton>
-      </div>
-
-      <GamePanel
-        eyebrow={`Page ${payload.public.revealEntryIndex + 1} of ${packet.entries.length}`}
-        title={entryTitle(entry)}
-      >
-        <div className="flex min-h-[260px] items-center justify-center rounded-xl border border-border bg-background p-3">
-          <RevealEntry entry={entry} packet={packet} />
-        </div>
-      </GamePanel>
-
-      <div className="grid grid-cols-2 gap-2">
-        <Button
-          disabled={!isHost}
-          type="button"
-          variant="outline"
-          onClick={() => void onAction("drawnguess:advanceReveal", { direction: "previous" })}
-        >
-          Previous page
-        </Button>
-        <Button
-          disabled={!isHost}
-          type="button"
-          onClick={() => void onAction("drawnguess:advanceReveal", { direction: "next" })}
-        >
-          Next page
-        </Button>
-      </div>
-      <Button
-        className="w-full gap-2"
-        type="button"
-        variant="outline"
-        onClick={() => downloadChainImage(packet, owner.name)}
-      >
-        <IconShare className="size-5" />
-        Share chain
-      </Button>
+      <DrawNGuessBookDisplay owner={owner} packet={packet} />
+      <ReadyNextStepsCard primaryText="Take turns presenting your Books to the other players. Once you've finished click through to the final gallery where you can view and share all of the books." />
     </div>
   );
 }
@@ -557,24 +482,9 @@ function DrawNGuessResultsScreen({
         </div>
       </GamePanel>
 
-      {selectedPacket ? (
-        <GamePanel
-          title={`${selectedOwner?.name ?? "Player"}'s book`}
-          subtitle={originalPrompt(selectedPacket)}
-        >
-          <div className="grid gap-3">
-            {selectedPacket.entries.map((entry, index) => (
-              <div
-                className="rounded-xl border border-border bg-background p-3"
-                key={`${entry.type}-${entry.createdAt}-${index}`}
-              >
-                <p className="mb-2 text-typ-ui font-semibold text-muted-foreground">
-                  Page {index + 1}: {entryTitle(entry)}
-                </p>
-                <RevealEntry entry={entry} packet={selectedPacket} />
-              </div>
-            ))}
-          </div>
+      {selectedPacket && selectedOwner ? (
+        <div className="space-y-3">
+          <DrawNGuessBookDisplay owner={selectedOwner} packet={selectedPacket} />
           <Button
             className="w-full gap-2"
             type="button"
@@ -584,8 +494,62 @@ function DrawNGuessResultsScreen({
             <IconShare className="size-5" />
             Share chain
           </Button>
-        </GamePanel>
+        </div>
       ) : null}
+    </div>
+  );
+}
+
+function DrawNGuessBookDisplay({
+  packet,
+  owner,
+}: {
+  readonly packet: DrawNGuessPacket;
+  readonly owner: DrawNGuessSyncDto["public"]["roster"][number];
+}) {
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageCount = packet.entries.length;
+  const entry = packet.entries[pageIndex];
+
+  useEffect(() => {
+    setPageIndex(0);
+  }, [packet.id]);
+
+  return (
+    <div className="space-y-3">
+      <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm">
+        <PlayerAvatar avatarId={avatarIdFor(owner.avatarId)} className="size-12" name={owner.name} />
+        <div className="min-w-0">
+          <p className="truncate text-typ-card-title font-semibold">{owner.name}'s book</p>
+          <p className="truncate text-typ-ui text-muted-foreground">{originalPrompt(packet)}</p>
+        </div>
+      </div>
+
+      <GamePanel eyebrow={`Page ${pageIndex + 1} of ${pageCount}`} title={entryTitle(entry)}>
+        <div className="flex min-h-[260px] items-center justify-center rounded-xl border border-border bg-background p-3">
+          <RevealEntry entry={entry} packet={packet} />
+        </div>
+      </GamePanel>
+
+      <div className="grid grid-cols-2 gap-2">
+        <Button
+          disabled={pageIndex <= 0}
+          type="button"
+          variant="outline"
+          onClick={() => setPageIndex((current) => Math.max(0, current - 1))}
+        >
+          <IconArrowLeft className="mr-2 size-4" />
+          Previous page
+        </Button>
+        <Button
+          disabled={pageIndex >= pageCount - 1}
+          type="button"
+          onClick={() => setPageIndex((current) => Math.min(pageCount - 1, current + 1))}
+        >
+          Next page
+          <IconChevronRight className="ml-2 size-4" />
+        </Button>
+      </div>
     </div>
   );
 }
@@ -654,30 +618,6 @@ function RevealEntry({
   );
 }
 
-function BookButton({
-  label,
-  disabled,
-  children,
-  onClick,
-}: {
-  readonly label: string;
-  readonly disabled: boolean;
-  readonly children: ReactNode;
-  readonly onClick: () => void;
-}) {
-  return (
-    <button
-      aria-label={label}
-      className="rounded-xl border border-border p-2 text-foreground transition hover:bg-muted disabled:opacity-40"
-      disabled={disabled}
-      type="button"
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
-
 function useCountdownSeconds(deadlineAt: number | null) {
   const [seconds, setSeconds] = useState<number | null>(null);
 
@@ -721,13 +661,20 @@ function originalPrompt(packet: DrawNGuessPacket) {
   return prompt?.type === "prompt" ? prompt.text : "Original prompt";
 }
 
+function findPacketForPlayer(payload: DrawNGuessSyncDto, playerId: string) {
+  return (
+    payload.public.packets?.find((packet) => packet.starterPlayerId === playerId) ??
+    (payload.public.revealPacket?.starterPlayerId === playerId ? payload.public.revealPacket : null)
+  );
+}
+
 function avatarIdFor(value: string | undefined): AvatarId {
   return isAvatarId(value) ? value : "bear";
 }
 
 function downloadChainImage(packet: DrawNGuessPacket, ownerName: string) {
   const width = 900;
-  const rowHeight = 250;
+  const rowHeight = 300;
   const padding = 48;
   const canvas = document.createElement("canvas");
   canvas.width = width;
@@ -756,7 +703,7 @@ function downloadChainImage(packet: DrawNGuessPacket, ownerName: string) {
     ctx.fillText(entryTitle(entry), padding + 28, top + 38);
 
     if (entry.type === "drawing") {
-      drawEntryImage(ctx, entry.drawing, padding + 28, top + 56, width - padding * 2 - 56, 150);
+      drawEntryImage(ctx, entry.drawing, padding + 28, top + 58, width - padding * 2 - 56, 200);
     } else {
       ctx.fillStyle = "#111827";
       ctx.font = "700 32px system-ui, sans-serif";
@@ -790,7 +737,28 @@ function drawEntryImage(
   preview.width = 640;
   preview.height = 480;
   renderDrawing(preview, drawing);
-  ctx.drawImage(preview, x, y, width, height);
+  const fit = containRect(preview.width, preview.height, x, y, width, height);
+  ctx.drawImage(preview, fit.x, fit.y, fit.width, fit.height);
+}
+
+function containRect(
+  sourceWidth: number,
+  sourceHeight: number,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) {
+  const scale = Math.min(width / sourceWidth, height / sourceHeight);
+  const fittedWidth = sourceWidth * scale;
+  const fittedHeight = sourceHeight * scale;
+
+  return {
+    x: x + (width - fittedWidth) / 2,
+    y: y + (height - fittedHeight) / 2,
+    width: fittedWidth,
+    height: fittedHeight,
+  };
 }
 
 function wrapText(

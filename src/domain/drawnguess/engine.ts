@@ -385,7 +385,7 @@ export function getPublicMatchSnapshot(match: DrawNGuessMatch): DrawNGuessPublic
     revealPacketIndex: match.revealPacketIndex,
     revealEntryIndex: match.revealEntryIndex,
     ...(revealPacket ? { revealPacket } : {}),
-    ...(match.phase === "complete" ? { packets: match.packets } : {}),
+    ...(match.phase === "reveal" || match.phase === "complete" ? { packets: match.packets } : {}),
   };
 }
 

@@ -8,6 +8,7 @@ import { captainPlayerIdForTeam } from "./captain.ts";
 import {
   applyDrawNGuessAdvanceReveal,
   applyDrawNGuessAdvanceTurn,
+  applyDrawNGuessAdvanceTurnIfComplete,
   applyDrawNGuessDrawingDraft,
   applyDrawNGuessDrawingSubmit,
   applyDrawNGuessGuessDraft,
@@ -724,6 +725,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       "Unable to submit prompt.",
       async ({ room, actor }, payload) => {
         applyDrawNGuessPromptSubmit(room, actor.id, payload.text);
+        applyDrawNGuessAdvanceTurnIfComplete(room);
         await broadcastRoom(io, store, room.code);
       },
     );
@@ -746,6 +748,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       "Unable to submit drawing.",
       async ({ room, actor }, payload) => {
         applyDrawNGuessDrawingSubmit(room, actor.id, payload.drawing);
+        applyDrawNGuessAdvanceTurnIfComplete(room);
         await broadcastRoom(io, store, room.code);
       },
     );
@@ -768,6 +771,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       "Unable to submit guess.",
       async ({ room, actor }, payload) => {
         applyDrawNGuessGuessSubmit(room, actor.id, payload.text);
+        applyDrawNGuessAdvanceTurnIfComplete(room);
         await broadcastRoom(io, store, room.code);
       },
     );

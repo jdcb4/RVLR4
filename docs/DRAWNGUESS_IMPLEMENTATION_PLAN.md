@@ -18,7 +18,7 @@ The design prototype lives at [`prototypes/drawnguess/index.html`](../prototypes
 - **Word packs:** build the backend framework around explicit word-pack IDs from the start, even if v1 only ships one default pack. The server should choose words so clients cannot all inspect the deck.
 - **Turn timing:** default to 60 seconds for drawing and 30 seconds for guessing, with host-configurable timers later if needed.
 - **Avatars:** players get a random avatar by default when entering their name, and can change it before joining.
-- **Review pacing:** host-paced reveal is simplest and fits the existing room captain pattern.
+- **Review pacing:** each player locally controls their own presentation book; social turn-taking happens around the table rather than through a shared host-controlled reveal.
 - **Drawing fidelity:** v1 can store drawings as compressed canvas data URLs or stroke data in memory. Stroke data is better for syncing and size control.
 
 ## Implementation Readiness Pass
@@ -57,7 +57,7 @@ These should be new, focused components under `src/features/drawnguess/` because
 | `DrawNGuessWhiteboard`        | Canvas drawing, brush controls, undo/clear, normalized stroke editing.                                                | No Socket.IO imports. Receives `value`, `onChange`, `disabled`, and display sizing props.                                              |
 | `DrawNGuessDrawingPreview`    | Renders submitted drawings and drawings-to-guess from stroke data.                                                    | Shared by guessing, waiting, reveal, gallery, and export.                                                                              |
 | `DrawNGuessTurnTimer`         | Countdown ring/compact timer derived from server `turnDeadlineAt`.                                                    | Uses server timestamps and tolerates drift; no authority over turn advancement.                                                        |
-| `DrawNGuessRevealFlipbook`    | Host-paced packet/page reveal.                                                                                        | Uses `GamePanel`, avatar display, footer buttons, and `IconShare`.                                                                     |
+| `DrawNGuessPresentationScreen` | Local own-book presentation.                                                                                          | Uses `GamePanel`, `ReadyNextStepsCard`, avatar display, and footer buttons.                                                            |
 | `DrawNGuessChainExport`       | Full-chain image export for share/download.                                                                           | Client-only rendering helper; not part of core match state.                                                                            |
 
 ### Screen-To-Component Map
@@ -73,8 +73,8 @@ These should be new, focused components under `src/features/drawnguess/` because
 | Draw waiting     | `DrawNGuessWaitingPanel`                                                    | `GamePanel`, `ReadyNextStepsCard` if useful, footer edit action                         | Submitted drawing preview, pending player list, server deadline countdown |
 | Guessing         | `DrawNGuessGuessingTurn`                                                    | `GamePanel`, existing input/button styling, `Metric`                                    | Drawing preview and guess submission                                      |
 | Guess waiting    | `DrawNGuessWaitingPanel`                                                    | Same as draw waiting                                                                    | Submitted guess preview and edit flow                                     |
-| Chain reveal     | `DrawNGuessRevealFlipbook`                                                  | `GamePanel`, `Button`, `IconArrowLeft`, `IconChevronRight`, `IconShare`, avatar display | Packet/page reveal state, full-chain export trigger                       |
-| Final gallery    | `DrawNGuessResultsScreen`                                                   | `GamePanel`, `MultiplayerEndGameActions`                                                | Packet list, open-any-packet flow, no-score presentation                  |
+| Presentation     | `DrawNGuessPresentationScreen`                                              | `GamePanel`, `ReadyNextStepsCard`, `Button`, `IconArrowLeft`, `IconChevronRight`, avatar display | Local own-book page state and final-gallery handoff                       |
+| Final gallery    | `DrawNGuessResultsScreen`                                                   | `GamePanel`, `MultiplayerEndGameActions`, `Button`, `IconShare`                         | Packet list, local book display, full-chain export, no-score presentation |
 
 ### Shared Types And Data Prerequisites
 
@@ -204,10 +204,10 @@ To avoid race conditions at the timer boundary, the server should use a short gr
 When all packets are complete:
 
 - Each player presents their own starting chain, meaning the packet whose first word was assigned to them.
-- The reveal screen should behave like a flip book, showing one entry at a time for suspense rather than showing the completed chain immediately.
-- All clients see the same packet and reveal step while the current presenter advances through their chain.
+- The presentation screen should behave like a flip book, showing one entry at a time for suspense rather than showing the completed chain immediately.
+- Each client sees and controls only their own starting book during presentation. Players then take turns presenting socially rather than forcing a shared app-controlled reveal sequence.
 - Each reveal step shows who created it.
-- The reveal screen should include a share/export control. The exported image should be the full chain as one image, not the current flipbook card.
+- The final gallery should include a share/export control. The exported image should be the full chain as one image, not the current flipbook card.
 - Final view shows all answer packets with access to any completed chain and a replay/new game action.
 
 ## Domain Model
@@ -371,7 +371,7 @@ Server responsibilities:
 - Validate DrawNGuess settings with Zod.
 - Add DrawNGuess match state to room state.
 - Handle reconnect by resending the same private assignment to the same player.
-- Guard host-only actions such as start, force advance, reveal advance, and restart.
+- Guard host-only actions such as start, force advance, and restart.
 - Allow a player to replace their own current-turn submission until the server deadline/grace window closes. Reject duplicate submissions after the turn is locked.
 - Apply timer expiry consistently with server-authoritative deadlines, a short grace window, and placeholder auto-submissions for missing entries.
 
@@ -398,7 +398,7 @@ Suggested screens:
 - `DrawNGuessDrawingTurn`
 - `DrawNGuessGuessingTurn`
 - `DrawNGuessWaitingPanel`
-- `DrawNGuessRevealScreen`
+- `DrawNGuessPresentationScreen`
 - `DrawNGuessResultsScreen`
 
 Use existing app chrome where possible:
@@ -410,7 +410,7 @@ Use existing app chrome where possible:
 
 The whiteboard itself should be a focused component with no Socket.IO imports. It should receive a `value`, `onChange`, and disabled/submitted state from the game view.
 
-The final gallery should not rank chains. It should list answer packets and let players open any completed packet. The reveal flow should be presenter-led and flipbook-style; the export/share view can render a separate full-chain image.
+The final gallery should not rank chains. It should list answer packets and let players open any completed packet using the same page-by-page book display as presentation. The export/share view can render a separate full-chain image.
 
 ## Word List
 
@@ -512,7 +512,7 @@ Client tests:
 Manual QA:
 
 - Use `docs/MULTIPLAYER_QA.md` as the baseline because this is Socket.IO room work.
-- Add DrawNGuess-specific checks for two browsers, mobile viewport canvas input, reconnect during drawing, reconnect during guessing, and host advancing reveal.
+- Add DrawNGuess-specific checks for two browsers, mobile viewport canvas input, reconnect during drawing, reconnect during guessing, and local presentation/gallery browsing.
 
 Required deterministic checks before shipping production implementation:
 
@@ -557,7 +557,7 @@ The standalone prototype demonstrates:
 - Simultaneous drawing turn with a real canvas.
 - Simultaneous guessing turn with text entry.
 - Packet summary and current-player assignment.
-- Flipbook reveal, presenter-owned starting chains, full-chain image export, and final packet access.
+- Local presentation books, presenter-owned starting chains, full-chain image export, and final packet access.
 
 Run it by opening:
 

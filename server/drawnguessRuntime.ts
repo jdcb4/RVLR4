@@ -79,6 +79,18 @@ export function applyDrawNGuessPromptSubmit(room: Room, playerId: string, text: 
   room.drawnguessMatch = submitPrompt(requireDrawNGuessMatch(room), playerId, text);
 }
 
+export function applyDrawNGuessAdvanceTurnIfComplete(room: Room, now = Date.now()) {
+  const match = requireDrawNGuessMatch(room);
+
+  if (!isTurnComplete(match)) {
+    return false;
+  }
+
+  room.drawnguessMatch = advanceTurn(match, now);
+
+  return true;
+}
+
 export function applyDrawNGuessDrawingDraft(
   room: Room,
   playerId: string,
@@ -161,7 +173,7 @@ export function canOfferDrawNGuessReplay(room: Room): boolean {
     room.gameKind === "drawnguess" &&
     room.phase === "playing" &&
     room.drawnguessMatch !== undefined &&
-    getPublicMatchSnapshot(room.drawnguessMatch).phase === "complete"
+    ["reveal", "complete"].includes(getPublicMatchSnapshot(room.drawnguessMatch).phase)
   );
 }
 
