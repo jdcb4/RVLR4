@@ -14,6 +14,7 @@ export type ImposterStep =
 export type ImposterPlayer = {
   readonly id: string;
   readonly name: string;
+  readonly avatarId?: string | undefined;
 };
 
 /** Active round: assignments + pass-and-play reveal progress. */

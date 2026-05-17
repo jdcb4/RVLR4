@@ -47,6 +47,7 @@ export function createMatch(
           `Player ${teamIndex + 1}.${playerIndex + 1}`,
         ),
         teamId,
+        avatarId: player.avatarId,
       });
       seat += 1;
     }

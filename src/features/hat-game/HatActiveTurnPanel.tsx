@@ -2,6 +2,7 @@ import { FooterOutlineIconTextButton } from "@/components/game/GameFooterButtons
 import { GamePanel } from "@/components/game/GamePanel";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
 import { Metric } from "@/components/Metric";
+import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
 import { getHatGameContext, getHatGamePhaseMeta } from "@/domain/hat-game/engine";
 import { formatCountdown } from "@/domain/hat-game/time";
 import type { HatGameSession } from "@/domain/hat-game/types";
@@ -22,6 +23,7 @@ export function HatActiveTurnPanel({
   const phase = getHatGamePhaseMeta(session.phaseNumber);
   const activeTurn = session.activeTurn;
   const currentClue = activeTurn?.clueQueue[activeTurn.queueIndex]?.text ?? "Loading";
+  const activeDescriber = session.players.find((player) => player.id === context.activeDescriberId);
 
   return (
     <section className="flex flex-1 flex-col gap-4 pb-4">
@@ -35,6 +37,12 @@ export function HatActiveTurnPanel({
         subtitle={`${context.activeDescriberName} is presenting`}
         title={`${context.activeTeam?.name ?? "Team"} guessing`}
       >
+        <PlayerAvatarBadge
+          avatarId={activeDescriber?.avatarId}
+          detail="Presenting"
+          name={context.activeDescriberName}
+        />
+
         <TurnPlayHighlight>{currentClue}</TurnPlayHighlight>
         <div className="grid grid-cols-2 gap-3">
           <Metric

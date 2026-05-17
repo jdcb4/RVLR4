@@ -4,6 +4,7 @@ import { BetweenTurnsLayout } from "@/components/game/BetweenTurnsLayout";
 import { GamePanel } from "@/components/game/GamePanel";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { ReadyProgressCard } from "@/components/game/ReadyProgressCard";
+import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
 import { getActiveContext } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 import { LastTurnCard } from "@/features/whowhatwhere/summary/LastTurnCard";
@@ -47,7 +48,13 @@ export function ReadyScreen({
           nextDescriberPlayerId: context.describer.id,
           nextTeamDisplayName: nextTeamName,
         })}
-      />
+      >
+        <PlayerAvatarBadge
+          avatarId={context.describer.avatarId}
+          detail={`${context.team.name} describer`}
+          name={describerName}
+        />
+      </GamePanel>
     ) : viewerOnNextTeam ? (
       <GamePanel title="Your team is up next" />
     ) : (

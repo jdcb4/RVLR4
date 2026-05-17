@@ -54,6 +54,7 @@ export function startImposterMatch(room: Room) {
   const players: ImposterPlayer[] = sortedPlayers.map((player) => ({
     id: player.id,
     name: player.name,
+    avatarId: player.avatarId,
   }));
 
   const wordBank = getImposterWordList();

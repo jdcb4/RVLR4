@@ -15,6 +15,7 @@ import { ReadyProgressCard } from "@/components/game/ReadyProgressCard";
 import { TeamStandingsList } from "@/components/game/TeamStandingsList";
 import { ThatsTheLastTurnCard } from "@/components/game/ThatsTheLastTurnCard";
 import { Metric } from "@/components/Metric";
+import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
 import { getHatGameContext, getHatGamePhaseMeta } from "@/domain/hat-game/engine";
 import { formatCountdown } from "@/domain/hat-game/time";
 import type { HatGameSession } from "@/domain/hat-game/types";
@@ -157,6 +158,7 @@ export function HatReadyMultiplayerBody({
   const nextTeamId = context.activeTeamId;
   const viewerOnNextTeam = Boolean(viewerTeamId && nextTeamId && viewerTeamId === nextTeamId);
   const nextTeamName = context.activeTeam?.name ?? "Team";
+  const activeDescriber = session.players.find((player) => player.id === context.activeDescriberId);
 
   const upNextPanel = (
     <GamePanel
@@ -167,7 +169,13 @@ export function HatReadyMultiplayerBody({
         nextDescriberPlayerId: context.activeDescriberId,
         nextTeamDisplayName: nextTeamName,
       })}
-    />
+    >
+      <PlayerAvatarBadge
+        avatarId={activeDescriber?.avatarId}
+        detail={`${nextTeamName} describer`}
+        name={context.activeDescriberName}
+      />
+    </GamePanel>
   );
 
   return (
@@ -324,6 +332,9 @@ function HatPassiveTurnBody({
   readonly teams: HatGameSession["teams"];
 }) {
   const isGuesser = role === "guesser";
+  const activeDescriber = context.activeTeamPlayers.find(
+    (player) => player.id === context.activeDescriberId,
+  );
 
   return (
     <section className="flex flex-1 flex-col gap-4 pb-4">
@@ -349,6 +360,7 @@ function HatPassiveTurnBody({
 
       <HatSpectatorTurnSnapshotCard
         activeTurn={activeTurn}
+        activeDescriberAvatarId={activeDescriber?.avatarId}
         context={context}
         secondsLeft={secondsLeft}
         teams={teams}
@@ -363,11 +375,13 @@ function HatPassiveTurnBody({
  */
 function HatSpectatorTurnSnapshotCard({
   activeTurn,
+  activeDescriberAvatarId,
   context,
   secondsLeft,
   teams,
 }: {
   readonly activeTurn: { readonly score: number };
+  readonly activeDescriberAvatarId?: string | undefined;
   readonly context: { readonly activeDescriberName: string };
   readonly secondsLeft: number;
   readonly teams: readonly { readonly id: string; readonly name: string; readonly score: number }[];
@@ -375,10 +389,15 @@ function HatSpectatorTurnSnapshotCard({
   return (
     <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
       <p className="text-typ-overline text-muted-foreground">Turn snapshot</p>
+      <PlayerAvatarBadge
+        avatarId={activeDescriberAvatarId}
+        className="mt-3"
+        detail="Describer"
+        name={context.activeDescriberName}
+      />
       <div className="mt-3 grid grid-cols-2 gap-3">
         <Metric label="Time left" value={formatCountdown(secondsLeft)} />
         <Metric label="Turn score" value={String(activeTurn.score)} />
-        <Metric className="col-span-2" label="Describer" value={context.activeDescriberName} />
       </div>
       <div className="mt-4 border-t border-border pt-4">
         <p className="text-typ-ui font-semibold text-foreground">Standings</p>

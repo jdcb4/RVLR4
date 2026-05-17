@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import bearUrl from "@/assets/avatars/bear.webp";
 import catUrl from "@/assets/avatars/cat.webp";
 import deerUrl from "@/assets/avatars/deer.webp";
@@ -19,7 +21,7 @@ import tigerUrl from "@/assets/avatars/tiger.webp";
 import turtleUrl from "@/assets/avatars/turtle.webp";
 import wolfUrl from "@/assets/avatars/wolf.webp";
 import { cn } from "@/lib/utils";
-import type { AvatarId } from "@/multiplayer/avatarCatalog";
+import { type AvatarId, isAvatarId } from "@/multiplayer/avatarCatalog";
 
 const avatarUrls: Record<AvatarId, string> = {
   bear: bearUrl,
@@ -63,5 +65,37 @@ export function PlayerAvatar({
       draggable={false}
       src={avatarUrls[avatarId]}
     />
+  );
+}
+
+export function PlayerAvatarBadge({
+  avatarId,
+  name,
+  detail,
+  className,
+  avatarClassName,
+}: {
+  readonly avatarId?: unknown;
+  readonly name: string;
+  readonly detail?: ReactNode;
+  readonly className?: string;
+  readonly avatarClassName?: string;
+}) {
+  const safeAvatarId = isAvatarId(avatarId) ? avatarId : null;
+
+  return (
+    <div className={cn("flex items-center gap-3", className)}>
+      {safeAvatarId ? (
+        <PlayerAvatar
+          avatarId={safeAvatarId}
+          className={cn("size-11", avatarClassName)}
+          name={name}
+        />
+      ) : null}
+      <div className="min-w-0">
+        <p className="truncate text-typ-ui font-semibold text-foreground">{name}</p>
+        {detail ? <p className="truncate text-typ-ui-snug text-muted-foreground">{detail}</p> : null}
+      </div>
+    </div>
   );
 }

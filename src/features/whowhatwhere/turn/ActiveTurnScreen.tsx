@@ -4,6 +4,7 @@ import { FooterOutlineIconTextButton } from "@/components/game/GameFooterButtons
 import { GamePanel } from "@/components/game/GamePanel";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
 import { Metric } from "@/components/Metric";
+import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
 import { Button } from "@/components/ui/button";
 import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
 import {
@@ -65,6 +66,12 @@ export function ActiveTurnScreen({
         subtitle={`${context.describer.name} is presenting`}
         title={`${context.team.name} guessing`}
       >
+        <PlayerAvatarBadge
+          avatarId={context.describer.avatarId}
+          detail="Presenting"
+          name={context.describer.name}
+        />
+
         <TurnPlayHighlight>
           {currentWord?.word ?? "No word"}
         </TurnPlayHighlight>

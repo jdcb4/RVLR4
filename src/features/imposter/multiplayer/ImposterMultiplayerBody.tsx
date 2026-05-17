@@ -4,6 +4,7 @@ import { GamePanel } from "@/components/game/GamePanel";
 import { ImposterRemindMeCard } from "@/components/game/ImposterRemindMeCard";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
+import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
 import { IMPOSTER_ROLE_CARD_COPY } from "@/config/imposterDefaults";
 import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 import { IMPOSTER_NOTICE_CLASS } from "@/features/imposter/screens/imposterScreenTokens";
@@ -53,7 +54,10 @@ export function ImposterMultiplayerBody({
   }
 
   if (step === "results" && round) {
-    const imposterNames =
+    const imposters = round.imposterPlayerIds
+      .map((id) => snapshot.players.find((player) => player.id === id))
+      .filter((player) => player !== undefined);
+    const fallbackImposterNames =
       round.imposterPlayerIds
         .map((id) => snapshot.players.find((player) => player.id === id)?.name ?? id)
         .join(", ") || "-";
@@ -69,7 +73,22 @@ export function ImposterMultiplayerBody({
             <p className="text-typ-overline font-semibold uppercase tracking-wide text-muted-foreground">
               Imposter
             </p>
-            <p className="mt-2 text-typ-display font-bold text-foreground">{imposterNames}</p>
+            {imposters.length > 0 ? (
+              <div className="mt-3 grid gap-3">
+                {imposters.map((player) => (
+                  <PlayerAvatarBadge
+                    key={player.id}
+                    avatarId={player.avatarId}
+                    avatarClassName="size-12"
+                    name={player.name}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="mt-2 text-typ-display font-bold text-foreground">
+                {fallbackImposterNames}
+              </p>
+            )}
           </div>
           <div>
             <p className="text-typ-overline font-semibold uppercase tracking-wide text-muted-foreground">
@@ -155,10 +174,12 @@ function ParallelRevealBody({
   }
 
   const viewerName = imposterPlayerName(snapshot.players, viewerPlayerId);
+  const viewer = snapshot.players.find((player) => player.id === viewerPlayerId);
 
   if (!seen) {
     return (
       <PrivateRevealPrompt
+        avatarId={viewer?.avatarId}
         eyebrow={`Secret role - player ${imposterPlayerOrdinal(snapshot.players, viewerPlayerId)} of ${snapshot.players.length}`}
         name={viewerName}
         primaryText="When you are in private, tap Reveal my role in the footer. The table cannot start the clue round until everyone has looked."
@@ -170,6 +191,7 @@ function ParallelRevealBody({
   if (!done) {
     return (
       <RoleRevealCard
+        avatarId={viewer?.avatarId}
         isImposter={isImposter}
         name={viewerName}
         secretWord={round.secretWord}
@@ -226,6 +248,7 @@ function SequentialRevealBody({
   if (!round.revealRevealed) {
     return (
       <PrivateRevealPrompt
+        avatarId={subject?.avatarId}
         eyebrow={`Secret role ${round.revealPlayerIndex + 1} of ${snapshot.players.length}`}
         name={subject?.name ?? "Player"}
         primaryText="When you are in private, use the footer button on this screen. Wait quietly if it is not your turn yet."
@@ -236,6 +259,7 @@ function SequentialRevealBody({
 
   return (
     <RoleRevealCard
+      avatarId={subject?.avatarId}
       isImposter={isImposter}
       name={subject?.name ?? "Player"}
       secretWord={round.secretWord}
@@ -250,11 +274,13 @@ function SequentialRevealBody({
 }
 
 function PrivateRevealPrompt({
+  avatarId,
   eyebrow,
   name,
   subtitle,
   primaryText,
 }: {
+  readonly avatarId?: string | undefined;
   readonly eyebrow: string;
   readonly name: string;
   readonly subtitle: string;
@@ -262,6 +288,7 @@ function PrivateRevealPrompt({
 }) {
   return (
     <GamePanel eyebrow={eyebrow} subtitle={subtitle} title={`Reveal - ${name}`}>
+      <PlayerAvatarBadge avatarId={avatarId} detail="Private reveal" name={name} />
       <p className={IMPOSTER_NOTICE_CLASS}>
         When you are ready in private, tap the footer button to see your role.
       </p>
@@ -273,11 +300,13 @@ function PrivateRevealPrompt({
 }
 
 function RoleRevealCard({
+  avatarId,
   isImposter,
   name,
   secretWord,
   primaryText,
 }: {
+  readonly avatarId?: string | undefined;
   readonly isImposter: boolean;
   readonly name: string;
   readonly secretWord: string;
@@ -293,6 +322,11 @@ function RoleRevealCard({
       }
       title={name}
     >
+      <PlayerAvatarBadge
+        avatarId={avatarId}
+        detail={isImposter ? "Secret role" : "Secret word"}
+        name={name}
+      />
       {isImposter ? (
         <TurnPlayHighlight>{IMPOSTER_ROLE_CARD_COPY}</TurnPlayHighlight>
       ) : (
@@ -317,6 +351,9 @@ function GuidePregameBody({
   const starterName = snapshot.cluesStartPlayerId
     ? imposterPlayerName(snapshot.players, snapshot.cluesStartPlayerId, "Someone")
     : "Someone";
+  const starter = snapshot.cluesStartPlayerId
+    ? snapshot.players.find((player) => player.id === snapshot.cluesStartPlayerId)
+    : null;
 
   return (
     <GamePanel
@@ -324,6 +361,11 @@ function GuidePregameBody({
       subtitle="Talk together at the table - this app only carries instructions."
       title="Give your clues"
     >
+      <PlayerAvatarBadge
+        avatarId={starter?.avatarId}
+        detail="Starts the clue circle"
+        name={starterName}
+      />
       <p className="text-typ-body text-foreground">
         Start with <strong>{starterName}</strong> and then move left around the circle, until
         everyone has gone twice. On each pass, say one short clue about the secret word. Imposters

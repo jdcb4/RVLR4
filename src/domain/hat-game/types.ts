@@ -3,6 +3,7 @@ export type Player = {
   seat: number;
   name: string;
   teamId: string;
+  avatarId?: string | undefined;
 };
 
 export type Team = {

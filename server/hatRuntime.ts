@@ -24,6 +24,7 @@ function playersAndTeamsFromSetups(setups: readonly TeamSetup[]) {
     setup.players.map((player) => ({
       id: player.id,
       name: player.name,
+      avatarId: player.avatarId,
       teamId: setup.id,
       seat: seat++,
     })),

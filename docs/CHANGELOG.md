@@ -2,6 +2,12 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.20.0 - 2026-05-17
+
+- **Feature (avatars):** Multiplayer avatars now carry from the lobby into Who
+  What Where, Hat Game, and Imposter active game state and render on turn,
+  ready, reveal, clue-starter, and results screens.
+
 ## 0.19.4 - 2026-05-16
 
 - **Docs:** Replaced the obsolete DrawNGuess implementation plan with a

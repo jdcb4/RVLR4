@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 
+import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import { IMPOSTER_MAX_PLAYERS } from "@/config/imposterDefaults";
 import { MAX_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 
+import { startHatMatch } from "./hatRuntime.ts";
+import { startImposterMatch } from "./imposterRuntime.ts";
 import {
   archiveRoomAfterAllPlayersOptedOut,
   assertTeamLobbyReady,
@@ -10,6 +13,7 @@ import {
   resetLobbyAfterReplay,
   RoomStore,
 } from "./roomStore.ts";
+import { startWhoWhatWhereMatch } from "./whoWhatWhereRuntime.ts";
 
 function fillImposterRoom(store: RoomStore, hostName = "Host"): string {
   const { room } = store.createRoom({ gameKind: "imposter", hostName });
@@ -19,6 +23,46 @@ function fillImposterRoom(store: RoomStore, hostName = "Host"): string {
   }
 
   return room.code;
+}
+
+function createReadyTeamRoom(gameKind: "whowhatwhere" | "hat") {
+  const store = new RoomStore();
+  const { room, hostPlayer } = store.createRoom({
+    gameKind,
+    hostName: "Host",
+    avatarId: "frog",
+  });
+  const { player: teammate } = store.joinRoom({
+    code: room.code,
+    name: "Teammate",
+    avatarId: "cat",
+  });
+  const { player: opponentOne } = store.joinRoom({
+    code: room.code,
+    name: "Opponent One",
+    avatarId: "dog",
+  });
+  const { player: opponentTwo } = store.joinRoom({
+    code: room.code,
+    name: "Opponent Two",
+    avatarId: "fox",
+  });
+
+  hostPlayer.teamIndex = 0;
+  teammate.teamIndex = 0;
+  opponentOne.teamIndex = 1;
+  opponentTwo.teamIndex = 1;
+
+  if (gameKind === "hat" && room.hatClueDrafts) {
+    for (const player of room.players.values()) {
+      room.hatClueDrafts[player.id] = Array.from(
+        { length: GAME_DEFAULTS.cluesPerPlayer },
+        (_, clueIndex) => `${player.name} clue ${clueIndex + 1}`,
+      );
+    }
+  }
+
+  return { room, hostPlayer, teammate, opponentOne, opponentTwo };
 }
 
 describe("RoomStore.createRoom", () => {
@@ -350,6 +394,46 @@ describe("resetLobbyAfterReplay", () => {
     expect(room.replayAcceptedPlayerIds).toBeUndefined();
     expect(hostPlayer.ready).toBe(false);
     expect(hostPlayer.optedOutOfResume).toBe(false);
+  });
+});
+
+describe("multiplayer avatar propagation", () => {
+  it("carries lobby avatars into Who What Where matches", async () => {
+    const { room, hostPlayer } = createReadyTeamRoom("whowhatwhere");
+
+    await startWhoWhatWhereMatch(room);
+
+    expect(room.wwwMatch?.players.find((player) => player.id === hostPlayer.id)?.avatarId).toBe(
+      "frog",
+    );
+  });
+
+  it("carries lobby avatars into Hat Game sessions", () => {
+    const { room, opponentOne } = createReadyTeamRoom("hat");
+
+    startHatMatch(room);
+
+    expect(room.hatSession?.players.find((player) => player.id === opponentOne.id)?.avatarId).toBe(
+      "dog",
+    );
+  });
+
+  it("carries lobby avatars into Imposter snapshots", () => {
+    const store = new RoomStore();
+    const { room, hostPlayer } = store.createRoom({
+      gameKind: "imposter",
+      hostName: "Host",
+      avatarId: "frog",
+    });
+    store.joinRoom({ code: room.code, name: "Guest 1", avatarId: "cat" });
+    store.joinRoom({ code: room.code, name: "Guest 2", avatarId: "dog" });
+    store.joinRoom({ code: room.code, name: "Guest 3", avatarId: "fox" });
+
+    startImposterMatch(room);
+
+    expect(
+      room.imposterSnapshot?.players.find((player) => player.id === hostPlayer.id)?.avatarId,
+    ).toBe("frog");
   });
 });
 

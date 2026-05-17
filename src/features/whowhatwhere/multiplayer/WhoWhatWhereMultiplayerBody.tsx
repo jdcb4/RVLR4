@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { viewerWhoWhatWhereTeamIsWinner } from "@/components/game/final-results/viewModel";
 import { TeamStandingsList } from "@/components/game/TeamStandingsList";
 import { Metric } from "@/components/Metric";
+import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
 import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
 import { getActiveContext, getSecondsLeft } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
@@ -166,11 +167,16 @@ export function GuessOrObserveTurn({
 
       <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
         <p className="text-typ-overline text-muted-foreground">Turn snapshot</p>
+        <PlayerAvatarBadge
+          avatarId={context.describer.avatarId}
+          className="mt-3"
+          detail="Describer"
+          name={context.describer.name}
+        />
         <div className="mt-3 grid grid-cols-2 gap-3">
           <Metric label="Time left" value={formatWhoWhatWhereTurnClock(secondsLeft)} />
           <Metric label="Turn score" value={String(activeTurn.score)} />
           <Metric label="Category" value={activeTurn.category} />
-          <Metric label="Describer" value={context.describer.name} />
         </div>
         <div className="mt-4 border-t border-border pt-4">
           <p className="text-typ-ui font-semibold text-foreground">Standings</p>

@@ -32,6 +32,7 @@ export type GameSettings = {
 type TeamSetupPlayer = {
   readonly id: string;
   readonly name: string;
+  readonly avatarId?: string | undefined;
 };
 
 export type TeamSetup = {
@@ -45,6 +46,7 @@ export type Player = {
   readonly seat: number;
   readonly name: string;
   readonly teamId: string;
+  readonly avatarId?: string | undefined;
 };
 
 export type Team = {

@@ -18,6 +18,7 @@ export function buildTeamSetupsFromLobby(room: Room): TeamSetup[] {
         // Preserve lobby UUIDs so turns + socket actions line up with MatchState.players.
         id: player.id,
         name: player.name || `Player ${teamIndex + 1}.${playerIndex + 1}`,
+        avatarId: player.avatarId,
       })),
     });
   }
