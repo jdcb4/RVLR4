@@ -54,6 +54,11 @@ type Credentials = {
   readonly secret: string;
 };
 
+type BoundClient = {
+  readonly socket: ClientSocket;
+  readonly firstSync: RoomSyncPayload;
+};
+
 async function postJson<T>(url: string, body: unknown): Promise<T> {
   const response = await fetch(url, {
     method: "POST",
@@ -69,10 +74,7 @@ async function postJson<T>(url: string, body: unknown): Promise<T> {
   return (await response.json()) as T;
 }
 
-function bindClient(
-  url: string,
-  creds: Credentials,
-): Promise<{ socket: ClientSocket; firstSync: RoomSyncPayload }> {
+function bindClient(url: string, creds: Credentials): Promise<BoundClient> {
   return new Promise((resolve, reject) => {
     const socket = ioClient(url, {
       autoConnect: false,
@@ -126,6 +128,33 @@ function bindClient(
   });
 }
 
+async function createRoomWithGuests(
+  url: string,
+  gameKind: "whowhatwhere" | "hat",
+): Promise<{ host: Credentials; guests: Credentials[] }> {
+  const host = await postJson<Credentials>(`${url}/api/rooms`, {
+    gameKind,
+    hostName: "Host",
+  });
+
+  const guests: Credentials[] = [];
+  for (const name of ["G1", "G2", "G3"]) {
+    guests.push(await postJson<Credentials>(`${url}/api/rooms/${host.code}/join`, { name }));
+  }
+
+  return { host, guests };
+}
+
+async function bindAllClients(url: string, creds: readonly Credentials[]): Promise<BoundClient[]> {
+  const bounds: BoundClient[] = [];
+
+  for (const entry of creds) {
+    bounds.push(await bindClient(url, entry));
+  }
+
+  return bounds;
+}
+
 function nextSync(socket: ClientSocket, timeoutMs = 4000): Promise<RoomSyncPayload> {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
@@ -141,6 +170,24 @@ function nextSync(socket: ClientSocket, timeoutMs = 4000): Promise<RoomSyncPaylo
 
     socket.on("room:sync", listener);
   });
+}
+
+async function nextSyncWhere(
+  socket: ClientSocket,
+  predicate: (payload: RoomSyncPayload) => boolean,
+  timeoutMs = 4000,
+): Promise<RoomSyncPayload> {
+  const deadline = Date.now() + timeoutMs;
+
+  while (Date.now() < deadline) {
+    const payload = await nextSync(socket, Math.max(1, deadline - Date.now()));
+
+    if (predicate(payload)) {
+      return payload;
+    }
+  }
+
+  throw new Error("Timed out waiting for matching room:sync");
 }
 
 function emitAck<TAck = { ok?: boolean; error?: string }>(
@@ -164,70 +211,45 @@ describe("multiplayer smoke", () => {
     await harness.close();
   });
 
-  it(
-    "hosts a Who What Where lobby, lets a guest join, marks ready, and starts the match",
-    async () => {
-      // 1. Host creates the room over HTTP.
-      const host = await postJson<Credentials>(`${harness.url}/api/rooms`, {
-        gameKind: "whowhatwhere",
-        hostName: "Host",
-      });
+  it("hosts a Who What Where lobby, lets a guest join, marks ready, and starts the match", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "whowhatwhere");
+    const bounds = await bindAllClients(harness.url, [host, ...guests]);
+    const hostBound = bounds[0]!;
+    const guestBounds = bounds.slice(1);
 
-      // 2. Three guests join (WhoWhatWhere needs 2 teams x ≥2 players each).
-      const guests: Credentials[] = [];
-      for (const name of ["G1", "G2", "G3"]) {
-        guests.push(
-          await postJson<Credentials>(
-            `${harness.url}/api/rooms/${host.code}/join`,
-            { name },
-          ),
-        );
+    try {
+      expect(hostBound.firstSync.code).toBe(host.code);
+      expect(hostBound.firstSync.phase).toBe("lobby");
+      expect(hostBound.firstSync.you.isHost).toBe(true);
+      for (const bound of guestBounds) {
+        expect(bound.firstSync.you.isHost).toBe(false);
       }
 
-      // 3. Everyone connects a socket and binds their session.
-      const hostBound = await bindClient(harness.url, host);
-      const guestBounds = [];
-      for (const guest of guests) {
-        guestBounds.push(await bindClient(harness.url, guest));
+      // Each guest marks ready; the host is not required to ready themselves.
+      for (const bound of guestBounds) {
+        const ack = await emitAck(bound.socket, "lobby:setReady", {
+          ready: true,
+        });
+        expect(ack).toEqual({ ok: true });
       }
 
-      try {
-        expect(hostBound.firstSync.code).toBe(host.code);
-        expect(hostBound.firstSync.phase).toBe("lobby");
-        expect(hostBound.firstSync.you.isHost).toBe(true);
-        for (const bound of guestBounds) {
-          expect(bound.firstSync.you.isHost).toBe(false);
-        }
+      // Host starts the match; everyone receives a sync with phase=playing.
+      const playingPromises = [hostBound, ...guestBounds].map((bound) => nextSync(bound.socket));
+      const startAck = await emitAck(hostBound.socket, "lobby:startGame", {});
+      expect(startAck).toEqual({ ok: true });
 
-        // 4. Each guest marks ready (host is not required to ready themselves).
-        for (const bound of guestBounds) {
-          const ack = await emitAck(bound.socket, "lobby:setReady", {
-            ready: true,
-          });
-          expect(ack).toEqual({ ok: true });
-        }
-
-        // 5. Host starts the match; everyone receives a sync with phase=playing.
-        const playingPromises = [hostBound, ...guestBounds].map((bound) =>
-          nextSync(bound.socket),
-        );
-        const startAck = await emitAck(hostBound.socket, "lobby:startGame", {});
-        expect(startAck).toEqual({ ok: true });
-
-        const playingSyncs = await Promise.all(playingPromises);
-        for (const sync of playingSyncs) {
-          expect(sync.phase).toBe("playing");
-          expect(sync.www).not.toBeNull();
-        }
-      } finally {
-        hostBound.socket.disconnect();
-        for (const bound of guestBounds) {
-          bound.socket.disconnect();
-        }
+      const playingSyncs = await Promise.all(playingPromises);
+      for (const sync of playingSyncs) {
+        expect(sync.phase).toBe("playing");
+        expect(sync.www).not.toBeNull();
       }
-    },
-    10_000,
-  );
+    } finally {
+      hostBound.socket.disconnect();
+      for (const bound of guestBounds) {
+        bound.socket.disconnect();
+      }
+    }
+  }, 10_000);
 
   it("rejects malformed socket payloads with the schema error", async () => {
     const host = await postJson<Credentials>(`${harness.url}/api/rooms`, {
@@ -250,4 +272,54 @@ describe("multiplayer smoke", () => {
       bound.socket.disconnect();
     }
   });
+
+  it("starts a Hat lobby after the host swaps teams and everyone is ready", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "hat");
+    const bounds = await bindAllClients(harness.url, [host, ...guests]);
+    const hostBound = bounds[0]!;
+    const guestOneBound = bounds[1]!;
+    const guestBounds = bounds.slice(2);
+
+    try {
+      expect(
+        await emitAck(hostBound.socket, "lobby:hostMovePlayer", {
+          playerId: host.playerId,
+          teamIndex: 1,
+        }),
+      ).toEqual({ ok: true });
+      expect(
+        await emitAck(hostBound.socket, "lobby:hostMovePlayer", {
+          playerId: guests[0]!.playerId,
+          teamIndex: 0,
+        }),
+      ).toEqual({ ok: true });
+
+      for (const [playerIndex, bound] of bounds.entries()) {
+        for (let clueIndex = 0; clueIndex < 6; clueIndex += 1) {
+          const ack = await emitAck(bound.socket, "lobby:hatSetClueCell", {
+            clueIndex,
+            value: `P${playerIndex + 1} clue ${clueIndex + 1}`,
+          });
+          expect(ack).toEqual({ ok: true });
+        }
+      }
+
+      for (const bound of [guestOneBound, ...guestBounds]) {
+        const ack = await emitAck(bound.socket, "lobby:setReady", { ready: true });
+        expect(ack).toEqual({ ok: true });
+      }
+
+      const playingPromise = nextSyncWhere(hostBound.socket, (sync) => sync.phase === "playing");
+      const startAck = await emitAck(hostBound.socket, "lobby:startGame", {});
+      expect(startAck).toEqual({ ok: true });
+
+      const playingSync = await playingPromise;
+      expect(playingSync.hat?.session.teams).toHaveLength(2);
+      expect(playingSync.hat?.session.players).toHaveLength(4);
+    } finally {
+      for (const bound of bounds) {
+        bound.socket.disconnect();
+      }
+    }
+  }, 10_000);
 });

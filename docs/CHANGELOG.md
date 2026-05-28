@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.20.1 - 2026-05-28
+
+- **Fix (mobile):** Made the shared game shell use a dedicated viewport scroll
+  pane so Android scroll gestures work consistently over cards and settings
+  remain reachable above the footer.
+- **Fix (Hat multiplayer):** Kept focused famous-figure inputs local while
+  server sync catches up, preventing Android caret jumps during clue entry.
+- **Tests:** Added coverage for Hat lobby clue typing during stale sync and for
+  starting a Hat multiplayer lobby after the host swaps teams.
+
 ## 0.20.0 - 2026-05-17
 
 - **Feature (avatars):** Multiplayer avatars now carry from the lobby into Who

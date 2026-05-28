@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { FooterIconSlotButton } from "@/components/game/GameFooterButtons";
 import { TeamCountOptionGroup } from "@/components/setup/TeamCountOptionGroup";
@@ -69,7 +69,9 @@ function DrawNGuessLobbySettingsCard({
   const drawSeconds = Math.round(settings.drawingDurationMs / 1000);
   const guessSeconds = Math.round(settings.guessDurationMs / 1000);
   const modeLabel =
-    settings.startingPromptMode === "predetermined" ? "Predetermined words" : "Players pick prompts";
+    settings.startingPromptMode === "predetermined"
+      ? "Predetermined words"
+      : "Players pick prompts";
 
   return (
     <details className="rounded-2xl border border-border bg-card p-4 shadow-sm">
@@ -205,17 +207,10 @@ function HatLobbyFamousFiguresSection({
                   {index + 1}
                 </td>
                 <td className="py-2 pr-2 align-middle">
-                  <input
-                    className={`${HAT_CLUE_INPUT_CLASS} w-full min-w-0`}
-                    maxLength={GAME_DEFAULTS.maxClueLength}
-                    placeholder="Enter a famous figure"
+                  <HatClueDraftInput
+                    clueIndex={index}
+                    emitWithAck={emitWithAck}
                     value={rowValues[index] ?? ""}
-                    onChange={(event) => {
-                      void emitWithAck("lobby:hatSetClueCell", {
-                        clueIndex: index,
-                        value: event.target.value,
-                      });
-                    }}
                   />
                 </td>
                 <td className="w-14 py-2 align-middle">
@@ -233,6 +228,91 @@ function HatLobbyFamousFiguresSection({
         </table>
       </div>
     </section>
+  );
+}
+
+function HatClueDraftInput({
+  clueIndex,
+  value,
+  emitWithAck,
+}: {
+  readonly clueIndex: number;
+  readonly value: string;
+  readonly emitWithAck: EmitWithAck;
+}) {
+  const [draft, setDraft] = useState(value);
+  const focusedRef = useRef(false);
+  const latestDraftRef = useRef(value);
+  const serverValueRef = useRef(value);
+  const lastSentRef = useRef(value);
+  const debounceRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    latestDraftRef.current = draft;
+  }, [draft]);
+
+  useEffect(() => {
+    serverValueRef.current = value;
+
+    if (!focusedRef.current) {
+      setDraft(value);
+      lastSentRef.current = value;
+    }
+  }, [value]);
+
+  useEffect(
+    () => () => {
+      if (debounceRef.current !== null) {
+        window.clearTimeout(debounceRef.current);
+      }
+    },
+    [],
+  );
+
+  const flushDraft = (next = latestDraftRef.current) => {
+    if (debounceRef.current !== null) {
+      window.clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
+
+    if (next === lastSentRef.current && next === serverValueRef.current) {
+      return;
+    }
+
+    lastSentRef.current = next;
+    void emitWithAck("lobby:hatSetClueCell", {
+      clueIndex,
+      value: next,
+    });
+  };
+
+  const scheduleFlush = (next: string) => {
+    if (debounceRef.current !== null) {
+      window.clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = window.setTimeout(() => flushDraft(next), 250);
+  };
+
+  return (
+    <input
+      className={`${HAT_CLUE_INPUT_CLASS} w-full min-w-0`}
+      maxLength={GAME_DEFAULTS.maxClueLength}
+      placeholder="Enter a famous figure"
+      value={draft}
+      onBlur={() => {
+        focusedRef.current = false;
+        flushDraft();
+      }}
+      onChange={(event) => {
+        const next = event.target.value;
+        setDraft(next);
+        scheduleFlush(next);
+      }}
+      onFocus={() => {
+        focusedRef.current = true;
+      }}
+    />
   );
 }
 
@@ -329,7 +409,9 @@ function HatTeamCountCard({
 }) {
   return (
     <details className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-      <summary className="cursor-pointer text-typ-card-title font-semibold">Number of teams</summary>
+      <summary className="cursor-pointer text-typ-card-title font-semibold">
+        Number of teams
+      </summary>
       <div className="mt-4">
         <TeamCountOptionGroup
           value={lobby.teamCount as SharedTeamCount}

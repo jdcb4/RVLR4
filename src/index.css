@@ -123,8 +123,8 @@
 
 /* When the mobile keyboard opens, keep inputs visible above the footer */
 .keyboard-safe-form {
-  overflow-y: auto;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .keyboard-safe-input {
