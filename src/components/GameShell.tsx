@@ -21,8 +21,8 @@ export function GameShell({
   footer?: ReactNode;
 }) {
   return (
-    <div className="min-h-dvh bg-background text-foreground">
-      <div className="safe-screen mx-auto flex min-h-dvh w-full max-w-md flex-col pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
+    <div className="h-dvh overflow-hidden bg-background text-foreground">
+      <div className="safe-screen mx-auto flex h-dvh w-full max-w-md flex-col pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
         <header className="flex items-center justify-between gap-2 border-b border-semantic-border-muted py-3">
           <Link
             aria-label="Back to game picker"
@@ -31,12 +31,7 @@ export function GameShell({
           >
             <IconHouse className="size-5" />
           </Link>
-          <h1
-            className={cn(
-              typography.shellTitle,
-              "min-w-0 flex-1 text-center font-semibold",
-            )}
-          >
+          <h1 className={cn(typography.shellTitle, "min-w-0 flex-1 text-center font-semibold")}>
             {title}
           </h1>
           <div className="flex min-h-10 min-w-[2.5rem] items-center justify-end gap-1">
@@ -44,12 +39,12 @@ export function GameShell({
           </div>
         </header>
 
-        <div className="keyboard-safe-form flex min-h-0 flex-1 flex-col py-4">
+        <main className="keyboard-safe-form flex min-h-0 flex-1 touch-pan-y flex-col overflow-x-hidden overflow-y-auto py-4">
           {children}
-        </div>
+        </main>
 
         {footer ? (
-          <footer className="sticky bottom-0 z-20 border-t border-border bg-semantic-surface-elevated py-3 backdrop-blur supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <footer className="z-20 shrink-0 border-t border-border bg-semantic-surface-elevated py-3 backdrop-blur supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             {footer}
           </footer>
         ) : null}

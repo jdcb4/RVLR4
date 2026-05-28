@@ -20,7 +20,7 @@ function renderLobbyView({
   readonly emitWithAck?: (event: string, body?: unknown) => Promise<AckResult>;
   readonly onStartGame?: () => Promise<void>;
 } = {}) {
-  render(
+  const result = render(
     <MemoryRouter>
       <RoomLobbyView
         canNativeShare={false}
@@ -41,7 +41,7 @@ function renderLobbyView({
     </MemoryRouter>,
   );
 
-  return { emitWithAck, onStartGame };
+  return { emitWithAck, onStartGame, rerender: result.rerender };
 }
 
 describe("RoomLobbyView", () => {
@@ -73,5 +73,72 @@ describe("RoomLobbyView", () => {
     await user.click(screen.getByRole("button", { name: "Start game (everyone must ready up)" }));
 
     expect(onStartGame).toHaveBeenCalledOnce();
+  });
+
+  it("keeps focused Hat clue typing local while server sync catches up", async () => {
+    const user = userEvent.setup();
+    const hatLobby = buildLobby({
+      teamCount: 2,
+      teamNames: ["Red Team", "Blue Team"],
+      players: [
+        {
+          id: "host",
+          name: "Host",
+          avatarId: "bear",
+          isHost: true,
+          teamIndex: 0,
+          ready: true,
+          disconnectedAt: null,
+        },
+        {
+          id: "me",
+          name: "Me",
+          avatarId: "cat",
+          isHost: false,
+          teamIndex: 1,
+          ready: false,
+          disconnectedAt: null,
+        },
+      ],
+      hatClueDrafts: {
+        me: ["", "", "", "", "", ""],
+      },
+    });
+    const sync = buildRoomSync({
+      gameKind: "hat",
+      lobby: hatLobby,
+      you: {
+        playerId: "me",
+        isHost: false,
+      },
+    });
+    const { rerender } = renderLobbyView({ sync });
+    const firstClue = screen.getAllByPlaceholderText("Enter a famous figure")[0]!;
+
+    await user.click(firstClue);
+    await user.type(firstClue, "Ada");
+
+    rerender(
+      <MemoryRouter>
+        <RoomLobbyView
+          canNativeShare={false}
+          connected
+          copiedToast={false}
+          emitWithAck={vi.fn(async () => ({ ok: true }))}
+          joinLink="https://example.test/name?intent=join&code=ABC123"
+          lobby={hatLobby}
+          qrToastOpen={false}
+          startError={null}
+          sync={sync}
+          onCloseQrToast={() => {}}
+          onCopyLink={async () => {}}
+          onOpenQrToast={() => {}}
+          onShareLink={async () => {}}
+          onStartGame={async () => {}}
+        />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getAllByPlaceholderText("Enter a famous figure")[0]!).toHaveValue("Ada");
   });
 });
