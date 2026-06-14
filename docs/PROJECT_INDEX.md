@@ -38,6 +38,7 @@ Games:
 - `src/config` — `env.ts`, `hatDefaults.ts`, `imposterDefaults.ts`, `teamRoster.ts` (shared 2–4 teams, 2–6 players per team), `appMeta.ts` (product label for shared chrome).
 - `src/typography` — named font tier map (`tiers.ts`) for `text-typ-*` utilities.
 - `src/themes` — semantic color tokens (`default.css`) layered on primitives in `index.css`.
+- `public` — static browser/app assets copied by Vite, including favicon and web app icon files.
 - `docs` — durable project documentation.
 - `scripts` — deterministic project utility scripts.
 - `gallery.html` / `src/ui-gallery/` — dev-only UI gallery (not part of default `pnpm run build`).

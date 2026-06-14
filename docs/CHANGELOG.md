@@ -2,6 +2,11 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.20.2 - 2026-06-14
+
+- **Branding:** Added RVLRY favicon and app icon assets for browser tabs,
+  Apple touch icons, and installable web app metadata.
+
 ## 0.20.1 - 2026-05-28
 
 - **Fix (mobile):** Made the shared game shell use a dedicated viewport scroll
