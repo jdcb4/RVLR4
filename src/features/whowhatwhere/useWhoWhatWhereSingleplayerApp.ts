@@ -178,9 +178,11 @@ export function useWhoWhatWhereSingleplayerApp() {
     setIsStartingTurn(true);
 
     try {
-      const { wordDeck } = await import("@/data/words.generated");
+      const { getWhoWhatWhereWordList } = await import("@/domain/whowhatwhere/wordList");
 
-      setMatch((currentMatch) => (currentMatch ? startTurn(currentMatch, wordDeck) : currentMatch));
+      setMatch((currentMatch) =>
+        currentMatch ? startTurn(currentMatch, getWhoWhatWhereWordList()) : currentMatch,
+      );
     } catch (error) {
       setTurnError(error instanceof Error ? error.message : "Unable to start this turn.");
     } finally {

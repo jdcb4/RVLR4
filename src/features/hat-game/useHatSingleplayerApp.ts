@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { GAME_DEFAULTS, type HatGameConfig } from "@/config/hatDefaults";
 import { MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
-import clueSuggestions from "@/data/clueSuggestions.json";
+import { getHatClueSuggestions } from "@/domain/hat-game/clueSuggestions";
 import { applyHatGameAction, createHatGameSession } from "@/domain/hat-game/engine";
 import {
   addPlayerToHatTeam,
@@ -116,10 +116,9 @@ const isStoragePayload = (value: unknown): value is StoragePayload =>
   );
 
 const chooseSuggestion = (used: string[]) => {
-  const remaining = (clueSuggestions as string[]).filter(
-    (suggestion) => !used.includes(suggestion),
-  );
-  const source = remaining.length > 0 ? remaining : (clueSuggestions as string[]);
+  const clueSuggestions = getHatClueSuggestions();
+  const remaining = clueSuggestions.filter((suggestion) => !used.includes(suggestion));
+  const source = remaining.length > 0 ? remaining : clueSuggestions;
   return source[Math.floor(Math.random() * source.length)] ?? "";
 };
 

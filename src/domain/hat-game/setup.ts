@@ -3,31 +3,13 @@ import {
   MAX_PLAYERS_PER_TEAM,
   MIN_PLAYERS_PER_TEAM,
 } from "@/config/teamRoster";
-import namePacks from "@/data/namePacks.json";
 import type { RosterTeamRow } from "@/domain/shared/rosterRow";
 
+import { getHatNameData } from "./nameData";
 import { sortPlayersBySeat } from "./teamUtils";
 import type { Player, Team } from "./types";
 
-type NamePack = {
-  teamName: string;
-  playerNames: string[];
-};
-
-const fallbackNames = [
-  'Alex',
-  'Sam',
-  'Jordan',
-  'Casey',
-  'Riley',
-  'Morgan',
-  'Jamie',
-  'Taylor',
-  'Cameron',
-  'Quinn',
-  'Avery',
-  'Rowan'
-];
+const { packs: namePacks, fallbackNames } = getHatNameData();
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, Math.trunc(value)));
@@ -73,7 +55,7 @@ export const getHatGameSetupError = ({
 };
 
 const shuffledPacks = () =>
-  [...(namePacks as NamePack[])]
+  [...namePacks]
     .map((pack) => ({ pack, sort: Math.random() }))
     .sort((left, right) => left.sort - right.sort)
     .map(({ pack }) => pack);

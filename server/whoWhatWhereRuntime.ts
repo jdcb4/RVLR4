@@ -37,8 +37,8 @@ export async function applyWhoWhatWhereStartTurn(room: Room) {
     throw new Error("The game is not waiting on a new turn.");
   }
 
-  const { wordDeck } = await import("@/data/words.generated");
-  room.wwwMatch = startTurn(match, wordDeck);
+  const { getWhoWhatWhereWordList } = await import("@/domain/whowhatwhere/wordList");
+  room.wwwMatch = startTurn(match, getWhoWhatWhereWordList());
   room.wwwReadyReveal = false;
 }
 

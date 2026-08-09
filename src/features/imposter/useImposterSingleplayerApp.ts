@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { IMPOSTER_MAX_PLAYERS, IMPOSTER_MIN_PLAYERS } from "@/config/imposterDefaults";
-import { getImposterWordList } from "@/data/imposterWordList";
 import {
   clampImposterCount,
   defaultImposterCount,
   maxImpostersForPlayers,
 } from "@/domain/imposter/round";
+import { getImposterWordList } from "@/domain/imposter/wordList";
 import {
   makeSingleplayerResumeSavedGame,
   makeSingleplayerStartNewGame,

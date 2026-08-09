@@ -3,8 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameShell } from "@/components/GameShell";
-import multiplayerDisplayNames from "@/data/multiplayerDisplayNames.json";
-import { type AvatarId,isAvatarId, pickRandomAvatarId } from "@/multiplayer/avatarCatalog";
+import { type AvatarId, isAvatarId, pickRandomAvatarId } from "@/multiplayer/avatarCatalog";
+import { getMultiplayerDisplayNames } from "@/multiplayer/displayNames";
 import { gameKindLabel } from "@/multiplayer/gameKindLabel";
 import { persistSession } from "@/multiplayer/useRoomChannel";
 
@@ -17,7 +17,7 @@ const LAST_NAME_KEY = "jd-multiplayer:last-display-name";
 const LAST_AVATAR_KEY = "jd-multiplayer:last-avatar";
 
 function pickRandomName(): string {
-  const names = multiplayerDisplayNames as readonly string[];
+  const names = getMultiplayerDisplayNames();
   return names[Math.floor(Math.random() * names.length)] ?? "Player";
 }
 

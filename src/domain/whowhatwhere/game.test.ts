@@ -13,11 +13,11 @@ import {
   startTurn,
 } from "./game";
 import { createDefaultSettings, createTeamSetups } from "./setup";
-import type { WordEntry } from "./types";
+import type { Category, WordEntry } from "./types";
 
 const now = new Date("2026-05-05T10:00:00.000Z");
 
-function wordsFor(category: string, count = 100): WordEntry[] {
+function wordsFor(category: Category, count = 100): WordEntry[] {
   return Array.from({ length: count }, (_, index) => ({
     word: `${category} ${index}`,
     category,

@@ -174,3 +174,25 @@ environments at `main` makes the dev environment an exact duplicate rather
 than a promotion candidate.
 
 **Supersedes:** The previous implicit main-only working and deployment flow.
+
+---
+
+## 2026-08-09: Curated game content uses validated JSON
+
+**Decision:** Store shipped word, prompt, clue-suggestion, and generated-name
+content as game-owned JSON assets in `src/data`, parsed once by lightweight
+TypeScript loaders with Zod validation. Keep large assets dynamically loaded
+when they are not needed for initial rendering.
+
+**Reasoning:** The content is static, bundled, and small enough to load as
+files; separating it from executable TypeScript makes editing and validation
+explicit. Domain loaders provide readonly typed data to browser and server
+consumers, while the Who What Where loader preserves the existing lazy chunk.
+
+**Rejected alternatives:** Executable TypeScript arrays obscure the boundary
+between content and code. Raw JSON imports with type assertions provide no
+runtime integrity checks. SQLite adds browser/server integration, dependency,
+and query complexity without a persistence or indexing requirement.
+
+**Supersedes:** Generalizes the 2026-05-10 Imposter JSON decision to all
+curated static game content.

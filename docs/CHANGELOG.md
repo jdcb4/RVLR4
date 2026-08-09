@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.20.4 - 2026-08-09
+
+- **Data:** Moved all curated word, prompt, clue, and generated-name content to
+  JSON assets with typed, runtime-validated loaders instead of executable data
+  modules or unchecked JSON casts.
+- **Performance:** Preserved on-demand loading of the 3,129-entry Who What
+  Where deck for both pass-and-play and multiplayer turns.
+- **Validation:** Added content-integrity coverage for every shipped game-data
+  list, including shape, category, uniqueness, and migration inventory checks.
+
 ## 0.20.3 - 2026-08-09
 
 - **Delivery workflow:** Established `dev` as the default integration branch

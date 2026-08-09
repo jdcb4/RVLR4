@@ -1,5 +1,5 @@
-import { getImposterWordList } from "@/data/imposterWordList";
 import { dealImposterRound } from "@/domain/imposter/round";
+import { getImposterWordList } from "@/domain/imposter/wordList";
 import type {
   ImposterPlayer,
   ImposterRoundState,

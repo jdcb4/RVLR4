@@ -57,7 +57,7 @@ export type Team = {
 
 export type WordEntry = {
   readonly word: string;
-  readonly category: string;
+  readonly category: Category;
   readonly hint: string;
 };
 

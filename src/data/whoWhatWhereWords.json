@@ -1,6 +1,4 @@
-import type { WordEntry } from "@/domain/whowhatwhere/types";
-
-export const wordDeck = [
+[
   {
     "word": "Astrolabe",
     "category": "What",
@@ -15646,4 +15644,4 @@ export const wordDeck = [
     "category": "Who",
     "hint": "Central figure of Christianity"
   }
-] as const satisfies readonly WordEntry[];
+]

@@ -32,12 +32,6 @@ current code and tests before implementation.
   mobile-appropriate loading state. Preserve route behavior and verify that the
   initial bundle materially shrinks before accepting the added loading
   complexity.
-- **ACT-04 — Verify Who What Where deck loading remains on demand (medium):**
-  the current client and server already use dynamic imports for
-  `words.generated.ts`, producing a separate word-data chunk. Measure initial
-  network and parse behavior, remove any production-path eager import that is
-  still present, and coordinate this work with the word-list storage migration
-  below rather than implementing a second loader.
 - **ACT-05 — Explain multiplayer start requirements (medium):** show the host
   why Start game is disabled: minimum total players, minimum players per team,
   players not ready, or ready to start. Derive the copy from the same readiness
@@ -59,16 +53,6 @@ current code and tests before implementation.
 
 ## Data and deployment direction
 
-- **Word-list storage audit and migration:** document every shipped word or
-  prompt source and its loader. Current state: Who What Where uses the large
-  generated TypeScript file `src/data/words.generated.ts`; Hat Game uses
-  `clueSuggestions.json`; DrawNGuess uses `drawnguessWordPrompts.json` with a
-  Zod-backed TypeScript loader; Imposter uses `imposterWords.json` with a small
-  TypeScript loader; name packs are also JSON. Prefer migrating the Who What
-  Where data to a compact JSON asset imported through a lightweight typed and
-  runtime-validated TypeScript loader. Consider SQLite only if measured size,
-  querying, or indexing needs justify the extra runtime/dependency complexity,
-  and record that choice in `docs/DECISIONS.md` before implementation.
 - **Meaningful Railway environment names and serverless parity:** choose names
   that clearly identify RVLRY development/review and production, preserve the
   `dev` branch -> development environment and `main` -> production environment

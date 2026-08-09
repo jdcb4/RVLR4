@@ -42,7 +42,9 @@ Games:
 - `src/domain/shared` — cross-game types (e.g. roster row shape for setup UI).
 - `src/components` — shared UI (`GameShell`, `GamePanel`, `GameResultActions`, `AppInfoOverlay`, `game/` panels including **`final-results/`** (shared podium + confetti), `GameScoreboard`, **`BetweenTurnsLayout`** / **`LandingScreenLayout`** (cross-game ready/recap + landing shells), ready-flow and **Final turn recap** pieces (`ThatsTheLastTurnCard`, `finalTurnRecapCopy`), footer buttons, `EditableName`, `Metric`, `setup/`, `team-setup/`, `ui/button`).
 - `src/services` — browser persistence (`whowhatwherePersistence`, `hatStorage`, `imposterStorage`) and Web Audio (`whowhatwhereSound`, `hatSound`).
-- `src/data` — `words.generated.ts`, `clueSuggestions.json`, `namePacks.json`, `imposterWords.json` (+ `imposterWordList.ts` loader).
+- `src/data` — JSON-only curated game content: Who What Where words/name packs,
+  Hat suggestions/name packs, DrawNGuess prompts, Imposter words, and
+  multiplayer display names. Domain loaders validate every asset with Zod.
 - `src/assets` — static assets bundled by Vite (e.g. Hat Game phase `.wav` cues).
 - `src/config` — `env.ts`, `hatDefaults.ts`, `imposterDefaults.ts`, `teamRoster.ts` (shared 2–4 teams, 2–6 players per team), `appMeta.ts` (product label for shared chrome).
 - `src/typography` — named font tier map (`tiers.ts`) for `text-typ-*` utilities.

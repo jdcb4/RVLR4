@@ -59,7 +59,11 @@ Use **semantic theme tokens** for tinted surfaces, soft borders, scrims, and dev
 
 ## Persistence
 
-Default: JSON files in `src/data/` validated with Zod on load. Move to a database only when JSON is unsuitable, and document the migration in `docs/DECISIONS.md`.
+Default: curated static game content lives in JSON files under `src/data/` and
+is parsed once through game-owned Zod loaders. Large content, such as the Who
+What Where deck, stays behind a dynamic loader so it is not part of the initial
+client bundle. Move to a database only when JSON is unsuitable, and document
+the migration in `docs/DECISIONS.md`.
 
 When a database is needed:
 
