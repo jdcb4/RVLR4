@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.21.2 - 2026-08-09
+
+- **Documentation:** Consolidated the maintained docs into a current canonical
+  set organized by audience in `PROJECT_INDEX.md`, with an explicit lifecycle
+  rule for completed audits and implementation plans.
+- **Cleanup:** Removed seven obsolete point-in-time reports and completed plans
+  after preserving reusable naming, shared-UI, and quality guidance in
+  `NAMING.md`, `ARCHITECTURE.md`, `AGENTS.md`, and RM-06.
+- **Roadmap:** Closed RM-05. RM-06 remains as a fresh security and
+  maintainability audit based on current evidence rather than stale metrics.
+
 ## 0.21.1 - 2026-08-09
 
 - **Deployment:** Made GitHub-to-Railway the primary deployment path and added

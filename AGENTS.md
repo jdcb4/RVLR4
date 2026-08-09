@@ -26,6 +26,11 @@ Before making changes:
 
 If docs are missing, stale, or inconsistent with the code, fix them as part of the change.
 
+Durable docs must describe the current system or an active future decision.
+When a one-shot audit or implementation plan is complete, move reusable rules
+to the relevant canonical doc, keep shipped history in `docs/CHANGELOG.md` and
+git, then delete the obsolete plan and repair inbound links.
+
 ## Branch and promotion workflow
 
 - **`dev` is the default working and integration branch.** Start routine work
@@ -58,6 +63,9 @@ If docs are missing, stale, or inconsistent with the code, fix them as part of t
 11. **Treat Railway as the default deployment path.** Keep `railway.json`, the
     GitHub source mappings, and `docs/DEPLOYMENT.md` aligned. Do not build or
     publish Docker images unless a Docker-specific task is explicitly active.
+12. **Do not accumulate completed plan documents.** Canonical docs explain the
+    current system; `docs/ROADMAP.md` holds only future work; the changelog and
+    git history preserve completed implementation history.
 
 ## Deterministic checks before commit
 

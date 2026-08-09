@@ -75,20 +75,40 @@ Games:
 
 ## Key docs
 
+### Operating and engineering
+
+- [`README.md`](../README.md) — human-facing overview and quick start.
 - [`AGENTS.md`](../AGENTS.md) — the every-turn agent ruleset.
+- [`CLAUDE.md`](../CLAUDE.md) — compatibility pointer to `AGENTS.md`; it must
+  not duplicate project guidance.
 - [`docs/AGENT_REFERENCE.md`](AGENT_REFERENCE.md) — detailed agent reference.
 - [`docs/AGENT_PROMPTS.md`](AGENT_PROMPTS.md) — canonical re-usable task prompts.
 - [`docs/ARCHITECTURE.md`](ARCHITECTURE.md) — module boundaries and runtime shape.
 - [`docs/VERIFICATION.md`](VERIFICATION.md) — required checks before commit.
+- [`docs/VERSIONING.md`](VERSIONING.md) — release and version-bump rules.
+- [`docs/NAMING.md`](NAMING.md) — canonical symbol, file, and action vocabulary.
+- [`SECURITY.md`](../SECURITY.md) — security rules and reporting.
+
+### Product and runtime
+
+- [`docs/SCREENS.md`](SCREENS.md) — current screen and flow names.
+- [`docs/DRAWNGUESS.md`](DRAWNGUESS.md) — DrawNGuess runtime, data, socket, and QA reference.
+- [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) — two-browser multiplayer regression matrix.
+- [`docs/DEPLOYMENT.md`](DEPLOYMENT.md) — Railway-first deployment instructions.
+
+### UI system and tooling
+
 - [`docs/TYPOGRAPHY.md`](TYPOGRAPHY.md) — named font tiers (`text-typ-*`).
 - [`docs/THEMING.md`](THEMING.md) — semantic colors (`semantic-*`) and theme layers.
-- [`docs/SCREENS.md`](SCREENS.md) — informal names for each hub/game screen (UX reference).
-- [`docs/UX_CROSS_GAME_REPORT.md`](UX_CROSS_GAME_REPORT.md) — historical WWW vs Hat screen parity and shared-component notes.
-- [`docs/VERSIONING.md`](VERSIONING.md) — version rules.
+- [`docs/UI_GALLERY.md`](UI_GALLERY.md) — development-only paired-screen gallery.
+
+### Decisions, history, and future work
+
 - [`docs/DECISIONS.md`](DECISIONS.md) — durable decisions (ADR-lite).
 - [`docs/ROADMAP.md`](ROADMAP.md) — future ideas only, not active work.
 - [`docs/CHANGELOG.md`](CHANGELOG.md) — notable changes by version.
-- [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) — manual regression checklist for Socket.IO / rooms (use before releases).
-- [`docs/DEPLOYMENT.md`](DEPLOYMENT.md) — deploy instructions.
-- [`docs/DRAWNGUESS.md`](DRAWNGUESS.md) — DrawNGuess runtime, data, socket, and QA reference.
-- [`SECURITY.md`](../SECURITY.md) — security rules.
+
+This index lists the maintained documentation set. Completed one-shot audits
+and implementation plans are not retained alongside canonical guidance: their
+lasting decisions belong in the relevant docs above, while shipped history is
+preserved in the changelog and git.

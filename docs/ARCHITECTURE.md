@@ -38,6 +38,17 @@ Use `@/components/game/GamePanel` as the **default wrapper for primary in-game c
 
 Shared roster UI (`TeamRosterSetupScreen`) can hide its built-in heading (`omitHeading`) when the parent supplies headings via `GamePanel`. **Primary navigation on roster steps** (Next team / Start round / Review teams) lives in the **`GameShell` footer**, not inside `TeamRosterSetupScreen`.
 
+### Shared screen composition
+
+Share stable presentation structure, not game state machines. Cross-game
+layouts such as `LandingScreenLayout`, `BetweenTurnsLayout`, shared review
+panels, and final-results components own consistent order, spacing, and chrome.
+Game-specific settings, active-turn content, last-turn details, and Hat's
+private clue-entry flow stay in their feature modules and compose those shared
+pieces. Do not replace them with a conditional cross-game mega-builder; extract
+a new shared shell only after at least two durable call sites demonstrate the
+same structure.
+
 ### Typography tiers (`text-typ-*`)
 
 Use **named font tiers** (`text-typ-ui`, `text-typ-panel-title`, …) backed by CSS variables — see [`docs/TYPOGRAPHY.md`](TYPOGRAPHY.md). Prefer these over raw `text-sm` / `text-xl` / `tracking-*` in components.

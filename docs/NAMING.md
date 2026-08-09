@@ -1,8 +1,7 @@
 # Naming conventions
 
-Single source of truth for symbol, file, and folder names in this repo.
-Companion to `docs/NAMING_AUDIT.md` (the one-shot audit that produced these
-rules). Re-run `pnpm run audit:names` after large refactors.
+Single source of truth for symbol, file, and folder names in this repo. Re-run
+`pnpm run audit:names` after large refactors.
 
 ## 1. Game brand tokens
 
@@ -149,5 +148,3 @@ Shared utility hooks describe the behavior, not a subject: `useRoomChannel`,
   by the audit script, not the linter (categorical rules can't express
   "your function must use the same verb as the parallel one in another
   game").
-- See [`docs/NAMING_AUDIT.md`](NAMING_AUDIT.md) for the original audit
-  data and remediation sequence.

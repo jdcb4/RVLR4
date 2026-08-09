@@ -118,6 +118,9 @@ git diff --stat
 ## Token-efficient agent workflow
 
 - `docs/PROJECT_INDEX.md` is the navigation entry point. Keep it current.
+- Prefer current, audience-owned references over dated audit snapshots. Once a
+  one-shot plan is complete, extract lasting rules into the canonical doc and
+  delete the plan; use `docs/CHANGELOG.md` and git for shipped history.
 - Maintain short module-level notes for complex folders.
 - Prefer small files with clear names over large files mixing concerns.
 - Use descriptive commit messages that include version impact.
