@@ -2,6 +2,18 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.21.3 - 2026-08-09
+
+- **Audit:** Completed RM-06's fresh security and maintainability baseline using
+  dependency advisories, coverage, Fallow, source scans, current tests, and a
+  manual review of HTTP, Socket.IO, reconnect, projection, and room boundaries.
+- **Plan:** Added a ranked active remediation plan covering dependency
+  vulnerabilities, Hat lobby draft privacy, capacity and abuse controls,
+  schema validation, production origins and headers, projection invariants,
+  health/error signals, timing-safe secret comparison, and targeted complexity
+  reductions.
+- **Roadmap:** Moved RM-06 into active work. No future roadmap items remain.
+
 ## 0.21.2 - 2026-08-09
 
 - **Documentation:** Consolidated the maintained docs into a current canonical

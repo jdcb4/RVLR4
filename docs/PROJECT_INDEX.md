@@ -87,6 +87,8 @@ Games:
 - [`docs/VERIFICATION.md`](VERIFICATION.md) — required checks before commit.
 - [`docs/VERSIONING.md`](VERSIONING.md) — release and version-bump rules.
 - [`docs/NAMING.md`](NAMING.md) — canonical symbol, file, and action vocabulary.
+- [`docs/SECURITY_MAINTAINABILITY_PLAN.md`](SECURITY_MAINTAINABILITY_PLAN.md) —
+  active, ranked remediation plan from the RM-06 audit; delete after close-out.
 - [`SECURITY.md`](../SECURITY.md) — security rules and reporting.
 
 ### Product and runtime
