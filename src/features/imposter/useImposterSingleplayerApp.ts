@@ -18,63 +18,32 @@ import {
   validateImposterSnapshotSetup,
 } from "@/features/imposter/imposterRoundFlow";
 import type {
-  ImposterPlayer,
-  ImposterRoundState,
   ImposterSnapshot,
-  ImposterStep,
   ImposterStoragePayload,
 } from "@/features/imposter/imposterSingleplayerAppTypes";
-import { formatSavedAt } from "@/lib/formatSavedAt";
 import {
-  clearImposterSavedState,
-  loadImposterSavedState,
-  saveImposterState,
-} from "@/services/imposterStorage";
+  loadImposterResumeRecord,
+  persistImposterSnapshot,
+} from "@/features/imposter/imposterSingleplayerPersistence";
+import {
+  advanceImposterReveal,
+  createImposterPlayers,
+  createInitialImposterSnapshot,
+  showImposterRole,
+  startImposterReveal,
+} from "@/features/imposter/imposterSingleplayerTransitions";
+import { formatSavedAt } from "@/lib/formatSavedAt";
+import { clearImposterSavedState } from "@/services/imposterStorage";
 
 import packageJson from "../../../package.json";
 
 export { formatSavedAt };
 
-const createPlayersForCount = (
-  count: number,
-  previous: readonly ImposterPlayer[],
-): ImposterPlayer[] =>
-  Array.from({ length: count }, (_, index) => ({
-    id: previous[index]?.id ?? `imposter-player-${index + 1}`,
-    name: previous[index]?.name ?? `Player ${index + 1}`,
-  }));
-
-const createInitialSnapshot = (step: ImposterStep = "landing"): ImposterSnapshot => ({
-  step,
-  playerCount: 6,
-  imposterCount: defaultImposterCount(6),
-  players: createPlayersForCount(6, []),
-  round: null,
-});
-
-const startRevealStep = (
-  snapshot: ImposterSnapshot,
-  round: ImposterRoundState,
-): ImposterSnapshot => ({
-  ...snapshot,
-  step: "reveal",
-  round,
-});
-
-const isStoragePayload = (value: unknown): value is ImposterStoragePayload =>
-  Boolean(
-    value &&
-    typeof value === "object" &&
-    "schemaVersion" in value &&
-    "snapshot" in value &&
-    "lastSavedAt" in value,
-  );
-
 export type ImposterSingleplayerAppController = ReturnType<typeof useImposterSingleplayerApp>;
 
 export function useImposterSingleplayerApp() {
   const [snapshot, setSnapshot] = useState<ImposterSnapshot>(() =>
-    createInitialSnapshot("landing"),
+    createInitialImposterSnapshot("landing"),
   );
   const [savedRecord, setSavedRecord] = useState<ImposterStoragePayload | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -88,51 +57,16 @@ export function useImposterSingleplayerApp() {
   }, [snapshot]);
 
   useEffect(() => {
-    void loadImposterSavedState<ImposterStoragePayload | ImposterSnapshot>()
-      .then((saved) => {
-        if (!saved) {
-          return;
-        }
-        const record = isStoragePayload(saved)
-          ? saved
-          : {
-              schemaVersion: 1 as const,
-              lastSavedAt: new Date().toISOString(),
-              snapshot: saved,
-            };
-        if (record.snapshot.step === "results") {
-          void clearImposterSavedState();
-          return;
-        }
-        setSavedRecord(record);
-      })
+    void loadImposterResumeRecord()
+      .then(setSavedRecord)
       .finally(() => {
         setLoaded(true);
       });
   }, []);
 
-  const persistSnapshot = async (nextSnapshot: ImposterSnapshot) => {
-    if (nextSnapshot.step === "landing") {
-      return null;
-    }
-    if (nextSnapshot.step === "results") {
-      setSavedRecord(null);
-      await clearImposterSavedState();
-      return null;
-    }
-    const record: ImposterStoragePayload = {
-      schemaVersion: 1,
-      lastSavedAt: new Date().toISOString(),
-      snapshot: nextSnapshot,
-    };
-    setSavedRecord(record);
-    await saveImposterState(record);
-    return record;
-  };
-
   useEffect(() => {
     if (loaded && snapshot.step !== "landing") {
-      void persistSnapshot(snapshot);
+      void persistImposterSnapshot(snapshot).then(setSavedRecord);
     }
   }, [loaded, snapshot]);
 
@@ -149,7 +83,7 @@ export function useImposterSingleplayerApp() {
 
   const startNewGame = makeSingleplayerStartNewGame({
     clearSavedState: clearImposterSavedState,
-    resetSnapshot: () => createInitialSnapshot("settings"),
+    resetSnapshot: () => createInitialImposterSnapshot("settings"),
     setConfirmNewGame,
     setError,
     setSavedRecord,
@@ -174,7 +108,7 @@ export function useImposterSingleplayerApp() {
         ...current,
         playerCount: count,
         imposterCount,
-        players: createPlayersForCount(count, current.players),
+        players: createImposterPlayers(count, current.players),
         round: null,
       };
     });
@@ -215,7 +149,7 @@ export function useImposterSingleplayerApp() {
         wordBank,
         rng: Math.random,
       });
-      setSnapshot((s) => startRevealStep(s, round));
+      setSnapshot((s) => startImposterReveal(s, round));
     } catch (e) {
       setError(e instanceof Error ? e.message : fallbackError);
     }
@@ -231,7 +165,7 @@ export function useImposterSingleplayerApp() {
     setSnapshot((current) => ({
       ...current,
       step: "roster",
-      players: createPlayersForCount(current.playerCount, current.players),
+      players: createImposterPlayers(current.playerCount, current.players),
     }));
   };
 
@@ -264,44 +198,12 @@ export function useImposterSingleplayerApp() {
   };
 
   const revealShowRole = () => {
-    setSnapshot((current) => {
-      if (!current.round) {
-        return current;
-      }
-      return {
-        ...current,
-        round: { ...current.round, revealRevealed: true },
-      };
-    });
+    setSnapshot(showImposterRole);
     setError("");
   };
 
   const revealConfirmNext = () => {
-    const current = snapshotRef.current;
-    if (!current.round?.revealRevealed) {
-      return;
-    }
-    const lastIndex = current.players.length - 1;
-    if (current.round.revealPlayerIndex >= lastIndex) {
-      setSnapshot((s) => ({
-        ...s,
-        step: "guidePregame",
-      }));
-      return;
-    }
-    setSnapshot((s) => {
-      if (!s.round) {
-        return s;
-      }
-      return {
-        ...s,
-        round: {
-          ...s.round,
-          revealPlayerIndex: s.round.revealPlayerIndex + 1,
-          revealRevealed: false,
-        },
-      };
-    });
+    setSnapshot(advanceImposterReveal);
     setError("");
   };
 
@@ -322,7 +224,7 @@ export function useImposterSingleplayerApp() {
     void clearImposterSavedState();
     setSavedRecord(null);
     setError("");
-    setSnapshot(createInitialSnapshot("settings"));
+    setSnapshot(createInitialImposterSnapshot("settings"));
   };
 
   const backToSettings = () => {
