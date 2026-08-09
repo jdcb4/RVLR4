@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.21.1 - 2026-08-09
+
+- **Deployment:** Made GitHub-to-Railway the primary deployment path and added
+  repository config that explicitly selects Railpack instead of the retained
+  root Dockerfile.
+- **Docker:** Kept the Dockerfile and manual image-build command for portability
+  and self-hosting, made the command cross-platform, and removed Docker builds
+  from routine deployment and verification guidance.
+- **Roadmap:** Removed RM-01, RM-02, and RM-03 at Joe's direction and closed
+  RM-04 after implementing the Railway-first policy.
+
 ## 0.21.0 - 2026-08-09
 
 - **Performance:** Kept the multiplayer home route eager while lazy-loading

@@ -1,6 +1,12 @@
 # Deployment — RVLRY
 
-Production cuts bundle the **Vite client** into `dist/` and run the **Express + Socket.IO** server (`server/index.ts`) so browsers share rooms through WebSockets.
+Production cuts bundle the **Vite client** into `dist/` and run the
+**Express + Socket.IO** server (`server/index.ts`) so browsers share rooms
+through WebSockets.
+
+The primary deployment path is **GitHub repository -> Railway using Railpack**.
+The repository retains an optional Docker image path for portability and
+self-hosting, but routine work does not build or publish Docker images.
 
 ## Local production preview (full stack)
 
@@ -9,38 +15,16 @@ pnpm run build
 pnpm run start
 ```
 
-`pnpm run start` listens on port **3001** by default (`PORT` env var overrides this). Open http://127.0.0.1:3001/.
-
-Optional diagnostics on the same shell: `MULTIPLAYER_DEBUG=1 pnpm run start` (Windows PowerShell: `$env:MULTIPLAYER_DEBUG='1'; pnpm run start`).
-
-**Note:** `pnpm run preview` only exercises the static bundle without multiplayer APIs.
-
-## Docker
-
-Build the image with the project script (it tags both versioned and `latest`):
-
-```bash
-pnpm run docker:build
-```
-
-Tags produced:
-
-```text
-jdcb4/jd-multiplayer-games:<package version>
-jdcb4/jd-multiplayer-games:latest
-```
-
-Run locally:
-
-```bash
-docker run --rm -p 3001:3001 jdcb4/jd-multiplayer-games:latest
-```
-
+`pnpm run start` listens on port **3001** by default (`PORT` overrides this).
 Open http://127.0.0.1:3001/.
 
-The container runs **Node + tsx** so the same process can serve static assets and Socket.IO. **`CLIENT_ORIGIN` is recommended in production** for a strict CORS allow-list — see [Production env vars](#production-env-vars) below. The server boots without it (falling back to allow-any CORS with a loud warning at startup) so platforms like Railway that don't expose the public origin to the container can deploy out of the box.
+Optional diagnostics in the same shell:
 
-Optional: set **`MULTIPLAYER_DEBUG=1`** in the container environment to print `[multiplayer]` diagnostics (room created/joined, session bind, match started). Use only while troubleshooting — logs may include player IDs and room codes (never secrets).
+```powershell
+$env:MULTIPLAYER_DEBUG='1'; pnpm run start
+```
+
+`pnpm run preview` only exercises the static bundle without multiplayer APIs.
 
 ## Branch promotion and Railway mapping
 
@@ -61,27 +45,96 @@ back into `dev` immediately. Railway's service-source branch mappings are live
 platform configuration rather than repository files, so verify both mappings
 after changing Railway settings.
 
-## Railway / generic Node hosts
+## Primary path: GitHub to Railway
 
-1. Set **start command** to `pnpm run start` (install dependencies with `pnpm install --frozen-lockfile` during build).
-2. Expose the HTTP port Railway assigns; map it to `PORT` (already read by the server).
-3. **Recommended:** `CLIENT_ORIGIN=https://your-host.up.railway.app` — comma-separate multiple origins. Without it the server still boots (allow-any CORS) and prints a warning; setting it locks the allow-list down.
-4. Optional: `MULTIPLAYER_DEBUG=1` for `[multiplayer]` server logs while diagnosing issues (room codes and player IDs may appear; never secrets).
+Railway services should use the GitHub repository as their source with
+autodeploy enabled for the mapped branch. Routine deployment happens when an
+approved commit reaches `dev` or `main`; do not upload a locally built image or
+use a manual CLI deploy as the normal release path.
 
-Because state is **in-memory**, expect rooms to reset when the dyno restarts.
+[`railway.json`](../railway.json) is the repository-owned deployment contract:
 
-## Production env vars
+- builder: **Railpack**, explicitly selected so Railway does not auto-detect the
+  retained root `Dockerfile`;
+- build command: `pnpm run build`;
+- start command: `pnpm run start`.
+
+Railpack installs dependencies from `pnpm-lock.yaml` and respects the Node and
+pnpm versions declared by the repository. Configuration in `railway.json`
+overrides equivalent dashboard settings for each deployment. Keep both Railway
+services pointed at this config file and check the deployment detail panel when
+confirming which settings were applied.
+
+For a new or repaired Railway service:
+
+1. Select this GitHub repository as the service source.
+2. Map the service to the correct branch and environment using the table above.
+3. Leave the build path on Railpack; do not select the Dockerfile builder.
+4. Expose Railway's assigned HTTP port through `PORT` (the server already reads
+   it and binds to `0.0.0.0`).
+5. Generate or retain the public domain, then set `CLIENT_ORIGIN` to that HTTPS
+   origin for a strict CORS allow-list.
+6. After deployment, check build logs, start logs, the public route, and a basic
+   two-browser room join. Remember that rooms reset whenever the service sleeps
+   or restarts because multiplayer state is in memory.
+
+Railway references:
+
+- [GitHub autodeploys](https://docs.railway.com/guides/github-autodeploys)
+- [Config as code](https://docs.railway.com/config-as-code)
+- [Railpack](https://docs.railway.com/builds/railpack)
+
+## Production environment variables
 
 - **`CLIENT_ORIGIN`** — comma-separated allow-list of browser origins
-  (e.g. `https://app.example.com,https://www.example.com`). **Recommended**
-  but not required. When unset in production, the server prints
-  `[server] CLIENT_ORIGIN is not set — accepting all browser origins...`
-  at boot and runs with allow-any CORS so platforms like Railway can deploy
-  without knowing their public origin ahead of time. Set this explicitly to
-  tighten CORS.
-- **`PORT`** — defaults to `3001`.
-- **`MULTIPLAYER_DEBUG`** — set to `1` or `true` to enable `[multiplayer]`
-  lifecycle logging.
+  (for example, `https://app.example.com,https://www.example.com`). This is
+  recommended but not required. When unset in production, the server logs a
+  warning and accepts all browser origins so a new platform deployment can
+  start before its public origin is known. Set it explicitly after assigning
+  the public domain.
+- **`PORT`** — defaults to `3001`; Railway supplies this for the service.
+- **`MULTIPLAYER_DEBUG`** — set to `1` or `true` only while diagnosing room
+  lifecycle issues. Logs may contain room codes and player IDs, never secrets.
+
+## Generic Node hosts
+
+Other Node platforms can use the same commands:
+
+1. Install with `pnpm install --frozen-lockfile`.
+2. Build with `pnpm run build`.
+3. Start with `pnpm run start` and supply `PORT`.
+4. Set `CLIENT_ORIGIN` to the public browser origin.
+
+Because state is **in-memory**, expect rooms to reset whenever the process
+restarts.
+
+## Optional manual Docker image
+
+Docker is retained as an explicit portability/self-hosting option. Do not run
+this command for routine Railway work, ordinary release verification, or image
+publishing. Run it only when a Docker-specific change or self-hosting task is
+active:
+
+```bash
+pnpm run docker:build
+```
+
+The cross-platform script tags the local image as:
+
+```text
+jdcb4/jd-multiplayer-games:<package version>
+jdcb4/jd-multiplayer-games:latest
+```
+
+Run the locally built image with:
+
+```bash
+docker run --rm -p 3001:3001 jdcb4/jd-multiplayer-games:latest
+```
+
+The container runs Node + `tsx`, serving the client assets and Socket.IO from
+the same process. Supply `CLIENT_ORIGIN` and any optional diagnostics as
+container environment variables when required.
 
 ## Verification before deploy
 
@@ -89,8 +142,6 @@ Because state is **in-memory**, expect rooms to reset when the dyno restarts.
 pnpm run verify
 ```
 
-For Docker-specific changes also run:
-
-```bash
-pnpm run docker:build
-```
+For multiplayer/socket-heavy changes, also complete the two-browser matrix in
+[`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md). Only run
+`pnpm run docker:build` when Docker itself is explicitly in scope.

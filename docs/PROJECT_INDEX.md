@@ -67,10 +67,11 @@ Games:
 | `pnpm run lint`           | ESLint.                                                                               |
 | `pnpm test`               | Vitest once.                                                                          |
 | `pnpm run test:watch`     | Vitest in watch mode.                                                                 |
-| `pnpm run build`          | Production build.                                                                     |
+| `pnpm run build`          | Production build used by local checks and Railway Railpack.                           |
 | `pnpm run verify`         | Typecheck + lint + test + build (commit gate).                                        |
 | `pnpm run fallow:hygiene` | Fallow dead-code + duplication only (see `docs/VERIFICATION.md`).                     |
 | `pnpm dlx fallow ...`     | Full Fallow scan (dead-code, duplication, health metrics).                            |
+| `pnpm run docker:build`   | Manual portability/self-hosting image; only run for explicit Docker work.             |
 
 ## Key docs
 

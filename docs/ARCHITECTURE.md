@@ -22,7 +22,11 @@ copy, so client guidance cannot diverge from server enforcement.
 
 Legacy solo flows still persist in **`localStorage`** where applicable. Web Audio cues remain client-side.
 
-Deploy targets: **Docker (`pnpm run docker:build`)** and **Railway/Node** (see `docs/DEPLOYMENT.md`).
+The primary deployment path is **GitHub repository -> Railway**, with
+`railway.json` explicitly selecting Railpack even though the repository retains
+a Dockerfile. Docker (`pnpm run docker:build`) is a manual portability and
+self-hosting option only; it is not part of routine deployment or verification.
+See `docs/DEPLOYMENT.md`.
 
 ## Module boundaries
 

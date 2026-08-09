@@ -7,7 +7,9 @@ This file holds the rules an agent must obey **on every turn**. Detailed referen
 ## Project shape
 
 - Preset: `client + server` (Vite React SPA + Express + Socket.IO)
-- Deploy targets: **Docker (recommended self-host)**, **Railway/Node platforms**, and optional static GitHub Pages (legacy)
+- Primary deploy target: **Railway from the GitHub repository using Railpack**.
+  Docker remains an optional manual portability/self-hosting path and is not
+  part of routine build, verification, or publishing work.
 - Stack defaults: TypeScript strict, pnpm, Vite, ESLint + Prettier, Vitest + RTL, Zod, Tailwind + shadcn-style components.
 - **Multiplayer state is in-memory on the Node process** (no database). A future database would need a `docs/DECISIONS.md` entry.
 - Auth: **do not implement auth** unless the user explicitly asks for it.
@@ -53,6 +55,9 @@ If docs are missing, stale, or inconsistent with the code, fix them as part of t
 9. **Local dev is Windows PowerShell.** When running shell commands locally use PowerShell syntax (no `&&`/`||` chains, env vars are `$env:NAME`, line continuation is backtick). CI and Docker run on Linux bash — that's fine, just don't conflate the two. Cheatsheet in `docs/AGENT_REFERENCE.md`.
 10. **Respect the branch promotion contract.** Routine work integrates into
     `dev`; moving it to `main` requires Joe's explicit review and approval.
+11. **Treat Railway as the default deployment path.** Keep `railway.json`, the
+    GitHub source mappings, and `docs/DEPLOYMENT.md` aligned. Do not build or
+    publish Docker images unless a Docker-specific task is explicitly active.
 
 ## Deterministic checks before commit
 
@@ -71,7 +76,8 @@ For significant implementation changes, also run Fallow and consider its feedbac
 pnpm dlx fallow --no-cache --format human
 ```
 
-`docs/VERIFICATION.md` lists preset-specific extra checks (Docker build, deploy preview, etc.).
+`docs/VERIFICATION.md` lists preset-specific extra checks. Docker builds apply
+only to explicitly active Docker work, not routine Railway deployment changes.
 
 ## Documentation map
 
