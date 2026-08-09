@@ -17,6 +17,7 @@ import { registerSocketHandlers } from "./socketHandlers.ts";
 type TestHarness = {
   readonly url: string;
   readonly close: () => Promise<void>;
+  readonly dropPlayerTransport: (playerId: string) => Promise<void>;
 };
 
 async function bootHarness(): Promise<TestHarness> {
@@ -39,6 +40,16 @@ async function bootHarness(): Promise<TestHarness> {
 
   return {
     url,
+    dropPlayerTransport: async (playerId) => {
+      const sockets = await io.fetchSockets();
+      const playerSocket = sockets.find((socket) => socket.data.playerId === playerId);
+
+      if (!playerSocket) {
+        throw new Error(`No bound socket for ${playerId}`);
+      }
+
+      playerSocket.conn.close();
+    },
     close: () =>
       new Promise<void>((resolve) => {
         io.close(() => {
@@ -46,6 +57,47 @@ async function bootHarness(): Promise<TestHarness> {
         });
       }),
   };
+}
+
+function bindReconnectingClient(url: string, creds: Credentials): Promise<BoundClient> {
+  return new Promise((resolve, reject) => {
+    const socket = ioClient(url, {
+      autoConnect: false,
+      transports: ["websocket"],
+      reconnection: true,
+      reconnectionDelay: 10,
+      forceNew: true,
+    });
+
+    let resolved = false;
+    const timer = setTimeout(() => {
+      if (!resolved) {
+        socket.disconnect();
+        reject(new Error(`Timed out binding reconnecting socket for ${creds.playerId}`));
+      }
+    }, 4000);
+
+    socket.on("connect", () => {
+      socket.emit("session:bind", creds, (ack?: { ok?: boolean; error?: string }) => {
+        if (ack?.ok === false && !resolved) {
+          clearTimeout(timer);
+          reject(new Error(ack.error ?? "session:bind rejected"));
+        }
+      });
+    });
+    socket.once("room:sync", (payload: RoomSyncPayload) => {
+      resolved = true;
+      clearTimeout(timer);
+      resolve({ socket, firstSync: payload });
+    });
+    socket.on("connect_error", (error) => {
+      if (!resolved) {
+        clearTimeout(timer);
+        reject(error);
+      }
+    });
+    socket.connect();
+  });
 }
 
 type Credentials = {
@@ -268,6 +320,41 @@ describe("multiplayer smoke", () => {
 
       expect(ack.ok).toBe(false);
       expect(ack.error).toBe("Invalid request.");
+    } finally {
+      bound.socket.disconnect();
+    }
+  });
+
+  it("re-binds a session after reconnect before accepting another room command", async () => {
+    const host = await postJson<Credentials>(`${harness.url}/api/rooms`, {
+      gameKind: "imposter",
+      hostName: "Host",
+    });
+    const guest = await postJson<Credentials>(`${harness.url}/api/rooms/${host.code}/join`, {
+      name: "Guest",
+    });
+    const bound = await bindReconnectingClient(harness.url, guest);
+
+    try {
+      const reconnected = new Promise<void>((resolve) =>
+        bound.socket.once("connect", () => resolve()),
+      );
+      const reboundSync = nextSyncWhere(
+        bound.socket,
+        (sync) => sync.you.playerId === guest.playerId && sync.phase === "lobby",
+      );
+
+      await harness.dropPlayerTransport(guest.playerId);
+      await reconnected;
+      await reboundSync;
+
+      const readySync = nextSyncWhere(
+        bound.socket,
+        (sync) =>
+          sync.lobby?.players.find((player) => player.id === guest.playerId)?.ready === true,
+      );
+      expect(await emitAck(bound.socket, "lobby:setReady", { ready: true })).toEqual({ ok: true });
+      expect((await readySync).you.playerId).toBe(guest.playerId);
     } finally {
       bound.socket.disconnect();
     }

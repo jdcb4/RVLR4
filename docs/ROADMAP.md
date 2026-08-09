@@ -17,12 +17,6 @@ Source: [`UX_AND_CODE_RECS_2026-08-09.md`](UX_AND_CODE_RECS_2026-08-09.md).
 The report is a point-in-time review, so validate each finding against the
 current code and tests before implementation.
 
-- **ACT-01 — Re-bind multiplayer sessions after Socket.IO reconnect
-  (critical):** `src/multiplayer/useRoomChannel.ts` currently emits
-  `session:bind` outside `handleConnect`, so an automatically reconnected
-  socket can remain unbound. Move binding into the successful connection path,
-  handle missing/invalid credentials, and add a regression test covering a
-  disconnect/reconnect followed by a room command.
 - **ACT-03 — Route-level code splitting (medium):** measure the current entry
   bundle, then lazy-load game and multiplayer route modules with an accessible,
   mobile-appropriate loading state. Preserve route behavior and verify that the

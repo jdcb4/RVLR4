@@ -74,6 +74,7 @@ export type RoomChannelHandle = {
 
 export function useRoomChannel(code: string | undefined, enabled: boolean): RoomChannelHandle {
   const socketRef = useRef<Socket | null>(null);
+  const bindAttemptRef = useRef(0);
   const [sync, setSync] = useState<RoomSyncPayload | null>(null);
   const [connected, setConnected] = useState(false);
   const [bindError, setBindError] = useState<string | null>(null);
@@ -92,11 +93,8 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
       return undefined;
     }
 
-    const creds = loadSession(code);
-
-    if (!creds) {
+    if (!loadSession(code)) {
       setBindError("Missing session. Go back and enter your name again.");
-
       return undefined;
     }
 
@@ -104,13 +102,44 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
       setSync(payload);
     };
 
-    const handleConnect = () => {
-      setConnected(true);
-      // Reconnected — the server is back. Clear any stale shutdown banner.
+    const bindSession = () => {
+      const creds = loadSession(code);
+      const bindAttempt = bindAttemptRef.current + 1;
+      bindAttemptRef.current = bindAttempt;
+      setConnected(false);
       setShuttingDown(false);
+
+      if (!creds) {
+        setBindError("Missing session. Go back and enter your name again.");
+        socket.disconnect();
+        return;
+      }
+
+      socket.emit(
+        "session:bind",
+        {
+          code: creds.code,
+          playerId: creds.playerId,
+          secret: creds.secret,
+        },
+        (ack?: { ok?: boolean; error?: string }) => {
+          if (bindAttempt !== bindAttemptRef.current || !socket.connected) {
+            return;
+          }
+
+          if (ack?.ok === true) {
+            setBindError(null);
+            setConnected(true);
+          } else {
+            setConnected(false);
+            setBindError(ack?.error ?? "Unable to reconnect.");
+          }
+        },
+      );
     };
 
     const handleDisconnect = () => {
+      bindAttemptRef.current += 1;
       setConnected(false);
     };
 
@@ -118,33 +147,20 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
       setShuttingDown(true);
     };
 
-    socket.on("connect", handleConnect);
+    socket.on("connect", bindSession);
     socket.on("disconnect", handleDisconnect);
     socket.on("room:sync", handleSync);
     socket.on("server:shuttingDown", handleShutdown);
 
-    if (!socket.connected) {
+    if (socket.connected) {
+      bindSession();
+    } else {
       socket.connect();
     }
 
-    socket.emit(
-      "session:bind",
-      {
-        code: creds.code,
-        playerId: creds.playerId,
-        secret: creds.secret,
-      },
-      (ack?: { ok?: boolean; error?: string }) => {
-        if (ack && ack.ok === false) {
-          setBindError(ack.error ?? "Unable to reconnect.");
-        } else {
-          setBindError(null);
-        }
-      },
-    );
-
     return () => {
-      socket.off("connect", handleConnect);
+      bindAttemptRef.current += 1;
+      socket.off("connect", bindSession);
       socket.off("disconnect", handleDisconnect);
       socket.off("room:sync", handleSync);
       socket.off("server:shuttingDown", handleShutdown);
@@ -152,8 +168,12 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
   }, [code, enabled, socket]);
 
   const emitWithAck = useCallback(
-    (event: string, payload?: unknown) =>
-      new Promise<{ ok?: boolean; error?: string } | undefined>((resolve, reject) => {
+    (event: string, payload?: unknown) => {
+      if (!connected) {
+        return Promise.resolve({ ok: false, error: "Reconnecting to the room." });
+      }
+
+      return new Promise<{ ok?: boolean; error?: string } | undefined>((resolve, reject) => {
         try {
           socket.emit(event, payload ?? {}, (ack?: { ok?: boolean; error?: string }) => {
             resolve(ack);
@@ -161,8 +181,9 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
         } catch (error) {
           reject(error);
         }
-      }),
-    [socket],
+      });
+    },
+    [connected, socket],
   );
 
   return {

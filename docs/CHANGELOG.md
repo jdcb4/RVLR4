@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.20.5 - 2026-08-09
+
+- **Fix (multiplayer):** Re-bind stored player sessions after every Socket.IO
+  reconnect and keep room commands unavailable until binding succeeds.
+- **Resilience:** Handle missing, expired, and stale session binding attempts
+  without presenting an unbound transport as a usable room connection.
+- **Tests:** Added client lifecycle and real Socket.IO reconnect coverage that
+  confirms room commands and synchronization resume after rebinding.
+
 ## 0.20.4 - 2026-08-09
 
 - **Data:** Moved all curated word, prompt, clue, and generated-name content to
