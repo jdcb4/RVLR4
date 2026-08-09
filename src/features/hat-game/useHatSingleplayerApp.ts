@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { GAME_DEFAULTS, type HatGameConfig } from "@/config/hatDefaults";
+import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import { MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 import { getHatClueSuggestions } from "@/domain/hat-game/clueSuggestions";
-import { applyHatGameAction, createHatGameSession } from "@/domain/hat-game/engine";
+import { applyHatGameAction } from "@/domain/hat-game/engine";
 import {
   addPlayerToHatTeam,
   applyRosterRowsToHat,
@@ -14,7 +14,7 @@ import {
   removePlayerFromHatTeam,
 } from "@/domain/hat-game/setup";
 import { getCountdownSeconds } from "@/domain/hat-game/time";
-import type { ClueSubmissionMap, HatGameAction } from "@/domain/hat-game/types";
+import type { HatGameAction } from "@/domain/hat-game/types";
 import {
   makeSingleplayerResumeSavedGame,
   makeSingleplayerStartNewGame,
@@ -22,11 +22,13 @@ import {
 import { useAutoHidePopup } from "@/features/game-app-hooks/useAutoHidePopup";
 import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
 import { playHatActionSoundEffects } from "@/features/hat-game/hatActionSound";
-import type {
-  AppSnapshot,
-  AppStep,
-  StoragePayload,
-} from "@/features/hat-game/hatSingleplayerAppTypes";
+import type { AppSnapshot, StoragePayload } from "@/features/hat-game/hatSingleplayerAppTypes";
+import {
+  createInitialHatSnapshot,
+  normalizeHatSnapshot,
+  startHatSession,
+  syncHatClueSubmissions,
+} from "@/features/hat-game/hatSingleplayerTransitions";
 import { formatSavedAt } from "@/lib/formatSavedAt";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import { playSoundCue } from "@/services/hatSound";
@@ -36,72 +38,7 @@ import packageJson from "../../../package.json";
 
 const createEmptyClues = () => Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "");
 
-const createInitialSnapshot = (step: AppStep = "settings"): AppSnapshot => ({
-  step,
-  teamEditIndex: 0,
-  playerCount: 0,
-  teamCount: 2,
-  teams: [],
-  players: [],
-  clueSubmissions: {},
-  clueEntryIndex: 0,
-  clueEntryRevealed: false,
-  handoffRevealed: false,
-  session: null,
-  turnDurationSeconds: GAME_DEFAULTS.turnDurationSeconds,
-  skipsPerTurn: GAME_DEFAULTS.skipsPerTurn,
-});
-
-/** Older builds used `counts` for the team-count-only step; merge setup prefs defaults. */
-const normalizeSnapshotStep = (snapshot: AppSnapshot): AppSnapshot => {
-  const step = snapshot.step as string;
-  const stepFixed = step === "counts" ? "settings" : snapshot.step;
-  return {
-    ...snapshot,
-    step: stepFixed,
-    turnDurationSeconds: snapshot.turnDurationSeconds ?? GAME_DEFAULTS.turnDurationSeconds,
-    skipsPerTurn: snapshot.skipsPerTurn ?? GAME_DEFAULTS.skipsPerTurn,
-  };
-};
-
-const sessionConfigFromSnapshot = (snapshot: AppSnapshot): HatGameConfig => ({
-  ...GAME_DEFAULTS,
-  turnDurationSeconds: snapshot.turnDurationSeconds,
-  skipsPerTurn: snapshot.skipsPerTurn,
-});
-
-const createSessionFromSnapshot = (snapshot: AppSnapshot) =>
-  createHatGameSession({
-    players: snapshot.players,
-    teams: snapshot.teams,
-    config: sessionConfigFromSnapshot(snapshot),
-    clueSubmissions: snapshot.clueSubmissions,
-  });
-
-const withStartedGameSession = (current: AppSnapshot, sessionSource: AppSnapshot): AppSnapshot => ({
-  ...current,
-  step: "game",
-  session: createSessionFromSnapshot(sessionSource),
-  handoffRevealed: false,
-});
-
 export { formatSavedAt };
-
-const syncClueSubmissions = (
-  players: AppSnapshot["players"],
-  current: ClueSubmissionMap,
-): ClueSubmissionMap =>
-  Object.fromEntries(
-    players.map((player) => [
-      player.id,
-      {
-        clues: Array.from(
-          { length: GAME_DEFAULTS.cluesPerPlayer },
-          (_, index) => current[player.id]?.clues[index] ?? "",
-        ),
-      },
-    ]),
-  );
 
 const isError = (value: unknown): value is { error: string } =>
   Boolean(value && typeof value === "object" && "error" in value);
@@ -123,7 +60,7 @@ const chooseSuggestion = (used: string[]) => {
 };
 
 export function useHatSingleplayerApp() {
-  const [snapshot, setSnapshot] = useState<AppSnapshot>(() => createInitialSnapshot("landing"));
+  const [snapshot, setSnapshot] = useState<AppSnapshot>(() => createInitialHatSnapshot("landing"));
   const [savedRecord, setSavedRecord] = useState<StoragePayload | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState("");
@@ -147,12 +84,12 @@ export function useHatSingleplayerApp() {
         const record = isStoragePayload(saved)
           ? {
               ...saved,
-              snapshot: normalizeSnapshotStep(saved.snapshot),
+              snapshot: normalizeHatSnapshot(saved.snapshot),
             }
           : {
               schemaVersion: 1 as const,
               lastSavedAt: new Date().toISOString(),
-              snapshot: normalizeSnapshotStep(saved),
+              snapshot: normalizeHatSnapshot(saved),
             };
         // Do not offer resume after a finished game (stale storage from older builds).
         if (record.snapshot.step === "game" && record.snapshot.session?.stage === "results") {
@@ -277,7 +214,7 @@ export function useHatSingleplayerApp() {
 
   const startNewGame = makeSingleplayerStartNewGame({
     clearSavedState,
-    resetSnapshot: () => createInitialSnapshot("settings"),
+    resetSnapshot: () => createInitialHatSnapshot("settings"),
     setConfirmNewGame,
     setError,
     setSavedRecord,
@@ -285,7 +222,7 @@ export function useHatSingleplayerApp() {
   });
 
   const resumeSavedGame = makeSingleplayerResumeSavedGame({
-    normalize: normalizeSnapshotStep,
+    normalize: normalizeHatSnapshot,
     savedRecord,
     setConfirmNewGame,
     setError,
@@ -332,7 +269,7 @@ export function useHatSingleplayerApp() {
       teamCount,
       teams,
       players,
-      clueSubmissions: syncClueSubmissions(players, {}),
+      clueSubmissions: syncHatClueSubmissions(players, {}),
       session: null,
     }));
     setError("");
@@ -347,7 +284,7 @@ export function useHatSingleplayerApp() {
         teams,
         players,
         playerCount: players.length,
-        clueSubmissions: syncClueSubmissions(players, current.clueSubmissions),
+        clueSubmissions: syncHatClueSubmissions(players, current.clueSubmissions),
       };
     });
   };
@@ -436,7 +373,7 @@ export function useHatSingleplayerApp() {
       step: "clues",
       clueEntryIndex: 0,
       clueEntryRevealed: false,
-      clueSubmissions: syncClueSubmissions(current.players, current.clueSubmissions),
+      clueSubmissions: syncHatClueSubmissions(current.players, current.clueSubmissions),
     }));
     setError("");
   };
@@ -456,7 +393,7 @@ export function useHatSingleplayerApp() {
       return;
     }
     if (snapshot.clueEntryIndex >= snapshot.players.length - 1) {
-      setSnapshot((current) => withStartedGameSession(current, snapshot));
+      setSnapshot((current) => startHatSession(current, snapshot));
     } else {
       setSnapshot((current) => ({
         ...current,
@@ -472,7 +409,7 @@ export function useHatSingleplayerApp() {
   };
 
   const playAgain = () => {
-    setSnapshot((current) => withStartedGameSession(current, snapshot));
+    setSnapshot((current) => startHatSession(current, snapshot));
   };
 
   return {
