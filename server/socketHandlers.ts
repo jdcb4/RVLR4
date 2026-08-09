@@ -4,6 +4,7 @@ import { GAME_DEFAULTS } from "@/config/hatDefaults";
 
 import { broadcastRoom, roomChannel } from "./broadcast.ts";
 import { captainPlayerIdForTeam } from "./captain.ts";
+import { socketClientAddress } from "./clientAddress.ts";
 import {
   applyDrawNGuessAdvanceReveal,
   applyDrawNGuessAdvanceTurn,
@@ -40,6 +41,7 @@ import {
 } from "./lobbyControl.ts";
 import { assertRoomLobbyStartReady } from "./lobbyReadiness.ts";
 import { mpDebug } from "./multiplayerDebug.ts";
+import { RATE_POLICIES, TokenBucketStore } from "./rateLimiter.ts";
 import type { Room, RoomPlayer } from "./roomStore.ts";
 import {
   archiveRoomAfterAllPlayersOptedOut,
@@ -101,10 +103,50 @@ function canOfferReplay(activeRoom: Room): boolean {
   return false;
 }
 
-export function registerSocketHandlers(io: Server, store: RoomStore) {
+export type SocketSecurityContext = {
+  readonly limiter: TokenBucketStore;
+  readonly isRailway: boolean;
+};
+
+export function registerSocketHandlers(
+  io: Server,
+  store: RoomStore,
+  security: SocketSecurityContext = { limiter: new TokenBucketStore(), isRailway: false },
+) {
+  io.use((socket, next) => {
+    const address = socketClientAddress(socket, security.isRailway);
+    const result = security.limiter.take(`socket:connect:${address}`, RATE_POLICIES.socketConnect);
+
+    if (!result.allowed) {
+      const error = new Error("Too many connection attempts. Try again shortly.");
+      error.name = "RATE_LIMITED";
+      next(error);
+
+      return;
+    }
+
+    socket.data.rateLimiter = security.limiter;
+    next();
+  });
+
   io.on("connection", (socket) => {
     socket.on("session:bind", async (rawPayload: unknown, ack?: SocketAck) => {
       try {
+        const bindBudget = security.limiter.take(
+          `socket:bind:${socket.id}`,
+          RATE_POLICIES.sessionBind,
+        );
+
+        if (!bindBudget.allowed) {
+          ack?.({
+            ok: false,
+            error: "Too many session attempts. Try again shortly.",
+            code: "RATE_LIMITED",
+          });
+
+          return;
+        }
+
         const parsed = sessionBindSchema.safeParse(rawPayload);
 
         if (!parsed.success) {

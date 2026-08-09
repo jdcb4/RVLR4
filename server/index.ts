@@ -9,8 +9,9 @@ import { Server } from "socket.io";
 import { startDrawNGuessTurnTicker } from "./drawnguessTicker.ts";
 import { loadServerEnv } from "./env.ts";
 import { startHatTurnTicker } from "./hatTicker.ts";
-import { registerHttpRoutes } from "./httpRoutes.ts";
+import { handleJsonBodyError, registerHttpRoutes } from "./httpRoutes.ts";
 import { initMultiplayerDebug } from "./multiplayerDebug.ts";
+import { startRateLimiterSweeper, TokenBucketStore } from "./rateLimiter.ts";
 import { RoomStore } from "./roomStore.ts";
 import { startRoomIdleSweeper } from "./roomSweep.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
@@ -21,9 +22,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const env = loadServerEnv(process.env);
 initMultiplayerDebug(env.MULTIPLAYER_DEBUG);
 const store = new RoomStore();
+const limiter = new TokenBucketStore();
+const isRailway = Boolean(process.env.RAILWAY_ENVIRONMENT_ID || process.env.RAILWAY_PROJECT_ID);
+const security = { limiter, isRailway };
+startRateLimiterSweeper(limiter);
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "16kb" }));
+app.use(handleJsonBodyError);
 
 const allowedOrigins =
   env.CLIENT_ORIGIN?.split(",")
@@ -63,7 +69,7 @@ app.use(
   }),
 );
 
-registerHttpRoutes(app, store);
+registerHttpRoutes(app, store, security);
 
 const clientDist = path.resolve(__dirname, "../dist");
 
@@ -82,12 +88,13 @@ app.use((request, response) => {
 const server = http.createServer(app);
 
 const io = new Server(server, {
+  maxHttpBufferSize: 256 * 1_024,
   cors: {
     origin: corsOrigin,
   },
 });
 
-registerSocketHandlers(io, store);
+registerSocketHandlers(io, store, security);
 startWhoWhatWhereTurnTicker(io, store);
 startHatTurnTicker(io, store);
 startDrawNGuessTurnTicker(io, store);

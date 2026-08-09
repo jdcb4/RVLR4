@@ -10,7 +10,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
 
-import { registerHttpRoutes } from "./httpRoutes.ts";
+import { handleJsonBodyError, registerHttpRoutes } from "./httpRoutes.ts";
 import { RoomStore } from "./roomStore.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
 
@@ -22,7 +22,8 @@ type TestHarness = {
 
 async function bootHarness(): Promise<TestHarness> {
   const app = express();
-  app.use(express.json());
+  app.use(express.json({ limit: "16kb" }));
+  app.use(handleJsonBodyError);
 
   const store = new RoomStore();
   registerHttpRoutes(app, store);
@@ -333,6 +334,29 @@ describe("multiplayer smoke", () => {
     } finally {
       bound.socket.disconnect();
     }
+  });
+
+  it("returns stable 413 and 429 HTTP envelopes", async () => {
+    const oversized = await fetch(`${harness.url}/api/rooms`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ gameKind: "hat", hostName: "x".repeat(17_000) }),
+    });
+    expect(oversized.status).toBe(413);
+    expect(await oversized.json()).toMatchObject({ code: "PAYLOAD_TOO_LARGE" });
+
+    for (let index = 0; index < 6; index += 1) {
+      await postJson(`${harness.url}/api/rooms`, { gameKind: "hat", hostName: `Host ${index}` });
+    }
+
+    const limited = await fetch(`${harness.url}/api/rooms`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ gameKind: "hat", hostName: "Overflow" }),
+    });
+    expect(limited.status).toBe(429);
+    expect(limited.headers.get("retry-after")).toBeTruthy();
+    expect(await limited.json()).toMatchObject({ code: "RATE_LIMITED" });
   });
 
   it("uses the synchronized lobby readiness reason when rejecting start", async () => {

@@ -7,7 +7,9 @@ import {
   DRAWNGUESS_MAX_PLAYERS,
   DRAWNGUESS_MAX_POINTS_PER_STROKE,
   DRAWNGUESS_MAX_PROMPT_LENGTH,
+  DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES,
   DRAWNGUESS_MAX_STROKES,
+  DRAWNGUESS_MAX_TOTAL_POINTS,
   DRAWNGUESS_MIN_PLAYERS,
   type DrawNGuessActiveTurn,
   type DrawNGuessAssignment,
@@ -756,8 +758,22 @@ function validateDrawing(drawing: DrawNGuessDrawing) {
     throw new Error("Drawing has too many strokes.");
   }
 
+  let totalPoints = 0;
+
   for (const stroke of drawing.strokes) {
     validateStroke(stroke);
+    totalPoints += stroke.points.length;
+  }
+
+  if (totalPoints > DRAWNGUESS_MAX_TOTAL_POINTS) {
+    throw new Error("Drawing has too many total points.");
+  }
+
+  if (
+    new TextEncoder().encode(JSON.stringify(drawing)).byteLength >
+    DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES
+  ) {
+    throw new Error("Drawing is too large.");
   }
 }
 

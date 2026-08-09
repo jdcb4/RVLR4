@@ -6,7 +6,9 @@ import {
   DRAWNGUESS_MAX_GUESS_LENGTH,
   DRAWNGUESS_MAX_POINTS_PER_STROKE,
   DRAWNGUESS_MAX_PROMPT_LENGTH,
+  DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES,
   DRAWNGUESS_MAX_STROKES,
+  DRAWNGUESS_MAX_TOTAL_POINTS,
 } from "@/domain/drawnguess/types";
 import { CATEGORIES, HINT_LIMIT_OPTIONS } from "@/domain/whowhatwhere/types";
 
@@ -95,7 +97,20 @@ const drawNGuessDrawingSchema = z
     height: z.number().int().min(1).max(4096),
     strokes: z.array(drawNGuessStrokeSchema).max(DRAWNGUESS_MAX_STROKES),
   })
-  .strict();
+  .strict()
+  .superRefine((drawing, context) => {
+    const totalPoints = drawing.strokes.reduce((sum, stroke) => sum + stroke.points.length, 0);
+
+    if (totalPoints > DRAWNGUESS_MAX_TOTAL_POINTS) {
+      context.addIssue({ code: z.ZodIssueCode.custom, message: "Drawing has too many points." });
+    }
+
+    if (
+      Buffer.byteLength(JSON.stringify(drawing), "utf8") > DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES
+    ) {
+      context.addIssue({ code: z.ZodIssueCode.custom, message: "Drawing is too large." });
+    }
+  });
 
 const imposterDispatchSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("reveal-show-role") }).strict(),

@@ -2,6 +2,19 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.21.7 - 2026-08-09
+
+- **Abuse controls:** Added bounded, sweepable in-memory token buckets for room
+  creation/lookups/joins, socket connections, session binding, general game
+  mutations, and size-weighted drawing mutations. Railway-only `X-Real-IP`
+  trust is explicit and validated.
+- **Payload limits:** HTTP JSON bodies are capped at 16 KiB, Socket.IO messages
+  at 256 KiB, and DrawNGuess drawings at 200 strokes, 2,000 points per stroke,
+  6,000 total points, and 192 KiB serialized data.
+- **Errors:** Oversized and throttled HTTP/socket requests return stable
+  `PAYLOAD_TOO_LARGE` or `RATE_LIMITED` codes; HTTP throttling includes
+  `Retry-After`.
+
 ## 0.21.6 - 2026-08-09
 
 - **Validation:** Added strict Zod schemas for every HTTP and Socket.IO input,

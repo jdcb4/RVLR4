@@ -60,6 +60,30 @@ const drawing: DrawNGuessDrawing = {
 };
 
 describe("DrawNGuess engine", () => {
+  it("rejects drawings beyond the total point budget", () => {
+    const match = createDrawNGuessMatch({
+      players: players.slice(0, 3),
+      wordSource: prompts,
+      now: 1_000,
+    });
+    const oversized: DrawNGuessDrawing = {
+      format: "strokes-v1",
+      width: 512,
+      height: 512,
+      strokes: Array.from({ length: 4 }, (_, strokeIndex) => ({
+        id: `stroke-${strokeIndex}`,
+        color: "#111827",
+        size: 6,
+        tool: "pen" as const,
+        points: Array.from({ length: 1_501 }, () => ({ x: 0.5, y: 0.5 })),
+      })),
+    };
+
+    expect(() => updateDrawingDraft(match, "p1", oversized, 1_100)).toThrow(
+      /too many total points/,
+    );
+  });
+
   it("alternates turn modes and rotates packets across every player", () => {
     expect(getTurnMode(0)).toBe("drawing");
     expect(getTurnMode(1)).toBe("guessing");

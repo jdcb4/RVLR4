@@ -1,13 +1,74 @@
-import type { Express } from "express";
+import type { Express, NextFunction, Request, Response } from "express";
 
 import { createRoomBodySchema, joinRoomBodySchema, roomParamsSchema } from "./boundarySchemas.ts";
+import { httpClientAddress } from "./clientAddress.ts";
 import { mpDebug } from "./multiplayerDebug.ts";
+import { RATE_POLICIES, type TokenBucketPolicy, TokenBucketStore } from "./rateLimiter.ts";
 import { RoomStore } from "./roomStore.ts";
 
 const INVALID_REQUEST = "INVALID_REQUEST" as const;
 
-export function registerHttpRoutes(app: Express, store: RoomStore) {
+export type HttpSecurityContext = {
+  readonly limiter: TokenBucketStore;
+  readonly isRailway: boolean;
+};
+
+export function handleJsonBodyError(
+  error: unknown,
+  _request: Request,
+  response: Response,
+  next: NextFunction,
+): void {
+  if (error instanceof Error && "type" in error && error.type === "entity.too.large") {
+    response
+      .status(413)
+      .json({ error: "Request payload is too large.", code: "PAYLOAD_TOO_LARGE" });
+
+    return;
+  }
+
+  if (error instanceof Error && "type" in error && error.type === "entity.parse.failed") {
+    response.status(400).json({ error: "Invalid request.", code: "INVALID_REQUEST" });
+
+    return;
+  }
+
+  next(error);
+}
+
+function consumeHttpBudget(
+  request: Request,
+  response: Response,
+  security: HttpSecurityContext,
+  operation: string,
+  policy: TokenBucketPolicy,
+): boolean {
+  const address = httpClientAddress(request, security.isRailway);
+  const result = security.limiter.take(`http:${operation}:${address}`, policy);
+
+  if (result.allowed) {
+    return true;
+  }
+
+  response.setHeader("Retry-After", Math.max(1, Math.ceil(result.retryAfterMs / 1_000)));
+  response.status(429).json({
+    error: "Too many requests. Try again shortly.",
+    code: "RATE_LIMITED",
+  });
+
+  return false;
+}
+
+export function registerHttpRoutes(
+  app: Express,
+  store: RoomStore,
+  security: HttpSecurityContext = { limiter: new TokenBucketStore(), isRailway: false },
+) {
   app.post("/api/rooms", (request, response) => {
+    if (!consumeHttpBudget(request, response, security, "create", RATE_POLICIES.createRoom)) {
+      return;
+    }
+
     try {
       const body = createRoomBodySchema.parse(request.body);
 
@@ -34,6 +95,10 @@ export function registerHttpRoutes(app: Express, store: RoomStore) {
   });
 
   app.get("/api/rooms/:code", (request, response) => {
+    if (!consumeHttpBudget(request, response, security, "lookup", RATE_POLICIES.roomLookup)) {
+      return;
+    }
+
     const parsed = roomParamsSchema.safeParse(request.params);
 
     if (!parsed.success) {
@@ -57,6 +122,10 @@ export function registerHttpRoutes(app: Express, store: RoomStore) {
   });
 
   app.post("/api/rooms/:code/join", (request, response) => {
+    if (!consumeHttpBudget(request, response, security, "join", RATE_POLICIES.joinRoom)) {
+      return;
+    }
+
     try {
       const { code } = roomParamsSchema.parse(request.params);
       const body = joinRoomBodySchema.parse(request.body);

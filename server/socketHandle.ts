@@ -1,6 +1,8 @@
 import type { Socket } from "socket.io";
 
+import type { TokenBucketStore } from "./rateLimiter.ts";
 import type { Room, RoomPlayer, RoomStore } from "./roomStore.ts";
+import { consumeMutationBudget, isDrawingPayloadTooLarge } from "./socketBudgets.ts";
 import { type SocketEventName, type SocketPayload, socketSchemas } from "./socketSchemas.ts";
 
 export type SocketErrorCode =
@@ -74,12 +76,32 @@ export function registerHandler<E extends SocketEventName>(
       const parsed = schema.safeParse(rawPayload);
 
       if (!parsed.success) {
-        ack?.({ ok: false, error: "Invalid request.", code: "INVALID_REQUEST" });
+        const payloadTooLarge = isDrawingPayloadTooLarge(event, rawPayload);
+        ack?.({
+          ok: false,
+          error: payloadTooLarge ? "Request payload is too large." : "Invalid request.",
+          code: payloadTooLarge ? "PAYLOAD_TOO_LARGE" : "INVALID_REQUEST",
+        });
 
         return;
       }
 
       const { room, actor } = requireActor(socket, store);
+      const limiter = socket.data.rateLimiter as TokenBucketStore | undefined;
+
+      if (limiter) {
+        const budget = consumeMutationBudget(limiter, socket, event, parsed.data);
+
+        if (!budget.allowed) {
+          ack?.({
+            ok: false,
+            error: "Too many requests. Try again shortly.",
+            code: "RATE_LIMITED",
+          });
+
+          return;
+        }
+      }
 
       await fn({ socket, store, room, actor }, parsed.data as SocketPayload<E>);
       ack?.({ ok: true });

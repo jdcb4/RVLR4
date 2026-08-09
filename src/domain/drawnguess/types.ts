@@ -6,8 +6,10 @@ export const DRAWNGUESS_DEFAULT_GUESS_DURATION_MS = 30_000;
 export const DRAWNGUESS_DEFAULT_GRACE_MS = 1_500;
 export const DRAWNGUESS_MAX_GUESS_LENGTH = 42;
 export const DRAWNGUESS_MAX_PROMPT_LENGTH = 42;
-export const DRAWNGUESS_MAX_STROKES = 500;
+export const DRAWNGUESS_MAX_STROKES = 200;
 export const DRAWNGUESS_MAX_POINTS_PER_STROKE = 2_000;
+export const DRAWNGUESS_MAX_TOTAL_POINTS = 6_000;
+export const DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES = 192 * 1_024;
 
 export type DrawNGuessPromptMode = "predetermined" | "custom";
 export type DrawNGuessTurnMode = "custom-prompt" | "drawing" | "guessing";
