@@ -24,6 +24,22 @@ Before making changes:
 
 If docs are missing, stale, or inconsistent with the code, fix them as part of the change.
 
+## Branch and promotion workflow
+
+- **`dev` is the default working and integration branch.** Start routine work
+  from an up-to-date `dev`. If a short-lived branch is useful, branch from
+  `dev` and merge it back into `dev`.
+- **Railway `dev` deploys `dev`.** Use that environment to validate the
+  integrated change before production promotion.
+- **`main` is the reviewed production branch.** Do not use `main` for routine
+  work and do not promote `dev` into `main` until Joe has reviewed the exact
+  candidate and explicitly approved the promotion.
+- Promote with a `dev` -> `main` pull request (or an explicitly requested
+  equivalent merge). Railway production deploys `main`.
+- If an emergency change is ever made directly on `main`, merge it back into
+  `dev` immediately so the integration branch does not lose the production
+  fix.
+
 ## Hard rules
 
 1. **No auth without explicit request.** If a task seems to need auth, surface that as a question rather than building it.
@@ -35,6 +51,8 @@ If docs are missing, stale, or inconsistent with the code, fix them as part of t
 7. **Do not commit secrets, build output, `node_modules`, or local env files.** See `.gitignore` and `SECURITY.md`.
 8. **Do not weaken or skip tests to make them pass.** Fix the underlying issue.
 9. **Local dev is Windows PowerShell.** When running shell commands locally use PowerShell syntax (no `&&`/`||` chains, env vars are `$env:NAME`, line continuation is backtick). CI and Docker run on Linux bash — that's fine, just don't conflate the two. Cheatsheet in `docs/AGENT_REFERENCE.md`.
+10. **Respect the branch promotion contract.** Routine work integrates into
+    `dev`; moving it to `main` requires Joe's explicit review and approval.
 
 ## Deterministic checks before commit
 

@@ -42,6 +42,25 @@ The container runs **Node + tsx** so the same process can serve static assets an
 
 Optional: set **`MULTIPLAYER_DEBUG=1`** in the container environment to print `[multiplayer]` diagnostics (room created/joined, session bind, match started). Use only while troubleshooting — logs may include player IDs and room codes (never secrets).
 
+## Branch promotion and Railway mapping
+
+| Git branch | Purpose                                                         | Railway environment |
+| ---------- | --------------------------------------------------------------- | ------------------- |
+| `dev`      | GitHub default and integration branch; current review candidate | `dev`               |
+| `main`     | Reviewed production branch                                      | `production`        |
+
+Routine work starts from `dev` (or a short-lived branch based on `dev`) and
+integrates back into `dev`. The `dev` deployment is the validation target.
+After Joe reviews and explicitly approves the exact candidate, promote with a
+`dev` -> `main` pull request or an explicitly requested equivalent merge. A
+successful update to `main` becomes the production deployment.
+
+Do not point Railway production at `dev`, and do not merge or push a promotion
+to `main` before approval. If a production-only hotfix is unavoidable, merge it
+back into `dev` immediately. Railway's service-source branch mappings are live
+platform configuration rather than repository files, so verify both mappings
+after changing Railway settings.
+
 ## Railway / generic Node hosts
 
 1. Set **start command** to `pnpm run start` (install dependencies with `pnpm install --frozen-lockfile` during build).

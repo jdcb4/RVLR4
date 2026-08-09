@@ -16,6 +16,15 @@ Games:
 - **Imposter** — full networked match flow from lobby through results (`ImposterMultiplayerView`).
 - **DrawNGuess** — production multiplayer flow from lobby through drawing, guessing, presentation, and final gallery (`DrawNGuessMultiplayerView`).
 
+## Branch and release flow
+
+- `dev` is the GitHub default and integration branch. Routine work starts
+  there, and Railway's `dev` environment deploys it.
+- `main` is the reviewed production branch. Promote `dev` to `main` only after
+  Joe reviews and approves the candidate; Railway production deploys `main`.
+- The full operating contract is in [`AGENTS.md`](../AGENTS.md), with deployment
+  details in [`docs/DEPLOYMENT.md`](DEPLOYMENT.md).
+
 ## Important folders
 
 - `server/` — Express routes + Socket.IO handlers + in-memory room store.

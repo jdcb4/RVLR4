@@ -153,3 +153,24 @@ case.
   can't tell which mode they're in without opening the file.
 
 **Supersedes:** N/A — this is the first naming-conventions decision.
+
+---
+
+## 2026-08-09: Dev-to-main promotion pipeline
+
+**Decision:** Use `dev` as the GitHub default and integration branch, deploy it
+to Railway's `dev` environment, and deploy `main` only to Railway production
+after Joe reviews and explicitly approves a `dev` -> `main` promotion.
+
+**Reasoning:** Separating the continuously changing integration line from the
+production line provides a stable review target and makes the deployed branch
+for each Railway environment unambiguous. Running CI for both branches and for
+pull requests targeting either branch keeps the same deterministic gate at
+integration and promotion time.
+
+**Rejected alternatives:** Continuing to develop and deploy directly from
+`main` leaves no durable pre-production review line. Pointing both Railway
+environments at `main` makes the dev environment an exact duplicate rather
+than a promotion candidate.
+
+**Supersedes:** The previous implicit main-only working and deployment flow.

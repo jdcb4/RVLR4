@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.20.3 - 2026-08-09
+
+- **Delivery workflow:** Established `dev` as the default integration branch
+  and review candidate, with explicit owner approval required before promotion
+  to the production `main` branch.
+- **Deployments:** Mapped Railway `dev` to `dev` while retaining `main` as the
+  Railway production source, and documented the live configuration contract.
+- **CI:** Run the deterministic GitHub Actions gate for pushes and pull
+  requests involving either `dev` or `main`.
+
 ## 0.20.2 - 2026-06-14
 
 - **Branding:** Added RVLRY favicon and app icon assets for browser tabs,
