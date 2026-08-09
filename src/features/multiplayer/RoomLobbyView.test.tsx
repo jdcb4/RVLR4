@@ -128,9 +128,7 @@ describe("RoomLobbyView", () => {
           disconnectedAt: null,
         },
       ],
-      hatClueDrafts: {
-        me: ["", "", "", "", "", ""],
-      },
+      myHatClueDrafts: ["", "", "", "", "", ""],
     });
     const sync = buildRoomSync({
       gameKind: "hat",
@@ -177,7 +175,7 @@ describe("RoomLobbyView", () => {
     const hatLobby = buildLobby({
       teamCount: 2,
       teamNames: ["Red Team", "Blue Team"],
-      hatClueDrafts: { me: ["", "", "", "", "", ""] },
+      myHatClueDrafts: ["", "", "", "", "", ""],
     });
     const sync = buildRoomSync({
       gameKind: "hat",

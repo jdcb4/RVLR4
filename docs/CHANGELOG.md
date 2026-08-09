@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.21.5 - 2026-08-09
+
+- **Privacy:** Hat lobby sync now sends only the authenticated player's clue
+  drafts. Server-only WWW word reserves and Hat clue pools are scrubbed from
+  live viewer projections.
+- **Capacity:** DrawNGuess rejects a ninth lobby participant before creating or
+  broadcasting a player record.
+- **Tests:** Added table-driven viewer projection invariants covering every
+  game, role-specific secrets, all relevant stages, and reconnect lobby sync.
+
 ## 0.21.4 - 2026-08-09
 
 - **Security:** Upgraded vulnerable production dependencies and pinned patched

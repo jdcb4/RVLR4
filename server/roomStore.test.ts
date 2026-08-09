@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import { IMPOSTER_MAX_PLAYERS } from "@/config/imposterDefaults";
 import { MAX_PLAYERS_PER_TEAM } from "@/config/teamRoster";
+import { DRAWNGUESS_MAX_PLAYERS } from "@/domain/drawnguess/types";
 
 import { startHatMatch } from "./hatRuntime.ts";
 import { startImposterMatch } from "./imposterRuntime.ts";
@@ -179,6 +180,21 @@ describe("RoomStore.joinRoom", () => {
     const code = fillImposterRoom(store);
 
     expect(() => store.joinRoom({ code, name: "Overflow" })).toThrow(/Imposter room is full/);
+  });
+
+  it("accepts eight DrawNGuess players and rejects the ninth", () => {
+    const store = new RoomStore();
+    const { room } = store.createRoom({ gameKind: "drawnguess", hostName: "Host" });
+
+    for (let index = 1; index < DRAWNGUESS_MAX_PLAYERS; index += 1) {
+      store.joinRoom({ code: room.code, name: `Player ${index + 1}` });
+    }
+
+    expect(room.players.size).toBe(DRAWNGUESS_MAX_PLAYERS);
+    expect(() => store.joinRoom({ code: room.code, name: "Overflow" })).toThrow(
+      /DrawNGuess room is full/,
+    );
+    expect(room.players.size).toBe(DRAWNGUESS_MAX_PLAYERS);
   });
 
   it("rejects joins after the lobby has started", () => {

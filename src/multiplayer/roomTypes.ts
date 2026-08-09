@@ -26,7 +26,7 @@ export type LobbyDto = {
   readonly imposterImposterCount: number;
   readonly drawnguessSettings: DrawNGuessSettings;
   readonly players: readonly LobbyPlayerDto[];
-  readonly hatClueDrafts: Record<string, readonly string[]>;
+  readonly myHatClueDrafts: readonly string[];
   readonly startReadiness: LobbyStartReadiness;
 };
 

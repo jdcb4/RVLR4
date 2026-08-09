@@ -18,13 +18,11 @@ export function GameSpecificLobbySections({
   sync,
   lobby,
   isHost,
-  myPlayerId,
   emitWithAck,
 }: {
   readonly sync: RoomSyncPayload;
   readonly lobby: LobbyDto;
   readonly isHost: boolean;
-  readonly myPlayerId: string;
   readonly emitWithAck: EmitWithAck;
 }) {
   return (
@@ -32,7 +30,7 @@ export function GameSpecificLobbySections({
       {sync.gameKind === "hat" ? (
         <HatLobbyFamousFiguresSection
           clueSlots={GAME_DEFAULTS.cluesPerPlayer}
-          drafts={lobby.hatClueDrafts[myPlayerId] ?? []}
+          drafts={lobby.myHatClueDrafts}
           emitWithAck={emitWithAck}
         />
       ) : null}

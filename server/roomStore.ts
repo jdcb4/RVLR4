@@ -6,7 +6,11 @@ import {
   TEAM_COUNT_OPTIONS,
 } from "@/config/teamRoster";
 import { createDefaultDrawNGuessSettings } from "@/domain/drawnguess/engine";
-import type { DrawNGuessMatch, DrawNGuessSettings } from "@/domain/drawnguess/types";
+import {
+  DRAWNGUESS_MAX_PLAYERS,
+  type DrawNGuessMatch,
+  type DrawNGuessSettings,
+} from "@/domain/drawnguess/types";
 import type { HatGameSession } from "@/domain/hat-game/types";
 import { clampImposterCount, defaultImposterCount, shuffleWithRng } from "@/domain/imposter/round";
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
@@ -248,6 +252,9 @@ export class RoomStore {
       }
       player.teamIndex = null;
     } else if (room.gameKind === "drawnguess") {
+      if (room.players.size >= DRAWNGUESS_MAX_PLAYERS) {
+        throw new Error("This DrawNGuess room is full.");
+      }
       player.teamIndex = null;
     } else {
       player.teamIndex = pickSmallestTeamIndex(room);

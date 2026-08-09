@@ -20,6 +20,10 @@ function scrubActiveTurnForGuessers(turn: ActiveTurn): ActiveTurn {
   };
 }
 
+function scrubCluePool(session: HatGameSession): HatGameSession["cluePool"] {
+  return session.cluePool.map((clue) => ({ ...clue, text: MASK }));
+}
+
 export function classifyHatRole(session: HatGameSession, viewerPlayerId: string): HatPeerRole {
   const context = getHatGameContext(session);
   const viewer = session.players.find((player) => player.id === viewerPlayerId);
@@ -42,16 +46,21 @@ export function projectHatSessionForViewer(
   session: HatGameSession,
   viewerPlayerId: string,
 ): HatGameSession {
+  const projectedBase = {
+    ...session,
+    cluePool: session.stage === "results" ? session.cluePool : scrubCluePool(session),
+  };
+
   if (session.stage !== "turn" || !session.activeTurn) {
-    return session;
+    return projectedBase;
   }
 
   if (classifyHatRole(session, viewerPlayerId) === "describer") {
-    return session;
+    return projectedBase;
   }
 
   return {
-    ...session,
+    ...projectedBase,
     activeTurn: scrubActiveTurnForGuessers(session.activeTurn),
   };
 }

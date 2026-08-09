@@ -42,8 +42,8 @@ export type LobbyDto = {
   readonly imposterImposterCount: number;
   readonly drawnguessSettings: Room["drawnguessSettings"];
   readonly players: readonly LobbyPlayerDto[];
-  /** Hat only — each player's six famous-figure drafts. */
-  readonly hatClueDrafts: Record<string, readonly string[]>;
+  /** Hat only — the authenticated viewer's six famous-figure drafts. */
+  readonly myHatClueDrafts: readonly string[];
   readonly startReadiness: LobbyStartReadiness;
 };
 
@@ -101,7 +101,7 @@ function toLobbyPlayerDto(player: RoomPlayer): LobbyPlayerDto {
   };
 }
 
-function buildLobbyDto(room: Room): LobbyDto {
+function buildLobbyDto(room: Room, viewerPlayerId: string): LobbyDto {
   return {
     teamCount: room.teamCount,
     teamNames: room.teamNames,
@@ -112,7 +112,7 @@ function buildLobbyDto(room: Room): LobbyDto {
     imposterImposterCount: room.imposterImposterCount,
     drawnguessSettings: room.drawnguessSettings,
     players: lobbyPlayers(room),
-    hatClueDrafts: room.hatClueDrafts ?? {},
+    myHatClueDrafts: room.hatClueDrafts?.[viewerPlayerId] ?? [],
     startReadiness: getRoomLobbyStartReadiness(room),
   };
 }
@@ -124,7 +124,7 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     throw new Error("Player not part of this room.");
   }
 
-  const lobby = room.phase === "lobby" ? buildLobbyDto(room) : null;
+  const lobby = room.phase === "lobby" ? buildLobbyDto(room, viewerPlayerId) : null;
 
   let www: WhoWhatWhereSyncDto | null = null;
 

@@ -32,7 +32,7 @@ export function buildLobby(overrides: Partial<LobbyDto> = {}): LobbyDto {
         disconnectedAt: null,
       },
     ],
-    hatClueDrafts: {},
+    myHatClueDrafts: [],
     startReadiness: {
       canStart: false,
       blockers: [

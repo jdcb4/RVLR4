@@ -98,7 +98,6 @@ export function RoomLobbyView({
             emitWithAck={emitWithAck}
             isHost={isHost}
             lobby={lobby}
-            myPlayerId={myId}
             sync={sync}
           />
 

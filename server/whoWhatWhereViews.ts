@@ -46,23 +46,32 @@ function scrubActiveTurn(turn: ActiveTurn): ActiveTurn {
   };
 }
 
+function scrubWordReserves(match: MatchState): MatchState["wordReserves"] {
+  return Object.fromEntries(
+    Object.entries(match.wordReserves).map(([category, words]) => [
+      category,
+      words?.map((word) => scrubWordEntry(word)),
+    ]),
+  );
+}
+
 /**
  * Strips secret words for anyone who is not the active describer during a live turn.
  * Category + timers remain so teammates can follow along without peeking.
  */
 export function projectWhoWhatWhereMatch(match: MatchState, viewerPlayerId: string): MatchState {
+  const projectedBase = { ...match, wordReserves: scrubWordReserves(match) };
+
   if (match.stage !== "turn" || !match.activeTurn) {
-    return match;
+    return projectedBase;
   }
 
-  const role = classifyWhoWhatWhereRole(match, viewerPlayerId);
-
-  if (role === "describer") {
-    return match;
+  if (classifyWhoWhatWhereRole(match, viewerPlayerId) === "describer") {
+    return projectedBase;
   }
 
   return {
-    ...match,
+    ...projectedBase,
     activeTurn: scrubActiveTurn(match.activeTurn),
   };
 }
