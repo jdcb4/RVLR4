@@ -12,7 +12,16 @@ if (typeof packageJson.version !== "string" || packageJson.version.length === 0)
 const image = "jdcb4/jd-multiplayer-games";
 const result = spawnSync(
   "docker",
-  ["build", "-t", `${image}:${packageJson.version}`, "-t", `${image}:latest`, "."],
+  [
+    "build",
+    "-f",
+    "docker/Dockerfile",
+    "-t",
+    `${image}:${packageJson.version}`,
+    "-t",
+    `${image}:latest`,
+    ".",
+  ],
   { stdio: "inherit" },
 );
 

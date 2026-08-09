@@ -131,7 +131,7 @@ git diff --stat
 
 ## Working on Windows (PowerShell)
 
-The user's local dev environment is Windows with PowerShell (5.1 or 7). CI and Docker run Linux bash, so commands inside `Dockerfile`, `.github/workflows/*.yml`, and `package.json` scripts can stay bash-flavoured (npm/pnpm spawn cmd.exe on Windows for script execution, which supports `&&`).
+The user's local dev environment is Windows with PowerShell (5.1 or 7). CI and Docker run Linux bash, so commands inside `docker/Dockerfile`, `.github/workflows/*.yml`, and `package.json` scripts can stay bash-flavoured (npm/pnpm spawn cmd.exe on Windows for script execution, which supports `&&`).
 
 Rules for shell commands you run **interactively** during local development:
 

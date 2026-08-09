@@ -2,6 +2,12 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.1 - 2026-08-09
+
+- **Deployment:** Moved the optional manual Docker recipe to
+  `docker/Dockerfile` so Railway no longer auto-detects it ahead of Railpack;
+  `pnpm run docker:build` continues to build the portability image explicitly.
+
 ## 0.22.0 - 2026-08-09
 
 - **Production security:** Added Helmet with a same-origin SPA CSP, disabled

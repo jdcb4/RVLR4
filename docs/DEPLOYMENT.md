@@ -54,8 +54,8 @@ use a manual CLI deploy as the normal release path.
 
 [`railway.json`](../railway.json) is the repository-owned deployment contract:
 
-- builder: **Railpack**, explicitly selected so Railway does not auto-detect the
-  retained root `Dockerfile`;
+- builder: **Railpack**; the optional recipe lives at `docker/Dockerfile` so
+  Railway cannot auto-detect it as the deployment builder;
 - build command: `pnpm run build`;
 - start command: `pnpm run start`.
 
@@ -69,7 +69,7 @@ For a new or repaired Railway service:
 
 1. Select this GitHub repository as the service source.
 2. Map the service to the correct branch and environment using the table above.
-3. Leave the build path on Railpack; do not select the Dockerfile builder.
+3. Leave the build path on Railpack; do not set a custom Dockerfile path.
 4. Expose Railway's assigned HTTP port through `PORT` (the server already reads
    it and binds to `0.0.0.0`).
 5. Generate or retain the public domain, then set `CLIENT_ORIGIN` to that HTTPS
@@ -126,6 +126,10 @@ active:
 ```bash
 pnpm run docker:build
 ```
+
+The command explicitly uses `docker/Dockerfile`. Keep optional Docker recipes
+outside the repository root because Railway always auto-detects a root file
+named `Dockerfile` before invoking Railpack.
 
 The cross-platform script tags the local image as:
 

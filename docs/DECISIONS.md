@@ -202,21 +202,20 @@ curated static game content.
 ## 2026-08-09: Railway is the primary deployment path
 
 **Decision:** Deploy RVLRY from its GitHub repository to Railway using Railpack.
-Keep `railway.json` as the repository-owned build/start contract and explicitly
-select Railpack so the retained root Dockerfile is not auto-detected for Railway
-deployments. Keep the Dockerfile and `pnpm run docker:build` as manual
-portability/self-hosting options only.
+Keep `railway.json` as the repository-owned build/start contract. Retain the
+manual portability recipe at `docker/Dockerfile`, outside Railway's root-level
+Dockerfile auto-detection, and invoke it only through `pnpm run docker:build`.
 
 **Reasoning:** GitHub branch deployments already provide the development and
-production promotion flow. Making the builder explicit prevents Railway from
-silently switching to the Dockerfile, while retaining a portable image option
-without spending time or compute on routine image builds and publishing.
+production promotion flow. Railway always auto-detects a root file named
+`Dockerfile`, even when config-as-code selects Railpack, so the manual recipe
+must live at a non-default path. This retains a portable image option without
+spending routine Railway compute on that recipe.
 
 **Rejected alternatives:** Removing Docker entirely would discard a useful
-self-hosting escape hatch. Allowing Railway to auto-detect the root Dockerfile
-would make Docker the effective deployment builder despite the Railway-first
-policy. Building or publishing images on every commit duplicates Railway's
-source-based build work.
+self-hosting escape hatch. Keeping the recipe at the repository root makes
+Docker the effective Railway builder. Building or publishing images on every
+commit duplicates Railway's source-based build work.
 
 **Supersedes:** Earlier guidance that treated Docker and Railway as equal deploy
 targets or described Docker as the recommended self-hosted default.

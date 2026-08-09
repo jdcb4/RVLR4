@@ -74,7 +74,7 @@ These may report false positives for framework entrypoints, plugin-loaded files,
 
 | Change area                                                     | Command / follow-up                                            |
 | --------------------------------------------------------------- | -------------------------------------------------------------- |
-| Explicit Docker work (`Dockerfile`, image runtime or packaging) | `pnpm run docker:build`                                        |
+| Explicit Docker work (`docker/Dockerfile`, image runtime or packaging) | `pnpm run docker:build`                                 |
 | Socket.IO / room sync / multiplayer UX                          | Manual matrix in [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) |
 
 Routine Railway deployments use the GitHub source integration and Railpack.
