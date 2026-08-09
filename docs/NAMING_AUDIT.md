@@ -56,11 +56,11 @@ export type GameKind = "whowhatwhere" | "hat" | "imposter";
 
 Code symbols should follow this in their case-folded forms:
 
-| Game | Literal | camelCase | PascalCase | Folder |
-|---|---|---|---|---|
+| Game           | Literal          | camelCase      | PascalCase     | Folder          |
+| -------------- | ---------------- | -------------- | -------------- | --------------- |
 | Who What Where | `"whowhatwhere"` | `whoWhatWhere` | `WhoWhatWhere` | `whowhatwhere/` |
-| Hat Game | `"hat"` | `hat` | `Hat` | `hat-game/` |
-| Imposter | `"imposter"` | `imposter` | `Imposter` | `imposter/` |
+| Hat Game       | `"hat"`          | `hat`          | `Hat`          | `hat-game/`     |
+| Imposter       | `"imposter"`     | `imposter`     | `Imposter`     | `imposter/`     |
 
 **Rationale for Hat short form:** the wire-format literal is `"hat"`, the
 shortest unambiguous tag within this app. Using `HatGame*` in symbols is
@@ -83,7 +83,7 @@ defensible code conventions:
 
 - **Option M-A (recommended, minimal churn):** code keeps the technical
   term **`Multiplayer*`** for the networked subsystem (Socket.IO, rooms,
-  sync), since that *is* what the implementation does. Treat
+  sync), since that _is_ what the implementation does. Treat
   "Multi-Device" as the UX-only marketing label. Pass-and-Play has no code
   prefix today and stays that way — there's no networked counterpart.
 - **Option M-B (more churn, perfect mode-symmetry):** rename every
@@ -102,18 +102,18 @@ strings (already done in 0.15.1–0.15.6). The docstring on
 
 Already consistent in 95% of the codebase — see §4. Adopt as policy:
 
-| Concept | Canonical verb | Example |
-|---|---|---|
-| Build something pure | `build*` | `buildGameLandingScreen` |
-| Construct a domain entity | `create*` | `createMatch`, `createHatGameSession` |
-| Initiate a runtime process | `start*` | `startWhoWhatWhereMatch`, `startTurn`, `startRoomIdleSweeper` |
-| Apply an action to state | `apply*` | `applyWhoWhatWhereCorrect` |
-| Read from storage | `load*` | `loadServerEnv`, `loadSession` |
-| Persist to storage | `save*` / `persist*` | `saveSetup`, `persistSession` |
-| Wipe storage | `clear*` | `clearSession` |
-| Get a derived value | `get*` / `format*` / `compute*` | `getActiveContext`, `formatSavedAt`, `computeResumeEligible` |
-| React hook | `use*` | `useRoomChannel` |
-| Type-guard predicate | `is*` / `can*` / `should*` | `isStoragePayload`, `canQueueSkipped` |
+| Concept                    | Canonical verb                  | Example                                                       |
+| -------------------------- | ------------------------------- | ------------------------------------------------------------- |
+| Build something pure       | `build*`                        | `buildGameLandingScreen`                                      |
+| Construct a domain entity  | `create*`                       | `createMatch`, `createHatGameSession`                         |
+| Initiate a runtime process | `start*`                        | `startWhoWhatWhereMatch`, `startTurn`, `startRoomIdleSweeper` |
+| Apply an action to state   | `apply*`                        | `applyWhoWhatWhereCorrect`                                    |
+| Read from storage          | `load*`                         | `loadServerEnv`, `loadSession`                                |
+| Persist to storage         | `save*` / `persist*`            | `saveSetup`, `persistSession`                                 |
+| Wipe storage               | `clear*`                        | `clearSession`                                                |
+| Get a derived value        | `get*` / `format*` / `compute*` | `getActiveContext`, `formatSavedAt`, `computeResumeEligible`  |
+| React hook                 | `use*`                          | `useRoomChannel`                                              |
+| Type-guard predicate       | `is*` / `can*` / `should*`      | `isStoragePayload`, `canQueueSkipped`                         |
 
 **Banned synonyms (zero current occurrences — keep it that way):**
 `begin*`, `commence*`, `launch*`, `initiate*` (use `start*`); `make*` /
@@ -122,21 +122,21 @@ Already consistent in 95% of the codebase — see §4. Adopt as policy:
 
 ### 2.4 Cross-game parallel actions
 
-When two games expose the *same* domain action, the verb and object words
+When two games expose the _same_ domain action, the verb and object words
 after the game tag must match:
 
 ```
 apply<Game><Verb><Object>
 ```
 
-| Concept | Hat | WhoWhatWhere | Status |
-|---|---|---|---|
-| Mark current word correct | `applyHatCorrect` | `applyWhoWhatWhereCorrect` | ❌ Hat has extra `Mark` |
-| Skip the current word/clue | `applyHatSkip` | `applyWhoWhatWhereSkip` | ❌ Hat has extra `Clue` |
-| Return a skipped word | `applyHatReturnSkipped` | `applyWhoWhatWhereReturnSkipped` | ✅ |
-| Start the turn | `applyHatStartTurn` | `applyWhoWhatWhereStartTurn` | ✅ |
-| End the turn | `applyHatEndTurn` | `applyWhoWhatWhereEndTurn` | ✅ |
-| Show final scores | `applyHatShowFinalScores` | `applyWhoWhatWhereShowFinalScores` | ❌ different action words |
+| Concept                    | Hat                       | WhoWhatWhere                       | Status                    |
+| -------------------------- | ------------------------- | ---------------------------------- | ------------------------- |
+| Mark current word correct  | `applyHatCorrect`         | `applyWhoWhatWhereCorrect`         | ❌ Hat has extra `Mark`   |
+| Skip the current word/clue | `applyHatSkip`            | `applyWhoWhatWhereSkip`            | ❌ Hat has extra `Clue`   |
+| Return a skipped word      | `applyHatReturnSkipped`   | `applyWhoWhatWhereReturnSkipped`   | ✅                        |
+| Start the turn             | `applyHatStartTurn`       | `applyWhoWhatWhereStartTurn`       | ✅                        |
+| End the turn               | `applyHatEndTurn`         | `applyWhoWhatWhereEndTurn`         | ✅                        |
+| Show final scores          | `applyHatShowFinalScores` | `applyWhoWhatWhereShowFinalScores` | ❌ different action words |
 
 See §3.2 for the proposed renames.
 
@@ -151,12 +151,12 @@ See §3.2 for the proposed renames.
 
 ### 2.6 File names
 
-| Kind | Case | Examples |
-|---|---|---|
-| React component (one default-ish export) | `PascalCase.tsx` | `HatMultiplayerView.tsx`, `RoomPage.tsx` |
-| Screen *builder* function (returns `ScreenModel`) | `camelCase.tsx` | `hatLandingScreen.tsx`, `imposterResultsScreen.tsx` |
-| Hooks, utilities, types | `camelCase.ts` | `useHatSingleplayerApp.ts`, `viewModel.ts` |
-| Folders | `kebab-case` | `hat-game/`, `team-setup/`, `final-results/` |
+| Kind                                              | Case             | Examples                                            |
+| ------------------------------------------------- | ---------------- | --------------------------------------------------- |
+| React component (one default-ish export)          | `PascalCase.tsx` | `HatMultiplayerView.tsx`, `RoomPage.tsx`            |
+| Screen _builder_ function (returns `ScreenModel`) | `camelCase.tsx`  | `hatLandingScreen.tsx`, `imposterResultsScreen.tsx` |
+| Hooks, utilities, types                           | `camelCase.ts`   | `useHatSingleplayerApp.ts`, `viewModel.ts`          |
+| Folders                                           | `kebab-case`     | `hat-game/`, `team-setup/`, `final-results/`        |
 
 Today's data: 55 PascalCase .tsx (✅), 26 camelCase .tsx (mostly screen
 builders ✅), 80 camelCase .ts (✅), 0 PascalCase .ts (✅). The
@@ -190,19 +190,19 @@ check.
 
 #### Hat — `Hat*` vs `HatGame*` (29 occurrences total)
 
-| Symbol | Current | Recommended | Why |
-|---|---|---|---|
-| `HatSingleplayerApp` (component) | mixed | rename to `HatApp` | parallel to `WhoWhatWhereSingleplayerApp`, `ImposterSingleplayerApp` |
-| `HatSingleplayerWebScreens` (file + export) | mixed | rename to `HatWebScreens` | parallel to `ImposterSingleplayerWebScreens` |
-| `HatGameSession` (type) | mixed | **keep** | "session" is the domain concept; `HatGame` here reads naturally |
-| `HatGameAction` (type) | mixed | **keep** | same |
-| `HatGameConfig` (type) | mixed | **keep** | same |
-| `HatGamePhaseMeta` (type) | mixed | **keep** | same |
-| `useHatSingleplayerApp` (hook) | mixed | rename to `useHatApp` | parallel to `useImposterSingleplayerApp` |
-| `hatActionSound` (file) | mixed | keep file, but tighten symbol names |
-| `hatSingleplayerAppTypes` (file) | mixed | rename to `hatAppTypes` | parallel to `imposterSingleplayerAppTypes` |
-| `hatDefaults` (file) | mixed | rename to `hatDefaults` | parallel to `imposterDefaults` |
-| `hatSound`, `hatStorage` (files) | mixed | rename to `hatSound`, `hatStorage` | parallel to `imposterStorage`… wait |
+| Symbol                                      | Current | Recommended                         | Why                                                                  |
+| ------------------------------------------- | ------- | ----------------------------------- | -------------------------------------------------------------------- |
+| `HatSingleplayerApp` (component)            | mixed   | rename to `HatApp`                  | parallel to `WhoWhatWhereSingleplayerApp`, `ImposterSingleplayerApp` |
+| `HatSingleplayerWebScreens` (file + export) | mixed   | rename to `HatWebScreens`           | parallel to `ImposterSingleplayerWebScreens`                         |
+| `HatGameSession` (type)                     | mixed   | **keep**                            | "session" is the domain concept; `HatGame` here reads naturally      |
+| `HatGameAction` (type)                      | mixed   | **keep**                            | same                                                                 |
+| `HatGameConfig` (type)                      | mixed   | **keep**                            | same                                                                 |
+| `HatGamePhaseMeta` (type)                   | mixed   | **keep**                            | same                                                                 |
+| `useHatSingleplayerApp` (hook)              | mixed   | rename to `useHatApp`               | parallel to `useImposterSingleplayerApp`                             |
+| `hatActionSound` (file)                     | mixed   | keep file, but tighten symbol names |
+| `hatSingleplayerAppTypes` (file)            | mixed   | rename to `hatAppTypes`             | parallel to `imposterSingleplayerAppTypes`                           |
+| `hatDefaults` (file)                        | mixed   | rename to `hatDefaults`             | parallel to `imposterDefaults`                                       |
+| `hatSound`, `hatStorage` (files)            | mixed   | rename to `hatSound`, `hatStorage`  | parallel to `imposterStorage`… wait                                  |
 
 **Edge case: `imposterStorage.ts` vs `hatStorage.ts`.** Both
 currently include `Game`. Decide one: drop `Game` from both →
@@ -212,19 +212,19 @@ currently include `Game`. Decide one: drop `Game` from both →
 
 8 short-form occurrences to rename:
 
-| Current | Recommended |
-|---|---|
-| `WhoWhatWhereLandingScreen` (component) | `WhoWhatWhereLandingScreen` |
-| `WhoWhatWhereReviewTeamsScreen` (component) | `WhoWhatWhereReviewTeamsScreen` |
-| `WhoWhatWhereLastTurnCard` (component) | `WhoWhatWhereLastTurnCard` |
-| `whoWhatWhereGallerySettings`, `whoWhatWhereGalleryTeamSetups`, `wwwGalleryMatch*` (5 consts in `whoWhatWhereGallerySessions.ts`) | `whoWhatWhereGallery*` |
-| `formatWhoWhatWhereTurnClock` (fn) | `formatWhoWhatWhereTurnClock` |
-| `hostPatchWhoWhatWhereSettings` (fn) | `hostPatchWhoWhatWhereSettings` |
-| `mapFinalResultsFromWhoWhatWhere` (fn) | `mapFinalResultsFromWhoWhatWhere` |
-| `viewerWhoWhatWhereTeamIsWinner` (fn) | `viewerWhoWhatWhereTeamIsWinner` |
-| `reviewDisplayRowsFromWhoWhatWhere` (fn) | `reviewDisplayRowsFromWhoWhatWhere` |
-| `whoWhatWhereGallerySessions.ts` (file) | `whoWhatWhereGallerySessions.ts` |
-| `server/whoWhatWhereRuntime.ts`, `whoWhatWhereTicker.ts`, `whoWhatWhereViews.ts` (files) | `whoWhatWhereRuntime.ts`, etc. |
+| Current                                                                                                                           | Recommended                         |
+| --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `WhoWhatWhereLandingScreen` (component)                                                                                           | `WhoWhatWhereLandingScreen`         |
+| `WhoWhatWhereReviewTeamsScreen` (component)                                                                                       | `WhoWhatWhereReviewTeamsScreen`     |
+| `WhoWhatWhereLastTurnCard` (component)                                                                                            | `WhoWhatWhereLastTurnCard`          |
+| `whoWhatWhereGallerySettings`, `whoWhatWhereGalleryTeamSetups`, `wwwGalleryMatch*` (5 consts in `whoWhatWhereGallerySessions.ts`) | `whoWhatWhereGallery*`              |
+| `formatWhoWhatWhereTurnClock` (fn)                                                                                                | `formatWhoWhatWhereTurnClock`       |
+| `hostPatchWhoWhatWhereSettings` (fn)                                                                                              | `hostPatchWhoWhatWhereSettings`     |
+| `mapFinalResultsFromWhoWhatWhere` (fn)                                                                                            | `mapFinalResultsFromWhoWhatWhere`   |
+| `viewerWhoWhatWhereTeamIsWinner` (fn)                                                                                             | `viewerWhoWhatWhereTeamIsWinner`    |
+| `reviewDisplayRowsFromWhoWhatWhere` (fn)                                                                                          | `reviewDisplayRowsFromWhoWhatWhere` |
+| `whoWhatWhereGallerySessions.ts` (file)                                                                                           | `whoWhatWhereGallerySessions.ts`    |
+| `server/whoWhatWhereRuntime.ts`, `whoWhatWhereTicker.ts`, `whoWhatWhereViews.ts` (files)                                          | `whoWhatWhereRuntime.ts`, etc.      |
 
 #### Imposter — already canonical ✅
 
@@ -232,10 +232,10 @@ No renames needed.
 
 ### 3.2 Cross-game parallel-action mismatches (the original concern)
 
-| Hat name | WWW name | Concept | Fix |
-|---|---|---|---|
-| `applyHatCorrect` | `applyWhoWhatWhereCorrect` | mark current correct | **Pick `Correct`** — rename Hat to `applyHatCorrect` (drop `Mark`) |
-| `applyHatSkip` | `applyWhoWhatWhereSkip` | skip current | **Pick `Skip`** — rename Hat to `applyHatSkip` (drop `Clue`) |
+| Hat name                  | WWW name                           | Concept                     | Fix                                                                                                                                                                                                                                          |
+| ------------------------- | ---------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `applyHatCorrect`         | `applyWhoWhatWhereCorrect`         | mark current correct        | **Pick `Correct`** — rename Hat to `applyHatCorrect` (drop `Mark`)                                                                                                                                                                           |
+| `applyHatSkip`            | `applyWhoWhatWhereSkip`            | skip current                | **Pick `Skip`** — rename Hat to `applyHatSkip` (drop `Clue`)                                                                                                                                                                                 |
 | `applyHatShowFinalScores` | `applyWhoWhatWhereShowFinalScores` | move to final-results stage | **Pick a single verb-noun.** Recommend `applyHatShowFinalScores` + `applyWhoWhatWhereShowFinalScores` so both express "transition the match to the final-scores stage." (`ViewResults` reads as a UI action; `FinalScores` is a stage noun.) |
 
 These also affect socket event names (`hat:markCorrect`, `hat:skipClue`,
@@ -246,12 +246,12 @@ to match. See §5 for sequencing.
 
 ### 3.3 Other small mismatches
 
-| Current | Recommended |
-|---|---|
-| `useWhoWhatWhereSingleplayerApp` | `useWhoWhatWhereApp` (parallel to `useHatSingleplayerApp` / `useImposterSingleplayerApp`) |
-| `hatSingleplayerAppTypes.ts` | `hatAppTypes.ts` (drop `Game`, match `imposterSingleplayerAppTypes.ts`) |
-| `LegacyHubPage` already renamed to `PassNPlayHubPage` in 0.15.6 ✅ | — |
-| `mpDebug` (server) / `MULTIPLAYER_DEBUG` (env var) | **Keep.** `MULTIPLAYER_DEBUG` is wire-facing config; renaming touches deploy docs. |
+| Current                                                            | Recommended                                                                               |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `useWhoWhatWhereSingleplayerApp`                                   | `useWhoWhatWhereApp` (parallel to `useHatSingleplayerApp` / `useImposterSingleplayerApp`) |
+| `hatSingleplayerAppTypes.ts`                                       | `hatAppTypes.ts` (drop `Game`, match `imposterSingleplayerAppTypes.ts`)                   |
+| `LegacyHubPage` already renamed to `PassNPlayHubPage` in 0.15.6 ✅ | —                                                                                         |
+| `mpDebug` (server) / `MULTIPLAYER_DEBUG` (env var)                 | **Keep.** `MULTIPLAYER_DEBUG` is wire-facing config; renaming touches deploy docs.        |
 
 ---
 

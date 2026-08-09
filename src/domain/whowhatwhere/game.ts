@@ -1,9 +1,5 @@
 import { buildLeaderboardRowsFromTeams } from "../shared/teamLeaderboard";
-import {
-  normalizeName,
-  TEAM_NAME_LIMIT,
-  validateSetup,
-} from "./setup";
+import { normalizeName, TEAM_NAME_LIMIT, validateSetup } from "./setup";
 import type {
   ActiveContext,
   ActiveTurn,
@@ -20,10 +16,7 @@ import type {
 } from "./types";
 import { buildTurnDeck } from "./words";
 
-export function createMatch(
-  teams: readonly TeamSetup[],
-  settings: GameSettings,
-): MatchState {
+export function createMatch(teams: readonly TeamSetup[], settings: GameSettings): MatchState {
   const errors = validateSetup(teams, settings);
 
   if (errors.length > 0) {
@@ -37,15 +30,11 @@ export function createMatch(
 
     for (const [playerIndex, player] of team.players.entries()) {
       // Prefer stable IDs from setup (multi-device rooms pass lobby UUIDs through TeamSetup).
-      const playerId =
-        player.id.trim().length > 0 ? player.id.trim() : `player-${seat + 1}`;
+      const playerId = player.id.trim().length > 0 ? player.id.trim() : `player-${seat + 1}`;
       players.push({
         id: playerId,
         seat,
-        name: normalizeName(
-          player.name,
-          `Player ${teamIndex + 1}.${playerIndex + 1}`,
-        ),
+        name: normalizeName(player.name, `Player ${teamIndex + 1}.${playerIndex + 1}`),
         teamId,
         avatarId: player.avatarId,
       });
@@ -115,9 +104,7 @@ export function startTurn(
   }
 
   const startedAt = now.toISOString();
-  const endsAt = new Date(
-    now.getTime() + match.settings.turnDurationSeconds * 1000,
-  ).toISOString();
+  const endsAt = new Date(now.getTime() + match.settings.turnDurationSeconds * 1000).toISOString();
 
   return {
     ...match,
@@ -161,10 +148,7 @@ export function getCurrentWord(activeTurn: ActiveTurn | null) {
 }
 
 export function getSecondsLeft(activeTurn: ActiveTurn, now = new Date()) {
-  return Math.max(
-    0,
-    Math.ceil((Date.parse(activeTurn.endsAt) - now.getTime()) / 1000),
-  );
+  return Math.max(0, Math.ceil((Date.parse(activeTurn.endsAt) - now.getTime()) / 1000));
 }
 
 export function isTurnExpired(activeTurn: ActiveTurn, now = new Date()) {
@@ -172,9 +156,7 @@ export function isTurnExpired(activeTurn: ActiveTurn, now = new Date()) {
 }
 
 export function canQueueSkipped(activeTurn: ActiveTurn) {
-  return (
-    activeTurn.skipLimit < 0 || activeTurn.skippedWords.length < activeTurn.skipLimit
-  );
+  return activeTurn.skipLimit < 0 || activeTurn.skippedWords.length < activeTurn.skipLimit;
 }
 
 export function correctWord(match: MatchState, now = new Date()): MatchState {
@@ -198,14 +180,10 @@ export function correctWord(match: MatchState, now = new Date()): MatchState {
     correctCount: activeTurn.correctCount + 1,
     wordHistory: [...activeTurn.wordHistory, historyEntry],
     currentSkippedWord:
-      activeTurn.currentWordSource === "skipped"
-        ? null
-        : activeTurn.currentSkippedWord,
+      activeTurn.currentWordSource === "skipped" ? null : activeTurn.currentSkippedWord,
     currentWordSource: "main",
     queueIndex:
-      activeTurn.currentWordSource === "main"
-        ? activeTurn.queueIndex + 1
-        : activeTurn.queueIndex,
+      activeTurn.currentWordSource === "main" ? activeTurn.queueIndex + 1 : activeTurn.queueIndex,
     currentWordHintRevealed: false,
   };
 
@@ -267,10 +245,7 @@ export function skipWord(match: MatchState, now = new Date()): MatchState {
   });
 }
 
-export function returnSkippedWord(
-  match: MatchState,
-  skippedWordId?: string,
-): MatchState {
+export function returnSkippedWord(match: MatchState, skippedWordId?: string): MatchState {
   if (!match.activeTurn || match.stage !== "turn") {
     return match;
   }
@@ -280,19 +255,15 @@ export function returnSkippedWord(
     ...(activeTurn.currentSkippedWord ? [activeTurn.currentSkippedWord] : []),
     ...activeTurn.skippedWords,
   ];
-  const target =
-    available.find((item) => item.id === skippedWordId) ?? available[0] ?? null;
+  const target = available.find((item) => item.id === skippedWordId) ?? available[0] ?? null;
 
   if (!target) {
     return match;
   }
 
-  const waitingWithoutTarget = activeTurn.skippedWords.filter(
-    (item) => item.id !== target.id,
-  );
+  const waitingWithoutTarget = activeTurn.skippedWords.filter((item) => item.id !== target.id);
   const shouldReturnCurrent =
-    activeTurn.currentSkippedWord &&
-    activeTurn.currentSkippedWord.id !== target.id;
+    activeTurn.currentSkippedWord && activeTurn.currentSkippedWord.id !== target.id;
 
   return {
     ...match,
@@ -360,14 +331,12 @@ export function endTurn(match: MatchState): MatchState {
     scoreDelta: activeTurn.score,
     correctCount: activeTurn.correctCount,
     skippedCount: activeTurn.skippedCount,
-    pendingSkippedCount:
-      activeTurn.skippedWords.length + (activeTurn.currentSkippedWord ? 1 : 0),
+    pendingSkippedCount: activeTurn.skippedWords.length + (activeTurn.currentSkippedWord ? 1 : 0),
     wordHistory: activeTurn.wordHistory,
     finalWord,
   };
   const turnSummaries = [...match.turnSummaries, lastTurnSummary];
-  const nextDescriberIndex =
-    ((match.describerIndexes[team.id] ?? 0) + 1) % teamPlayers.length;
+  const nextDescriberIndex = ((match.describerIndexes[team.id] ?? 0) + 1) % teamPlayers.length;
   let nextTeamIndex = match.teamIndex + 1;
   let nextRoundNumber = match.roundNumber;
 
@@ -434,9 +403,7 @@ export function showResults(match: MatchState): MatchState {
 }
 
 function buildBestTurn(turnSummaries: readonly LastTurnSummary[]) {
-  const bestTurn = [...turnSummaries].sort(
-    (left, right) => right.scoreDelta - left.scoreDelta,
-  )[0];
+  const bestTurn = [...turnSummaries].sort((left, right) => right.scoreDelta - left.scoreDelta)[0];
 
   return bestTurn
     ? {

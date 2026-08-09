@@ -1,10 +1,6 @@
 import { Link } from "react-router-dom";
 
-import {
-  IconDisguise,
-  IconQuestionMark,
-  IconTopHat,
-} from "@/components/icons";
+import { IconDisguise, IconQuestionMark, IconTopHat } from "@/components/icons";
 import { LandingAttribution } from "@/components/LandingAttribution";
 import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 
@@ -20,16 +16,14 @@ const games = [
   {
     id: "hat",
     title: "Hat Game",
-    description:
-      "Celebrity-style clues in three phases using your own figure list.",
+    description: "Celebrity-style clues in three phases using your own figure list.",
     to: "/games/hat",
     icon: IconTopHat,
   },
   {
     id: "imposter",
     title: "Imposter",
-    description:
-      "Hidden roles and one secret word - pass the phone for private reveals.",
+    description: "Hidden roles and one secret word - pass the phone for private reveals.",
     to: "/games/imposter",
     icon: IconDisguise,
   },
@@ -43,7 +37,8 @@ export function PassNPlayHubPage() {
         <header className="py-6 text-center">
           <h1 className="text-typ-display font-bold tracking-tight text-primary">RVLRY</h1>
           <p className="mx-auto mt-2 max-w-prose text-typ-body-relaxed text-muted-foreground">
-            <span className="font-semibold text-foreground">Pass-and-Play mode</span> — share a phone
+            <span className="font-semibold text-foreground">Pass-and-Play mode</span> — share a
+            phone
           </p>
         </header>
 

@@ -23,20 +23,13 @@ export function GamePanel({
 }) {
   return (
     <div
-      className={cn(
-        "space-y-3 rounded-xl border border-border bg-card p-4 shadow-sm",
-        className,
-      )}
+      className={cn("space-y-3 rounded-xl border border-border bg-card p-4 shadow-sm", className)}
     >
       <div>
-        {eyebrow ? (
-          <p className={cn(typography.ui, "text-muted-foreground")}>{eyebrow}</p>
-        ) : null}
+        {eyebrow ? <p className={cn(typography.ui, "text-muted-foreground")}>{eyebrow}</p> : null}
         <h2 className={cn(typography.panelTitle, "font-semibold")}>{title}</h2>
         {subtitle ? (
-          <p className={cn(typography.ui, "mt-1 text-muted-foreground")}>
-            {subtitle}
-          </p>
+          <p className={cn(typography.ui, "mt-1 text-muted-foreground")}>{subtitle}</p>
         ) : null}
       </div>
       <div className="grid gap-4">{children}</div>

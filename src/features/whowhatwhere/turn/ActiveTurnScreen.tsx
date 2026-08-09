@@ -7,11 +7,7 @@ import { Metric } from "@/components/Metric";
 import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
 import { Button } from "@/components/ui/button";
 import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
-import {
-  getActiveContext,
-  getCurrentWord,
-  getSecondsLeft,
-} from "@/domain/whowhatwhere/game";
+import { getActiveContext, getCurrentWord, getSecondsLeft } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
@@ -72,9 +68,7 @@ export function ActiveTurnScreen({
           name={context.describer.name}
         />
 
-        <TurnPlayHighlight>
-          {currentWord?.word ?? "No word"}
-        </TurnPlayHighlight>
+        <TurnPlayHighlight>{currentWord?.word ?? "No word"}</TurnPlayHighlight>
 
         {canShowHintButton && (
           <div className="flex flex-col items-center gap-2">
@@ -106,20 +100,15 @@ export function ActiveTurnScreen({
           <Metric label="Time left" value={formatWhoWhatWhereTurnClock(secondsLeft)} />
           <Metric label="Category" value={activeTurn.category} />
           <Metric label="Score" value={String(activeTurn.score)} />
-          <Metric
-            label="Skipped waiting"
-            value={String(activeTurn.skippedWords.length)}
-          />
+          <Metric label="Skipped waiting" value={String(activeTurn.skippedWords.length)} />
         </div>
 
         <p className="text-typ-ui text-muted-foreground">
           Keep going until time runs out or tap{" "}
-          <span className="font-medium text-foreground">End turn</span> in the
-          header.
+          <span className="font-medium text-foreground">End turn</span> in the header.
         </p>
 
-        {(activeTurn.currentWordSource === "skipped" ||
-          activeTurn.skippedWords.length > 0) && (
+        {(activeTurn.currentWordSource === "skipped" || activeTurn.skippedWords.length > 0) && (
           <div className="rounded-lg border border-dashed border-border p-3">
             <p className="mb-2 font-semibold text-typ-ui">
               {activeTurn.currentWordSource === "skipped"

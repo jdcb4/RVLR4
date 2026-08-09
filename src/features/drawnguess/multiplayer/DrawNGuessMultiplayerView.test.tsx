@@ -156,10 +156,7 @@ describe("DrawNGuessMultiplayerView", () => {
 
     expect(screen.getByText("Page 3 of 3")).toBeInTheDocument();
     expect(screen.getByText("Beach tower")).toBeInTheDocument();
-    expect(emitWithAck).not.toHaveBeenCalledWith(
-      "drawnguess:openRevealPacket",
-      expect.anything(),
-    );
+    expect(emitWithAck).not.toHaveBeenCalledWith("drawnguess:openRevealPacket", expect.anything());
   });
 
   it("shows each player only their own presentation book with local page controls", async () => {
@@ -188,10 +185,7 @@ describe("DrawNGuessMultiplayerView", () => {
     await user.click(screen.getByRole("button", { name: /Next page/i }));
 
     expect(screen.getByText("Dinner")).toBeInTheDocument();
-    expect(emitWithAck).not.toHaveBeenCalledWith(
-      "drawnguess:advanceReveal",
-      expect.anything(),
-    );
+    expect(emitWithAck).not.toHaveBeenCalledWith("drawnguess:advanceReveal", expect.anything());
   });
 
   it("lets a player move locally from presentation to the final gallery", async () => {

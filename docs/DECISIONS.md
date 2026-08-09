@@ -141,15 +141,15 @@ case.
 
 **Rejected alternatives:**
 
-- *Canonical `HatGame*` everywhere* — would force renaming the wire-format
-  literal `"hat"` → `"hatGame"`, breaking the server↔client contract for
+- _Canonical `HatGame_`everywhere* — would force renaming the wire-format
+literal`"hat"`→`"hatGame"`, breaking the server↔client contract for
   no clarity gain.
-- *Rename `Multiplayer*` → `MultiDevice*` in code* — touches `~11`
+- _Rename `Multiplayer_`→`MultiDevice*` in code* — touches `~11`
   symbols, `src/multiplayer/` folder, and the `MULTIPLAYER_DEBUG` env
   var; the wire-facing env var rename is deploy-affecting. No semantic
   gain.
-- *No `Singleplayer*` modifier, just bare names on the older side* — keeps
-  the existing asymmetry; agents reading `WhoWhatWhereSingleplayerApp` in isolation
+- _No `Singleplayer_`modifier, just bare names on the older side* — keeps
+the existing asymmetry; agents reading`WhoWhatWhereSingleplayerApp` in isolation
   can't tell which mode they're in without opening the file.
 
 **Supersedes:** N/A — this is the first naming-conventions decision.

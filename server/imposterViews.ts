@@ -8,10 +8,7 @@ export type ImposterSyncDto = {
   readonly revealSubjectIsImposter: boolean;
 };
 
-function scrubRoundForViewer(
-  snapshot: ImposterSnapshot,
-  viewerId: string,
-): ImposterSnapshot {
+function scrubRoundForViewer(snapshot: ImposterSnapshot, viewerId: string): ImposterSnapshot {
   const round = snapshot.round;
 
   if (!round) {
@@ -38,8 +35,7 @@ function scrubRoundForViewer(
      */
     if (!viewerIsImposter && roleSeen) {
       const onRevealMemoryCard = snapshot.step === "reveal" && !revealDone;
-      const postRevealGuideOrPlay =
-        revealDone && snapshot.step !== "results";
+      const postRevealGuideOrPlay = revealDone && snapshot.step !== "results";
 
       if (onRevealMemoryCard || postRevealGuideOrPlay) {
         secretWordOut = round.secretWord;

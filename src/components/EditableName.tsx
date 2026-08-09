@@ -21,9 +21,7 @@ export function EditableName({
 
   if (isEditing) {
     return (
-      <label
-        className={cn("grid min-w-0 gap-2 font-medium text-typ-ui", className)}
-      >
+      <label className={cn("grid min-w-0 gap-2 font-medium text-typ-ui", className)}>
         {!hideLabel && label}
         <span className="p-0.5">
           <input

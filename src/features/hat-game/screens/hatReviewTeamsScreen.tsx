@@ -1,7 +1,4 @@
-import {
-  PrimaryFooterButton,
-  SecondaryFooterButton,
-} from "@/components/game/GameFooterButtons";
+import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { reviewDisplayRowsFromHat } from "@/components/game/reviewTeamMappers";
 import { ReviewTeamsPanel } from "@/components/game/ReviewTeamsPanel";
@@ -14,10 +11,7 @@ export function hatReviewTeamsScreen(controller: HatSingleplayerAppController): 
       <section className="keyboard-safe-form flex flex-1 flex-col gap-4 pb-4">
         <GamePanel title="Review teams">
           <ReviewTeamsPanel
-            teams={reviewDisplayRowsFromHat(
-              controller.snapshot.teams,
-              controller.snapshot.players,
-            )}
+            teams={reviewDisplayRowsFromHat(controller.snapshot.teams, controller.snapshot.players)}
           />
         </GamePanel>
         <GamePanel subtitle="Private clue entry" title="Next steps">

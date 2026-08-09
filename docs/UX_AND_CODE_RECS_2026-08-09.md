@@ -8,22 +8,23 @@
 
 ## 📑 Action Items Overview
 
-| ID | Category | Severity | Summary | Primary File(s) |
-| :--- | :--- | :--- | :--- | :--- |
-| **`ACT-01`** | Bug Fix | 🔴 **Critical** | Re-bind session on Socket.IO auto-reconnect | `src/multiplayer/useRoomChannel.ts` |
-| **`ACT-02`** | Bug Fix | 🟠 **High** | Handle direct `/games/drawnguess` URL & catch-all 404 fallback | `src/app/router.tsx` |
-| **`ACT-03`** | Performance | 🟡 **Medium** | Route-level code splitting (`React.lazy`) to reduce 567kB bundle | `src/app/router.tsx` |
-| **`ACT-04`** | Performance | 🟡 **Medium** | Dynamic on-demand import for 258kB word dictionary | `src/domain/whowhatwhere/words.ts` |
-| **`ACT-05`** | UX Guidance | 🟡 **Medium** | Informational helper chip for multi-device player thresholds | `src/features/multiplayer/RoomLobbyView.tsx` |
-| **`ACT-06`** | Mobile Polish | 🔵 **Low** | Standardize mobile keyboard attributes (`enterkeyhint`, `autocapitalize`) | Roster and prompt input components |
-| **`ACT-07`** | Accessibility | 🔵 **Low** | Suppress continuous screen reader chatter on 1s timer tickers | Turn timer countdown components |
-| **`ACT-08`** | Tooling | 🔵 **Low** | Normalize Prettier line-ending configuration for Windows/Linux | `.prettierrc.json` |
+| ID           | Category      | Severity        | Summary                                                                   | Primary File(s)                              |
+| :----------- | :------------ | :-------------- | :------------------------------------------------------------------------ | :------------------------------------------- |
+| **`ACT-01`** | Bug Fix       | 🔴 **Critical** | Re-bind session on Socket.IO auto-reconnect                               | `src/multiplayer/useRoomChannel.ts`          |
+| **`ACT-02`** | Bug Fix       | 🟠 **High**     | Handle direct `/games/drawnguess` URL & catch-all 404 fallback            | `src/app/router.tsx`                         |
+| **`ACT-03`** | Performance   | 🟡 **Medium**   | Route-level code splitting (`React.lazy`) to reduce 567kB bundle          | `src/app/router.tsx`                         |
+| **`ACT-04`** | Performance   | 🟡 **Medium**   | Dynamic on-demand import for 258kB word dictionary                        | `src/domain/whowhatwhere/words.ts`           |
+| **`ACT-05`** | UX Guidance   | 🟡 **Medium**   | Informational helper chip for multi-device player thresholds              | `src/features/multiplayer/RoomLobbyView.tsx` |
+| **`ACT-06`** | Mobile Polish | 🔵 **Low**      | Standardize mobile keyboard attributes (`enterkeyhint`, `autocapitalize`) | Roster and prompt input components           |
+| **`ACT-07`** | Accessibility | 🔵 **Low**      | Suppress continuous screen reader chatter on 1s timer tickers             | Turn timer countdown components              |
+| **`ACT-08`** | Tooling       | 🔵 **Low**      | Normalize Prettier line-ending configuration for Windows/Linux            | `.prettierrc.json`                           |
 
 ---
 
 ## 🛠️ Detailed Action Items
 
 ### `ACT-01`: Re-bind Session on Socket.IO Auto-Reconnect
+
 - **Severity**: 🔴 Critical (Bug Fix)
 - **Target File**: [`src/multiplayer/useRoomChannel.ts`](file:///c:/Users/joedo/Documents/antigravity/charming-borg/rvlry_repo/src/multiplayer/useRoomChannel.ts)
 - **Problem**:
@@ -32,6 +33,7 @@
   Move the `session:bind` emit inside the `handleConnect` callback so every successful connection and reconnection automatically re-registers credentials with the server.
 - **Implementation Guide**:
   In `src/multiplayer/useRoomChannel.ts`:
+
   ```typescript
   const handleConnect = () => {
     setConnected(true);
@@ -73,6 +75,7 @@
 ---
 
 ### `ACT-02`: Handle Direct `/games/drawnguess` URL & Add Catch-All 404 Route
+
 - **Severity**: 🟠 High (Bug Fix)
 - **Target File**: [`src/app/router.tsx`](file:///c:/Users/joedo/Documents/antigravity/charming-borg/rvlry_repo/src/app/router.tsx)
 - **Problem**:
@@ -110,6 +113,7 @@
 ---
 
 ### `ACT-03`: Implement Route-Level Code Splitting (`React.lazy`)
+
 - **Severity**: 🟡 Medium (Performance)
 - **Target File**: [`src/app/router.tsx`](file:///c:/Users/joedo/Documents/antigravity/charming-borg/rvlry_repo/src/app/router.tsx)
 - **Problem**:
@@ -117,54 +121,66 @@
 - **Action Required**:
   Wrap route-level components in `React.lazy()` and wrap `<RootLayout>` / route outlet in `<Suspense>`.
 - **Implementation Guide**:
+
   ```typescript
   import React, { Suspense } from "react";
   import { createBrowserRouter, Navigate } from "react-router-dom";
 
   const MultiplayerHomePage = React.lazy(() =>
-    import("@/features/multiplayer/MultiplayerHomePage").then((m) => ({ default: m.MultiplayerHomePage }))
+    import("@/features/multiplayer/MultiplayerHomePage").then((m) => ({
+      default: m.MultiplayerHomePage,
+    })),
   );
   const RoomPage = React.lazy(() =>
-    import("@/features/multiplayer/RoomPage").then((m) => ({ default: m.RoomPage }))
+    import("@/features/multiplayer/RoomPage").then((m) => ({ default: m.RoomPage })),
   );
   const WhoWhatWhereSingleplayerApp = React.lazy(() =>
-    import("@/features/whowhatwhere/WhoWhatWhereSingleplayerApp").then((m) => ({ default: m.WhoWhatWhereSingleplayerApp }))
+    import("@/features/whowhatwhere/WhoWhatWhereSingleplayerApp").then((m) => ({
+      default: m.WhoWhatWhereSingleplayerApp,
+    })),
   );
   const HatSingleplayerApp = React.lazy(() =>
-    import("@/features/hat-game/HatSingleplayerApp").then((m) => ({ default: m.HatSingleplayerApp }))
+    import("@/features/hat-game/HatSingleplayerApp").then((m) => ({
+      default: m.HatSingleplayerApp,
+    })),
   );
   const ImposterSingleplayerApp = React.lazy(() =>
-    import("@/features/imposter/ImposterSingleplayerApp").then((m) => ({ default: m.ImposterSingleplayerApp }))
+    import("@/features/imposter/ImposterSingleplayerApp").then((m) => ({
+      default: m.ImposterSingleplayerApp,
+    })),
   );
   ```
 
 ---
 
 ### `ACT-04`: Dynamic On-Demand Import for 258kB Mystery Word Dictionary
+
 - **Severity**: 🟡 Medium (Performance)
 - **Target File**: `src/domain/whowhatwhere/words.ts` (or word loader module)
 - **Problem**:
-  The static dictionary (`words.generated.js`: **258.31 kB**) is bundled eagerly and parsed even when playing *Hat Game*, *Imposter*, or *DrawNGuess*.
+  The static dictionary (`words.generated.js`: **258.31 kB**) is bundled eagerly and parsed even when playing _Hat Game_, _Imposter_, or _DrawNGuess_.
 - **Action Required**:
-  Convert dictionary loading into an asynchronous getter (`async function loadWordDeck()`) loaded when *Who What Where* starts.
+  Convert dictionary loading into an asynchronous getter (`async function loadWordDeck()`) loaded when _Who What Where_ starts.
 
 ---
 
 ### `ACT-05`: Add Explanatory Helper Banner for Multi-Device Player Thresholds
+
 - **Severity**: 🟡 Medium (UX Friction)
 - **Target File**: [`src/features/multiplayer/RoomLobbyView.tsx`](file:///c:/Users/joedo/Documents/antigravity/charming-borg/rvlry_repo/src/features/multiplayer/RoomLobbyView.tsx)
 - **Problem**:
   In Multi-Device mode with 2 teams (Who What Where & Hat Game), the host `Start game` button remains disabled when there are fewer than 4 players (or fewer than 2 players per team). New hosts have no feedback indicating why the button is locked.
 - **Action Required**:
   Add an informative status badge above the start button:
-  - If total players < 4: *"Need at least 2 players on each team to start (currently {count}/4)"*
-  - If a team has < 2 players: *"Each team needs at least 2 players"*
-  - If players are not ready: *"Waiting for everyone to ready up"*
-  - When ready: *"All players ready! Tap Start Game."*
+  - If total players < 4: _"Need at least 2 players on each team to start (currently {count}/4)"_
+  - If a team has < 2 players: _"Each team needs at least 2 players"_
+  - If players are not ready: _"Waiting for everyone to ready up"_
+  - When ready: _"All players ready! Tap Start Game."_
 
 ---
 
 ### `ACT-06`: Standardize Mobile Keyboard Attributes across Inputs
+
 - **Severity**: 🔵 Low (Mobile Polish)
 - **Target Files**:
   - `src/features/multiplayer/EnterNamePage.tsx`
@@ -182,11 +198,12 @@
     spellcheck="false"
   />
   ```
-  *(For DrawNGuess prompts, use `autocapitalize="sentences"` and `enterkeyhint="send"`).*
+  _(For DrawNGuess prompts, use `autocapitalize="sentences"` and `enterkeyhint="send"`)._
 
 ---
 
 ### `ACT-07`: Suppress Rapid Screen Reader Announcements on 1s Countdown Timer
+
 - **Severity**: 🔵 Low (Accessibility)
 - **Target Files**:
   - `src/features/whowhatwhere/turn/ActiveTurnScreen.tsx`
@@ -199,6 +216,7 @@
 ---
 
 ### `ACT-08`: Normalize Prettier Line-Ending Configuration
+
 - **Severity**: 🔵 Low (Developer Tooling)
 - **Target File**: [`.prettierrc.json`](file:///c:/Users/joedo/Documents/antigravity/charming-borg/rvlry_repo/.prettierrc.json) / `.gitattributes`
 - **Problem**:
@@ -228,4 +246,3 @@ pnpm run build
 pnpm run format:check
 pnpm run smoke:server-imports
 ```
-

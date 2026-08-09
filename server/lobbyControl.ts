@@ -13,8 +13,7 @@ function isTeamGame(kind: GameKind) {
 }
 
 function countPlayersOnTeam(room: Room, teamIndex: number): number {
-  return [...room.players.values()].filter((player) => player.teamIndex === teamIndex)
-    .length;
+  return [...room.players.values()].filter((player) => player.teamIndex === teamIndex).length;
 }
 
 function pickSmallestTeamIndex(room: Room): number {
@@ -52,9 +51,7 @@ export function hostSetTeamCount(room: Room, nextCount: number) {
 
   if (nextCount > room.teamCount) {
     const freshSetups = createTeamSetups(nextCount as 2 | 3 | 4);
-    const nextNames = freshSetups.map(
-      (team, index) => room.teamNames[index] ?? team.name,
-    );
+    const nextNames = freshSetups.map((team, index) => room.teamNames[index] ?? team.name);
     room.teamCount = nextCount;
     room.teamNames = nextNames;
 
@@ -84,8 +81,7 @@ export function hostSetTeamName(room: Room, teamIndex: number, name: string) {
 
   const trimmed = name.trim().slice(0, 24);
   const next = [...room.teamNames];
-  next[teamIndex] =
-    trimmed.length > 0 ? trimmed : next[teamIndex] ?? `Team ${teamIndex + 1}`;
+  next[teamIndex] = trimmed.length > 0 ? trimmed : (next[teamIndex] ?? `Team ${teamIndex + 1}`);
   room.teamNames = next;
 }
 
@@ -179,10 +175,13 @@ export function hostPatchWhoWhatWhereSettings(room: Room, patch: Partial<GameSet
   }
 }
 
-export function hostPatchHatPrefs(room: Room, patch: {
-  readonly hatTurnDurationSeconds?: number;
-  readonly hatSkipsPerTurn?: number;
-}) {
+export function hostPatchHatPrefs(
+  room: Room,
+  patch: {
+    readonly hatTurnDurationSeconds?: number;
+    readonly hatSkipsPerTurn?: number;
+  },
+) {
   if (room.gameKind !== "hat") {
     throw new Error("Hat Game settings only.");
   }
@@ -196,9 +195,12 @@ export function hostPatchHatPrefs(room: Room, patch: {
   }
 }
 
-export function hostPatchImposterCounts(room: Room, patch: {
-  readonly imposterImposterCount?: number;
-}) {
+export function hostPatchImposterCounts(
+  room: Room,
+  patch: {
+    readonly imposterImposterCount?: number;
+  },
+) {
   if (room.gameKind !== "imposter") {
     throw new Error("Imposter settings only.");
   }
@@ -226,10 +228,7 @@ export function assertLobbyReadyForImposterStart(room: Room) {
   clampImposterLobbyCounts(room);
 }
 
-export function validateWhoWhatWhereLobby(
-  room: Room,
-  setups: readonly TeamSetup[],
-) {
+export function validateWhoWhatWhereLobby(room: Room, setups: readonly TeamSetup[]) {
   const errors = validateSetup(setups, room.wwwSettings);
 
   if (errors.length > 0) {

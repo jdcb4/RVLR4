@@ -16,11 +16,7 @@ export function GameScreenHeaderActions({
   return (
     <>
       {endTurn ? (
-        <Button
-          className="h-9 px-2 text-typ-micro"
-          onClick={endTurn.onClick}
-          type="button"
-        >
+        <Button className="h-9 px-2 text-typ-micro" onClick={endTurn.onClick} type="button">
           {endTurn.label ?? "End turn"}
         </Button>
       ) : null}

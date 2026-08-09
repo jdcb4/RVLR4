@@ -39,11 +39,7 @@ export function HatLastTurnCard({
   );
 }
 
-function ClueWords({
-  correct,
-}: {
-  readonly correct: readonly ClueHistoryEntry[];
-}) {
+function ClueWords({ correct }: { readonly correct: readonly ClueHistoryEntry[] }) {
   if (correct.length === 0) {
     return null;
   }

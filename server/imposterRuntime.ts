@@ -35,10 +35,7 @@ function allTrue(ids: readonly string[], map: Record<string, boolean> | undefine
   return ids.every((id) => map[id] === true);
 }
 
-function pickCluesStarter(
-  players: readonly ImposterPlayer[],
-  rng: () => number,
-): string {
+function pickCluesStarter(players: readonly ImposterPlayer[], rng: () => number): string {
   const index = Math.floor(rng() * players.length);
 
   return players[index]?.id ?? players[0]!.id;

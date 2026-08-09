@@ -23,10 +23,6 @@ current code and tests before implementation.
   socket can remain unbound. Move binding into the successful connection path,
   handle missing/invalid credentials, and add a regression test covering a
   disconnect/reconnect followed by a room command.
-- **ACT-02 — Friendly direct-route and not-found handling (high):** add an
-  intentional route for `/games/drawnguess` that sends players into the
-  multi-device host flow, plus an app-styled catch-all or safe redirect for
-  unknown paths. Cover direct navigation and invalid URLs in router tests.
 - **ACT-03 — Route-level code splitting (medium):** measure the current entry
   bundle, then lazy-load game and multiplayer route modules with an accessible,
   mobile-appropriate loading state. Preserve route behavior and verify that the
@@ -45,11 +41,6 @@ current code and tests before implementation.
   one-second timer update. Keep the visual countdown, but use a separate polite
   live region for meaningful milestones such as ten seconds remaining and time
   expiry; verify behavior across Who What Where, Hat Game, and DrawNGuess.
-- **ACT-08 — Make formatting line endings deterministic (low):** reconcile the
-  current Prettier `endOfLine: "lf"` policy with Windows checkouts. Evaluate a
-  repository-level `.gitattributes` policy versus `endOfLine: "auto"`, then
-  choose one cross-platform approach and confirm `pnpm run format:check` is
-  clean without mass unrelated rewrites.
 
 ## Data and deployment direction
 

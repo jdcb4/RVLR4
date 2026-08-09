@@ -8,8 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground shadow hover:bg-semantic-primary-hover",
+        default: "bg-primary text-primary-foreground shadow hover:bg-semantic-primary-hover",
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-semantic-secondary-hover",
         outline:
@@ -34,10 +33,6 @@ type ButtonProps = ComponentProps<"button"> & VariantProps<typeof buttonVariants
 
 export function Button({ className, variant, size, ...props }: ButtonProps) {
   return (
-    <button
-      type="button"
-      className={cn(buttonVariants({ variant, size }), className)}
-      {...props}
-    />
+    <button type="button" className={cn(buttonVariants({ variant, size }), className)} {...props} />
   );
 }

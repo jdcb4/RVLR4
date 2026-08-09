@@ -14,20 +14,20 @@ To swap palettes per game or route: load an alternate stylesheet (or swap a clas
 
 ## Token reference (default)
 
-| Token | Typical use |
-| --- | --- |
-| `--semantic-primary-soft-bg` | Soft primary wash (e.g. highlight panel) |
-| `--semantic-primary-well-bg` | Icon / small emphasis well |
-| `--semantic-primary-border` | Primary-tinted borders, hover outline |
-| `--semantic-primary-hover` | Primary button hover |
-| `--semantic-secondary-hover` | Secondary button hover |
-| `--semantic-accent-hover-wash` | Card / row hover fill |
-| `--semantic-muted-panel-bg` | Muted inset panels |
-| `--semantic-border-faint` | Divider / inner borders |
-| `--semantic-border-muted` | Shell header rule |
-| `--semantic-surface-elevated` | Sticky footer / bar scrim |
-| `--semantic-destructive-border-soft` | Warning callout border |
-| `--semantic-destructive-surface-soft` | Warning callout background |
-| `--semantic-scrim` | Modal / overlay dim |
-| `--semantic-gallery-chrome` | UI gallery shell (HSL components) |
-| `--semantic-gallery-foreground` | UI gallery default text |
+| Token                                 | Typical use                              |
+| ------------------------------------- | ---------------------------------------- |
+| `--semantic-primary-soft-bg`          | Soft primary wash (e.g. highlight panel) |
+| `--semantic-primary-well-bg`          | Icon / small emphasis well               |
+| `--semantic-primary-border`           | Primary-tinted borders, hover outline    |
+| `--semantic-primary-hover`            | Primary button hover                     |
+| `--semantic-secondary-hover`          | Secondary button hover                   |
+| `--semantic-accent-hover-wash`        | Card / row hover fill                    |
+| `--semantic-muted-panel-bg`           | Muted inset panels                       |
+| `--semantic-border-faint`             | Divider / inner borders                  |
+| `--semantic-border-muted`             | Shell header rule                        |
+| `--semantic-surface-elevated`         | Sticky footer / bar scrim                |
+| `--semantic-destructive-border-soft`  | Warning callout border                   |
+| `--semantic-destructive-surface-soft` | Warning callout background               |
+| `--semantic-scrim`                    | Modal / overlay dim                      |
+| `--semantic-gallery-chrome`           | UI gallery shell (HSL components)        |
+| `--semantic-gallery-foreground`       | UI gallery default text                  |

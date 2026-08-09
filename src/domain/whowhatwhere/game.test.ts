@@ -72,12 +72,7 @@ describe("game domain", () => {
   it("rotates teams, completes rounds, and builds tie results", () => {
     const settings = { ...createDefaultSettings(), totalRounds: 1 as const };
     const words = wordsFor("What");
-    const firstTurn = startTurn(
-      createMatch(createTeamSetups(2), settings),
-      words,
-      now,
-      () => 0,
-    );
+    const firstTurn = startTurn(createMatch(createTeamSetups(2), settings), words, now, () => 0);
     const firstScored = correctWord(firstTurn, new Date("2026-05-05T10:00:01.000Z"));
     const secondReady = endTurn(firstScored);
     const secondTurn = startTurn(secondReady, words, now, () => 0);

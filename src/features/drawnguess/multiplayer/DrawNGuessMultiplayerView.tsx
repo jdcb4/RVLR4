@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import {
-  PrimaryFooterButton,
-  SecondaryFooterButton,
-} from "@/components/game/GameFooterButtons";
+import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { IconArrowLeft, IconChevronRight, IconShare } from "@/components/icons";
@@ -190,7 +187,11 @@ function DrawNGuessBody({
 
   if (submitted) {
     return (
-      <DrawNGuessWaitingPanel payload={payload} secondsLeft={secondsLeft} submission={payload.private.ownSubmission} />
+      <DrawNGuessWaitingPanel
+        payload={payload}
+        secondsLeft={secondsLeft}
+        submission={payload.private.ownSubmission}
+      />
     );
   }
 
@@ -216,7 +217,11 @@ function DrawNGuessBody({
 
   if (assignment.mode === "drawing") {
     return (
-      <GamePanel eyebrow={turnEyebrow(payload)} subtitle="Draw the prompt without using text." title="Draw this">
+      <GamePanel
+        eyebrow={turnEyebrow(payload)}
+        subtitle="Draw the prompt without using text."
+        title="Draw this"
+      >
         <TurnTimer secondsLeft={secondsLeft} />
         <p className="rounded-xl border border-border bg-background p-4 text-center text-typ-section-title font-bold">
           {assignment.promptText}
@@ -303,12 +308,7 @@ function DrawNGuessFooter({
   }
 
   if (submitted) {
-    return (
-      <DrawNGuessSubmittedFooter
-        deadlineOpen={deadlineOpen}
-        onEdit={onEdit}
-      />
-    );
+    return <DrawNGuessSubmittedFooter deadlineOpen={deadlineOpen} onEdit={onEdit} />;
   }
 
   if (!payload.private.assignment) {
@@ -429,7 +429,9 @@ function DrawNGuessWaitingPanel({
       <div className="rounded-xl border border-border bg-background p-3">
         <p className="text-typ-ui font-semibold">Still working</p>
         <p className="mt-1 text-typ-ui-snug text-muted-foreground">
-          {pending.length === 0 ? "Everyone has submitted." : pending.map((player) => player.name).join(", ")}
+          {pending.length === 0
+            ? "Everyone has submitted."
+            : pending.map((player) => player.name).join(", ")}
         </p>
       </div>
     </GamePanel>
@@ -458,11 +460,7 @@ function DrawNGuessPresentationScreen({
   );
 }
 
-function DrawNGuessResultsScreen({
-  payload,
-}: {
-  readonly payload: DrawNGuessSyncDto;
-}) {
+function DrawNGuessResultsScreen({ payload }: { readonly payload: DrawNGuessSyncDto }) {
   const packets = payload.public.packets ?? [];
   const roster = payload.public.roster;
   const [selectedPacketId, setSelectedPacketId] = useState<string | null>(null);
@@ -521,7 +519,11 @@ function DrawNGuessBookDisplay({
   return (
     <div className="space-y-3">
       <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm">
-        <PlayerAvatar avatarId={avatarIdFor(owner.avatarId)} className="size-12" name={owner.name} />
+        <PlayerAvatar
+          avatarId={avatarIdFor(owner.avatarId)}
+          className="size-12"
+          name={owner.name}
+        />
         <div className="min-w-0">
           <p className="truncate text-typ-card-title font-semibold">{owner.name}'s book</p>
           <p className="truncate text-typ-ui text-muted-foreground">{originalPrompt(packet)}</p>
@@ -578,10 +580,16 @@ function GalleryPacketButton({
       onClick={onClick}
     >
       {owner ? (
-        <PlayerAvatar avatarId={avatarIdFor(owner.avatarId)} className="size-11" name={owner.name} />
+        <PlayerAvatar
+          avatarId={avatarIdFor(owner.avatarId)}
+          className="size-11"
+          name={owner.name}
+        />
       ) : null}
       <div className="min-w-0 flex-1">
-        <p className="truncate text-typ-card-title font-semibold">{owner?.name ?? "Player"}'s book</p>
+        <p className="truncate text-typ-card-title font-semibold">
+          {owner?.name ?? "Player"}'s book
+        </p>
         <p className="truncate text-typ-ui text-muted-foreground">{originalPrompt(packet)}</p>
       </div>
     </button>

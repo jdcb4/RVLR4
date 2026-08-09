@@ -45,10 +45,10 @@ These may report false positives for framework entrypoints, plugin-loaded files,
 
 ## Preset-specific checks
 
-| Change area | Command / follow-up |
-| --- | --- |
-| Docker image (`Dockerfile`, server static assets, runtime port) | `pnpm run docker:build` |
-| Socket.IO / room sync / multiplayer UX | Manual matrix in [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) |
+| Change area                                                     | Command / follow-up                                            |
+| --------------------------------------------------------------- | -------------------------------------------------------------- |
+| Docker image (`Dockerfile`, server static assets, runtime port) | `pnpm run docker:build`                                        |
+| Socket.IO / room sync / multiplayer UX                          | Manual matrix in [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) |
 
 ## Environment
 

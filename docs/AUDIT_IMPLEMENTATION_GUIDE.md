@@ -62,10 +62,7 @@ export type HandlerContext = {
   readonly actor: RoomPlayer;
 };
 
-function requireActor(
-  socket: Socket,
-  store: RoomStore,
-): { room: Room; actor: RoomPlayer } {
+function requireActor(socket: Socket, store: RoomStore): { room: Room; actor: RoomPlayer } {
   const code = socket.data.roomCode as string | undefined;
   const playerId = socket.data.playerId as string | undefined;
 
@@ -224,9 +221,7 @@ import { TEAM_COUNT_OPTIONS } from "@/config/teamRoster";
 const teamCountSchema = z
   .number()
   .int()
-  .refine((value): value is 2 | 3 | 4 =>
-    (TEAM_COUNT_OPTIONS as readonly number[]).includes(value),
-  );
+  .refine((value): value is 2 | 3 | 4 => (TEAM_COUNT_OPTIONS as readonly number[]).includes(value));
 
 const playerNameSchema = z.string().max(64);
 
@@ -254,15 +249,23 @@ export const socketSchemas = {
     name: z.string().max(40),
   }),
   "lobby:hostPatchWhoWhatWhereSettings": z.unknown(), // delegate to existing hostPatchWhoWhatWhereSettings validation
-  "lobby:hostPatchHatPrefs": z.unknown(),    // ditto
+  "lobby:hostPatchHatPrefs": z.unknown(), // ditto
   "lobby:hostPatchImposterCounts": z.unknown(),
   "lobby:startGame": z.object({}).optional(),
   "lobby:hatSetClueCell": z.object({
-    clueIndex: z.number().int().min(0).max(GAME_DEFAULTS.cluesPerPlayer - 1),
+    clueIndex: z
+      .number()
+      .int()
+      .min(0)
+      .max(GAME_DEFAULTS.cluesPerPlayer - 1),
     value: z.string().max(GAME_DEFAULTS.maxClueLength),
   }),
   "lobby:hatSuggestClue": z.object({
-    clueIndex: z.number().int().min(0).max(GAME_DEFAULTS.cluesPerPlayer - 1),
+    clueIndex: z
+      .number()
+      .int()
+      .min(0)
+      .max(GAME_DEFAULTS.cluesPerPlayer - 1),
   }),
   "imposter:dispatch": z.unknown(), // delegate to applyImposterDispatch's existing checks
   "game:hostOfferReplay": z.object({}).optional(),
@@ -283,9 +286,7 @@ export const socketSchemas = {
 } as const;
 
 export type SocketEventName = keyof typeof socketSchemas;
-export type SocketPayload<E extends SocketEventName> = z.infer<
-  (typeof socketSchemas)[E]
->;
+export type SocketPayload<E extends SocketEventName> = z.infer<(typeof socketSchemas)[E]>;
 ```
 
 For events marked `z.unknown()`, **do not** weaken the existing inner validation in `hostPatchWhoWhatWhereSettings`, `hostPatchHatPrefs`, `applyImposterDispatch`, etc. The plan is to lift those into real schemas later; for now, preserve current behaviour.
@@ -415,7 +416,9 @@ Replace the current `corsOrigin` block. The fallback to `true` is gone. In produ
 
 ```ts
 const allowedOrigins =
-  env.CLIENT_ORIGIN?.split(",").map((o) => o.trim()).filter(Boolean) ?? [];
+  env.CLIENT_ORIGIN?.split(",")
+    .map((o) => o.trim())
+    .filter(Boolean) ?? [];
 
 const corsOrigin =
   allowedOrigins.length > 0
@@ -538,15 +541,17 @@ Return `shuttingDown` from the hook and add it to `RoomChannelHandle`. Remember 
 Destructure `shuttingDown` from `useRoomChannel(...)`. Render a banner at the top of the page **only when `shuttingDown` is true**:
 
 ```tsx
-{shuttingDown && (
-  <div
-    role="status"
-    aria-live="polite"
-    className="rounded-lg bg-semantic-warning-soft px-4 py-2 text-typ-ui"
-  >
-    The server is restarting. The room will reopen in a moment — keep this tab open.
-  </div>
-)}
+{
+  shuttingDown && (
+    <div
+      role="status"
+      aria-live="polite"
+      className="rounded-lg bg-semantic-warning-soft px-4 py-2 text-typ-ui"
+    >
+      The server is restarting. The room will reopen in a moment — keep this tab open.
+    </div>
+  );
+}
 ```
 
 Use whichever `bg-semantic-*` class actually exists in `src/themes/default.css`. **Check before inventing one.** If there is no warning surface, fall back to `bg-muted` and a regular border.
@@ -957,23 +962,29 @@ useEffect(() => {
 Show banners in priority order: `bindError` (fatal, no retry possible by the user) > `shuttingDown` > `showOffline`.
 
 ```tsx
-{bindError && (
-  <div role="alert" aria-live="assertive" className="… your error styling …">
-    {bindError}
-  </div>
-)}
+{
+  bindError && (
+    <div role="alert" aria-live="assertive" className="… your error styling …">
+      {bindError}
+    </div>
+  );
+}
 
-{!bindError && shuttingDown && (
-  <div role="status" aria-live="polite" className="…">
-    The server is restarting. Keep this tab open.
-  </div>
-)}
+{
+  !bindError && shuttingDown && (
+    <div role="status" aria-live="polite" className="…">
+      The server is restarting. Keep this tab open.
+    </div>
+  );
+}
 
-{!bindError && !shuttingDown && showOffline && (
-  <div role="status" aria-live="polite" className="…">
-    Reconnecting…
-  </div>
-)}
+{
+  !bindError && !shuttingDown && showOffline && (
+    <div role="status" aria-live="polite" className="…">
+      Reconnecting…
+    </div>
+  );
+}
 ```
 
 Pick existing Tailwind utilities only — do not invent new semantic colors. If you need a new token, stop and surface it.
@@ -1042,8 +1053,8 @@ Replace `.animate-confetti-fall` with the actual class name applied by `ResultsC
 
 ```ts
 function useReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(() =>
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  const [reduced, setReduced] = useState(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
 
   useEffect(() => {

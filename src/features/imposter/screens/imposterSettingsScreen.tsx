@@ -10,13 +10,8 @@ const PLAYER_COUNT_OPTIONS = Array.from(
   (_, index) => IMPOSTER_MIN_PLAYERS + index,
 );
 
-export function imposterSettingsScreen(
-  controller: ImposterSingleplayerAppController,
-): ScreenModel {
-  const imposterOptions = Array.from(
-    { length: controller.maxImposters },
-    (_, index) => index + 1,
-  );
+export function imposterSettingsScreen(controller: ImposterSingleplayerAppController): ScreenModel {
+  const imposterOptions = Array.from({ length: controller.maxImposters }, (_, index) => index + 1);
 
   return {
     content: (

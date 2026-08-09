@@ -34,11 +34,7 @@ export function LandingScreenLayout({
   );
 
   if (wrapInKeyboardSafeSection) {
-    return (
-      <section className="keyboard-safe-form flex flex-1 flex-col pb-4">
-        {panel}
-      </section>
-    );
+    return <section className="keyboard-safe-form flex flex-1 flex-col pb-4">{panel}</section>;
   }
 
   return panel;

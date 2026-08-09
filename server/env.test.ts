@@ -19,9 +19,7 @@ describe("loadServerEnv", () => {
     });
 
     expect(env.NODE_ENV).toBe("production");
-    expect(env.CLIENT_ORIGIN).toBe(
-      "https://app.example.com,https://www.example.com",
-    );
+    expect(env.CLIENT_ORIGIN).toBe("https://app.example.com,https://www.example.com");
   });
 
   it("loads in production without CLIENT_ORIGIN (warning printed at boot, not a parse error)", () => {
@@ -45,11 +43,7 @@ describe("loadServerEnv", () => {
 
   it("coerces MULTIPLAYER_DEBUG from '1' and 'true'", () => {
     expect(loadServerEnv({ MULTIPLAYER_DEBUG: "1" }).MULTIPLAYER_DEBUG).toBe(true);
-    expect(loadServerEnv({ MULTIPLAYER_DEBUG: "true" }).MULTIPLAYER_DEBUG).toBe(
-      true,
-    );
-    expect(loadServerEnv({ MULTIPLAYER_DEBUG: "0" }).MULTIPLAYER_DEBUG).toBe(
-      false,
-    );
+    expect(loadServerEnv({ MULTIPLAYER_DEBUG: "true" }).MULTIPLAYER_DEBUG).toBe(true);
+    expect(loadServerEnv({ MULTIPLAYER_DEBUG: "0" }).MULTIPLAYER_DEBUG).toBe(false);
   });
 });

@@ -1,4 +1,4 @@
-import { type ReactNode,useContext } from "react";
+import { type ReactNode, useContext } from "react";
 
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { Button } from "@/components/ui/button";

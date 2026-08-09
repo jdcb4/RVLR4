@@ -3,11 +3,7 @@ import type { FinalBestTurnVm } from "@/components/game/final-results/viewModel"
 /**
  * Highlights the single best scoring turn — player first, big score, team subtle.
  */
-export function FinalBestTurnBlock({
-  bestTurn,
-}: {
-  readonly bestTurn: FinalBestTurnVm | null;
-}) {
+export function FinalBestTurnBlock({ bestTurn }: { readonly bestTurn: FinalBestTurnVm | null }) {
   if (!bestTurn) {
     return null;
   }

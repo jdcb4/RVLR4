@@ -39,20 +39,14 @@ export function AppInfoOverlay({
             ×
           </Button>
         </div>
-        <p className="mt-2 text-typ-ui text-muted-foreground">
-          By jdcb4. Version {version}.
-        </p>
+        <p className="mt-2 text-typ-ui text-muted-foreground">By jdcb4. Version {version}.</p>
       </div>
     </div>
   );
 }
 
 /** Circular info control used in both game headers. */
-export function AppInfoHeaderButton({
-  onClick,
-}: {
-  readonly onClick: () => void;
-}) {
+export function AppInfoHeaderButton({ onClick }: { readonly onClick: () => void }) {
   return (
     <Button
       aria-label="App information"

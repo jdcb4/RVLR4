@@ -31,12 +31,10 @@ async function sweepIdleRooms(io: Server, store: RoomStore) {
       .map((p) => p.disconnectedAt)
       .filter((t): t is number => t !== null);
 
-    const everyoneDisconnected =
-      playerCount > 0 && disconnectedAts.length === playerCount;
+    const everyoneDisconnected = playerCount > 0 && disconnectedAts.length === playerCount;
 
     const staleByEveryoneAway =
-      everyoneDisconnected &&
-      now - Math.max(...disconnectedAts) >= ALL_DISCONNECTED_GRACE_MS;
+      everyoneDisconnected && now - Math.max(...disconnectedAts) >= ALL_DISCONNECTED_GRACE_MS;
 
     const empty = playerCount === 0;
 

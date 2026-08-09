@@ -1,7 +1,4 @@
-import {
-  PrimaryFooterButton,
-  SecondaryFooterButton,
-} from "@/components/game/GameFooterButtons";
+import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { IconCheck, IconSkipForward } from "@/components/icons";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 

@@ -18,12 +18,8 @@ export function hatFinalTurnRecapScreen(
     content: (
       <BetweenTurnsLayout
         banner={<ThatsTheLastTurnCard />}
-        lastTurnCard={
-          previousTurn ? <HatLastTurnCard summary={previousTurn} /> : null
-        }
-        nextSteps={
-          <ReadyNextStepsCard primaryText={FINAL_TURN_RECAP_NEXT_STEPS} />
-        }
+        lastTurnCard={previousTurn ? <HatLastTurnCard summary={previousTurn} /> : null}
+        nextSteps={<ReadyNextStepsCard primaryText={FINAL_TURN_RECAP_NEXT_STEPS} />}
       />
     ),
     actions: (

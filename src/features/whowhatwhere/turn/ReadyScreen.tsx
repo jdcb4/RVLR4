@@ -82,9 +82,9 @@ export function ReadyScreen({
     } else {
       nextStepsPrimary = (
         <>
-          <span className="font-semibold text-foreground">{nextTeamName}</span> is up next.
-          Waiting for{" "}
-          <span className="font-semibold text-foreground">{describerName}</span> to start the turn.
+          <span className="font-semibold text-foreground">{nextTeamName}</span> is up next. Waiting
+          for <span className="font-semibold text-foreground">{describerName}</span> to start the
+          turn.
         </>
       );
     }
@@ -101,9 +101,8 @@ export function ReadyScreen({
       </>
     ) : (
       <>
-        Only{" "}
-        <span className="font-semibold text-foreground">{describerName}</span> should peek when words
-        appear.
+        Only <span className="font-semibold text-foreground">{describerName}</span> should peek when
+        words appear.
       </>
     );
   } else {
@@ -116,8 +115,7 @@ export function ReadyScreen({
       </>
     ) : (
       <>
-        Give the phone to{" "}
-        <span className="font-semibold text-foreground">{describerName}</span>.
+        Give the phone to <span className="font-semibold text-foreground">{describerName}</span>.
       </>
     );
   }

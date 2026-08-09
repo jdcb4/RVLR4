@@ -126,8 +126,7 @@ function normalizeMatch(match: MatchState): MatchState {
     activeTurn: match.activeTurn
       ? {
           ...match.activeTurn,
-          hintsRemaining:
-            match.activeTurn.hintsRemaining ?? settings.hints.perTurnLimit,
+          hintsRemaining: match.activeTurn.hintsRemaining ?? settings.hints.perTurnLimit,
           currentWordHintRevealed: match.activeTurn.currentWordHintRevealed ?? false,
         }
       : match.activeTurn,

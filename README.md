@@ -26,16 +26,16 @@ pnpm run dev
 
 ## Common scripts
 
-| Script               | Purpose                                                    |
-| -------------------- | ---------------------------------------------------------- |
-| `pnpm run dev`       | Full multiplayer dev stack (Vite + Node).                |
-| `pnpm run start`     | Production Node server (run `pnpm run build` first).     |
-| `pnpm run typecheck` | TypeScript checking.                                       |
-| `pnpm run lint`      | ESLint.                                                    |
-| `pnpm test`          | Vitest once.                                               |
-| `pnpm run test:watch`| Vitest in watch mode.                                      |
-| `pnpm run build`     | Production client bundle (`dist/`).                       |
-| `pnpm run verify`    | Run typecheck, lint, test, and build (commit gate).        |
+| Script                | Purpose                                              |
+| --------------------- | ---------------------------------------------------- |
+| `pnpm run dev`        | Full multiplayer dev stack (Vite + Node).            |
+| `pnpm run start`      | Production Node server (run `pnpm run build` first). |
+| `pnpm run typecheck`  | TypeScript checking.                                 |
+| `pnpm run lint`       | ESLint.                                              |
+| `pnpm test`           | Vitest once.                                         |
+| `pnpm run test:watch` | Vitest in watch mode.                                |
+| `pnpm run build`      | Production client bundle (`dist/`).                  |
+| `pnpm run verify`     | Run typecheck, lint, test, and build (commit gate).  |
 
 See `docs/PROJECT_INDEX.md` for the full list and `docs/DEPLOYMENT.md` for deploy instructions.
 

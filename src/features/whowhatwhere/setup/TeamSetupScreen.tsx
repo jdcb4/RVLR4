@@ -3,10 +3,7 @@ import {
   type RosterTeamRow,
   TeamRosterSetupScreen,
 } from "@/components/team-setup/TeamRosterSetupScreen";
-import {
-  addPlayerToTeam,
-  removePlayerFromTeam,
-} from "@/domain/whowhatwhere/setup";
+import { addPlayerToTeam, removePlayerFromTeam } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, TeamSetup } from "@/domain/whowhatwhere/types";
 
 export function TeamSetupScreen({
@@ -39,11 +36,7 @@ export function TeamSetupScreen({
           error={error}
           omitHeading
           removePlayerFromRoster={(rows, teamId, playerId) =>
-            removePlayerFromTeam(
-              rows as readonly TeamSetup[],
-              teamId,
-              playerId,
-            ) as RosterTeamRow[]
+            removePlayerFromTeam(rows as readonly TeamSetup[], teamId, playerId) as RosterTeamRow[]
           }
           teamCount={settings.teamCount}
           teamIndex={teamIndex}

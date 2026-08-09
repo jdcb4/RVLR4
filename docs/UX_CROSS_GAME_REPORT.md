@@ -14,18 +14,18 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 
 ## 2. Screen-type comparison matrix
 
-| Screen type (informal) | Who What Where | Hat Game | Parity / notes |
-|------------------------|----------------|----------|----------------|
-| **Landing** | `WhoWhatWhereLandingScreen` | `renderLanding` | **High** — same `GamePanel` + `ResumeGameCard` + discard copy pattern; different titles/subtitles. |
-| **Game settings** | `SettingsScreen` | `renderSettings` | **Medium** — shared `TeamCountOptionGroup`, turn length, skips; **WWW-only**: rounds, categories, difficulty, hints. |
-| **Team roster (per team)** | `TeamSetupScreen` | `renderTeamEditor` | **High** — both wrap [`TeamRosterSetupScreen`](../src/components/team-setup/TeamRosterSetupScreen.tsx); same eyebrow/subtitle pattern; footer labels via `teamRosterAdvanceLabel`. |
-| **Review teams** | `WhoWhatWhereReviewTeamsScreen` | `renderReview` | **High** — shared [`ReviewTeamsPanel`](../src/components/game/ReviewTeamsPanel.tsx) + [`reviewTeamMappers`](../src/components/game/reviewTeamMappers.ts); **different** next-step copy and primary footer (**Start the game** vs **Start famous figure entry**). |
-| **Clue / word prep** | *(none — goes to review → round)* | Clue handoff + clue form | **Hat-only** — pass-and-play private entry; no WWW equivalent. |
-| **Between turns (ready)** | `ReadyScreen` | `renderReady` | **High** — shared stack: [`ReadyProgressCard`](../src/components/game/ReadyProgressCard.tsx), [`GameScoreboard`](../src/components/game/GameScoreboard.tsx), [`ReadyNextStepsCard`](../src/components/game/ReadyNextStepsCard.tsx); domain-specific [`LastTurnCard`](../src/features/whowhatwhere/summary/LastTurnCard.tsx) vs [`HatLastTurnCard`](../src/components/game/HatLastTurnCard.tsx) (WWW shows **Round**, Hat **Phase**). |
-| **Active turn** | `ActiveTurnScreen` | `renderTurn` | **Medium** — both use [`TurnPlayHighlight`](../src/components/game/TurnPlayHighlight.tsx), [`Metric`](../src/components/Metric.tsx), Skip/Correct footers; **WWW**: word queue, categories, **End turn** in header; **Hat**: phase label in metrics, skipped-clue return rows, **End turn** in header. |
-| **Final turn recap** | `FinalTurnRecapScreen` | `renderFinalTurnRecap` | **High** — shared [`ThatsTheLastTurnCard`](../src/components/game/ThatsTheLastTurnCard.tsx), [`ReadyNextStepsCard`](../src/components/game/ReadyNextStepsCard.tsx), domain-specific last-turn cards. |
-| **Final results** | `ResultsScreen` | `renderResults` | **Very high** — shared [`FinalResultsBody`](../src/components/game/final-results/FinalResultsBody.tsx) + mappers in [`viewModel.ts`](../src/components/game/final-results/viewModel.ts). |
-| **Loading** | *(inline in controller)* | `GamePanel` “Loading saved game…” | **Hat-only** explicit placeholder. |
+| Screen type (informal)     | Who What Where                    | Hat Game                          | Parity / notes                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| -------------------------- | --------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Landing**                | `WhoWhatWhereLandingScreen`       | `renderLanding`                   | **High** — same `GamePanel` + `ResumeGameCard` + discard copy pattern; different titles/subtitles.                                                                                                                                                                                                                                                                                                                                   |
+| **Game settings**          | `SettingsScreen`                  | `renderSettings`                  | **Medium** — shared `TeamCountOptionGroup`, turn length, skips; **WWW-only**: rounds, categories, difficulty, hints.                                                                                                                                                                                                                                                                                                                 |
+| **Team roster (per team)** | `TeamSetupScreen`                 | `renderTeamEditor`                | **High** — both wrap [`TeamRosterSetupScreen`](../src/components/team-setup/TeamRosterSetupScreen.tsx); same eyebrow/subtitle pattern; footer labels via `teamRosterAdvanceLabel`.                                                                                                                                                                                                                                                   |
+| **Review teams**           | `WhoWhatWhereReviewTeamsScreen`   | `renderReview`                    | **High** — shared [`ReviewTeamsPanel`](../src/components/game/ReviewTeamsPanel.tsx) + [`reviewTeamMappers`](../src/components/game/reviewTeamMappers.ts); **different** next-step copy and primary footer (**Start the game** vs **Start famous figure entry**).                                                                                                                                                                     |
+| **Clue / word prep**       | _(none — goes to review → round)_ | Clue handoff + clue form          | **Hat-only** — pass-and-play private entry; no WWW equivalent.                                                                                                                                                                                                                                                                                                                                                                       |
+| **Between turns (ready)**  | `ReadyScreen`                     | `renderReady`                     | **High** — shared stack: [`ReadyProgressCard`](../src/components/game/ReadyProgressCard.tsx), [`GameScoreboard`](../src/components/game/GameScoreboard.tsx), [`ReadyNextStepsCard`](../src/components/game/ReadyNextStepsCard.tsx); domain-specific [`LastTurnCard`](../src/features/whowhatwhere/summary/LastTurnCard.tsx) vs [`HatLastTurnCard`](../src/components/game/HatLastTurnCard.tsx) (WWW shows **Round**, Hat **Phase**). |
+| **Active turn**            | `ActiveTurnScreen`                | `renderTurn`                      | **Medium** — both use [`TurnPlayHighlight`](../src/components/game/TurnPlayHighlight.tsx), [`Metric`](../src/components/Metric.tsx), Skip/Correct footers; **WWW**: word queue, categories, **End turn** in header; **Hat**: phase label in metrics, skipped-clue return rows, **End turn** in header.                                                                                                                               |
+| **Final turn recap**       | `FinalTurnRecapScreen`            | `renderFinalTurnRecap`            | **High** — shared [`ThatsTheLastTurnCard`](../src/components/game/ThatsTheLastTurnCard.tsx), [`ReadyNextStepsCard`](../src/components/game/ReadyNextStepsCard.tsx), domain-specific last-turn cards.                                                                                                                                                                                                                                 |
+| **Final results**          | `ResultsScreen`                   | `renderResults`                   | **Very high** — shared [`FinalResultsBody`](../src/components/game/final-results/FinalResultsBody.tsx) + mappers in [`viewModel.ts`](../src/components/game/final-results/viewModel.ts).                                                                                                                                                                                                                                             |
+| **Loading**                | _(inline in controller)_          | `GamePanel` “Loading saved game…” | **Hat-only** explicit placeholder.                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 ---
 
@@ -43,56 +43,56 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 
 ## 4. Differences (same screen types)
 
-| Dimension | Who What Where | Hat Game |
-|-----------|----------------|----------|
-| **Code organization** | Many small screen files | Single large `HatSingleplayerWebScreens` builder |
-| **Settings depth** | Word categories, rounds, hint controls | Team count, turn length, skips only |
-| **Pre-play path** | Review → **Start the game** → match | Review → **Clue entry** (multi-step) → match |
-| **Ready strip** | Round x/y | Phase name + number |
-| **Last-turn recap** | Words from word history | Words from clue history; optional phase-complete line inside card |
-| **Active turn primary content** | Mystery words + category | Famous-figure clues + phase |
-| **Skip return UI** | WWW word chips / queue | Hat outline buttons per skipped clue |
-| **Sound / timers** | WWW-specific sound hooks | Hat phase cues + countdown helpers |
-| **Footer wiring** | `WhoWhatWhereSingleplayerApp` centralizes modes | `ScreenModel.actions` returned from `buildHatSingleplayerScreen` |
+| Dimension                       | Who What Where                                  | Hat Game                                                          |
+| ------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------- |
+| **Code organization**           | Many small screen files                         | Single large `HatSingleplayerWebScreens` builder                  |
+| **Settings depth**              | Word categories, rounds, hint controls          | Team count, turn length, skips only                               |
+| **Pre-play path**               | Review → **Start the game** → match             | Review → **Clue entry** (multi-step) → match                      |
+| **Ready strip**                 | Round x/y                                       | Phase name + number                                               |
+| **Last-turn recap**             | Words from word history                         | Words from clue history; optional phase-complete line inside card |
+| **Active turn primary content** | Mystery words + category                        | Famous-figure clues + phase                                       |
+| **Skip return UI**              | WWW word chips / queue                          | Hat outline buttons per skipped clue                              |
+| **Sound / timers**              | WWW-specific sound hooks                        | Hat phase cues + countdown helpers                                |
+| **Footer wiring**               | `WhoWhatWhereSingleplayerApp` centralizes modes | `ScreenModel.actions` returned from `buildHatSingleplayerScreen`  |
 
 ---
 
 ## 5. Shared UX components (abstracted today)
 
-| Component / area | Location | Role |
-|------------------|----------|------|
-| `GameShell` | `components/GameShell.tsx` | App frame: header, scroll, footer |
-| `GamePanel` | `components/game/GamePanel.tsx` | Card titles/subtitles/eyebrows |
-| `GameFooterButtons` | `components/game/GameFooterButtons.tsx` | Footer primaries/secondaries |
-| `GameScreenHeaderActions` | `components/game/GameScreenHeaderActions.tsx` | e.g. End turn + info |
-| `ResumeGameCard` | `components/game/ResumeGameCard.tsx` | Saved-game resume CTA |
-| `TeamRosterSetupScreen` | `components/team-setup/TeamRosterSetupScreen.tsx` | Editable teams/players |
-| `teamRosterAdvanceLabel` | `components/team-setup/teamRosterLabels.ts` | Footer label progression |
-| `ReviewTeamsPanel` + mappers | `components/game/` | Review grid |
-| `TeamCountOptionGroup`, `OptionGroup` | `components/setup/` | Settings chips |
-| `Metric` | `components/Metric.tsx` | Turn metrics |
-| `TurnPlayHighlight` | `components/game/TurnPlayHighlight.tsx` | Big reveal line |
-| `GameScoreboard` | `components/game/GameScoreboard.tsx` | Score list + highlight |
-| `ReadyProgressCard`, `ReadyNextStepsCard` | `components/game/` | Between-turns strips |
-| `WhoWhatWhereLastTurnCard` / `HatLastTurnCard` | `components/game/` | Last-turn recap bodies |
-| `ThatsTheLastTurnCard`, recap copy | `components/game/` | Final-turn recap banner |
-| `FinalResultsBody` + blocks + confetti | `components/game/final-results/` | Results podium |
-| `GameResultActions` | `components/GameResultActions.tsx` | Post-results triple actions |
+| Component / area                               | Location                                          | Role                              |
+| ---------------------------------------------- | ------------------------------------------------- | --------------------------------- |
+| `GameShell`                                    | `components/GameShell.tsx`                        | App frame: header, scroll, footer |
+| `GamePanel`                                    | `components/game/GamePanel.tsx`                   | Card titles/subtitles/eyebrows    |
+| `GameFooterButtons`                            | `components/game/GameFooterButtons.tsx`           | Footer primaries/secondaries      |
+| `GameScreenHeaderActions`                      | `components/game/GameScreenHeaderActions.tsx`     | e.g. End turn + info              |
+| `ResumeGameCard`                               | `components/game/ResumeGameCard.tsx`              | Saved-game resume CTA             |
+| `TeamRosterSetupScreen`                        | `components/team-setup/TeamRosterSetupScreen.tsx` | Editable teams/players            |
+| `teamRosterAdvanceLabel`                       | `components/team-setup/teamRosterLabels.ts`       | Footer label progression          |
+| `ReviewTeamsPanel` + mappers                   | `components/game/`                                | Review grid                       |
+| `TeamCountOptionGroup`, `OptionGroup`          | `components/setup/`                               | Settings chips                    |
+| `Metric`                                       | `components/Metric.tsx`                           | Turn metrics                      |
+| `TurnPlayHighlight`                            | `components/game/TurnPlayHighlight.tsx`           | Big reveal line                   |
+| `GameScoreboard`                               | `components/game/GameScoreboard.tsx`              | Score list + highlight            |
+| `ReadyProgressCard`, `ReadyNextStepsCard`      | `components/game/`                                | Between-turns strips              |
+| `WhoWhatWhereLastTurnCard` / `HatLastTurnCard` | `components/game/`                                | Last-turn recap bodies            |
+| `ThatsTheLastTurnCard`, recap copy             | `components/game/`                                | Final-turn recap banner           |
+| `FinalResultsBody` + blocks + confetti         | `components/game/final-results/`                  | Results podium                    |
+| `GameResultActions`                            | `components/GameResultActions.tsx`                | Post-results triple actions       |
 
 ---
 
 ## 6. Not (fully) abstracted — game-specific or duplicated
 
-| Pattern | WWW | Hat | Note |
-|---------|-----|-----|------|
-| **Landing screen** | `WhoWhatWhereLandingScreen` | Inline in `renderLanding` | Same UX recipe; two implementations. |
-| **Settings body** | `SettingsScreen` | `renderSettings` | Shared controls at leaf level; **no** single `SettingsPanel` wrapper. |
-| **Team setup wrapper** | `TeamSetupScreen` | `renderTeamEditor` | Both use `TeamRosterSetupScreen`; outer `GamePanel` duplicated in spirit. |
-| **Review + next steps** | `WhoWhatWhereReviewTeamsScreen` | `renderReview` | Two `GamePanel` stacks; copy differs. |
-| **Ready screen** | `ReadyScreen` | `renderReady` | Shared pieces; **no** single `BetweenTurnsScreen` component. |
-| **Active turn** | `ActiveTurnScreen` | `renderTurn` | Large bespoke layouts; shared atoms only. |
-| **Scoreboard adapter** | `Scoreboard` (WWW-specific mapping) | `HatScoreboard` local helper | Both delegate to `GameScoreboard`; thin wrappers could stay or merge into props factories. |
-| **Footer orchestration** | `WhoWhatWhereSingleplayerApp` | `buildHatSingleplayerScreen` + `HatSingleplayerApp` | Different patterns; equivalent outcomes. |
+| Pattern                  | WWW                                 | Hat                                                 | Note                                                                                       |
+| ------------------------ | ----------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **Landing screen**       | `WhoWhatWhereLandingScreen`         | Inline in `renderLanding`                           | Same UX recipe; two implementations.                                                       |
+| **Settings body**        | `SettingsScreen`                    | `renderSettings`                                    | Shared controls at leaf level; **no** single `SettingsPanel` wrapper.                      |
+| **Team setup wrapper**   | `TeamSetupScreen`                   | `renderTeamEditor`                                  | Both use `TeamRosterSetupScreen`; outer `GamePanel` duplicated in spirit.                  |
+| **Review + next steps**  | `WhoWhatWhereReviewTeamsScreen`     | `renderReview`                                      | Two `GamePanel` stacks; copy differs.                                                      |
+| **Ready screen**         | `ReadyScreen`                       | `renderReady`                                       | Shared pieces; **no** single `BetweenTurnsScreen` component.                               |
+| **Active turn**          | `ActiveTurnScreen`                  | `renderTurn`                                        | Large bespoke layouts; shared atoms only.                                                  |
+| **Scoreboard adapter**   | `Scoreboard` (WWW-specific mapping) | `HatScoreboard` local helper                        | Both delegate to `GameScoreboard`; thin wrappers could stay or merge into props factories. |
+| **Footer orchestration** | `WhoWhatWhereSingleplayerApp`       | `buildHatSingleplayerScreen` + `HatSingleplayerApp` | Different patterns; equivalent outcomes.                                                   |
 
 ---
 
@@ -131,10 +131,10 @@ The largest **structural** difference is runtime shape: WWW uses many focused sc
 
 ## 9. Related docs
 
-- [`docs/SCREENS.md`](SCREENS.md) — screen naming map  
-- [`docs/ARCHITECTURE.md`](ARCHITECTURE.md) — module boundaries  
-- [`docs/THEMING.md`](THEMING.md) / [`docs/TYPOGRAPHY.md`](TYPOGRAPHY.md) — visual system  
+- [`docs/SCREENS.md`](SCREENS.md) — screen naming map
+- [`docs/ARCHITECTURE.md`](ARCHITECTURE.md) — module boundaries
+- [`docs/THEMING.md`](THEMING.md) / [`docs/TYPOGRAPHY.md`](TYPOGRAPHY.md) — visual system
 
 ---
 
-*Generated as a UX inventory for cross-game parity discussions; update when major flows or shared components change.*
+_Generated as a UX inventory for cross-game parity discussions; update when major flows or shared components change._

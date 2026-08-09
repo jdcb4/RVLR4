@@ -1,8 +1,8 @@
-import { buildLeaderboardRowsFromTeams } from '../shared/teamLeaderboard';
-import type { LeaderboardEntry, Player, Team } from './types';
+import { buildLeaderboardRowsFromTeams } from "../shared/teamLeaderboard";
+import type { LeaderboardEntry, Player, Team } from "./types";
 
-export const normalizeText = (value: unknown, fallback = '') => {
-  const normalized = String(value ?? '').trim();
+export const normalizeText = (value: unknown, fallback = "") => {
+  const normalized = String(value ?? "").trim();
   return normalized || fallback;
 };
 
@@ -32,7 +32,7 @@ export const getTimedTeamContext = ({
   teams,
   teamOrder,
   teamIndex,
-  describerIndexes
+  describerIndexes,
 }: {
   players: Player[];
   teams: Team[];
@@ -46,7 +46,7 @@ export const getTimedTeamContext = ({
   const describerIndex =
     activeTeamPlayers.length === 0
       ? 0
-      : (describerIndexes[activeTeamId ?? ''] ?? 0) % activeTeamPlayers.length;
+      : (describerIndexes[activeTeamId ?? ""] ?? 0) % activeTeamPlayers.length;
   const activeDescriber = activeTeamPlayers[describerIndex] ?? null;
 
   return {
@@ -54,7 +54,7 @@ export const getTimedTeamContext = ({
     activeTeam,
     activeTeamPlayers,
     activeDescriberId: activeDescriber?.id ?? null,
-    activeDescriberName: activeDescriber?.name ?? 'Waiting'
+    activeDescriberName: activeDescriber?.name ?? "Waiting",
   };
 };
 

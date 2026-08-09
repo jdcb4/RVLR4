@@ -7,9 +7,7 @@ import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTyp
 import { IMPOSTER_NOTICE_CLASS } from "@/features/imposter/screens/imposterScreenTokens";
 import type { ImposterSingleplayerAppController } from "@/features/imposter/useImposterSingleplayerApp";
 
-export function imposterRevealScreen(
-  controller: ImposterSingleplayerAppController,
-): ScreenModel {
+export function imposterRevealScreen(controller: ImposterSingleplayerAppController): ScreenModel {
   const { snapshot } = controller;
   const round = snapshot.round;
   if (!round) {
@@ -28,8 +26,7 @@ export function imposterRevealScreen(
   }
 
   const isImposter = round.imposterPlayerIds.includes(player.id);
-  const isLast =
-    round.revealPlayerIndex >= snapshot.players.length - 1;
+  const isLast = round.revealPlayerIndex >= snapshot.players.length - 1;
 
   if (!round.revealRevealed) {
     return {
@@ -72,9 +69,7 @@ export function imposterRevealScreen(
           )}
         </GamePanel>
         <div className="mt-4">
-          <ReadyNextStepsCard
-            primaryText="Once you have memorised this, hit the button below and pass on to the next person."
-          />
+          <ReadyNextStepsCard primaryText="Once you have memorised this, hit the button below and pass on to the next person." />
         </div>
       </>
     ),

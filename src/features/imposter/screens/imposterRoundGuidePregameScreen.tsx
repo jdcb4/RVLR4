@@ -15,12 +15,12 @@ export function imposterRoundGuidePregameScreen(
         title="Give your clues"
       >
         <p className="text-typ-body text-foreground">
-          Go around the circle <strong>twice</strong>. On each pass, say one short clue
-          about the secret word. Imposters should try to sound like everyone else.
+          Go around the circle <strong>twice</strong>. On each pass, say one short clue about the
+          secret word. Imposters should try to sound like everyone else.
         </p>
         <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>
-          When two full rounds of clues are done, come back here and tap the button
-          below when you are ready to discuss.
+          When two full rounds of clues are done, come back here and tap the button below when you
+          are ready to discuss.
         </p>
       </GamePanel>
     ),

@@ -1,7 +1,11 @@
 import { type PointerEvent, useEffect, useRef, useState } from "react";
 
 import { IconRotateCcw, IconTrash } from "@/components/icons";
-import type { DrawNGuessDrawing, DrawNGuessPoint, DrawNGuessStroke } from "@/domain/drawnguess/types";
+import type {
+  DrawNGuessDrawing,
+  DrawNGuessPoint,
+  DrawNGuessStroke,
+} from "@/domain/drawnguess/types";
 import { cn } from "@/lib/utils";
 
 import { renderDrawing } from "./drawingCanvas";
@@ -109,7 +113,9 @@ export function DrawNGuessWhiteboard({
             aria-pressed={tool === "pen" && color === option}
             className={cn(
               "size-9 rounded-full border shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              tool === "pen" && color === option ? "border-primary ring-2 ring-primary/25" : "border-border",
+              tool === "pen" && color === option
+                ? "border-primary ring-2 ring-primary/25"
+                : "border-border",
             )}
             key={option}
             style={{ backgroundColor: option }}

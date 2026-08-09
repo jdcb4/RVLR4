@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import {
-  AppInfoHeaderButton,
-  AppInfoOverlay,
-} from "@/components/AppInfoOverlay";
+import { AppInfoHeaderButton, AppInfoOverlay } from "@/components/AppInfoOverlay";
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { GameShell } from "@/components/GameShell";
 import { buildImposterScreen } from "@/features/imposter/ImposterSingleplayerWebScreens";
@@ -27,9 +24,7 @@ export function ImposterSingleplayerApp() {
     <FooterActionLockContext.Provider value={controller.footerActionsLocked}>
       <GameShell footer={footer} headerRight={headerRight} title="Imposter">
         {controller.error ? (
-          <p className="mb-3 font-medium text-typ-ui text-destructive">
-            {controller.error}
-          </p>
+          <p className="mb-3 font-medium text-typ-ui text-destructive">{controller.error}</p>
         ) : null}
         {screen.content}
 

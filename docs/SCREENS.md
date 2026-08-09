@@ -78,16 +78,16 @@ Screen assembly: **`buildImposterScreen`** in `ImposterSingleplayerWebScreens.ts
 
 DrawNGuess is registered in the production multiplayer picker. Production screens use **`MultiplayerGameShell`**, **`GamePanel`**, shared footer buttons, existing room lobby chrome, typography tiers, and semantic tokens. Runtime details live in [`docs/DRAWNGUESS.md`](DRAWNGUESS.md).
 
-| Name                          | Description                                                                                                                                                             |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name + avatar**             | Extension of multiplayer name entry: display name plus random-default avatar picker. Components: `EnterNamePage`, `AvatarPicker`, `PlayerAvatar`.                      |
-| **Lobby**                     | Flat-player room lobby with invite, readiness, DrawNGuess settings, and avatar-aware player rows. Components: `RoomLobbyView` + `GameSpecificLobbySections`.           |
-| **Custom prompt turn**        | Optional first simultaneous text-entry turn when players create their own starting prompts. Component: `DrawNGuessMultiplayerView`.                                     |
-| **Draw brief / drawing turn** | Private prompt assignment followed by a controlled whiteboard. Components: `DrawNGuessMultiplayerView`, `DrawNGuessWhiteboard`.                                        |
-| **Draw waiting**              | Submitted drawing preview, countdown, pending players, and edit-before-deadline action. Component: `DrawNGuessMultiplayerView`.                                        |
-| **Guessing turn**             | Shows the assigned drawing and a text guess input. Component: `DrawNGuessMultiplayerView`.                                                                              |
-| **Guess waiting**             | Submitted guess preview, countdown, pending players, and edit-before-deadline action. Component: `DrawNGuessMultiplayerView`.                                          |
-| **Presentation**              | Each player sees and locally controls their own starting book, with Next steps guidance for social turn-taking before moving to the gallery. Component: `DrawNGuessMultiplayerView`. |
+| Name                          | Description                                                                                                                                                                             |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Name + avatar**             | Extension of multiplayer name entry: display name plus random-default avatar picker. Components: `EnterNamePage`, `AvatarPicker`, `PlayerAvatar`.                                       |
+| **Lobby**                     | Flat-player room lobby with invite, readiness, DrawNGuess settings, and avatar-aware player rows. Components: `RoomLobbyView` + `GameSpecificLobbySections`.                            |
+| **Custom prompt turn**        | Optional first simultaneous text-entry turn when players create their own starting prompts. Component: `DrawNGuessMultiplayerView`.                                                     |
+| **Draw brief / drawing turn** | Private prompt assignment followed by a controlled whiteboard. Components: `DrawNGuessMultiplayerView`, `DrawNGuessWhiteboard`.                                                         |
+| **Draw waiting**              | Submitted drawing preview, countdown, pending players, and edit-before-deadline action. Component: `DrawNGuessMultiplayerView`.                                                         |
+| **Guessing turn**             | Shows the assigned drawing and a text guess input. Component: `DrawNGuessMultiplayerView`.                                                                                              |
+| **Guess waiting**             | Submitted guess preview, countdown, pending players, and edit-before-deadline action. Component: `DrawNGuessMultiplayerView`.                                                           |
+| **Presentation**              | Each player sees and locally controls their own starting book, with Next steps guidance for social turn-taking before moving to the gallery. Component: `DrawNGuessMultiplayerView`.    |
 | **Final gallery**             | No-score packet gallery with access to any completed book, page-by-page book display, share/export, and shared multiplayer replay/exit actions. Component: `DrawNGuessMultiplayerView`. |
 
 ---

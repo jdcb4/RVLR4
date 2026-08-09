@@ -1,13 +1,8 @@
 import type React from "react";
 
-import type {
-  ClueSubmissionMap,
-  HatGameSession,
-  Player,
-  Team,
-} from "@/domain/hat-game/types";
+import type { ClueSubmissionMap, HatGameSession, Player, Team } from "@/domain/hat-game/types";
 
-export type AppStep = 'landing' | 'settings' | 'team' | 'review' | 'clues' | 'game';
+export type AppStep = "landing" | "settings" | "team" | "review" | "clues" | "game";
 
 export type AppSnapshot = {
   step: AppStep;
@@ -36,4 +31,3 @@ export type ScreenModel = {
   content: React.ReactNode;
   actions?: React.ReactNode;
 };
-

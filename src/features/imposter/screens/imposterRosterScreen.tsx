@@ -1,15 +1,10 @@
 import { EditableName } from "@/components/EditableName";
-import {
-  PrimaryFooterButton,
-  SecondaryFooterButton,
-} from "@/components/game/GameFooterButtons";
+import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTypes";
 import type { ImposterSingleplayerAppController } from "@/features/imposter/useImposterSingleplayerApp";
 
-export function imposterRosterScreen(
-  controller: ImposterSingleplayerAppController,
-): ScreenModel {
+export function imposterRosterScreen(controller: ImposterSingleplayerAppController): ScreenModel {
   return {
     content: (
       <GamePanel
@@ -32,14 +27,8 @@ export function imposterRosterScreen(
     ),
     actions: (
       <>
-        <SecondaryFooterButton
-          label="Back"
-          onClick={() => controller.backToSettings()}
-        />
-        <PrimaryFooterButton
-          label="Next: Review"
-          onClick={() => controller.confirmRosterNext()}
-        />
+        <SecondaryFooterButton label="Back" onClick={() => controller.backToSettings()} />
+        <PrimaryFooterButton label="Next: Review" onClick={() => controller.confirmRosterNext()} />
       </>
     ),
   };

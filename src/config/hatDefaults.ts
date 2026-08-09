@@ -20,5 +20,5 @@ export const GAME_DEFAULTS: HatGameConfig = {
   cluesPerPlayer: 6,
   skipsPerTurn: 1,
   maxClueLength: 80,
-  maxNameLength: 24
+  maxNameLength: 24,
 } as const;

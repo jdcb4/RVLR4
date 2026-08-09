@@ -27,9 +27,7 @@ export function ModeSwitchCard({
       to={to}
     >
       <div className="min-w-0 flex-1">
-        <p className="text-typ-overline font-medium uppercase text-muted-foreground">
-          {eyebrow}
-        </p>
+        <p className="text-typ-overline font-medium uppercase text-muted-foreground">{eyebrow}</p>
         <p className="mt-1 text-typ-card-title font-semibold">{title}</p>
         <p className="mt-1 text-typ-ui-snug text-muted-foreground">{description}</p>
       </div>

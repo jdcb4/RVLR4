@@ -12,8 +12,7 @@ export function buildMultiplayerReplayUi(args: {
     body?: unknown,
   ) => Promise<{ ok?: boolean; error?: string } | undefined>;
 }): MultiplayerReplayUi {
-  const { offerActive, acceptedIds, cancelledByDisconnect, viewerId, isHost, emitWithAck } =
-    args;
+  const { offerActive, acceptedIds, cancelledByDisconnect, viewerId, isHost, emitWithAck } = args;
 
   if (cancelledByDisconnect) {
     return {

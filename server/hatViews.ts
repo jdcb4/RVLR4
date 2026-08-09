@@ -1,11 +1,5 @@
-import {
-  getHatGameContext,
-} from "@/domain/hat-game/engine";
-import type {
-  ActiveTurn,
-  HatGameSession,
-  QueuedClue,
-} from "@/domain/hat-game/types";
+import { getHatGameContext } from "@/domain/hat-game/engine";
+import type { ActiveTurn, HatGameSession, QueuedClue } from "@/domain/hat-game/types";
 
 export type HatPeerRole = "describer" | "guesser" | "observer";
 
@@ -26,10 +20,7 @@ function scrubActiveTurnForGuessers(turn: ActiveTurn): ActiveTurn {
   };
 }
 
-export function classifyHatRole(
-  session: HatGameSession,
-  viewerPlayerId: string,
-): HatPeerRole {
+export function classifyHatRole(session: HatGameSession, viewerPlayerId: string): HatPeerRole {
   const context = getHatGameContext(session);
   const viewer = session.players.find((player) => player.id === viewerPlayerId);
 
@@ -65,10 +56,7 @@ export function projectHatSessionForViewer(
   };
 }
 
-export function shouldShowHatTurnFooter(
-  session: HatGameSession,
-  viewerPlayerId: string,
-): boolean {
+export function shouldShowHatTurnFooter(session: HatGameSession, viewerPlayerId: string): boolean {
   return (
     session.stage === "turn" &&
     Boolean(session.activeTurn) &&
@@ -76,10 +64,7 @@ export function shouldShowHatTurnFooter(
   );
 }
 
-export function canHatReturnSkipped(
-  session: HatGameSession,
-  viewerPlayerId: string,
-): boolean {
+export function canHatReturnSkipped(session: HatGameSession, viewerPlayerId: string): boolean {
   return (
     session.stage === "turn" &&
     Boolean(session.activeTurn) &&

@@ -72,10 +72,7 @@ export type RoomChannelHandle = {
   ) => Promise<{ ok?: boolean; error?: string } | undefined>;
 };
 
-export function useRoomChannel(
-  code: string | undefined,
-  enabled: boolean,
-): RoomChannelHandle {
+export function useRoomChannel(code: string | undefined, enabled: boolean): RoomChannelHandle {
   const socketRef = useRef<Socket | null>(null);
   const [sync, setSync] = useState<RoomSyncPayload | null>(null);
   const [connected, setConnected] = useState(false);

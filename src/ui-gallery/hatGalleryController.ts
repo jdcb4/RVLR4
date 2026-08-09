@@ -17,8 +17,7 @@ const noopAsync = async () => undefined;
 function normalizeGallerySnapshot(snapshot: AppSnapshot): AppSnapshot {
   return {
     ...snapshot,
-    turnDurationSeconds:
-      snapshot.turnDurationSeconds ?? GAME_DEFAULTS.turnDurationSeconds,
+    turnDurationSeconds: snapshot.turnDurationSeconds ?? GAME_DEFAULTS.turnDurationSeconds,
     skipsPerTurn: snapshot.skipsPerTurn ?? GAME_DEFAULTS.skipsPerTurn,
   };
 }
@@ -54,8 +53,7 @@ export function createHatGalleryController(
     normalized.step === "game" &&
     normalized.session?.stage === "turn" &&
     Boolean(normalized.session.activeTurn);
-  const secondsRemaining =
-    options.secondsRemaining ?? (turnActive ? 38 : 0);
+  const secondsRemaining = options.secondsRemaining ?? (turnActive ? 38 : 0);
 
   return {
     appVersion: "gallery",
@@ -96,10 +94,7 @@ export function createHatGalleryController(
 }
 
 /** Defaults for `AppSnapshot` setup prefs in static gallery fixtures. */
-function hatGallerySetupPrefs(): Pick<
-  AppSnapshot,
-  "turnDurationSeconds" | "skipsPerTurn"
-> {
+function hatGallerySetupPrefs(): Pick<AppSnapshot, "turnDurationSeconds" | "skipsPerTurn"> {
   return {
     turnDurationSeconds: GAME_DEFAULTS.turnDurationSeconds,
     skipsPerTurn: GAME_DEFAULTS.skipsPerTurn,

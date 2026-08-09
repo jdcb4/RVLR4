@@ -12,7 +12,7 @@ import { clampImposterCount, defaultImposterCount, shuffleWithRng } from "@/doma
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
 import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
-import { type AvatarId,normalizeAvatarId } from "@/multiplayer/avatarCatalog";
+import { type AvatarId, normalizeAvatarId } from "@/multiplayer/avatarCatalog";
 
 import { generateRoomCode, normalizeRoomCode } from "./codes.ts";
 import { generateSecretToken } from "./secrets.ts";
@@ -214,11 +214,10 @@ export class RoomStore {
     return { room, hostPlayer };
   }
 
-  joinRoom(args: {
-    code: string;
-    name: string;
-    avatarId?: unknown;
-  }): { room: Room; player: RoomPlayer } {
+  joinRoom(args: { code: string; name: string; avatarId?: unknown }): {
+    room: Room;
+    player: RoomPlayer;
+  } {
     const code = normalizeRoomCode(args.code);
     const room = this.roomsByCode.get(code);
 

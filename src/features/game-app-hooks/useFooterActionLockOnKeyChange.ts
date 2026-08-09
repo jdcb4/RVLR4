@@ -16,10 +16,7 @@ export function useFooterActionLockOnKeyChange(key: string): boolean {
 
   useEffect(() => {
     setLocked(true);
-    const timeout = window.setTimeout(
-      () => setLocked(false),
-      FOOTER_ACTION_LOCK_MS,
-    );
+    const timeout = window.setTimeout(() => setLocked(false), FOOTER_ACTION_LOCK_MS);
 
     return () => window.clearTimeout(timeout);
   }, [key]);

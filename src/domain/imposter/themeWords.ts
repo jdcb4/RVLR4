@@ -12,10 +12,7 @@ export function resolveImposterWordBank(
   themeId: string,
   fullWordBank: readonly string[],
 ): readonly string[] {
-  if (
-    themeId === DEFAULT_IMPOSTER_THEME_ID ||
-    themeId === ""
-  ) {
+  if (themeId === DEFAULT_IMPOSTER_THEME_ID || themeId === "") {
     return fullWordBank;
   }
   // Placeholder for future themed subsets (e.g. places-only pack).

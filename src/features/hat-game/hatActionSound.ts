@@ -18,7 +18,11 @@ export function playHatActionSoundEffects(
   turnEndCueTurnRef: StringOrNullRef,
   playCue: (cue: SoundCue) => void,
 ): void {
-  if (action.type === "start-turn" && previousSession.stage === "ready" && nextSession.stage === "turn") {
+  if (
+    action.type === "start-turn" &&
+    previousSession.stage === "ready" &&
+    nextSession.stage === "turn"
+  ) {
     playCue("turn-start");
   }
   if (action.type === "mark-correct") {

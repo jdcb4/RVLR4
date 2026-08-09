@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import {
-  AppInfoHeaderButton,
-  AppInfoOverlay,
-} from "@/components/AppInfoOverlay";
+import { AppInfoHeaderButton, AppInfoOverlay } from "@/components/AppInfoOverlay";
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
 import { GameShell } from "@/components/GameShell";
@@ -26,34 +23,27 @@ export function HatSingleplayerApp() {
       {...(showEndTurn
         ? {
             endTurn: {
-              onClick: () =>
-                controller.dispatchGameAction({ type: "end-turn" }),
+              onClick: () => controller.dispatchGameAction({ type: "end-turn" }),
             },
           }
         : {})}
       trailing={
         showAppInfo ? (
-          <AppInfoHeaderButton
-            onClick={() => controller.setShowInfoPopup(true)}
-          />
+          <AppInfoHeaderButton onClick={() => controller.setShowInfoPopup(true)} />
         ) : null
       }
     />
   );
 
   const footer = screen.actions ? (
-      <div className="flex w-full flex-col gap-2">
-        {screen.actions}
-      </div>
+    <div className="flex w-full flex-col gap-2">{screen.actions}</div>
   ) : undefined;
 
   return (
     <FooterActionLockContext.Provider value={controller.footerActionsLocked}>
       <GameShell footer={footer} headerRight={headerRight} title="Hat Game">
         {controller.error && controller.snapshot.step !== "team" ? (
-          <p className="mb-3 font-medium text-typ-ui text-destructive">
-            {controller.error}
-          </p>
+          <p className="mb-3 font-medium text-typ-ui text-destructive">{controller.error}</p>
         ) : null}
         {screen.content}
 

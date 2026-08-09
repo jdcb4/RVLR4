@@ -37,18 +37,19 @@ describe("setup domain", () => {
 
     expect(withPlayer[0]?.players).toHaveLength(MAX_PLAYERS_PER_TEAM);
 
-    const removed = removePlayerFromTeam(
-      withPlayer,
-      "team-1",
-      withPlayer[0]!.players[2]!.id,
-    );
+    const removed = removePlayerFromTeam(withPlayer, "team-1", withPlayer[0]!.players[2]!.id);
 
     expect(removed[0]?.players).toHaveLength(MAX_PLAYERS_PER_TEAM - 1);
   });
 
   it("validates team/player counts and name edits", () => {
     const settings = createDefaultSettings();
-    const teams = updatePlayerName(createTeamSetups(2), "team-1", "team-1-player-1", "A very long player name exceeding limit");
+    const teams = updatePlayerName(
+      createTeamSetups(2),
+      "team-1",
+      "team-1-player-1",
+      "A very long player name exceeding limit",
+    );
 
     expect(teams[0]?.players[0]?.name).toHaveLength(24);
     expect(validateSetup(teams, settings)).toEqual([]);

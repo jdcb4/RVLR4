@@ -12,9 +12,7 @@ export function ReadyProgressCard({
 }) {
   return (
     <div className="rounded-lg border border-border bg-background p-3 text-typ-ui shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        {label}
-      </p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
       <div className="mt-1 font-semibold text-foreground">{children}</div>
     </div>
   );

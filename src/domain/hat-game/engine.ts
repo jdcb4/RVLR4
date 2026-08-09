@@ -5,8 +5,8 @@ import {
   getTimedTeamContext,
   normalizeText,
   shuffleArray,
-  sortPlayersBySeat
-} from './teamUtils';
+  sortPlayersBySeat,
+} from "./teamUtils";
 import type {
   ActiveTurn,
   BestTurnSummary,
@@ -20,8 +20,8 @@ import type {
   Player,
   QueuedClue,
   Team,
-  TurnSummary
-} from './types';
+  TurnSummary,
+} from "./types";
 
 type ActionRuntime = {
   rng: () => number;
@@ -33,17 +33,17 @@ type ActionRuntime = {
 
 const HAT_GAME_PHASES = {
   1: {
-    name: 'Describe',
-    instruction: 'Use as many words as you want, but do not say any part of the name.'
+    name: "Describe",
+    instruction: "Use as many words as you want, but do not say any part of the name.",
   },
   2: {
-    name: 'One Word',
-    instruction: 'Say exactly one word only. No gestures.'
+    name: "One Word",
+    instruction: "Say exactly one word only. No gestures.",
   },
   3: {
-    name: 'Charades',
-    instruction: 'Act it out silently. No words or sounds.'
-  }
+    name: "Charades",
+    instruction: "Act it out silently. No words or sounds.",
+  },
 } as const;
 
 export const getHatGamePhaseMeta = (phaseNumber: number) =>
@@ -55,12 +55,12 @@ export const getHatGameContext = (session: HatGameSession) =>
     teams: session.teams,
     teamOrder: session.teamOrder,
     teamIndex: session.teamIndex,
-    describerIndexes: session.describerIndexes
+    describerIndexes: session.describerIndexes,
   });
 
 const buildHatGameCluePool = (
   players: Player[],
-  clueSubmissions: ClueSubmissionMap
+  clueSubmissions: ClueSubmissionMap,
 ): CluePoolEntry[] =>
   sortPlayersBySeat(players).flatMap((player) =>
     (clueSubmissions[player.id]?.clues ?? [])
@@ -69,19 +69,22 @@ const buildHatGameCluePool = (
       .map((clue) => ({
         text: clue,
         submittedBy: player.id,
-        submittedByName: player.name
-      }))
+        submittedByName: player.name,
+      })),
   );
 
 const syncSkipState = (activeTurn: ActiveTurn, skipLimit: number): ActiveTurn => ({
   ...activeTurn,
-  skipsRemaining: Math.max(skipLimit - (activeTurn.skippedClues?.length ?? 0), 0)
+  skipsRemaining: Math.max(skipLimit - (activeTurn.skippedClues?.length ?? 0), 0),
 });
 
 const hasUnresolvedSkippedClues = (activeTurn: ActiveTurn) =>
   activeTurn.skippedClues.length > 0 || activeTurn.currentSkippedCluePoolIndex !== null;
 
-const movePreviousVisibleClueFromFront = (queue: QueuedClue[], lastSeenCluePoolIndex?: number | null) => {
+const movePreviousVisibleClueFromFront = (
+  queue: QueuedClue[],
+  lastSeenCluePoolIndex?: number | null,
+) => {
   if (queue.length <= 1 || queue[0]?.poolIndex !== lastSeenCluePoolIndex) {
     return queue;
   }
@@ -99,13 +102,16 @@ const collectClueQueue = (session: HatGameSession, rng: () => number) =>
       session.cluePool
         .map((clue, index) => ({ ...clue, poolIndex: index }))
         .filter((clue) => !session.usedCluePoolIndices.includes(clue.poolIndex)),
-      rng
+      rng,
     ),
-    session.lastSeenCluePoolIndex
+    session.lastSeenCluePoolIndex,
   );
 
 const buildFullPhaseQueue = (session: HatGameSession, rng: () => number) =>
-  shuffleArray(session.cluePool.map((clue, index) => ({ ...clue, poolIndex: index })), rng);
+  shuffleArray(
+    session.cluePool.map((clue, index) => ({ ...clue, poolIndex: index })),
+    rng,
+  );
 
 const currentQueuedClue = (activeTurn: ActiveTurn): QueuedClue | null =>
   activeTurn.clueQueue[activeTurn.queueIndex] ?? null;
@@ -114,17 +120,17 @@ const cloneActiveTurn = (activeTurn: ActiveTurn): ActiveTurn => ({
   ...activeTurn,
   clueQueue: [...activeTurn.clueQueue],
   skippedClues: [...activeTurn.skippedClues],
-  clueHistory: [...activeTurn.clueHistory]
+  clueHistory: [...activeTurn.clueHistory],
 });
 
 const buildHistoryEntry = ({
   clue,
   status,
   phaseNumber,
-  makeTimestamp
+  makeTimestamp,
 }: {
   clue: QueuedClue;
-  status: ClueHistoryEntry['status'];
+  status: ClueHistoryEntry["status"];
   phaseNumber: number;
   makeTimestamp: () => string;
 }): ClueHistoryEntry => ({
@@ -132,21 +138,24 @@ const buildHistoryEntry = ({
   status,
   timestamp: makeTimestamp(),
   poolIndex: clue.poolIndex,
-  phaseNumber
+  phaseNumber,
 });
 
 const currentPhaseCorrectPoolIndices = (session: HatGameSession, activeTurn: ActiveTurn) =>
   activeTurn.clueHistory
     .filter(
       (entry) =>
-        entry.status === 'correct' &&
+        entry.status === "correct" &&
         (entry.phaseNumber === session.phaseNumber ||
-          (entry.phaseNumber === undefined && session.phaseNumber === 1))
+          (entry.phaseNumber === undefined && session.phaseNumber === 1)),
     )
     .map((entry) => entry.poolIndex);
 
 const nextUsedCluePoolIndices = (session: HatGameSession, activeTurn: ActiveTurn) => [
-  ...new Set([...session.usedCluePoolIndices, ...currentPhaseCorrectPoolIndices(session, activeTurn)])
+  ...new Set([
+    ...session.usedCluePoolIndices,
+    ...currentPhaseCorrectPoolIndices(session, activeTurn),
+  ]),
 ];
 
 const buildResults = (session: HatGameSession) => {
@@ -161,7 +170,7 @@ const buildResults = (session: HatGameSession) => {
     winnerTeamIds,
     isTie: winnerTeamIds.length > 1,
     totalClues: session.cluePool.length,
-    bestTurn: session.bestTurnSummary
+    bestTurn: session.bestTurnSummary,
   };
 };
 
@@ -169,7 +178,7 @@ const buildTurnSummary = ({
   session,
   activeTurn,
   phaseCompleted,
-  nextPhaseNumber
+  nextPhaseNumber,
 }: {
   session: HatGameSession;
   activeTurn: ActiveTurn;
@@ -179,8 +188,8 @@ const buildTurnSummary = ({
   const context = getHatGameContext(session);
 
   return {
-    teamId: context.activeTeamId ?? '',
-    teamName: context.activeTeam?.name ?? 'Team',
+    teamId: context.activeTeamId ?? "",
+    teamName: context.activeTeam?.name ?? "Team",
     describerId: context.activeDescriberId,
     describerName: context.activeDescriberName,
     scoreDelta: activeTurn.score,
@@ -191,24 +200,24 @@ const buildTurnSummary = ({
     completedPhaseNumber: phaseCompleted ? session.phaseNumber : null,
     nextPhaseNumber: phaseCompleted && session.phaseNumber < 3 ? nextPhaseNumber : null,
     nextPhaseName:
-      phaseCompleted && session.phaseNumber < 3 ? getHatGamePhaseMeta(nextPhaseNumber).name : null
+      phaseCompleted && session.phaseNumber < 3 ? getHatGamePhaseMeta(nextPhaseNumber).name : null,
   };
 };
 
 const buildCurrentTurnHighlight = (
   session: HatGameSession,
-  activeTurn: ActiveTurn
+  activeTurn: ActiveTurn,
 ): BestTurnSummary => {
   const context = getHatGameContext(session);
 
   return {
-    teamId: context.activeTeamId ?? '',
-    teamName: context.activeTeam?.name ?? 'Team',
+    teamId: context.activeTeamId ?? "",
+    teamName: context.activeTeam?.name ?? "Team",
     describerId: context.activeDescriberId,
     describerName: context.activeDescriberName,
     score: activeTurn.score,
     phaseNumber: session.phaseNumber,
-    phaseName: getHatGamePhaseMeta(session.phaseNumber).name
+    phaseName: getHatGamePhaseMeta(session.phaseNumber).name,
   };
 };
 
@@ -231,7 +240,7 @@ const rotateDescriber = (session: HatGameSession) => {
     [context.activeTeamId]:
       context.activeTeamPlayers.length === 0
         ? 0
-        : (currentDescriberIndex + 1) % context.activeTeamPlayers.length
+        : (currentDescriberIndex + 1) % context.activeTeamPlayers.length,
   };
 };
 
@@ -248,19 +257,19 @@ const rotateTeam = (session: HatGameSession) => {
 };
 
 const startTurn = (session: HatGameSession, runtime: ActionRuntime): HatGameActionResult => {
-  if (session.stage !== 'ready') {
-    return { error: 'The next turn is already underway' };
+  if (session.stage !== "ready") {
+    return { error: "The next turn is already underway" };
   }
 
   const clueQueue = collectClueQueue(session, runtime.rng);
   if (clueQueue.length === 0) {
-    return { error: 'No famous figures are available for this turn right now' };
+    return { error: "No famous figures are available for this turn right now" };
   }
 
   const startedAt = runtime.nowMs();
   return {
     ...session,
-    stage: 'turn',
+    stage: "turn",
     activeTurn: syncSkipState(
       {
         startedAt: runtime.toIso(startedAt),
@@ -274,27 +283,27 @@ const startTurn = (session: HatGameSession, runtime: ActionRuntime): HatGameActi
         skipsRemaining: session.settings.skipsPerTurn,
         skippedClues: [],
         currentSkippedCluePoolIndex: null,
-        clueHistory: []
+        clueHistory: [],
       },
-      session.settings.skipsPerTurn
-    )
+      session.settings.skipsPerTurn,
+    ),
   };
 };
 
 const advancePhaseWithinTurn = (
   session: HatGameSession,
   activeTurn: ActiveTurn,
-  runtime: ActionRuntime
+  runtime: ActionRuntime,
 ): HatGameActionResult => {
   if (hasUnresolvedSkippedClues(activeTurn)) {
-    return { error: 'Bring the skipped famous figure back before moving to the next phase' };
+    return { error: "Bring the skipped famous figure back before moving to the next phase" };
   }
 
   const nextPhaseNumber = Math.min(session.phaseNumber + 1, 3);
   const nextQueue = buildFullPhaseQueue(session, runtime.rng);
 
   if (nextQueue.length === 0) {
-    return { error: 'No famous figures are available for the next phase' };
+    return { error: "No famous figures are available for the next phase" };
   }
 
   return {
@@ -307,33 +316,35 @@ const advancePhaseWithinTurn = (
         clueQueue: nextQueue,
         queueIndex: 0,
         skippedClues: [],
-        currentSkippedCluePoolIndex: null
+        currentSkippedCluePoolIndex: null,
       },
-      session.settings.skipsPerTurn
-    )
+      session.settings.skipsPerTurn,
+    ),
   };
 };
 
 const finishTurn = (session: HatGameSession): HatGameActionResult => {
   const context = getHatGameContext(session);
   if (!session.activeTurn || !context.activeTeamId) {
-    return { error: 'No live turn is active right now' };
+    return { error: "No live turn is active right now" };
   }
 
   const activeTurn = session.activeTurn;
   const lastSeenCluePoolIndex = currentQueuedClue(activeTurn)?.poolIndex ?? null;
   const teams = session.teams.map((team) =>
-    team.id === context.activeTeamId ? { ...team, score: team.score + activeTurn.score } : team
+    team.id === context.activeTeamId ? { ...team, score: team.score + activeTurn.score } : team,
   );
   const usedCluePoolIndices = nextUsedCluePoolIndices(session, activeTurn);
   const phaseCompleted =
     session.cluePool.length > 0 && usedCluePoolIndices.length >= session.cluePool.length;
-  const nextPhaseNumber = phaseCompleted ? Math.min(session.phaseNumber + 1, 3) : session.phaseNumber;
+  const nextPhaseNumber = phaseCompleted
+    ? Math.min(session.phaseNumber + 1, 3)
+    : session.phaseNumber;
   const lastTurnSummary = buildTurnSummary({
     session,
     activeTurn,
     phaseCompleted,
-    nextPhaseNumber
+    nextPhaseNumber,
   });
   const bestTurnSummary = updateBestTurnSummary(session, activeTurn);
   const describerIndexes = rotateDescriber(session);
@@ -342,7 +353,7 @@ const finishTurn = (session: HatGameSession): HatGameActionResult => {
   const nextSession: HatGameSession = {
     ...session,
     teams,
-    stage: 'ready',
+    stage: "ready",
     activeTurn: null,
     lastTurnSummary,
     bestTurnSummary,
@@ -351,13 +362,13 @@ const finishTurn = (session: HatGameSession): HatGameActionResult => {
     roundNumber,
     phaseNumber: nextPhaseNumber,
     describerIndexes,
-    usedCluePoolIndices: phaseCompleted ? [] : usedCluePoolIndices
+    usedCluePoolIndices: phaseCompleted ? [] : usedCluePoolIndices,
   };
 
   if (phaseCompleted && session.phaseNumber >= 3) {
     return {
       ...nextSession,
-      stage: 'finalSummary',
+      stage: "finalSummary",
       usedCluePoolIndices: [],
       results: buildResults(nextSession),
     };
@@ -370,7 +381,7 @@ const markCorrect = (
   session: HatGameSession,
   activeTurn: ActiveTurn,
   clue: QueuedClue,
-  runtime: ActionRuntime
+  runtime: ActionRuntime,
 ) => {
   const nextTurn = cloneActiveTurn(activeTurn);
   nextTurn.score += 1;
@@ -378,10 +389,10 @@ const markCorrect = (
   nextTurn.clueHistory.push(
     buildHistoryEntry({
       clue,
-      status: 'correct',
+      status: "correct",
       phaseNumber: session.phaseNumber,
-      makeTimestamp: runtime.makeTimestamp
-    })
+      makeTimestamp: runtime.makeTimestamp,
+    }),
   );
 
   if (nextTurn.currentSkippedCluePoolIndex === clue.poolIndex) {
@@ -396,11 +407,11 @@ const skipFigure = (
   session: HatGameSession,
   activeTurn: ActiveTurn,
   clue: QueuedClue,
-  runtime: ActionRuntime
+  runtime: ActionRuntime,
 ): ActiveTurn | { error: string } => {
   const nextTurn = cloneActiveTurn(activeTurn);
   if (nextTurn.skipsRemaining <= 0) {
-    return { error: 'No skips remain this turn' };
+    return { error: "No skips remain this turn" };
   }
 
   nextTurn.skippedCount += 1;
@@ -409,10 +420,10 @@ const skipFigure = (
   nextTurn.clueHistory.push(
     buildHistoryEntry({
       clue,
-      status: 'skipped',
+      status: "skipped",
       phaseNumber: session.phaseNumber,
-      makeTimestamp: runtime.makeTimestamp
-    })
+      makeTimestamp: runtime.makeTimestamp,
+    }),
   );
   const [skippedClue] = nextTurn.clueQueue.splice(nextTurn.queueIndex, 1);
   if (!skippedClue) {
@@ -430,7 +441,7 @@ const availableSkippedClues = (activeTurn: ActiveTurn) => {
     if (activeSkippedClue) {
       skippedClues.unshift({
         poolIndex: activeSkippedClue.poolIndex,
-        text: activeSkippedClue.text
+        text: activeSkippedClue.text,
       });
     }
   }
@@ -440,21 +451,23 @@ const availableSkippedClues = (activeTurn: ActiveTurn) => {
 const returnSkippedFigure = (
   session: HatGameSession,
   activeTurn: ActiveTurn,
-  targetPoolIndex?: number
+  targetPoolIndex?: number,
 ): ActiveTurn | { error: string } => {
   const nextTurn = cloneActiveTurn(activeTurn);
   const skippedClues = availableSkippedClues(nextTurn);
   if (skippedClues.length === 0) {
-    return { error: 'There is no skipped famous figure to return to' };
+    return { error: "There is no skipped famous figure to return to" };
   }
 
   const selectedPoolIndex = targetPoolIndex ?? skippedClues[0]?.poolIndex ?? null;
   const selectedSkippedClue = skippedClues.find((clue) => clue.poolIndex === selectedPoolIndex);
   if (!selectedSkippedClue) {
-    return { error: 'The skipped famous figure is no longer available' };
+    return { error: "The skipped famous figure is no longer available" };
   }
 
-  nextTurn.skippedClues = nextTurn.skippedClues.filter((clue) => clue.poolIndex !== selectedPoolIndex);
+  nextTurn.skippedClues = nextTurn.skippedClues.filter(
+    (clue) => clue.poolIndex !== selectedPoolIndex,
+  );
   if (
     nextTurn.currentSkippedCluePoolIndex !== null &&
     nextTurn.currentSkippedCluePoolIndex !== selectedPoolIndex
@@ -463,14 +476,14 @@ const returnSkippedFigure = (
     if (activeSkippedClue) {
       nextTurn.skippedClues.push({
         poolIndex: activeSkippedClue.poolIndex,
-        text: activeSkippedClue.text
+        text: activeSkippedClue.text,
       });
     }
   }
 
   const skippedIndex = nextTurn.clueQueue.findIndex((clue) => clue.poolIndex === selectedPoolIndex);
   if (skippedIndex === -1) {
-    return { error: 'The skipped famous figure is no longer available' };
+    return { error: "The skipped famous figure is no longer available" };
   }
   if (skippedIndex !== nextTurn.queueIndex) {
     const [skippedClue] = nextTurn.clueQueue.splice(skippedIndex, 1);
@@ -487,7 +500,7 @@ const returnSkippedFigure = (
 const finishActionIfNeeded = (
   session: HatGameSession,
   activeTurn: ActiveTurn,
-  runtime: ActionRuntime
+  runtime: ActionRuntime,
 ): HatGameActionResult => {
   if (currentQueuedClue(activeTurn)) {
     return { ...session, activeTurn };
@@ -509,7 +522,7 @@ const buildActionRuntime = (options: {
   nowMs: options.nowMs ?? Date.now,
   toIso: options.toIso ?? ((timestamp) => new Date(timestamp).toISOString()),
   makeTimestamp: options.makeTimestamp ?? (() => new Date().toISOString()),
-  isPast: options.isPast ?? ((timestamp) => new Date(timestamp).getTime() <= Date.now())
+  isPast: options.isPast ?? ((timestamp) => new Date(timestamp).getTime() <= Date.now()),
 });
 
 /**
@@ -519,11 +532,11 @@ const buildActionRuntime = (options: {
 const applyTurnInteractionAction = (
   session: HatGameSession,
   action: HatGameAction,
-  runtime: ActionRuntime
+  runtime: ActionRuntime,
 ): HatGameActionResult => {
   const activeTurn = session.activeTurn;
   if (!activeTurn) {
-    return { error: 'The turn has not started yet' };
+    return { error: "The turn has not started yet" };
   }
 
   if (runtime.isPast(activeTurn.endsAt)) {
@@ -535,21 +548,21 @@ const applyTurnInteractionAction = (
     return finishTurn(session);
   }
 
-  if (action.type === 'mark-correct') {
+  if (action.type === "mark-correct") {
     return finishActionIfNeeded(session, markCorrect(session, activeTurn, clue, runtime), runtime);
   }
 
-  if (action.type === 'skip-clue') {
+  if (action.type === "skip-clue") {
     const nextTurn = skipFigure(session, activeTurn, clue, runtime);
-    if ('error' in nextTurn) {
+    if ("error" in nextTurn) {
       return nextTurn;
     }
     return finishActionIfNeeded(session, nextTurn, runtime);
   }
 
-  if (action.type === 'return-skipped-clue') {
+  if (action.type === "return-skipped-clue") {
     const nextTurn = returnSkippedFigure(session, activeTurn, action.payload?.poolIndex);
-    if ('error' in nextTurn) {
+    if ("error" in nextTurn) {
       return nextTurn;
     }
     return finishActionIfNeeded(session, nextTurn, runtime);
@@ -563,7 +576,7 @@ export const createHatGameSession = ({
   teams,
   config = GAME_DEFAULTS,
   clueSubmissions,
-  rng = Math.random
+  rng = Math.random,
 }: {
   players: Player[];
   teams: Team[];
@@ -575,7 +588,7 @@ export const createHatGameSession = ({
     teamCount: teams.length,
     turnDurationSeconds: config.turnDurationSeconds,
     cluesPerPlayer: config.cluesPerPlayer,
-    skipsPerTurn: config.skipsPerTurn
+    skipsPerTurn: config.skipsPerTurn,
   };
   const nextTeams = teams.map((team) => ({ ...team, score: 0 }));
   const teamOrder = nextTeams.map((team) => team.id);
@@ -584,7 +597,7 @@ export const createHatGameSession = ({
     players: sortPlayersBySeat(players),
     teams: nextTeams,
     settings,
-    stage: 'ready',
+    stage: "ready",
     roundNumber: 1,
     phaseNumber: 1,
     teamOrder,
@@ -596,7 +609,7 @@ export const createHatGameSession = ({
     activeTurn: null,
     lastTurnSummary: null,
     bestTurnSummary: null,
-    results: null
+    results: null,
   };
 };
 
@@ -609,33 +622,33 @@ export const applyHatGameAction = (
     toIso?: (timestamp: number) => string;
     makeTimestamp?: () => string;
     isPast?: (timestamp: string) => boolean;
-  } = {}
+  } = {},
 ): HatGameActionResult => {
   const runtime = buildActionRuntime(options);
 
-  if (action.type === 'start-turn') {
+  if (action.type === "start-turn") {
     return startTurn(session, runtime);
   }
 
-  if (action.type === 'end-turn') {
-    if (session.stage !== 'turn' || !session.activeTurn) {
-      return { error: 'There is no active turn to end' };
+  if (action.type === "end-turn") {
+    if (session.stage !== "turn" || !session.activeTurn) {
+      return { error: "There is no active turn to end" };
     }
     return finishTurn(session);
   }
 
-  if (action.type === 'view-results') {
-    if (session.stage !== 'finalSummary') {
-      return { error: 'Final scores are only available after the last turn.' };
+  if (action.type === "view-results") {
+    if (session.stage !== "finalSummary") {
+      return { error: "Final scores are only available after the last turn." };
     }
     return {
       ...session,
-      stage: 'results',
+      stage: "results",
     };
   }
 
-  if (session.stage !== 'turn' || !session.activeTurn) {
-    return { error: 'The turn has not started yet' };
+  if (session.stage !== "turn" || !session.activeTurn) {
+    return { error: "The turn has not started yet" };
   }
 
   return applyTurnInteractionAction(session, action, runtime);

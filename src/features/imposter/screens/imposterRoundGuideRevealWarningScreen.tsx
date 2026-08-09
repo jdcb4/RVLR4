@@ -18,16 +18,10 @@ export function imposterRoundGuideRevealWarningScreen(
           The next screen shows who was secretly the imposter and what the word was.
         </p>
         <p className={`mt-4 ${IMPOSTER_NOTICE_CLASS}`}>
-          Are all players okay moving on — including anyone who should look away until
-          you say so?
+          Are all players okay moving on — including anyone who should look away until you say so?
         </p>
       </GamePanel>
     ),
-    actions: (
-      <PrimaryFooterButton
-        label="Reveal"
-        onClick={() => controller.goResults()}
-      />
-    ),
+    actions: <PrimaryFooterButton label="Reveal" onClick={() => controller.goResults()} />,
   };
 }

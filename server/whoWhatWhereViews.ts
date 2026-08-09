@@ -1,7 +1,4 @@
-import {
-  getActiveContext,
-  getCurrentWord,
-} from "@/domain/whowhatwhere/game";
+import { getActiveContext, getCurrentWord } from "@/domain/whowhatwhere/game";
 import type { ActiveTurn, MatchState, WordEntry } from "@/domain/whowhatwhere/types";
 
 export type WhoWhatWherePeerRole = "describer" | "guesser" | "observer";
@@ -53,10 +50,7 @@ function scrubActiveTurn(turn: ActiveTurn): ActiveTurn {
  * Strips secret words for anyone who is not the active describer during a live turn.
  * Category + timers remain so teammates can follow along without peeking.
  */
-export function projectWhoWhatWhereMatch(
-  match: MatchState,
-  viewerPlayerId: string,
-): MatchState {
+export function projectWhoWhatWhereMatch(match: MatchState, viewerPlayerId: string): MatchState {
   if (match.stage !== "turn" || !match.activeTurn) {
     return match;
   }
@@ -84,10 +78,7 @@ export function shouldShowWhoWhatWhereTurnFooter(
   );
 }
 
-export function canReturnSkippedWords(
-  match: MatchState,
-  viewerPlayerId: string,
-): boolean {
+export function canReturnSkippedWords(match: MatchState, viewerPlayerId: string): boolean {
   return (
     match.stage === "turn" &&
     Boolean(match.activeTurn) &&

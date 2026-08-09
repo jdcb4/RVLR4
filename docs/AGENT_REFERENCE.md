@@ -143,16 +143,16 @@ Rules for shell commands you run **interactively** during local development:
 
 ### Cross-shell command equivalents
 
-| Task                              | Bash                              | PowerShell                                   |
-| --------------------------------- | --------------------------------- | -------------------------------------------- |
-| Sequence (always run B)           | `A; B` or `A && B`                | `A; B`                                       |
-| Conditional (run B if A succeeds) | `A && B`                          | `A; if ($?) { B }`                           |
-| Set env var inline                | `FOO=bar pnpm dev`                | `$env:FOO="bar"; pnpm dev`                   |
-| Multi-line                        | `cmd \`<br>` --flag`              | `cmd `` ` ``<br>` --flag`                    |
-| Make dir incl. parents            | `mkdir -p path/to/dir`            | `mkdir path/to/dir`                          |
-| Remove dir recursively            | `rm -rf dir`                      | `Remove-Item -Recurse -Force dir`            |
-| Suppress output                   | `cmd > /dev/null 2>&1`            | `cmd > $null 2> $null`                       |
-| Read env var                      | `echo $FOO`                       | `$env:FOO` or `Write-Output $env:FOO`        |
+| Task                              | Bash                   | PowerShell                            |
+| --------------------------------- | ---------------------- | ------------------------------------- |
+| Sequence (always run B)           | `A; B` or `A && B`     | `A; B`                                |
+| Conditional (run B if A succeeds) | `A && B`               | `A; if ($?) { B }`                    |
+| Set env var inline                | `FOO=bar pnpm dev`     | `$env:FOO="bar"; pnpm dev`            |
+| Multi-line                        | `cmd \`<br>` --flag`   | `cmd `` ` ``<br>` --flag`             |
+| Make dir incl. parents            | `mkdir -p path/to/dir` | `mkdir path/to/dir`                   |
+| Remove dir recursively            | `rm -rf dir`           | `Remove-Item -Recurse -Force dir`     |
+| Suppress output                   | `cmd > /dev/null 2>&1` | `cmd > $null 2> $null`                |
+| Read env var                      | `echo $FOO`            | `$env:FOO` or `Write-Output $env:FOO` |
 
 ### When to use bash anyway
 
@@ -160,8 +160,8 @@ If you absolutely need bash semantics (running a POSIX shell script, complex pip
 
 ### When documenting commands in `/docs`
 
-- For commands that run in CI/Docker (Linux): bash syntax is correct, label fences as ```` ```bash ````.
-- For commands the user runs locally: write them so they work in both shells when possible (single-line `pnpm` invocations, no chains). When that's impossible, label the fence as ```` ```powershell ```` and provide the PowerShell form.
+- For commands that run in CI/Docker (Linux): bash syntax is correct, label fences as ` ```bash `.
+- For commands the user runs locally: write them so they work in both shells when possible (single-line `pnpm` invocations, no chains). When that's impossible, label the fence as ` ```powershell ` and provide the PowerShell form.
 
 ## When blocked
 

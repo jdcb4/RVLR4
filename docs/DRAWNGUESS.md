@@ -14,15 +14,15 @@ DrawNGuess is a production multiplayer game in RVLRY. It is a Telestrations-styl
 
 ## Main Files
 
-| Area | Files |
-| --- | --- |
-| Pure rules | `src/domain/drawnguess/engine.ts`, `src/domain/drawnguess/types.ts` |
-| Word packs | `src/domain/drawnguess/wordPacks.ts`, `src/data/drawnguessWordPrompts.json` |
-| Server runtime | `server/drawnguessRuntime.ts`, `server/drawnguessTicker.ts`, `server/drawnguessViews.ts` |
-| Socket wiring | `server/socketHandlers.ts`, `server/socketSchemas.ts`, `server/sync.ts` |
-| Production UI | `src/features/drawnguess/multiplayer/DrawNGuessMultiplayerView.tsx` |
-| Drawing UI | `src/features/drawnguess/multiplayer/DrawNGuessWhiteboard.tsx`, `src/features/drawnguess/multiplayer/DrawNGuessDrawingPreview.tsx` |
-| Avatars | `src/multiplayer/avatarCatalog.ts`, `src/components/PlayerAvatar.tsx`, `src/features/multiplayer/AvatarPicker.tsx`, `src/assets/avatars/` |
+| Area           | Files                                                                                                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Pure rules     | `src/domain/drawnguess/engine.ts`, `src/domain/drawnguess/types.ts`                                                                       |
+| Word packs     | `src/domain/drawnguess/wordPacks.ts`, `src/data/drawnguessWordPrompts.json`                                                               |
+| Server runtime | `server/drawnguessRuntime.ts`, `server/drawnguessTicker.ts`, `server/drawnguessViews.ts`                                                  |
+| Socket wiring  | `server/socketHandlers.ts`, `server/socketSchemas.ts`, `server/sync.ts`                                                                   |
+| Production UI  | `src/features/drawnguess/multiplayer/DrawNGuessMultiplayerView.tsx`                                                                       |
+| Drawing UI     | `src/features/drawnguess/multiplayer/DrawNGuessWhiteboard.tsx`, `src/features/drawnguess/multiplayer/DrawNGuessDrawingPreview.tsx`        |
+| Avatars        | `src/multiplayer/avatarCatalog.ts`, `src/components/PlayerAvatar.tsx`, `src/features/multiplayer/AvatarPicker.tsx`, `src/assets/avatars/` |
 
 ## Runtime Flow
 

@@ -1,7 +1,4 @@
-import {
-  MAX_PLAYERS_PER_TEAM,
-  MIN_PLAYERS_PER_TEAM,
-} from "@/config/teamRoster";
+import { MAX_PLAYERS_PER_TEAM, MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 
 import { getTeamNameSet } from "./teamNames";
 import { CATEGORIES, type Category, type GameSettings, type TeamSetup } from "./types";
@@ -34,9 +31,7 @@ export function normalizeName(name: string, fallback: string, limit = PLAYER_NAM
 }
 
 export function createTeamSetups(teamCount: GameSettings["teamCount"]): TeamSetup[] {
-  return Array.from({ length: teamCount }, (_, teamIndex) =>
-    createTeamSetup(teamIndex),
-  );
+  return Array.from({ length: teamCount }, (_, teamIndex) => createTeamSetup(teamIndex));
 }
 
 export function reconcileTeamSetups(
@@ -62,10 +57,7 @@ function createTeamSetup(teamIndex: number): TeamSetup {
   };
 }
 
-export function addPlayerToTeam(
-  teams: readonly TeamSetup[],
-  teamId: string,
-): TeamSetup[] {
+export function addPlayerToTeam(teams: readonly TeamSetup[], teamId: string): TeamSetup[] {
   return teams.map((team) => {
     if (team.id !== teamId || team.players.length >= MAX_PLAYERS_PER_TEAM) {
       return team;
@@ -82,9 +74,8 @@ export function addPlayerToTeam(
       ) + 1;
     const teamIndex = Number(team.id.replace("team-", "")) - 1;
     const defaultName =
-      getTeamNameSet(Number.isFinite(teamIndex) ? teamIndex : 0).members[
-        nextNumber - 1
-      ] ?? `Player ${nextNumber}`;
+      getTeamNameSet(Number.isFinite(teamIndex) ? teamIndex : 0).members[nextNumber - 1] ??
+      `Player ${nextNumber}`;
 
     return {
       ...team,
@@ -140,33 +131,23 @@ export function updatePlayerName(
     return {
       ...team,
       players: team.players.map((player) =>
-        player.id === playerId
-          ? { ...player, name: name.slice(0, PLAYER_NAME_LIMIT) }
-          : player,
+        player.id === playerId ? { ...player, name: name.slice(0, PLAYER_NAME_LIMIT) } : player,
       ),
     };
   });
 }
 
-export function toggleCategory(
-  selectedCategories: readonly Category[],
-  category: Category,
-) {
+export function toggleCategory(selectedCategories: readonly Category[], category: Category) {
   if (selectedCategories.includes(category)) {
     const nextCategories = selectedCategories.filter((item) => item !== category);
 
     return nextCategories.length > 0 ? nextCategories : selectedCategories;
   }
 
-  return CATEGORIES.filter(
-    (item) => item === category || selectedCategories.includes(item),
-  );
+  return CATEGORIES.filter((item) => item === category || selectedCategories.includes(item));
 }
 
-export function validateSetup(
-  teams: readonly TeamSetup[],
-  settings: GameSettings,
-): string[] {
+export function validateSetup(teams: readonly TeamSetup[], settings: GameSettings): string[] {
   const errors: string[] = [];
   const totalPlayers = teams.reduce((count, team) => count + team.players.length, 0);
 

@@ -54,11 +54,7 @@ export function applyWhoWhatWhereSkip(room: Room, actorId: string) {
   room.wwwMatch = skipWord(match);
 }
 
-export function applyWhoWhatWhereReturnSkipped(
-  room: Room,
-  actorId: string,
-  skippedWordId: string,
-) {
+export function applyWhoWhatWhereReturnSkipped(room: Room, actorId: string, skippedWordId: string) {
   const match = requireActiveTurn(room);
   assertActorIsDescriber(match, actorId);
   room.wwwMatch = returnSkippedWord(match, skippedWordId);

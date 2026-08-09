@@ -33,14 +33,11 @@ export function GameScoreboard({
             key={team.id}
             className={cn(
               "flex items-center justify-between text-typ-ui font-medium",
-              team.id === highlightTeamId &&
-                "-mx-1 rounded-md px-2 py-1 ring-2 ring-ring",
+              team.id === highlightTeamId && "-mx-1 rounded-md px-2 py-1 ring-2 ring-ring",
             )}
           >
             <span>{team.name}</span>
-            <span className="tabular-nums text-muted-foreground">
-              {team.score} pts
-            </span>
+            <span className="tabular-nums text-muted-foreground">{team.score} pts</span>
           </li>
         ))}
       </ul>
