@@ -17,8 +17,7 @@ import {
 import { assertRoomLobbyStartReady } from "../lobbyReadiness.ts";
 import { mpDebug } from "../multiplayerDebug.ts";
 import type { Room, RoomPlayer } from "../roomStore.ts";
-import { type HandlerContext,registerHandler } from "../socketHandle.ts";
-import type { SocketEventName, SocketPayload } from "../socketSchemas.ts";
+import { createSocketHandlerRegistrar } from "./register.ts";
 import { startWhoWhatWhereMatch } from "../whoWhatWhereRuntime.ts";
 import type { SocketHandlerContext } from "./types.ts";
 
@@ -28,11 +27,7 @@ function ensureHostCanChangeLobbySettings(room: Room, actor: RoomPlayer) {
 }
 
 export function registerLobbyHandlers({ io, socket, store }: SocketHandlerContext) {
-  const register = <E extends SocketEventName>(
-    event: E,
-    message: string,
-    handler: (context: HandlerContext, payload: SocketPayload<E>) => Promise<void> | void,
-  ) => registerHandler(socket, store, event, message, handler);
+  const register = createSocketHandlerRegistrar({ io, socket, store });
 
   register("lobby:setReady", "Unable to update ready state.", async ({ room, actor }, payload) => {
     actor.ready = payload.ready;

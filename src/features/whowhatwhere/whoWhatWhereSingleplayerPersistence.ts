@@ -1,7 +1,7 @@
 import type { GameSettings, MatchState, TeamSetup } from "@/domain/whowhatwhere/types";
 import { clearMatch, saveMatch, saveSetup } from "@/services/whowhatwherePersistence";
 
-export function persistWhoWhatWhereSetup(settings: GameSettings, teams: TeamSetup[]) {
+export function persistWhoWhatWhereSetup(settings: GameSettings, teams: readonly TeamSetup[]) {
   saveSetup({ settings, teams });
 }
 

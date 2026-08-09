@@ -10,9 +10,8 @@ import {
 } from "./imposterSingleplayerTransitions";
 
 const round: ImposterRoundState = {
-  theme: "Animals",
-  word: "Otter",
-  imposterIds: ["imposter-player-1"],
+  secretWord: "Otter",
+  imposterPlayerIds: ["imposter-player-1"],
   revealPlayerIndex: 0,
   revealRevealed: false,
 };

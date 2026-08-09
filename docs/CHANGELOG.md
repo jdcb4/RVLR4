@@ -12,6 +12,12 @@ Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`
   and aggregate-only rate-limit reporting.
 - **Deployment:** Railway now waits up to 30 seconds for `/api/health` before
   activating a deployment.
+- **Maintainability:** Split socket registration into session, lobby, replay,
+  and per-game modules, extracted game-specific single-player transitions and
+  persistence from large hooks, and added fake-clock server timer coverage.
+- **Verification:** Coverage now includes production client/server sources,
+  emits JSON for Fallow, and enforces elevated thresholds for projections,
+  sync, validation, reconnect secrets, and request limiting.
 
 ## 0.21.7 - 2026-08-09
 

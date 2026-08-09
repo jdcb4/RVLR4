@@ -29,7 +29,6 @@ describe("Who What Where single-player transitions", () => {
       { word: "Sydney", category: "Where", hint: "A harbour city" },
     ]);
     const pending: PersistedMatch = {
-      schemaVersion: 1,
       savedAt: new Date().toISOString(),
       match: {
         ...active,

@@ -18,7 +18,7 @@ export type MatchCreationResult =
   | { readonly match: null; readonly error: string };
 
 export function createValidatedWhoWhatWhereMatch(
-  teams: TeamSetup[],
+  teams: readonly TeamSetup[],
   settings: GameSettings,
 ): MatchCreationResult {
   const errors = validateSetup(teams, settings);

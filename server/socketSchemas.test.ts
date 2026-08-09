@@ -66,4 +66,40 @@ describe("Socket.IO boundary schemas", () => {
     expect(sessionBindSchema.safeParse({ ...parsed, extra: true }).success).toBe(false);
     expect(sessionBindSchema.safeParse({ ...parsed, secret: "short" }).success).toBe(false);
   });
+
+  it("rejects drawings over aggregate point and byte budgets", () => {
+    const baseStroke = {
+      id: "stroke",
+      color: "#111827",
+      size: 6,
+      tool: "pen" as const,
+    };
+    const tooManyPoints = {
+      drawing: {
+        format: "strokes-v1",
+        width: 512,
+        height: 512,
+        strokes: Array.from({ length: 4 }, (_, index) => ({
+          ...baseStroke,
+          id: `stroke-${index}`,
+          points: Array.from({ length: 1_501 }, () => ({ x: 0.5, y: 0.5 })),
+        })),
+      },
+    };
+    expect(socketSchemas["drawnguess:submitDrawing"].safeParse(tooManyPoints).success).toBe(false);
+
+    const tooManyBytes = {
+      drawing: {
+        format: "strokes-v1",
+        width: 512,
+        height: 512,
+        strokes: Array.from({ length: 100 }, (_, index) => ({
+          ...baseStroke,
+          id: `stroke-${index}`,
+          points: Array.from({ length: 60 }, () => ({ x: 0.123456789, y: 0.987654321 })),
+        })),
+      },
+    };
+    expect(socketSchemas["drawnguess:submitDrawing"].safeParse(tooManyBytes).success).toBe(false);
+  });
 });

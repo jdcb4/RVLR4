@@ -15,6 +15,21 @@ The combined gate is also exposed as:
 pnpm run verify
 ```
 
+Security-sensitive or significant server work also runs production dependency
+audit, import smoke testing, and coverage:
+
+```bash
+pnpm audit --prod
+pnpm run smoke:server-imports
+pnpm run test:coverage
+```
+
+Coverage emits text, HTML, and `coverage/coverage-final.json`. Projection and
+sync modules require 95% lines/statements, 100% functions, and 90% branches;
+boundary schemas, reconnect-secret comparison, and the limiter require 100%
+lines/statements/functions and 90% branches. Fake-clock tests cover all server
+turn tickers, room cleanup, limiter cleanup, and shutdown health state.
+
 For significant implementation changes, run Fallow and consider its feedback before final verification:
 
 ```bash
@@ -30,6 +45,11 @@ pnpm run fallow:hygiene
 ```
 
 If Fallow is unavailable, record that it was skipped and perform a local code-quality review before running the deterministic checks. Fallow 2.x reads `.fallowrc.json`: use **`entry`** (glob list of entry points, including tests/scripts) and **`ignorePatterns`** — the old `entrypoints` / `ignore` keys are no longer accepted.
+
+Fallow may classify `tailwindcss` as an unused production dependency because
+it executes during Vite/PostCSS builds rather than from application imports.
+It remains a required `devDependency`; this is the reviewed build-tool false
+positive, not a reason to remove or move it.
 
 ## Optional deeper checks
 

@@ -6,10 +6,20 @@ import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerA
 
 import { startDrawNGuessMatch } from "./drawnguessRuntime.ts";
 import { buildDrawNGuessSyncDto } from "./drawnguessViews.ts";
-import { projectHatSessionForViewer } from "./hatViews.ts";
+import {
+  canHatReturnSkipped,
+  classifyHatRole,
+  projectHatSessionForViewer,
+  shouldShowHatTurnFooter,
+} from "./hatViews.ts";
 import { buildImposterSyncDto } from "./imposterViews.ts";
 import { RoomStore } from "./roomStore.ts";
-import { projectWhoWhatWhereMatch } from "./whoWhatWhereViews.ts";
+import {
+  canReturnSkippedWords,
+  classifyWhoWhatWhereRole,
+  projectWhoWhatWhereMatch,
+  shouldShowWhoWhatWhereTurnFooter,
+} from "./whoWhatWhereViews.ts";
 
 const WWW_SECRET = "WWW secret";
 const HAT_SECRET = "Hat secret";
@@ -108,7 +118,7 @@ function hatSession(stage: HatGameSession["stage"]): HatGameSession {
             correctCount: 0,
             skippedCount: 0,
             skipsRemaining: 2,
-            skippedClues: [],
+            skippedClues: [{ poolIndex: 1, text: "Skipped Hat secret" }],
             currentSkippedCluePoolIndex: null,
             clueHistory: [],
           }
@@ -138,6 +148,17 @@ describe("viewer projection invariants", () => {
     expect(wire.includes(WWW_SECRET)).toBe(maySee);
   });
 
+  it("classifies WWW roles and gates describer-only controls", () => {
+    const match = wwwMatch("turn");
+    expect(classifyWhoWhatWhereRole(match, "describer")).toBe("describer");
+    expect(classifyWhoWhatWhereRole(match, "guesser")).toBe("guesser");
+    expect(classifyWhoWhatWhereRole(match, "observer")).toBe("observer");
+    expect(shouldShowWhoWhatWhereTurnFooter(match, "describer")).toBe(true);
+    expect(shouldShowWhoWhatWhereTurnFooter(match, "observer")).toBe(false);
+    expect(canReturnSkippedWords(match, "describer")).toBe(true);
+    expect(canReturnSkippedWords(wwwMatch("ready"), "describer")).toBe(false);
+  });
+
   it.each(["ready", "turn", "finalSummary"] as const)(
     "keeps the Hat clue pool private during %s",
     (stage) => {
@@ -154,6 +175,17 @@ describe("viewer projection invariants", () => {
     const projected = projectHatSessionForViewer(hatSession("turn"), viewerId);
     expect(JSON.stringify(projected.activeTurn).includes(HAT_SECRET)).toBe(maySee);
     expect(JSON.stringify(projected.cluePool)).not.toContain(HAT_SECRET);
+  });
+
+  it("classifies Hat roles and gates describer-only controls", () => {
+    const session = hatSession("turn");
+    expect(classifyHatRole(session, "describer")).toBe("describer");
+    expect(classifyHatRole(session, "guesser")).toBe("guesser");
+    expect(classifyHatRole(session, "observer")).toBe("observer");
+    expect(shouldShowHatTurnFooter(session, "describer")).toBe(true);
+    expect(shouldShowHatTurnFooter(session, "observer")).toBe(false);
+    expect(canHatReturnSkipped(session, "describer")).toBe(true);
+    expect(canHatReturnSkipped(hatSession("ready"), "describer")).toBe(false);
   });
 
   it("reveals completed Hat clues only at results", () => {
@@ -193,6 +225,36 @@ describe("viewer projection invariants", () => {
       expect(projected.snapshot.round?.imposterPlayerIds).toEqual(expectedImposterIds);
     },
   );
+
+  it("scrubs sequential Imposter reveals and exposes completed results", () => {
+    const snapshot: ImposterSnapshot = {
+      step: "reveal",
+      playerCount: 2,
+      imposterCount: 1,
+      players: [
+        { id: "crew", name: "Crew" },
+        { id: "imposter", name: "Imposter" },
+      ],
+      round: {
+        secretWord: "Volcano",
+        imposterPlayerIds: ["imposter"],
+        revealPlayerIndex: 0,
+        revealRevealed: true,
+      },
+    };
+
+    expect(buildImposterSyncDto(snapshot, "crew").snapshot.round?.secretWord).toBe("Volcano");
+    expect(buildImposterSyncDto(snapshot, "imposter").snapshot.round?.secretWord).toBe("");
+    expect(buildImposterSyncDto(snapshot, "crew").revealSubjectId).toBe("crew");
+    expect(buildImposterSyncDto({ ...snapshot, step: "results" }, "crew").snapshot).toEqual({
+      ...snapshot,
+      step: "results",
+    });
+    expect(
+      buildImposterSyncDto({ ...snapshot, step: "guidePregame", round: null }, "crew").snapshot
+        .round,
+    ).toBeNull();
+  });
 
   it("does not place another DrawNGuess player's assignment in the viewer DTO", () => {
     const store = new RoomStore();

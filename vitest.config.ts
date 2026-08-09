@@ -24,7 +24,31 @@ export default defineConfig({
     ],
     coverage: {
       provider: "v8",
-      reporter: ["text", "html"],
+      include: ["server/**/*.ts", "src/**/*.{ts,tsx}"],
+      exclude: [
+        "**/*.test.{ts,tsx}",
+        "**/*.d.ts",
+        "**/*Types.ts",
+        "**/types.ts",
+        "src/ui-gallery/**",
+        "src/tests/**",
+        "server/index.ts",
+      ],
+      reporter: ["text", "html", "json"],
+      thresholds: {
+        "server/{sync,whoWhatWhereViews,hatViews,imposterViews,drawnguessViews}.ts": {
+          lines: 95,
+          statements: 95,
+          functions: 100,
+          branches: 90,
+        },
+        "server/{boundarySchemas,socketSchemas,secrets,rateLimiter}.ts": {
+          lines: 100,
+          statements: 100,
+          functions: 100,
+          branches: 90,
+        },
+      },
     },
   },
 });

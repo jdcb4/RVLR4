@@ -1,6 +1,5 @@
 import { broadcastRoom } from "../broadcast.ts";
-import { type HandlerContext,registerHandler } from "../socketHandle.ts";
-import type { SocketEventName, SocketPayload } from "../socketSchemas.ts";
+import { createSocketHandlerRegistrar } from "./register.ts";
 import {
   applyWhoWhatWhereCorrect,
   applyWhoWhatWhereEndTurn,
@@ -14,11 +13,7 @@ import {
 import type { SocketHandlerContext } from "./types.ts";
 
 export function registerWhoWhatWhereHandlers({ io, socket, store }: SocketHandlerContext) {
-  const register = <E extends SocketEventName>(
-    event: E,
-    message: string,
-    handler: (context: HandlerContext, payload: SocketPayload<E>) => Promise<void> | void,
-  ) => registerHandler(socket, store, event, message, handler);
+  const register = createSocketHandlerRegistrar({ io, socket, store });
 
   register("www:markReady", "Unable to update readiness.", async ({ room, actor }) => {
     const match = room.wwwMatch;

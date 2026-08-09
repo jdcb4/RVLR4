@@ -20,6 +20,9 @@ These rules apply to all contributors, including AI agents.
 - Prefer well-maintained packages with TypeScript types.
 - Document any new top-level dependency in `docs/DECISIONS.md`.
 - Renovate keeps dependencies current; merge dependency PRs promptly after CI passes.
+- Run `pnpm audit --prod` for every security wave and keep the deployed
+  dependency graph free of known advisories. Any unavoidable advisory requires
+  an explicit, documented applicability and residual-risk review.
 
 ### Input handling
 
@@ -29,6 +32,8 @@ These rules apply to all contributors, including AI agents.
   budgets, and preserve bounded per-process request/mutation token buckets.
 - Enforce private game data through server viewer projections. UI visibility is
   not an authorization control.
+- Reconnect secrets stay 32-character base64url values and are compared only
+  with the constant-time helper after strict shape validation.
 
 ### Production transport boundary
 

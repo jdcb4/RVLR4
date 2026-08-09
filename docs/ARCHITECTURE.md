@@ -106,6 +106,16 @@ Operational logs use allow-listed metadata only and never include room codes,
 player identifiers, names, reconnect secrets, clues, drawings, bodies, or
 headers.
 
+Socket registration is a small composition layer in `server/socketHandlers.ts`.
+Session, lobby, replay, and each multiplayer game's handlers live under
+`server/socketHandlers/`; every authenticated mutation still enters through
+the common schema, actor lookup, and token-budget guard in `socketHandle.ts`.
+
+Single-player orchestration remains game-specific. Pure setup, handoff,
+resume, and replay transitions live beside their owning feature, while browser
+persistence is isolated from the React controller. Do not combine the three
+games into a generic reducer or hook.
+
 ## Configuration
 
 Environment variables flow through Zod: **`src/config/env.ts`** (Vite client) and **`server/env.ts`** (Node server). Missing or malformed values must fail fast at startup.
@@ -116,6 +126,9 @@ Environment variables flow through Zod: **`src/config/env.ts`** (Vite client) an
 - React Testing Library for component behaviour.
 - Deterministic unit tests for domain logic. Integration tests for important flows.
 - Inject fakes for time, randomness, IDs.
+- Coverage includes production `server/**/*.ts` and `src/**/*.{ts,tsx}` and
+  enforces higher glob-specific gates for projections, sync, validation,
+  reconnect-secret comparison, and rate limiting.
 
 ## Deployment
 
