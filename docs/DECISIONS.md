@@ -239,3 +239,23 @@ package and is easier to drift. Disabling CSP wholesale would give up the most
 useful browser-side control to avoid a small amount of configuration.
 
 **Supersedes:** The previous implicit reliance on browser and Express defaults.
+
+---
+
+## 2026-08-09: Istanbul is the coverage interchange format
+
+**Decision:** Use Vitest's Istanbul coverage adapter and emit text, HTML, and
+`coverage-final.json` reports. Apply glob-specific thresholds to security and
+viewer-projection modules and pass the JSON report directly to Fallow.
+
+**Reasoning:** Both Vitest adapters can enforce thresholds, but Fallow expects
+Istanbul source locations and counters. Using the matching adapter avoids a
+lossy source-map conversion step and keeps one deterministic artifact for local
+review and CI tooling.
+
+**Rejected alternatives:** V8 coverage generated valid Vitest reports but its
+negative source-map column offsets were rejected by Fallow's Istanbul reader.
+Maintaining a sanitizing conversion script would add an unnecessary second
+coverage format and could conceal mapping errors.
+
+**Supersedes:** The previous implicit use of Vitest's V8 coverage adapter.

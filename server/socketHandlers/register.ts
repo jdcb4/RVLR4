@@ -1,4 +1,4 @@
-import { registerHandler, type HandlerContext } from "../socketHandle.ts";
+import { type HandlerContext,registerHandler } from "../socketHandle.ts";
 import type { SocketEventName, SocketPayload } from "../socketSchemas.ts";
 import type { SocketHandlerContext } from "./types.ts";
 

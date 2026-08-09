@@ -14,6 +14,11 @@ import {
 import { createSocketHandlerRegistrar } from "./register.ts";
 import type { SocketHandlerContext } from "./types.ts";
 
+/**
+ * Registration-only composition stays together so the prompt/drawing/guess
+ * event pairs can be audited as one protocol; each callback delegates its
+ * state transition and retains the shared schema/actor/budget guard.
+ */
 export function registerDrawNGuessHandlers({ io, socket, store }: SocketHandlerContext) {
   const register = createSocketHandlerRegistrar({ io, socket, store });
 

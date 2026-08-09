@@ -4,6 +4,9 @@ import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import { buildDefaultSetup } from "@/domain/hat-game/setup";
 
 import {
+  advanceHatClueEntry,
+  advanceHatTeamStep,
+  createHatTeamSetup,
   createInitialHatSnapshot,
   normalizeHatSnapshot,
   startHatSession,
@@ -52,5 +55,17 @@ describe("Hat single-player transitions", () => {
     expect(started.step).toBe("game");
     expect(started.session).not.toBeNull();
     expect(source.session).toBeNull();
+  });
+
+  it("builds the roster and blocks incomplete clue handoffs", () => {
+    const setup = createHatTeamSetup(createInitialHatSnapshot());
+    expect(setup.snapshot?.players).toHaveLength(4);
+    const teamStep = advanceHatTeamStep(setup.snapshot!);
+    expect(teamStep.snapshot?.teamEditIndex).toBe(1);
+    const clueStep = { ...setup.snapshot!, step: "clues" as const, clueEntryIndex: 0 };
+    expect(advanceHatClueEntry(clueStep)).toMatchObject({
+      snapshot: null,
+      error: expect.stringContaining("Fill in every famous figure"),
+    });
   });
 });

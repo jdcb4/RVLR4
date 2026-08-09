@@ -23,7 +23,7 @@ export default defineConfig({
       "**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*",
     ],
     coverage: {
-      provider: "v8",
+      provider: "istanbul",
       include: ["server/**/*.ts", "src/**/*.{ts,tsx}"],
       exclude: [
         "**/*.test.{ts,tsx}",

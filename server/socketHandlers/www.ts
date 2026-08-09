@@ -1,5 +1,4 @@
 import { broadcastRoom } from "../broadcast.ts";
-import { createSocketHandlerRegistrar } from "./register.ts";
 import {
   applyWhoWhatWhereCorrect,
   applyWhoWhatWhereEndTurn,
@@ -10,8 +9,13 @@ import {
   applyWhoWhatWhereStartTurn,
   markReadyGate,
 } from "../whoWhatWhereRuntime.ts";
+import { createSocketHandlerRegistrar } from "./register.ts";
 import type { SocketHandlerContext } from "./types.ts";
 
+/**
+ * Registration-only composition keeps the WWW turn protocol auditable in
+ * event order; each callback delegates to the runtime and shared guard.
+ */
 export function registerWhoWhatWhereHandlers({ io, socket, store }: SocketHandlerContext) {
   const register = createSocketHandlerRegistrar({ io, socket, store });
 

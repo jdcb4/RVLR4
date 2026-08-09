@@ -5,8 +5,11 @@ import {
   advanceImposterReveal,
   createImposterPlayers,
   createInitialImposterSnapshot,
+  moveImposterSetupForward,
+  resizeImposterRoster,
   showImposterRole,
   startImposterReveal,
+  startImposterRound,
 } from "./imposterSingleplayerTransitions";
 
 const round: ImposterRoundState = {
@@ -43,5 +46,13 @@ describe("Imposter single-player transitions", () => {
     expect(advanceImposterReveal(startImposterReveal(initial, finalRound)).step).toBe(
       "guidePregame",
     );
+  });
+
+  it("keeps setup and replay transitions inside the feature state machine", () => {
+    const resized = resizeImposterRoster(createInitialImposterSnapshot(), 4);
+    expect(resized.players).toHaveLength(4);
+    expect(moveImposterSetupForward(resized, "roster").snapshot?.step).toBe("roster");
+    const started = startImposterRound(resized, ["Otter"], () => 0, "Could not start.");
+    expect(started.snapshot).toMatchObject({ step: "reveal", round: { secretWord: "Otter" } });
   });
 });

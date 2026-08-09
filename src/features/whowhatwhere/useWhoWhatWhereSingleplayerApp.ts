@@ -4,7 +4,6 @@ import { FOOTER_ACTION_LOCK_MS } from "@/components/footerActionLockContext";
 import {
   correctWord,
   endTurn,
-  isTurnExpired,
   returnSkippedWord,
   revealHint,
   showResults,
@@ -13,10 +12,8 @@ import {
 } from "@/domain/whowhatwhere/game";
 import { reconcileTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState, TeamSetup } from "@/domain/whowhatwhere/types";
-import {
-  persistWhoWhatWhereMatch,
-  persistWhoWhatWhereSetup,
-} from "@/features/whowhatwhere/whoWhatWhereSingleplayerPersistence";
+import { useWhoWhatWherePersistence } from "@/features/whowhatwhere/useWhoWhatWherePersistence";
+import { useWhoWhatWhereTurnTicker } from "@/features/whowhatwhere/useWhoWhatWhereTurnTicker";
 import {
   createValidatedWhoWhatWhereMatch,
   nextWhoWhatWhereTeamStep,
@@ -46,39 +43,8 @@ export function useWhoWhatWhereSingleplayerApp() {
   const [footerActionsLocked, setFooterActionsLocked] = useState(false);
   const [readyHandoffRevealed, setReadyHandoffRevealed] = useState(false);
 
-  useEffect(() => {
-    persistWhoWhatWhereSetup(settings, teamSetups);
-  }, [settings, teamSetups]);
-
-  useEffect(() => {
-    if (!match) {
-      return;
-    }
-    persistWhoWhatWhereMatch(match);
-  }, [match]);
-
-  useEffect(() => {
-    if (match?.stage !== "turn" || !match.activeTurn) {
-      return undefined;
-    }
-
-    const interval = window.setInterval(() => {
-      setMatch((currentMatch) => {
-        if (
-          !currentMatch?.activeTurn ||
-          currentMatch.stage !== "turn" ||
-          !isTurnExpired(currentMatch.activeTurn)
-        ) {
-          return currentMatch;
-        }
-
-        void playGameSoundEffect("timeout");
-        return endTurn(currentMatch);
-      });
-    }, 250);
-
-    return () => window.clearInterval(interval);
-  }, [match?.activeTurn, match?.stage]);
+  useWhoWhatWherePersistence(settings, teamSetups, match);
+  useWhoWhatWhereTurnTicker(match, setMatch);
 
   const activeMode: WhoWhatWhereAppMode = match
     ? match.stage === "ready"

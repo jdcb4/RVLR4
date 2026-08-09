@@ -24,7 +24,8 @@ pnpm run smoke:server-imports
 pnpm run test:coverage
 ```
 
-Coverage emits text, HTML, and `coverage/coverage-final.json`. Projection and
+Coverage uses Vitest's Istanbul adapter and emits text, HTML, and
+`coverage/coverage-final.json` in the format Fallow consumes. Projection and
 sync modules require 95% lines/statements, 100% functions, and 90% branches;
 boundary schemas, reconnect-secret comparison, and the limiter require 100%
 lines/statements/functions and 90% branches. Fake-clock tests cover all server
@@ -50,6 +51,12 @@ Fallow may classify `tailwindcss` as an unused production dependency because
 it executes during Vite/PostCSS builds rather than from application imports.
 It remains a required `devDependency`; this is the reviewed build-tool false
 positive, not a reason to remove or move it.
+
+Run `pnpm dlx fallow security --no-cache --format human` for security-candidate
+review. Its current same-origin `fetch` candidates use encoded room-code path
+segments, `Retry-After` is derived as an integer, and the reported static-file
+paths are composed only from build-time literals. These are reviewed false
+positives; re-review them if their input sources or path construction changes.
 
 ## Optional deeper checks
 

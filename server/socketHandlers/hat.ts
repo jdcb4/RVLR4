@@ -11,6 +11,10 @@ import type { HandlerContext } from "../socketHandle.ts";
 import { createSocketHandlerRegistrar } from "./register.ts";
 import type { SocketHandlerContext } from "./types.ts";
 
+/**
+ * Registration-only composition keeps the six symmetric Hat turn commands
+ * visible as one protocol; game transitions remain in hatRuntime.
+ */
 export function registerHatHandlers({ io, socket, store }: SocketHandlerContext) {
   const register = createSocketHandlerRegistrar({ io, socket, store });
   const requireActiveHat = (room: HandlerContext["room"]) => {

@@ -17,8 +17,8 @@ import {
 import { assertRoomLobbyStartReady } from "../lobbyReadiness.ts";
 import { mpDebug } from "../multiplayerDebug.ts";
 import type { Room, RoomPlayer } from "../roomStore.ts";
-import { createSocketHandlerRegistrar } from "./register.ts";
 import { startWhoWhatWhereMatch } from "../whoWhatWhereRuntime.ts";
+import { createSocketHandlerRegistrar } from "./register.ts";
 import type { SocketHandlerContext } from "./types.ts";
 
 function ensureHostCanChangeLobbySettings(room: Room, actor: RoomPlayer) {
@@ -26,6 +26,11 @@ function ensureHostCanChangeLobbySettings(room: Room, actor: RoomPlayer) {
   if (room.phase !== "lobby") throw new Error("Settings are locked once the match begins.");
 }
 
+/**
+ * Lobby registration is intentionally a single protocol inventory: it spans
+ * player/team/settings/start events that share one phase and broadcast rule.
+ * Domain mutations stay in lobbyControl and the per-game runtimes.
+ */
 export function registerLobbyHandlers({ io, socket, store }: SocketHandlerContext) {
   const register = createSocketHandlerRegistrar({ io, socket, store });
 

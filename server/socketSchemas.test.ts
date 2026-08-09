@@ -45,6 +45,9 @@ describe("Socket.IO boundary schemas", () => {
         },
       }).success,
     ).toBe(true);
+    expect(socketSchemas["lobby:hostSetTeamCount"].parse({ teamCount: 2 })).toEqual({
+      teamCount: 2,
+    });
   });
 
   it.each([

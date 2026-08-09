@@ -1,19 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
-import { MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 import { getHatClueSuggestions } from "@/domain/hat-game/clueSuggestions";
 import { applyHatGameAction } from "@/domain/hat-game/engine";
 import {
   addPlayerToHatTeam,
   applyRosterRowsToHat,
-  buildDefaultSetup,
-  getHatGameSetupError,
   type HatRosterTeamRow,
   hatStateToRosterRows,
   removePlayerFromHatTeam,
 } from "@/domain/hat-game/setup";
-import { getCountdownSeconds } from "@/domain/hat-game/time";
 import type { HatGameAction } from "@/domain/hat-game/types";
 import {
   makeSingleplayerResumeSavedGame,
@@ -24,13 +20,18 @@ import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFoo
 import { playHatActionSoundEffects } from "@/features/hat-game/hatActionSound";
 import type { AppSnapshot, StoragePayload } from "@/features/hat-game/hatSingleplayerAppTypes";
 import {
+  advanceHatClueEntry,
+  advanceHatTeamStep,
+  applyHatRosterTransition,
+  backHatTeamStep,
+  beginHatClueEntry,
+  createHatTeamSetup,
   createInitialHatSnapshot,
   normalizeHatSnapshot,
   startHatSession,
-  syncHatClueSubmissions,
 } from "@/features/hat-game/hatSingleplayerTransitions";
+import { useHatTurnLifecycle } from "@/features/hat-game/useHatTurnLifecycle";
 import { formatSavedAt } from "@/lib/formatSavedAt";
-import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import { playSoundCue } from "@/services/hatSound";
 import { clearSavedState, loadSavedState, saveState } from "@/services/hatStorage";
 
@@ -64,11 +65,8 @@ export function useHatSingleplayerApp() {
   const [savedRecord, setSavedRecord] = useState<StoragePayload | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState("");
-  const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [confirmNewGame, setConfirmNewGame] = useState(false);
   const [showInfoPopup, setShowInfoPopup] = useState(false);
-  const warningCueTurnRef = useRef<string | null>(null);
-  const turnEndCueTurnRef = useRef<string | null>(null);
   const snapshotRef = useRef(snapshot);
 
   useEffect(() => {
@@ -149,40 +147,11 @@ export function useHatSingleplayerApp() {
       handoffRevealed: result.stage === "ready" ? false : current.handoffRevealed,
     }));
   };
-
-  useEffect(() => {
-    if (
-      snapshot.step !== "game" ||
-      snapshot.session?.stage !== "turn" ||
-      !snapshot.session.activeTurn?.endsAt
-    ) {
-      setSecondsRemaining(0);
-      warningCueTurnRef.current = null;
-      return undefined;
-    }
-
-    const turnCueKey = snapshot.session.activeTurn.startedAt;
-    const tick = () => {
-      const remaining = getCountdownSeconds(snapshotRef.current.session?.activeTurn?.endsAt);
-      setSecondsRemaining(remaining);
-      if (remaining <= 10 && remaining > 0 && warningCueTurnRef.current !== turnCueKey) {
-        warningCueTurnRef.current = turnCueKey;
-        void playGameSoundEffect("warn10");
-      }
-      if (remaining <= 0) {
-        dispatchGameAction({ type: "end-turn" });
-      }
-    };
-
-    tick();
-    const interval = setInterval(tick, 250);
-    return () => clearInterval(interval);
-  }, [
-    snapshot.step,
-    snapshot.session?.activeTurn?.endsAt,
-    snapshot.session?.activeTurn?.startedAt,
-    snapshot.session?.stage,
-  ]);
+  const { secondsRemaining, turnEndCueTurnRef } = useHatTurnLifecycle(
+    snapshot,
+    snapshotRef,
+    dispatchGameAction,
+  );
 
   const activeTeam = useMemo(() => {
     if (snapshot.step === "team") {
@@ -253,40 +222,15 @@ export function useHatSingleplayerApp() {
 
   /** Build 2 players per team and move into per-team setup (same pattern as WhoWhatWhere). */
   const confirmTeamCountAndStartTeamSetup = () => {
-    const teamCount = snapshotRef.current.teamCount;
-    const playerCount = teamCount * MIN_PLAYERS_PER_TEAM;
-    const setupError = getHatGameSetupError({ playerCount, teamCount });
-    if (setupError) {
-      setError(setupError);
-      return;
-    }
-    const { teams, players } = buildDefaultSetup(playerCount, teamCount);
-    setSnapshot((current) => ({
-      ...current,
-      step: "team",
-      teamEditIndex: 0,
-      playerCount: players.length,
-      teamCount,
-      teams,
-      players,
-      clueSubmissions: syncHatClueSubmissions(players, {}),
-      session: null,
-    }));
+    const result = createHatTeamSetup(snapshotRef.current);
+    if (!result.snapshot) return setError(result.error);
+    setSnapshot(result.snapshot);
     setError("");
   };
 
   const applyHatRosterFromRows = (rows: readonly HatRosterTeamRow[]) => {
     setError("");
-    setSnapshot((current) => {
-      const { teams, players } = applyRosterRowsToHat(rows, current.teams);
-      return {
-        ...current,
-        teams,
-        players,
-        playerCount: players.length,
-        clueSubmissions: syncHatClueSubmissions(players, current.clueSubmissions),
-      };
-    });
+    setSnapshot((current) => applyHatRosterTransition(current, rows));
   };
 
   const addPlayerToHatRosterRows = (rows: readonly HatRosterTeamRow[], teamId: string) => {
@@ -330,27 +274,14 @@ export function useHatSingleplayerApp() {
   };
 
   const confirmTeamStep = () => {
-    if (!activeTeam) {
-      return;
-    }
-    if (!activeTeam.name.trim() || activeTeamPlayers.some((player) => !player.name.trim())) {
-      setError("Name the team and every player before continuing.");
-      return;
-    }
+    const result = advanceHatTeamStep(snapshotRef.current);
+    if (!result.snapshot) return setError(result.error);
+    setSnapshot(result.snapshot);
     setError("");
-    setSnapshot((current) => ({
-      ...current,
-      teamEditIndex: current.teamEditIndex + 1,
-      step: current.teamEditIndex >= current.teams.length - 1 ? "review" : "team",
-    }));
   };
 
   const backTeamStep = () => {
-    setSnapshot((current) => ({
-      ...current,
-      step: current.teamEditIndex === 0 ? "settings" : "team",
-      teamEditIndex: Math.max(0, current.teamEditIndex - 1),
-    }));
+    setSnapshot(backHatTeamStep);
   };
 
   const editTeams = () => {
@@ -358,23 +289,9 @@ export function useHatSingleplayerApp() {
   };
 
   const startClueEntry = () => {
-    const setupError = getHatGameSetupError({
-      playerCount: snapshot.players.length,
-      teamCount: snapshot.teamCount,
-      teams: snapshot.teams,
-      players: snapshot.players,
-    });
-    if (setupError) {
-      setError(setupError);
-      return;
-    }
-    setSnapshot((current) => ({
-      ...current,
-      step: "clues",
-      clueEntryIndex: 0,
-      clueEntryRevealed: false,
-      clueSubmissions: syncHatClueSubmissions(current.players, current.clueSubmissions),
-    }));
+    const result = beginHatClueEntry(snapshotRef.current);
+    if (!result.snapshot) return setError(result.error);
+    setSnapshot(result.snapshot);
     setError("");
   };
 
@@ -383,24 +300,9 @@ export function useHatSingleplayerApp() {
   };
 
   const confirmClues = () => {
-    const player = snapshot.players[snapshot.clueEntryIndex];
-    if (!player) {
-      return;
-    }
-    const clues = snapshot.clueSubmissions[player.id]?.clues ?? createEmptyClues();
-    if (clues.some((clue) => clue.trim().length === 0)) {
-      setError(`Fill in every famous figure before handing the phone on from ${player.name}.`);
-      return;
-    }
-    if (snapshot.clueEntryIndex >= snapshot.players.length - 1) {
-      setSnapshot((current) => startHatSession(current, snapshot));
-    } else {
-      setSnapshot((current) => ({
-        ...current,
-        clueEntryIndex: current.clueEntryIndex + 1,
-        clueEntryRevealed: false,
-      }));
-    }
+    const result = advanceHatClueEntry(snapshotRef.current);
+    if (!result.snapshot) return setError(result.error);
+    setSnapshot(result.snapshot);
     setError("");
   };
 

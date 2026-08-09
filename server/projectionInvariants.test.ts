@@ -65,7 +65,12 @@ function wwwMatch(stage: MatchState["stage"]): MatchState {
             correctCount: 0,
             skippedCount: 0,
             skipLimit: 2,
-            skippedWords: [],
+            skippedWords: [
+              {
+                id: "skipped-secret",
+                word: { word: "Skipped WWW secret", category: "What", hint: "Skip hint" },
+              },
+            ],
             nextSkippedWordId: 1,
             wordHistory: [],
             hintsRemaining: 1,
