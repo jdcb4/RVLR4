@@ -220,3 +220,22 @@ source-based build work.
 
 **Supersedes:** Earlier guidance that treated Docker and Railway as equal deploy
 targets or described Docker as the recommended self-hosted default.
+
+---
+
+## 2026-08-09: Helmet owns the production HTTP header baseline
+
+**Decision:** Use `helmet@8.3.0` on the Express server with an explicit
+same-origin SPA Content Security Policy; keep the policy enabled and tune its
+directives when a reviewed asset or connection requirement changes.
+
+**Reasoning:** Helmet provides a maintained baseline for CSP and related
+browser security headers with less bespoke middleware. The explicit policy
+permits the app's same-origin scripts, WebSocket connections, inline Tailwind
+styles, and data/blob images while disabling objects and framing.
+
+**Rejected alternatives:** Hand-maintaining every header duplicates a mature
+package and is easier to drift. Disabling CSP wholesale would give up the most
+useful browser-side control to avoid a small amount of configuration.
+
+**Supersedes:** The previous implicit reliance on browser and Express defaults.

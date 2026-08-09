@@ -3,6 +3,7 @@ import type { Express, NextFunction, Request, Response } from "express";
 import { createRoomBodySchema, joinRoomBodySchema, roomParamsSchema } from "./boundarySchemas.ts";
 import { httpClientAddress } from "./clientAddress.ts";
 import { mpDebug } from "./multiplayerDebug.ts";
+import type { RateLimitReporter } from "./operationalLog.ts";
 import { RATE_POLICIES, type TokenBucketPolicy, TokenBucketStore } from "./rateLimiter.ts";
 import { RoomStore } from "./roomStore.ts";
 
@@ -11,6 +12,7 @@ const INVALID_REQUEST = "INVALID_REQUEST" as const;
 export type HttpSecurityContext = {
   readonly limiter: TokenBucketStore;
   readonly isRailway: boolean;
+  readonly rateLimitReporter?: RateLimitReporter;
 };
 
 export function handleJsonBodyError(
@@ -49,6 +51,8 @@ function consumeHttpBudget(
   if (result.allowed) {
     return true;
   }
+
+  security.rateLimitReporter?.record(`http.${operation}`);
 
   response.setHeader("Retry-After", Math.max(1, Math.ceil(result.retryAfterMs / 1_000)));
   response.status(429).json({

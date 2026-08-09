@@ -11,6 +11,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
 
 import { handleJsonBodyError, registerHttpRoutes } from "./httpRoutes.ts";
+import { createCorsOriginValidator } from "./originPolicy.ts";
 import { RoomStore } from "./roomStore.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
 
@@ -29,7 +30,10 @@ async function bootHarness(): Promise<TestHarness> {
   registerHttpRoutes(app, store);
 
   const server = http.createServer(app);
-  const io = new Server(server);
+  const io = new Server(server, {
+    cors: { origin: createCorsOriginValidator(["http://allowed.test"]) },
+    maxHttpBufferSize: 256 * 1_024,
+  });
   registerSocketHandlers(io, store);
 
   await new Promise<void>((resolve) => {
@@ -357,6 +361,35 @@ describe("multiplayer smoke", () => {
     expect(limited.status).toBe(429);
     expect(limited.headers.get("retry-after")).toBeTruthy();
     expect(await limited.json()).toMatchObject({ code: "RATE_LIMITED" });
+  });
+
+  it("rejects an unlisted Socket.IO browser origin", async () => {
+    const socket = ioClient(harness.url, {
+      transports: ["websocket"],
+      forceNew: true,
+      extraHeaders: { Origin: "https://evil.example.com" },
+    });
+
+    try {
+      const error = await new Promise<Error>((resolve, reject) => {
+        const timer = setTimeout(
+          () => reject(new Error("Timed out waiting for origin rejection")),
+          2_000,
+        );
+        socket.once("connect", () => {
+          clearTimeout(timer);
+          reject(new Error("Socket unexpectedly connected"));
+        });
+        socket.once("connect_error", (connectionError) => {
+          clearTimeout(timer);
+          resolve(connectionError);
+        });
+      });
+
+      expect(error.message).toMatch(/websocket error|Origin is not allowed/i);
+    } finally {
+      socket.disconnect();
+    }
   });
 
   it("uses the synchronized lobby readiness reason when rejecting start", async () => {

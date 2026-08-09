@@ -41,6 +41,7 @@ import {
 } from "./lobbyControl.ts";
 import { assertRoomLobbyStartReady } from "./lobbyReadiness.ts";
 import { mpDebug } from "./multiplayerDebug.ts";
+import { operationalLog, type RateLimitReporter } from "./operationalLog.ts";
 import { RATE_POLICIES, TokenBucketStore } from "./rateLimiter.ts";
 import type { Room, RoomPlayer } from "./roomStore.ts";
 import {
@@ -106,6 +107,7 @@ function canOfferReplay(activeRoom: Room): boolean {
 export type SocketSecurityContext = {
   readonly limiter: TokenBucketStore;
   readonly isRailway: boolean;
+  readonly rateLimitReporter?: RateLimitReporter;
 };
 
 export function registerSocketHandlers(
@@ -118,14 +120,17 @@ export function registerSocketHandlers(
     const result = security.limiter.take(`socket:connect:${address}`, RATE_POLICIES.socketConnect);
 
     if (!result.allowed) {
+      security.rateLimitReporter?.record("socket.connect");
       const error = new Error("Too many connection attempts. Try again shortly.");
       error.name = "RATE_LIMITED";
+      (error as Error & { data?: unknown }).data = { code: "RATE_LIMITED" };
       next(error);
 
       return;
     }
 
     socket.data.rateLimiter = security.limiter;
+    socket.data.rateLimitReporter = security.rateLimitReporter;
     next();
   });
 
@@ -138,6 +143,7 @@ export function registerSocketHandlers(
         );
 
         if (!bindBudget.allowed) {
+          security.rateLimitReporter?.record("socket.session_bind");
           ack?.({
             ok: false,
             error: "Too many session attempts. Try again shortly.",
@@ -183,6 +189,13 @@ export function registerSocketHandlers(
         mpDebug("session bound", { code: code.toUpperCase(), playerId: player.id });
         ack?.({ ok: true });
       } catch (error) {
+        if (!(error instanceof Error)) {
+          operationalLog("error", "socket_error", {
+            operation: "session.bind",
+            errorClass: "UnknownError",
+          });
+        }
+
         ack?.({
           ok: false,
           error: error instanceof Error ? error.message : "Unable to bind session.",
@@ -854,8 +867,11 @@ export function registerSocketHandlers(
         }
 
         await broadcastRoom(io, store, code);
-      } catch {
-        // ignore disconnect broadcast failures
+      } catch (error) {
+        operationalLog("error", "socket_error", {
+          operation: "socket.disconnect",
+          errorClass: error instanceof Error ? error.name : "UnknownError",
+        });
       }
     });
   });

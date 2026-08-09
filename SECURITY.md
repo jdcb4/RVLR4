@@ -25,6 +25,21 @@ These rules apply to all contributors, including AI agents.
 
 - Validate every external input with Zod: forms, URL params, request bodies, localStorage reads, JSON file loads, third-party API responses.
 - Treat data on disk as untrusted on read: schema-validate it.
+- Keep HTTP and Socket.IO schemas strict, retain explicit body/message/drawing
+  budgets, and preserve bounded per-process request/mutation token buckets.
+- Enforce private game data through server viewer projections. UI visibility is
+  not an authorization control.
+
+### Production transport boundary
+
+- Production requires an exact, URL-validated `CLIENT_ORIGIN` allow-list.
+  Origin-free navigation, health checks, and non-browser requests remain
+  supported; supplied unlisted origins are rejected.
+- Keep Helmet and the explicit same-origin CSP enabled. Any new external asset
+  or connection source requires a reviewed policy change.
+- Operational logs contain only allow-listed event metadata. Never log room
+  codes, player identifiers or names, reconnect secrets, clues, drawings,
+  request bodies, or headers.
 
 ### Auth
 

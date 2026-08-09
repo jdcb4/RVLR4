@@ -95,6 +95,17 @@ When a database is needed:
 
 Zod is the validation default. Validate every external input: forms, URL params, request bodies, environment variables, JSON file loads, third-party API responses, Socket.io events.
 
+HTTP and Socket.IO boundaries use strict schemas, stable error codes, explicit
+payload-size limits, and bounded in-memory token buckets. Viewer projections
+are server-authored and must remove other players' private data and game
+secrets; client-side hiding is never an authorization boundary.
+
+The Express runtime applies Helmet's reviewed header baseline, exact
+production origin allow-listing, and a minimal `/api/health` readiness signal.
+Operational logs use allow-listed metadata only and never include room codes,
+player identifiers, names, reconnect secrets, clues, drawings, bodies, or
+headers.
+
 ## Configuration
 
 Environment variables flow through Zod: **`src/config/env.ts`** (Vite client) and **`server/env.ts`** (Node server). Missing or malformed values must fail fast at startup.

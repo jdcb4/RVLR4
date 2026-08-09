@@ -73,7 +73,8 @@ For a new or repaired Railway service:
 4. Expose Railway's assigned HTTP port through `PORT` (the server already reads
    it and binds to `0.0.0.0`).
 5. Generate or retain the public domain, then set `CLIENT_ORIGIN` to that HTTPS
-   origin for a strict CORS allow-list.
+   origin before deploying. Production startup fails closed when this value is
+   missing, empty, or not a valid HTTP(S) origin.
 6. After deployment, check build logs, start logs, the public route, and a basic
    two-browser room join. Remember that rooms reset whenever the service sleeps
    or restarts because multiplayer state is in memory.
@@ -88,10 +89,9 @@ Railway references:
 
 - **`CLIENT_ORIGIN`** — comma-separated allow-list of browser origins
   (for example, `https://app.example.com,https://www.example.com`). This is
-  recommended but not required. When unset in production, the server logs a
-  warning and accepts all browser origins so a new platform deployment can
-  start before its public origin is known. Set it explicitly after assigning
-  the public domain.
+  required in production. Values must be exact HTTP(S) origins without paths,
+  queries, or credentials. Requests without an `Origin` header remain valid
+  for navigation, health checks, and non-browser clients.
 - **`PORT`** — defaults to `3001`; Railway supplies this for the service.
 - **`MULTIPLAYER_DEBUG`** — set to `1` or `true` only while diagnosing room
   lifecycle issues. Logs may contain room codes and player IDs, never secrets.
@@ -107,6 +107,14 @@ Other Node platforms can use the same commands:
 
 Because state is **in-memory**, expect rooms to reset whenever the process
 restarts.
+
+## Health and activation
+
+`GET /api/health` returns `{status:"ok",version}` with `200` while the process
+is ready and `{status:"shutting-down",version}` with `503` after graceful
+shutdown begins. Responses are `no-store` and expose no room or player state.
+`railway.json` points both environments at this endpoint with a 30-second
+activation timeout.
 
 ## Optional manual Docker image
 

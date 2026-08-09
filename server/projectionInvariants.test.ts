@@ -205,7 +205,9 @@ describe("viewer projection invariants", () => {
     const guestSync = buildDrawNGuessSyncDto(room, guest.id)!;
     expect(hostSync.private.assignment).not.toEqual(guestSync.private.assignment);
     expect(JSON.stringify(hostSync)).not.toContain(
-      JSON.stringify(guestSync.private.assignment?.mode === "drawing" && guestSync.private.assignment.promptText),
+      JSON.stringify(
+        guestSync.private.assignment?.mode === "drawing" && guestSync.private.assignment.promptText,
+      ),
     );
     expect(hostSync.public).not.toHaveProperty("packets");
   });

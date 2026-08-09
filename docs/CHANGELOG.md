@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.0 - 2026-08-09
+
+- **Production security:** Added Helmet with a same-origin SPA CSP, disabled
+  `X-Powered-By`, and made a validated `CLIENT_ORIGIN` allow-list mandatory in
+  production while retaining origin-free navigation and health clients.
+- **Operations:** Added `/api/health` readiness/shutdown responses, Railway
+  health-check configuration, redacted structured startup/shutdown/error logs,
+  and aggregate-only rate-limit reporting.
+- **Deployment:** Railway now waits up to 30 seconds for `/api/health` before
+  activating a deployment.
+
 ## 0.21.7 - 2026-08-09
 
 - **Abuse controls:** Added bounded, sweepable in-memory token buckets for room

@@ -1,5 +1,6 @@
 import type { Socket } from "socket.io";
 
+import { operationalLog } from "./operationalLog.ts";
 import type { TokenBucketStore } from "./rateLimiter.ts";
 import type { Room, RoomPlayer, RoomStore } from "./roomStore.ts";
 import { consumeMutationBudget, isDrawingPayloadTooLarge } from "./socketBudgets.ts";
@@ -93,6 +94,14 @@ export function registerHandler<E extends SocketEventName>(
         const budget = consumeMutationBudget(limiter, socket, event, parsed.data);
 
         if (!budget.allowed) {
+          const reporter = socket.data.rateLimitReporter as
+            | { record(operation: string): void }
+            | undefined;
+          reporter?.record(
+            event === "drawnguess:updateDrawingDraft" || event === "drawnguess:submitDrawing"
+              ? "socket.drawing_mutation"
+              : "socket.general_mutation",
+          );
           ack?.({
             ok: false,
             error: "Too many requests. Try again shortly.",
@@ -106,6 +115,13 @@ export function registerHandler<E extends SocketEventName>(
       await fn({ socket, store, room, actor }, parsed.data as SocketPayload<E>);
       ack?.({ ok: true });
     } catch (error) {
+      if (!(error instanceof Error)) {
+        operationalLog("error", "socket_error", {
+          operation: event,
+          errorClass: "UnknownError",
+        });
+      }
+
       ack?.({
         ok: false,
         error: error instanceof Error ? error.message : fallbackErrorMessage,
