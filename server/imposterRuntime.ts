@@ -106,146 +106,115 @@ export function applyImposterDispatch(
   actorIsHost: boolean,
   action: ImposterDispatchAction,
 ) {
-  switch (action.type) {
-    case "reveal-show-role": {
-      const snap = requireImposterPlaying(room);
-
-      if (snap.step !== "reveal" || !snap.round) {
-        throw new Error("Reveal is not active.");
-      }
-
-      const round = snap.round;
-
-      if (round.parallelRoleSeen) {
-        room.imposterSnapshot = {
-          ...snap,
-          round: {
-            ...round,
-            parallelRoleSeen: {
-              ...round.parallelRoleSeen,
-              [actorId]: true,
-            },
-          },
-        };
-
-        return;
-      }
-
-      const subject = snap.players[snap.round.revealPlayerIndex];
-
-      if (!subject || subject.id !== actorId) {
-        throw new Error("Only the player whose reveal it is can continue.");
-      }
-
-      room.imposterSnapshot = {
-        ...snap,
-        round: { ...snap.round, revealRevealed: true },
-      };
-
-      return;
-    }
-
-    case "reveal-confirm-next": {
-      const snap = requireImposterPlaying(room);
-
-      if (snap.step !== "reveal" || !snap.round) {
-        throw new Error("Reveal is not active.");
-      }
-
-      const round = snap.round;
-
-      if (round.parallelRevealDone && round.parallelRoleSeen) {
-        if (!round.parallelRoleSeen[actorId]) {
-          throw new Error("Reveal your role first.");
-        }
-
-        const ids = snap.players.map((player) => player.id);
-        const nextDone = { ...round.parallelRevealDone, [actorId]: true };
-
-        if (!allTrue(ids, nextDone)) {
-          room.imposterSnapshot = {
-            ...snap,
-            round: {
-              ...round,
-              parallelRevealDone: nextDone,
-            },
-          };
-
-          return;
-        }
-
-        const starter = pickCluesStarter(snap.players, Math.random);
-
-        room.imposterSnapshot = {
-          ...snap,
-          step: "guidePregame",
-          cluesStartPlayerId: starter,
-          round: {
-            ...round,
-            parallelRevealDone: nextDone,
-          },
-        };
-
-        return;
-      }
-
-      const subject = snap.players[snap.round.revealPlayerIndex];
-
-      if (!subject || subject.id !== actorId) {
-        throw new Error("Only the player whose reveal it is can continue.");
-      }
-
-      if (!snap.round.revealRevealed) {
-        throw new Error("Reveal the role first.");
-      }
-
-      const lastIndex = snap.players.length - 1;
-
-      if (snap.round.revealPlayerIndex >= lastIndex) {
-        room.imposterSnapshot = {
-          ...snap,
-          step: "guidePregame",
-          cluesStartPlayerId: pickCluesStarter(snap.players, Math.random),
-        };
-
-        return;
-      }
-
-      room.imposterSnapshot = {
-        ...snap,
-        round: {
-          ...snap.round,
-          revealPlayerIndex: snap.round.revealPlayerIndex + 1,
-          revealRevealed: false,
-        },
-      };
-
-      return;
-    }
-
-    case "guide-pregame-done": {
-      advanceHostGuide(room, actorIsHost, "guidePregame", "guidePrediscussion");
-
-      return;
-    }
-
-    case "guide-prediscussion-done": {
-      advanceHostGuide(room, actorIsHost, "guidePrediscussion", "guideWarning");
-
-      return;
-    }
-
-    case "guide-warning-done": {
-      advanceHostGuide(room, actorIsHost, "guideWarning", "results");
-
-      return;
-    }
-
-    default: {
-      const never: never = action;
-      throw new Error(`Unsupported Imposter action: ${String(never)}`);
-    }
+  if (action.type === "reveal-show-role") {
+    showRevealRole(room, actorId);
+  } else if (action.type === "reveal-confirm-next") {
+    confirmReveal(room, actorId);
+  } else if (action.type === "guide-pregame-done") {
+    advanceHostGuide(room, actorIsHost, "guidePregame", "guidePrediscussion");
+  } else if (action.type === "guide-prediscussion-done") {
+    advanceHostGuide(room, actorIsHost, "guidePrediscussion", "guideWarning");
+  } else {
+    advanceHostGuide(room, actorIsHost, "guideWarning", "results");
   }
+}
+
+function requireReveal(room: Room): { snapshot: ImposterSnapshot; round: ImposterRoundState } {
+  const snapshot = requireImposterPlaying(room);
+
+  if (snapshot.step !== "reveal" || !snapshot.round) {
+    throw new Error("Reveal is not active.");
+  }
+
+  return { snapshot, round: snapshot.round };
+}
+
+function requireRevealSubject(snapshot: ImposterSnapshot, actorId: string): void {
+  if (snapshot.players[snapshot.round!.revealPlayerIndex]?.id !== actorId) {
+    throw new Error("Only the player whose reveal it is can continue.");
+  }
+}
+
+function showRevealRole(room: Room, actorId: string): void {
+  const { snapshot, round } = requireReveal(room);
+
+  if (round.parallelRoleSeen) {
+    room.imposterSnapshot = {
+      ...snapshot,
+      round: {
+        ...round,
+        parallelRoleSeen: { ...round.parallelRoleSeen, [actorId]: true },
+      },
+    };
+    return;
+  }
+
+  requireRevealSubject(snapshot, actorId);
+  room.imposterSnapshot = { ...snapshot, round: { ...round, revealRevealed: true } };
+}
+
+function confirmReveal(room: Room, actorId: string): void {
+  const reveal = requireReveal(room);
+
+  if (reveal.round.parallelRevealDone && reveal.round.parallelRoleSeen) {
+    confirmParallelReveal(room, actorId, reveal.snapshot, reveal.round);
+  } else {
+    confirmSequentialReveal(room, actorId, reveal.snapshot, reveal.round);
+  }
+}
+
+function confirmParallelReveal(
+  room: Room,
+  actorId: string,
+  snapshot: ImposterSnapshot,
+  round: ImposterRoundState,
+): void {
+  if (!round.parallelRoleSeen?.[actorId]) {
+    throw new Error("Reveal your role first.");
+  }
+
+  const nextDone = { ...round.parallelRevealDone, [actorId]: true };
+  const complete = allTrue(
+    snapshot.players.map((player) => player.id),
+    nextDone,
+  );
+  room.imposterSnapshot = {
+    ...snapshot,
+    ...(complete
+      ? {
+          step: "guidePregame" as const,
+          cluesStartPlayerId: pickCluesStarter(snapshot.players, Math.random),
+        }
+      : {}),
+    round: { ...round, parallelRevealDone: nextDone },
+  };
+}
+
+function confirmSequentialReveal(
+  room: Room,
+  actorId: string,
+  snapshot: ImposterSnapshot,
+  round: ImposterRoundState,
+): void {
+  requireRevealSubject(snapshot, actorId);
+
+  if (!round.revealRevealed) {
+    throw new Error("Reveal the role first.");
+  }
+
+  if (round.revealPlayerIndex >= snapshot.players.length - 1) {
+    room.imposterSnapshot = {
+      ...snapshot,
+      step: "guidePregame",
+      cluesStartPlayerId: pickCluesStarter(snapshot.players, Math.random),
+    };
+    return;
+  }
+
+  room.imposterSnapshot = {
+    ...snapshot,
+    round: { ...round, revealPlayerIndex: round.revealPlayerIndex + 1, revealRevealed: false },
+  };
 }
 
 function advanceHostGuide(

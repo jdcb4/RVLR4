@@ -15,65 +15,53 @@ function scrubRoundForViewer(snapshot: ImposterSnapshot, viewerId: string): Impo
     return snapshot;
   }
 
-  const viewerIsImposter = round.imposterPlayerIds.includes(viewerId);
-
   if (snapshot.step === "results") {
     return snapshot;
   }
 
-  /** Multiplayer parallel reveal — per-viewer scrub */
   if (round.parallelRoleSeen && round.parallelRevealDone) {
-    const roleSeen = round.parallelRoleSeen[viewerId] === true;
-    const revealDone = round.parallelRevealDone[viewerId] === true;
-
-    let secretWordOut = "";
-
-    /**
-     * Crew sees the secret word only after they have opened their private card (`roleSeen`),
-     * and either on the in-reveal “remember” step or again in later phases (e.g. clue-round
-     * “Remind me” card). Never send the word to imposters.
-     */
-    if (!viewerIsImposter && roleSeen) {
-      const onRevealMemoryCard = snapshot.step === "reveal" && !revealDone;
-      const postRevealGuideOrPlay = revealDone && snapshot.step !== "results";
-
-      if (onRevealMemoryCard || postRevealGuideOrPlay) {
-        secretWordOut = round.secretWord;
-      }
-    }
-
-    /** After they peek, imposters can tell they are imposter from ids; never list other imposters. */
-    const scrubbedImposterIds = viewerIsImposter && roleSeen ? [viewerId] : [];
-
-    return {
-      ...snapshot,
-      round: {
-        ...round,
-        secretWord: secretWordOut,
-        imposterPlayerIds: scrubbedImposterIds,
-      },
-    };
+    return scrubParallelRound(snapshot, viewerId);
   }
 
-  const subject = snapshot.players[round.revealPlayerIndex];
-  const subjectId = subject?.id ?? null;
+  return scrubSequentialRound(snapshot, viewerId);
+}
 
-  let secretWordOut = "";
-
-  if (
-    snapshot.step === "reveal" &&
-    round.revealRevealed &&
-    viewerId === subjectId &&
-    !viewerIsImposter
-  ) {
-    secretWordOut = round.secretWord;
-  }
+function scrubParallelRound(snapshot: ImposterSnapshot, viewerId: string): ImposterSnapshot {
+  const round = snapshot.round!;
+  const roleSeen = round.parallelRoleSeen?.[viewerId] === true;
+  const revealDone = round.parallelRevealDone?.[viewerId] === true;
+  const viewerIsImposter = round.imposterPlayerIds.includes(viewerId);
+  const maySeeWord =
+    !viewerIsImposter &&
+    roleSeen &&
+    ((snapshot.step === "reveal" && !revealDone) || (revealDone && snapshot.step !== "results"));
 
   return {
     ...snapshot,
     round: {
       ...round,
-      secretWord: secretWordOut,
+      secretWord: maySeeWord ? round.secretWord : "",
+      imposterPlayerIds: viewerIsImposter && roleSeen ? [viewerId] : [],
+    },
+  };
+}
+
+function scrubSequentialRound(snapshot: ImposterSnapshot, viewerId: string): ImposterSnapshot {
+  const round = snapshot.round!;
+  const viewerIsImposter = round.imposterPlayerIds.includes(viewerId);
+  const subject = snapshot.players[round.revealPlayerIndex];
+  const subjectId = subject?.id ?? null;
+  const maySeeWord =
+    snapshot.step === "reveal" &&
+    round.revealRevealed &&
+    viewerId === subjectId &&
+    !viewerIsImposter;
+
+  return {
+    ...snapshot,
+    round: {
+      ...round,
+      secretWord: maySeeWord ? round.secretWord : "",
       imposterPlayerIds: viewerIsImposter ? [viewerId] : [],
     },
   };
@@ -85,22 +73,15 @@ export function buildImposterSyncDto(
 ): ImposterSyncDto {
   const round = snapshot.round;
 
-  let revealSubjectId: string | null = null;
-  let revealSubjectIsImposter = false;
-
-  if (snapshot.step === "reveal" && round) {
-    if (round.parallelRoleSeen) {
-      revealSubjectId = viewerPlayerId;
-      revealSubjectIsImposter = round.imposterPlayerIds.includes(viewerPlayerId);
-    } else {
-      const subject = snapshot.players[round.revealPlayerIndex];
-      revealSubjectId = subject?.id ?? null;
-
-      if (subject) {
-        revealSubjectIsImposter = round.imposterPlayerIds.includes(subject.id);
-      }
-    }
-  }
+  const revealSubjectId =
+    snapshot.step !== "reveal" || !round
+      ? null
+      : round.parallelRoleSeen
+        ? viewerPlayerId
+        : (snapshot.players[round.revealPlayerIndex]?.id ?? null);
+  const revealSubjectIsImposter = Boolean(
+    revealSubjectId && round?.imposterPlayerIds.includes(revealSubjectId),
+  );
 
   return {
     snapshot: scrubRoundForViewer(snapshot, viewerPlayerId),

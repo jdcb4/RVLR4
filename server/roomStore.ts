@@ -229,6 +229,8 @@ export class RoomStore {
       throw new Error("That join code is not available.");
     }
 
+    assertFlatRoomCapacity(room);
+
     const trimmedName = args.name.trim().slice(0, 32) || "Player";
     const playerId = crypto.randomUUID();
     const secret = generateSecretToken();
@@ -246,26 +248,7 @@ export class RoomStore {
       optedOutOfResume: false,
     };
 
-    if (room.gameKind === "imposter") {
-      if (room.players.size >= IMPOSTER_MAX_PLAYERS) {
-        throw new Error("This Imposter room is full.");
-      }
-      player.teamIndex = null;
-    } else if (room.gameKind === "drawnguess") {
-      if (room.players.size >= DRAWNGUESS_MAX_PLAYERS) {
-        throw new Error("This DrawNGuess room is full.");
-      }
-      player.teamIndex = null;
-    } else {
-      player.teamIndex = pickSmallestTeamIndex(room);
-      const nextCounts = previewCountsAfterJoin(room, player.teamIndex);
-
-      for (const count of nextCounts) {
-        if (count > MAX_PLAYERS_PER_TEAM) {
-          throw new Error(`Teams can have at most ${MAX_PLAYERS_PER_TEAM} players for this game.`);
-        }
-      }
-    }
+    assignJoiningPlayerTeam(room, player);
 
     room.players.set(playerId, player);
 
@@ -384,6 +367,31 @@ function previewCountsAfterJoin(room: Room, newPlayerTeamIndex: number): number[
   }
 
   return counts;
+}
+
+function assertFlatRoomCapacity(room: Room): void {
+  if (room.gameKind === "imposter" && room.players.size >= IMPOSTER_MAX_PLAYERS) {
+    throw new Error("This Imposter room is full.");
+  }
+
+  if (room.gameKind === "drawnguess" && room.players.size >= DRAWNGUESS_MAX_PLAYERS) {
+    throw new Error("This DrawNGuess room is full.");
+  }
+}
+
+function assignJoiningPlayerTeam(room: Room, player: RoomPlayer): void {
+  if (!isTeamGame(room.gameKind)) {
+    player.teamIndex = null;
+    return;
+  }
+
+  player.teamIndex = pickSmallestTeamIndex(room);
+
+  if (
+    previewCountsAfterJoin(room, player.teamIndex).some((count) => count > MAX_PLAYERS_PER_TEAM)
+  ) {
+    throw new Error(`Teams can have at most ${MAX_PLAYERS_PER_TEAM} players for this game.`);
+  }
 }
 
 /** Keeps Imposter counts aligned with actual lobby size (no manual roster target). */
