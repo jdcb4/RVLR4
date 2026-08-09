@@ -2,6 +2,12 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.21.4 - 2026-08-09
+
+- **Security:** Upgraded vulnerable production dependencies and pinned patched
+  transitive releases for the Express and Socket.IO stacks. The production
+  dependency audit now reports no known vulnerabilities.
+
 ## 0.21.3 - 2026-08-09
 
 - **Audit:** Completed RM-06's fresh security and maintainability baseline using
