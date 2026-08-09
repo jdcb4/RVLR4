@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { FOOTER_ACTION_LOCK_MS } from "@/components/footerActionLockContext";
 import {
   correctWord,
-  createMatch,
   endTurn,
   isTurnExpired,
   returnSkippedWord,
@@ -12,27 +11,25 @@ import {
   skipWord,
   startTurn,
 } from "@/domain/whowhatwhere/game";
-import { reconcileTeamSetups, validateSetup } from "@/domain/whowhatwhere/setup";
+import { reconcileTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState, TeamSetup } from "@/domain/whowhatwhere/types";
+import {
+  persistWhoWhatWhereMatch,
+  persistWhoWhatWhereSetup,
+} from "@/features/whowhatwhere/whoWhatWhereSingleplayerPersistence";
+import {
+  createValidatedWhoWhatWhereMatch,
+  nextWhoWhatWhereTeamStep,
+  restoreWhoWhatWhereMatch,
+  type WhoWhatWhereAppMode,
+} from "@/features/whowhatwhere/whoWhatWhereSingleplayerTransitions";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import {
   clearMatch,
   loadMatch,
   loadSetup,
   type PersistedMatch,
-  saveMatch,
-  saveSetup,
 } from "@/services/whowhatwherePersistence";
-
-type AppMode =
-  | "landing"
-  | "settings"
-  | "team"
-  | "review"
-  | "ready"
-  | "turn"
-  | "finalSummary"
-  | "results";
 
 export function useWhoWhatWhereSingleplayerApp() {
   const initialSetup = useMemo(() => loadSetup(), []);
@@ -40,7 +37,7 @@ export function useWhoWhatWhereSingleplayerApp() {
   const [teamSetups, setTeamSetups] = useState(initialSetup.teams);
   const [teamStep, setTeamStep] = useState(0);
   const [match, setMatch] = useState<MatchState | null>(null);
-  const [mode, setMode] = useState<AppMode>("landing");
+  const [mode, setMode] = useState<WhoWhatWhereAppMode>("landing");
   const [pendingMatch, setPendingMatch] = useState<PersistedMatch | null>(() => loadMatch());
   const [confirmDiscardPending, setConfirmDiscardPending] = useState(false);
   const [setupError, setSetupError] = useState("");
@@ -50,19 +47,14 @@ export function useWhoWhatWhereSingleplayerApp() {
   const [readyHandoffRevealed, setReadyHandoffRevealed] = useState(false);
 
   useEffect(() => {
-    saveSetup({ settings, teams: teamSetups });
+    persistWhoWhatWhereSetup(settings, teamSetups);
   }, [settings, teamSetups]);
 
   useEffect(() => {
     if (!match) {
       return;
     }
-    // Finished matches are not resumed — only in-progress games (tab close / refresh).
-    if (match.stage === "results") {
-      clearMatch();
-      return;
-    }
-    saveMatch(match);
+    persistWhoWhatWhereMatch(match);
   }, [match]);
 
   useEffect(() => {
@@ -88,7 +80,11 @@ export function useWhoWhatWhereSingleplayerApp() {
     return () => window.clearInterval(interval);
   }, [match?.activeTurn, match?.stage]);
 
-  const activeMode: AppMode = match ? (match.stage === "ready" ? "ready" : match.stage) : mode;
+  const activeMode: WhoWhatWhereAppMode = match
+    ? match.stage === "ready"
+      ? "ready"
+      : match.stage
+    : mode;
 
   useEffect(() => {
     setReadyHandoffRevealed(false);
@@ -139,28 +135,17 @@ export function useWhoWhatWhereSingleplayerApp() {
 
   const advanceTeamSetup = () => {
     setSetupError("");
-    if (teamStep < settings.teamCount - 1) {
-      setTeamStep((currentStep) => currentStep + 1);
-      return;
-    }
-    setMode("review");
+    const next = nextWhoWhatWhereTeamStep(teamStep, settings.teamCount);
+    setTeamStep(next.step);
+    setMode(next.mode);
   };
 
   const startNewMatch = () => {
-    const errors = validateSetup(teamSetups, settings);
-
-    if (errors.length > 0) {
-      setSetupError(errors[0] ?? "Check the setup.");
-      return;
-    }
-
-    try {
-      clearMatch();
-      setMatch(createMatch(teamSetups, settings));
-      setSetupError("");
-    } catch (error) {
-      setSetupError(error instanceof Error ? error.message : "Unable to start.");
-    }
+    const result = createValidatedWhoWhatWhereMatch(teamSetups, settings);
+    if (!result.match) return setSetupError(result.error);
+    clearMatch();
+    setMatch(result.match);
+    setSetupError("");
   };
 
   const startRoundFromReview = () => {
@@ -195,14 +180,7 @@ export function useWhoWhatWhereSingleplayerApp() {
       return;
     }
 
-    const restoredMatch =
-      pendingMatch.match.stage === "turn" &&
-      pendingMatch.match.activeTurn &&
-      isTurnExpired(pendingMatch.match.activeTurn)
-        ? endTurn(pendingMatch.match)
-        : pendingMatch.match;
-
-    setMatch(restoredMatch);
+    setMatch(restoreWhoWhatWhereMatch(pendingMatch));
     setPendingMatch(null);
     setConfirmDiscardPending(false);
   };
@@ -233,7 +211,8 @@ export function useWhoWhatWhereSingleplayerApp() {
   };
 
   const playAgain = () => {
-    setMatch(createMatch(teamSetups, settings));
+    const result = createValidatedWhoWhatWhereMatch(teamSetups, settings);
+    if (result.match) setMatch(result.match);
   };
 
   return {
