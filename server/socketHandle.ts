@@ -3,7 +3,17 @@ import type { Socket } from "socket.io";
 import type { Room, RoomPlayer, RoomStore } from "./roomStore.ts";
 import { type SocketEventName, type SocketPayload, socketSchemas } from "./socketSchemas.ts";
 
-export type SocketAck = (payload?: { ok?: boolean; error?: string }) => void;
+export type SocketErrorCode =
+  | "INVALID_REQUEST"
+  | "PAYLOAD_TOO_LARGE"
+  | "RATE_LIMITED"
+  | "INTERNAL_ERROR";
+
+export type SocketAck = (payload?: {
+  ok?: boolean;
+  error?: string;
+  code?: SocketErrorCode;
+}) => void;
 
 export type HandlerContext = {
   readonly socket: Socket;
@@ -55,11 +65,18 @@ export function registerHandler<E extends SocketEventName>(
   const schema = socketSchemas[event];
 
   socket.on(event as string, async (rawPayload: unknown, ack?: SocketAck) => {
+    if (typeof rawPayload === "function" && ack === undefined) {
+      ack = rawPayload as SocketAck;
+      rawPayload = undefined;
+    }
+
     try {
       const parsed = schema.safeParse(rawPayload);
 
       if (!parsed.success) {
-        throw new Error("Invalid request.");
+        ack?.({ ok: false, error: "Invalid request.", code: "INVALID_REQUEST" });
+
+        return;
       }
 
       const { room, actor } = requireActor(socket, store);

@@ -78,12 +78,16 @@ function bindReconnectingClient(url: string, creds: Credentials): Promise<BoundC
     }, 4000);
 
     socket.on("connect", () => {
-      socket.emit("session:bind", creds, (ack?: { ok?: boolean; error?: string }) => {
-        if (ack?.ok === false && !resolved) {
-          clearTimeout(timer);
-          reject(new Error(ack.error ?? "session:bind rejected"));
-        }
-      });
+      socket.emit(
+        "session:bind",
+        { code: creds.code, playerId: creds.playerId, secret: creds.secret },
+        (ack?: { ok?: boolean; error?: string }) => {
+          if (ack?.ok === false && !resolved) {
+            clearTimeout(timer);
+            reject(new Error(ack.error ?? "session:bind rejected"));
+          }
+        },
+      );
     });
     socket.once("room:sync", (payload: RoomSyncPayload) => {
       resolved = true;
@@ -248,7 +252,13 @@ function emitAck<TAck = { ok?: boolean; error?: string }>(
   payload: unknown,
 ): Promise<TAck> {
   return new Promise((resolve) => {
-    socket.emit(event, payload, (ack: TAck) => resolve(ack));
+    const handleAck = (ack: TAck) => resolve(ack);
+
+    if (payload === undefined) {
+      socket.emit(event, handleAck);
+    } else {
+      socket.emit(event, payload, handleAck);
+    }
   });
 }
 
@@ -287,7 +297,7 @@ describe("multiplayer smoke", () => {
 
       // Host starts the match; everyone receives a sync with phase=playing.
       const playingPromises = [hostBound, ...guestBounds].map((bound) => nextSync(bound.socket));
-      const startAck = await emitAck(hostBound.socket, "lobby:startGame", {});
+      const startAck = await emitAck(hostBound.socket, "lobby:startGame", undefined);
       expect(startAck).toEqual({ ok: true });
 
       const playingSyncs = await Promise.all(playingPromises);
@@ -339,7 +349,7 @@ describe("multiplayer smoke", () => {
         message: "Imposter needs 4–10 players (currently 1).",
       });
 
-      const ack = await emitAck(bound.socket, "lobby:startGame", {});
+      const ack = await emitAck(bound.socket, "lobby:startGame", undefined);
       expect(ack).toEqual({ ok: false, error: blocker?.message });
     } finally {
       bound.socket.disconnect();
@@ -418,7 +428,7 @@ describe("multiplayer smoke", () => {
       }
 
       const playingPromise = nextSyncWhere(hostBound.socket, (sync) => sync.phase === "playing");
-      const startAck = await emitAck(hostBound.socket, "lobby:startGame", {});
+      const startAck = await emitAck(hostBound.socket, "lobby:startGame", undefined);
       expect(startAck).toEqual({ ok: true });
 
       const playingSync = await playingPromise;

@@ -1,7 +1,6 @@
 import type { Server } from "socket.io";
 
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
-import type { GameSettings } from "@/domain/whowhatwhere/types";
 
 import { broadcastRoom, roomChannel } from "./broadcast.ts";
 import { captainPlayerIdForTeam } from "./captain.ts";
@@ -109,7 +108,13 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
         const parsed = sessionBindSchema.safeParse(rawPayload);
 
         if (!parsed.success) {
-          throw new Error("Missing session details.");
+          ack?.({
+            ok: false,
+            error: "Missing session details.",
+            code: "INVALID_REQUEST",
+          });
+
+          return;
         }
 
         const code = parsed.data.code.trim();
@@ -314,9 +319,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       async ({ room, actor }, payload) => {
         ensureHostCanChangeLobbySettings(room, actor);
 
-        // Schema is `z.unknown()` — `hostPatchWhoWhatWhereSettings` validates field-by-field internally.
-        const { patch } = (payload ?? {}) as { patch?: Partial<GameSettings> };
-        hostPatchWhoWhatWhereSettings(room, patch ?? {});
+        hostPatchWhoWhatWhereSettings(room, payload.patch);
         await broadcastRoom(io, store, room.code);
       },
     );
@@ -329,14 +332,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       async ({ room, actor }, payload) => {
         ensureHostCanChangeLobbySettings(room, actor);
 
-        // Schema is `z.unknown()` — `hostPatchHatPrefs` validates field-by-field internally.
-        hostPatchHatPrefs(
-          room,
-          (payload ?? {}) as {
-            hatTurnDurationSeconds?: number;
-            hatSkipsPerTurn?: number;
-          },
-        );
+        hostPatchHatPrefs(room, payload);
         await broadcastRoom(io, store, room.code);
       },
     );
@@ -355,14 +351,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           throw new Error("Counts are locked once the match begins.");
         }
 
-        // Schema is `z.unknown()` — `hostPatchImposterCounts` validates field-by-field internally.
-        hostPatchImposterCounts(
-          room,
-          (payload ?? {}) as {
-            imposterPlayerCount?: number;
-            imposterImposterCount?: number;
-          },
-        );
+        hostPatchImposterCounts(room, payload);
         await broadcastRoom(io, store, room.code);
       },
     );
@@ -375,7 +364,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
       async ({ room, actor }, payload) => {
         ensureHostCanChangeLobbySettings(room, actor);
 
-        patchDrawNGuessSettings(room, payload as Parameters<typeof patchDrawNGuessSettings>[1]);
+        patchDrawNGuessSettings(room, payload);
         await broadcastRoom(io, store, room.code);
       },
     );

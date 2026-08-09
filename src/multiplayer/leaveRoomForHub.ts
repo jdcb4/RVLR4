@@ -14,7 +14,7 @@ export async function leaveMultiplayerRoomForHub(
   navigate: NavigateFunction,
 ): Promise<void> {
   try {
-    await emitWithAck("room:optOutResume", {});
+    await emitWithAck("room:optOutResume");
   } finally {
     clearActiveGameBookmark();
     navigate("/");

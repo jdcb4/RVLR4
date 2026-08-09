@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.21.6 - 2026-08-09
+
+- **Validation:** Added strict Zod schemas for every HTTP and Socket.IO input,
+  including normalized names/codes, current UI setting enums, UUID identifiers,
+  exact string limits, strict objects, and payload-free events.
+- **Errors:** Invalid boundary requests now include the stable
+  `INVALID_REQUEST` code while retaining human-readable errors.
+- **Reconnect security:** Reconnect secrets are shape-validated and compared
+  with `crypto.timingSafeEqual` without throwing on malformed input.
+
 ## 0.21.5 - 2026-08-09
 
 - **Privacy:** Hat lobby sync now sends only the authenticated player's clue

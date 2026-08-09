@@ -19,7 +19,7 @@ import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerA
 import { type AvatarId, normalizeAvatarId } from "@/multiplayer/avatarCatalog";
 
 import { generateRoomCode, normalizeRoomCode } from "./codes.ts";
-import { generateSecretToken } from "./secrets.ts";
+import { generateSecretToken, verifySecretToken } from "./secrets.ts";
 
 export type GameKind = "whowhatwhere" | "hat" | "imposter" | "drawnguess";
 
@@ -305,7 +305,7 @@ export class RoomStore {
 
     const player = room.players.get(args.playerId);
 
-    if (!player || player.secret !== args.secret) {
+    if (!player || !verifySecretToken(player.secret, args.secret)) {
       return null;
     }
 

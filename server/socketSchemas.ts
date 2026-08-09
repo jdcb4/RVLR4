@@ -8,18 +8,10 @@ import {
   DRAWNGUESS_MAX_PROMPT_LENGTH,
   DRAWNGUESS_MAX_STROKES,
 } from "@/domain/drawnguess/types";
+import { CATEGORIES, HINT_LIMIT_OPTIONS } from "@/domain/whowhatwhere/types";
 
 /**
  * Zod schemas for every Socket.IO event payload accepted by the server.
- *
- * Coverage philosophy:
- * - For events whose payload shape is known and small, validate tightly here.
- * - For events whose inner runtime (`hostPatch*`, etc.) already performs
- *   field-by-field validation, accept `z.unknown()` at this layer to avoid
- *   duplicating that validation surface; the inner function still throws on
- *   bad input and the wrapper turns the throw into an `{ok:false}` ack.
- * - Events with no meaningful payload (`_payload: unknown` in handlers) accept
- *   anything; the schema exists purely so the wrapper has something to call.
  *
  * If you change a handler's expected payload shape, update the schema here in
  * the same change.
@@ -39,115 +31,198 @@ const clueIndexSchema = z
   .min(0)
   .max(GAME_DEFAULTS.cluesPerPlayer - 1);
 
-const playerNameSchema = z.string().max(64);
+const normalizedNameSchema = (max: number) =>
+  z
+    .string()
+    .transform((value) => value.trim().replace(/\s+/g, " "))
+    .pipe(z.string().min(1).max(max));
 
-const ignoredPayloadSchema = z.unknown();
+const noPayloadSchema = z.undefined();
 
-const drawNGuessPointSchema = z.object({
-  x: z.number().min(0).max(1),
-  y: z.number().min(0).max(1),
-});
+function nonEmptyPatch<T extends z.ZodRawShape>(shape: T) {
+  return z
+    .object(shape)
+    .strict()
+    .partial()
+    .refine((value) => Object.keys(value).length > 0, "At least one setting is required.");
+}
 
-const drawNGuessStrokeSchema = z.object({
-  id: z.string().min(1).max(128),
-  color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
-  size: z.number().min(1).max(64),
-  tool: z.enum(["pen", "eraser"]),
-  points: z.array(drawNGuessPointSchema).max(DRAWNGUESS_MAX_POINTS_PER_STROKE),
-});
+const wwwSettingsSchema = z
+  .object({
+    teamCount: z.union([z.literal(2), z.literal(3), z.literal(4)]),
+    turnDurationSeconds: z.union([z.literal(30), z.literal(45), z.literal(60), z.literal(75)]),
+    totalRounds: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
+    skipLimit: z.union([z.literal(-1), z.literal(1), z.literal(2), z.literal(3)]),
+    selectedCategories: z.array(z.enum(CATEGORIES)).min(1).max(CATEGORIES.length),
+    difficultyMode: z.enum(["easy", "hard"]),
+    hints: z
+      .object({
+        enabled: z.boolean(),
+        perTurnLimit: z.union([
+          z.literal(HINT_LIMIT_OPTIONS[0]),
+          z.literal(HINT_LIMIT_OPTIONS[1]),
+          z.literal(HINT_LIMIT_OPTIONS[2]),
+          z.literal(HINT_LIMIT_OPTIONS[3]),
+        ]),
+      })
+      .strict(),
+  })
+  .strict()
+  .partial()
+  .refine((value) => Object.keys(value).length > 0, "At least one setting is required.");
 
-const drawNGuessDrawingSchema = z.object({
-  format: z.literal("strokes-v1"),
-  width: z.number().int().min(1).max(4096),
-  height: z.number().int().min(1).max(4096),
-  strokes: z.array(drawNGuessStrokeSchema).max(DRAWNGUESS_MAX_STROKES),
-});
+const drawNGuessPointSchema = z
+  .object({
+    x: z.number().min(0).max(1),
+    y: z.number().min(0).max(1),
+  })
+  .strict();
+
+const drawNGuessStrokeSchema = z
+  .object({
+    id: z.string().min(1).max(128),
+    color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+    size: z.number().min(1).max(64),
+    tool: z.enum(["pen", "eraser"]),
+    points: z.array(drawNGuessPointSchema).max(DRAWNGUESS_MAX_POINTS_PER_STROKE),
+  })
+  .strict();
+
+const drawNGuessDrawingSchema = z
+  .object({
+    format: z.literal("strokes-v1"),
+    width: z.number().int().min(1).max(4096),
+    height: z.number().int().min(1).max(4096),
+    strokes: z.array(drawNGuessStrokeSchema).max(DRAWNGUESS_MAX_STROKES),
+  })
+  .strict();
 
 const imposterDispatchSchema = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("reveal-show-role") }),
-  z.object({ type: z.literal("reveal-confirm-next") }),
-  z.object({ type: z.literal("guide-pregame-done") }),
-  z.object({ type: z.literal("guide-prediscussion-done") }),
-  z.object({ type: z.literal("guide-warning-done") }),
+  z.object({ type: z.literal("reveal-show-role") }).strict(),
+  z.object({ type: z.literal("reveal-confirm-next") }).strict(),
+  z.object({ type: z.literal("guide-pregame-done") }).strict(),
+  z.object({ type: z.literal("guide-prediscussion-done") }).strict(),
+  z.object({ type: z.literal("guide-warning-done") }).strict(),
 ]);
 
 export const socketSchemas = {
-  "room:optOutResume": ignoredPayloadSchema,
-  "lobby:setReady": z.object({ ready: z.boolean() }),
-  "lobby:setName": z.object({ name: playerNameSchema }),
-  "lobby:moveSelf": z.object({ teamIndex: teamIndexSchema }),
-  "lobby:hostMovePlayer": z.object({
-    playerId: z.string().min(1).max(128),
-    teamIndex: teamIndexSchema,
+  "room:optOutResume": noPayloadSchema,
+  "lobby:setReady": z.object({ ready: z.boolean() }).strict(),
+  "lobby:setName": z.object({ name: normalizedNameSchema(32) }).strict(),
+  "lobby:moveSelf": z.object({ teamIndex: teamIndexSchema }).strict(),
+  "lobby:hostMovePlayer": z
+    .object({
+      playerId: z.string().uuid(),
+      teamIndex: teamIndexSchema,
+    })
+    .strict(),
+  "lobby:hostSetTeamCount": z.object({ teamCount: teamCountSchema }).strict(),
+  "lobby:hostSetTeamName": z
+    .object({
+      teamIndex: teamIndexSchema,
+      name: normalizedNameSchema(24),
+    })
+    .strict(),
+  "lobby:captainSetTeamName": z
+    .object({
+      teamIndex: teamIndexSchema,
+      name: normalizedNameSchema(24),
+    })
+    .strict(),
+  "lobby:hostPatchWhoWhatWhereSettings": z.object({ patch: wwwSettingsSchema }).strict(),
+  "lobby:hostPatchHatPrefs": nonEmptyPatch({
+    hatTurnDurationSeconds: z.union([z.literal(30), z.literal(45), z.literal(60), z.literal(75)]),
+    hatSkipsPerTurn: z.union([z.literal(1), z.literal(2), z.literal(3)]),
   }),
-  "lobby:hostSetTeamCount": z.object({ teamCount: teamCountSchema }),
-  "lobby:hostSetTeamName": z.object({
-    teamIndex: teamIndexSchema,
-    name: z.string().max(64),
+  "lobby:hostPatchImposterCounts": nonEmptyPatch({
+    imposterImposterCount: z.number().int().positive(),
   }),
-  "lobby:captainSetTeamName": z.object({
-    teamIndex: teamIndexSchema,
-    name: z.string().max(64),
+  "lobby:hostPatchDrawNGuessSettings": nonEmptyPatch({
+    startingPromptMode: z.enum(["predetermined", "custom"]),
+    drawingDurationMs: z.union([
+      z.literal(45_000),
+      z.literal(60_000),
+      z.literal(90_000),
+      z.literal(120_000),
+    ]),
+    guessDurationMs: z.union([
+      z.literal(20_000),
+      z.literal(30_000),
+      z.literal(45_000),
+      z.literal(60_000),
+    ]),
   }),
-  // hostPatchWhoWhatWhereSettings/HatPrefs/ImposterCounts have inner validation in
-  // server/lobbyControl.ts that throws on bad fields. Keep that as the source
-  // of truth rather than duplicating it here.
-  "lobby:hostPatchWhoWhatWhereSettings": z.unknown(),
-  "lobby:hostPatchHatPrefs": z.unknown(),
-  "lobby:hostPatchImposterCounts": z.unknown(),
-  "lobby:hostPatchDrawNGuessSettings": z.unknown(),
-  "lobby:startGame": ignoredPayloadSchema,
+  "lobby:startGame": noPayloadSchema,
   "imposter:dispatch": imposterDispatchSchema,
-  "lobby:hatSetClueCell": z.object({
-    clueIndex: clueIndexSchema,
-    value: z.string().max(GAME_DEFAULTS.maxClueLength * 2),
-  }),
-  "lobby:hatSuggestClue": z.object({ clueIndex: clueIndexSchema }),
-  "game:hostOfferReplay": ignoredPayloadSchema,
-  "game:acceptReplay": ignoredPayloadSchema,
-  "www:markReady": ignoredPayloadSchema,
-  "www:startTurn": ignoredPayloadSchema,
-  "www:correct": ignoredPayloadSchema,
-  "www:skip": ignoredPayloadSchema,
-  "www:returnSkipped": z.object({ skippedWordId: z.string().min(1).max(128) }),
-  "www:revealHint": ignoredPayloadSchema,
-  "www:endTurn": ignoredPayloadSchema,
-  "www:showFinalScores": ignoredPayloadSchema,
-  "hat:startTurn": ignoredPayloadSchema,
-  "hat:endTurn": ignoredPayloadSchema,
-  "hat:correct": ignoredPayloadSchema,
-  "hat:skip": ignoredPayloadSchema,
-  "hat:returnSkipped": z.object({ poolIndex: z.number().int().min(0).max(255) }),
-  "hat:showFinalScores": ignoredPayloadSchema,
-  "drawnguess:updatePromptDraft": z.object({
-    text: z.string().max(DRAWNGUESS_MAX_PROMPT_LENGTH * 2),
-  }),
-  "drawnguess:submitPrompt": z.object({
-    text: z.string().max(DRAWNGUESS_MAX_PROMPT_LENGTH * 2),
-  }),
-  "drawnguess:updateDrawingDraft": z.object({ drawing: drawNGuessDrawingSchema }),
-  "drawnguess:submitDrawing": z.object({ drawing: drawNGuessDrawingSchema }),
-  "drawnguess:updateGuessDraft": z.object({
-    text: z.string().max(DRAWNGUESS_MAX_GUESS_LENGTH * 2),
-  }),
-  "drawnguess:submitGuess": z.object({
-    text: z.string().max(DRAWNGUESS_MAX_GUESS_LENGTH * 2),
-  }),
-  "drawnguess:advanceTurn": ignoredPayloadSchema,
-  "drawnguess:advanceReveal": z.object({
-    direction: z.enum(["next", "previous"]).default("next"),
-  }),
-  "drawnguess:openRevealPacket": z.object({
-    starterPlayerId: z.string().min(1).max(128),
-  }),
+  "lobby:hatSetClueCell": z
+    .object({
+      clueIndex: clueIndexSchema,
+      value: z.string().max(GAME_DEFAULTS.maxClueLength),
+    })
+    .strict(),
+  "lobby:hatSuggestClue": z.object({ clueIndex: clueIndexSchema }).strict(),
+  "game:hostOfferReplay": noPayloadSchema,
+  "game:acceptReplay": noPayloadSchema,
+  "www:markReady": noPayloadSchema,
+  "www:startTurn": noPayloadSchema,
+  "www:correct": noPayloadSchema,
+  "www:skip": noPayloadSchema,
+  "www:returnSkipped": z.object({ skippedWordId: z.string().min(1).max(128) }).strict(),
+  "www:revealHint": noPayloadSchema,
+  "www:endTurn": noPayloadSchema,
+  "www:showFinalScores": noPayloadSchema,
+  "hat:startTurn": noPayloadSchema,
+  "hat:endTurn": noPayloadSchema,
+  "hat:correct": noPayloadSchema,
+  "hat:skip": noPayloadSchema,
+  "hat:returnSkipped": z.object({ poolIndex: z.number().int().min(0).max(255) }).strict(),
+  "hat:showFinalScores": noPayloadSchema,
+  "drawnguess:updatePromptDraft": z
+    .object({
+      text: z.string().max(DRAWNGUESS_MAX_PROMPT_LENGTH),
+    })
+    .strict(),
+  "drawnguess:submitPrompt": z
+    .object({
+      text: z.string().max(DRAWNGUESS_MAX_PROMPT_LENGTH),
+    })
+    .strict(),
+  "drawnguess:updateDrawingDraft": z.object({ drawing: drawNGuessDrawingSchema }).strict(),
+  "drawnguess:submitDrawing": z.object({ drawing: drawNGuessDrawingSchema }).strict(),
+  "drawnguess:updateGuessDraft": z
+    .object({
+      text: z.string().max(DRAWNGUESS_MAX_GUESS_LENGTH),
+    })
+    .strict(),
+  "drawnguess:submitGuess": z
+    .object({
+      text: z.string().max(DRAWNGUESS_MAX_GUESS_LENGTH),
+    })
+    .strict(),
+  "drawnguess:advanceTurn": noPayloadSchema,
+  "drawnguess:advanceReveal": z
+    .object({
+      direction: z.enum(["next", "previous"]).default("next"),
+    })
+    .strict(),
+  "drawnguess:openRevealPacket": z
+    .object({
+      starterPlayerId: z.string().uuid(),
+    })
+    .strict(),
 } as const;
 
 export type SocketEventName = keyof typeof socketSchemas;
 
 export type SocketPayload<E extends SocketEventName> = z.infer<(typeof socketSchemas)[E]>;
 
-export const sessionBindSchema = z.object({
-  code: z.string().min(1).max(16),
-  playerId: z.string().min(1).max(128),
-  secret: z.string().min(1).max(256),
-});
+export const sessionBindSchema = z
+  .object({
+    code: z
+      .string()
+      .transform((value) => value.trim().toUpperCase())
+      .pipe(z.string().regex(/^[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{6}$/)),
+    playerId: z.string().uuid(),
+    secret: z.string().regex(/^[A-Za-z0-9_-]{32}$/),
+  })
+  .strict();

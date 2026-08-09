@@ -175,9 +175,15 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
 
       return new Promise<{ ok?: boolean; error?: string } | undefined>((resolve, reject) => {
         try {
-          socket.emit(event, payload ?? {}, (ack?: { ok?: boolean; error?: string }) => {
+          const handleAck = (ack?: { ok?: boolean; error?: string }) => {
             resolve(ack);
-          });
+          };
+
+          if (payload === undefined) {
+            socket.emit(event, handleAck);
+          } else {
+            socket.emit(event, payload, handleAck);
+          }
         } catch (error) {
           reject(error);
         }
