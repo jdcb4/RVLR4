@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -130,6 +130,55 @@ afterEach(() => {
 });
 
 describe("DrawNGuessMultiplayerView", () => {
+  it("submits a text response with Enter and exposes mobile keyboard hints", async () => {
+    const user = userEvent.setup();
+    const emitWithAck = vi.fn(async () => ({ ok: true }));
+    const now = Date.now();
+    const payload: DrawNGuessSyncDto = {
+      public: {
+        ...guessingTurnPayload.public,
+        startedAt: now,
+        deadlineAt: now + 60_000,
+      },
+      private: {
+        ...guessingTurnPayload.private,
+        ownSubmission: {
+          playerId: "host",
+          status: "draft",
+          updatedAt: now,
+          guessText: "Robot chef",
+        },
+      },
+    };
+
+    render(
+      <MemoryRouter>
+        <DrawNGuessMultiplayerView
+          emitWithAck={emitWithAck}
+          isHost
+          payload={payload}
+          replaySync={{ offerActive: false, acceptedIds: [], cancelledByDisconnect: false }}
+          viewerPlayerId="host"
+        />
+      </MemoryRouter>,
+    );
+
+    const input = await screen.findByPlaceholderText("Your guess");
+    await waitFor(() => expect(input).toHaveValue("Robot chef"));
+    expect(input).toHaveAttribute("enterkeyhint", "send");
+    expect(input).toHaveAttribute("autocapitalize", "sentences");
+    expect(input).toHaveAttribute("spellcheck", "false");
+
+    await user.click(input);
+    await user.keyboard("{Enter}");
+
+    await waitFor(() =>
+      expect(emitWithAck).toHaveBeenCalledWith("drawnguess:submitGuess", {
+        text: "Robot chef",
+      }),
+    );
+  });
+
   it("opens final gallery packets locally without dispatching a room reveal event", async () => {
     const user = userEvent.setup();
     const emitWithAck = vi.fn(async () => ({ ok: true }));

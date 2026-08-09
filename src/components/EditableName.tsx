@@ -26,14 +26,20 @@ export function EditableName({
         <span className="p-0.5">
           <input
             aria-label={label}
+            autoCapitalize="words"
+            autoComplete="off"
             autoFocus
             className="keyboard-safe-input h-12 w-full rounded-md border bg-background px-3 text-typ-input outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+            enterKeyHint="done"
+            inputMode="text"
             maxLength={24}
+            spellCheck={false}
+            type="text"
             value={value}
             onBlur={() => setIsEditing(false)}
             onChange={(event) => onChange(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key === "Enter") {
+              if (event.key === "Enter" && !event.nativeEvent.isComposing) {
                 event.currentTarget.blur();
               }
             }}

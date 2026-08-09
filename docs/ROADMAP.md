@@ -11,31 +11,6 @@ When the user mentions a future idea that is out of scope for the current task, 
 - **DrawNGuess word packs:** expose category and difficulty filters in lobby settings. The backend already keeps `wordPackId` and prompt metadata for this.
 - **DrawNGuess sharing:** consider Web Share API support for exported books where the browser supports file sharing.
 
-## Imported UX and engineering findings — 2026-08-09
-
-Source: [`UX_AND_CODE_RECS_2026-08-09.md`](UX_AND_CODE_RECS_2026-08-09.md).
-The report is a point-in-time review, so validate each finding against the
-current code and tests before implementation.
-
-- **ACT-03 — Route-level code splitting (medium):** measure the current entry
-  bundle, then lazy-load game and multiplayer route modules with an accessible,
-  mobile-appropriate loading state. Preserve route behavior and verify that the
-  initial bundle materially shrinks before accepting the added loading
-  complexity.
-- **ACT-05 — Explain multiplayer start requirements (medium):** show the host
-  why Start game is disabled: minimum total players, minimum players per team,
-  players not ready, or ready to start. Derive the copy from the same readiness
-  rules used by the server so the guidance cannot drift from enforcement.
-- **ACT-06 — Standardize mobile text-input behavior (low):** audit player,
-  team, Hat clue, and DrawNGuess prompt inputs for appropriate `autoCapitalize`,
-  `autoComplete`, `enterKeyHint`, input mode, and spellcheck settings. Choose
-  values by field purpose and add focused interaction coverage where Enter
-  submits or advances.
-- **ACT-07 — Reduce timer screen-reader chatter (low):** stop announcing every
-  one-second timer update. Keep the visual countdown, but use a separate polite
-  live region for meaningful milestones such as ten seconds remaining and time
-  expiry; verify behavior across Who What Where, Hat Game, and DrawNGuess.
-
 ## Data and deployment direction
 
 - **Meaningful Railway environment names and serverless parity:** choose names

@@ -301,9 +301,15 @@ function TeamRenameForm({
   return (
     <form className="flex flex-wrap items-center gap-2" onSubmit={handleSubmit}>
       <input
+        autoCapitalize="words"
+        autoComplete="off"
         autoFocus
         className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1 text-typ-ui"
+        enterKeyHint="done"
+        inputMode="text"
         maxLength={24}
+        spellCheck={false}
+        type="text"
         value={draft}
         onChange={(event) => onDraftChange(event.target.value)}
       />

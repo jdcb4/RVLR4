@@ -210,6 +210,7 @@ function HatLobbyFamousFiguresSection({
                   <HatClueDraftInput
                     clueIndex={index}
                     emitWithAck={emitWithAck}
+                    isLast={index === clueSlots - 1}
                     value={rowValues[index] ?? ""}
                   />
                 </td>
@@ -233,10 +234,12 @@ function HatLobbyFamousFiguresSection({
 
 function HatClueDraftInput({
   clueIndex,
+  isLast,
   value,
   emitWithAck,
 }: {
   readonly clueIndex: number;
+  readonly isLast: boolean;
   readonly value: string;
   readonly emitWithAck: EmitWithAck;
 }) {
@@ -296,9 +299,16 @@ function HatClueDraftInput({
 
   return (
     <input
+      autoCapitalize="words"
+      autoComplete="off"
       className={`${HAT_CLUE_INPUT_CLASS} w-full min-w-0`}
+      data-hat-clue-index={clueIndex}
+      enterKeyHint={isLast ? "done" : "next"}
+      inputMode="text"
       maxLength={GAME_DEFAULTS.maxClueLength}
       placeholder="Enter a famous figure"
+      spellCheck={false}
+      type="text"
       value={draft}
       onBlur={() => {
         focusedRef.current = false;
@@ -311,6 +321,22 @@ function HatClueDraftInput({
       }}
       onFocus={() => {
         focusedRef.current = true;
+      }}
+      onKeyDown={(event) => {
+        if (event.key !== "Enter" || event.nativeEvent.isComposing) {
+          return;
+        }
+
+        event.preventDefault();
+        flushDraft(event.currentTarget.value);
+        const nextInput = event.currentTarget
+          .closest("section")
+          ?.querySelector<HTMLInputElement>(`[data-hat-clue-index="${clueIndex + 1}"]`);
+        if (nextInput) {
+          nextInput.focus();
+        } else {
+          event.currentTarget.blur();
+        }
       }}
     />
   );

@@ -59,9 +59,13 @@ describe("RoomLobbyView", () => {
   it("wires the host start action through the extracted lobby view", async () => {
     const user = userEvent.setup();
     const onStartGame = vi.fn(async () => undefined);
+    const readyLobby = buildLobby({
+      startReadiness: { canStart: true, blockers: [] },
+    });
 
     renderLobbyView({
       sync: buildRoomSync({
+        lobby: readyLobby,
         you: {
           playerId: "host",
           isHost: true,
@@ -70,9 +74,33 @@ describe("RoomLobbyView", () => {
       onStartGame,
     });
 
-    await user.click(screen.getByRole("button", { name: "Start game (everyone must ready up)" }));
+    expect(screen.getByText("Everyone is ready.")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Start game" }));
 
     expect(onStartGame).toHaveBeenCalledOnce();
+  });
+
+  it("explains every blocker and keeps the host start action disabled", () => {
+    const blockedLobby = buildLobby({
+      startReadiness: {
+        canStart: false,
+        blockers: [
+          { code: "player-count", message: "Imposter needs 4–10 players (currently 2)." },
+          { code: "players-not-ready", message: "Waiting for Me to ready up." },
+        ],
+      },
+    });
+
+    renderLobbyView({
+      sync: buildRoomSync({
+        lobby: blockedLobby,
+        you: { playerId: "host", isHost: true },
+      }),
+    });
+
+    expect(screen.getByText("Imposter needs 4–10 players (currently 2).")).toBeInTheDocument();
+    expect(screen.getByText("Waiting for Me to ready up.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Start game" })).toBeDisabled();
   });
 
   it("keeps focused Hat clue typing local while server sync catches up", async () => {
@@ -114,6 +142,8 @@ describe("RoomLobbyView", () => {
     });
     const { rerender } = renderLobbyView({ sync });
     const firstClue = screen.getAllByPlaceholderText("Enter a famous figure")[0]!;
+    expect(firstClue).toHaveAttribute("enterkeyhint", "next");
+    expect(firstClue).toHaveAttribute("autocapitalize", "words");
 
     await user.click(firstClue);
     await user.type(firstClue, "Ada");
@@ -140,5 +170,27 @@ describe("RoomLobbyView", () => {
     );
 
     expect(screen.getAllByPlaceholderText("Enter a famous figure")[0]!).toHaveValue("Ada");
+  });
+
+  it("advances between Hat clue fields when Enter is pressed", async () => {
+    const user = userEvent.setup();
+    const hatLobby = buildLobby({
+      teamCount: 2,
+      teamNames: ["Red Team", "Blue Team"],
+      hatClueDrafts: { me: ["", "", "", "", "", ""] },
+    });
+    const sync = buildRoomSync({
+      gameKind: "hat",
+      lobby: hatLobby,
+      you: { playerId: "me", isHost: false },
+    });
+    renderLobbyView({ sync });
+    const clues = screen.getAllByPlaceholderText("Enter a famous figure");
+
+    await user.click(clues[0]!);
+    await user.keyboard("{Enter}");
+
+    expect(clues[1]).toHaveFocus();
+    expect(clues.at(-1)).toHaveAttribute("enterkeyhint", "done");
   });
 });

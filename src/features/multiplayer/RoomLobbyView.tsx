@@ -56,7 +56,8 @@ export function RoomLobbyView({
           isHost ? (
             <div className="flex w-full flex-col gap-2">
               <SecondaryFooterButton
-                label="Start game (everyone must ready up)"
+                disabled={!connected || !lobby.startReadiness.canStart}
+                label="Start game"
                 onClick={() => {
                   void onStartGame();
                 }}
@@ -101,6 +102,8 @@ export function RoomLobbyView({
             sync={sync}
           />
 
+          {isHost ? <LobbyStartStatus connected={connected} lobby={lobby} /> : null}
+
           {startError ? (
             <p className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-typ-ui text-destructive">
               {startError}
@@ -111,6 +114,33 @@ export function RoomLobbyView({
 
       {qrToastOpen ? <QrJoinDialog joinLink={joinLink} onClose={onCloseQrToast} /> : null}
     </>
+  );
+}
+
+function LobbyStartStatus({
+  connected,
+  lobby,
+}: {
+  readonly connected: boolean;
+  readonly lobby: LobbyDto;
+}) {
+  const messages = connected
+    ? lobby.startReadiness.blockers.map(({ message }) => message)
+    : ["Reconnecting before the game can start."];
+
+  return (
+    <section className="rounded-2xl border border-border bg-card p-4 shadow-sm" aria-live="polite">
+      <p className="text-typ-card-title font-semibold">Ready to start?</p>
+      {messages.length === 0 ? (
+        <p className="mt-2 text-typ-ui text-emerald-700">Everyone is ready.</p>
+      ) : (
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-typ-ui text-muted-foreground">
+          {messages.map((message) => (
+            <li key={message}>{message}</li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 

@@ -8,14 +8,14 @@ Environment variables are documented in `docs/DEPLOYMENT.md`. Optional diagnosti
 
 ## Smoke (all games)
 
-| Step | Action                       | Expected                                                            |
-| ---- | ---------------------------- | ------------------------------------------------------------------- |
-| S1   | Host creates room            | Redirect to `/name`, then `/room/:code`; code visible; QR/copy work |
-| S2   | Guest joins same code + name | Both see lobby; player lists match                                  |
-| S3   | Guest toggles ready          | Host sees ready state; non-host footer shows ready button           |
-| S4   | Host starts before all ready | Error or blocked (everyone must ready)                              |
-| S5   | All ready → Host starts      | Phase becomes playing; correct shell loads                          |
-| S6   | Refresh guest mid-lobby      | Reconnect or clear message per `RoomPage` / session secret          |
+| Step | Action                                          | Expected                                                                                         |
+| ---- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| S1   | Host creates room                               | Redirect to `/name`, then `/room/:code`; code visible; QR/copy work                              |
+| S2   | Guest joins same code + name                    | Both see lobby; player lists match                                                               |
+| S3   | Guest toggles ready                             | Host sees ready state; non-host footer shows ready button                                        |
+| S4   | Host reviews Start before requirements pass     | Start is disabled and the readiness card lists every current blocker                             |
+| S5   | All ready → Host starts                         | Phase becomes playing; correct shell loads                                                       |
+| S6   | Refresh or briefly disconnect a guest mid-lobby | The stored session re-binds automatically; room sync resumes and the next lobby command succeeds |
 
 ## Who What Where
 

@@ -16,6 +16,10 @@ Networked game views currently cover Who What Where, Hat Game, Imposter, and Dra
 
 Runtime multiplayer state lives **only in the Node process RAM** (rooms keyed by short codes). Clients reconnect with per-player secrets stored in **`sessionStorage`** (`jd-multiplayer:*`).
 
+Lobby synchronization includes a server-authored start-readiness result. The
+same pure evaluator gates `lobby:startGame` and supplies host-facing blocker
+copy, so client guidance cannot diverge from server enforcement.
+
 Legacy solo flows still persist in **`localStorage`** where applicable. Web Audio cues remain client-side.
 
 Deploy targets: **Docker (`pnpm run docker:build`)** and **Railway/Node** (see `docs/DEPLOYMENT.md`).

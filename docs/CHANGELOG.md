@@ -2,6 +2,23 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.21.0 - 2026-08-09
+
+- **Performance:** Kept the multiplayer home route eager while lazy-loading
+  room, name, pass-and-play, and single-player routes behind an accessible
+  loading state. The production entry bundle fell from about 623 kB/193 kB
+  gzip to 345 kB/111 kB gzip.
+- **Lobby UX:** Added server-authored start-readiness blockers for connection,
+  player-count, team-size, Hat clue, and ready-up requirements. Hosts now see
+  every blocker and cannot start until the authoritative rules pass.
+- **Mobile UX:** Standardized capitalization, autocomplete, keyboard hints,
+  input modes, spellcheck, and Enter behavior across names, team names, join
+  codes, Hat clues, and DrawNGuess text responses.
+- **Accessibility:** Kept countdowns visually live while limiting polite screen
+  reader announcements to the final-ten-seconds milestone and time expiry.
+- **Tests:** Added route loading, readiness parity, mobile interaction, and
+  countdown announcement coverage.
+
 ## 0.20.5 - 2026-08-09
 
 - **Fix (multiplayer):** Re-bind stored player sessions after every Socket.IO

@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import { cn } from "@/lib/utils";
 
 export function Metric({
@@ -6,7 +8,7 @@ export function Metric({
   className,
 }: {
   readonly label: string;
-  readonly value: string;
+  readonly value: ReactNode;
   /** Optional layout helpers (e.g. `col-span-2` in a CSS grid). */
   readonly className?: string;
 }) {

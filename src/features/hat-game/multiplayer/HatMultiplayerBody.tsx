@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 
+import { AccessibleCountdownValue } from "@/components/game/AccessibleCountdownValue";
 import { BetweenTurnsLayout } from "@/components/game/BetweenTurnsLayout";
 import { FinalResultsBody } from "@/components/game/final-results/FinalResultsBody";
 import { ResultsConfetti } from "@/components/game/final-results/ResultsConfetti";
@@ -380,7 +381,7 @@ function HatSpectatorTurnSnapshotCard({
   secondsLeft,
   teams,
 }: {
-  readonly activeTurn: { readonly score: number };
+  readonly activeTurn: { readonly score: number; readonly startedAt: string };
   readonly activeDescriberAvatarId?: string | undefined;
   readonly context: { readonly activeDescriberName: string };
   readonly secondsLeft: number;
@@ -396,7 +397,16 @@ function HatSpectatorTurnSnapshotCard({
         name={context.activeDescriberName}
       />
       <div className="mt-3 grid grid-cols-2 gap-3">
-        <Metric label="Time left" value={formatCountdown(secondsLeft)} />
+        <Metric
+          label="Time left"
+          value={
+            <AccessibleCountdownValue
+              countdownKey={activeTurn.startedAt}
+              formattedValue={formatCountdown(secondsLeft)}
+              secondsLeft={secondsLeft}
+            />
+          }
+        />
         <Metric label="Turn score" value={String(activeTurn.score)} />
       </div>
       <div className="mt-4 border-t border-border pt-4">

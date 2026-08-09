@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { AccessibleCountdownValue } from "@/components/game/AccessibleCountdownValue";
 import { viewerWhoWhatWhereTeamIsWinner } from "@/components/game/final-results/viewModel";
 import { TeamStandingsList } from "@/components/game/TeamStandingsList";
 import { Metric } from "@/components/Metric";
@@ -174,7 +175,16 @@ export function GuessOrObserveTurn({
           name={context.describer.name}
         />
         <div className="mt-3 grid grid-cols-2 gap-3">
-          <Metric label="Time left" value={formatWhoWhatWhereTurnClock(secondsLeft)} />
+          <Metric
+            label="Time left"
+            value={
+              <AccessibleCountdownValue
+                countdownKey={activeTurn.startedAt}
+                formattedValue={formatWhoWhatWhereTurnClock(secondsLeft)}
+                secondsLeft={secondsLeft}
+              />
+            }
+          />
           <Metric label="Turn score" value={String(activeTurn.score)} />
           <Metric label="Category" value={activeTurn.category} />
         </div>

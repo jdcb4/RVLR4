@@ -1,5 +1,6 @@
 import type { DrawNGuessSettings, DrawNGuessSyncDto } from "@/domain/drawnguess/types";
 import type { HatGameSession } from "@/domain/hat-game/types";
+import type { LobbyStartReadiness } from "@/domain/multiplayer/lobbyReadiness";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
 import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 import type { AvatarId } from "@/multiplayer/avatarCatalog";
@@ -26,6 +27,7 @@ export type LobbyDto = {
   readonly drawnguessSettings: DrawNGuessSettings;
   readonly players: readonly LobbyPlayerDto[];
   readonly hatClueDrafts: Record<string, readonly string[]>;
+  readonly startReadiness: LobbyStartReadiness;
 };
 
 export type WhoWhatWherePeerRole = "describer" | "guesser" | "observer";

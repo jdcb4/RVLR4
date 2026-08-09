@@ -325,6 +325,27 @@ describe("multiplayer smoke", () => {
     }
   });
 
+  it("uses the synchronized lobby readiness reason when rejecting start", async () => {
+    const host = await postJson<Credentials>(`${harness.url}/api/rooms`, {
+      gameKind: "imposter",
+      hostName: "Host",
+    });
+    const bound = await bindClient(harness.url, host);
+
+    try {
+      const blocker = bound.firstSync.lobby?.startReadiness.blockers[0];
+      expect(blocker).toEqual({
+        code: "player-count",
+        message: "Imposter needs 4–10 players (currently 1).",
+      });
+
+      const ack = await emitAck(bound.socket, "lobby:startGame", {});
+      expect(ack).toEqual({ ok: false, error: blocker?.message });
+    } finally {
+      bound.socket.disconnect();
+    }
+  });
+
   it("re-binds a session after reconnect before accepting another room command", async () => {
     const host = await postJson<Credentials>(`${harness.url}/api/rooms`, {
       gameKind: "imposter",

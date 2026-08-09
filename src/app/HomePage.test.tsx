@@ -16,5 +16,9 @@ describe("MultiplayerHomePage", () => {
     expect(screen.getByText(/Who What Where/i)).toBeInTheDocument();
     expect(screen.getByText(/Hat Game/i)).toBeInTheDocument();
     expect(screen.getByText(/Imposter/i)).toBeInTheDocument();
+    const joinCode = screen.getByPlaceholderText(/Join code/i);
+    expect(joinCode).toHaveAttribute("enterkeyhint", "go");
+    expect(joinCode).toHaveAttribute("autocapitalize", "characters");
+    expect(joinCode).toHaveAttribute("spellcheck", "false");
   });
 });

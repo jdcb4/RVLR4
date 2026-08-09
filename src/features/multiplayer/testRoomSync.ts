@@ -33,6 +33,15 @@ export function buildLobby(overrides: Partial<LobbyDto> = {}): LobbyDto {
       },
     ],
     hatClueDrafts: {},
+    startReadiness: {
+      canStart: false,
+      blockers: [
+        {
+          code: "player-count",
+          message: "Imposter needs 4–10 players (currently 2).",
+        },
+      ],
+    },
     ...overrides,
   };
 }

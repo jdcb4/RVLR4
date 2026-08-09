@@ -39,6 +39,7 @@ import {
   hostSetTeamName,
   movePlayerToTeam,
 } from "./lobbyControl.ts";
+import { assertRoomLobbyStartReady } from "./lobbyReadiness.ts";
 import { mpDebug } from "./multiplayerDebug.ts";
 import type { Room, RoomPlayer } from "./roomStore.ts";
 import {
@@ -59,18 +60,6 @@ import {
   markReadyGate,
   startWhoWhatWhereMatch,
 } from "./whoWhatWhereRuntime.ts";
-
-function ensureLobbyEveryoneReady(room: Room) {
-  for (const player of room.players.values()) {
-    if (player.isHost) {
-      continue;
-    }
-
-    if (!player.ready) {
-      throw new Error("Waiting for everyone to ready up.");
-    }
-  }
-}
 
 function ensureHostCanChangeLobbySettings(room: Room, actor: RoomPlayer) {
   if (!actor.isHost) {
@@ -405,7 +394,7 @@ export function registerSocketHandlers(io: Server, store: RoomStore) {
           throw new Error("This match already started.");
         }
 
-        ensureLobbyEveryoneReady(room);
+        assertRoomLobbyStartReady(room);
 
         if (room.gameKind === "whowhatwhere") {
           await startWhoWhatWhereMatch(room);

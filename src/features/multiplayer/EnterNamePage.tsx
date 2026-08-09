@@ -255,11 +255,16 @@ export function EnterNamePage() {
           Display name
         </label>
         <input
+          autoCapitalize="words"
           autoComplete="nickname"
           className="rounded-xl border border-input bg-background px-3 py-2 text-typ-body-relaxed outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+          enterKeyHint="go"
           id="display-name"
+          inputMode="text"
           maxLength={32}
           placeholder="Name shown in the lobby"
+          spellCheck={false}
+          type="text"
           value={name}
           onChange={(event) => setName(event.target.value)}
         />

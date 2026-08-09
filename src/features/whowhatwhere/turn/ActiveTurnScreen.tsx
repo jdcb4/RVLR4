@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
+import { AccessibleCountdownValue } from "@/components/game/AccessibleCountdownValue";
 import { FooterOutlineIconTextButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
@@ -97,7 +98,16 @@ export function ActiveTurnScreen({
         )}
 
         <div className="grid grid-cols-2 gap-3">
-          <Metric label="Time left" value={formatWhoWhatWhereTurnClock(secondsLeft)} />
+          <Metric
+            label="Time left"
+            value={
+              <AccessibleCountdownValue
+                countdownKey={activeTurn.startedAt}
+                formattedValue={formatWhoWhatWhereTurnClock(secondsLeft)}
+                secondsLeft={secondsLeft}
+              />
+            }
+          />
           <Metric label="Category" value={activeTurn.category} />
           <Metric label="Score" value={String(activeTurn.score)} />
           <Metric label="Skipped waiting" value={String(activeTurn.skippedWords.length)} />

@@ -59,8 +59,10 @@ describe("LobbyTeamsSection", () => {
 
     await user.click(screen.getByRole("button", { name: "Rename Red" }));
     await user.clear(screen.getByDisplayValue("Red"));
-    await user.type(screen.getByRole("textbox"), "Scarlet");
-    await user.click(screen.getByRole("button", { name: "Save" }));
+    const nameInput = screen.getByRole("textbox");
+    expect(nameInput).toHaveAttribute("enterkeyhint", "done");
+    expect(nameInput).toHaveAttribute("autocapitalize", "words");
+    await user.type(nameInput, "Scarlet{Enter}");
 
     expect(emitWithAck).toHaveBeenCalledWith("lobby:captainSetTeamName", {
       teamIndex: 0,

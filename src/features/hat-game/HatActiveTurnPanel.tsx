@@ -1,3 +1,4 @@
+import { AccessibleCountdownValue } from "@/components/game/AccessibleCountdownValue";
 import { FooterOutlineIconTextButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
@@ -47,7 +48,16 @@ export function HatActiveTurnPanel({
         <div className="grid grid-cols-2 gap-3">
           <Metric
             label="Time left"
-            value={formatCountdown(secondsRemaining)}
+            value={
+              <AccessibleCountdownValue
+                countdownKey={
+                  activeTurn?.startedAt ??
+                  `hat-${session.phaseNumber}-${session.roundNumber}-${session.teamIndex}`
+                }
+                formattedValue={formatCountdown(secondsRemaining)}
+                secondsLeft={secondsRemaining}
+              />
+            }
             {...(!showPhaseMetric ? { className: "col-span-2" } : {})}
           />
           {showPhaseMetric ? <Metric label="Phase" value={phase.name} /> : null}

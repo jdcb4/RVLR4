@@ -1,5 +1,6 @@
 import type { DrawNGuessSyncDto } from "@/domain/drawnguess/types";
 import type { HatGameSession } from "@/domain/hat-game/types";
+import type { LobbyStartReadiness } from "@/domain/multiplayer/lobbyReadiness";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 
 import { buildDrawNGuessSyncDto } from "./drawnguessViews.ts";
@@ -11,6 +12,7 @@ import {
   shouldShowHatTurnFooter,
 } from "./hatViews.ts";
 import { buildImposterSyncDto, type ImposterSyncDto } from "./imposterViews.ts";
+import { getRoomLobbyStartReadiness } from "./lobbyReadiness.ts";
 import type { GameKind, Room, RoomPhase, RoomPlayer } from "./roomStore.ts";
 import {
   canReturnSkippedWords,
@@ -42,6 +44,7 @@ export type LobbyDto = {
   readonly players: readonly LobbyPlayerDto[];
   /** Hat only — each player's six famous-figure drafts. */
   readonly hatClueDrafts: Record<string, readonly string[]>;
+  readonly startReadiness: LobbyStartReadiness;
 };
 
 export type WhoWhatWhereSyncDto = {
@@ -110,6 +113,7 @@ function buildLobbyDto(room: Room): LobbyDto {
     drawnguessSettings: room.drawnguessSettings,
     players: lobbyPlayers(room),
     hatClueDrafts: room.hatClueDrafts ?? {},
+    startReadiness: getRoomLobbyStartReadiness(room),
   };
 }
 

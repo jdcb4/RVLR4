@@ -154,10 +154,13 @@ export function MultiplayerHomePage() {
               autoCapitalize="characters"
               autoComplete="off"
               className="rounded-xl border border-input bg-background px-3 py-2 text-typ-body-relaxed outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+              enterKeyHint="go"
               id="join-code"
               inputMode="text"
               maxLength={8}
               placeholder="Join code. e.g. ABC123"
+              spellCheck={false}
+              type="text"
               value={joinCode}
               onChange={(event) => setJoinCode(event.target.value)}
             />
