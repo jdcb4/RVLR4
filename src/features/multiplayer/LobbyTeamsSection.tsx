@@ -10,6 +10,7 @@ import {
 import { PlayerAvatar } from "@/components/PlayerAvatar";
 import { Button } from "@/components/ui/button";
 import { captainPlayerIdForTeam } from "@/features/multiplayer/lobbyCaptain";
+import { cn } from "@/lib/utils";
 import type { LobbyDto, LobbyPlayerDto } from "@/multiplayer/roomTypes";
 
 type EmitWithAck = (
@@ -34,6 +35,7 @@ export function LobbyTeamsSection({
   const [hostMoveTeamPick, setHostMoveTeamPick] = useState(0);
 
   const myTeamIndex = lobby.players.find((player) => player.id === myPlayerId)?.teamIndex ?? 0;
+  const dense = lobby.players.length >= 6;
 
   const openEdit = (teamIndex: number) => {
     setEditingTeamIndex(teamIndex);
@@ -76,10 +78,14 @@ export function LobbyTeamsSection({
 
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div
+        className={cn("flex flex-col", dense ? "gap-3" : "gap-4")}
+        data-dense={dense || undefined}
+      >
         {Array.from({ length: lobby.teamCount }).map((_, teamIndex) => (
           <LobbyTeamCard
             editDraft={editDraft}
+            dense={dense}
             editing={editingTeamIndex === teamIndex}
             emitWithAck={emitWithAck}
             isHost={isHost}
@@ -121,6 +127,7 @@ function LobbyTeamCard({
   isHost,
   editing,
   editDraft,
+  dense,
   emitWithAck,
   onOpenEdit,
   onCancelEdit,
@@ -135,6 +142,7 @@ function LobbyTeamCard({
   readonly isHost: boolean;
   readonly editing: boolean;
   readonly editDraft: string;
+  readonly dense: boolean;
   readonly emitWithAck: EmitWithAck;
   readonly onOpenEdit: (teamIndex: number) => void;
   readonly onCancelEdit: () => void;
@@ -147,12 +155,14 @@ function LobbyTeamCard({
   const canRename = isHost || (captainId !== undefined && captainId === myPlayerId);
   const showJoinArrow = myTeamIndex !== teamIndex;
   const members = playersForTeam(lobby, teamIndex);
+  const compactPlayers = dense && !editing;
 
   return (
     <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
       <TeamHeader
         canRename={canRename}
         displayName={displayName}
+        compact={compactPlayers}
         editDraft={editDraft}
         editing={editing}
         emitWithAck={emitWithAck}
@@ -165,10 +175,15 @@ function LobbyTeamCard({
         onOpenEdit={onOpenEdit}
         onSubmitRename={onSubmitRename}
       />
-      <ul className="divide-y divide-border px-3 py-1">
+      <ul
+        className={cn(
+          compactPlayers ? "grid grid-cols-2 gap-1.5 p-2" : "divide-y divide-border px-3 py-1",
+        )}
+      >
         {members.map((player) => (
           <LobbyTeamPlayerRow
             captainId={captainId}
+            compact={compactPlayers}
             isHost={isHost}
             key={player.id}
             player={player}
@@ -176,7 +191,11 @@ function LobbyTeamCard({
           />
         ))}
         {members.length === 0 ? (
-          <li className="py-3 text-typ-ui text-muted-foreground">No players yet</li>
+          <li
+            className={cn("py-3 text-typ-ui text-muted-foreground", compactPlayers && "col-span-2")}
+          >
+            No players yet
+          </li>
         ) : null}
       </ul>
     </section>
@@ -188,6 +207,7 @@ function TeamHeader({
   editing,
   editDraft,
   canRename,
+  compact,
   showJoinArrow,
   myPlayerId,
   teamIndex,
@@ -202,6 +222,7 @@ function TeamHeader({
   readonly editing: boolean;
   readonly editDraft: string;
   readonly canRename: boolean;
+  readonly compact: boolean;
   readonly showJoinArrow: boolean;
   readonly myPlayerId: string;
   readonly teamIndex: number;
@@ -213,7 +234,12 @@ function TeamHeader({
   readonly onSubmitRename: () => void;
 }) {
   return (
-    <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-3 py-2">
+    <div
+      className={cn(
+        "flex items-center gap-2 border-b border-border bg-muted/30 px-3",
+        compact ? "py-1.5" : "py-2",
+      )}
+    >
       <div className="min-w-0 flex-1">
         {editing ? (
           <TeamRenameForm
@@ -327,13 +353,63 @@ function LobbyTeamPlayerRow({
   player,
   captainId,
   isHost,
+  compact,
   onOpenHostMovePlayer,
 }: {
   readonly player: LobbyPlayerDto;
   readonly captainId: string | undefined;
   readonly isHost: boolean;
+  readonly compact: boolean;
   readonly onOpenHostMovePlayer: (player: LobbyPlayerDto) => void;
 }) {
+  if (compact) {
+    const details = [
+      player.ready ? "Ready" : "Not ready",
+      captainId === player.id ? "Captain" : null,
+      player.isHost ? "Host" : null,
+      player.disconnectedAt ? "Away" : null,
+    ].filter(Boolean);
+    const content = (
+      <>
+        <PlayerAvatar avatarId={player.avatarId} className="size-7 shrink-0" name={player.name} />
+        <span className="min-w-0 flex-1 text-left">
+          <span className="block truncate font-medium text-typ-ui" title={player.name}>
+            {player.name}
+          </span>
+          <span
+            className={cn(
+              "block truncate text-typ-micro",
+              player.disconnectedAt ? "text-destructive" : "text-muted-foreground",
+            )}
+            title={details.join(" · ")}
+          >
+            {details.join(" · ")}
+          </span>
+        </span>
+        {isHost ? <IconArrowLeftRight className="size-4 shrink-0 text-muted-foreground" /> : null}
+      </>
+    );
+
+    return (
+      <li className="min-w-0">
+        {isHost ? (
+          <button
+            aria-label={`Choose team for ${player.name}`}
+            className="flex min-h-11 w-full min-w-0 items-center gap-2 rounded-xl border border-border bg-background px-2 py-1.5 transition hover:bg-muted"
+            type="button"
+            onClick={() => onOpenHostMovePlayer(player)}
+          >
+            {content}
+          </button>
+        ) : (
+          <div className="flex min-h-11 min-w-0 items-center gap-2 rounded-xl border border-border bg-background px-2 py-1.5">
+            {content}
+          </div>
+        )}
+      </li>
+    );
+  }
+
   return (
     <li className="flex items-center gap-2 py-2 text-typ-ui">
       {player.ready ? (

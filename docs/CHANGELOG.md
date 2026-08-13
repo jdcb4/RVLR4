@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.2 - 2026-08-13
+
+- **Mobile Hat entry:** Clue fields now follow the visual viewport when the
+  on-screen keyboard opens, scroll the active field into view, and use denser
+  rows while preserving the existing Enter-to-advance flow.
+- **Compact setup:** Who What Where pairs timing, round, skip, and hint controls
+  into two-column groups to reduce vertical scrolling on phone screens.
+- **Adaptive lobbies:** Team lobbies switch to compact two-column player cards
+  from six participants onward while retaining readiness, captain, host,
+  connection, rename, join, and host-move controls.
+
 ## 0.22.1 - 2026-08-09
 
 - **Deployment:** Moved the optional manual Docker recipe to

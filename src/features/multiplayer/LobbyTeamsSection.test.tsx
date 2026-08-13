@@ -92,4 +92,34 @@ describe("LobbyTeamsSection", () => {
       teamIndex: 0,
     });
   });
+
+  it("uses the dense two-column roster once six players join", async () => {
+    const user = userEvent.setup();
+    const emitWithAck = vi.fn(async () => ({ ok: true }));
+    const longName = "Alexandria With A Long Name";
+    const players: LobbyDto["players"] = Array.from({ length: 6 }, (_, index) => ({
+      id: index === 0 ? "host" : `player-${index}`,
+      name: index === 5 ? longName : `Player ${index + 1}`,
+      avatarId: index % 2 === 0 ? "cat" : "dog",
+      isHost: index === 0,
+      teamIndex: index % 2,
+      ready: index < 4,
+      disconnectedAt: null,
+    }));
+    const { container } = render(
+      <LobbyTeamsSection
+        emitWithAck={emitWithAck}
+        isHost
+        lobby={buildTeamLobby({ players })}
+        myPlayerId="host"
+      />,
+    );
+
+    expect(container.querySelector('[data-dense="true"]')).toBeInTheDocument();
+    expect(container.querySelectorAll("ul.grid-cols-2")).toHaveLength(2);
+    expect(screen.getByTitle(longName)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: `Choose team for ${longName}` }));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
 });

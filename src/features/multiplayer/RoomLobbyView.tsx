@@ -48,6 +48,7 @@ export function RoomLobbyView({
   const isHost = sync.you.isHost;
   const myId = sync.you.playerId;
   const isTeamGame = sync.gameKind === "whowhatwhere" || sync.gameKind === "hat";
+  const denseLobby = isTeamGame && lobby.players.length >= 6;
 
   return (
     <>
@@ -72,12 +73,13 @@ export function RoomLobbyView({
         }
         title="Lobby"
       >
-        <div className="flex flex-col gap-4 pb-6">
+        <div className={`flex flex-col ${denseLobby ? "gap-3 pb-4" : "gap-4 pb-6"}`}>
           <LobbyInviteSection
             canNativeShare={canNativeShare}
             code={sync.code}
             connected={connected}
             copiedToast={copiedToast}
+            compact={denseLobby}
             onCopyLink={onCopyLink}
             onOpenQrToast={onOpenQrToast}
             onShareLink={onShareLink}

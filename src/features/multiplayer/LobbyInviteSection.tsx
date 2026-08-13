@@ -8,6 +8,7 @@ export function LobbyInviteSection({
   connected,
   canNativeShare,
   copiedToast,
+  compact = false,
   onCopyLink,
   onShareLink,
   onOpenQrToast,
@@ -16,15 +17,19 @@ export function LobbyInviteSection({
   readonly connected: boolean;
   readonly canNativeShare: boolean;
   readonly copiedToast: boolean;
+  readonly compact?: boolean;
   readonly onCopyLink: () => Promise<void>;
   readonly onShareLink: () => Promise<void>;
   readonly onOpenQrToast: () => void;
 }) {
   return (
     <>
-      <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+      <section
+        className={`rounded-2xl border border-border bg-card shadow-sm ${compact ? "p-3" : "p-4"}`}
+        data-compact={compact || undefined}
+      >
         <p className="text-typ-overline text-primary">Share code</p>
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div className={`${compact ? "mt-2" : "mt-3"} flex flex-wrap items-center gap-x-4 gap-y-2`}>
           <span className="font-mono text-typ-display font-bold tracking-[0.25em]">{code}</span>
           <span className="flex items-center gap-2">
             <Button

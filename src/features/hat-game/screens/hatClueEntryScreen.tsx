@@ -7,6 +7,7 @@ import {
   HAT_NOTICE_CLASS,
 } from "@/features/hat-game/screens/hatScreenTokens";
 import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
+import { keepKeyboardSafeInputVisible } from "@/lib/keyboardSafeInput";
 
 export function hatClueEntryScreen(controller: HatSingleplayerAppController): ScreenModel {
   const player = controller.snapshot.players[controller.snapshot.clueEntryIndex];
@@ -36,48 +37,49 @@ export function hatClueEntryScreen(controller: HatSingleplayerAppController): Sc
   return {
     content: (
       <GamePanel
+        className="focus-within:[&_[data-game-panel-subtitle]]:hidden"
         subtitle="Enter people or characters most players could know."
         title={`${player.name}'s famous figures`}
       >
-        {clues.map((clue, index) => (
-          <div key={`${player.id}-clue-${index}`} className="flex flex-wrap items-center gap-2">
-            <span className="w-6 shrink-0 font-medium tabular-nums text-typ-ui">{index + 1}.</span>
-            <input
-              autoCapitalize="words"
-              autoComplete="off"
-              className={`${HAT_CLUE_INPUT_CLASS} min-w-0 flex-1`}
-              data-hat-clue-index={index}
-              enterKeyHint={index < clues.length - 1 ? "next" : "done"}
-              inputMode="text"
-              maxLength={GAME_DEFAULTS.maxClueLength}
-              placeholder="Enter a famous figure"
-              spellCheck={false}
-              type="text"
-              value={clue}
-              onChange={(event) => controller.updateClue(player.id, index, event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key !== "Enter" || event.nativeEvent.isComposing) {
-                  return;
-                }
-
-                event.preventDefault();
-                const nextInput = event.currentTarget
-                  .closest("section")
-                  ?.querySelector<HTMLInputElement>(`[data-hat-clue-index="${index + 1}"]`);
-                if (nextInput) {
-                  nextInput.focus();
-                } else {
-                  event.currentTarget.blur();
-                }
-              }}
-            />
-            <FooterIconSlotButton
-              icon={<span aria-hidden="true">⚡</span>}
-              label="Lightning suggestion"
-              onClick={() => controller.fillSuggestion(player.id, index)}
-            />
-          </div>
-        ))}
+        <div className="grid gap-2">
+          {clues.map((clue, index) => (
+            <div key={`${player.id}-clue-${index}`} className="flex items-center gap-2">
+              <span className="w-5 shrink-0 font-medium tabular-nums text-typ-ui">
+                {index + 1}.
+              </span>
+              <input
+                autoCapitalize="words"
+                autoComplete="off"
+                className={`${HAT_CLUE_INPUT_CLASS} min-w-0 flex-1`}
+                data-hat-clue-index={index}
+                enterKeyHint={index < clues.length - 1 ? "next" : "done"}
+                inputMode="text"
+                maxLength={GAME_DEFAULTS.maxClueLength}
+                placeholder="Enter a famous figure"
+                spellCheck={false}
+                type="text"
+                value={clue}
+                onChange={(event) => controller.updateClue(player.id, index, event.target.value)}
+                onFocus={(event) => keepKeyboardSafeInputVisible(event.currentTarget)}
+                onKeyDown={(event) => {
+                  if (event.key !== "Enter" || event.nativeEvent.isComposing) return;
+                  event.preventDefault();
+                  const nextInput = event.currentTarget
+                    .closest("section")
+                    ?.querySelector<HTMLInputElement>(`[data-hat-clue-index="${index + 1}"]`);
+                  if (nextInput) nextInput.focus();
+                  else event.currentTarget.blur();
+                }}
+              />
+              <FooterIconSlotButton
+                compact
+                icon={<span aria-hidden="true">⚡</span>}
+                label="Lightning suggestion"
+                onClick={() => controller.fillSuggestion(player.id, index)}
+              />
+            </div>
+          ))}
+        </div>
       </GamePanel>
     ),
     actions: (

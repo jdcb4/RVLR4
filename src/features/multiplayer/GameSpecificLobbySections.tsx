@@ -7,6 +7,7 @@ import type { SharedTeamCount } from "@/config/teamRoster";
 import { maxImpostersForPlayers } from "@/domain/imposter/round";
 import { HAT_CLUE_INPUT_CLASS } from "@/features/hat-game/screens/hatScreenTokens";
 import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
+import { keepKeyboardSafeInputVisible } from "@/lib/keyboardSafeInput";
 import type { LobbyDto, RoomSyncPayload } from "@/multiplayer/roomTypes";
 
 type EmitWithAck = (
@@ -196,15 +197,15 @@ function HatLobbyFamousFiguresSection({
         Enter six people or characters your table will recognize. Tap the lightning if you want a
         random suggestion for that row.
       </p>
-      <div className="mt-4 overflow-x-auto">
+      <div className="mt-3 overflow-x-auto">
         <table className="w-full min-w-[280px] border-collapse text-typ-ui">
           <tbody>
             {Array.from({ length: clueSlots }).map((_, index) => (
               <tr className="border-b border-border last:border-b-0" key={index}>
-                <td className="py-2 pr-2 align-middle tabular-nums text-muted-foreground">
+                <td className="py-1 pr-2 align-middle tabular-nums text-muted-foreground">
                   {index + 1}
                 </td>
-                <td className="py-2 pr-2 align-middle">
+                <td className="py-1 pr-2 align-middle">
                   <HatClueDraftInput
                     clueIndex={index}
                     emitWithAck={emitWithAck}
@@ -212,8 +213,9 @@ function HatLobbyFamousFiguresSection({
                     value={rowValues[index] ?? ""}
                   />
                 </td>
-                <td className="w-14 py-2 align-middle">
+                <td className="w-14 py-1 align-middle">
                   <FooterIconSlotButton
+                    compact
                     icon={<span aria-hidden="true">{"\u26a1"}</span>}
                     label="Lightning suggestion"
                     onClick={() => {
@@ -317,8 +319,9 @@ function HatClueDraftInput({
         setDraft(next);
         scheduleFlush(next);
       }}
-      onFocus={() => {
+      onFocus={(event) => {
         focusedRef.current = true;
+        keepKeyboardSafeInputVisible(event.currentTarget);
       }}
       onKeyDown={(event) => {
         if (event.key !== "Enter" || event.nativeEvent.isComposing) {

@@ -29,7 +29,9 @@ export function GamePanel({
         {eyebrow ? <p className={cn(typography.ui, "text-muted-foreground")}>{eyebrow}</p> : null}
         <h2 className={cn(typography.panelTitle, "font-semibold")}>{title}</h2>
         {subtitle ? (
-          <p className={cn(typography.ui, "mt-1 text-muted-foreground")}>{subtitle}</p>
+          <p className={cn(typography.ui, "mt-1 text-muted-foreground")} data-game-panel-subtitle>
+            {subtitle}
+          </p>
         ) : null}
       </div>
       <div className="grid gap-4">{children}</div>

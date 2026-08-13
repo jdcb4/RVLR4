@@ -29,66 +29,86 @@ export function SettingsScreen({
         onChange={(count) => setSetting("teamCount", count as GameSettings["teamCount"])}
       />
 
-      <OptionGroup label="Turn length">
-        {[30, 45, 60, 75].map((seconds) => (
-          <OptionButton
-            key={seconds}
-            selected={settings.turnDurationSeconds === seconds}
-            onClick={() =>
-              setSetting("turnDurationSeconds", seconds as GameSettings["turnDurationSeconds"])
-            }
-          >
-            {seconds}s
-          </OptionButton>
-        ))}
-      </OptionGroup>
+      <div className="grid grid-cols-2 gap-3" data-settings-pair="timing">
+        <OptionGroup
+          className="gap-2"
+          label="Turn length"
+          optionsClassName="grid-flow-row auto-cols-auto grid-cols-2"
+        >
+          {[30, 45, 60, 75].map((seconds) => (
+            <OptionButton
+              key={seconds}
+              selected={settings.turnDurationSeconds === seconds}
+              onClick={() =>
+                setSetting("turnDurationSeconds", seconds as GameSettings["turnDurationSeconds"])
+              }
+            >
+              {seconds}s
+            </OptionButton>
+          ))}
+        </OptionGroup>
 
-      <OptionGroup label="Rounds">
-        {[1, 2, 3, 4].map((rounds) => (
-          <OptionButton
-            key={rounds}
-            selected={settings.totalRounds === rounds}
-            onClick={() => setSetting("totalRounds", rounds as GameSettings["totalRounds"])}
-          >
-            {rounds}
-          </OptionButton>
-        ))}
-      </OptionGroup>
+        <OptionGroup
+          className="gap-2"
+          label="Rounds"
+          optionsClassName="grid-flow-row auto-cols-auto grid-cols-2"
+        >
+          {[1, 2, 3, 4].map((rounds) => (
+            <OptionButton
+              key={rounds}
+              selected={settings.totalRounds === rounds}
+              onClick={() => setSetting("totalRounds", rounds as GameSettings["totalRounds"])}
+            >
+              {rounds}
+            </OptionButton>
+          ))}
+        </OptionGroup>
+      </div>
 
-      <OptionGroup label="Skips">
-        {[
-          { label: "1", value: 1 },
-          { label: "2", value: 2 },
-          { label: "3", value: 3 },
-          { label: "Any", value: -1 },
-        ].map((skip) => (
-          <OptionButton
-            key={skip.value}
-            selected={settings.skipLimit === skip.value}
-            onClick={() => setSetting("skipLimit", skip.value as GameSettings["skipLimit"])}
-          >
-            {skip.label}
-          </OptionButton>
-        ))}
-      </OptionGroup>
+      <div className="grid grid-cols-2 gap-3" data-settings-pair="assists">
+        <OptionGroup
+          className="gap-2"
+          label="Skips"
+          optionsClassName="grid-flow-row auto-cols-auto grid-cols-2"
+        >
+          {[
+            { label: "1", value: 1 },
+            { label: "2", value: 2 },
+            { label: "3", value: 3 },
+            { label: "Any", value: -1 },
+          ].map((skip) => (
+            <OptionButton
+              key={skip.value}
+              selected={settings.skipLimit === skip.value}
+              onClick={() => setSetting("skipLimit", skip.value as GameSettings["skipLimit"])}
+            >
+              {skip.label}
+            </OptionButton>
+          ))}
+        </OptionGroup>
 
-      <OptionGroup label="Hints per turn">
-        {HINT_LIMIT_OPTIONS.map((value) => (
-          <OptionButton
-            key={value}
-            selected={settings.hints.perTurnLimit === value}
-            onClick={() =>
-              setSetting("hints", {
-                ...settings.hints,
-                perTurnLimit: value as HintLimit,
-                enabled: value > 0,
-              })
-            }
-          >
-            {value}
-          </OptionButton>
-        ))}
-      </OptionGroup>
+        <OptionGroup
+          className="gap-2"
+          label="Hints / turn"
+          optionsClassName="grid-flow-row auto-cols-auto grid-cols-2"
+        >
+          {HINT_LIMIT_OPTIONS.map((value) => (
+            <OptionButton
+              key={value}
+              selected={settings.hints.perTurnLimit === value}
+              onClick={() =>
+                setSetting("hints", {
+                  ...settings.hints,
+                  perTurnLimit: value as HintLimit,
+                  enabled: value > 0,
+                })
+              }
+            >
+              {value}
+            </OptionButton>
+          ))}
+        </OptionGroup>
+      </div>
 
       <OptionGroup label="Categories">
         {CATEGORIES.map((category) => (
