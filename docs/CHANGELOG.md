@@ -2,6 +2,11 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.24.3 - 2026-09-05
+
+- **Runtime dependencies:** Resolve Express/body-parser's `qs` dependency to
+  patched 6.16.0 and gate production dependency audit in CI.
+
 ## 0.24.2 - 2026-09-05
 
 - **Failure navigation:** Unknown links and failed route/chunk rendering show
