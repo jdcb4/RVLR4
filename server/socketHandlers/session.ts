@@ -61,12 +61,28 @@ function registerSessionBind(
         return;
       }
       const code = parsed.data.code.toUpperCase();
+      if (!store.getRoom(code)) {
+        ack({
+          ok: false,
+          code: "ROOM_NOT_FOUND",
+          error: "This room has expired or the server restarted. Host or join a new room.",
+        });
+        return;
+      }
       const player = store.authenticate({
         code,
         playerId: parsed.data.playerId,
         secret: parsed.data.secret,
       });
-      if (!player) throw new Error("Unable to restore this session.");
+      if (!player) {
+        ack({
+          ok: false,
+          code: "SESSION_EXPIRED",
+          error:
+            "This seat cannot be restored. Its saved session may be invalid or the host may have removed it.",
+        });
+        return;
+      }
       if (socket.data.roomCode !== code || socket.data.playerId !== player.id) {
         await releaseRoomSocket(io, socket, store);
       }
@@ -82,7 +98,12 @@ function registerSessionBind(
       const room = store.getRoom(code);
       if (room?.players.get(player.id) !== player) {
         await releaseRoomSocket(io, socket, store);
-        throw new Error("This seat no longer exists. Ask the host for a new invitation.");
+        ack({
+          ok: false,
+          code: "SESSION_EXPIRED",
+          error: "This seat no longer exists. Ask the host for a new invitation.",
+        });
+        return;
       }
       if (room && [...room.players.values()].every((member) => member.disconnectedAt === null)) {
         delete room.replayCancelledByDisconnect;

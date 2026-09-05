@@ -77,7 +77,8 @@ describe("authoritative server timers", () => {
   it("sweeps an idle room on the one-minute cleanup timer", async () => {
     const deleteRoom = vi.fn();
     const disconnectSockets = vi.fn(async () => undefined);
-    const io = { in: vi.fn(() => ({ disconnectSockets })) } as unknown as Server;
+    const emit = vi.fn();
+    const io = { in: vi.fn(() => ({ disconnectSockets, emit })) } as unknown as Server;
     const room = asRoom({
       code: "OLD111",
       lastActivityAt: Date.now() - 31 * 60_000,
@@ -88,6 +89,7 @@ describe("authoritative server timers", () => {
     await vi.advanceTimersByTimeAsync(60_000);
 
     expect(disconnectSockets).toHaveBeenCalledWith(true);
+    expect(emit).toHaveBeenCalledWith("room:expired", { code: room.code });
     expect(deleteRoom).toHaveBeenCalledWith("OLD111");
   });
 });

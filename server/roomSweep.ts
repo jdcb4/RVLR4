@@ -40,6 +40,7 @@ async function sweepIdleRooms(io: Server, store: RoomStore) {
 
     if (empty || staleByActivity || staleByEveryoneAway) {
       try {
+        io.in(roomChannel(code)).emit("room:expired", { code });
         await io.in(roomChannel(code)).disconnectSockets(true);
       } catch {
         // Best-effort cleanup; room is still removed from memory.

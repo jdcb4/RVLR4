@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { createBrowserRouter, Navigate, type RouteObject } from "react-router-dom";
 
 import { RootLayout } from "@/app/RootLayout";
+import { NotFoundPage, RouteErrorScreen } from "@/app/RouteErrorScreen";
 import { MultiplayerHomePage } from "@/features/multiplayer/MultiplayerHomePage";
 
 const EnterNamePage = lazy(() =>
@@ -39,6 +40,7 @@ export const appRoutes: RouteObject[] = [
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <RouteErrorScreen />,
     children: [
       { index: true, element: <MultiplayerHomePage /> },
       { path: "passnplay", element: <PassNPlayHubPage /> },
@@ -49,6 +51,7 @@ export const appRoutes: RouteObject[] = [
       { path: "games/whowhatwhere", element: <WhoWhatWhereSingleplayerApp /> },
       { path: "games/hat", element: <HatSingleplayerApp /> },
       { path: "games/imposter", element: <ImposterSingleplayerApp /> },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
 ];

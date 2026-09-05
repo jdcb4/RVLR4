@@ -10,7 +10,9 @@ export type SocketErrorCode =
   | "INVALID_REQUEST"
   | "PAYLOAD_TOO_LARGE"
   | "RATE_LIMITED"
-  | "INTERNAL_ERROR";
+  | "INTERNAL_ERROR"
+  | "ROOM_NOT_FOUND"
+  | "SESSION_EXPIRED";
 
 export type SocketAck = (payload?: {
   ok?: boolean;

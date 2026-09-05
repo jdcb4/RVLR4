@@ -285,6 +285,30 @@ describe("multiplayer smoke", () => {
     await harness.close();
   });
 
+  it("distinguishes an invalid seat from a room lost after process replacement", async () => {
+    const { host } = await createRoomWithGuests(harness.url, "hat");
+    const { socket } = await bindClient(harness.url, host);
+    try {
+      expect(
+        await emitAck(socket, "session:bind", {
+          code: host.code,
+          playerId: host.playerId,
+          secret: "x".repeat(32),
+        }),
+      ).toMatchObject({ ok: false, code: "SESSION_EXPIRED" });
+      harness.store.deleteRoom(host.code);
+      expect(
+        await emitAck(socket, "session:bind", {
+          code: host.code,
+          playerId: host.playerId,
+          secret: host.secret,
+        }),
+      ).toMatchObject({ ok: false, code: "ROOM_NOT_FOUND" });
+    } finally {
+      socket.disconnect();
+    }
+  });
+
   it("removes only away lobby seats and recovers capacity without reusing identity", async () => {
     const { host, guests } = await createRoomWithGuests(harness.url, "hat");
     const [owner, present] = await bindAllClients(harness.url, [host, guests[0]!]);

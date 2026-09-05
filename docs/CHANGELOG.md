@@ -2,6 +2,13 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.24.2 - 2026-09-05
+
+- **Failure navigation:** Unknown links and failed route/chunk rendering show
+  friendly home/reload actions. Binding distinguishes lost rooms from expired
+  seats, clears their stale credentials/bookmark, and stops futile reconnects.
+  Restart copy explains that rooms in RAM are lost and a new room is required.
+
 ## 0.24.1 - 2026-09-05
 
 - **Saved games:** Validate nested game state and references with versioned

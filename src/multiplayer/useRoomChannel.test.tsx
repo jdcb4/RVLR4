@@ -2,7 +2,8 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import { io, type Socket } from "socket.io-client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { persistSession, useRoomChannel } from "@/multiplayer/useRoomChannel";
+import { readActiveGameBookmark, writeActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
+import { loadSession, persistSession, useRoomChannel } from "@/multiplayer/useRoomChannel";
 
 vi.mock("socket.io-client", () => ({ io: vi.fn() }));
 
@@ -10,7 +11,7 @@ type Listener = (...args: unknown[]) => void;
 
 class FakeSocket {
   connected = false;
-  bindAck: { ok?: boolean; error?: string } = { ok: true };
+  bindAck: { ok?: boolean; error?: string; code?: string } = { ok: true };
   connectCalls = 0;
   readonly pendingAcks: Array<(error: Error | null, value: unknown) => void> = [];
   readonly emissions: Array<{ event: string; payload: unknown }> = [];
@@ -79,6 +80,29 @@ describe("useRoomChannel", () => {
     vi.mocked(io).mockReturnValue(socket as unknown as Socket);
   });
 
+  it.each(["ROOM_NOT_FOUND", "SESSION_EXPIRED"])(
+    "stops retrying and clears only the invalid session after %s",
+    async (code) => {
+      persistSession({
+        code: "ABC234",
+        playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+        secret: "a".repeat(32),
+      });
+      writeActiveGameBookmark({
+        code: "ABC234",
+        gameKind: "hat",
+        startedAtIso: new Date().toISOString(),
+      });
+      socket.bindAck = { ok: false, code, error: "This room or seat is no longer available." };
+      const { result } = renderHook(() => useRoomChannel("ABC234", true));
+      await waitFor(() => expect(result.current.bindErrorCode).toBe(code));
+      expect(socket.connected).toBe(false);
+      expect(loadSession("ABC234")).toBeNull();
+      expect(readActiveGameBookmark()).toBeNull();
+      expect(result.current.sync).toBeNull();
+    },
+  );
+
   it("binds the session again after an automatic reconnect", async () => {
     persistSession({
       code: "ABC234",
@@ -98,6 +122,22 @@ describe("useRoomChannel", () => {
 
     await waitFor(() => expect(result.current.connected).toBe(true));
     expect(socket.emissions.filter(({ event }) => event === "session:bind")).toHaveLength(2);
+  });
+
+  it("replaces an idle room with recovery navigation when the server expires it", async () => {
+    persistSession({
+      code: "ABC234",
+      playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+      secret: "a".repeat(32),
+    });
+    const { result } = renderHook(() => useRoomChannel("ABC234", true));
+    await waitFor(() => expect(result.current.connected).toBe(true));
+    act(() => socket.trigger("room:expired", { code: "DEF456" }));
+    expect(result.current.connected).toBe(true);
+    act(() => socket.trigger("room:expired", { code: "ABC234" }));
+    expect(result.current.bindErrorCode).toBe("ROOM_NOT_FOUND");
+    expect(loadSession("ABC234")).toBeNull();
+    expect(socket.connected).toBe(false);
   });
 
   it("exposes a connection failure and lets the player retry", async () => {

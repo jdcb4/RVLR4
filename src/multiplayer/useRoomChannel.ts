@@ -5,6 +5,7 @@ import {
   type SessionCredentials,
   sessionCredentialsSchema,
 } from "@/domain/multiplayer/sessionCredentials";
+import { clearActiveGameBookmark, readActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
 import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
 import { discardStoredRecord, readStoredJson, roomSessionStorage } from "@/services/browserStorage";
 import { requestSocketAck } from "@/services/networkRequests";
@@ -48,6 +49,7 @@ export type RoomChannelHandle = {
   readonly sync: RoomSyncPayload | null;
   readonly connected: boolean;
   readonly bindError: string | null;
+  readonly bindErrorCode: string | null;
   /**
    * True after the server emits `server:shuttingDown` (graceful shutdown on
    * SIGTERM/SIGINT). UI should show a "server restarting" banner; the socket
@@ -69,6 +71,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
   const [sync, setSync] = useState<RoomSyncPayload | null>(null);
   const [connected, setConnected] = useState(false);
   const [bindError, setBindError] = useState<string | null>(null);
+  const [bindErrorCode, setBindErrorCode] = useState<string | null>(null);
   const [shuttingDown, setShuttingDown] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
@@ -84,6 +87,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
     setConnected(false);
     setSync(null);
     setBindError(null);
+    setBindErrorCode(null);
     setShuttingDown(false);
     setActionError(null);
     if (!enabled || !code) {
@@ -91,8 +95,15 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
       return undefined;
     }
 
+    const forgetSession = () => {
+      clearSession(code);
+      if (readActiveGameBookmark()?.code === code.toUpperCase()) clearActiveGameBookmark();
+    };
+
     if (!loadSession(code)) {
+      forgetSession();
       setBindError("Missing session. Go back and enter your name again.");
+      setBindErrorCode("SESSION_EXPIRED");
       return undefined;
     }
 
@@ -111,6 +122,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
 
       if (!creds) {
         setBindError("Missing session. Go back and enter your name again.");
+        setBindErrorCode("SESSION_EXPIRED");
         socket.disconnect();
         return;
       }
@@ -122,17 +134,27 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
 
         if (ack?.ok === true) {
           setBindError(null);
+          setBindErrorCode(null);
           setConnected(true);
         } else {
           setConnected(false);
           setBindError(ack?.error ?? "Unable to reconnect.");
+          setBindErrorCode(ack.code ?? null);
+          if (ack.code === "ROOM_NOT_FOUND" || ack.code === "SESSION_EXPIRED") {
+            forgetSession();
+            setSync(null);
+            socket.disconnect();
+          }
         }
       });
     };
 
-    const handleDisconnect = () => {
+    const handleDisconnect = (reason?: string) => {
       bindAttemptRef.current += 1;
       setConnected(false);
+      if (reason === "io server disconnect") {
+        setBindError("The room connection was closed. Retry to check whether it still exists.");
+      }
     };
 
     const handleShutdown = () => {
@@ -141,14 +163,25 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
 
     const handleSessionEnded = (payload: { code: string }) => {
       if (payload.code !== code.toUpperCase()) return;
-      clearSession(code);
+      forgetSession();
       setSync(null);
       setBindError("You left this lobby in another tab. Join again to take a new seat.");
+      setBindErrorCode("SESSION_EXPIRED");
+      socket.disconnect();
+    };
+
+    const handleRoomExpired = (payload: { code: string }) => {
+      if (payload.code !== code.toUpperCase()) return;
+      forgetSession();
+      setSync(null);
+      setBindError("This room expired. Host or join a new room to continue.");
+      setBindErrorCode("ROOM_NOT_FOUND");
       socket.disconnect();
     };
 
     const handleConnectError = () => {
       setConnected(false);
+      setBindErrorCode(null);
       setBindError("Could not connect to the room. Check your connection, then retry.");
     };
 
@@ -158,6 +191,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
     socket.on("room:sync", handleSync);
     socket.on("server:shuttingDown", handleShutdown);
     socket.on("session:ended", handleSessionEnded);
+    socket.on("room:expired", handleRoomExpired);
 
     if (socket.connected) {
       bindSession();
@@ -173,6 +207,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
       socket.off("room:sync", handleSync);
       socket.off("server:shuttingDown", handleShutdown);
       socket.off("session:ended", handleSessionEnded);
+      socket.off("room:expired", handleRoomExpired);
       socket.disconnect();
     };
   }, [code, enabled, socket]);
@@ -206,6 +241,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
     sync: enabled && sync?.code === code?.toUpperCase() ? sync : null,
     connected: enabled && connected,
     bindError,
+    bindErrorCode,
     shuttingDown,
     retryConnection,
     actionError,

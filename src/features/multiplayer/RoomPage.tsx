@@ -27,6 +27,7 @@ export function RoomPage() {
   const {
     sync,
     bindError,
+    bindErrorCode,
     emitWithAck,
     connected,
     shuttingDown,
@@ -39,7 +40,7 @@ export function RoomPage() {
   useActiveRoomBookmark(sync);
 
   return (
-    <RoomConnectionBanners connected={connected} shuttingDown={shuttingDown}>
+    <RoomConnectionBanners active={Boolean(sync)} connected={connected} shuttingDown={shuttingDown}>
       {actionError ? (
         <div
           role="alert"
@@ -53,6 +54,7 @@ export function RoomPage() {
       ) : null}
       <RoomPageContent
         bindError={bindError}
+        bindErrorCode={bindErrorCode}
         code={code}
         connected={connected}
         emitWithAck={emitWithAck}
@@ -68,6 +70,7 @@ export function RoomPage() {
 export function RoomPageContent({
   code,
   bindError,
+  bindErrorCode,
   sync,
   connected,
   invite,
@@ -77,6 +80,7 @@ export function RoomPageContent({
 }: {
   readonly code: string | undefined;
   readonly bindError: string | null;
+  readonly bindErrorCode?: string | null;
   readonly sync: RoomSyncPayload | null;
   readonly connected: boolean;
   readonly invite: ReturnType<typeof useRoomInviteControls>;
@@ -93,21 +97,37 @@ export function RoomPageContent({
   }
 
   if (bindError) {
+    const roomLost = bindErrorCode === "ROOM_NOT_FOUND";
+    const sessionLost = bindErrorCode === "SESSION_EXPIRED";
     return (
       <GameShell
         footer={
           <>
-            <PrimaryFooterButton label="Retry connection" onClick={onRetryConnection} />
-            <SecondaryFooterButton label="Back to home" onClick={onBackHome} />
+            {roomLost || sessionLost ? (
+              <PrimaryFooterButton label="Host or join a new room" onClick={onBackHome} />
+            ) : (
+              <>
+                <PrimaryFooterButton label="Retry connection" onClick={onRetryConnection} />
+                <SecondaryFooterButton label="Back to home" onClick={onBackHome} />
+              </>
+            )}
           </>
         }
-        title="Reconnect"
+        title={roomLost ? "Room unavailable" : sessionLost ? "Session unavailable" : "Reconnect"}
       >
-        <p className="text-typ-body-relaxed text-destructive">{bindError}</p>
+        <p role="alert" className="text-typ-body-relaxed text-destructive">
+          {bindError}
+        </p>
         <p className="mt-2 text-typ-ui text-muted-foreground">
-          To resume your seat, use the original tab and its saved session. A name alone cannot
-          restore it. If that session is lost, ask the host to remove your away seat in Room
-          options, then join again from the home page.
+          {roomLost ? (
+            "Rooms are held in server memory and cannot be restored after a restart or expiry."
+          ) : (
+            <>
+              To resume your seat, use the original tab and its saved session. A name alone cannot
+              restore it. If that session is lost, ask the host to remove your away seat in Room
+              options, then join again from the home page.
+            </>
+          )}
         </p>
       </GameShell>
     );
