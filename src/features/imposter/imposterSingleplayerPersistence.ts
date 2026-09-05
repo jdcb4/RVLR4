@@ -8,21 +8,9 @@ import {
   saveImposterState,
 } from "@/services/imposterStorage";
 
-const isStoragePayload = (value: unknown): value is ImposterStoragePayload =>
-  Boolean(
-    value &&
-    typeof value === "object" &&
-    "schemaVersion" in value &&
-    "snapshot" in value &&
-    "lastSavedAt" in value,
-  );
-
 export async function loadImposterResumeRecord(): Promise<ImposterStoragePayload | null> {
-  const saved = await loadImposterSavedState<ImposterStoragePayload | ImposterSnapshot>();
-  if (!saved) return null;
-  const record: ImposterStoragePayload = isStoragePayload(saved)
-    ? saved
-    : { schemaVersion: 1, lastSavedAt: new Date().toISOString(), snapshot: saved };
+  const record = await loadImposterSavedState();
+  if (!record) return null;
   if (record.snapshot.step === "results") {
     await clearImposterSavedState();
     return null;

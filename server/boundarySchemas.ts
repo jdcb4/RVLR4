@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { roomCodeSchema } from "@/domain/multiplayer/sessionCredentials";
 import { AVATAR_IDS } from "@/multiplayer/avatarCatalog";
 
 const normalizedName = z
@@ -7,10 +8,7 @@ const normalizedName = z
   .transform((value) => value.trim().replace(/\s+/g, " "))
   .pipe(z.string().min(1).max(32));
 
-export const roomCodeSchema = z
-  .string()
-  .transform((value) => value.trim().toUpperCase())
-  .pipe(z.string().regex(/^[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{6}$/));
+export { roomCodeSchema } from "@/domain/multiplayer/sessionCredentials";
 
 const avatarSchema = z.enum(AVATAR_IDS);
 

@@ -80,9 +80,13 @@ describe("useRoomChannel", () => {
   });
 
   it("binds the session again after an automatic reconnect", async () => {
-    persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
+    persistSession({
+      code: "ABC234",
+      playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+      secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    });
 
-    const { result } = renderHook(() => useRoomChannel("ABC123", true));
+    const { result } = renderHook(() => useRoomChannel("ABC234", true));
 
     await waitFor(() => expect(result.current.connected).toBe(true));
     expect(socket.emissions.filter(({ event }) => event === "session:bind")).toHaveLength(1);
@@ -97,8 +101,12 @@ describe("useRoomChannel", () => {
   });
 
   it("exposes a connection failure and lets the player retry", async () => {
-    persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
-    const { result } = renderHook(() => useRoomChannel("ABC123", true));
+    persistSession({
+      code: "ABC234",
+      playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+      secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    });
+    const { result } = renderHook(() => useRoomChannel("ABC234", true));
     await waitFor(() => expect(result.current.connected).toBe(true));
     act(() => {
       socket.disconnect();
@@ -111,8 +119,12 @@ describe("useRoomChannel", () => {
   });
 
   it("disconnects and removes listeners on unmount", () => {
-    persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
-    const { unmount } = renderHook(() => useRoomChannel("ABC123", true));
+    persistSession({
+      code: "ABC234",
+      playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+      secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    });
+    const { unmount } = renderHook(() => useRoomChannel("ABC234", true));
     expect(socket.connected).toBe(true);
     unmount();
     expect(socket.connected).toBe(false);
@@ -121,18 +133,41 @@ describe("useRoomChannel", () => {
   });
 
   it("clears old sync on room changes and ignores messages for another session", () => {
-    persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
-    persistSession({ code: "DEF456", playerId: "player-2", secret: "secret-2" });
-    const { result, rerender } = renderHook(({ code, enabled }) => useRoomChannel(code, enabled), {
-      initialProps: { code: "ABC123", enabled: true },
+    persistSession({
+      code: "ABC234",
+      playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+      secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     });
-    act(() => socket.trigger("room:sync", { code: "ABC123", you: { playerId: "player-1" } }));
-    expect(result.current.sync?.code).toBe("ABC123");
+    persistSession({
+      code: "DEF456",
+      playerId: "17672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+      secret: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    });
+    const { result, rerender } = renderHook(({ code, enabled }) => useRoomChannel(code, enabled), {
+      initialProps: { code: "ABC234", enabled: true },
+    });
+    act(() =>
+      socket.trigger("room:sync", {
+        code: "ABC234",
+        you: { playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e" },
+      }),
+    );
+    expect(result.current.sync?.code).toBe("ABC234");
     rerender({ code: "DEF456", enabled: true });
     expect(result.current.sync).toBeNull();
-    act(() => socket.trigger("room:sync", { code: "ABC123", you: { playerId: "player-1" } }));
+    act(() =>
+      socket.trigger("room:sync", {
+        code: "ABC234",
+        you: { playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e" },
+      }),
+    );
     expect(result.current.sync).toBeNull();
-    act(() => socket.trigger("room:sync", { code: "DEF456", you: { playerId: "player-2" } }));
+    act(() =>
+      socket.trigger("room:sync", {
+        code: "DEF456",
+        you: { playerId: "17672d0a-8ab8-4a0d-9dc2-dad2f0f3897e" },
+      }),
+    );
     expect(result.current.sync?.code).toBe("DEF456");
     rerender({ code: "DEF456", enabled: false });
     expect(socket.connected).toBe(false);
@@ -141,7 +176,7 @@ describe("useRoomChannel", () => {
   });
 
   it("does not connect without stored session credentials", async () => {
-    const { result } = renderHook(() => useRoomChannel("ABC123", true));
+    const { result } = renderHook(() => useRoomChannel("ABC234", true));
 
     await waitFor(() =>
       expect(result.current.bindError).toBe("Missing session. Go back and enter your name again."),
@@ -152,10 +187,18 @@ describe("useRoomChannel", () => {
   });
 
   it("does not show a late action failure from a previous room", async () => {
-    persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
-    persistSession({ code: "DEF456", playerId: "player-2", secret: "secret-2" });
+    persistSession({
+      code: "ABC234",
+      playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+      secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    });
+    persistSession({
+      code: "DEF456",
+      playerId: "17672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+      secret: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    });
     const { result, rerender } = renderHook(({ code }) => useRoomChannel(code, true), {
-      initialProps: { code: "ABC123" },
+      initialProps: { code: "ABC234" },
     });
     await waitFor(() => expect(result.current.connected).toBe(true));
     let request: ReturnType<typeof result.current.emitWithAck>;
@@ -173,9 +216,13 @@ describe("useRoomChannel", () => {
 
   it("keeps commands unavailable when session binding is rejected", async () => {
     socket.bindAck = { ok: false, error: "Session expired." };
-    persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
+    persistSession({
+      code: "ABC234",
+      playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+      secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    });
 
-    const { result } = renderHook(() => useRoomChannel("ABC123", true));
+    const { result } = renderHook(() => useRoomChannel("ABC234", true));
 
     await waitFor(() => expect(result.current.bindError).toBe("Session expired."));
     expect(result.current.connected).toBe(false);

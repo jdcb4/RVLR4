@@ -1,25 +1,11 @@
+import type { StoragePayload } from "@/features/hat-game/hatSingleplayerAppTypes";
+import { localGameStorage, readValidatedRecord } from "@/services/browserStorage";
+import { hatSavedStateSchema } from "@/services/savedStates/hat";
+
 const STORAGE_KEY = "hat-game.state.v1";
-
-export const loadSavedState = async <T>() => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return null;
-    }
-    return JSON.parse(raw) as T;
-  } catch {
-    return null;
-  }
-};
-
-export const saveState = async (value: unknown) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-  } catch {
-    // Private mode / quota — gameplay can still continue in memory.
-  }
-};
-
+export const loadSavedState = async () => readValidatedRecord(STORAGE_KEY, hatSavedStateSchema);
+export const saveState = async (value: StoragePayload) =>
+  localGameStorage.write(STORAGE_KEY, JSON.stringify(value));
 export const clearSavedState = async () => {
-  localStorage.removeItem(STORAGE_KEY);
+  localGameStorage.remove(STORAGE_KEY);
 };

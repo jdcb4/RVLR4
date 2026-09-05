@@ -41,7 +41,7 @@ Games:
 - `src/domain/drawnguess` — DrawNGuess packet rotation, prompt selection, submissions, timer auto-submit, and reveal rules.
 - `src/domain/shared` — cross-game types (e.g. roster row shape for setup UI).
 - `src/components` — shared UI (`GameShell`, `GamePanel`, `GameResultActions`, `AppInfoOverlay`, `game/` panels including **`final-results/`** (shared podium + confetti), `GameScoreboard`, **`BetweenTurnsLayout`** / **`LandingScreenLayout`** (cross-game ready/recap + landing shells), ready-flow and **Final turn recap** pieces (`ThatsTheLastTurnCard`, `finalTurnRecapCopy`), footer buttons, `EditableName`, `Metric`, `setup/`, `team-setup/`, `ui/button`).
-- `src/services` — browser persistence and shared Cuelume game audio; see [AUDIO.md](AUDIO.md) for every cue mapping.
+- `src/services` — validated browser [persistence](PERSISTENCE.md) and shared Cuelume game audio; see [AUDIO.md](AUDIO.md) for every cue mapping.
 - `src/data` — JSON-only curated game content: Who What Where words/name packs,
   Hat suggestions/name packs, DrawNGuess prompts, Imposter words, and
   multiplayer display names. Domain loaders validate every asset with Zod.

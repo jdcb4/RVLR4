@@ -18,16 +18,17 @@ describe("readRoomEntrySession", () => {
     await expect(
       readRoomEntrySession(
         Response.json({
-          code: "ABC123",
-          playerId: "player-1",
-          secret: "secret-1",
+          gameKind: "hat",
+          code: "ABC234",
+          playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+          secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         }),
         "Unable to enter room.",
       ),
     ).resolves.toEqual({
-      code: "ABC123",
-      playerId: "player-1",
-      secret: "secret-1",
+      code: "ABC234",
+      playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
+      secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     });
   });
 
@@ -40,7 +41,7 @@ describe("readRoomEntrySession", () => {
     ).rejects.toThrow("Room is full.");
 
     await expect(
-      readRoomEntrySession(Response.json({ code: "ABC123" }), "Unable to enter room."),
+      readRoomEntrySession(Response.json({ code: "ABC234" }), "Unable to enter room."),
     ).rejects.toThrow("Unable to enter room.");
   });
 });

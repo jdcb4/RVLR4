@@ -7,6 +7,7 @@ import { type AvatarId, isAvatarId, pickRandomAvatarId } from "@/multiplayer/ava
 import { getMultiplayerDisplayNames } from "@/multiplayer/displayNames";
 import { gameKindLabel } from "@/multiplayer/gameKindLabel";
 import { persistSession } from "@/multiplayer/useRoomChannel";
+import { localGameStorage } from "@/services/browserStorage";
 import { requestHttp } from "@/services/networkRequests";
 
 import { AvatarPicker } from "./AvatarPicker";
@@ -23,37 +24,20 @@ function pickRandomName(): string {
 }
 
 function loadLastName(): string {
-  try {
-    return (localStorage.getItem(LAST_NAME_KEY) ?? "").slice(0, 32);
-  } catch {
-    return "";
-  }
+  return (localGameStorage.read(LAST_NAME_KEY) ?? "").slice(0, 32);
 }
 
 function saveLastName(value: string): void {
-  try {
-    localStorage.setItem(LAST_NAME_KEY, value.slice(0, 32));
-  } catch {
-    // Private browsing / quota: persist is best-effort.
-  }
+  localGameStorage.write(LAST_NAME_KEY, value.slice(0, 32));
 }
 
 function loadLastAvatar(): AvatarId {
-  try {
-    const stored = localStorage.getItem(LAST_AVATAR_KEY);
-
-    return isAvatarId(stored) ? stored : pickRandomAvatarId();
-  } catch {
-    return pickRandomAvatarId();
-  }
+  const stored = localGameStorage.read(LAST_AVATAR_KEY);
+  return isAvatarId(stored) ? stored : pickRandomAvatarId();
 }
 
 function saveLastAvatar(value: AvatarId): void {
-  try {
-    localStorage.setItem(LAST_AVATAR_KEY, value);
-  } catch {
-    // Private browsing / quota: persist is best-effort.
-  }
+  localGameStorage.write(LAST_AVATAR_KEY, value);
 }
 
 export function EnterNamePage() {

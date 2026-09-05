@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
 
+import {
+  type SessionCredentials,
+  sessionCredentialsSchema,
+} from "@/domain/multiplayer/sessionCredentials";
 import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
+import { discardStoredRecord, readStoredJson, roomSessionStorage } from "@/services/browserStorage";
 import { requestSocketAck } from "@/services/networkRequests";
 
 const SOCKET_PATH = "/socket.io";
@@ -14,46 +19,24 @@ function connectSocket(): Socket {
   });
 }
 
-export type SessionCredentials = {
-  readonly code: string;
-  readonly playerId: string;
-  readonly secret: string;
-};
+export type { SessionCredentials } from "@/domain/multiplayer/sessionCredentials";
 
 export function persistSession(creds: SessionCredentials) {
-  sessionStorage.setItem(sessionKey(creds.code), JSON.stringify(creds));
+  return roomSessionStorage.write(sessionKey(creds.code), JSON.stringify(creds));
 }
 
 export function loadSession(code: string): SessionCredentials | null {
-  const raw = sessionStorage.getItem(sessionKey(code));
-
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    const parsed = JSON.parse(raw) as SessionCredentials;
-
-    if (
-      typeof parsed.code !== "string" ||
-      typeof parsed.playerId !== "string" ||
-      typeof parsed.secret !== "string"
-    ) {
-      return null;
-    }
-
-    return parsed;
-  } catch {
-    return null;
-  }
+  const key = sessionKey(code);
+  const raw = readStoredJson(roomSessionStorage, key);
+  if (raw === null) return null;
+  const parsed = sessionCredentialsSchema.safeParse(raw);
+  if (parsed.success && parsed.data.code === code.toUpperCase()) return parsed.data;
+  discardStoredRecord(roomSessionStorage, key);
+  return null;
 }
 
 export function clearSession(code: string) {
-  try {
-    sessionStorage.removeItem(sessionKey(code));
-  } catch {
-    /* Best-effort cleanup. */
-  }
+  roomSessionStorage.remove(sessionKey(code));
 }
 
 function sessionKey(code: string) {

@@ -1,5 +1,10 @@
 # Architecture — RVLRY
 
+Browser save boundaries and supported migrations are documented in
+[PERSISTENCE.md](PERSISTENCE.md). Game-owned controllers consume validated
+snapshots; the storage service contains failures and provides a tab-local
+fallback with an explicit durability notice.
+
 ## Room recovery
 
 Room options provide explicit lobby departure, host removal of away guests,

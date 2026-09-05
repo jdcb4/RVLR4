@@ -252,13 +252,4 @@ export type SocketEventName = keyof typeof socketSchemas;
 
 export type SocketPayload<E extends SocketEventName> = z.infer<(typeof socketSchemas)[E]>;
 
-export const sessionBindSchema = z
-  .object({
-    code: z
-      .string()
-      .transform((value) => value.trim().toUpperCase())
-      .pipe(z.string().regex(/^[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{6}$/)),
-    playerId: z.string().uuid(),
-    secret: z.string().regex(/^[A-Za-z0-9_-]{32}$/),
-  })
-  .strict();
+export { sessionCredentialsSchema as sessionBindSchema } from "@/domain/multiplayer/sessionCredentials";

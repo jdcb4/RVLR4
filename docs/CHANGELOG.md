@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.24.1 - 2026-09-05
+
+- **Saved games:** Validate nested game state and references with versioned
+  Zod boundaries, migrate supported bare/older saves, and recover from corrupt
+  records. Contain storage reads/writes/removals with a tab-local fallback and
+  visible persistence notice. Browser and server share session validation;
+  successful HTTP entry responses are validated before saving credentials.
+
 ## 0.24.0 - 2026-09-05
 
 - **Room recovery:** Room options let guests leave, hosts remove away lobby

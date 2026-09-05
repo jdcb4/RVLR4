@@ -44,15 +44,6 @@ export { formatSavedAt };
 const isError = (value: unknown): value is { error: string } =>
   Boolean(value && typeof value === "object" && "error" in value);
 
-const isStoragePayload = (value: unknown): value is StoragePayload =>
-  Boolean(
-    value &&
-    typeof value === "object" &&
-    "schemaVersion" in value &&
-    "snapshot" in value &&
-    "lastSavedAt" in value,
-  );
-
 const chooseSuggestion = (used: string[]) => {
   const clueSuggestions = getHatClueSuggestions();
   const remaining = clueSuggestions.filter((suggestion) => !used.includes(suggestion));
@@ -74,21 +65,11 @@ export function useHatSingleplayerApp() {
   }, [snapshot]);
 
   useEffect(() => {
-    void loadSavedState<StoragePayload | AppSnapshot>()
-      .then((saved) => {
-        if (!saved) {
+    void loadSavedState()
+      .then((record) => {
+        if (!record) {
           return;
         }
-        const record = isStoragePayload(saved)
-          ? {
-              ...saved,
-              snapshot: normalizeHatSnapshot(saved.snapshot),
-            }
-          : {
-              schemaVersion: 1 as const,
-              lastSavedAt: new Date().toISOString(),
-              snapshot: normalizeHatSnapshot(saved),
-            };
         // Do not offer resume after a finished game (stale storage from older builds).
         if (record.snapshot.step === "game" && record.snapshot.session?.stage === "results") {
           void clearSavedState();
