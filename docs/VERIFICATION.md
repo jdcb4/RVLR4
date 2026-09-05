@@ -64,6 +64,23 @@ segments, `Retry-After` is derived as an integer, and the reported static-file
 paths are composed only from build-time literals. These are reviewed false
 positives; re-review them if their input sources or path construction changes.
 
+## Dependency maintenance
+
+Run `pnpm audit` for development-tool advisories as well as the production
+audit in CI. Keep Vitest and its Istanbul adapter at the same version. Vite
+6.4 remains on its security-supported line; a major Vite migration needs a
+concrete benefit and its own browser/build verification.
+
+ESLint 10 replaces [end-of-life ESLint 9](https://eslint.org/version-support/).
+`eslint-plugin-jsx-a11y` 6.10.2 has not declared ESLint 10 in its peer range.
+The exact 6.10.2/10.10.0 pair is allowed in `pnpm.peerDependencyRules` after
+the full lint run and an intentional missing-image-alt canary both exercised
+the plugin successfully. Recheck this pair on either upgrade; remove the
+exception when the plugin declares support. No compatibility adapter is used.
+The Hooks rules remain `rules-of-hooks` and `exhaustive-deps`; this application
+does not enable React Compiler. The route-configuration module is exempt from
+the Fast Refresh component-export rule because it exports the router itself.
+
 ## Optional deeper checks
 
 When investigating dead code, duplication, or unused dependencies:
@@ -78,10 +95,10 @@ These may report false positives for framework entrypoints, plugin-loaded files,
 
 ## Preset-specific checks
 
-| Change area                                                     | Command / follow-up                                            |
-| --------------------------------------------------------------- | -------------------------------------------------------------- |
-| Explicit Docker work (`docker/Dockerfile`, image runtime or packaging) | `pnpm run docker:build`                                 |
-| Socket.IO / room sync / multiplayer UX                          | Manual matrix in [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) |
+| Change area                                                            | Command / follow-up                                            |
+| ---------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Explicit Docker work (`docker/Dockerfile`, image runtime or packaging) | `pnpm run docker:build`                                        |
+| Socket.IO / room sync / multiplayer UX                                 | Manual matrix in [`docs/MULTIPLAYER_QA.md`](MULTIPLAYER_QA.md) |
 
 Routine Railway deployments use the GitHub source integration and Railpack.
 Do not build or publish a Docker image for ordinary commits, Railway config

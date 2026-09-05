@@ -2,6 +2,8 @@ import { isRouteErrorResponse, useRouteError } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 
+const homeUrl = import.meta.env.BASE_URL;
+
 function RecoveryScreen({ missing }: { readonly missing: boolean }) {
   return (
     <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-5 px-6 py-8">
@@ -20,7 +22,7 @@ function RecoveryScreen({ missing }: { readonly missing: boolean }) {
       ) : null}
       <a
         className="rounded-xl border border-border px-4 py-3 text-center font-semibold focus-visible:outline focus-visible:outline-2"
-        href={import.meta.env.BASE_URL}
+        href={homeUrl}
       >
         Back to home
       </a>

@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.24.4 - 2026-09-05
+
+- **Development dependencies:** Update patched toolchain packages, including
+  Vite 6.4.3, and move from end-of-life ESLint 9 to ESLint 10 with compatible
+  Hooks/Refresh plugins. Preserve the existing Hooks and accessibility rules.
+  Review the narrowly scoped JSX accessibility plugin peer exception in
+  `docs/VERIFICATION.md` when updating the linter.
+
 ## 0.24.3 - 2026-09-05
 
 - **Runtime dependencies:** Resolve Express/body-parser's `qs` dependency to

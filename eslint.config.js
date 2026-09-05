@@ -24,7 +24,9 @@ export default tseslint.config(
       "simple-import-sort": simpleImportSort,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
+      // Preserve the Hooks checks used by this app; React Compiler is not enabled.
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
       ...jsxA11y.configs.recommended.rules,
       // Game components use a domain `role` prop; validate ARIA on DOM elements.
       "jsx-a11y/aria-role": ["error", { ignoreNonDOM: true }],
@@ -43,6 +45,11 @@ export default tseslint.config(
         { selector: "typeLike", format: ["PascalCase"] },
       ],
     },
+  },
+  {
+    // This module exports route configuration, not a Fast Refresh boundary.
+    files: ["src/app/router.tsx"],
+    rules: { "react-refresh/only-export-components": "off" },
   },
   prettier,
 );
