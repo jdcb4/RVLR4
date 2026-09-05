@@ -6,7 +6,8 @@ import { mpDebug } from "../multiplayerDebug.ts";
 import { operationalLog } from "../operationalLog.ts";
 import { RATE_POLICIES } from "../rateLimiter.ts";
 import { archiveRoomAfterAllPlayersOptedOut, type RoomStore } from "../roomStore.ts";
-import { registerHandler, type SocketAck } from "../socketHandle.ts";
+import { registerHandler } from "../socketHandle.ts";
+import { readSocketRequest, reportSocketFailure } from "../socketRequest.ts";
 import { sessionBindSchema } from "../socketSchemas.ts";
 import type { SocketHandlerContext, SocketSecurityContext } from "./types.ts";
 
@@ -34,7 +35,8 @@ function registerSessionBind(
   store: RoomStore,
   security: SocketSecurityContext,
 ) {
-  socket.on("session:bind", async (rawPayload: unknown, ack?: SocketAck) => {
+  socket.on("session:bind", async (...args: unknown[]) => {
+    const { payload: rawPayload, valid, ack } = readSocketRequest(args, "session:bind");
     try {
       const budget = security.limiter.take(`socket:bind:${socket.id}`, RATE_POLICIES.sessionBind);
       if (!budget.allowed) {
@@ -47,7 +49,7 @@ function registerSessionBind(
         return;
       }
       const parsed = sessionBindSchema.safeParse(rawPayload);
-      if (!parsed.success) {
+      if (!valid || !parsed.success) {
         ack?.({ ok: false, error: "Missing session details.", code: "INVALID_REQUEST" });
         return;
       }
@@ -66,12 +68,7 @@ function registerSessionBind(
       mpDebug("session bound", { code, playerId: player.id });
       ack?.({ ok: true });
     } catch (error) {
-      if (!(error instanceof Error)) {
-        operationalLog("error", "socket_error", {
-          operation: "session.bind",
-          errorClass: "UnknownError",
-        });
-      }
+      reportSocketFailure("session:bind", error);
       ack?.({
         ok: false,
         error: error instanceof Error ? error.message : "Unable to bind session.",

@@ -1,9 +1,9 @@
 import type { Socket } from "socket.io";
 
-import { operationalLog } from "./operationalLog.ts";
 import type { TokenBucketStore } from "./rateLimiter.ts";
 import type { Room, RoomPlayer, RoomStore } from "./roomStore.ts";
 import { consumeMutationBudget, isDrawingPayloadTooLarge } from "./socketBudgets.ts";
+import { readSocketRequest, reportSocketFailure } from "./socketRequest.ts";
 import { type SocketEventName, type SocketPayload, socketSchemas } from "./socketSchemas.ts";
 
 export type SocketErrorCode =
@@ -67,16 +67,13 @@ export function registerHandler<E extends SocketEventName>(
 ) {
   const schema = socketSchemas[event];
 
-  socket.on(event as string, async (rawPayload: unknown, ack?: SocketAck) => {
-    if (typeof rawPayload === "function" && ack === undefined) {
-      ack = rawPayload as SocketAck;
-      rawPayload = undefined;
-    }
+  socket.on(event as string, async (...args: unknown[]) => {
+    const { payload: rawPayload, valid, ack } = readSocketRequest(args, event);
 
     try {
       const parsed = schema.safeParse(rawPayload);
 
-      if (!parsed.success) {
+      if (!valid || !parsed.success) {
         const payloadTooLarge = isDrawingPayloadTooLarge(event, rawPayload);
         ack?.({
           ok: false,
@@ -115,12 +112,7 @@ export function registerHandler<E extends SocketEventName>(
       await fn({ socket, store, room, actor }, parsed.data as SocketPayload<E>);
       ack?.({ ok: true });
     } catch (error) {
-      if (!(error instanceof Error)) {
-        operationalLog("error", "socket_error", {
-          operation: event,
-          errorClass: "UnknownError",
-        });
-      }
+      reportSocketFailure(event, error);
 
       ack?.({
         ok: false,

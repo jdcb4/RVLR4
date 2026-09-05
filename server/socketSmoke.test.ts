@@ -340,6 +340,36 @@ describe("multiplayer smoke", () => {
     }
   });
 
+  it("survives malformed acknowledgement positions and keeps another room usable", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "hat");
+    const [attacker, peer] = await bindAllClients(harness.url, [host, guests[0]!]);
+    const other = await postJson<Credentials>(`${harness.url}/api/rooms`, {
+      gameKind: "hat",
+      hostName: "Other host",
+    });
+    const otherBound = await bindClient(harness.url, other);
+    try {
+      for (const event of ["session:bind", "lobby:setReady"]) {
+        const payload = event === "session:bind" ? host : { ready: true };
+        attacker!.socket.emit(event, payload, 42);
+        attacker!.socket.emit(event, payload, null);
+        const ack = await new Promise((resolve) =>
+          attacker!.socket.emit(event, payload, 42, resolve),
+        );
+        expect(ack).toMatchObject({ ok: false, code: "INVALID_REQUEST" });
+      }
+      expect(await emitAck(peer!.socket, "lobby:setReady", { ready: true })).toEqual({ ok: true });
+      expect(await emitAck(otherBound.socket, "lobby:setReady", { ready: true })).toEqual({
+        ok: true,
+      });
+      expect((await fetch(`${harness.url}/api/rooms/${other.code}`)).ok).toBe(true);
+    } finally {
+      attacker!.socket.disconnect();
+      peer!.socket.disconnect();
+      otherBound.socket.disconnect();
+    }
+  });
+
   it("returns stable 413 and 429 HTTP envelopes", async () => {
     const oversized = await fetch(`${harness.url}/api/rooms`, {
       method: "POST",

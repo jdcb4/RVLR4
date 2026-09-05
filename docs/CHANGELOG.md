@@ -2,6 +2,13 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.3 - 2026-09-05
+
+- **Socket resilience:** Reject malformed argument lists before mutations, safely
+  handle optional acknowledgements, and record redacted error classes for all
+  handler failures. Regression tests keep a second room usable after malformed
+  bind and game commands.
+
 ## 0.22.2 - 2026-08-13
 
 - **Mobile Hat entry:** Clue fields now follow the visual viewport when the
