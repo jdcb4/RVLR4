@@ -36,12 +36,13 @@ export default defineConfig({
       ],
       reporter: ["text", "html", "json"],
       thresholds: {
-        "server/{sync,whoWhatWhereViews,hatViews,imposterViews,drawnguessViews}.ts": {
-          lines: 95,
-          statements: 95,
-          functions: 100,
-          branches: 90,
-        },
+        "{server/{sync,whoWhatWhereViews,hatViews,imposterViews,drawnguessViews,drawnguessGallery},src/multiplayer/mergeRoomSync}.ts":
+          {
+            lines: 95,
+            statements: 95,
+            functions: 100,
+            branches: 90,
+          },
         "{server/{boundarySchemas,secrets,rateLimiter},src/domain/multiplayer/socketSchemas}.ts": {
           lines: 100,
           statements: 100,

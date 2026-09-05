@@ -154,6 +154,8 @@ export type DrawNGuessPublicSnapshot = {
   readonly revealEntryIndex: number;
   readonly revealPacket?: DrawNGuessPacket;
   readonly packets?: readonly DrawNGuessPacket[];
+  /** Opt-in wire cache identity. Missing packets reuse only this exact completed gallery. */
+  readonly galleryId?: string;
 };
 
 export type DrawNGuessPrivateSnapshot = {

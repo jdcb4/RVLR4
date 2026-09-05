@@ -17,6 +17,8 @@ export async function releaseRoomSocket(io: Server, socket: Socket, store: RoomS
   const playerId = socket.data.playerId as string | undefined;
   delete socket.data.roomCode;
   delete socket.data.playerId;
+  delete socket.data.galleryCache;
+  delete socket.data.lastGalleryId;
   if (!code || !playerId) return;
 
   await socket.leave(roomChannel(code));

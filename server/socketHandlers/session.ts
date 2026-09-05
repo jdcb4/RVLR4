@@ -90,6 +90,9 @@ function registerSessionBind(
       if (!socket.connected) return;
       socket.data.roomCode = code;
       socket.data.playerId = player.id;
+      socket.data.galleryCache = parsed.data.galleryCache;
+      // A bind always sends full data, including a retry on the same transport.
+      delete socket.data.lastGalleryId;
       await socket.join(roomChannel(code));
       if (!socket.connected) {
         await releaseRoomSocket(io, socket, store);

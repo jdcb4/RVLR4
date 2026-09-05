@@ -12,6 +12,8 @@ import {
 } from "@/domain/drawnguess/types";
 import { CATEGORIES, HINT_LIMIT_OPTIONS } from "@/domain/whowhatwhere/types";
 
+import { sessionCredentialsSchema } from "./sessionCredentials";
+
 /**
  * Zod schemas for every Socket.IO event payload accepted by the server.
  *
@@ -253,4 +255,6 @@ export type SocketEventName = keyof typeof socketSchemas;
 
 export type SocketPayload<E extends SocketEventName> = z.infer<(typeof socketSchemas)[E]>;
 
-export { sessionCredentialsSchema as sessionBindSchema } from "@/domain/multiplayer/sessionCredentials";
+export const sessionBindSchema = sessionCredentialsSchema.extend({
+  galleryCache: z.literal("drawnguess-v1").optional(),
+});

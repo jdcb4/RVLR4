@@ -298,3 +298,21 @@ This removes repeated declarations without changing the in-memory architecture.
 
 **Rejected alternatives:** A package, code generator, universal game engine, or
 monorepo would add setup and maintenance work without serving another consumer.
+
+---
+
+## 2026-09-05: Reuse completed drawing galleries on opted-in connections
+
+**Decision:** Send completed packet arrays once per Socket.IO binding, then
+send their cache identity with ordinary replay/presence state. Negotiate this
+additive capability so older clients still receive complete snapshots.
+
+**Reasoning:** The dense eight-player probe produced 4.73 MB per viewer per
+broadcast. Navigation is already local, but replay votes and reconnects would
+otherwise retransmit unchanged drawings. A small merge boundary removes those
+repeat transfers and the duplicate selected packet. Rebinding recovers a missing
+cache. There is no persistence, compression dependency, or new service.
+
+**Rejected alternatives:** Binary drawing encoding, a media service, and a
+general delta-sync framework add substantially more complexity than this one
+immutable, measured payload warrants. The existing stroke renderer/export stays.

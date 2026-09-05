@@ -8,6 +8,7 @@ import { Server } from "socket.io";
 import { io as ioClient, type Socket as ClientSocket } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
+import { advanceTurn } from "@/domain/drawnguess/engine";
 import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
 import { requestSocketAck } from "@/services/networkRequests";
 
@@ -247,17 +248,21 @@ async function nextSyncWhere(
   predicate: (payload: RoomSyncPayload) => boolean,
   timeoutMs = 4000,
 ): Promise<RoomSyncPayload> {
-  const deadline = Date.now() + timeoutMs;
-
-  while (Date.now() < deadline) {
-    const payload = await nextSync(socket, Math.max(1, deadline - Date.now()));
-
-    if (predicate(payload)) {
-      return payload;
-    }
-  }
-
-  throw new Error("Timed out waiting for matching room:sync");
+  // Keep listening across non-matching packets. Removing/readding the listener
+  // between awaits can miss the next packet in the same transport flush.
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      socket.off("room:sync", listener);
+      reject(new Error("Timed out waiting for matching room:sync"));
+    }, timeoutMs);
+    const listener = (payload: RoomSyncPayload) => {
+      if (!predicate(payload)) return;
+      clearTimeout(timer);
+      socket.off("room:sync", listener);
+      resolve(payload);
+    };
+    socket.on("room:sync", listener);
+  });
 }
 
 function emitAck<TAck = { ok?: boolean; error?: string }>(
@@ -285,6 +290,50 @@ describe("multiplayer smoke", () => {
 
   afterEach(async () => {
     await harness.close();
+  });
+
+  it("negotiates gallery caching without changing legacy clients and resends data on bind", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "drawnguess");
+    const bounds = await bindAllClients(harness.url, [host, ...guests]);
+    const owner = bounds[0]!.socket;
+    const legacy = bounds[1]!.socket;
+    const room = harness.store.getRoom(host.code)!;
+    try {
+      expect(
+        await emitAck(owner, "session:bind", {
+          code: host.code,
+          playerId: host.playerId,
+          secret: host.secret,
+          galleryCache: "drawnguess-v1",
+        }),
+      ).toEqual({ ok: true });
+      startDrawNGuessMatch(room, 1000);
+      for (let i = 0; i < 4; i++)
+        room.drawnguessMatch = advanceTurn(room.drawnguessMatch!, (i + 1) * 100_000);
+      const initial = nextSyncWhere(owner, (sync) => Boolean(sync.drawnguess?.public.packets));
+      const oldInitial = nextSyncWhere(legacy, (sync) => Boolean(sync.drawnguess?.public.packets));
+      await broadcastRoom(harness.io, harness.store, room.code);
+      const first = await initial;
+      expect(first.drawnguess?.public.revealPacket).toBeUndefined();
+      expect((await oldInitial).drawnguess?.public.revealPacket).toBeDefined();
+      const update = nextSyncWhere(owner, (sync) => sync.replay.offerActive);
+      const oldUpdate = nextSyncWhere(legacy, (sync) => sync.replay.offerActive);
+      expect(await emitAck(owner, "game:hostOfferReplay", undefined)).toEqual({ ok: true });
+      expect((await update).drawnguess?.public.packets).toBeUndefined();
+      expect((await oldUpdate).drawnguess?.public.packets).toBeDefined();
+      const rebound = nextSyncWhere(owner, (sync) => Boolean(sync.drawnguess?.public.packets));
+      expect(
+        await emitAck(owner, "session:bind", {
+          code: host.code,
+          playerId: host.playerId,
+          secret: host.secret,
+          galleryCache: "drawnguess-v1",
+        }),
+      ).toEqual({ ok: true });
+      expect((await rebound).drawnguess?.public.galleryId).toBe(first.drawnguess?.public.galleryId);
+    } finally {
+      for (const bound of bounds) bound.socket.disconnect();
+    }
   });
 
   it("sends private drawing drafts only to the owning tabs and broadcasts progress changes", async () => {

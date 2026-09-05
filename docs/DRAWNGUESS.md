@@ -58,6 +58,22 @@ sync to the player's bound tabs; status changes still broadcast to all players.
 The engine copies changed paths and treats previously stored drawings as
 immutable, so adding a draft does not clone all prior books.
 
+Current clients opt into `galleryCache: "drawnguess-v1"` during session binding.
+The first completed gallery includes `packets` plus a unique `galleryId`;
+later replay/presence updates reuse that ID and omit unchanged packets. The
+client merges only a matching room, viewer, and gallery. If its cache is
+missing, it reconnects for full data. Every bind clears the per-socket marker.
+Older clients keep receiving full snapshots, including the legacy selected
+packet. Cache IDs use weak references to immutable packet arrays; sockets keep
+only an ID, so this does not retain old match data.
+
+Budget reference: eight valid 6,000-point drawings per drawing turn produced
+about 4.2 MB of completed books in the dense synthetic case. Keep a full gallery
+under 6.5 MB at the existing eight-player/192-KiB-per-drawing caps. Routine
+gallery progress/replay updates should remain under 4 KiB. Re-measure these
+budgets before raising player, point, or drawing-byte limits. This is a local
+engineering budget, not a measured Railway room-capacity or cost guarantee.
+
 ## Data And Settings
 
 The v1 word source is `src/data/drawnguessWordPrompts.json`. It contains Easy prompts from Standard, Kids, and Sports categories. The current UI exposes only the default word pack, but the domain settings keep a `wordPackId` so category and difficulty filtering can be added later without reshaping match state.

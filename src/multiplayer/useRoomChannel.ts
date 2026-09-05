@@ -11,6 +11,8 @@ import { clearActiveGameBookmark, readActiveGameBookmark } from "@/multiplayer/a
 import { discardStoredRecord, readStoredJson, roomSessionStorage } from "@/services/browserStorage";
 import { requestSocketAck } from "@/services/networkRequests";
 
+import { mergeRoomSync } from "./mergeRoomSync";
+
 const SOCKET_PATH = "/socket.io";
 
 function connectSocket(): Socket {
@@ -67,6 +69,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
   const socketRef = useRef<Socket | null>(null);
   const bindAttemptRef = useRef(0);
   const [sync, setSync] = useState<RoomSyncPayload | null>(null);
+  const latestSyncRef = useRef<RoomSyncPayload | null>(null);
   const [connected, setConnected] = useState(false);
   const [bindError, setBindError] = useState<string | null>(null);
   const [bindErrorCode, setBindErrorCode] = useState<string | null>(null);
@@ -84,6 +87,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
   useEffect(() => {
     setConnected(false);
     setSync(null);
+    latestSyncRef.current = null;
     setBindError(null);
     setBindErrorCode(null);
     setShuttingDown(false);
@@ -108,7 +112,14 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
     const handleSync = (payload: RoomSyncPayload) => {
       const creds = loadSession(code);
       if (payload.code !== code.toUpperCase() || payload.you.playerId !== creds?.playerId) return;
-      setSync(payload);
+      const merged = mergeRoomSync(latestSyncRef.current, payload);
+      if (!merged) {
+        // A new bind clears the server's per-socket cache and restores full data.
+        socket.disconnect().connect();
+        return;
+      }
+      latestSyncRef.current = merged;
+      setSync(merged);
     };
 
     const bindSession = () => {
@@ -125,7 +136,10 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
         return;
       }
 
-      void requestSocketAck(socket, "session:bind", creds).then((ack) => {
+      void requestSocketAck(socket, "session:bind", {
+        ...creds,
+        galleryCache: "drawnguess-v1",
+      }).then((ack) => {
         if (bindAttempt !== bindAttemptRef.current || !socket.connected) {
           return;
         }
@@ -206,6 +220,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
       socket.off("server:shuttingDown", handleShutdown);
       socket.off("session:ended", handleSessionEnded);
       socket.off("room:expired", handleRoomExpired);
+      latestSyncRef.current = null;
       socket.disconnect();
     };
   }, [code, enabled, socket]);

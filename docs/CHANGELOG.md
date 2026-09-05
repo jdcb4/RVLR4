@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.24.7 - 2026-09-05
+
+- **Gallery transfer:** Current clients receive completed drawing books once
+  per connection and reuse them for replay/presence updates. Missing cache
+  triggers a fresh bind; reconnect always resends full data. Earlier clients
+  retain the full-snapshot protocol. Gallery rendering and exports use the
+  original strokes without lossy encoding.
+
 ## 0.24.6 - 2026-09-05
 
 - **Drawing input:** Keep the last valid stroke at point, stroke, and byte

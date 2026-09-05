@@ -1,5 +1,6 @@
 import type { Server } from "socket.io";
 
+import { prepareDrawNGuessGallerySync } from "./drawnguessGallery.ts";
 import type { RoomStore } from "./roomStore.ts";
 import { buildRoomSync } from "./sync.ts";
 
@@ -32,7 +33,14 @@ export async function broadcastRoom(
       continue;
     }
 
-    if (!onlyPlayerId || onlyPlayerId === playerId)
-      socket.emit("room:sync", buildRoomSync(room, playerId));
+    if (onlyPlayerId && onlyPlayerId !== playerId) continue;
+    let sync = buildRoomSync(room, playerId);
+    if (socket.data.galleryCache === "drawnguess-v1") {
+      const prepared = prepareDrawNGuessGallerySync(sync, socket.data.lastGalleryId);
+      sync = prepared.sync;
+      if (prepared.galleryId) socket.data.lastGalleryId = prepared.galleryId;
+      else delete socket.data.lastGalleryId;
+    }
+    socket.emit("room:sync", sync);
   }
 }
