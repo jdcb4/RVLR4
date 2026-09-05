@@ -6,7 +6,7 @@ import type { AddressInfo } from "node:net";
 import express from "express";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { securityHeaders } from "./securityHeaders.ts";
+import { createSecurityHeaders } from "./securityHeaders.ts";
 
 describe("security headers", () => {
   let server: http.Server | undefined;
@@ -22,10 +22,10 @@ describe("security headers", () => {
       }),
   );
 
-  it("sets the reviewed Helmet baseline and hides Express", async () => {
+  it.each([true, false])("sets the Helmet baseline with HTTPS-only mode %s", async (httpsOnly) => {
     const app = express();
     app.disable("x-powered-by");
-    app.use(securityHeaders);
+    app.use(createSecurityHeaders(httpsOnly));
     app.get("/", (_request, response) => response.send("ok"));
     server = http.createServer(app);
     await new Promise<void>((resolve) => server!.listen(0, "127.0.0.1", resolve));
@@ -40,5 +40,6 @@ describe("security headers", () => {
     expect(csp).toContain("connect-src 'self' ws: wss:");
     expect(csp).toContain("object-src 'none'");
     expect(csp).toContain("frame-ancestors 'none'");
+    expect(csp.includes("upgrade-insecure-requests")).toBe(httpsOnly);
   });
 });

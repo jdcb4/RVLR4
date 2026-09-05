@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.24.8 - 2026-09-05
+
+- **Local preview:** `pnpm run preview` runs the built app and multiplayer
+  server together with exact loopback origins and production mode. HTTP preview
+  keeps CSP protections without forcing asset requests to HTTPS. Invalid port
+  numbers fail at startup.
+- **Operations:** Document one replica, room loss on process replacement,
+  health/version checks, rollback, and a sole-maintainer branch-rule proposal.
+
 ## 0.24.7 - 2026-09-05
 
 - **Gallery transfer:** Current clients receive completed drawing books once

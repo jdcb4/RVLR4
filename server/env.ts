@@ -10,7 +10,7 @@ import { z } from "zod";
 const ServerEnvSchema = z
   .object({
     NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-    PORT: z.coerce.number().int().positive().default(3001),
+    PORT: z.coerce.number().int().positive().max(65535).default(3001),
     /** Allowed browser origins for CORS + Socket.IO (comma-separated). */
     CLIENT_ORIGIN: z.string().optional(),
     /**

@@ -30,6 +30,7 @@ pnpm run dev
 | ----------------------- | ---------------------------------------------------- |
 | `pnpm run dev`          | Full multiplayer dev stack (Vite + Node).            |
 | `pnpm run start`        | Production Node server (run `pnpm run build` first). |
+| `pnpm run preview`      | Built client and multiplayer with local origins.     |
 | `pnpm run typecheck`    | TypeScript checking.                                 |
 | `pnpm run lint`         | ESLint.                                              |
 | `pnpm test`             | Vitest once.                                         |

@@ -59,7 +59,7 @@ Environment variables are documented in `docs/DEPLOYMENT.md`. Optional diagnosti
 
 ```bash
 pnpm run build
-pnpm run start
+pnpm run preview
 ```
 
 Open `http://127.0.0.1:3001/` and repeat **S1–S5** for one game kind. For Docker changes, also run `pnpm run docker:build` (see `docs/VERIFICATION.md`).

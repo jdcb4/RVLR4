@@ -3,6 +3,9 @@ import { describe, expect, it } from "vitest";
 import { loadServerEnv } from "./env.ts";
 
 describe("loadServerEnv", () => {
+  it.each(["0", "65536", "not-a-port"])("rejects an unusable PORT %s", (PORT) => {
+    expect(() => loadServerEnv({ PORT })).toThrow();
+  });
   it("defaults NODE_ENV to development and accepts no CLIENT_ORIGIN", () => {
     const env = loadServerEnv({});
 

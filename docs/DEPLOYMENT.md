@@ -12,19 +12,26 @@ self-hosting, but routine work does not build or publish Docker images.
 
 ```bash
 pnpm run build
-pnpm run start
+pnpm run preview
 ```
 
-`pnpm run start` listens on port **3001** by default (`PORT` overrides this).
-Open http://127.0.0.1:3001/.
+Open [the full-stack preview](http://127.0.0.1:3001/). The preview script sets
+production mode and allows both `127.0.0.1` and `localhost` at its port. It
+deliberately replaces an inherited `CLIENT_ORIGIN` with these local origins.
+`PORT` defaults to **3001** and may be overridden in the same shell. A missing
+build produces a clear instruction to build first.
 
 Optional diagnostics in the same shell:
 
 ```powershell
-$env:MULTIPLAYER_DEBUG='1'; pnpm run start
+$env:MULTIPLAYER_DEBUG='1'
+pnpm run preview
 ```
 
-`pnpm run preview` only exercises the static bundle without multiplayer APIs.
+`pnpm run start` is the hosting command; the host must supply its production
+origin. For a static-only diagnostic, `pnpm exec vite preview` serves the
+client bundle without multiplayer APIs. HTTPS-only origins keep CSP asset
+upgrading enabled; HTTP local preview does not force unavailable HTTPS assets.
 
 ## Branch promotion and Railway mapping
 
@@ -115,6 +122,65 @@ is ready and `{status:"shutting-down",version}` with `503` after graceful
 shutdown begins. Responses are `no-store` and expose no room or player state.
 `railway.json` points both environments at this endpoint with a 30-second
 activation timeout.
+This is an activation check, not continuous uptime monitoring after deployment.
+
+## Capacity, cost, and room lifetime
+
+Run **one service replica in one region**. All room data and rate limits live
+in one Node process; multiple replicas can disagree about room membership and
+timers. Sticky routing alone does not provide shared state or safe failover.
+There is no database, persistent room volume, or recoverable room backup.
+
+Service sleep, crashes, deployments, rollbacks, and process replacement discard
+rooms. Sleep saves idle running costs but adds a cold start; the home/entry UI
+can retry a bounded request after startup. Do not restart during a game users
+expect to finish. The app has a room cap, per-event budgets, idle cleanup, and
+drawing-size limits; use Railway CPU/memory/egress observations before changing
+those limits or adding capacity. See the drawing byte budgets in [DRAWNGUESS.md](DRAWNGUESS.md).
+
+## Rollback and recovery
+
+1. Record the failed environment, deployed commit, package version, and the
+   prior successful deployment ID/commit. Capture sanitized logs and health
+   responses; do not copy reconnect credentials or private game content.
+2. Check whether the failure is configuration, startup, or application behavior.
+   Confirm `CLIENT_ORIGIN`, source branch, Railpack, one replica, and `/api/health`
+   in the deployment's applied settings. A green build alone is insufficient.
+3. After approval for a production action, use Railway's **Rollback** on the
+   known-good deployment for that environment. Railway restores its image and
+   custom variables; recheck source mapping and other applied service settings. If that
+   deployment is unavailable, revert the bad commit through the normal branch
+   review flow and let GitHub source deployment build the revert.
+4. Check `/api/health` for 200 and the expected version, open the home page,
+   then create and join a new room from two separate browsers. Start one game,
+   reconnect a guest, and verify the next action succeeds.
+5. Confirm old rooms show recovery navigation. Rollback does **not** restore
+   their in-memory data. Share a fresh room code with the players.
+6. Keep `dev` aligned with any reviewed production rollback/fix before the next
+   promotion. Record the actual recovery outcome in the change's review record.
+
+For a local rehearsal, stop only the task's preview process, run a known-good
+commit from an isolated checkout with production mode and matching loopback
+origins, verify its health/version and new-room entry, then restore the candidate
+preview. Never infer production rollback success from this local rehearsal.
+
+## Proposed repository protections
+
+The branch workflow remains the contract until platform rules are configured.
+For a sole maintainer, the proposed minimal rule for `main` is: require a pull
+request, require the **verify** CI job, require the branch to be up to date,
+and block force pushes and deletion. Keep required external approvals at zero
+so Joe can review and merge his own candidate. Joe's explicit approval of the
+exact promotion remains required for agents. Do not enable auto-merge.
+
+For `dev`, retain direct integration pushes but block force pushes/deletion.
+Keep a documented administrator emergency bypass for recovery, followed by a
+recorded review. Enabling these platform rules is a separate maintainer choice;
+the proposal does not claim they are already enforced.
+
+References: [Railway rollback](https://docs.railway.com/guides/deployment-actions),
+[health checks](https://docs.railway.com/guides/healthchecks), and
+[GitHub protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches).
 
 ## Optional manual Docker image
 

@@ -17,7 +17,7 @@ import { createCorsOriginValidator } from "./originPolicy.ts";
 import { startRateLimiterSweeper, TokenBucketStore } from "./rateLimiter.ts";
 import { RoomStore } from "./roomStore.ts";
 import { startRoomIdleSweeper } from "./roomSweep.ts";
-import { securityHeaders } from "./securityHeaders.ts";
+import { createSecurityHeaders } from "./securityHeaders.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
 import { APP_VERSION } from "./version.ts";
 import { startWhoWhatWhereTurnTicker } from "./whoWhatWhereTicker.ts";
@@ -36,7 +36,12 @@ startRateLimitReporter(rateLimitReporter);
 
 const app = express();
 app.disable("x-powered-by");
-app.use(securityHeaders);
+app.use(
+  createSecurityHeaders(
+    env.CLIENT_ORIGINS.length > 0 &&
+      env.CLIENT_ORIGINS.every((origin) => origin.startsWith("https://")),
+  ),
+);
 app.use(express.json({ limit: "16kb" }));
 app.use(handleJsonBodyError);
 

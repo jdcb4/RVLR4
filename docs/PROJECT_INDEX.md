@@ -62,6 +62,7 @@ Games:
 | `pnpm run dev:client`     | Vite only.                                                                            |
 | `pnpm run dev:server`     | Node multiplayer server only (`tsx watch`).                                           |
 | `pnpm run start`          | Production-style Node server (expects `dist/` built).                                 |
+| `pnpm run preview`        | Built client + multiplayer server with exact local origins.                           |
 | `pnpm run ui-gallery`     | Dev-only paired-screen preview (`gallery.html`, port 5174). See `docs/UI_GALLERY.md`. |
 | `pnpm run typecheck`      | TypeScript checking.                                                                  |
 | `pnpm run lint`           | ESLint.                                                                               |
