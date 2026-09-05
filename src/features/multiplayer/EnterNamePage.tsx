@@ -284,6 +284,7 @@ export function EnterNamePage() {
           className="rounded-xl border border-input bg-background px-3 py-2 text-typ-body-relaxed outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
           enterKeyHint="go"
           id="display-name"
+          aria-describedby={error ? "entry-error" : undefined}
           inputMode="text"
           maxLength={32}
           placeholder="Name shown in the lobby"
@@ -303,7 +304,11 @@ export function EnterNamePage() {
 
         <AvatarPicker value={avatarId} onChange={setAvatarId} />
 
-        {error ? <p className="text-typ-ui text-destructive">{error}</p> : null}
+        {error ? (
+          <p id="entry-error" role="alert" className="text-typ-ui text-destructive">
+            {error}
+          </p>
+        ) : null}
       </form>
     </GameShell>
   );

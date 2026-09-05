@@ -1,6 +1,7 @@
 import { QRCode } from "react-qr-code";
 
-import { IconClipboard, IconQrCode, IconShare, IconX } from "@/components/icons";
+import { IconClipboard, IconQrCode, IconShare } from "@/components/icons";
+import { ModalDialog } from "@/components/ModalDialog";
 import { Button } from "@/components/ui/button";
 
 export function LobbyInviteSection({
@@ -80,28 +81,13 @@ export function QrJoinDialog({
   readonly onClose: () => void;
 }) {
   return (
-    <div
-      className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-black/50 px-4 py-8"
-      role="dialog"
-      onClick={onClose}
-    >
-      <div
-        className="w-full max-w-sm cursor-default rounded-2xl border border-border bg-card p-5 shadow-xl"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="flex items-start justify-between gap-3">
-          <p className="text-typ-card-title font-semibold">Scan to join</p>
-          <Button aria-label="Close" size="icon" variant="ghost" onClick={onClose}>
-            <IconX className="size-5" />
-          </Button>
-        </div>
-        <p className="mt-1 text-typ-ui-snug text-muted-foreground">
-          Opens the name screen with this room code filled in.
-        </p>
-        <div className="mt-4 flex justify-center rounded-xl bg-white p-4">
-          <QRCode size={200} value={joinLink} />
-        </div>
+    <ModalDialog title="Scan to join" onClose={onClose}>
+      <p className="mt-1 text-typ-ui-snug text-muted-foreground">
+        Opens the name screen with this room code filled in.
+      </p>
+      <div className="mt-4 flex justify-center rounded-xl bg-white p-4">
+        <QRCode size={200} value={joinLink} title="Room invitation QR code" />
       </div>
-    </div>
+    </ModalDialog>
   );
 }

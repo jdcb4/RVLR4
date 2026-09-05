@@ -28,7 +28,9 @@ export function EditableName({
             aria-label={label}
             autoCapitalize="words"
             autoComplete="off"
-            autoFocus
+            ref={(input) => {
+              input?.focus();
+            }}
             className="keyboard-safe-input h-12 w-full rounded-md border bg-background px-3 text-typ-input outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
             enterKeyHint="done"
             inputMode="text"

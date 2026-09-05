@@ -2,6 +2,14 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.23.1 - 2026-09-05
+
+- **Accessibility:** QR, app information, and team-move overlays use named
+  native dialogs with contained focus, Escape dismissal, and focus return.
+  Options expose selection, drawing fields and brush colors have accessible
+  names, and entry errors are announced. Enable the installed accessibility
+  lint rules and avoid opening the keyboard automatically on drawing turns.
+
 ## 0.23.0 - 2026-09-05
 
 - **Audio:** Replace Tone and both Hat phase WAVs with eleven mapped Cuelume

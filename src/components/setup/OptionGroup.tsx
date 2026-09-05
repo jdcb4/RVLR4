@@ -35,6 +35,7 @@ export function OptionButton({
 }) {
   return (
     <Button
+      aria-pressed={selected}
       className="h-11"
       variant={selected ? "default" : "outline"}
       onClick={onClick}

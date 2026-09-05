@@ -11,6 +11,13 @@ import { cn } from "@/lib/utils";
 import { renderDrawing } from "./drawingCanvas";
 
 const COLORS = ["#111827", "#dc2626", "#2563eb", "#16a34a", "#f59e0b"] as const;
+const COLOR_NAMES = {
+  "#111827": "black",
+  "#dc2626": "red",
+  "#2563eb": "blue",
+  "#16a34a": "green",
+  "#f59e0b": "amber",
+};
 const SIZES = [4, 8, 14] as const;
 
 export function DrawNGuessWhiteboard({
@@ -109,7 +116,7 @@ export function DrawNGuessWhiteboard({
       <div className="flex flex-wrap items-center gap-2">
         {COLORS.map((option) => (
           <button
-            aria-label={`Use ${option} brush`}
+            aria-label={`Use ${COLOR_NAMES[option]} brush`}
             aria-pressed={tool === "pen" && color === option}
             className={cn(
               "size-9 rounded-full border shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
@@ -127,6 +134,7 @@ export function DrawNGuessWhiteboard({
           />
         ))}
         <button
+          aria-pressed={tool === "eraser"}
           className={cn(
             "rounded-xl border px-3 py-2 text-typ-ui font-semibold transition",
             tool === "eraser" ? "border-primary bg-semantic-primary-soft-bg" : "border-border",

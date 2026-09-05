@@ -264,7 +264,9 @@ function DrawNGuessBody({
           disabled={disabled}
           autoCapitalize="sentences"
           autoComplete="off"
-          autoFocus
+          aria-label="Your prompt"
+          aria-describedby={error ? "prompt-error" : undefined}
+          aria-invalid={Boolean(error)}
           className="rounded-xl border border-input bg-background px-3 py-3 text-typ-body-relaxed outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
           enterKeyHint="send"
           inputMode="text"
@@ -277,7 +279,7 @@ function DrawNGuessBody({
           onKeyDown={onTextSubmitKeyDown}
         />
         {error ? (
-          <p role="alert" className="text-typ-ui text-destructive">
+          <p id="prompt-error" role="alert" className="text-typ-ui text-destructive">
             {error}
           </p>
         ) : null}
@@ -297,7 +299,11 @@ function DrawNGuessBody({
           {assignment.promptText}
         </p>
         <DrawNGuessWhiteboard disabled={disabled} value={drawingDraft} onChange={onDrawingChange} />
-        {error ? <p className="text-typ-ui text-destructive">{error}</p> : null}
+        {error ? (
+          <p role="alert" className="text-typ-ui text-destructive">
+            {error}
+          </p>
+        ) : null}
       </GamePanel>
     );
   }
@@ -314,7 +320,9 @@ function DrawNGuessBody({
         disabled={disabled}
         autoCapitalize="sentences"
         autoComplete="off"
-        autoFocus
+        aria-label="Your guess"
+        aria-describedby={error ? "guess-error" : undefined}
+        aria-invalid={Boolean(error)}
         className="rounded-xl border border-input bg-background px-3 py-3 text-typ-body-relaxed outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
         enterKeyHint="send"
         inputMode="text"
@@ -326,7 +334,11 @@ function DrawNGuessBody({
         onChange={(event) => onGuessChange(event.target.value)}
         onKeyDown={onTextSubmitKeyDown}
       />
-      {error ? <p className="text-typ-ui text-destructive">{error}</p> : null}
+      {error ? (
+        <p id="guess-error" role="alert" className="text-typ-ui text-destructive">
+          {error}
+        </p>
+      ) : null}
     </GamePanel>
   );
 }

@@ -1,3 +1,4 @@
+import { ModalDialog } from "@/components/ModalDialog";
 import { Button } from "@/components/ui/button";
 import { APP_DISPLAY_NAME } from "@/config/appMeta";
 
@@ -21,27 +22,9 @@ export function AppInfoOverlay({
   }
 
   return (
-    <div
-      aria-modal="true"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-semantic-scrim p-4 sm:items-center"
-      role="dialog"
-    >
-      <div className="w-full max-w-sm rounded-xl border border-border bg-card p-4 shadow-xl">
-        <div className="flex items-start justify-between gap-2">
-          <p className="text-typ-card-title font-semibold">{title}</p>
-          <Button
-            aria-label="Close"
-            className="h-8 px-2"
-            onClick={onClose}
-            type="button"
-            variant="ghost"
-          >
-            ×
-          </Button>
-        </div>
-        <p className="mt-2 text-typ-ui text-muted-foreground">By jdcb4. Version {version}.</p>
-      </div>
-    </div>
+    <ModalDialog title={title} onClose={onClose}>
+      <p className="mt-2 text-typ-ui text-muted-foreground">By jdcb4. Version {version}.</p>
+    </ModalDialog>
   );
 }
 

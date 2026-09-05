@@ -106,7 +106,10 @@ export function RoomLobbyView({
           {isHost ? <LobbyStartStatus connected={connected} lobby={lobby} /> : null}
 
           {startError ? (
-            <p className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-typ-ui text-destructive">
+            <p
+              role="alert"
+              className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-typ-ui text-destructive"
+            >
               {startError}
             </p>
           ) : null}

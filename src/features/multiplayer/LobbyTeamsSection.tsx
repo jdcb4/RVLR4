@@ -329,7 +329,10 @@ function TeamRenameForm({
       <input
         autoCapitalize="words"
         autoComplete="off"
-        autoFocus
+        aria-label="Team name"
+        ref={(input) => {
+          input?.focus();
+        }}
         className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1 text-typ-ui"
         enterKeyHint="done"
         inputMode="text"
@@ -464,43 +467,31 @@ function HostMovePlayerDialog({
   readonly onConfirm: () => void;
 }) {
   return (
-    <div
-      className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-black/50 px-4 py-8"
-      role="dialog"
-      onClick={onCancel}
-    >
-      <div
-        className="w-full max-w-md cursor-default rounded-2xl border border-border bg-card p-5 shadow-xl"
-        onClick={(event) => event.stopPropagation()}
+    <ModalDialog title={`What team do you want to move ${target.name} to?`} onClose={onCancel}>
+      <label className="mt-4 block text-typ-ui font-medium" htmlFor="host-move-team">
+        Team
+      </label>
+      <select
+        className="mt-2 w-full rounded-xl border border-input bg-background px-3 py-2 text-typ-ui"
+        id="host-move-team"
+        value={selectedTeamIndex}
+        onChange={(event) => onSelectedTeamIndexChange(Number(event.target.value))}
       >
-        <p className="text-typ-card-title font-semibold leading-snug">
-          What team do you want to move {target.name} to?
-        </p>
-        <label className="mt-4 block text-typ-ui font-medium" htmlFor="host-move-team">
-          Team
-        </label>
-        <select
-          className="mt-2 w-full rounded-xl border border-input bg-background px-3 py-2 text-typ-ui"
-          id="host-move-team"
-          value={selectedTeamIndex}
-          onChange={(event) => onSelectedTeamIndexChange(Number(event.target.value))}
-        >
-          {Array.from({ length: lobby.teamCount }).map((_, teamIndex) => (
-            <option key={teamIndex} value={teamIndex}>
-              {teamDisplayName(lobby, teamIndex)}
-            </option>
-          ))}
-        </select>
-        <div className="mt-5 flex flex-wrap justify-end gap-2">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button type="button" onClick={onConfirm}>
-            Move
-          </Button>
-        </div>
+        {Array.from({ length: lobby.teamCount }).map((_, teamIndex) => (
+          <option key={teamIndex} value={teamIndex}>
+            {teamDisplayName(lobby, teamIndex)}
+          </option>
+        ))}
+      </select>
+      <div className="mt-5 flex flex-wrap justify-end gap-2">
+        <Button type="button" variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button type="button" onClick={onConfirm}>
+          Move
+        </Button>
       </div>
-    </div>
+    </ModalDialog>
   );
 }
 
@@ -511,3 +502,4 @@ function playersForTeam(lobby: LobbyDto, teamIndex: number) {
 function teamDisplayName(lobby: LobbyDto, teamIndex: number) {
   return lobby.teamNames[teamIndex] ?? `Team ${teamIndex + 1}`;
 }
+import { ModalDialog } from "@/components/ModalDialog";

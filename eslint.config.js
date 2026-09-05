@@ -25,6 +25,9 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      ...jsxA11y.configs.recommended.rules,
+      // Game components use a domain `role` prop; validate ARIA on DOM elements.
+      "jsx-a11y/aria-role": ["error", { ignoreNonDOM: true }],
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "simple-import-sort/imports": "warn",
       "simple-import-sort/exports": "warn",
