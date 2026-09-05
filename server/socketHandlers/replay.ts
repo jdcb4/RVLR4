@@ -6,7 +6,11 @@ import { registerHandler } from "../socketHandle.ts";
 import type { SocketHandlerContext } from "./types.ts";
 
 function canOfferReplay(room: Room): boolean {
-  if (room.phase !== "playing" || room.replayCancelledByDisconnect) return false;
+  if (
+    room.phase !== "playing" ||
+    [...room.players.values()].some((player) => player.disconnectedAt !== null)
+  )
+    return false;
   if (room.gameKind === "whowhatwhere") {
     return room.wwwMatch?.stage === "results" || room.wwwMatch?.stage === "finalSummary";
   }
@@ -27,6 +31,9 @@ export function registerReplayHandlers({ io, socket, store }: SocketHandlerConte
     async ({ room, actor }) => {
       if (!actor.isHost) throw new Error("Only the host can offer a replay.");
       if (!canOfferReplay(room)) throw new Error("Replay is not available yet.");
+      if (room.replayOfferActive) return;
+      delete room.replayCancelledByDisconnect;
+      room.replayOfferId = crypto.randomUUID();
       room.replayOfferActive = true;
       room.replayAcceptedPlayerIds = [actor.id];
       await broadcastRoom(io, store, room.code);
@@ -37,8 +44,10 @@ export function registerReplayHandlers({ io, socket, store }: SocketHandlerConte
     store,
     "game:acceptReplay",
     "Unable to accept replay.",
-    async ({ room, actor }) => {
+    async ({ room, actor }, payload) => {
       if (!room.replayOfferActive) throw new Error("The host has not offered a replay yet.");
+      if (payload && payload.offerId !== room.replayOfferId)
+        throw new Error("That replay offer has expired. Join the current offer instead.");
       const accepted = new Set(room.replayAcceptedPlayerIds ?? []);
       accepted.add(actor.id);
       room.replayAcceptedPlayerIds = [...accepted];

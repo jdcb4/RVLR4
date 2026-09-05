@@ -72,6 +72,7 @@ export type RoomSyncPayload = {
   readonly drawnguess: DrawNGuessSyncDto | null;
   readonly replay: {
     readonly offerActive: boolean;
+    readonly offerId?: string;
     readonly acceptedIds: readonly string[];
     readonly cancelledByDisconnect: boolean;
   };

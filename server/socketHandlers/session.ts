@@ -79,6 +79,10 @@ function registerSessionBind(
         return;
       }
       player.disconnectedAt = null;
+      const room = store.getRoom(code);
+      if (room && [...room.players.values()].every((member) => member.disconnectedAt === null)) {
+        delete room.replayCancelledByDisconnect;
+      }
       await broadcastRoom(io, store, code);
       mpDebug("session bound", { code, playerId: player.id });
       ack?.({ ok: true });

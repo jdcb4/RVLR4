@@ -27,6 +27,7 @@ export async function releaseRoomSocket(io: Server, socket: Socket, store: RoomS
     if (room.replayOfferActive) {
       delete room.replayOfferActive;
       delete room.replayAcceptedPlayerIds;
+      delete room.replayOfferId;
       room.replayCancelledByDisconnect = true;
     }
   }

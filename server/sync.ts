@@ -81,6 +81,7 @@ export type RoomSyncPayload = {
   readonly drawnguess: DrawNGuessSyncDto | null;
   readonly replay: {
     readonly offerActive: boolean;
+    readonly offerId?: string;
     readonly acceptedIds: readonly string[];
     readonly cancelledByDisconnect: boolean;
   };
@@ -178,6 +179,7 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     drawnguess,
     replay: {
       offerActive: Boolean(room.replayOfferActive),
+      ...(room.replayOfferId ? { offerId: room.replayOfferId } : {}),
       acceptedIds: room.replayAcceptedPlayerIds ?? [],
       cancelledByDisconnect: Boolean(room.replayCancelledByDisconnect),
     },

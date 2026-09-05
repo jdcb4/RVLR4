@@ -83,6 +83,7 @@ export type Room = {
   hatClueDrafts?: Record<string, string[]>;
   /** Results replay: host offered to play again in the same room. */
   replayOfferActive?: boolean;
+  replayOfferId?: string;
   /** Player ids who accepted rematch in the current offer round. */
   replayAcceptedPlayerIds?: string[];
   /** Set when a disconnect cancels an in-flight replay offer so clients stop waiting. */
@@ -125,6 +126,7 @@ function clearActiveMatchState(room: Room): void {
   delete room.wwwReadyReveal;
   delete room.hatReadyReveal;
   delete room.replayOfferActive;
+  delete room.replayOfferId;
   delete room.replayAcceptedPlayerIds;
   delete room.replayCancelledByDisconnect;
 }

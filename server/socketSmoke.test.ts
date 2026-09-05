@@ -15,6 +15,7 @@ import { handleJsonBodyError, registerHttpRoutes } from "./httpRoutes.ts";
 import { createCorsOriginValidator } from "./originPolicy.ts";
 import { RoomStore } from "./roomStore.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
+import { startWhoWhatWhereMatch } from "./whoWhatWhereRuntime.ts";
 
 type TestHarness = {
   readonly store: RoomStore;
@@ -281,6 +282,59 @@ describe("multiplayer smoke", () => {
 
   afterEach(async () => {
     await harness.close();
+  });
+
+  it("replaces a cancelled replay after all players return and rejects stale acceptances", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "whowhatwhere");
+    const bounds = await bindAllClients(harness.url, [host, ...guests]);
+    const room = harness.store.getRoom(host.code)!;
+    const restored: BoundClient[] = [];
+    try {
+      await startWhoWhatWhereMatch(room);
+      room.wwwMatch = { ...room.wwwMatch!, stage: "results" };
+      expect(await emitAck(bounds[0]!.socket, "game:hostOfferReplay", undefined)).toEqual({
+        ok: true,
+      });
+      const oldOfferId = room.replayOfferId!;
+      expect(
+        await emitAck(bounds[1]!.socket, "game:acceptReplay", { offerId: oldOfferId }),
+      ).toEqual({ ok: true });
+      await emitAck(bounds[0]!.socket, "game:hostOfferReplay", undefined);
+      expect(room.replayAcceptedPlayerIds).toContain(guests[0]!.playerId);
+      expect(room.replayOfferId).toBe(oldOfferId);
+      bounds[2]!.socket.disconnect();
+      bounds[3]!.socket.disconnect();
+      await expect
+        .poll(() =>
+          guests
+            .slice(1)
+            .every((guest) => room.players.get(guest.playerId)?.disconnectedAt != null),
+        )
+        .toBe(true);
+      restored.push(await bindClient(harness.url, guests[1]!));
+      expect(room.replayCancelledByDisconnect).toBe(true);
+      expect((await emitAck(bounds[0]!.socket, "game:hostOfferReplay", undefined)).ok).toBe(false);
+      restored.push(await bindClient(harness.url, guests[2]!));
+      expect(room.replayCancelledByDisconnect).toBeUndefined();
+      expect(await emitAck(bounds[0]!.socket, "game:hostOfferReplay", undefined)).toEqual({
+        ok: true,
+      });
+      expect(room.replayOfferId).not.toBe(oldOfferId);
+      expect(
+        (await emitAck(bounds[1]!.socket, "game:acceptReplay", { offerId: oldOfferId })).ok,
+      ).toBe(false);
+      expect(room.replayAcceptedPlayerIds).toEqual([host.playerId]);
+      for (const bound of [bounds[1]!, ...restored]) {
+        expect(
+          await emitAck(bound.socket, "game:acceptReplay", { offerId: room.replayOfferId }),
+        ).toEqual({ ok: true });
+      }
+      expect(room.phase).toBe("lobby");
+      expect(room.players.size).toBe(4);
+      expect(room.replayOfferId).toBeUndefined();
+    } finally {
+      for (const bound of [...bounds, ...restored]) bound.socket.disconnect();
+    }
   });
 
   it("settles unacknowledged and disconnected requests without replaying offline commands", async () => {

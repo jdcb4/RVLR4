@@ -186,7 +186,7 @@ export const socketSchemas = {
     .strict(),
   "lobby:hatSuggestClue": z.object({ clueIndex: clueIndexSchema }).strict(),
   "game:hostOfferReplay": noPayloadSchema,
-  "game:acceptReplay": noPayloadSchema,
+  "game:acceptReplay": z.object({ offerId: z.string().uuid() }).strict().optional(),
   "www:markReady": noPayloadSchema,
   "www:startTurn": noPayloadSchema,
   "www:correct": noPayloadSchema,

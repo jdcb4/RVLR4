@@ -2,6 +2,12 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.9 - 2026-09-05
+
+- **Replay recovery:** A cancelled offer can be replaced after everyone
+  reconnects. Duplicate host offers preserve votes, and current clients send
+  the offer ID so delayed acceptance cannot join a replacement offer.
+
 ## 0.22.8 - 2026-09-05
 
 - **Bounded requests:** Socket binds/actions and HTTP room requests have an

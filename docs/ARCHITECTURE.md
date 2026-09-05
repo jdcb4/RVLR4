@@ -27,6 +27,12 @@ timeout/disconnect. Actions are never automatically replayed. Room screens
 surface failures and offer connection retry or home navigation. Entry requests
 are cancelled on unmount and duplicate form submissions are prevented.
 
+Replay offers are identified by a fresh UUID. Disconnecting the last tab for
+a player cancels the current offer; reconnection clears the notice once everyone
+is back, but never restores old votes. The host explicitly makes a fresh offer.
+Current clients include its ID in acceptance requests; absent IDs remain accepted
+for older clients. Repeating an active host offer is idempotent.
+
 Lobby synchronization includes a server-authored start-readiness result. The
 same pure evaluator gates `lobby:startGame` and supplies host-facing blocker
 copy, so client guidance cannot diverge from server enforcement.
