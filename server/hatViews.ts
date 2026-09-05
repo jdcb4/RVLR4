@@ -13,6 +13,7 @@ function scrubActiveTurnForGuessers(turn: ActiveTurn): ActiveTurn {
   return {
     ...turn,
     clueQueue: turn.clueQueue.map((clue) => scrubQueuedClue(clue)),
+    clueHistory: turn.clueHistory.map((entry) => ({ ...entry, clue: MASK })),
     skippedClues: turn.skippedClues.map((entry) => ({
       ...entry,
       text: MASK,

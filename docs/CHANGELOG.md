@@ -2,6 +2,12 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.4 - 2026-09-05
+
+- **Answer privacy:** Mask live-turn word and clue history for guessers and
+  observers, including skipped answers returned to play. Completed turn recaps
+  still show their answers. Transition tests inspect the whole serialized view.
+
 ## 0.22.3 - 2026-09-05
 
 - **Socket resilience:** Reject malformed argument lists before mutations, safely

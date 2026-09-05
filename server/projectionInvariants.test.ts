@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import type { HatGameSession } from "@/domain/hat-game/types";
+import { applyHatGameAction } from "@/domain/hat-game/engine";
+import type { HatGameAction, HatGameSession } from "@/domain/hat-game/types";
+import {
+  correctWord,
+  endTurn,
+  returnSkippedWord,
+  skipWord,
+  startTurn,
+} from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 
@@ -135,6 +143,75 @@ function hatSession(stage: HatGameSession["stage"]): HatGameSession {
 }
 
 describe("viewer projection invariants", () => {
+  it.each(["guesser", "observer"])(
+    "keeps WWW history private through skip/return/correct for %s",
+    (viewer) => {
+      const words = ["Secret alpha", "Secret beta", "Secret gamma"].map((word) => ({
+        word,
+        hint: `Hint ${word}`,
+        category: "What" as const,
+      }));
+      let match = startTurn(wwwMatch("ready"), words, new Date(0), () => 0.5);
+      const check = () => {
+        const wire = JSON.stringify(projectWhoWhatWhereMatch(match, viewer));
+        for (const word of words) expect(wire).not.toContain(word.word);
+        expect(JSON.stringify(projectWhoWhatWhereMatch(match, "describer"))).toContain("Secret");
+      };
+      check();
+      match = skipWord(match, new Date(1_000));
+      check();
+      match = returnSkippedWord(match);
+      check();
+      match = correctWord(match, new Date(2_000));
+      check();
+      const ended = endTurn(match);
+      expect(JSON.stringify(projectWhoWhatWhereMatch(ended, viewer).lastTurnSummary)).toContain(
+        "Secret",
+      );
+      expect(match.activeTurn?.wordHistory).toHaveLength(2);
+    },
+  );
+
+  it.each(["guesser", "observer"])(
+    "keeps Hat history private through skip/return/correct for %s",
+    (viewer) => {
+      let session = hatSession("ready");
+      session.cluePool = ["Secret alpha", "Secret beta", "Secret gamma"].map((text) => ({
+        text,
+        submittedBy: "describer",
+        submittedByName: "Describer",
+      }));
+      const apply = (action: HatGameAction, expired = false) => {
+        const next = applyHatGameAction(session, action, {
+          nowMs: () => 0,
+          rng: () => 0.5,
+          isPast: () => expired,
+        });
+        if ("error" in next) throw new Error(next.error);
+        session = next;
+      };
+      for (const type of [
+        "start-turn",
+        "skip-clue",
+        "return-skipped-clue",
+        "mark-correct",
+      ] as const) {
+        apply({ type });
+        const wire = JSON.stringify(projectHatSessionForViewer(session, viewer));
+        expect(wire).not.toContain("Secret");
+        expect(
+          JSON.stringify(projectHatSessionForViewer(session, "describer").activeTurn),
+        ).toContain("Secret");
+      }
+      expect(session.activeTurn?.clueHistory).toHaveLength(2);
+      apply({ type: "mark-correct" }, true);
+      expect(session.stage).toBe("ready");
+      expect(JSON.stringify(projectHatSessionForViewer(session, viewer).lastTurnSummary)).toContain(
+        "Secret",
+      );
+    },
+  );
+
   it.each(["ready", "turn", "finalSummary", "results"] as const)(
     "never exposes Who What Where reserves during %s",
     (stage) => {

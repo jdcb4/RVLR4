@@ -33,6 +33,7 @@ function scrubActiveTurn(turn: ActiveTurn): ActiveTurn {
   return {
     ...turn,
     wordQueue: turn.wordQueue.map((entry) => scrubWordEntry(entry)),
+    wordHistory: turn.wordHistory.map((entry) => ({ ...entry, word: scrubWordEntry(entry.word) })),
     skippedWords: turn.skippedWords.map((skipped) => ({
       ...skipped,
       word: scrubWordEntry(skipped.word),
