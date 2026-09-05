@@ -8,6 +8,7 @@ import { HatMultiplayerView } from "@/features/hat-game/multiplayer/HatMultiplay
 import { ImposterMultiplayerView } from "@/features/imposter/multiplayer/ImposterMultiplayerView";
 import { RoomConnectionBanners } from "@/features/multiplayer/RoomConnectionBanners";
 import { RoomLobbyView } from "@/features/multiplayer/RoomLobbyView";
+import { RoomOptions } from "@/features/multiplayer/RoomOptions";
 import { useActiveRoomBookmark } from "@/features/multiplayer/useActiveRoomBookmark";
 import { useRoomInviteControls } from "@/features/multiplayer/useRoomInviteControls";
 import { WhoWhatWhereMultiplayerView } from "@/features/whowhatwhere/multiplayer/WhoWhatWhereMultiplayerView";
@@ -104,8 +105,9 @@ export function RoomPageContent({
       >
         <p className="text-typ-body-relaxed text-destructive">{bindError}</p>
         <p className="mt-2 text-typ-ui text-muted-foreground">
-          If you just left, ask the host for the code and join again with the same display name if
-          the room is still in the lobby.
+          To resume your seat, use the original tab and its saved session. A name alone cannot
+          restore it. If that session is lost, ask the host to remove your away seat in Room
+          options, then join again from the home page.
         </p>
       </GameShell>
     );
@@ -163,7 +165,7 @@ export function SyncedRoomContent({
   }
 
   if (sync.phase === "playing") {
-    return <PlayingRoomView emitWithAck={emitWithAck} sync={sync} />;
+    return <PlayingRoomView emitWithAck={emitWithAck} sync={sync} connected={connected} />;
   }
 
   if (sync.phase === "lobby" && sync.lobby) {
@@ -197,13 +199,19 @@ export function SyncedRoomContent({
 export function PlayingRoomView({
   sync,
   emitWithAck,
+  connected = true,
 }: {
   readonly sync: RoomSyncPayload;
   readonly emitWithAck: EmitWithAck;
+  readonly connected?: boolean;
 }) {
+  const roomControls = sync.you.isHost ? (
+    <RoomOptions sync={sync} connected={connected} emitWithAck={emitWithAck} />
+  ) : null;
   const gameView = {
     hat: sync.hat ? (
       <HatMultiplayerView
+        roomControls={roomControls}
         emitWithAck={emitWithAck}
         isHost={sync.you.isHost}
         payload={sync.hat}
@@ -213,6 +221,7 @@ export function PlayingRoomView({
     ) : null,
     imposter: sync.imposter ? (
       <ImposterMultiplayerView
+        roomControls={roomControls}
         emitWithAck={emitWithAck}
         isHost={sync.you.isHost}
         payload={sync.imposter}
@@ -222,6 +231,7 @@ export function PlayingRoomView({
     ) : null,
     whowhatwhere: sync.www ? (
       <WhoWhatWhereMultiplayerView
+        roomControls={roomControls}
         emitWithAck={emitWithAck}
         isHost={sync.you.isHost}
         payload={sync.www}
@@ -231,6 +241,7 @@ export function PlayingRoomView({
     ) : null,
     drawnguess: sync.drawnguess ? (
       <DrawNGuessMultiplayerView
+        roomControls={roomControls}
         emitWithAck={emitWithAck}
         isHost={sync.you.isHost}
         payload={sync.drawnguess}

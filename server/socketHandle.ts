@@ -85,6 +85,7 @@ export function registerHandler<E extends SocketEventName>(
       }
 
       const { room, actor } = requireActor(socket, store);
+      if (room.starting) throw new Error("The game is starting. Wait a moment and try again.");
       const limiter = socket.data.rateLimiter as TokenBucketStore | undefined;
 
       if (limiter) {

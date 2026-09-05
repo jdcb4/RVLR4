@@ -7,6 +7,7 @@ import { registerHatHandlers } from "./socketHandlers/hat.ts";
 import { registerImposterHandlers } from "./socketHandlers/imposter.ts";
 import { registerLobbyHandlers } from "./socketHandlers/lobby.ts";
 import { registerReplayHandlers } from "./socketHandlers/replay.ts";
+import { registerRoomRecoveryHandlers } from "./socketHandlers/roomRecovery.ts";
 import {
   registerSessionHandlers,
   registerSocketConnectionGuard,
@@ -32,6 +33,7 @@ export function registerSocketHandlers(
     registerSessionHandlers(context, security);
     registerLobbyHandlers(context);
     registerReplayHandlers(context);
+    registerRoomRecoveryHandlers(context);
     registerWhoWhatWhereHandlers(context);
     registerHatHandlers(context);
     registerImposterHandlers(context);

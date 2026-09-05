@@ -1,5 +1,16 @@
 # Architecture — RVLRY
 
+## Room recovery
+
+Room options provide explicit lobby departure, host removal of away guests,
+and host lobby closure. Removal invalidates that seat's reconnect secret and
+Hat clue drafts; connected guests cannot be removed. A new HTTP join is away
+until its socket binds, and a matching display name never restores identity.
+During play, the host can confirm ending the match and return all players to
+the lobby. This clears live scores/turns/drawings and readiness while preserving
+players, teams, settings, and Hat lobby clues. There is no live-seat replacement
+or host transfer. Commands are locked during asynchronous match startup.
+
 ## Runtime shape
 
 **Vite React SPA** (`src/`) paired with a **Node HTTP server** (`server/index.ts`) that serves **`dist/`**, exposes REST endpoints under **`/api/*`**, and coordinates realtime gameplay via **Socket.IO**.

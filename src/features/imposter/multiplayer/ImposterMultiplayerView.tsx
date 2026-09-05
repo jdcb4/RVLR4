@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { MultiplayerGameShell } from "@/features/multiplayer/MultiplayerGameShell";
 import type { ImposterSyncDto } from "@/multiplayer/roomTypes";
@@ -20,6 +20,7 @@ export function ImposterMultiplayerView({
   viewerPlayerId,
   isHost,
   replaySync,
+  roomControls,
   emitWithAck,
 }: {
   readonly payload: ImposterSyncDto;
@@ -30,6 +31,7 @@ export function ImposterMultiplayerView({
     readonly acceptedIds: readonly string[];
     readonly cancelledByDisconnect: boolean;
   };
+  readonly roomControls?: ReactNode;
   readonly emitWithAck: EmitWithAck;
 }) {
   const step = payload.snapshot.step;
@@ -69,7 +71,7 @@ export function ImposterMultiplayerView({
   );
 
   return (
-    <MultiplayerGameShell footer={footer} title="Imposter">
+    <MultiplayerGameShell footer={footer} title="Imposter" headerRight={roomControls}>
       <ImposterMultiplayerBody
         error={error}
         isHost={isHost}

@@ -1,4 +1,10 @@
-import { type KeyboardEvent as ReactKeyboardEvent, useEffect, useRef, useState } from "react";
+import {
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { AccessibleCountdownValue } from "@/components/game/AccessibleCountdownValue";
 import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
@@ -37,6 +43,7 @@ type DrawNGuessViewProps = {
     readonly acceptedIds: readonly string[];
     readonly cancelledByDisconnect: boolean;
   };
+  readonly roomControls?: ReactNode;
   readonly emitWithAck: EmitWithAck;
 };
 
@@ -54,6 +61,7 @@ function DrawNGuessTurnView({
   viewerPlayerId,
   isHost,
   replaySync,
+  roomControls,
   emitWithAck,
 }: DrawNGuessViewProps) {
   const turnKey = drawNGuessTurnKey(payload);
@@ -162,7 +170,7 @@ function DrawNGuessTurnView({
   );
 
   return (
-    <MultiplayerGameShell footer={footer} title="DrawNGuess">
+    <MultiplayerGameShell footer={footer} title="DrawNGuess" headerRight={roomControls}>
       <DrawNGuessBody
         disabled={busy || !deadlineOpen}
         assignment={assignment}

@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.24.0 - 2026-09-05
+
+- **Room recovery:** Room options let guests leave, hosts remove away lobby
+  seats or close a lobby, and hosts end a stuck match and return everyone to
+  the lobby after confirmation. Removed seats lose their reconnect secrets
+  and Hat clue drafts. New seats count as away until a socket binds; joining
+  again with the same name creates a new seat. Match start locks competing
+  commands while its initial data loads.
+
 ## 0.23.1 - 2026-09-05
 
 - **Accessibility:** QR, app information, and team-move overlays use named

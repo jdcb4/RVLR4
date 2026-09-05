@@ -130,6 +130,10 @@ const imposterDispatchSchema = z.discriminatedUnion("type", [
 ]);
 
 export const socketSchemas = {
+  "lobby:leave": noPayloadSchema,
+  "lobby:hostClose": noPayloadSchema,
+  "lobby:hostRemovePlayer": z.object({ playerId: z.string().uuid() }).strict(),
+  "room:hostReturnToLobby": noPayloadSchema,
   "room:optOutResume": noPayloadSchema,
   "lobby:setReady": z.object({ ready: z.boolean() }).strict(),
   "lobby:setName": z.object({ name: normalizedNameSchema(32) }).strict(),

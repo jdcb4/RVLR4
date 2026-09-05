@@ -35,6 +35,7 @@ export function registerLobbyHandlers({ io, socket, store }: SocketHandlerContex
   const register = createSocketHandlerRegistrar({ io, socket, store });
 
   register("lobby:setReady", "Unable to update ready state.", async ({ room, actor }, payload) => {
+    if (room.phase !== "lobby") throw new Error("Ready state can only change in the lobby.");
     actor.ready = payload.ready;
     await broadcastRoom(io, store, room.code);
   });
@@ -150,10 +151,15 @@ export function registerLobbyHandlers({ io, socket, store }: SocketHandlerContex
     if (!actor.isHost) throw new Error("Only the host can start the match.");
     if (room.phase !== "lobby") throw new Error("This match already started.");
     assertRoomLobbyStartReady(room);
-    if (room.gameKind === "whowhatwhere") await startWhoWhatWhereMatch(room);
-    else if (room.gameKind === "hat") startHatMatch(room);
-    else if (room.gameKind === "imposter") startImposterMatch(room);
-    else if (room.gameKind === "drawnguess") startDrawNGuessMatch(room);
+    room.starting = true;
+    try {
+      if (room.gameKind === "whowhatwhere") await startWhoWhatWhereMatch(room);
+      else if (room.gameKind === "hat") startHatMatch(room);
+      else if (room.gameKind === "imposter") startImposterMatch(room);
+      else if (room.gameKind === "drawnguess") startDrawNGuessMatch(room);
+    } finally {
+      delete room.starting;
+    }
     mpDebug("match started", { code: room.code, gameKind: room.gameKind });
     await broadcastRoom(io, store, room.code);
   });

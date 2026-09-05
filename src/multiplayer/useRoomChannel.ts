@@ -49,7 +49,11 @@ export function loadSession(code: string): SessionCredentials | null {
 }
 
 export function clearSession(code: string) {
-  sessionStorage.removeItem(sessionKey(code));
+  try {
+    sessionStorage.removeItem(sessionKey(code));
+  } catch {
+    /* Best-effort cleanup. */
+  }
 }
 
 function sessionKey(code: string) {
@@ -152,6 +156,14 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
       setShuttingDown(true);
     };
 
+    const handleSessionEnded = (payload: { code: string }) => {
+      if (payload.code !== code.toUpperCase()) return;
+      clearSession(code);
+      setSync(null);
+      setBindError("You left this lobby in another tab. Join again to take a new seat.");
+      socket.disconnect();
+    };
+
     const handleConnectError = () => {
       setConnected(false);
       setBindError("Could not connect to the room. Check your connection, then retry.");
@@ -162,6 +174,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
     socket.on("disconnect", handleDisconnect);
     socket.on("room:sync", handleSync);
     socket.on("server:shuttingDown", handleShutdown);
+    socket.on("session:ended", handleSessionEnded);
 
     if (socket.connected) {
       bindSession();
@@ -176,6 +189,7 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
       socket.off("disconnect", handleDisconnect);
       socket.off("room:sync", handleSync);
       socket.off("server:shuttingDown", handleShutdown);
+      socket.off("session:ended", handleSessionEnded);
       socket.disconnect();
     };
   }, [code, enabled, socket]);

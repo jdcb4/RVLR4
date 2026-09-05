@@ -11,6 +11,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
 import { requestSocketAck } from "@/services/networkRequests";
 
+import { startHatMatch } from "./hatRuntime.ts";
 import { handleJsonBodyError, registerHttpRoutes } from "./httpRoutes.ts";
 import { createCorsOriginValidator } from "./originPolicy.ts";
 import { RoomStore } from "./roomStore.ts";
@@ -282,6 +283,110 @@ describe("multiplayer smoke", () => {
 
   afterEach(async () => {
     await harness.close();
+  });
+
+  it("removes only away lobby seats and recovers capacity without reusing identity", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "hat");
+    const [owner, present] = await bindAllClients(harness.url, [host, guests[0]!]);
+    const room = harness.store.getRoom(host.code)!;
+    const abandoned = guests[1]!;
+    const oldName = room.players.get(abandoned.playerId)!.name;
+    try {
+      expect(room.players.get(abandoned.playerId)?.disconnectedAt).toEqual(expect.any(Number));
+      expect(
+        (await emitAck(present!.socket, "lobby:hostRemovePlayer", { playerId: abandoned.playerId }))
+          .ok,
+      ).toBe(false);
+      expect(
+        (await emitAck(owner!.socket, "lobby:hostRemovePlayer", { playerId: guests[0]!.playerId }))
+          .ok,
+      ).toBe(false);
+      expect(
+        (await emitAck(owner!.socket, "lobby:hostRemovePlayer", { playerId: host.playerId })).ok,
+      ).toBe(false);
+      for (let index = room.players.size; index < 12; index += 1)
+        harness.store.joinRoom({ code: room.code, name: `Extra ${index}` });
+      await expect(
+        postJson(`${harness.url}/api/rooms/${room.code}/join`, { name: oldName }),
+      ).rejects.toThrow();
+      expect(
+        await emitAck(owner!.socket, "lobby:hostRemovePlayer", { playerId: abandoned.playerId }),
+      ).toEqual({ ok: true });
+      expect(room.hatClueDrafts?.[abandoned.playerId]).toBeUndefined();
+      expect(harness.store.authenticate(abandoned)).toBeNull();
+      const replacement = await postJson<Credentials>(
+        `${harness.url}/api/rooms/${room.code}/join`,
+        { name: oldName },
+      );
+      expect(replacement.playerId).not.toBe(abandoned.playerId);
+      expect(room.players.size).toBe(12);
+      expect(room.players.get(guests[0]!.playerId)?.disconnectedAt).toBeNull();
+    } finally {
+      owner!.socket.disconnect();
+      present!.socket.disconnect();
+    }
+  });
+
+  it("explicit guest departure invalidates every tab of that seat and preserves peers", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "hat");
+    const bounds = await bindAllClients(harness.url, [host, guests[0]!, guests[0]!]);
+    const room = harness.store.getRoom(host.code)!;
+    try {
+      const ended = new Promise((resolve) => bounds[2]!.socket.once("session:ended", resolve));
+      expect(await emitAck(bounds[1]!.socket, "lobby:leave", undefined)).toEqual({ ok: true });
+      expect(await ended).toEqual({ code: room.code });
+      expect(room.players.has(guests[0]!.playerId)).toBe(false);
+      expect(harness.store.authenticate(guests[0]!)).toBeNull();
+      expect((await emitAck(bounds[2]!.socket, "lobby:setReady", { ready: true })).ok).toBe(false);
+      expect(room.players.get(host.playerId)?.disconnectedAt).toBeNull();
+      expect((await emitAck(bounds[0]!.socket, "lobby:leave", undefined)).ok).toBe(false);
+    } finally {
+      bounds.forEach(({ socket }) => socket.disconnect());
+    }
+  });
+
+  it("lets only the host end an active match and later close the lobby", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "hat");
+    const bounds = await bindAllClients(harness.url, [host, ...guests]);
+    const room = harness.store.getRoom(host.code)!;
+    try {
+      for (const player of room.players.values()) {
+        room.hatClueDrafts![player.id] = Array.from(
+          { length: 6 },
+          (_, index) => `${player.name} ${index}`,
+        );
+        player.ready = true;
+      }
+      const clues = structuredClone(room.hatClueDrafts);
+      startHatMatch(room);
+      expect(
+        (
+          await emitAck(bounds[0]!.socket, "lobby:hostRemovePlayer", {
+            playerId: guests[0]!.playerId,
+          })
+        ).ok,
+      ).toBe(false);
+      expect((await emitAck(bounds[1]!.socket, "lobby:leave", undefined)).ok).toBe(false);
+      expect((await emitAck(bounds[1]!.socket, "room:hostReturnToLobby", undefined)).ok).toBe(
+        false,
+      );
+      expect(await emitAck(bounds[0]!.socket, "room:hostReturnToLobby", undefined)).toEqual({
+        ok: true,
+      });
+      expect(room.phase).toBe("lobby");
+      expect(room.hatSession).toBeUndefined();
+      expect(room.hatClueDrafts).toEqual(clues);
+      expect([...room.players.values()].every((player) => !player.ready)).toBe(true);
+      expect((await emitAck(bounds[1]!.socket, "lobby:hostClose", undefined)).ok).toBe(false);
+      room.starting = true;
+      expect((await emitAck(bounds[0]!.socket, "lobby:hostClose", undefined)).ok).toBe(false);
+      expect(room.phase).toBe("lobby");
+      delete room.starting;
+      expect(await emitAck(bounds[0]!.socket, "lobby:hostClose", undefined)).toEqual({ ok: true });
+      expect(room.phase).toBe("ended");
+    } finally {
+      bounds.forEach(({ socket }) => socket.disconnect());
+    }
   });
 
   it("replaces a cancelled replay after all players return and rejects stale acceptances", async () => {

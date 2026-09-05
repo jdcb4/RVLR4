@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { GameSpecificLobbySections } from "@/features/multiplayer/GameSpecificLobbySections";
 import { LobbyInviteSection, QrJoinDialog } from "@/features/multiplayer/LobbyInviteSection";
 import { LobbyTeamsSection } from "@/features/multiplayer/LobbyTeamsSection";
+import { RoomOptions } from "@/features/multiplayer/RoomOptions";
 import { cn } from "@/lib/utils";
 import type { LobbyDto, LobbyPlayerDto, RoomSyncPayload } from "@/multiplayer/roomTypes";
 
@@ -53,6 +54,7 @@ export function RoomLobbyView({
   return (
     <>
       <GameShell
+        headerRight={<RoomOptions sync={sync} connected={connected} emitWithAck={emitWithAck} />}
         footer={
           isHost ? (
             <div className="flex w-full flex-col gap-2">

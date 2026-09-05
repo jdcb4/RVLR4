@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
 import { getCountdownSeconds } from "@/domain/hat-game/time";
@@ -21,6 +21,7 @@ export function HatMultiplayerView({
   viewerPlayerId,
   isHost,
   replaySync,
+  roomControls,
 }: {
   readonly payload: HatSyncDto;
   readonly viewerPlayerId: string;
@@ -30,6 +31,7 @@ export function HatMultiplayerView({
     readonly acceptedIds: readonly string[];
     readonly cancelledByDisconnect: boolean;
   };
+  readonly roomControls?: ReactNode;
   readonly emitWithAck: EmitWithAck;
 }) {
   const session = payload.session;
@@ -78,7 +80,12 @@ export function HatMultiplayerView({
           onShowScoresPane={() => setShowScoresPane(true)}
         />
       }
-      headerRight={headerRight}
+      headerRight={
+        <>
+          {headerRight}
+          {roomControls}
+        </>
+      }
       title="Hat Game"
     >
       <HatMultiplayerBody

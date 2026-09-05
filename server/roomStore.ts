@@ -53,6 +53,8 @@ export type Room = {
   /** Updated whenever the room is broadcast after a meaningful change (see `broadcastRoom`). */
   lastActivityAt: number;
   phase: RoomPhase;
+  /** Locks mutations while the initial word pack is being loaded. */
+  starting?: boolean;
   /** 2–4 for team games; Imposter stores `0` (unused). */
   teamCount: number;
   /** One display name per team bench (team games only). */
@@ -201,7 +203,7 @@ export class RoomStore {
       isHost: true,
       teamIndex: isTeamGame(args.gameKind) ? 0 : null,
       ready: false,
-      disconnectedAt: null,
+      disconnectedAt: Date.now(),
       optedOutOfResume: false,
     };
 
@@ -246,7 +248,7 @@ export class RoomStore {
       isHost: false,
       teamIndex: null,
       ready: false,
-      disconnectedAt: null,
+      disconnectedAt: Date.now(),
       optedOutOfResume: false,
     };
 
@@ -419,6 +421,17 @@ export function resetLobbyAfterReplay(room: Room): void {
   if (room.gameKind === "imposter") {
     clampImposterLobbyCounts(room);
   }
+}
+
+/** Lobby-only removal invalidates the reconnect secret and game-owned drafts. */
+export function removeLobbyGuest(room: Room, playerId: string): void {
+  if (room.phase !== "lobby") throw new Error("Players can only leave in the lobby.");
+  const player = room.players.get(playerId);
+  if (!player) throw new Error("This seat is already gone.");
+  if (player.isHost) throw new Error("The host must close the lobby instead.");
+  room.players.delete(playerId);
+  if (room.hatClueDrafts) delete room.hatClueDrafts[playerId];
+  clampImposterLobbyCounts(room);
 }
 
 /** Validates minimum players per team when starting (called from game layer). */

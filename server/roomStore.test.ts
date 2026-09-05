@@ -354,13 +354,15 @@ describe("computeResumeEligible", () => {
     });
     room.phase = "playing";
     hostPlayer.optedOutOfResume = true;
+    hostPlayer.disconnectedAt = null;
 
     expect(computeResumeEligible(room)).toBe(false);
   });
 
   it("returns true when at least one connected player has not opted out", () => {
     const store = new RoomStore();
-    const { room } = store.createRoom({ gameKind: "hat", hostName: "Host" });
+    const { room, hostPlayer } = store.createRoom({ gameKind: "hat", hostName: "Host" });
+    hostPlayer.disconnectedAt = null;
     room.phase = "playing";
 
     expect(computeResumeEligible(room)).toBe(true);
@@ -502,6 +504,7 @@ describe("RoomStore.peek", () => {
     expect(lower?.code).toBe(room.code);
     expect(lower?.resumeEligible).toBe(false); // still lobby
 
+    room.players.get(room.hostId)!.disconnectedAt = null;
     room.phase = "playing";
     expect(store.peek(room.code)?.resumeEligible).toBe(true);
   });

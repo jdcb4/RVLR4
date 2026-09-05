@@ -80,6 +80,10 @@ function registerSessionBind(
       }
       player.disconnectedAt = null;
       const room = store.getRoom(code);
+      if (room?.players.get(player.id) !== player) {
+        await releaseRoomSocket(io, socket, store);
+        throw new Error("This seat no longer exists. Ask the host for a new invitation.");
+      }
       if (room && [...room.players.values()].every((member) => member.disconnectedAt === null)) {
         delete room.replayCancelledByDisconnect;
       }

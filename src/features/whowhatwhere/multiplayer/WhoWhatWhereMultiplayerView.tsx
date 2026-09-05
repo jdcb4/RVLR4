@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
 import { getSecondsLeft } from "@/domain/whowhatwhere/game";
@@ -20,6 +20,7 @@ export function WhoWhatWhereMultiplayerView({
   viewerPlayerId,
   isHost,
   replaySync,
+  roomControls,
 }: {
   readonly payload: WhoWhatWhereSyncDto;
   readonly viewerPlayerId: string;
@@ -29,6 +30,7 @@ export function WhoWhatWhereMultiplayerView({
     readonly acceptedIds: readonly string[];
     readonly cancelledByDisconnect: boolean;
   };
+  readonly roomControls?: ReactNode;
   readonly emitWithAck: EmitWithAck;
 }) {
   const match = payload.match;
@@ -78,7 +80,12 @@ export function WhoWhatWhereMultiplayerView({
           onShowScoresPane={() => setShowScoresPane(true)}
         />
       }
-      headerRight={headerRight}
+      headerRight={
+        <>
+          {headerRight}
+          {roomControls}
+        </>
+      }
       title="Who What Where"
     >
       <WhoWhatWhereMultiplayerBody
