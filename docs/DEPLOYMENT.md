@@ -94,6 +94,12 @@ Railway references:
 
 ## Production environment variables
 
+For the current **dev** environment, `CLIENT_ORIGIN` includes
+`https://rvlry-dev.jboxgames.com,https://rvlry-dev.up.railway.app`. Keep this
+aligned with the service's public domains. A missing custom domain can leave
+health checks green while browser asset requests and room entry fail with 403;
+always test with that domain's `Origin` header and with a real browser.
+
 - **`CLIENT_ORIGIN`** — comma-separated allow-list of browser origins
   (for example, `https://app.example.com,https://www.example.com`). This is
   required in production. Values must be exact HTTP(S) origins without paths,

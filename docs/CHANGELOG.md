@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.24.11
+
+- Align Railway dev's exact origin allow-list with its custom public domain,
+  preserving the generated domain. Browser asset requests and room entry can
+  now use `rvlry-dev.jboxgames.com`; the runbook checks browser origins as well
+  as the health endpoint. Production configuration is unchanged.
+
 ## 0.24.10
 
 - Keep keyboard focus inside room recovery confirmations when their content
