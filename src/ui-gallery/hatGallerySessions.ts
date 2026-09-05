@@ -4,7 +4,7 @@ import { buildDefaultSetup } from "@/domain/hat-game/setup";
 import type { ClueSubmissionMap, HatGameSession } from "@/domain/hat-game/types";
 
 /** Deterministic options aligned with `domain/hat-game/engine.test.ts`. */
-export const galleryHatActionOpts = {
+const galleryHatActionOpts = {
   rng: () => 0.5,
   nowMs: () => Date.UTC(2026, 5, 10, 12, 0, 0),
   toIso: (timestamp: number) => new Date(timestamp).toISOString(),
@@ -19,7 +19,7 @@ function unwrap<T>(result: T | { error: string }): T {
   return result as T;
 }
 
-export function makeGalleryClueSubmissions(
+function makeGalleryClueSubmissions(
   players: readonly { readonly id: string }[],
 ): ClueSubmissionMap {
   return Object.fromEntries(
@@ -42,7 +42,7 @@ export function getGalleryHatSetup() {
   return { teams, players, clueSubmissions };
 }
 
-export function hatGalleryBaseSession(): HatGameSession {
+function hatGalleryBaseSession(): HatGameSession {
   const { teams, players, clueSubmissions } = getGalleryHatSetup();
   return createHatGameSession({
     teams,
@@ -62,7 +62,7 @@ export function hatGallerySessionReadyWithSummary(): HatGameSession {
   return session;
 }
 
-export function hatGallerySessionMidTurn(): HatGameSession {
+function hatGallerySessionMidTurn(): HatGameSession {
   return unwrap(
     applyHatGameAction(hatGalleryBaseSession(), { type: "start-turn" }, galleryHatActionOpts),
   );

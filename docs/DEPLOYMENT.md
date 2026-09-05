@@ -101,7 +101,8 @@ Railway references:
   for navigation, health checks, and non-browser clients.
 - **`PORT`** — defaults to `3001`; Railway supplies this for the service.
 - **`MULTIPLAYER_DEBUG`** — set to `1` or `true` only while diagnosing room
-  lifecycle issues. Logs may contain room codes and player IDs, never secrets.
+  lifecycle issues. Logs use allow-listed metadata and exclude room codes,
+  player identities, secrets, and game content.
 
 ## Generic Node hosts
 
@@ -152,7 +153,8 @@ those limits or adding capacity. See the drawing byte budgets in [DRAWNGUESS.md]
    deployment is unavailable, revert the bad commit through the normal branch
    review flow and let GitHub source deployment build the revert.
 4. Check `/api/health` for 200 and the expected version, open the home page,
-   then create and join a new room from two separate browsers. Start one game,
+   and reload open browsers so their client assets match the restored server.
+   Then create and join a new room from two separate browsers. Start one game,
    reconnect a guest, and verify the next action succeeds.
 5. Confirm old rooms show recovery navigation. Rollback does **not** restore
    their in-memory data. Share a fresh room code with the players.

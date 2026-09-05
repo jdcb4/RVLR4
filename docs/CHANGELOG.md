@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.24.9
+
+- Correct Fallow's entry graph to scan actual app/server/gallery entry points,
+  tests, and scripts. Remove the unused client environment wrapper, obsolete
+  nginx configuration, four icons, setup helper, sound wrapper, unused types,
+  and unnecessary exports. Keep separate game-domain contracts and live routes.
+- Align the screen map, multiplayer QA, configuration/security guidance, and
+  persistence policy with current routes, private per-device reveals, validated
+  browser saves, and single-process multiplayer storage.
+- Restrict optional multiplayer debug output to operational counts, game kind,
+  and cleanup reasons; remove room codes and player identifiers from its calls.
+
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
 ## 0.24.8 - 2026-09-05

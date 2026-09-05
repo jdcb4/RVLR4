@@ -42,15 +42,6 @@ export function IconSkipForward(props: IconProps) {
   );
 }
 
-export function IconX(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  );
-}
-
 export function IconPlus(props: IconProps) {
   return (
     <svg {...iconProps(props)}>
@@ -170,39 +161,6 @@ export function IconArrowLeftRight(props: IconProps) {
       <path d="m5 9-3 3 3 3" />
       <path d="M16 12h5" />
       <path d="m19 9 3 3-3 3" />
-    </svg>
-  );
-}
-
-export function IconSparkles(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z" />
-    </svg>
-  );
-}
-
-export function IconTheatre(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M7 4v16" />
-      <path d="M17 4v16" />
-      <path d="M3 8h4" />
-      <path d="M17 8h4" />
-      <path d="M3 16h4" />
-      <path d="M17 16h4" />
-      <path d="M7 12h10" />
-    </svg>
-  );
-}
-
-export function IconMask(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M2 12a10 10 0 1 0 20 0 10 10 0 1 0-20 0" />
-      <path d="M8 10h.01" />
-      <path d="M16 10h.01" />
-      <path d="M9.5 15.5c.5 1 1.5 1.5 2.5 1.5s2-.5 2.5-1.5" />
     </svg>
   );
 }

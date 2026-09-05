@@ -6,7 +6,7 @@ Detailed reference for AI agents working in this project. Load on demand — not
 
 - **TypeScript** strict mode, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`. Path alias `@/*` → `src/*`.
 - **Package manager** pnpm 9+. Do not switch to npm or yarn without a `docs/DECISIONS.md` entry.
-- **Build** Vite (or framework-specific equivalent — Cloudflare Workers uses Wrangler).
+- **Build** Vite for the browser; `tsx` runs the Express/Socket.IO server.
 - **Lint/format** ESLint flat config + Prettier. Errors fail CI; warnings should be cleaned before merge.
 - **Test** Vitest + React Testing Library. `jsdom` for component tests; `node` for domain/server tests.
 - **Validation** Zod everywhere external input lands.
@@ -65,11 +65,14 @@ Do not blindly follow these tools. False positives are common for framework entr
 
 ## Persistence policy
 
-1. **Default to JSON files** in `src/data/`. Validate on read with a Zod schema. This covers most small projects.
-2. **Move to SQLite + Drizzle** when relational queries, transactions, or larger datasets become awkward in JSON.
-3. **Move to Postgres + Drizzle** when concurrency, advanced queries, or production scale demand it.
+- Curated content is validated JSON in `src/data/`.
+- Multiplayer sessions live only in one Node process's RAM. Do not add a database
+  without explicit approval of that scope and a `docs/DECISIONS.md` entry.
+- Browser snapshots and reconnect credentials use the adapters and versioned
+  validators documented in [PERSISTENCE.md](PERSISTENCE.md).
 
-Every move between tiers needs a `docs/DECISIONS.md` entry and migration logic that handles existing data.
+Any storage change must justify its user benefit and describe migration and
+recovery. No ORM or future database stack is prescribed for this application.
 
 ## Persistence and schema changes
 

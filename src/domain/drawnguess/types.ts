@@ -14,7 +14,6 @@ export const DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES = 192 * 1_024;
 export type DrawNGuessPromptMode = "predetermined" | "custom";
 export type DrawNGuessTurnMode = "custom-prompt" | "drawing" | "guessing";
 export type DrawNGuessPhase = "custom-prompt" | "turn" | "reveal" | "complete";
-export type DrawNGuessEntryType = "prompt" | "drawing" | "guess";
 
 export type DrawNGuessSettings = {
   readonly startingPromptMode: DrawNGuessPromptMode;

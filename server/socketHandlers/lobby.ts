@@ -160,7 +160,7 @@ export function registerLobbyHandlers({ io, socket, store }: SocketHandlerContex
     } finally {
       delete room.starting;
     }
-    mpDebug("match started", { code: room.code, gameKind: room.gameKind });
+    mpDebug("match started", { gameKind: room.gameKind });
     await broadcastRoom(io, store, room.code);
   });
 }

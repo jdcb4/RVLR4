@@ -4,7 +4,7 @@ let storageNotice: string | null = null;
 let dismissedNotice: string | null = null;
 const listeners = new Set<() => void>();
 
-export function reportStorageIssue(message: string) {
+function reportStorageIssue(message: string) {
   if (storageNotice === message || dismissedNotice === message) return;
   dismissedNotice = null;
   storageNotice = message;

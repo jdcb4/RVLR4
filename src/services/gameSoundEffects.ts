@@ -14,7 +14,7 @@ export type GameSoundEffect =
   | "phaseOneWord"
   | "phaseCharades";
 
-export const GAME_SOUND_MAP = {
+const GAME_SOUND_MAP = {
   correct: "success",
   skip: "droplet",
   returnSkipped: "page",

@@ -135,7 +135,7 @@ function HatFinalResultsSection({
   );
 }
 
-export function HatReadyMultiplayerBody({
+function HatReadyMultiplayerBody({
   session,
   payload,
   error,

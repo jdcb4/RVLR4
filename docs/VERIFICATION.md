@@ -31,8 +31,9 @@ pnpm run test:coverage
 ```
 
 Coverage uses Vitest's Istanbul adapter and emits text, HTML, and
-`coverage/coverage-final.json` in the format Fallow consumes. Projection and
-sync modules require 95% lines/statements, 100% functions, and 90% branches;
+`coverage/coverage-final.json` in the format Fallow consumes. Projection, sync,
+and drawing-gallery cache/merge modules require 95% lines/statements, 100%
+functions, and 90% branches;
 boundary schemas, reconnect-secret comparison, and the limiter require 100%
 lines/statements/functions and 90% branches. Fake-clock tests cover all server
 turn tickers, room cleanup, limiter cleanup, and shutdown health state.
@@ -51,7 +52,11 @@ The default combined run includes **health** (cyclomatic / CRAP heuristics). Lar
 pnpm run fallow:hygiene
 ```
 
-If Fallow is unavailable, record that it was skipped and perform a local code-quality review before running the deterministic checks. Fallow 2.x reads `.fallowrc.json`: use **`entry`** (glob list of entry points, including tests/scripts) and **`ignorePatterns`** — the old `entrypoints` / `ignore` keys are no longer accepted.
+If Fallow is unavailable, record that it was skipped and perform a local code-quality review before running the deterministic checks. Fallow reads `.fallowrc.json`: use **`entry`** and **`ignorePatterns`**. Entries name the browser, UI gallery, server, tests, and scripts; never mark all source files as entries, which hides unreachable files and unused exports. Include `.mts` scripts. Framework configuration entries are also detected by plugins.
+
+Hat and Who What Where intentionally define separate `Player`, `Team`, and
+`ActiveTurn` types. Their modules use direct imports without an ambiguous shared
+barrel; scoped duplicate-export comments preserve those game-owned contracts.
 
 Fallow may classify `tailwindcss` as an unused production dependency because
 it executes during Vite/PostCSS builds rather than from application imports.

@@ -106,7 +106,7 @@ Use **semantic theme tokens** for tinted surfaces, soft borders, scrims, and dev
 - `src/domain` — framework-independent business rules. Free of React, IO, and database imports.
 - `src/services` — IO wrappers (storage, HTTP, filesystem).
 - `src/data` — local data, JSON files, fixtures.
-- `src/config` — typed config + environment parsing (Zod).
+- `src/config` — typed game defaults, roster limits, and product metadata.
 - `src/lib` — small generic helpers without domain knowledge.
 - `src/tests` — shared test utilities and integration tests.
 
@@ -120,18 +120,14 @@ Use **semantic theme tokens** for tinted surfaces, soft borders, scrims, and dev
 
 ## Persistence
 
-Default: curated static game content lives in JSON files under `src/data/` and
+Curated static game content lives in JSON files under `src/data/` and
 is parsed once through game-owned Zod loaders. Large content, such as the Who
 What Where deck, stays behind a dynamic loader so it is not part of the initial
-client bundle. Move to a database only when JSON is unsuitable, and document
-the migration in `docs/DECISIONS.md`.
-
-When a database is needed:
-
-- Drizzle ORM, with SQLite for development and Postgres for production.
-- Schemas in `src/db/schema.ts` (or `apps/server/src/db/schema.ts` in monorepo presets).
-- Migrations in `drizzle/`.
-- Seed scripts under `scripts/`.
+client bundle. Multiplayer rooms live in process memory; browser saves and
+credentials use the validated adapters in [PERSISTENCE.md](PERSISTENCE.md).
+There is no database or ORM. Adding durable multiplayer storage requires an
+explicitly approved scope and a `docs/DECISIONS.md` entry describing the actual
+need, migration, and recovery contract; no database stack is preselected.
 
 ## Validation
 
@@ -160,7 +156,10 @@ games into a generic reducer or hook.
 
 ## Configuration
 
-Environment variables flow through Zod: **`src/config/env.ts`** (Vite client) and **`server/env.ts`** (Node server). Missing or malformed values must fail fast at startup.
+Node environment variables are validated at startup in **`server/env.ts`**.
+The client uses Vite's built-in values, including `BASE_URL`, and has no custom
+environment schema. If a future feature adds `VITE_*` input, validate it where
+the client configuration is consumed and remember it is public build output.
 
 ## Testing
 

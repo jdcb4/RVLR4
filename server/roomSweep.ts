@@ -49,7 +49,6 @@ async function sweepIdleRooms(io: Server, store: RoomStore) {
       store.deleteRoom(code);
 
       mpDebug("room swept (idle)", {
-        code,
         empty,
         staleByActivity,
         staleByEveryoneAway,

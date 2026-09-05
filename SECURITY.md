@@ -12,8 +12,12 @@ These rules apply to all contributors, including AI agents.
 
 - Never commit secrets, API keys, tokens, certificates, or production credentials.
 - Use `.env.local` for local secrets. It is gitignored.
-- Validate every environment variable through a Zod schema in `src/config/env.ts` (client) or `server/env.ts` (Node) so missing or malformed values fail fast at startup.
-- Optional **`MULTIPLAYER_DEBUG`** on the server logs `[multiplayer]` lifecycle events for troubleshooting. Do not collect or ship those logs without consent; they may include room codes and player IDs (never session secrets).
+- Validate Node environment input through `server/env.ts` so malformed values
+  fail fast. The browser currently uses only Vite built-ins. Validate any future
+  custom `VITE_*` configuration at its consumer; all client values are public.
+- Optional **`MULTIPLAYER_DEBUG`** logs allow-listed lifecycle metadata for
+  troubleshooting. It follows the same secret-free operational log boundary
+  below; room codes and player identities must never be added to it.
 
 ### Dependencies
 

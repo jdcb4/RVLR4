@@ -1,3 +1,5 @@
+// fallow-ignore-file duplicate-export
+// Player, Team, and ActiveTurn are game-specific types with direct imports; no shared barrel.
 export const CATEGORIES = ["What", "Who", "Where"] as const;
 
 export type Category = (typeof CATEGORIES)[number];

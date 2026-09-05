@@ -82,7 +82,7 @@ export function registerHttpRoutes(
         avatarId: body.avatarId,
       });
 
-      mpDebug("room created", { code: room.code, gameKind: room.gameKind });
+      mpDebug("room created", { gameKind: room.gameKind });
 
       response.status(201).json({
         code: room.code,
@@ -137,7 +137,6 @@ export function registerHttpRoutes(
       const { room, player } = store.joinRoom({ code, name: body.name, avatarId: body.avatarId });
 
       mpDebug("player joined", {
-        code: room.code,
         gameKind: room.gameKind,
         playerCount: room.players.size,
       });

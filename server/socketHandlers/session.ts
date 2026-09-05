@@ -113,7 +113,7 @@ function registerSessionBind(
         delete room.replayCancelledByDisconnect;
       }
       await broadcastRoom(io, store, code);
-      mpDebug("session bound", { code, playerId: player.id });
+      mpDebug("session bound");
       ack?.({ ok: true });
     } catch (error) {
       reportSocketFailure("session:bind", error);

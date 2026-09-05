@@ -5,11 +5,16 @@ Implementation hints refer to components under `src/features/` unless noted.
 
 ---
 
-## Hub (`/`)
+## Multiplayer entry and shared room
 
-| Name                   | Description                                                                                      |
-| ---------------------- | ------------------------------------------------------------------------------------------------ |
-| **Game picker (home)** | Lists Who What Where, Hat Game, Imposter cards; entry to each game route. Component: `HomePage`. |
+| Name                                 | Description                                                                                                            |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| **Multiplayer home (`/`)**           | Join by code or host Who What Where, Hat Game, Imposter, or DrawNGuess. Component: `MultiplayerHomePage`.              |
+| **Name entry (`/name`)**             | Display name, avatar, and HTTP host/join handshake. Component: `EnterNamePage`.                                        |
+| **Room (`/room/:code`)**             | Shared lobby, invites, readiness, team/settings controls, and game-specific playing view. Component: `RoomPage`.       |
+| **Room options**                     | Guest lobby departure, host removal of away guests, lobby closure, or confirmed match reset. Component: `RoomOptions`. |
+| **Recovery screens**                 | Unknown routes offer Home; route errors offer Reload/Home; lost rooms explain session loss and offer a new room.       |
+| **Pass-and-play hub (`/passnplay`)** | Three single-device game routes below. Component: `PassNPlayHubPage`; `/legacy` redirects here.                        |
 
 ---
 
@@ -54,7 +59,7 @@ Screen assembly: **`buildHatSingleplayerScreen`** in `HatSingleplayerWebScreens.
 
 ## Imposter (`/games/imposter`)
 
-Rendered inside **`GameShell`**. Flow is driven by **`ImposterSnapshot.step`** (`imposterSingleplayerAppTypes`). Winner/final-guess rules stay at the table — the app only orchestrates timing and reveals.
+Rendered inside **`GameShell`**. Flow is driven by **`ImposterSnapshot.step`** (`domain/imposter/types`). Winner/final-guess rules stay at the table — the app only orchestrates timing and reveals.
 
 | Name                             | Description                                                                                                                                                    |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |

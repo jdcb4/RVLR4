@@ -31,15 +31,12 @@ import {
   startHatSession,
 } from "@/features/hat-game/hatSingleplayerTransitions";
 import { useHatTurnLifecycle } from "@/features/hat-game/useHatTurnLifecycle";
-import { formatSavedAt } from "@/lib/formatSavedAt";
 import { playSoundCue } from "@/services/hatSound";
 import { clearSavedState, loadSavedState, saveState } from "@/services/hatStorage";
 
 import packageJson from "../../../package.json";
 
 const createEmptyClues = () => Array.from({ length: GAME_DEFAULTS.cluesPerPlayer }, () => "");
-
-export { formatSavedAt };
 
 const isError = (value: unknown): value is { error: string } =>
   Boolean(value && typeof value === "object" && "error" in value);

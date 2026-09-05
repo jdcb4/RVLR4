@@ -35,12 +35,12 @@ Environment variables are documented in `docs/DEPLOYMENT.md`. Optional diagnosti
 
 ## Imposter
 
-| Step | Action               | Expected                                              |
-| ---- | -------------------- | ----------------------------------------------------- |
-| I1   | Ready + start        | Reveal step; only subject sees role tap sequence      |
-| I2   | Pass-the-phone       | Each player completes reveal; then host guide screens |
-| I3   | Host advances guides | Pregame → discussion → warning → results              |
-| I4   | Results              | Imposter names + word shown; matches dealt round      |
+| Step | Action                                              | Expected                                                                           |
+| ---- | --------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| I1   | Ready + start                                       | Each device shows only its own reveal prompt; role/word stays private until tapped |
+| I2   | Each player confirms their role on their own device | Host guide unlocks after all confirms; no pass-the-phone handoff in multiplayer    |
+| I3   | Host advances guides                                | Pregame → discussion → warning → results                                           |
+| I4   | Results                                             | Imposter names + word shown; matches dealt round                                   |
 
 ## DrawNGuess
 
@@ -54,6 +54,22 @@ Environment variables are documented in `docs/DEPLOYMENT.md`. Optional diagnosti
 | D6   | Guessing turn                                     | Player sees only the assigned drawing and can submit/edit before deadline                                 |
 | D7   | Presentation                                      | Each player sees only their own book and can page through it locally                                      |
 | D8   | Final gallery                                     | Player selector opens any book with the page-by-page display; export/share preserves drawing aspect ratio |
+| D9   | Edit while another player submits or reconnects   | Local text, whitespace, and in-progress drawing stay intact; stale-turn requests fail                     |
+| D10  | Dense drawing and slow draft acknowledgement      | Input stops at the shared limit with a notice; Undo/Clear recover; only one draft request is in flight    |
+| D11  | Reload final gallery and change replay votes      | Reload restores all books; routine updates reuse cached packets without changing the displayed gallery    |
+
+## Recovery and keyboard access
+
+| Step | Action                                                                  | Expected                                                                                                      |
+| ---- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| R1   | Open QR, About, move-player, and room-options dialogs with the keyboard | Named dialog, Close focus, background controls inert, Escape closes and restores the opener                   |
+| R2   | Navigate away with another tab still bound, then close the last tab     | Seat stays online until its last connection leaves; no stale room updates                                     |
+| R3   | Guest leaves lobby; host removes an away guest                          | Seat is freed, old credentials cannot restore it, remaining players can start                                 |
+| R4   | Host ends a match through Room options                                  | Confirmation names discarded progress; everyone returns to lobby with roster/settings preserved               |
+| R5   | Disconnect during replay, reconnect, and offer again                    | Old offer is cancelled; a fresh offer can be accepted by every player                                         |
+| R6   | Replace the local server with an active room open                       | Reconnect explains that the room is gone, clears stale credentials, and offers a new room                     |
+| R7   | Visit an unknown route or encounter a route load error                  | Home/Reload recovery works without a blank page                                                               |
+| R8   | Use option selectors and DrawNGuess text entry                          | Selected state is exposed, inputs have labels, errors are associated, routine room updates do not steal focus |
 
 ## Production-shaped check (optional)
 

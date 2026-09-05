@@ -593,7 +593,7 @@ function entryFromSubmission(
   };
 }
 
-export function createNoResponseDrawing(): DrawNGuessDrawing {
+function createNoResponseDrawing(): DrawNGuessDrawing {
   return {
     format: "placeholder-v1",
     text: "No response submitted",

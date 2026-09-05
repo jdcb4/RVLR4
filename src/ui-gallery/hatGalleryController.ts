@@ -101,7 +101,7 @@ function hatGallerySetupPrefs(): Pick<AppSnapshot, "turnDurationSeconds" | "skip
   };
 }
 
-export function hatSnapshotLanding(): AppSnapshot {
+function hatSnapshotLanding(): AppSnapshot {
   return {
     step: "landing",
     teamEditIndex: 0,
@@ -118,7 +118,7 @@ export function hatSnapshotLanding(): AppSnapshot {
   };
 }
 
-export function hatSnapshotSettings(): AppSnapshot {
+function hatSnapshotSettings(): AppSnapshot {
   return {
     step: "settings",
     teamEditIndex: 0,
@@ -135,7 +135,7 @@ export function hatSnapshotSettings(): AppSnapshot {
   };
 }
 
-export function hatSnapshotTeam(teamEditIndex: number): AppSnapshot {
+function hatSnapshotTeam(teamEditIndex: number): AppSnapshot {
   const { teams, players, clueSubmissions } = getGalleryHatSetup();
   return {
     step: "team",
@@ -153,7 +153,7 @@ export function hatSnapshotTeam(teamEditIndex: number): AppSnapshot {
   };
 }
 
-export function hatSnapshotReview(): AppSnapshot {
+function hatSnapshotReview(): AppSnapshot {
   const { teams, players, clueSubmissions } = getGalleryHatSetup();
   return {
     step: "review",
@@ -171,7 +171,7 @@ export function hatSnapshotReview(): AppSnapshot {
   };
 }
 
-export function hatSnapshotClueEntry(revealed: boolean): AppSnapshot {
+function hatSnapshotClueEntry(revealed: boolean): AppSnapshot {
   const { teams, players, clueSubmissions } = getGalleryHatSetup();
   return {
     step: "clues",
@@ -189,10 +189,7 @@ export function hatSnapshotClueEntry(revealed: boolean): AppSnapshot {
   };
 }
 
-export function hatSnapshotGame(
-  session: AppSnapshot["session"],
-  handoffRevealed: boolean,
-): AppSnapshot {
+function hatSnapshotGame(session: AppSnapshot["session"], handoffRevealed: boolean): AppSnapshot {
   const { teams, players, clueSubmissions } = getGalleryHatSetup();
   return {
     step: "game",

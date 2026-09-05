@@ -23,12 +23,9 @@ import {
   updateImposterPlayerName,
 } from "@/features/imposter/imposterSingleplayerTransitions";
 import { useImposterSingleplayerPersistence } from "@/features/imposter/useImposterSingleplayerPersistence";
-import { formatSavedAt } from "@/lib/formatSavedAt";
 import { clearImposterSavedState } from "@/services/imposterStorage";
 
 import packageJson from "../../../package.json";
-
-export { formatSavedAt };
 
 export type ImposterSingleplayerAppController = ReturnType<typeof useImposterSingleplayerApp>;
 

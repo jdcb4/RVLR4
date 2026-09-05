@@ -46,7 +46,7 @@ Games:
   Hat suggestions/name packs, DrawNGuess prompts, Imposter words, and
   multiplayer display names. Domain loaders validate every asset with Zod.
 - `src/assets` — static assets bundled by Vite. Game sounds are synthesized locally.
-- `src/config` — `env.ts`, `hatDefaults.ts`, `imposterDefaults.ts`, `teamRoster.ts` (shared 2–4 teams, 2–6 players per team), `appMeta.ts` (product label for shared chrome).
+- `src/config` — `hatDefaults.ts`, `imposterDefaults.ts`, `teamRoster.ts` (shared 2–4 teams, 2–6 players per team), `appMeta.ts` (product label for shared chrome).
 - `src/typography` — named font tier map (`tiers.ts`) for `text-typ-*` utilities.
 - `src/themes` — semantic color tokens (`default.css`) layered on primitives in `index.css`.
 - `public` — static browser/app assets copied by Vite, including favicon and web app icon files.

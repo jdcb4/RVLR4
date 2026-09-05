@@ -33,5 +33,3 @@ export const typography = {
   /** Single-line text inputs */
   input: "text-typ-input",
 } as const;
-
-export type TypographyTier = keyof typeof typography;

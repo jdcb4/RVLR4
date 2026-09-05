@@ -7,7 +7,7 @@ const PLAYER_NAME_LIMIT = 24;
 export const TEAM_NAME_LIMIT = 24;
 
 /** Re-export for callers that already import limits from domain setup. */
-export { MAX_PLAYERS_PER_TEAM, MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
+export { MAX_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 
 export function createDefaultSettings(): GameSettings {
   return {
@@ -105,16 +105,6 @@ export function removePlayerFromTeam(
       players: team.players.filter((player) => player.id !== playerId),
     };
   });
-}
-
-export function updateTeamName(
-  teams: readonly TeamSetup[],
-  teamId: string,
-  name: string,
-): TeamSetup[] {
-  return teams.map((team) =>
-    team.id === teamId ? { ...team, name: name.slice(0, TEAM_NAME_LIMIT) } : team,
-  );
 }
 
 export function updatePlayerName(
