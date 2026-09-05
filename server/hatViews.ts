@@ -69,7 +69,7 @@ export function projectHatSessionForViewer(
 export function shouldShowHatTurnFooter(session: HatGameSession, viewerPlayerId: string): boolean {
   return (
     session.stage === "turn" &&
-    Boolean(session.activeTurn) &&
+    session.activeTurn !== null &&
     classifyHatRole(session, viewerPlayerId) === "describer"
   );
 }
@@ -77,7 +77,7 @@ export function shouldShowHatTurnFooter(session: HatGameSession, viewerPlayerId:
 export function canHatReturnSkipped(session: HatGameSession, viewerPlayerId: string): boolean {
   return (
     session.stage === "turn" &&
-    Boolean(session.activeTurn) &&
+    session.activeTurn !== null &&
     classifyHatRole(session, viewerPlayerId) === "describer" &&
     (session.activeTurn.skippedClues.length > 0 ||
       session.activeTurn.currentSkippedCluePoolIndex !== null)

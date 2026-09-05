@@ -15,6 +15,12 @@ The combined gate is also exposed as:
 pnpm run verify
 ```
 
+`typecheck` explicitly runs the client, build/test configuration, and server
+projects, including tests and utility scripts. Running `tsc --noEmit` on the
+root solution does not traverse its references. The server uses the Bundler
+resolver because `tsx` resolves the shared `@/*` aliases and TypeScript imports;
+`smoke:server-imports` separately verifies that runtime resolution.
+
 Security-sensitive or significant server work also runs production dependency
 audit, import smoke testing, and coverage:
 

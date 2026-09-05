@@ -82,6 +82,7 @@ export type RoomSyncPayload = {
   readonly replay: {
     readonly offerActive: boolean;
     readonly acceptedIds: readonly string[];
+    readonly cancelledByDisconnect: boolean;
   };
 };
 

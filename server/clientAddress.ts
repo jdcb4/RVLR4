@@ -10,7 +10,10 @@ function railwayAddress(header: string | string[] | undefined): string | null {
   return candidate && isIP(candidate) ? candidate : null;
 }
 
-export function httpClientAddress(request: Request, isRailway: boolean): string {
+export function httpClientAddress(
+  request: { headers: Request["headers"]; socket: Pick<Request["socket"], "remoteAddress"> },
+  isRailway: boolean,
+): string {
   if (isRailway) {
     const trusted = railwayAddress(request.headers["x-real-ip"]);
 
@@ -22,7 +25,10 @@ export function httpClientAddress(request: Request, isRailway: boolean): string 
   return request.socket.remoteAddress ?? "unknown";
 }
 
-export function socketClientAddress(socket: Socket, isRailway: boolean): string {
+export function socketClientAddress(
+  socket: { handshake: Pick<Socket["handshake"], "headers" | "address"> },
+  isRailway: boolean,
+): string {
   if (isRailway) {
     const trusted = railwayAddress(socket.handshake.headers["x-real-ip"]);
 

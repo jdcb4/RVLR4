@@ -110,7 +110,7 @@ function countTeamPlayers(room: Room): number[] {
 
   for (const player of room.players.values()) {
     if (player.teamIndex !== null && player.teamIndex >= 0 && player.teamIndex < counts.length) {
-      counts[player.teamIndex] += 1;
+      counts[player.teamIndex] = (counts[player.teamIndex] ?? 0) + 1;
     }
   }
 
@@ -118,15 +118,15 @@ function countTeamPlayers(room: Room): number[] {
 }
 
 function clearActiveMatchState(room: Room): void {
-  room.wwwMatch = undefined;
-  room.hatSession = undefined;
-  room.imposterSnapshot = undefined;
-  room.drawnguessMatch = undefined;
-  room.wwwReadyReveal = undefined;
-  room.hatReadyReveal = undefined;
-  room.replayOfferActive = undefined;
-  room.replayAcceptedPlayerIds = undefined;
-  room.replayCancelledByDisconnect = undefined;
+  delete room.wwwMatch;
+  delete room.hatSession;
+  delete room.imposterSnapshot;
+  delete room.drawnguessMatch;
+  delete room.wwwReadyReveal;
+  delete room.hatReadyReveal;
+  delete room.replayOfferActive;
+  delete room.replayAcceptedPlayerIds;
+  delete room.replayCancelledByDisconnect;
 }
 
 export class RoomStore {
@@ -363,7 +363,7 @@ function previewCountsAfterJoin(room: Room, newPlayerTeamIndex: number): number[
   const counts = countTeamPlayers(room);
 
   if (newPlayerTeamIndex >= 0 && newPlayerTeamIndex < counts.length) {
-    counts[newPlayerTeamIndex] += 1;
+    counts[newPlayerTeamIndex] = (counts[newPlayerTeamIndex] ?? 0) + 1;
   }
 
   return counts;

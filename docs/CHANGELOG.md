@@ -2,6 +2,16 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.5 - 2026-09-05
+
+- **Type safety:** The typecheck gate now checks client, server, configuration,
+  tests, and utility scripts. Fixed nullable game-state handling, exact optional
+  resets, settings-patch boundaries, and mismatched replay/transport types found
+  by the previously missing server check.
+- **Test tooling:** Upgrade Vitest and its Istanbul adapter together to 3.2.7
+  to remove the Vite 5/6 configuration-type mismatch and receive the patched
+  Vitest 3 release. Existing assertions and coverage thresholds are retained.
+
 ## 0.22.4 - 2026-09-05
 
 - **Answer privacy:** Mask live-turn word and clue history for guessers and

@@ -1,6 +1,6 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { RouteLoadingScreen } from "@/app/RouteLoadingScreen";
 import { appRoutes } from "@/app/router";
@@ -29,6 +29,7 @@ describe("app routes", () => {
   ])("lazy-loads %s on direct navigation", async (path, heading) => {
     const memoryRouter = createMemoryRouter(appRoutes, { initialEntries: [path] });
     render(<RouterProvider router={memoryRouter} />);
+    await act(() => vi.dynamicImportSettled());
 
     expect(await screen.findByRole("heading", { level: 1, name: heading })).toBeInTheDocument();
   });
@@ -38,6 +39,7 @@ describe("app routes", () => {
       initialEntries: ["/name?intent=host&game=hat"],
     });
     render(<RouterProvider router={memoryRouter} />);
+    await act(() => vi.dynamicImportSettled());
 
     const nameInput = await screen.findByLabelText("Display name");
     expect(nameInput).toHaveAttribute("autocomplete", "nickname");

@@ -88,8 +88,8 @@ function registerDisconnect({ io, socket, store }: SocketHandlerContext) {
       if (!room || !player) return;
       player.disconnectedAt = Date.now();
       if (room.replayOfferActive) {
-        room.replayOfferActive = undefined;
-        room.replayAcceptedPlayerIds = undefined;
+        delete room.replayOfferActive;
+        delete room.replayAcceptedPlayerIds;
         room.replayCancelledByDisconnect = true;
       }
       await broadcastRoom(io, store, code);

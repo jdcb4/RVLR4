@@ -46,7 +46,7 @@ async function bootHarness(): Promise<TestHarness> {
   return {
     url,
     dropPlayerTransport: async (playerId) => {
-      const sockets = await io.fetchSockets();
+      const sockets = [...io.sockets.sockets.values()];
       const playerSocket = sockets.find((socket) => socket.data.playerId === playerId);
 
       if (!playerSocket) {

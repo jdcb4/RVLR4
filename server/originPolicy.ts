@@ -9,7 +9,7 @@ export function isBrowserOriginAllowed(
 
 export function createCorsOriginValidator(
   allowedOrigins: readonly string[],
-): CorsOptions["origin"] {
+): Extract<CorsOptions["origin"], (...args: never[]) => unknown> {
   return (origin, callback) => {
     if (isBrowserOriginAllowed(origin, allowedOrigins)) {
       callback(null, true);

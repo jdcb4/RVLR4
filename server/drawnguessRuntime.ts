@@ -172,7 +172,7 @@ export function canOfferDrawNGuessReplay(room: Room): boolean {
   return (
     room.gameKind === "drawnguess" &&
     room.phase === "playing" &&
-    room.drawnguessMatch !== undefined &&
+    room.drawnguessMatch != null &&
     ["reveal", "complete"].includes(getPublicMatchSnapshot(room.drawnguessMatch).phase)
   );
 }

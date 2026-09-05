@@ -20,10 +20,7 @@ describe("browser origin policy", () => {
     const callback = vi.fn();
     const validator = createCorsOriginValidator(allowed);
     expect(typeof validator).toBe("function");
-    (validator as Exclude<typeof validator, boolean | string | RegExp | (string | RegExp)[]>)(
-      "https://evil.example.com",
-      callback,
-    );
+    validator("https://evil.example.com", callback);
     expect(callback).toHaveBeenCalledWith(expect.any(Error));
   });
 });

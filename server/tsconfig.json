@@ -1,13 +1,14 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["ES2022"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "types": ["node"],
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "types": ["node", "vite/client"],
     "noEmit": true,
     "rootDir": "..",
     "baseUrl": ".."
   },
-  "include": ["./**/*.ts"]
+  "include": ["./**/*.ts", "../scripts/**/*.ts", "../scripts/**/*.mts"]
 }

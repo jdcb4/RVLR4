@@ -50,6 +50,23 @@ describe("Socket.IO boundary schemas", () => {
     });
   });
 
+  it("strips undefined patch fields and rejects patches with no defined setting", () => {
+    expect(
+      socketSchemas["lobby:hostPatchWhoWhatWhereSettings"].parse({
+        patch: { turnDurationSeconds: 45, teamCount: undefined },
+      }),
+    ).toEqual({ patch: { turnDurationSeconds: 45 } });
+    expect(
+      socketSchemas["lobby:hostPatchHatPrefs"].parse({
+        hatTurnDurationSeconds: 60,
+        hatSkipsPerTurn: undefined,
+      }),
+    ).toEqual({ hatTurnDurationSeconds: 60 });
+    expect(
+      socketSchemas["lobby:hostPatchHatPrefs"].safeParse({ hatSkipsPerTurn: undefined }).success,
+    ).toBe(false);
+  });
+
   it.each([
     ["lobby:hostPatchHatPrefs", {}],
     ["lobby:hostPatchHatPrefs", { hatTurnDurationSeconds: 90 }],

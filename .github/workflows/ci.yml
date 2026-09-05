@@ -34,8 +34,11 @@ jobs:
       - name: Lint
         run: pnpm run lint
 
-      - name: Test
-        run: pnpm test
+      - name: Test with coverage gates
+        run: pnpm run test:coverage
+
+      - name: Server runtime imports
+        run: pnpm run smoke:server-imports
 
       - name: Build
         run: pnpm run build

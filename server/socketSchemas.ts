@@ -41,11 +41,18 @@ const normalizedNameSchema = (max: number) =>
 
 const noPayloadSchema = z.undefined();
 
+function definedFields<T extends Record<string, unknown>>(value: T) {
+  return Object.fromEntries(Object.entries(value).filter(([, field]) => field !== undefined)) as {
+    [Key in keyof T]: Exclude<T[Key], undefined>;
+  };
+}
+
 function nonEmptyPatch<T extends z.ZodRawShape>(shape: T) {
   return z
     .object(shape)
     .strict()
     .partial()
+    .transform(definedFields)
     .refine((value) => Object.keys(value).length > 0, "At least one setting is required.");
 }
 
@@ -71,6 +78,7 @@ const wwwSettingsSchema = z
   })
   .strict()
   .partial()
+  .transform(definedFields)
   .refine((value) => Object.keys(value).length > 0, "At least one setting is required.");
 
 const drawNGuessPointSchema = z
