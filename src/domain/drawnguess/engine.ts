@@ -157,12 +157,12 @@ export function updatePromptDraft(
   text: string,
   now = Date.now(),
 ): DrawNGuessMatch {
-  const trimmed = trimPrompt(text);
+  const draft = text.slice(0, DRAWNGUESS_MAX_PROMPT_LENGTH);
 
   return upsertSubmission(match, playerId, now, {
     mode: "custom-prompt",
     status: "draft",
-    promptText: trimmed,
+    promptText: draft,
   });
 }
 
@@ -221,12 +221,12 @@ export function updateGuessDraft(
   text: string,
   now = Date.now(),
 ): DrawNGuessMatch {
-  const trimmed = trimGuess(text);
+  const draft = text.slice(0, DRAWNGUESS_MAX_GUESS_LENGTH);
 
   return upsertSubmission(match, playerId, now, {
     mode: "guessing",
     status: "draft",
-    guessText: trimmed,
+    guessText: draft,
   });
 }
 

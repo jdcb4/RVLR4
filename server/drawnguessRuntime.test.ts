@@ -9,6 +9,7 @@ import {
   applyDrawNGuessExpireTurn,
   applyDrawNGuessGuessSubmit,
   applyDrawNGuessPromptSubmit,
+  assertDrawNGuessTurn,
   patchDrawNGuessSettings,
   startDrawNGuessMatch,
 } from "./drawnguessRuntime.ts";
@@ -57,6 +58,19 @@ function expectAdvancedToGuessingWithHostDrawing(
 }
 
 describe("DrawNGuess runtime", () => {
+  it("accepts the current turn token and rejects stale tokens before any mutation", () => {
+    const { room } = buildRoom();
+    startDrawNGuessMatch(room, 1_000);
+    const turn = room.drawnguessMatch!.activeTurn!;
+    const key = `${turn.turnIndex}:${turn.mode}:${turn.deadlineAt}`;
+    const before = JSON.stringify(room.drawnguessMatch);
+    expect(() => assertDrawNGuessTurn(room, key)).not.toThrow();
+    expect(() => assertDrawNGuessTurn(room, undefined)).not.toThrow();
+    expect(() => assertDrawNGuessTurn(room, "0:drawing:1")).toThrow("previous turn");
+    expect(JSON.stringify(room.drawnguessMatch)).toBe(before);
+    delete room.drawnguessMatch!.activeTurn;
+    expect(() => assertDrawNGuessTurn(room, key)).toThrow("previous turn");
+  });
   it("starts a predetermined match and sends private assignments per viewer", () => {
     const { room, hostPlayer, first } = buildRoom();
 

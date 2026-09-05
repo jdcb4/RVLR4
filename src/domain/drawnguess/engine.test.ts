@@ -17,6 +17,7 @@ import {
   submitPrompt,
   updateDrawingDraft,
   updateGuessDraft,
+  updatePromptDraft,
 } from "./engine";
 import type { DrawNGuessDrawing, DrawNGuessPlayer, DrawNGuessWordPrompt } from "./types";
 
@@ -60,6 +61,25 @@ const drawing: DrawNGuessDrawing = {
 };
 
 describe("DrawNGuess engine", () => {
+  it("preserves draft whitespace but trims submitted and expired entries", () => {
+    let match = createDrawNGuessMatch({
+      players: players.slice(0, 3),
+      wordSource: prompts,
+      settings: createDefaultDrawNGuessSettings({ startingPromptMode: "custom" }),
+      now: 1_000,
+    });
+    match = updatePromptDraft(match, "p1", "Robot ", 1_100);
+    expect(getPrivatePlayerSnapshot(match, "p1").ownSubmission?.promptText).toBe("Robot ");
+    match = submitPrompt(match, "p1", "Robot chef ", 1_200);
+    expect(getPrivatePlayerSnapshot(match, "p1").ownSubmission?.promptText).toBe("Robot chef");
+    match = advanceTurn(match, 1_000_000);
+    match = advanceTurn(match, 2_000_000);
+    match = updateGuessDraft(match, "p1", "Robot ", 2_000_100);
+    expect(getPrivatePlayerSnapshot(match, "p1").ownSubmission?.guessText).toBe("Robot ");
+    match = advanceTurn(match, 3_000_000);
+    expect(JSON.stringify(match.packets)).toContain('"text":"Robot"');
+    expect(JSON.stringify(match.packets)).not.toContain('"text":"Robot "');
+  });
   it("rejects drawings beyond the total point budget", () => {
     const match = createDrawNGuessMatch({
       players: players.slice(0, 3),

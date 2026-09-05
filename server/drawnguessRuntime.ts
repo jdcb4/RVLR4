@@ -50,6 +50,15 @@ export function patchDrawNGuessSettings(room: Room, patch: Partial<DrawNGuessSet
   });
 }
 
+export function assertDrawNGuessTurn(room: Room, turnKey: string | undefined) {
+  // Optional only for clients loaded before this additive protocol field.
+  if (turnKey === undefined) return;
+  const turn = requireDrawNGuessMatch(room).activeTurn;
+  if (!turn || turnKey !== `${turn.turnIndex}:${turn.mode}:${turn.deadlineAt}`) {
+    throw new Error("That response belongs to a previous turn.");
+  }
+}
+
 export function startDrawNGuessMatch(room: Room, now = Date.now()) {
   if (room.gameKind !== "drawnguess") {
     throw new Error("This room is not a DrawNGuess room.");

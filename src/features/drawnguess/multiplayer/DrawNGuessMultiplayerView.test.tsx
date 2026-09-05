@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -175,9 +175,89 @@ describe("DrawNGuessMultiplayerView", () => {
     await waitFor(() =>
       expect(emitWithAck).toHaveBeenCalledWith("drawnguess:submitGuess", {
         text: "Robot chef",
+        turnKey: `1:guessing:${now + 60_000}`,
       }),
     );
   });
+
+  it.each(["guessing", "custom-prompt"] as const)(
+    "preserves a %s edit across peer broadcasts and delayed acknowledgements",
+    async (mode) => {
+      const now = Date.now();
+      const field = mode === "guessing" ? "guessText" : "promptText";
+      const payload: DrawNGuessSyncDto = {
+        public: { ...guessingTurnPayload.public, turnMode: mode, deadlineAt: now + 60_000 },
+        private: {
+          ...guessingTurnPayload.private,
+          assignment:
+            mode === "guessing"
+              ? guessingTurnPayload.private.assignment
+              : { mode, packetId: "packet-host", starterPlayerId: "host" },
+          hasSubmitted: true,
+          ownSubmission: {
+            playerId: "host",
+            status: "submitted",
+            updatedAt: now,
+            [field]: "Robot",
+          },
+        },
+      };
+      const replies: ((ack: { ok: boolean; error?: string }) => void)[] = [];
+      const emitWithAck = vi.fn(
+        () => new Promise<{ ok: boolean; error?: string }>((resolve) => replies.push(resolve)),
+      );
+      const view = (next: DrawNGuessSyncDto) => (
+        <MemoryRouter>
+          <DrawNGuessMultiplayerView
+            payload={next}
+            emitWithAck={emitWithAck}
+            isHost
+            viewerPlayerId="host"
+            replaySync={{ offerActive: false, acceptedIds: [], cancelledByDisconnect: false }}
+          />
+        </MemoryRouter>
+      );
+      const { rerender } = render(view(payload));
+      fireEvent.click(screen.getByRole("button", { name: "Edit response" }));
+      const input = screen.getByRole("textbox");
+      fireEvent.change(input, { target: { value: "Robot " } });
+      rerender(
+        view({
+          ...payload,
+          private: {
+            ...payload.private,
+            ownSubmission: { ...payload.private.ownSubmission!, [field]: "Robot" },
+          },
+        }),
+      );
+      expect(screen.getByRole("textbox")).toHaveValue("Robot ");
+      fireEvent.change(input, { target: { value: "Robot chef" } });
+      await act(async () => {
+        replies[1]!({ ok: true });
+        replies[0]!({ ok: false, error: "Stale failure" });
+      });
+      expect(screen.getByRole("textbox")).toHaveValue("Robot chef");
+      expect(screen.queryByText("Stale failure")).not.toBeInTheDocument();
+      fireEvent.click(
+        screen.getByRole("button", {
+          name: mode === "guessing" ? "Update guess" : "Update prompt",
+        }),
+      );
+      expect(input).toBeDisabled();
+      await act(async () => {
+        replies[2]!({ ok: true });
+      });
+      expect(screen.getByText("Response submitted")).toBeInTheDocument();
+      rerender(
+        view({
+          ...payload,
+          public: { ...payload.public, deadlineAt: now + 90_000 },
+          private: { ...payload.private, hasSubmitted: false, ownSubmission: null },
+        }),
+      );
+      expect(screen.getByRole("textbox")).toHaveValue("");
+    },
+  );
 
   it("opens final gallery packets locally without dispatching a room reveal event", async () => {
     const user = userEvent.setup();

@@ -28,13 +28,7 @@ type EmitWithAck = (
   body?: unknown,
 ) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
-export function DrawNGuessMultiplayerView({
-  payload,
-  viewerPlayerId,
-  isHost,
-  replaySync,
-  emitWithAck,
-}: {
+type DrawNGuessViewProps = {
   readonly payload: DrawNGuessSyncDto;
   readonly viewerPlayerId: string;
   readonly isHost: boolean;
@@ -44,28 +38,50 @@ export function DrawNGuessMultiplayerView({
     readonly cancelledByDisconnect: boolean;
   };
   readonly emitWithAck: EmitWithAck;
-}) {
-  const turnKey = `${payload.public.turnIndex}:${payload.public.turnMode}:${payload.public.deadlineAt ?? 0}`;
+};
+
+export function DrawNGuessMultiplayerView(props: DrawNGuessViewProps) {
+  return (
+    <DrawNGuessTurnView
+      key={`${props.viewerPlayerId}:${drawNGuessTurnKey(props.payload)}`}
+      {...props}
+    />
+  );
+}
+
+function DrawNGuessTurnView({
+  payload,
+  viewerPlayerId,
+  isHost,
+  replaySync,
+  emitWithAck,
+}: DrawNGuessViewProps) {
+  const turnKey = drawNGuessTurnKey(payload);
   const ownSubmission = payload.private.ownSubmission;
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [editing, setEditing] = useState(false);
-  const [promptDraft, setPromptDraft] = useState("");
-  const [guessDraft, setGuessDraft] = useState("");
-  const [drawingDraft, setDrawingDraft] = useState<DrawNGuessDrawing>(() => createBlankDrawing());
+  const [promptDraft, setPromptDraft] = useState(ownSubmission?.promptText ?? "");
+  const [guessDraft, setGuessDraft] = useState(ownSubmission?.guessText ?? "");
+  const [drawingDraft, setDrawingDraft] = useState<DrawNGuessDrawing>(
+    () => ownSubmission?.drawing ?? createBlankDrawing(),
+  );
+  const latestAction = useRef(0);
   const [localGalleryOpen, setLocalGalleryOpen] = useState(false);
   const secondsLeft = useCountdownSeconds(payload.public.deadlineAt);
   const deadlineOpen = payload.public.deadlineAt ? Date.now() <= payload.public.deadlineAt : true;
 
   useDrawNGuessWarningSound(payload);
 
-  useEffect(() => {
-    setEditing(false);
-    setError("");
-    setPromptDraft(ownSubmission?.promptText ?? "");
-    setGuessDraft(ownSubmission?.guessText ?? "");
-    setDrawingDraft(ownSubmission?.drawing ?? createBlankDrawing());
-  }, [ownSubmission, turnKey]);
+  // The keyed turn view initializes from the server on entry/recovery. During
+  // that turn this device owns its draft; peer broadcasts and delayed echoes
+  // must not replace text or close an edit in progress.
+  useEffect(
+    () => () => {
+      latestAction.current += 1;
+    },
+    [],
+  );
 
   useEffect(() => {
     if (payload.public.phase !== "reveal") {
@@ -73,18 +89,27 @@ export function DrawNGuessMultiplayerView({
     }
   }, [payload.public.phase]);
 
-  const runAction = async (event: string, body?: unknown) => {
-    setBusy(true);
+  const runAction = async (event: string, body: Record<string, unknown>, submit = false) => {
+    const actionId = ++latestAction.current;
+    if (submit) setBusy(true);
     setError("");
 
     try {
-      const ack = await emitWithAck(event, body);
+      const ack = await emitWithAck(event, { ...body, turnKey });
+      if (actionId !== latestAction.current) return;
 
-      if (ack?.ok === false) {
-        setError(ack.error ?? "That action did not work.");
+      if (ack?.ok !== true) {
+        setError(ack?.error ?? "That action did not work.");
+      } else if (submit) {
+        setEditing(false);
       }
+    } catch {
+      if (actionId === latestAction.current)
+        setError(
+          "Your response could not be saved. Check the connection and try submitting again.",
+        );
     } finally {
-      setBusy(false);
+      if (submit) setBusy(false);
     }
   };
 
@@ -104,7 +129,7 @@ export function DrawNGuessMultiplayerView({
     });
 
     if (!config.disabled) {
-      await runAction(config.event, config.payload);
+      await runAction(config.event, config.payload, true);
     }
   };
   const handleTextSubmitKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
@@ -139,6 +164,7 @@ export function DrawNGuessMultiplayerView({
   return (
     <MultiplayerGameShell footer={footer} title="DrawNGuess">
       <DrawNGuessBody
+        disabled={busy || !deadlineOpen}
         assignment={assignment}
         drawingDraft={drawingDraft}
         error={error}
@@ -168,6 +194,7 @@ export function DrawNGuessMultiplayerView({
 }
 
 function DrawNGuessBody({
+  disabled,
   payload,
   assignment,
   submitted,
@@ -183,6 +210,7 @@ function DrawNGuessBody({
   onDrawingChange,
   onTextSubmitKeyDown,
 }: {
+  readonly disabled: boolean;
   readonly payload: DrawNGuessSyncDto;
   readonly assignment: DrawNGuessSyncDto["private"]["assignment"];
   readonly submitted: boolean;
@@ -233,6 +261,7 @@ function DrawNGuessBody({
       >
         <TurnTimer countdownKey={drawNGuessTurnKey(payload)} secondsLeft={secondsLeft} />
         <input
+          disabled={disabled}
           autoCapitalize="sentences"
           autoComplete="off"
           autoFocus
@@ -247,6 +276,11 @@ function DrawNGuessBody({
           onChange={(event) => onPromptChange(event.target.value)}
           onKeyDown={onTextSubmitKeyDown}
         />
+        {error ? (
+          <p role="alert" className="text-typ-ui text-destructive">
+            {error}
+          </p>
+        ) : null}
       </GamePanel>
     );
   }
@@ -262,7 +296,7 @@ function DrawNGuessBody({
         <p className="rounded-xl border border-border bg-background p-4 text-center text-typ-section-title font-bold">
           {assignment.promptText}
         </p>
-        <DrawNGuessWhiteboard value={drawingDraft} onChange={onDrawingChange} />
+        <DrawNGuessWhiteboard disabled={disabled} value={drawingDraft} onChange={onDrawingChange} />
         {error ? <p className="text-typ-ui text-destructive">{error}</p> : null}
       </GamePanel>
     );
@@ -277,6 +311,7 @@ function DrawNGuessBody({
       <TurnTimer countdownKey={drawNGuessTurnKey(payload)} secondsLeft={secondsLeft} />
       <DrawNGuessDrawingPreview drawing={assignment.drawing} />
       <input
+        disabled={disabled}
         autoCapitalize="sentences"
         autoComplete="off"
         autoFocus

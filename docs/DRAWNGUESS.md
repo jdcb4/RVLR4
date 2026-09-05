@@ -36,6 +36,13 @@ DrawNGuess is a production multiplayer game in RVLRY. It is a Telestrations-styl
 8. Presentation starts when all books are complete. Each player controls their own book locally.
 9. Final gallery lets any player review and export any completed book.
 
+Each turn view initializes its draft from the server once. Later room broadcasts
+update progress but cannot overwrite that device's editor or cancel an edit.
+Draft text retains whitespace; explicit submission and timer expiry trim it.
+All six draft/submission requests from current clients include a `turnKey`
+(`turnIndex:turnMode:deadlineAt`), which the server checks before mutation. The
+field is optional only for compatibility with clients loaded before its addition.
+
 ## Data And Settings
 
 The v1 word source is `src/data/drawnguessWordPrompts.json`. It contains Easy prompts from Standard, Kids, and Sports categories. The current UI exposes only the default word pack, but the domain settings keep a `wordPackId` so category and difficulty filtering can be added later without reshaping match state.

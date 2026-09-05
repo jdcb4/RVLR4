@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.6 - 2026-09-05
+
+- **DrawNGuess drafts:** Keep local edits stable through peer broadcasts and
+  delayed acknowledgements; retain spaces while typing, trim only final text,
+  and reset drafts on a new turn. Submitting locks the editor until its result.
+- **Turn integrity:** New clients identify the turn with each draft/submission
+  so delayed responses cannot update a later turn. Older clients remain
+  compatible with the additive field.
+
 ## 0.22.5 - 2026-09-05
 
 - **Type safety:** The typecheck gate now checks client, server, configuration,

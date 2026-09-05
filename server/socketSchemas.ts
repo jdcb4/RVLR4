@@ -40,6 +40,7 @@ const normalizedNameSchema = (max: number) =>
     .pipe(z.string().min(1).max(max));
 
 const noPayloadSchema = z.undefined();
+const drawNGuessTurnKeySchema = z.string().min(1).max(80).optional();
 
 function definedFields<T extends Record<string, unknown>>(value: T) {
   return Object.fromEntries(Object.entries(value).filter(([, field]) => field !== undefined)) as {
@@ -202,23 +203,31 @@ export const socketSchemas = {
   "hat:showFinalScores": noPayloadSchema,
   "drawnguess:updatePromptDraft": z
     .object({
+      turnKey: drawNGuessTurnKeySchema,
       text: z.string().max(DRAWNGUESS_MAX_PROMPT_LENGTH),
     })
     .strict(),
   "drawnguess:submitPrompt": z
     .object({
+      turnKey: drawNGuessTurnKeySchema,
       text: z.string().max(DRAWNGUESS_MAX_PROMPT_LENGTH),
     })
     .strict(),
-  "drawnguess:updateDrawingDraft": z.object({ drawing: drawNGuessDrawingSchema }).strict(),
-  "drawnguess:submitDrawing": z.object({ drawing: drawNGuessDrawingSchema }).strict(),
+  "drawnguess:updateDrawingDraft": z
+    .object({ drawing: drawNGuessDrawingSchema, turnKey: drawNGuessTurnKeySchema })
+    .strict(),
+  "drawnguess:submitDrawing": z
+    .object({ drawing: drawNGuessDrawingSchema, turnKey: drawNGuessTurnKeySchema })
+    .strict(),
   "drawnguess:updateGuessDraft": z
     .object({
+      turnKey: drawNGuessTurnKeySchema,
       text: z.string().max(DRAWNGUESS_MAX_GUESS_LENGTH),
     })
     .strict(),
   "drawnguess:submitGuess": z
     .object({
+      turnKey: drawNGuessTurnKeySchema,
       text: z.string().max(DRAWNGUESS_MAX_GUESS_LENGTH),
     })
     .strict(),

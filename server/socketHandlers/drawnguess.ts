@@ -10,6 +10,7 @@ import {
   applyDrawNGuessOpenRevealPacket,
   applyDrawNGuessPromptDraft,
   applyDrawNGuessPromptSubmit,
+  assertDrawNGuessTurn,
 } from "../drawnguessRuntime.ts";
 import { createSocketHandlerRegistrar } from "./register.ts";
 import type { SocketHandlerContext } from "./types.ts";
@@ -26,6 +27,7 @@ export function registerDrawNGuessHandlers({ io, socket, store }: SocketHandlerC
     "drawnguess:updatePromptDraft",
     "Unable to update prompt.",
     async ({ room, actor }, payload) => {
+      assertDrawNGuessTurn(room, payload.turnKey);
       applyDrawNGuessPromptDraft(room, actor.id, payload.text);
       await broadcastRoom(io, store, room.code);
     },
@@ -34,6 +36,7 @@ export function registerDrawNGuessHandlers({ io, socket, store }: SocketHandlerC
     "drawnguess:submitPrompt",
     "Unable to submit prompt.",
     async ({ room, actor }, payload) => {
+      assertDrawNGuessTurn(room, payload.turnKey);
       applyDrawNGuessPromptSubmit(room, actor.id, payload.text);
       applyDrawNGuessAdvanceTurnIfComplete(room);
       await broadcastRoom(io, store, room.code);
@@ -43,6 +46,7 @@ export function registerDrawNGuessHandlers({ io, socket, store }: SocketHandlerC
     "drawnguess:updateDrawingDraft",
     "Unable to update drawing.",
     async ({ room, actor }, payload) => {
+      assertDrawNGuessTurn(room, payload.turnKey);
       applyDrawNGuessDrawingDraft(room, actor.id, payload.drawing);
       await broadcastRoom(io, store, room.code);
     },
@@ -51,6 +55,7 @@ export function registerDrawNGuessHandlers({ io, socket, store }: SocketHandlerC
     "drawnguess:submitDrawing",
     "Unable to submit drawing.",
     async ({ room, actor }, payload) => {
+      assertDrawNGuessTurn(room, payload.turnKey);
       applyDrawNGuessDrawingSubmit(room, actor.id, payload.drawing);
       applyDrawNGuessAdvanceTurnIfComplete(room);
       await broadcastRoom(io, store, room.code);
@@ -60,6 +65,7 @@ export function registerDrawNGuessHandlers({ io, socket, store }: SocketHandlerC
     "drawnguess:updateGuessDraft",
     "Unable to update guess.",
     async ({ room, actor }, payload) => {
+      assertDrawNGuessTurn(room, payload.turnKey);
       applyDrawNGuessGuessDraft(room, actor.id, payload.text);
       await broadcastRoom(io, store, room.code);
     },
@@ -68,6 +74,7 @@ export function registerDrawNGuessHandlers({ io, socket, store }: SocketHandlerC
     "drawnguess:submitGuess",
     "Unable to submit guess.",
     async ({ room, actor }, payload) => {
+      assertDrawNGuessTurn(room, payload.turnKey);
       applyDrawNGuessGuessSubmit(room, actor.id, payload.text);
       applyDrawNGuessAdvanceTurnIfComplete(room);
       await broadcastRoom(io, store, room.code);
