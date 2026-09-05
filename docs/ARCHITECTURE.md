@@ -16,6 +16,11 @@ Networked game views currently cover Who What Where, Hat Game, Imposter, and Dra
 
 Runtime multiplayer state lives **only in the Node process RAM** (rooms keyed by short codes). Clients reconnect with per-player secrets stored in **`sessionStorage`** (`jd-multiplayer:*`).
 
+A room screen owns one socket and closes it on unmount or room changes.
+The single-process Socket.IO adapter supplies presence: a player is away only
+after their final bound tab disconnects. Rebinding first releases the previous
+room membership; viewer broadcasts also check membership before projection.
+
 Lobby synchronization includes a server-authored start-readiness result. The
 same pure evaluator gates `lobby:startGame` and supplies host-facing blocker
 copy, so client guidance cannot diverge from server enforcement.

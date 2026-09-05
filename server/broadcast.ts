@@ -22,7 +22,8 @@ export async function broadcastRoom(io: Server, store: RoomStore, code: string) 
   for (const socket of sockets) {
     const playerId = socket.data.playerId as string | undefined;
 
-    if (!playerId) {
+    if (!playerId || socket.data.roomCode !== code || !room.players.has(playerId)) {
+      await socket.leave(roomChannel(code));
       continue;
     }
 

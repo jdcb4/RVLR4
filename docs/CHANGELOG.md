@@ -2,6 +2,13 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.7 - 2026-09-05
+
+- **Connection ownership:** Leaving a room screen now closes its socket and
+  clears stale state. Rebinding leaves the previous room before joining the
+  next. Presence stays online while any tab for that player is connected, and
+  broadcasts discard stale memberships instead of failing the room.
+
 ## 0.22.6 - 2026-09-05
 
 - **DrawNGuess drafts:** Keep local edits stable through peer broadcasts and

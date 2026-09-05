@@ -89,7 +89,12 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
   }, []);
 
   useEffect(() => {
+    setConnected(false);
+    setSync(null);
+    setBindError(null);
+    setShuttingDown(false);
     if (!enabled || !code) {
+      socket.disconnect();
       return undefined;
     }
 
@@ -99,6 +104,8 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
     }
 
     const handleSync = (payload: RoomSyncPayload) => {
+      const creds = loadSession(code);
+      if (payload.code !== code.toUpperCase() || payload.you.playerId !== creds?.playerId) return;
       setSync(payload);
     };
 
@@ -164,12 +171,13 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
       socket.off("disconnect", handleDisconnect);
       socket.off("room:sync", handleSync);
       socket.off("server:shuttingDown", handleShutdown);
+      socket.disconnect();
     };
   }, [code, enabled, socket]);
 
   const emitWithAck = useCallback(
     (event: string, payload?: unknown) => {
-      if (!connected) {
+      if (!connected || !socket.connected || !enabled) {
         return Promise.resolve({ ok: false, error: "Reconnecting to the room." });
       }
 
@@ -189,13 +197,13 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
         }
       });
     },
-    [connected, socket],
+    [connected, enabled, socket],
   );
 
   return {
     socket,
-    sync,
-    connected,
+    sync: enabled && sync?.code === code?.toUpperCase() ? sync : null,
+    connected: enabled && connected,
     bindError,
     shuttingDown,
     emitWithAck,

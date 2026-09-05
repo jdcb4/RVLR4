@@ -56,9 +56,9 @@ class FakeSocket {
     this.trigger("connect");
   }
 
-  private trigger(event: string) {
+  trigger(event: string, ...args: unknown[]) {
     for (const listener of this.listeners.get(event) ?? []) {
-      listener();
+      listener(...args);
     }
   }
 }
@@ -87,6 +87,36 @@ describe("useRoomChannel", () => {
 
     await waitFor(() => expect(result.current.connected).toBe(true));
     expect(socket.emissions.filter(({ event }) => event === "session:bind")).toHaveLength(2);
+  });
+
+  it("disconnects and removes listeners on unmount", () => {
+    persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
+    const { unmount } = renderHook(() => useRoomChannel("ABC123", true));
+    expect(socket.connected).toBe(true);
+    unmount();
+    expect(socket.connected).toBe(false);
+    socket.reconnect();
+    expect(socket.emissions.filter(({ event }) => event === "session:bind")).toHaveLength(1);
+  });
+
+  it("clears old sync on room changes and ignores messages for another session", () => {
+    persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
+    persistSession({ code: "DEF456", playerId: "player-2", secret: "secret-2" });
+    const { result, rerender } = renderHook(({ code, enabled }) => useRoomChannel(code, enabled), {
+      initialProps: { code: "ABC123", enabled: true },
+    });
+    act(() => socket.trigger("room:sync", { code: "ABC123", you: { playerId: "player-1" } }));
+    expect(result.current.sync?.code).toBe("ABC123");
+    rerender({ code: "DEF456", enabled: true });
+    expect(result.current.sync).toBeNull();
+    act(() => socket.trigger("room:sync", { code: "ABC123", you: { playerId: "player-1" } }));
+    expect(result.current.sync).toBeNull();
+    act(() => socket.trigger("room:sync", { code: "DEF456", you: { playerId: "player-2" } }));
+    expect(result.current.sync?.code).toBe("DEF456");
+    rerender({ code: "DEF456", enabled: false });
+    expect(socket.connected).toBe(false);
+    expect(result.current.connected).toBe(false);
+    expect(result.current.sync).toBeNull();
   });
 
   it("does not connect without stored session credentials", async () => {

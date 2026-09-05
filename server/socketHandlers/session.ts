@@ -7,6 +7,7 @@ import { operationalLog } from "../operationalLog.ts";
 import { RATE_POLICIES } from "../rateLimiter.ts";
 import { archiveRoomAfterAllPlayersOptedOut, type RoomStore } from "../roomStore.ts";
 import { registerHandler } from "../socketHandle.ts";
+import { releaseRoomSocket } from "../socketPresence.ts";
 import { readSocketRequest, reportSocketFailure } from "../socketRequest.ts";
 import { sessionBindSchema } from "../socketSchemas.ts";
 import type { SocketHandlerContext, SocketSecurityContext } from "./types.ts";
@@ -35,8 +36,14 @@ function registerSessionBind(
   store: RoomStore,
   security: SocketSecurityContext,
 ) {
+  let binding = false;
   socket.on("session:bind", async (...args: unknown[]) => {
     const { payload: rawPayload, valid, ack } = readSocketRequest(args, "session:bind");
+    if (binding) {
+      ack({ ok: false, error: "A session connection is already in progress. Try again." });
+      return;
+    }
+    binding = true;
     try {
       const budget = security.limiter.take(`socket:bind:${socket.id}`, RATE_POLICIES.sessionBind);
       if (!budget.allowed) {
@@ -60,10 +67,18 @@ function registerSessionBind(
         secret: parsed.data.secret,
       });
       if (!player) throw new Error("Unable to restore this session.");
+      if (socket.data.roomCode !== code || socket.data.playerId !== player.id) {
+        await releaseRoomSocket(io, socket, store);
+      }
+      if (!socket.connected) return;
       socket.data.roomCode = code;
       socket.data.playerId = player.id;
-      player.disconnectedAt = null;
       await socket.join(roomChannel(code));
+      if (!socket.connected) {
+        await releaseRoomSocket(io, socket, store);
+        return;
+      }
+      player.disconnectedAt = null;
       await broadcastRoom(io, store, code);
       mpDebug("session bound", { code, playerId: player.id });
       ack?.({ ok: true });
@@ -73,6 +88,8 @@ function registerSessionBind(
         ok: false,
         error: error instanceof Error ? error.message : "Unable to bind session.",
       });
+    } finally {
+      binding = false;
     }
   });
 }
@@ -80,19 +97,7 @@ function registerSessionBind(
 function registerDisconnect({ io, socket, store }: SocketHandlerContext) {
   socket.on("disconnect", async () => {
     try {
-      const code = socket.data.roomCode as string | undefined;
-      const playerId = socket.data.playerId as string | undefined;
-      if (!code || !playerId) return;
-      const room = store.getRoom(code);
-      const player = room?.players.get(playerId);
-      if (!room || !player) return;
-      player.disconnectedAt = Date.now();
-      if (room.replayOfferActive) {
-        delete room.replayOfferActive;
-        delete room.replayAcceptedPlayerIds;
-        room.replayCancelledByDisconnect = true;
-      }
-      await broadcastRoom(io, store, code);
+      await releaseRoomSocket(io, socket, store);
     } catch (error) {
       operationalLog("error", "socket_error", {
         operation: "socket.disconnect",

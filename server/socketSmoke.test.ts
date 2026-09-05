@@ -16,6 +16,8 @@ import { RoomStore } from "./roomStore.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
 
 type TestHarness = {
+  readonly store: RoomStore;
+  readonly io: Server;
   readonly url: string;
   readonly close: () => Promise<void>;
   readonly dropPlayerTransport: (playerId: string) => Promise<void>;
@@ -44,6 +46,8 @@ async function bootHarness(): Promise<TestHarness> {
   const url = `http://127.0.0.1:${port}`;
 
   return {
+    store,
+    io,
     url,
     dropPlayerTransport: async (playerId) => {
       const sockets = [...io.sockets.sockets.values()];
@@ -276,6 +280,71 @@ describe("multiplayer smoke", () => {
 
   afterEach(async () => {
     await harness.close();
+  });
+
+  it("keeps a player present until their last tab disconnects", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "hat");
+    const [first, duplicate, peer] = await bindAllClients(harness.url, [host, host, guests[0]!]);
+    try {
+      const firstUpdate = nextSync(peer!.socket);
+      duplicate!.socket.disconnect();
+      const stillPresent = await firstUpdate;
+      await expect
+        .poll(() => harness.io.sockets.adapter.rooms.get(`room:${host.code}`)?.size)
+        .toBe(2);
+      expect(
+        harness.store.getRoom(host.code)?.players.get(host.playerId)?.disconnectedAt,
+      ).toBeNull();
+      expect(
+        stillPresent.lobby?.players.find((player) => player.id === host.playerId)?.disconnectedAt,
+      ).toBeNull();
+      expect(await emitAck(first!.socket, "lobby:setReady", { ready: true })).toEqual({ ok: true });
+      const finalUpdate = nextSyncWhere(
+        peer!.socket,
+        (sync) =>
+          typeof sync.lobby?.players.find((player) => player.id === host.playerId)
+            ?.disconnectedAt === "number",
+      );
+      first!.socket.disconnect();
+      const away = await finalUpdate;
+      expect(
+        away.lobby?.players.find((player) => player.id === host.playerId)?.disconnectedAt,
+      ).toEqual(expect.any(Number));
+    } finally {
+      first!.socket.disconnect();
+      duplicate!.socket.disconnect();
+      peer!.socket.disconnect();
+    }
+  });
+
+  it("rebinds into one room and leaves the previous room able to broadcast", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "hat");
+    const [bound, peer] = await bindAllClients(harness.url, [host, guests[0]!]);
+    const other = await postJson<Credentials>(`${harness.url}/api/rooms`, {
+      gameKind: "hat",
+      hostName: "Other",
+    });
+    try {
+      const departure = nextSync(peer!.socket);
+      expect(
+        await emitAck(bound!.socket, "session:bind", {
+          code: other.code,
+          playerId: other.playerId,
+          secret: other.secret,
+        }),
+      ).toEqual({ ok: true });
+      expect(
+        (await departure).lobby?.players.find((player) => player.id === host.playerId)
+          ?.disconnectedAt,
+      ).toEqual(expect.any(Number));
+      expect(harness.io.sockets.adapter.rooms.get(`room:${host.code}`)?.size).toBe(1);
+      expect(harness.io.sockets.adapter.rooms.get(`room:${other.code}`)?.size).toBe(1);
+      expect(await emitAck(peer!.socket, "lobby:setReady", { ready: true })).toEqual({ ok: true });
+      expect(await emitAck(bound!.socket, "lobby:setReady", { ready: true })).toEqual({ ok: true });
+    } finally {
+      bound!.socket.disconnect();
+      peer!.socket.disconnect();
+    }
   });
 
   it("hosts a Who What Where lobby, lets a guest join, marks ready, and starts the match", async () => {
