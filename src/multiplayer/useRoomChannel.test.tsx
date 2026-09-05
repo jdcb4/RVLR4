@@ -12,6 +12,7 @@ class FakeSocket {
   connected = false;
   bindAck: { ok?: boolean; error?: string } = { ok: true };
   connectCalls = 0;
+  readonly pendingAcks: Array<(error: Error | null, value: unknown) => void> = [];
   readonly emissions: Array<{ event: string; payload: unknown }> = [];
   private readonly listeners = new Map<string, Set<Listener>>();
 
@@ -43,11 +44,17 @@ class FakeSocket {
     return this;
   }
 
-  emit(event: string, payload: unknown, ack?: (value: { ok?: boolean; error?: string }) => void) {
+  emit(event: string, payload: unknown, ack?: (error: Error | null, value: unknown) => void) {
     this.emissions.push({ event, payload });
     if (event === "session:bind") {
-      ack?.(this.bindAck);
+      ack?.(null, this.bindAck);
+    } else if (ack) {
+      this.pendingAcks.push(ack);
     }
+    return this;
+  }
+
+  timeout() {
     return this;
   }
 
@@ -89,6 +96,20 @@ describe("useRoomChannel", () => {
     expect(socket.emissions.filter(({ event }) => event === "session:bind")).toHaveLength(2);
   });
 
+  it("exposes a connection failure and lets the player retry", async () => {
+    persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
+    const { result } = renderHook(() => useRoomChannel("ABC123", true));
+    await waitFor(() => expect(result.current.connected).toBe(true));
+    act(() => {
+      socket.disconnect();
+      socket.trigger("connect_error", new Error("Transport unavailable"));
+    });
+    expect(result.current.bindError).toContain("Could not connect");
+    act(() => result.current.retryConnection());
+    await waitFor(() => expect(result.current.connected).toBe(true));
+    expect(result.current.bindError).toBeNull();
+  });
+
   it("disconnects and removes listeners on unmount", () => {
     persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
     const { unmount } = renderHook(() => useRoomChannel("ABC123", true));
@@ -128,6 +149,26 @@ describe("useRoomChannel", () => {
     expect(socket.connectCalls).toBe(0);
     expect(socket.connected).toBe(false);
     expect(socket.emissions).toHaveLength(0);
+  });
+
+  it("does not show a late action failure from a previous room", async () => {
+    persistSession({ code: "ABC123", playerId: "player-1", secret: "secret-1" });
+    persistSession({ code: "DEF456", playerId: "player-2", secret: "secret-2" });
+    const { result, rerender } = renderHook(({ code }) => useRoomChannel(code, true), {
+      initialProps: { code: "ABC123" },
+    });
+    await waitFor(() => expect(result.current.connected).toBe(true));
+    let request: ReturnType<typeof result.current.emitWithAck>;
+    act(() => {
+      request = result.current.emitWithAck("lobby:setReady", { ready: true });
+    });
+    rerender({ code: "DEF456" });
+    await waitFor(() => expect(result.current.connected).toBe(true));
+    await act(async () => {
+      socket.pendingAcks[0]!(null, { ok: false, error: "Old room failed." });
+      await request;
+    });
+    expect(result.current.actionError).toBeNull();
   });
 
   it("keeps commands unavailable when session binding is rejected", async () => {

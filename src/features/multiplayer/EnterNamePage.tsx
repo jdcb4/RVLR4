@@ -7,6 +7,7 @@ import { type AvatarId, isAvatarId, pickRandomAvatarId } from "@/multiplayer/ava
 import { getMultiplayerDisplayNames } from "@/multiplayer/displayNames";
 import { gameKindLabel } from "@/multiplayer/gameKindLabel";
 import { persistSession } from "@/multiplayer/useRoomChannel";
+import { requestHttp } from "@/services/networkRequests";
 
 import { AvatarPicker } from "./AvatarPicker";
 import { readRoomEntrySession, type RoomEntrySession } from "./roomEntryResponse";
@@ -58,10 +59,12 @@ function saveLastAvatar(value: AvatarId): void {
 export function EnterNamePage() {
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
+  const submission = useRef<AbortController | null>(null);
   const [searchParams] = useSearchParams();
   const intent = searchParams.get("intent") as Intent | null;
   const joinCode = searchParams.get("code");
   const hostGame = searchParams.get("game");
+  useEffect(() => () => submission.current?.abort(), [intent, joinCode, hostGame]);
 
   const [name, setName] = useState(() => loadLastName());
   const [avatarId, setAvatarId] = useState<AvatarId>(() => loadLastAvatar());
@@ -91,9 +94,11 @@ export function EnterNamePage() {
     }
 
     let cancelled = false;
+    const controller = new AbortController();
 
-    void fetch(`/api/rooms/${encodeURIComponent(joinCode)}`)
-      .then(async (response) => {
+    void requestHttp(
+      `/api/rooms/${encodeURIComponent(joinCode)}`,
+      async (response) => {
         if (!response.ok) {
           throw new Error("That join code is not active.");
         }
@@ -104,7 +109,9 @@ export function EnterNamePage() {
           gameKind?: string;
           playerCount?: number;
         }>;
-      })
+      },
+      { signal: controller.signal },
+    )
       .then((payload) => {
         if (cancelled || !payload.exists) {
           return;
@@ -117,16 +124,19 @@ export function EnterNamePage() {
         });
       })
       .catch(() => {
-        setError("Could not look up that join code.");
+        if (!cancelled)
+          setError("Could not look up that join code. Check your connection and try again.");
       });
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, [intent, joinCode]);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    if (submission.current) return;
     setError(null);
 
     const trimmed = name.trim();
@@ -138,6 +148,8 @@ export function EnterNamePage() {
     }
 
     setLoading(true);
+    const controller = new AbortController();
+    submission.current = controller;
 
     try {
       const enterRoom = (session: RoomEntrySession) => {
@@ -152,39 +164,51 @@ export function EnterNamePage() {
           throw new Error("Missing game selection.");
         }
 
-        const response = await fetch("/api/rooms", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        const session = await requestHttp(
+          "/api/rooms",
+          (response) => readRoomEntrySession(response, "Unable to create a room."),
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              gameKind: hostGame,
+              hostName: trimmed,
+              avatarId,
+            }),
+            signal: controller.signal,
           },
-          body: JSON.stringify({
-            gameKind: hostGame,
-            hostName: trimmed,
-            avatarId,
-          }),
-        });
+        );
 
-        enterRoom(await readRoomEntrySession(response, "Unable to create a room."));
+        if (!controller.signal.aborted) enterRoom(session);
       } else if (intent === "join") {
         if (!joinCode) {
           throw new Error("Missing join code.");
         }
 
-        const response = await fetch(`/api/rooms/${encodeURIComponent(joinCode)}/join`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        const session = await requestHttp(
+          `/api/rooms/${encodeURIComponent(joinCode)}/join`,
+          (response) => readRoomEntrySession(response, "Unable to join this room."),
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: trimmed, avatarId }),
+            signal: controller.signal,
           },
-          body: JSON.stringify({ name: trimmed, avatarId }),
-        });
+        );
 
-        enterRoom(await readRoomEntrySession(response, "Unable to join this room."));
+        if (!controller.signal.aborted) enterRoom(session);
       } else {
         throw new Error("Open this page from the home screen.");
       }
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Something went wrong.");
+      if (!controller.signal.aborted)
+        setError(caught instanceof Error ? caught.message : "Something went wrong.");
     } finally {
+      submission.current = null;
       setLoading(false);
     }
   };

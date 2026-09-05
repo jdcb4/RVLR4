@@ -9,6 +9,7 @@ import { io as ioClient, type Socket as ClientSocket } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
+import { requestSocketAck } from "@/services/networkRequests";
 
 import { handleJsonBodyError, registerHttpRoutes } from "./httpRoutes.ts";
 import { createCorsOriginValidator } from "./originPolicy.ts";
@@ -280,6 +281,27 @@ describe("multiplayer smoke", () => {
 
   afterEach(async () => {
     await harness.close();
+  });
+
+  it("settles unacknowledged and disconnected requests without replaying offline commands", async () => {
+    const { host } = await createRoomWithGuests(harness.url, "hat");
+    const { socket } = await bindClient(harness.url, host);
+    try {
+      expect(await requestSocketAck(socket, "ignored:event", undefined, 30)).toMatchObject({
+        ok: false,
+        code: "REQUEST_TIMEOUT",
+      });
+      const pending = requestSocketAck(socket, "ignored:event", undefined, 4_000);
+      socket.disconnect();
+      expect(await pending).toMatchObject({ ok: false, code: "DISCONNECTED" });
+      expect(await requestSocketAck(socket, "lobby:setReady", { ready: true })).toMatchObject({
+        ok: false,
+        code: "DISCONNECTED",
+      });
+      expect(harness.store.getRoom(host.code)?.players.get(host.playerId)?.ready).toBe(false);
+    } finally {
+      socket.disconnect();
+    }
   });
 
   it("keeps a player present until their last tab disconnects", async () => {

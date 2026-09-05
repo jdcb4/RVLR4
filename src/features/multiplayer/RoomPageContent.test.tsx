@@ -33,6 +33,7 @@ describe("RoomPageContent", () => {
   it("renders the missing-code state before binding a room", () => {
     renderWithRouter(
       <RoomPageContent
+        onRetryConnection={() => {}}
         bindError={null}
         code={undefined}
         connected

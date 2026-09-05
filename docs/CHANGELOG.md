@@ -2,6 +2,13 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.8 - 2026-09-05
+
+- **Bounded requests:** Socket binds/actions and HTTP room requests have an
+  eight-second deadline. Disconnects settle pending actions, incomplete replies
+  show an error, and connection failures offer retry and home navigation.
+  HTTP deadlines include reading the body; leaving entry screens cancels work.
+
 ## 0.22.7 - 2026-09-05
 
 - **Connection ownership:** Leaving a room screen now closes its socket and

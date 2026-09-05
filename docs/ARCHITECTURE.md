@@ -21,6 +21,12 @@ The single-process Socket.IO adapter supplies presence: a player is away only
 after their final bound tab disconnects. Rebinding first releases the previous
 room membership; viewer broadcasts also check membership before projection.
 
+Browser requests use `src/services/networkRequests.ts`: an eight-second limit
+covers HTTP headers and body reading, and Socket.IO clears outstanding acks on
+timeout/disconnect. Actions are never automatically replayed. Room screens
+surface failures and offer connection retry or home navigation. Entry requests
+are cancelled on unmount and duplicate form submissions are prevented.
+
 Lobby synchronization includes a server-authored start-readiness result. The
 same pure evaluator gates `lobby:startGame` and supplies host-facing blocker
 copy, so client guidance cannot diverge from server enforcement.

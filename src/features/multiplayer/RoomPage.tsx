@@ -1,7 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 
-import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
+import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameShell } from "@/components/GameShell";
+import { Button } from "@/components/ui/button";
 import { DrawNGuessMultiplayerView } from "@/features/drawnguess/multiplayer/DrawNGuessMultiplayerView";
 import { HatMultiplayerView } from "@/features/hat-game/multiplayer/HatMultiplayerView";
 import { ImposterMultiplayerView } from "@/features/imposter/multiplayer/ImposterMultiplayerView";
@@ -22,16 +23,33 @@ export function RoomPage() {
   const navigate = useNavigate();
   const params = useParams();
   const code = params.code?.toUpperCase();
-  const { sync, bindError, emitWithAck, connected, shuttingDown } = useRoomChannel(
-    code,
-    Boolean(code),
-  );
+  const {
+    sync,
+    bindError,
+    emitWithAck,
+    connected,
+    shuttingDown,
+    retryConnection,
+    actionError,
+    clearActionError,
+  } = useRoomChannel(code, Boolean(code));
   const invite = useRoomInviteControls({ code, emitWithAck, sync });
 
   useActiveRoomBookmark(sync);
 
   return (
     <RoomConnectionBanners connected={connected} shuttingDown={shuttingDown}>
+      {actionError ? (
+        <div
+          role="alert"
+          className="fixed inset-x-2 top-2 z-50 flex items-center justify-between gap-3 rounded-xl border border-destructive bg-background p-3 text-typ-ui text-destructive shadow-md"
+        >
+          <span>{actionError}</span>
+          <Button type="button" variant="outline" onClick={clearActionError}>
+            Dismiss
+          </Button>
+        </div>
+      ) : null}
       <RoomPageContent
         bindError={bindError}
         code={code}
@@ -40,6 +58,7 @@ export function RoomPage() {
         invite={invite}
         sync={sync}
         onBackHome={() => navigate("/")}
+        onRetryConnection={retryConnection}
       />
     </RoomConnectionBanners>
   );
@@ -53,6 +72,7 @@ export function RoomPageContent({
   invite,
   emitWithAck,
   onBackHome,
+  onRetryConnection,
 }: {
   readonly code: string | undefined;
   readonly bindError: string | null;
@@ -61,6 +81,7 @@ export function RoomPageContent({
   readonly invite: ReturnType<typeof useRoomInviteControls>;
   readonly emitWithAck: EmitWithAck;
   readonly onBackHome: () => void;
+  readonly onRetryConnection: () => void;
 }) {
   if (!code) {
     return (
@@ -73,7 +94,12 @@ export function RoomPageContent({
   if (bindError) {
     return (
       <GameShell
-        footer={<PrimaryFooterButton label="Back to home" onClick={onBackHome} />}
+        footer={
+          <>
+            <PrimaryFooterButton label="Retry connection" onClick={onRetryConnection} />
+            <SecondaryFooterButton label="Back to home" onClick={onBackHome} />
+          </>
+        }
         title="Reconnect"
       >
         <p className="text-typ-body-relaxed text-destructive">{bindError}</p>
@@ -87,7 +113,10 @@ export function RoomPageContent({
 
   if (!sync) {
     return (
-      <GameShell footer={null} title="Connecting">
+      <GameShell
+        footer={<SecondaryFooterButton label="Back to home" onClick={onBackHome} />}
+        title="Connecting"
+      >
         <p className="text-typ-body-relaxed text-muted-foreground">
           {connected ? "Syncing your table..." : "Connecting to the host..."}
         </p>

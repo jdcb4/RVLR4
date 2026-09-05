@@ -7,6 +7,7 @@ import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 import { clearActiveGameBookmark, readActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
 import { gameKindLabel } from "@/multiplayer/gameKindLabel";
 import { loadSession } from "@/multiplayer/useRoomChannel";
+import { requestHttp } from "@/services/networkRequests";
 
 const games = [
   {
@@ -61,15 +62,22 @@ export function MultiplayerHomePage() {
     }
 
     let cancelled = false;
+    const controller = new AbortController();
 
     void (async () => {
       try {
-        const response = await fetch(`/api/rooms/${encodeURIComponent(bookmark.code)}`);
-        const data = (await response.json()) as {
-          exists?: boolean;
-          phase?: string;
-          resumeEligible?: boolean;
-        };
+        const { response, data } = await requestHttp(
+          `/api/rooms/${encodeURIComponent(bookmark.code)}`,
+          async (response) => ({
+            response,
+            data: (await response.json()) as {
+              exists?: boolean;
+              phase?: string;
+              resumeEligible?: boolean;
+            },
+          }),
+          { signal: controller.signal },
+        );
 
         if (cancelled) {
           return;
@@ -96,6 +104,7 @@ export function MultiplayerHomePage() {
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, []);
 
