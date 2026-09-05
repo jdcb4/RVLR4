@@ -7,7 +7,12 @@ export function roomChannel(code: string) {
   return `room:${code}`;
 }
 
-export async function broadcastRoom(io: Server, store: RoomStore, code: string) {
+export async function broadcastRoom(
+  io: Server,
+  store: RoomStore,
+  code: string,
+  onlyPlayerId?: string,
+) {
   const room = store.getRoom(code);
 
   if (!room) {
@@ -27,6 +32,7 @@ export async function broadcastRoom(io: Server, store: RoomStore, code: string) 
       continue;
     }
 
-    socket.emit("room:sync", buildRoomSync(room, playerId));
+    if (!onlyPlayerId || onlyPlayerId === playerId)
+      socket.emit("room:sync", buildRoomSync(room, playerId));
   }
 }

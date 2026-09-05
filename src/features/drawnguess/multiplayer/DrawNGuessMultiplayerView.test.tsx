@@ -233,7 +233,6 @@ describe("DrawNGuessMultiplayerView", () => {
       expect(screen.getByRole("textbox")).toHaveValue("Robot ");
       fireEvent.change(input, { target: { value: "Robot chef" } });
       await act(async () => {
-        replies[1]!({ ok: true });
         replies[0]!({ ok: false, error: "Stale failure" });
       });
       expect(screen.getByRole("textbox")).toHaveValue("Robot chef");
@@ -245,7 +244,8 @@ describe("DrawNGuessMultiplayerView", () => {
       );
       expect(input).toBeDisabled();
       await act(async () => {
-        replies[2]!({ ok: true });
+        await Promise.resolve();
+        replies[1]!({ ok: true });
       });
       expect(screen.getByText("Response submitted")).toBeInTheDocument();
       rerender(

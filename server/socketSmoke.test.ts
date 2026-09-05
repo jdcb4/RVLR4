@@ -11,6 +11,8 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
 import { requestSocketAck } from "@/services/networkRequests";
 
+import { broadcastRoom } from "./broadcast.ts";
+import { startDrawNGuessMatch } from "./drawnguessRuntime.ts";
 import { startHatMatch } from "./hatRuntime.ts";
 import { handleJsonBodyError, registerHttpRoutes } from "./httpRoutes.ts";
 import { createCorsOriginValidator } from "./originPolicy.ts";
@@ -198,7 +200,7 @@ function bindClient(url: string, creds: Credentials): Promise<BoundClient> {
 
 async function createRoomWithGuests(
   url: string,
-  gameKind: "whowhatwhere" | "hat",
+  gameKind: "whowhatwhere" | "hat" | "drawnguess",
 ): Promise<{ host: Credentials; guests: Credentials[] }> {
   const host = await postJson<Credentials>(`${url}/api/rooms`, {
     gameKind,
@@ -283,6 +285,49 @@ describe("multiplayer smoke", () => {
 
   afterEach(async () => {
     await harness.close();
+  });
+
+  it("sends private drawing drafts only to the owning tabs and broadcasts progress changes", async () => {
+    const { host, guests } = await createRoomWithGuests(harness.url, "drawnguess");
+    const [owner, duplicate, peer] = await bindAllClients(harness.url, [host, host, guests[0]!]);
+    const room = harness.store.getRoom(host.code)!;
+    startDrawNGuessMatch(room);
+    const ready = nextSyncWhere(peer!.socket, (sync) => sync.phase === "playing");
+    await broadcastRoom(harness.io, harness.store, host.code);
+    await ready;
+    const peerUpdates: RoomSyncPayload[] = [];
+    peer!.socket.on("room:sync", (sync) => peerUpdates.push(sync));
+    const drawing = { format: "strokes-v1", width: 1, height: 1, strokes: [] };
+    try {
+      const duplicateDraft = nextSyncWhere(
+        duplicate!.socket,
+        (sync) => sync.drawnguess?.private.ownSubmission?.status === "draft",
+      );
+      expect(await emitAck(owner!.socket, "drawnguess:updateDrawingDraft", { drawing })).toEqual({
+        ok: true,
+      });
+      await duplicateDraft;
+      await new Promise((resolve) => setTimeout(resolve, 20));
+      expect(peerUpdates).toHaveLength(0);
+      const submitted = nextSyncWhere(
+        peer!.socket,
+        (sync) => sync.drawnguess?.public.submittedPlayerIds.includes(host.playerId) === true,
+      );
+      expect(await emitAck(owner!.socket, "drawnguess:submitDrawing", { drawing })).toEqual({
+        ok: true,
+      });
+      await submitted;
+      const editing = nextSyncWhere(
+        peer!.socket,
+        (sync) => sync.drawnguess?.public.submittedPlayerIds.includes(host.playerId) === false,
+      );
+      expect(await emitAck(owner!.socket, "drawnguess:updateDrawingDraft", { drawing })).toEqual({
+        ok: true,
+      });
+      await editing;
+    } finally {
+      for (const bound of [owner, duplicate, peer]) bound!.socket.disconnect();
+    }
   });
 
   it("distinguishes an invalid seat from a room lost after process replacement", async () => {

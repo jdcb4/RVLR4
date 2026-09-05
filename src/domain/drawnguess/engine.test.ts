@@ -61,6 +61,24 @@ const drawing: DrawNGuessDrawing = {
 };
 
 describe("DrawNGuess engine", () => {
+  it("copies changed paths without mutating prior drafts or completed drawing history", () => {
+    const original = createDrawNGuessMatch({
+      players: players.slice(0, 3),
+      wordSource: prompts,
+      now: 1000,
+    });
+    const draft = updateDrawingDraft(original, "p1", drawing, 1100);
+    expect(original.activeTurn!.submissions).toEqual({});
+    expect(draft.packets).toBe(original.packets);
+    const before = JSON.stringify(draft);
+    const next = updateDrawingDraft(draft, "p2", drawing, 1200);
+    expect(next.activeTurn!.submissions.p1).toBe(draft.activeTurn!.submissions.p1);
+    expect(JSON.stringify(draft)).toBe(before);
+    const advanced = advanceTurn(next, 1_000_000);
+    expect(next.packets.every((packet) => packet.entries.length === 1)).toBe(true);
+    expect(advanced.packets[0]?.entries[0]).toBe(next.packets[0]?.entries[0]);
+    expect(advanced.packets[0]?.entries[1]).toMatchObject({ drawing });
+  });
   it("preserves draft whitespace but trims submitted and expired entries", () => {
     let match = createDrawNGuessMatch({
       players: players.slice(0, 3),

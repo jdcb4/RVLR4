@@ -2,6 +2,17 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.24.6 - 2026-09-05
+
+- **Drawing input:** Keep the last valid stroke at point, stroke, and byte
+  limits, show a limit notice, quantize coordinates, and disable submitted
+  drawing tools. Commit a visible stroke at the client deadline.
+- **Drawing updates:** Coalesce drafts with one request in flight, preserve
+  the latest edit, and submit only after prior drafts settle. Editing withdraws
+  submitted status immediately. Private drafts sync only to their owning tabs;
+  public progress still reaches everyone. Match mutations copy changed paths
+  instead of cloning completed books on every input.
+
 ## 0.24.5 - 2026-09-05
 
 - **Shared protocol:** Client and server now use one set of room/replay DTOs,

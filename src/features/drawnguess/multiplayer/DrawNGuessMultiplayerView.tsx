@@ -19,7 +19,7 @@ import type {
   DrawNGuessSyncDto,
 } from "@/domain/drawnguess/types";
 import type { ReplaySync } from "@/domain/multiplayer/protocol";
-import type { EmitWithAck, SocketReply, SocketRequestArgs } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck, SocketRequestArgs } from "@/domain/multiplayer/protocol";
 import {
   MultiplayerEndGameActions,
   MultiplayerGameShell,
@@ -27,6 +27,7 @@ import {
 import { type AvatarId, isAvatarId } from "@/multiplayer/avatarCatalog";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
+import { createDraftQueue } from "./draftQueue";
 import { createBlankDrawing, renderDrawing } from "./drawingCanvas";
 import { DrawNGuessDrawingPreview } from "./DrawNGuessDrawingPreview";
 import { DrawNGuessWhiteboard } from "./DrawNGuessWhiteboard";
@@ -67,7 +68,7 @@ function DrawNGuessTurnView({
   const [drawingDraft, setDrawingDraft] = useState<DrawNGuessDrawing>(
     () => ownSubmission?.drawing ?? createBlankDrawing(),
   );
-  const latestAction = useRef(0);
+  const queueRef = useRef<ReturnType<typeof createDraftQueue> | null>(null);
   const [localGalleryOpen, setLocalGalleryOpen] = useState(false);
   const secondsLeft = useCountdownSeconds(payload.public.deadlineAt);
   const deadlineOpen = payload.public.deadlineAt ? Date.now() <= payload.public.deadlineAt : true;
@@ -77,12 +78,21 @@ function DrawNGuessTurnView({
   // The keyed turn view initializes from the server on entry/recovery. During
   // that turn this device owns its draft; peer broadcasts and delayed echoes
   // must not replace text or close an edit in progress.
-  useEffect(
-    () => () => {
-      latestAction.current += 1;
-    },
-    [],
-  );
+  useEffect(() => {
+    const queue = createDraftQueue(emitWithAck, (reply) => {
+      if (!reply.ok)
+        setError(reply.error ?? "Your draft could not be saved. Submit again to retry.");
+    });
+    queueRef.current = queue;
+    return () => {
+      queue.dispose();
+      queueRef.current = null;
+    };
+  }, [emitWithAck]);
+
+  useEffect(() => {
+    if (!deadlineOpen) void queueRef.current?.flush();
+  }, [deadlineOpen]);
 
   useEffect(() => {
     if (payload.public.phase !== "reveal") {
@@ -90,28 +100,9 @@ function DrawNGuessTurnView({
     }
   }, [payload.public.phase]);
 
-  const runAction = async (send: () => Promise<SocketReply>, submit = false) => {
-    const actionId = ++latestAction.current;
-    if (submit) setBusy(true);
+  const queueDraft = (request: SocketRequestArgs) => {
     setError("");
-
-    try {
-      const ack = await send();
-      if (actionId !== latestAction.current) return;
-
-      if (ack?.ok !== true) {
-        setError(ack?.error ?? "That action did not work.");
-      } else if (submit) {
-        setEditing(false);
-      }
-    } catch {
-      if (actionId === latestAction.current)
-        setError(
-          "Your response could not be saved. Check the connection and try submitting again.",
-        );
-    } finally {
-      if (submit) setBusy(false);
-    }
+    queueRef.current?.update(request);
   };
 
   const assignment = payload.private.assignment;
@@ -132,7 +123,17 @@ function DrawNGuessTurnView({
 
     if (!config.disabled) {
       const request = config.request;
-      if (request) await runAction(() => emitWithAck(...request), true);
+      if (request) {
+        setBusy(true);
+        setError("");
+        try {
+          const ack = await queueRef.current?.submit(request);
+          if (ack?.ok) setEditing(false);
+          else setError(ack?.error ?? "Your response was not saved. Try submitting again.");
+        } finally {
+          setBusy(false);
+        }
+      }
     }
   };
   const handleTextSubmitKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
@@ -158,7 +159,18 @@ function DrawNGuessTurnView({
       replaySync={replaySync}
       submitted={submitted}
       viewerPlayerId={viewerPlayerId}
-      onEdit={() => setEditing(true)}
+      onEdit={() => {
+        setEditing(true);
+        // Withdraw the submitted status immediately, before further typing or drawing.
+        const mode = assignment?.mode;
+        if (mode === "custom-prompt")
+          queueDraft(["drawnguess:updatePromptDraft", { text: promptDraft, turnKey }]);
+        else if (mode === "guessing")
+          queueDraft(["drawnguess:updateGuessDraft", { text: guessDraft, turnKey }]);
+        else if (mode === "drawing" && drawingDraft.format === "strokes-v1")
+          queueDraft(["drawnguess:updateDrawingDraft", { drawing: drawingDraft, turnKey }]);
+        void queueRef.current?.flush();
+      }}
       onGoToGallery={() => setLocalGalleryOpen(true)}
       onSubmit={submitCurrentResponse}
     />
@@ -181,19 +193,15 @@ function DrawNGuessTurnView({
         onDrawingChange={(next) => {
           setDrawingDraft(next);
           if (next.format === "strokes-v1")
-            void runAction(() =>
-              emitWithAck("drawnguess:updateDrawingDraft", { drawing: next, turnKey }),
-            );
+            queueDraft(["drawnguess:updateDrawingDraft", { drawing: next, turnKey }]);
         }}
         onGuessChange={(next) => {
           setGuessDraft(next);
-          void runAction(() => emitWithAck("drawnguess:updateGuessDraft", { text: next, turnKey }));
+          queueDraft(["drawnguess:updateGuessDraft", { text: next, turnKey }]);
         }}
         onPromptChange={(next) => {
           setPromptDraft(next);
-          void runAction(() =>
-            emitWithAck("drawnguess:updatePromptDraft", { text: next, turnKey }),
-          );
+          queueDraft(["drawnguess:updatePromptDraft", { text: next, turnKey }]);
         }}
         onTextSubmitKeyDown={handleTextSubmitKeyDown}
       />

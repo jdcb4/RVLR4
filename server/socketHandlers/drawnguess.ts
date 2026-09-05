@@ -28,8 +28,10 @@ export function registerDrawNGuessHandlers({ io, socket, store }: SocketHandlerC
     "Unable to update prompt.",
     async ({ room, actor }, payload) => {
       assertDrawNGuessTurn(room, payload.turnKey);
+      const publicProgressChanged =
+        room.drawnguessMatch?.activeTurn?.submissions[actor.id]?.status === "submitted";
       applyDrawNGuessPromptDraft(room, actor.id, payload.text);
-      await broadcastRoom(io, store, room.code);
+      await broadcastRoom(io, store, room.code, publicProgressChanged ? undefined : actor.id);
     },
   );
   register(
@@ -47,8 +49,10 @@ export function registerDrawNGuessHandlers({ io, socket, store }: SocketHandlerC
     "Unable to update drawing.",
     async ({ room, actor }, payload) => {
       assertDrawNGuessTurn(room, payload.turnKey);
+      const publicProgressChanged =
+        room.drawnguessMatch?.activeTurn?.submissions[actor.id]?.status === "submitted";
       applyDrawNGuessDrawingDraft(room, actor.id, payload.drawing);
-      await broadcastRoom(io, store, room.code);
+      await broadcastRoom(io, store, room.code, publicProgressChanged ? undefined : actor.id);
     },
   );
   register(
@@ -66,8 +70,10 @@ export function registerDrawNGuessHandlers({ io, socket, store }: SocketHandlerC
     "Unable to update guess.",
     async ({ room, actor }, payload) => {
       assertDrawNGuessTurn(room, payload.turnKey);
+      const publicProgressChanged =
+        room.drawnguessMatch?.activeTurn?.submissions[actor.id]?.status === "submitted";
       applyDrawNGuessGuessDraft(room, actor.id, payload.text);
-      await broadcastRoom(io, store, room.code);
+      await broadcastRoom(io, store, room.code, publicProgressChanged ? undefined : actor.id);
     },
   );
   register(

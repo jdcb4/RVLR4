@@ -43,6 +43,21 @@ All six draft/submission requests from current clients include a `turnKey`
 (`turnIndex:turnMode:deadlineAt`), which the server checks before mutation. The
 field is optional only for compatibility with clients loaded before its addition.
 
+The editor enforces the server's 200-stroke, 2,000-points-per-stroke,
+6,000-total-point, and 192-KiB drawing limits. Coordinates round to three decimal
+places (at most 0.32px error at 640px width); repeated identical points are
+ignored. When a limit is reached, existing work stays submitable and a notice
+offers undo/clear. Active strokes finish at the client deadline.
+
+Drafts coalesce at a one-second interval with one request in flight and one
+latest pending value. Explicit submission cancels unsent drafts and waits for
+an in-flight draft before sending the final value. A turn change cancels queued
+work; actions are not replayed after a lost connection. Editing a submitted
+response immediately withdraws its submitted status. Private draft-only updates
+sync to the player's bound tabs; status changes still broadcast to all players.
+The engine copies changed paths and treats previously stored drawings as
+immutable, so adding a draft does not clone all prior books.
+
 ## Data And Settings
 
 The v1 word source is `src/data/drawnguessWordPrompts.json`. It contains Easy prompts from Standard, Kids, and Sports categories. The current UI exposes only the default word pack, but the domain settings keep a `wordPackId` so category and difficulty filtering can be added later without reshaping match state.

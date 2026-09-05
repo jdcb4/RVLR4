@@ -1,4 +1,4 @@
-import { type PointerEvent, useEffect, useRef, useState } from "react";
+import { type PointerEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import { IconRotateCcw, IconTrash } from "@/components/icons";
 import type {
@@ -9,6 +9,7 @@ import type {
 import { cn } from "@/lib/utils";
 
 import { renderDrawing } from "./drawingCanvas";
+import { drawingInputBudget, quantizeDrawingPoint, strokeFitsBudget } from "./drawingInput";
 
 const COLORS = ["#111827", "#dc2626", "#2563eb", "#16a34a", "#f59e0b"] as const;
 const COLOR_NAMES = {
@@ -34,6 +35,15 @@ export function DrawNGuessWhiteboard({
   const [size, setSize] = useState<(typeof SIZES)[number]>(8);
   const [tool, setTool] = useState<"pen" | "eraser">("pen");
   const [activeStroke, setActiveStroke] = useState<DrawNGuessStroke | null>(null);
+  const activeStrokeRef = useRef<DrawNGuessStroke | null>(null);
+  const pointerIdRef = useRef<number | null>(null);
+  const [limitNotice, setLimitNotice] = useState("");
+  const budget = useMemo(() => drawingInputBudget(value), [value]);
+
+  const replaceActiveStroke = (stroke: DrawNGuessStroke | null) => {
+    activeStrokeRef.current = stroke;
+    setActiveStroke(stroke);
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -46,6 +56,7 @@ export function DrawNGuessWhiteboard({
   }, [activeStroke, value]);
 
   const updateDrawing = (strokes: readonly DrawNGuessStroke[]) => {
+    setLimitNotice("");
     onChange({
       format: "strokes-v1",
       width: 1,
@@ -55,43 +66,67 @@ export function DrawNGuessWhiteboard({
   };
 
   const startStroke = (event: PointerEvent<HTMLCanvasElement>) => {
-    if (disabled) {
+    if (disabled || pointerIdRef.current !== null) {
       return;
     }
 
     const point = pointerPoint(event);
-    event.currentTarget.setPointerCapture(event.pointerId);
-    setActiveStroke({
+    const stroke: DrawNGuessStroke = {
       id: crypto.randomUUID(),
       color,
       size,
       tool,
       points: [point],
-    });
+    };
+    if (!strokeFitsBudget(stroke, budget)) {
+      setLimitNotice("Drawing limit reached. Undo a stroke or clear the board to continue.");
+      return;
+    }
+    pointerIdRef.current = event.pointerId;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    replaceActiveStroke(stroke);
   };
 
   const moveStroke = (event: PointerEvent<HTMLCanvasElement>) => {
-    if (!activeStroke || disabled) {
+    const stroke = activeStrokeRef.current;
+    if (!stroke || disabled || event.pointerId !== pointerIdRef.current) {
       return;
     }
 
     const point = pointerPoint(event);
-    setActiveStroke({
-      ...activeStroke,
-      points: [...activeStroke.points, point],
-    });
+    const last = stroke.points.at(-1);
+    if (last?.x === point.x && last.y === point.y) return;
+    const next = { ...stroke, points: [...stroke.points, point] };
+    if (!strokeFitsBudget(next, budget)) {
+      setLimitNotice(
+        "Stroke limit reached. Your drawing is kept. Lift your finger, or undo to make space.",
+      );
+      return;
+    }
+    replaceActiveStroke(next);
   };
 
-  const finishStroke = () => {
-    if (!activeStroke || value.format !== "strokes-v1") {
-      setActiveStroke(null);
+  const finishStroke = (event?: PointerEvent<HTMLCanvasElement>) => {
+    if (event && event.pointerId !== pointerIdRef.current) return;
+    const stroke = activeStrokeRef.current;
+    pointerIdRef.current = null;
+    if (!stroke || value.format !== "strokes-v1") {
+      replaceActiveStroke(null);
 
       return;
     }
 
-    updateDrawing([...value.strokes, activeStroke]);
-    setActiveStroke(null);
+    if (strokeFitsBudget(stroke, budget)) updateDrawing([...value.strokes, stroke]);
+    replaceActiveStroke(null);
   };
+
+  // Commit the last visible stroke at the client deadline; the server's grace
+  // window can still preserve it as a draft before advancing the turn.
+  const finishStrokeRef = useRef(finishStroke);
+  finishStrokeRef.current = finishStroke;
+  useEffect(() => {
+    if (disabled) finishStrokeRef.current();
+  }, [disabled]);
 
   const strokes = value.format === "strokes-v1" ? value.strokes : [];
 
@@ -99,6 +134,7 @@ export function DrawNGuessWhiteboard({
     <div className="space-y-3">
       <canvas
         aria-label="Drawing board"
+        aria-describedby={limitNotice ? "drawing-limit" : undefined}
         className={cn(
           "aspect-[4/3] w-full touch-none rounded-xl border border-border bg-white shadow-inner",
           disabled ? "opacity-70" : "cursor-crosshair",
@@ -113,6 +149,12 @@ export function DrawNGuessWhiteboard({
         onPointerUp={finishStroke}
       />
 
+      {limitNotice ? (
+        <p id="drawing-limit" role="status" className="text-typ-ui text-muted-foreground">
+          {limitNotice}
+        </p>
+      ) : null}
+
       <div className="flex flex-wrap items-center gap-2">
         {COLORS.map((option) => (
           <button
@@ -125,6 +167,7 @@ export function DrawNGuessWhiteboard({
                 : "border-border",
             )}
             key={option}
+            disabled={disabled}
             style={{ backgroundColor: option }}
             type="button"
             onClick={() => {
@@ -140,6 +183,7 @@ export function DrawNGuessWhiteboard({
             tool === "eraser" ? "border-primary bg-semantic-primary-soft-bg" : "border-border",
           )}
           type="button"
+          disabled={disabled}
           onClick={() => setTool("eraser")}
         >
           Eraser
@@ -153,6 +197,7 @@ export function DrawNGuessWhiteboard({
               size === option ? "border-primary bg-semantic-primary-soft-bg" : "border-border",
             )}
             key={option}
+            disabled={disabled}
             type="button"
             onClick={() => setSize(option)}
           >
@@ -166,7 +211,7 @@ export function DrawNGuessWhiteboard({
         <button
           aria-label="Undo stroke"
           className="ml-auto rounded-xl border border-border p-2 transition hover:bg-muted"
-          disabled={strokes.length === 0}
+          disabled={disabled || activeStroke !== null || strokes.length === 0}
           type="button"
           onClick={() => updateDrawing(strokes.slice(0, -1))}
         >
@@ -175,7 +220,7 @@ export function DrawNGuessWhiteboard({
         <button
           aria-label="Clear drawing"
           className="rounded-xl border border-border p-2 transition hover:bg-muted"
-          disabled={strokes.length === 0}
+          disabled={disabled || activeStroke !== null || strokes.length === 0}
           type="button"
           onClick={() => updateDrawing([])}
         >
@@ -203,10 +248,10 @@ function appendActiveStroke(
 function pointerPoint(event: PointerEvent<HTMLCanvasElement>): DrawNGuessPoint {
   const rect = event.currentTarget.getBoundingClientRect();
 
-  return {
+  return quantizeDrawingPoint({
     x: clamp01((event.clientX - rect.left) / rect.width),
     y: clamp01((event.clientY - rect.top) / rect.height),
-  };
+  });
 }
 
 function clamp01(value: number) {

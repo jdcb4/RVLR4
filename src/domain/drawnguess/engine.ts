@@ -266,7 +266,7 @@ export function advanceTurn(match: DrawNGuessMatch, now = Date.now()): DrawNGues
     throw new Error("Turn is still in progress.");
   }
 
-  const next = cloneMatch(match);
+  const next = { ...match };
   const nextTurn = requireActiveTurn(next);
 
   next.packets = lockTurnEntries(next, nextTurn, now);
@@ -306,7 +306,7 @@ export function advanceReveal(
     throw new Error("Reveal is not available yet.");
   }
 
-  const next = cloneMatch(match);
+  const next = { ...match };
   const packet = packetAt(next, next.revealPacketIndex);
   const lastEntryIndex = Math.max(0, packet.entries.length - 1);
 
@@ -356,7 +356,7 @@ export function openRevealPacket(match: DrawNGuessMatch, starterPlayerId: string
     throw new Error("Unknown packet.");
   }
 
-  const next = cloneMatch(match);
+  const next = { ...match };
   next.phase = "reveal";
   next.revealPacketIndex = packetIndex;
   next.revealEntryIndex = 0;
@@ -420,13 +420,16 @@ function upsertSubmission(
   const turn = requireActiveTurn(match);
   assertSubmissionAllowed(match, turn, playerId, patch.mode, now);
 
-  const next = cloneMatch(match);
-  const nextTurn = requireActiveTurn(next);
-  const previous = nextTurn.submissions[playerId];
-
-  nextTurn.submissions[playerId] = buildTurnSubmission(playerId, now, patch, previous);
-
-  return next;
+  return {
+    ...match,
+    activeTurn: {
+      ...turn,
+      submissions: {
+        ...turn.submissions,
+        [playerId]: buildTurnSubmission(playerId, now, patch, turn.submissions[playerId]),
+      },
+    },
+  };
 }
 
 function assertSubmissionAllowed(
@@ -819,8 +822,4 @@ function packetAt(match: DrawNGuessMatch, index: number): DrawNGuessPacket {
   }
 
   return packet;
-}
-
-function cloneMatch(match: DrawNGuessMatch): DrawNGuessMatch {
-  return structuredClone(match) as DrawNGuessMatch;
 }
