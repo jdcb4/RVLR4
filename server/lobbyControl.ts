@@ -41,8 +41,18 @@ export function hostSetTeamCount(room: Room, nextCount: number) {
     return;
   }
 
-  if (nextCount < MIN_TEAMS || nextCount > MAX_TEAMS) {
+  if (!Number.isInteger(nextCount) || nextCount < MIN_TEAMS || nextCount > MAX_TEAMS) {
     throw new Error("Team count must be between 2 and 4.");
+  }
+
+  if (room.players.size > nextCount * MAX_PLAYERS_PER_TEAM) {
+    throw new Error(
+      `${nextCount} teams can hold at most ${nextCount * MAX_PLAYERS_PER_TEAM} players. Keep more teams or remove departed players first.`,
+    );
+  }
+
+  if (room.gameKind === "whowhatwhere") {
+    room.wwwSettings = { ...room.wwwSettings, teamCount: nextCount as 2 | 3 | 4 };
   }
 
   if (nextCount === room.teamCount) {
@@ -132,29 +142,15 @@ function rebalanceOverflow(room: Room) {
     return;
   }
 
-  let safety = 0;
-
-  while (safety < 64) {
-    safety += 1;
-    const counts = Array.from({ length: room.teamCount }, (_, teamIndex) =>
-      countPlayersOnTeam(room, teamIndex),
-    );
-
-    const overloadedIndex = counts.findIndex((count) => count > MAX_PLAYERS_PER_TEAM);
-
-    if (overloadedIndex === -1) {
-      return;
+  // Capacity is checked before mutation; each move reduces an overflowing
+  // team's count, so at most one pass over the roster is needed.
+  for (const player of room.players.values()) {
+    if (
+      player.teamIndex !== null &&
+      countPlayersOnTeam(room, player.teamIndex) > MAX_PLAYERS_PER_TEAM
+    ) {
+      player.teamIndex = pickSmallestTeamIndex(room);
     }
-
-    const movable = [...room.players.values()].find(
-      (player) => player.teamIndex === overloadedIndex,
-    );
-
-    if (!movable) {
-      return;
-    }
-
-    movable.teamIndex = pickSmallestTeamIndex(room);
   }
 }
 
@@ -163,16 +159,17 @@ export function hostPatchWhoWhatWhereSettings(room: Room, patch: Partial<GameSet
     throw new Error("Settings apply to Who What Where only.");
   }
 
-  room.wwwSettings = {
+  const nextSettings = {
     ...room.wwwSettings,
     ...patch,
   };
 
-  const reconciledTeamCount = room.wwwSettings.teamCount;
+  const reconciledTeamCount = nextSettings.teamCount;
 
   if (reconciledTeamCount !== room.teamCount) {
     hostSetTeamCount(room, reconciledTeamCount);
   }
+  room.wwwSettings = nextSettings;
 }
 
 export function hostPatchHatPrefs(

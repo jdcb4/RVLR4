@@ -437,5 +437,10 @@ export function assertTeamLobbyReady(room: Room): void {
         `Team ${index + 1} needs at least ${MIN_PLAYERS_PER_TEAM} players before you can start.`,
       );
     }
+    if (count > MAX_PLAYERS_PER_TEAM) {
+      throw new Error(
+        `Team ${index + 1} can have at most ${MAX_PLAYERS_PER_TEAM} players. Move players or add a team.`,
+      );
+    }
   }
 }

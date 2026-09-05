@@ -2,6 +2,12 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.22.10 - 2026-09-05
+
+- **Team capacity:** Reject undersized team-count choices before changing
+  settings or seats. Shared readiness enforces both minimum and maximum team
+  sizes, and Who What Where settings stay aligned with the lobby team count.
+
 ## 0.22.9 - 2026-09-05
 
 - **Replay recovery:** A cancelled offer can be replaced after everyone

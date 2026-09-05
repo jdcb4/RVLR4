@@ -33,6 +33,22 @@ function player(
 }
 
 describe("evaluateLobbyStartReadiness", () => {
+  it("blocks a team above the maximum and identifies its count", () => {
+    const readiness = evaluateLobbyStartReadiness(
+      buildInput({
+        gameKind: "whowhatwhere",
+        teamCount: 2,
+        teamNames: ["Red", "Blue"],
+        players: Array.from({ length: 9 }, (_, index) =>
+          player(`p${index}`, `Player ${index}`, index === 0, index < 7 ? 0 : 1, true),
+        ),
+      }),
+    );
+    expect(readiness.canStart).toBe(false);
+    expect(readiness.blockers).toEqual([
+      { code: "team-size", message: "Each team needs 2–6 players (Red: 7)." },
+    ]);
+  });
   it("allows a connected, ready Imposter lobby within the player limits", () => {
     expect(evaluateLobbyStartReadiness(buildInput())).toEqual({ canStart: true, blockers: [] });
   });

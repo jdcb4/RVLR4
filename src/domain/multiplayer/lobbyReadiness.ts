@@ -1,6 +1,6 @@
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import { IMPOSTER_MAX_PLAYERS, IMPOSTER_MIN_PLAYERS } from "@/config/imposterDefaults";
-import { MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
+import { MAX_PLAYERS_PER_TEAM, MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 import { DRAWNGUESS_MAX_PLAYERS, DRAWNGUESS_MIN_PLAYERS } from "@/domain/drawnguess/types";
 
 export type LobbyReadinessGameKind = "whowhatwhere" | "hat" | "imposter" | "drawnguess";
@@ -56,15 +56,15 @@ export function evaluateLobbyStartReadiness(input: LobbyReadinessInput): LobbySt
   }
 
   if (input.gameKind === "whowhatwhere" || input.gameKind === "hat") {
-    const undersizedTeams = Array.from({ length: input.teamCount }, (_, teamIndex) => ({
+    const invalidTeams = Array.from({ length: input.teamCount }, (_, teamIndex) => ({
       count: input.players.filter((player) => player.teamIndex === teamIndex).length,
       name: input.teamNames[teamIndex] ?? `Team ${teamIndex + 1}`,
-    })).filter(({ count }) => count < MIN_PLAYERS_PER_TEAM);
+    })).filter(({ count }) => count < MIN_PLAYERS_PER_TEAM || count > MAX_PLAYERS_PER_TEAM);
 
-    if (undersizedTeams.length > 0) {
+    if (invalidTeams.length > 0) {
       blockers.push({
         code: "team-size",
-        message: `Each team needs at least ${MIN_PLAYERS_PER_TEAM} players (${undersizedTeams
+        message: `Each team needs ${MIN_PLAYERS_PER_TEAM}–${MAX_PLAYERS_PER_TEAM} players (${invalidTeams
           .map(({ name, count }) => `${name}: ${count}`)
           .join(", ")}).`,
       });
