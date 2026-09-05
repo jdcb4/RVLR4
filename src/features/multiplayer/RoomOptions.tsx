@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 import { ModalDialog } from "@/components/ModalDialog";
 import { Button } from "@/components/ui/button";
+import type { EmitWithAck, SocketRequestArgs } from "@/domain/multiplayer/protocol";
+import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
 import { clearActiveGameBookmark, readActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
-import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
 import { clearSession } from "@/multiplayer/useRoomChannel";
 
 type Confirmation = {
-  event: string;
-  playerId?: string;
+  request: SocketRequestArgs;
   title: string;
   detail: string;
   leave?: boolean;
@@ -22,10 +22,7 @@ export function RoomOptions({
 }: {
   readonly sync: RoomSyncPayload;
   readonly connected: boolean;
-  readonly emitWithAck: (
-    event: string,
-    body?: unknown,
-  ) => Promise<{ ok?: boolean; error?: string } | undefined>;
+  readonly emitWithAck: EmitWithAck;
 }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -40,10 +37,7 @@ export function RoomOptions({
     setBusy(true);
     setError("");
     try {
-      const ack = await emitWithAck(
-        confirmation.event,
-        confirmation.playerId ? { playerId: confirmation.playerId } : undefined,
-      );
+      const ack = await emitWithAck(...confirmation.request);
       if (!ack?.ok) {
         setError(ack?.error ?? "The change was not confirmed. Try again.");
         return;
@@ -117,8 +111,7 @@ export function RoomOptions({
                                 disabled={!connected}
                                 onClick={() =>
                                   setConfirmation({
-                                    event: "lobby:hostRemovePlayer",
-                                    playerId: player.id,
+                                    request: ["lobby:hostRemovePlayer", { playerId: player.id }],
                                     title: `Remove ${player.name}?`,
                                     detail:
                                       "This removes their seat and submitted lobby clues. Their old tab will no longer be able to resume. Connected players cannot be removed.",
@@ -143,14 +136,14 @@ export function RoomOptions({
                       setConfirmation(
                         sync.you.isHost
                           ? {
-                              event: "lobby:hostClose",
+                              request: ["lobby:hostClose"],
                               title: "Close this lobby?",
                               detail:
                                 "Everyone will leave this table. You can host a new room from the home page.",
                               leave: true,
                             }
                           : {
-                              event: "lobby:leave",
+                              request: ["lobby:leave"],
                               title: "Leave this lobby?",
                               detail:
                                 "Your seat and lobby clues will be removed, including in any other tab using this seat. You can join again as a new player.",
@@ -174,7 +167,7 @@ export function RoomOptions({
                     disabled={!connected}
                     onClick={() =>
                       setConfirmation({
-                        event: "room:hostReturnToLobby",
+                        request: ["room:hostReturnToLobby"],
                         title: "End this match and return to lobby?",
                         detail:
                           "Current scores, turns, and drawings will be cleared. Players, teams, settings, and Hat lobby clues stay available. Everyone must ready up again.",

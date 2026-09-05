@@ -1,5 +1,6 @@
-import { type HandlerContext,registerHandler } from "../socketHandle.ts";
-import type { SocketEventName, SocketPayload } from "../socketSchemas.ts";
+import type { SocketEventName, SocketPayload } from "@/domain/multiplayer/socketSchemas";
+
+import { type HandlerContext, registerHandler } from "../socketHandle.ts";
 import type { SocketHandlerContext } from "./types.ts";
 
 export function createSocketHandlerRegistrar({ socket, store }: SocketHandlerContext) {

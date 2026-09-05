@@ -3,17 +3,13 @@ import { GameShell } from "@/components/GameShell";
 import { IconCheck } from "@/components/icons";
 import { PlayerAvatar } from "@/components/PlayerAvatar";
 import { Button } from "@/components/ui/button";
+import type { LobbyDto, LobbyPlayerDto, RoomSyncPayload } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { GameSpecificLobbySections } from "@/features/multiplayer/GameSpecificLobbySections";
 import { LobbyInviteSection, QrJoinDialog } from "@/features/multiplayer/LobbyInviteSection";
 import { LobbyTeamsSection } from "@/features/multiplayer/LobbyTeamsSection";
 import { RoomOptions } from "@/features/multiplayer/RoomOptions";
 import { cn } from "@/lib/utils";
-import type { LobbyDto, LobbyPlayerDto, RoomSyncPayload } from "@/multiplayer/roomTypes";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 export function RoomLobbyView({
   sync,

@@ -1,9 +1,9 @@
 import type { Socket } from "socket.io";
 
 import { DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES } from "@/domain/drawnguess/types";
+import type { SocketEventName } from "@/domain/multiplayer/socketSchemas";
 
 import { RATE_POLICIES, type TokenBucketResult, TokenBucketStore } from "./rateLimiter.ts";
-import type { SocketEventName } from "./socketSchemas.ts";
 
 const DRAWING_EVENTS = new Set<SocketEventName>([
   "drawnguess:updateDrawingDraft",

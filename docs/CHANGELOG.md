@@ -2,6 +2,15 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.24.5 - 2026-09-05
+
+- **Shared protocol:** Client and server now use one set of room/replay DTOs,
+  schema-derived event inputs, and acknowledgement types. Event names and
+  payloads are checked together at UI call sites. Imposter's shared state
+  types live in the domain layer, and runtime payload validation stays strict.
+- **Input cleanup:** Delayed keyboard scrolling checks its input's document
+  and attachment, so a closed screen cannot leave a callback using torn-down UI.
+
 ## 0.24.4 - 2026-09-05
 
 - **Development dependencies:** Update patched toolchain packages, including

@@ -3,9 +3,9 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import type { HatGameSession } from "@/domain/hat-game/types";
+import type { HatSyncDto } from "@/domain/multiplayer/protocol";
 import { HatMultiplayerBody } from "@/features/hat-game/multiplayer/HatMultiplayerBody";
 import { HatMultiplayerFooter } from "@/features/hat-game/multiplayer/HatMultiplayerFooter";
-import type { HatSyncDto } from "@/multiplayer/roomTypes";
 
 function buildSession(overrides: Partial<HatGameSession> = {}): HatGameSession {
   return {

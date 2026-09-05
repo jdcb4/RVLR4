@@ -1,11 +1,11 @@
 import { dealImposterRound } from "@/domain/imposter/round";
-import { getImposterWordList } from "@/domain/imposter/wordList";
 import type {
   ImposterPlayer,
   ImposterRoundState,
   ImposterSnapshot,
   ImposterStep,
-} from "@/features/imposter/imposterSingleplayerAppTypes";
+} from "@/domain/imposter/types";
+import { getImposterWordList } from "@/domain/imposter/wordList";
 
 import { assertLobbyReadyForImposterStart } from "./lobbyControl.ts";
 import type { Room } from "./roomStore.ts";

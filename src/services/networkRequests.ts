@@ -2,7 +2,8 @@ import type { Socket } from "socket.io-client";
 
 const REQUEST_TIMEOUT_MS = 8_000;
 
-export type SocketReply = { ok: boolean; error?: string; code?: string };
+import type { SocketReply } from "@/domain/multiplayer/protocol";
+export type { SocketReply } from "@/domain/multiplayer/protocol";
 
 /** Socket.IO removes timed-out and disconnected acknowledgements internally. */
 export function requestSocketAck(

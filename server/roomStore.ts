@@ -13,17 +13,15 @@ import {
 } from "@/domain/drawnguess/types";
 import type { HatGameSession } from "@/domain/hat-game/types";
 import { clampImposterCount, defaultImposterCount, shuffleWithRng } from "@/domain/imposter/round";
+import type { ImposterSnapshot } from "@/domain/imposter/types";
+import type { GameKind, RoomPhase } from "@/domain/multiplayer/protocol";
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
-import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 import { type AvatarId, normalizeAvatarId } from "@/multiplayer/avatarCatalog";
 
 import { generateRoomCode, normalizeRoomCode } from "./codes.ts";
 import { generateSecretToken, verifySecretToken } from "./secrets.ts";
-
-export type GameKind = "whowhatwhere" | "hat" | "imposter" | "drawnguess";
-
-export type RoomPhase = "lobby" | "playing" | "ended";
+export type { GameKind, RoomPhase } from "@/domain/multiplayer/protocol";
 
 export type RoomPlayer = {
   readonly id: string;

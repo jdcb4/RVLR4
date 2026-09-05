@@ -1,7 +1,4 @@
-import type {
-  ImposterPlayer,
-  ImposterRoundState,
-} from "@/features/imposter/imposterSingleplayerAppTypes";
+import type { ImposterPlayer, ImposterRoundState } from "@/domain/imposter/types";
 
 export type ParallelRevealProgress = {
   readonly seen: boolean;

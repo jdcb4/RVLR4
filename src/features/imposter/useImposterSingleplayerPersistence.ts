@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 
-import type {
-  ImposterSnapshot,
-  ImposterStoragePayload,
-} from "@/features/imposter/imposterSingleplayerAppTypes";
+import type { ImposterSnapshot } from "@/domain/imposter/types";
+import type { ImposterStoragePayload } from "@/features/imposter/imposterSingleplayerAppTypes";
 import {
   loadImposterResumeRecord,
   persistImposterSnapshot,

@@ -20,17 +20,13 @@ import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
 import { getHatGameContext, getHatGamePhaseMeta } from "@/domain/hat-game/engine";
 import { formatCountdown } from "@/domain/hat-game/time";
 import type { HatGameSession } from "@/domain/hat-game/types";
+import type { HatSyncDto } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { HatActiveTurnPanel } from "@/features/hat-game/HatActiveTurnPanel";
 import { HatPhaseBanner } from "@/features/hat-game/HatPhaseBanner";
 import { HatScoreboard } from "@/features/hat-game/screens/HatScoreboard";
-import type { HatSyncDto } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 export function HatMultiplayerBody({
   payload,

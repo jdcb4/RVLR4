@@ -8,7 +8,7 @@ import { Server } from "socket.io";
 import { io as ioClient, type Socket as ClientSocket } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
+import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
 import { requestSocketAck } from "@/services/networkRequests";
 
 import { startHatMatch } from "./hatRuntime.ts";

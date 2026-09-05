@@ -1,91 +1,29 @@
-import type { DrawNGuessSyncDto } from "@/domain/drawnguess/types";
-import type { HatGameSession } from "@/domain/hat-game/types";
-import type { LobbyStartReadiness } from "@/domain/multiplayer/lobbyReadiness";
-import type { MatchState } from "@/domain/whowhatwhere/types";
+import type {
+  HatSyncDto,
+  ImposterSyncDto,
+  LobbyDto,
+  LobbyPlayerDto,
+  RoomSyncPayload,
+  WhoWhatWhereSyncDto,
+} from "@/domain/multiplayer/protocol";
+export type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
 
 import { buildDrawNGuessSyncDto } from "./drawnguessViews.ts";
 import {
   canHatReturnSkipped,
   classifyHatRole,
-  type HatPeerRole,
   projectHatSessionForViewer,
   shouldShowHatTurnFooter,
 } from "./hatViews.ts";
-import { buildImposterSyncDto, type ImposterSyncDto } from "./imposterViews.ts";
+import { buildImposterSyncDto } from "./imposterViews.ts";
 import { getRoomLobbyStartReadiness } from "./lobbyReadiness.ts";
-import type { GameKind, Room, RoomPhase, RoomPlayer } from "./roomStore.ts";
+import type { Room, RoomPlayer } from "./roomStore.ts";
 import {
   canReturnSkippedWords,
   classifyWhoWhatWhereRole,
   projectWhoWhatWhereMatch,
   shouldShowWhoWhatWhereTurnFooter,
-  type WhoWhatWherePeerRole,
 } from "./whoWhatWhereViews.ts";
-
-export type LobbyPlayerDto = {
-  readonly id: string;
-  readonly name: string;
-  readonly avatarId: RoomPlayer["avatarId"];
-  readonly isHost: boolean;
-  readonly teamIndex: number | null;
-  readonly ready: boolean;
-  readonly disconnectedAt: number | null;
-};
-
-export type LobbyDto = {
-  readonly teamCount: number;
-  readonly teamNames: readonly string[];
-  readonly wwwSettings: Room["wwwSettings"];
-  readonly hatTurnDurationSeconds: number;
-  readonly hatSkipsPerTurn: number;
-  readonly imposterPlayerCount: number;
-  readonly imposterImposterCount: number;
-  readonly drawnguessSettings: Room["drawnguessSettings"];
-  readonly players: readonly LobbyPlayerDto[];
-  /** Hat only — the authenticated viewer's six famous-figure drafts. */
-  readonly myHatClueDrafts: readonly string[];
-  readonly startReadiness: LobbyStartReadiness;
-};
-
-export type WhoWhatWhereSyncDto = {
-  readonly match: MatchState;
-  readonly role: WhoWhatWherePeerRole;
-  readonly readyReveal: boolean;
-  readonly showTurnFooter: boolean;
-  readonly canReturnSkipped: boolean;
-};
-
-export type HatSyncDto = {
-  readonly session: HatGameSession;
-  readonly role: HatPeerRole;
-  readonly readyReveal: boolean;
-  readonly showTurnFooter: boolean;
-  readonly canReturnSkipped: boolean;
-};
-
-export type { ImposterSyncDto };
-export type { DrawNGuessSyncDto };
-
-export type RoomSyncPayload = {
-  readonly code: string;
-  readonly gameKind: GameKind;
-  readonly phase: RoomPhase;
-  readonly you: {
-    readonly playerId: string;
-    readonly isHost: boolean;
-  };
-  readonly lobby: LobbyDto | null;
-  readonly www: WhoWhatWhereSyncDto | null;
-  readonly hat: HatSyncDto | null;
-  readonly imposter: ImposterSyncDto | null;
-  readonly drawnguess: DrawNGuessSyncDto | null;
-  readonly replay: {
-    readonly offerActive: boolean;
-    readonly offerId?: string;
-    readonly acceptedIds: readonly string[];
-    readonly cancelledByDisconnect: boolean;
-  };
-};
 
 function lobbyPlayers(room: Room): LobbyPlayerDto[] {
   return [...room.players.values()].map((player) => toLobbyPlayerDto(player));

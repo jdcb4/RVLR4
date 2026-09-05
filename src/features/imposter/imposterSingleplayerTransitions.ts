@@ -1,14 +1,14 @@
 import { clampImposterCount, defaultImposterCount } from "@/domain/imposter/round";
-import {
-  createImposterRevealRound,
-  validateImposterSnapshotSetup,
-} from "@/features/imposter/imposterRoundFlow";
 import type {
   ImposterPlayer,
   ImposterRoundState,
   ImposterSnapshot,
   ImposterStep,
-} from "@/features/imposter/imposterSingleplayerAppTypes";
+} from "@/domain/imposter/types";
+import {
+  createImposterRevealRound,
+  validateImposterSnapshotSetup,
+} from "@/features/imposter/imposterRoundFlow";
 
 export const createImposterPlayers = (
   count: number,

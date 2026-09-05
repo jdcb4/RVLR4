@@ -142,14 +142,14 @@ case.
 **Rejected alternatives:**
 
 - _Canonical `HatGame_`everywhere* — would force renaming the wire-format
-literal`"hat"`→`"hatGame"`, breaking the server↔client contract for
+  literal`"hat"`→`"hatGame"`, breaking the server↔client contract for
   no clarity gain.
 - _Rename `Multiplayer_`→`MultiDevice*` in code* — touches `~11`
   symbols, `src/multiplayer/` folder, and the `MULTIPLAYER_DEBUG` env
   var; the wire-facing env var rename is deploy-affecting. No semantic
   gain.
 - _No `Singleplayer_`modifier, just bare names on the older side* — keeps
-the existing asymmetry; agents reading`WhoWhatWhereSingleplayerApp` in isolation
+  the existing asymmetry; agents reading`WhoWhatWhereSingleplayerApp` in isolation
   can't tell which mode they're in without opening the file.
 
 **Supersedes:** N/A — this is the first naming-conventions decision.
@@ -282,3 +282,19 @@ Both packages and their published implementations were inspected. Sources:
 [ReactSounds source](https://github.com/e3ntity/react-sounds).
 
 **Supersedes:** The 2026-05-10 Tone.js decision and bundled Hat phase WAVs.
+
+---
+
+## 2026-09-05: One protocol boundary inside the repository
+
+**Decision:** Share room DTOs, replay state, acknowledgements, and schema-derived
+event inputs under `src/domain/multiplayer`. Move Imposter state types from its
+solo UI into the domain. Server handlers continue validating every request.
+
+**Reasoning:** Separate client/server declarations had already disagreed on a
+replay field. Correlated event/payload types now catch misspelled events, missing
+payloads, and payloads intended for another command during the normal typecheck.
+This removes repeated declarations without changing the in-memory architecture.
+
+**Rejected alternatives:** A package, code generator, universal game engine, or
+monorepo would add setup and maintenance work without serving another consumer.

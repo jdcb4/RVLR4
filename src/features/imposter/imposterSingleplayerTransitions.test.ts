@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import type { ImposterRoundState } from "./imposterSingleplayerAppTypes";
+import type { ImposterRoundState } from "@/domain/imposter/types";
+
 import {
   advanceImposterReveal,
   createImposterPlayers,

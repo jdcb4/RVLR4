@@ -1,8 +1,5 @@
 import { dealImposterRound, getImposterSetupError } from "@/domain/imposter/round";
-import type {
-  ImposterRoundState,
-  ImposterSnapshot,
-} from "@/features/imposter/imposterSingleplayerAppTypes";
+import type { ImposterRoundState, ImposterSnapshot } from "@/domain/imposter/types";
 
 export function validateImposterSnapshotSetup(snapshot: ImposterSnapshot): string | null {
   return getImposterSetupError({

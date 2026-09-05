@@ -42,7 +42,7 @@ export default defineConfig({
           functions: 100,
           branches: 90,
         },
-        "server/{boundarySchemas,socketSchemas,secrets,rateLimiter}.ts": {
+        "{server/{boundarySchemas,secrets,rateLimiter},src/domain/multiplayer/socketSchemas}.ts": {
           lines: 100,
           statements: 100,
           functions: 100,

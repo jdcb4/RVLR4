@@ -1,7 +1,6 @@
+import type { WhoWhatWherePeerRole } from "@/domain/multiplayer/protocol";
 import { getActiveContext, getCurrentWord } from "@/domain/whowhatwhere/game";
 import type { ActiveTurn, MatchState, WordEntry } from "@/domain/whowhatwhere/types";
-
-export type WhoWhatWherePeerRole = "describer" | "guesser" | "observer";
 
 export function classifyWhoWhatWhereRole(
   match: MatchState,

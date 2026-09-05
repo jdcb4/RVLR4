@@ -1,7 +1,6 @@
 import { getHatGameContext } from "@/domain/hat-game/engine";
 import type { ActiveTurn, HatGameSession, QueuedClue } from "@/domain/hat-game/types";
-
-export type HatPeerRole = "describer" | "guesser" | "observer";
+import type { HatPeerRole } from "@/domain/multiplayer/protocol";
 
 const MASK = "••••••";
 

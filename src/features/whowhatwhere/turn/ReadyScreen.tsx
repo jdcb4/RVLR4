@@ -5,11 +5,11 @@ import { GamePanel } from "@/components/game/GamePanel";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { ReadyProgressCard } from "@/components/game/ReadyProgressCard";
 import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
+import type { WhoWhatWherePeerRole } from "@/domain/multiplayer/protocol";
 import { getActiveContext } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 import { LastTurnCard } from "@/features/whowhatwhere/summary/LastTurnCard";
 import { Scoreboard } from "@/features/whowhatwhere/summary/Scoreboard";
-import type { WhoWhatWherePeerRole } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
 
 export function ReadyScreen({

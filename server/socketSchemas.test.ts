@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { sessionBindSchema, socketSchemas } from "./socketSchemas.ts";
+import { sessionBindSchema, socketSchemas } from "@/domain/multiplayer/socketSchemas";
 
 describe("Socket.IO boundary schemas", () => {
   it("accepts only undefined for payload-free events", () => {

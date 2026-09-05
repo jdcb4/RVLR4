@@ -2,10 +2,10 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
+import type { ImposterSyncDto } from "@/domain/multiplayer/protocol";
 import { ImposterMultiplayerBody } from "@/features/imposter/multiplayer/ImposterMultiplayerBody";
 import { ImposterMultiplayerFooter } from "@/features/imposter/multiplayer/ImposterMultiplayerFooter";
 import { getParallelRevealProgress } from "@/features/imposter/multiplayer/imposterMultiplayerReveal";
-import type { ImposterSyncDto } from "@/multiplayer/roomTypes";
 
 const basePayload: ImposterSyncDto = {
   revealSubjectId: "viewer",

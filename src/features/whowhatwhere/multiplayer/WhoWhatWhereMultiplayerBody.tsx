@@ -5,6 +5,8 @@ import { viewerWhoWhatWhereTeamIsWinner } from "@/components/game/final-results/
 import { TeamStandingsList } from "@/components/game/TeamStandingsList";
 import { Metric } from "@/components/Metric";
 import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
+import type { WhoWhatWherePeerRole, WhoWhatWhereSyncDto } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
 import { getActiveContext, getSecondsLeft } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
@@ -12,13 +14,7 @@ import { FinalTurnRecapScreen } from "@/features/whowhatwhere/results/FinalTurnR
 import { ResultsScreen } from "@/features/whowhatwhere/results/ResultsScreen";
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
 import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
-import type { WhoWhatWherePeerRole, WhoWhatWhereSyncDto } from "@/multiplayer/roomTypes";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 function wwwOutcomeTone(match: MatchState, viewerPlayerId: string): "none" | "win" | "lose" {
   const hasResults =

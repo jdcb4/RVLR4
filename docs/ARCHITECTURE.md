@@ -63,6 +63,15 @@ See `docs/DEPLOYMENT.md`.
 
 ## Module boundaries
 
+`src/domain/multiplayer/protocol.ts` defines the room/replay DTOs and
+acknowledgements used on both sides. Event input types derive from the Zod
+schemas in `src/domain/multiplayer/socketSchemas.ts`; `EmitWithAck` keeps event
+names paired with their payloads. `server/sync.ts` and the per-game views still
+own viewer-specific privacy projection. Shared types do not sanitize data.
+Imposter snapshots live in `src/domain/imposter/types.ts`, independent of UI.
+The network adapter accepts unknown responses and validates them before
+returning a shared reply. There is no generated code or separate shared package.
+
 Use clear layers. Adapt the names if the project demands it, but keep the separation.
 
 ### Game screen layout (`GamePanel`)

@@ -6,9 +6,9 @@ import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { TurnPlayHighlight } from "@/components/game/TurnPlayHighlight";
 import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
 import { IMPOSTER_ROLE_CARD_COPY } from "@/config/imposterDefaults";
-import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
+import type { ImposterSnapshot } from "@/domain/imposter/types";
+import type { ImposterSyncDto } from "@/domain/multiplayer/protocol";
 import { IMPOSTER_NOTICE_CLASS } from "@/features/imposter/screens/imposterScreenTokens";
-import type { ImposterSyncDto } from "@/multiplayer/roomTypes";
 
 import {
   getParallelRevealProgress,

@@ -1,4 +1,4 @@
-import type { LobbyDto } from "@/multiplayer/roomTypes";
+import type { LobbyDto } from "@/domain/multiplayer/protocol";
 
 /**
  * Captain = lexicographically smallest player id on the team (deterministic, matches server).

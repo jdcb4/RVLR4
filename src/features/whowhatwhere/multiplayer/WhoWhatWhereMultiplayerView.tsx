@@ -1,18 +1,15 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
+import type { ReplaySync } from "@/domain/multiplayer/protocol";
+import type { WhoWhatWhereSyncDto } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { getSecondsLeft } from "@/domain/whowhatwhere/game";
 import { MultiplayerGameShell } from "@/features/multiplayer/MultiplayerGameShell";
-import type { WhoWhatWhereSyncDto } from "@/multiplayer/roomTypes";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 import { WhoWhatWhereMultiplayerBody } from "./WhoWhatWhereMultiplayerBody";
 import { WhoWhatWhereMultiplayerFooter } from "./WhoWhatWhereMultiplayerFooter";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 export function WhoWhatWhereMultiplayerView({
   payload,
@@ -25,11 +22,7 @@ export function WhoWhatWhereMultiplayerView({
   readonly payload: WhoWhatWhereSyncDto;
   readonly viewerPlayerId: string;
   readonly isHost: boolean;
-  readonly replaySync: {
-    readonly offerActive: boolean;
-    readonly acceptedIds: readonly string[];
-    readonly cancelledByDisconnect: boolean;
-  };
+  readonly replaySync: ReplaySync;
   readonly roomControls?: ReactNode;
   readonly emitWithAck: EmitWithAck;
 }) {

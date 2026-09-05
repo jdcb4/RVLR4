@@ -3,11 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
+import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { RoomLobbyView } from "@/features/multiplayer/RoomLobbyView";
 import { buildLobby, buildRoomSync } from "@/features/multiplayer/testRoomSync";
-import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
-
-type AckResult = { ok?: boolean; error?: string } | undefined;
 
 const lobby = buildLobby();
 
@@ -17,7 +16,7 @@ function renderLobbyView({
   onStartGame = vi.fn(async () => undefined),
 }: {
   readonly sync?: RoomSyncPayload;
-  readonly emitWithAck?: (event: string, body?: unknown) => Promise<AckResult>;
+  readonly emitWithAck?: EmitWithAck;
   readonly onStartGame?: () => Promise<void>;
 } = {}) {
   const result = render(

@@ -1,5 +1,7 @@
 import type { Server, Socket } from "socket.io";
 
+import { sessionBindSchema } from "@/domain/multiplayer/socketSchemas";
+
 import { broadcastRoom, roomChannel } from "../broadcast.ts";
 import { socketClientAddress } from "../clientAddress.ts";
 import { mpDebug } from "../multiplayerDebug.ts";
@@ -9,7 +11,6 @@ import { archiveRoomAfterAllPlayersOptedOut, type RoomStore } from "../roomStore
 import { registerHandler } from "../socketHandle.ts";
 import { releaseRoomSocket } from "../socketPresence.ts";
 import { readSocketRequest, reportSocketFailure } from "../socketRequest.ts";
-import { sessionBindSchema } from "../socketSchemas.ts";
 import type { SocketHandlerContext, SocketSecurityContext } from "./types.ts";
 
 export function registerSocketConnectionGuard(io: Server, security: SocketSecurityContext) {

@@ -1,24 +1,17 @@
 import type { Socket } from "socket.io";
 
+import {
+  type SocketEventName,
+  type SocketPayload,
+  socketSchemas,
+} from "@/domain/multiplayer/socketSchemas";
+
 import type { TokenBucketStore } from "./rateLimiter.ts";
 import type { Room, RoomPlayer, RoomStore } from "./roomStore.ts";
 import { consumeMutationBudget, isDrawingPayloadTooLarge } from "./socketBudgets.ts";
 import { readSocketRequest, reportSocketFailure } from "./socketRequest.ts";
-import { type SocketEventName, type SocketPayload, socketSchemas } from "./socketSchemas.ts";
 
-export type SocketErrorCode =
-  | "INVALID_REQUEST"
-  | "PAYLOAD_TOO_LARGE"
-  | "RATE_LIMITED"
-  | "INTERNAL_ERROR"
-  | "ROOM_NOT_FOUND"
-  | "SESSION_EXPIRED";
-
-export type SocketAck = (payload?: {
-  ok?: boolean;
-  error?: string;
-  code?: SocketErrorCode;
-}) => void;
+export type { SocketAck } from "@/domain/multiplayer/protocol";
 
 export type HandlerContext = {
   readonly socket: Socket;
@@ -53,7 +46,7 @@ function requireActor(socket: Socket, store: RoomStore): { room: Room; actor: Ro
 /**
  * Registers a Socket.IO handler that:
  * - validates `rawPayload` against the schema declared for `event` in
- *   `server/socketSchemas.ts` (rejects with "Invalid request." on failure),
+ *   `src/domain/multiplayer/socketSchemas.ts` (rejects with "Invalid request." on failure),
  * - looks up the actor + room from `socket.data`,
  * - awaits `fn`,
  * - acks `{ ok: true }` on success or `{ ok: false, error }` on throw.
@@ -95,8 +88,7 @@ export function registerHandler<E extends SocketEventName>(
 
         if (!budget.allowed) {
           const reporter = socket.data.rateLimitReporter as
-            | { record(operation: string): void }
-            | undefined;
+            { record(operation: string): void } | undefined;
           reporter?.record(
             event === "drawnguess:updateDrawingDraft" || event === "drawnguess:submitDrawing"
               ? "socket.drawing_mutation"

@@ -1,11 +1,7 @@
 import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { IconCheck, IconSkipForward } from "@/components/icons";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 /**
  * Shared Skip + Correct footer for the multiplayer turn screen. Used by
@@ -25,12 +21,12 @@ export function MultiplayerSkipCorrectFooter({
   skipEvent,
 }: {
   readonly busy: boolean;
-  readonly correctEvent: string;
+  readonly correctEvent: "hat:correct" | "www:correct";
   readonly emitWithAck: EmitWithAck;
   readonly setBusy: (value: boolean) => void;
   readonly setError: (value: string) => void;
   readonly skipDisabled: boolean;
-  readonly skipEvent: string;
+  readonly skipEvent: "hat:skip" | "www:skip";
 }) {
   return (
     <div className="flex w-full flex-col gap-2">

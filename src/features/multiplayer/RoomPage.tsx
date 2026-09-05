@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameShell } from "@/components/GameShell";
 import { Button } from "@/components/ui/button";
+import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { DrawNGuessMultiplayerView } from "@/features/drawnguess/multiplayer/DrawNGuessMultiplayerView";
 import { HatMultiplayerView } from "@/features/hat-game/multiplayer/HatMultiplayerView";
 import { ImposterMultiplayerView } from "@/features/imposter/multiplayer/ImposterMultiplayerView";
@@ -12,13 +14,7 @@ import { RoomOptions } from "@/features/multiplayer/RoomOptions";
 import { useActiveRoomBookmark } from "@/features/multiplayer/useActiveRoomBookmark";
 import { useRoomInviteControls } from "@/features/multiplayer/useRoomInviteControls";
 import { WhoWhatWhereMultiplayerView } from "@/features/whowhatwhere/multiplayer/WhoWhatWhereMultiplayerView";
-import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
 import { useRoomChannel } from "@/multiplayer/useRoomChannel";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 export function RoomPage() {
   const navigate = useNavigate();

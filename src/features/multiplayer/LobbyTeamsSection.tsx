@@ -9,14 +9,10 @@ import {
 } from "@/components/icons";
 import { PlayerAvatar } from "@/components/PlayerAvatar";
 import { Button } from "@/components/ui/button";
+import type { LobbyDto, LobbyPlayerDto } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { captainPlayerIdForTeam } from "@/features/multiplayer/lobbyCaptain";
 import { cn } from "@/lib/utils";
-import type { LobbyDto, LobbyPlayerDto } from "@/multiplayer/roomTypes";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 export function LobbyTeamsSection({
   lobby,
@@ -263,10 +259,9 @@ function TeamHeader({
           className="shrink-0 rounded-xl border border-input bg-background p-2 text-primary shadow-sm transition hover:bg-accent"
           type="button"
           onClick={() =>
-            void emitWithAck(
-              isHost ? "lobby:hostMovePlayer" : "lobby:moveSelf",
-              isHost ? { playerId: myPlayerId, teamIndex } : { teamIndex },
-            )
+            void (isHost
+              ? emitWithAck("lobby:hostMovePlayer", { playerId: myPlayerId, teamIndex })
+              : emitWithAck("lobby:moveSelf", { teamIndex }))
           }
         >
           <IconArrowRightToLine className="size-5" />

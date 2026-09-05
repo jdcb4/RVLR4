@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { applyHatGameAction } from "@/domain/hat-game/engine";
 import type { HatGameAction, HatGameSession } from "@/domain/hat-game/types";
+import type { ImposterSnapshot } from "@/domain/imposter/types";
 import {
   correctWord,
   endTurn,
@@ -10,7 +11,6 @@ import {
   startTurn,
 } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
-import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 
 import { startDrawNGuessMatch } from "./drawnguessRuntime.ts";
 import { buildDrawNGuessSyncDto } from "./drawnguessViews.ts";

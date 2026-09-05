@@ -4,6 +4,28 @@ import { RoomStore } from "./roomStore.ts";
 import { buildRoomSync } from "./sync.ts";
 
 describe("buildRoomSync lobby projections", () => {
+  it.each(["hat", "whowhatwhere", "imposter", "drawnguess"] as const)(
+    "serializes %s and the complete replay contract without credentials",
+    (gameKind) => {
+      const store = new RoomStore();
+      const { room, hostPlayer } = store.createRoom({ gameKind, hostName: "Host" });
+      room.replayOfferActive = true;
+      room.replayOfferId = crypto.randomUUID();
+      room.replayAcceptedPlayerIds = [hostPlayer.id];
+      room.replayCancelledByDisconnect = false;
+      const payload = buildRoomSync(room, hostPlayer.id);
+      const serialized = JSON.stringify(payload);
+      expect(JSON.parse(serialized)).toEqual(payload);
+      expect(serialized).not.toContain(hostPlayer.secret);
+      expect(payload.replay).toEqual({
+        offerActive: true,
+        offerId: room.replayOfferId,
+        acceptedIds: [hostPlayer.id],
+        cancelledByDisconnect: false,
+      });
+    },
+  );
+
   it("rejects sync for an unknown viewer", () => {
     const store = new RoomStore();
     const { room } = store.createRoom({ gameKind: "hat", hostName: "Host" });

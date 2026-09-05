@@ -2,6 +2,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { IMPOSTER_MAX_PLAYERS, IMPOSTER_MIN_PLAYERS } from "@/config/imposterDefaults";
 import { maxImpostersForPlayers } from "@/domain/imposter/round";
+import type { ImposterSnapshot } from "@/domain/imposter/types";
 import { getImposterWordList } from "@/domain/imposter/wordList";
 import {
   makeSingleplayerResumeSavedGame,
@@ -9,7 +10,6 @@ import {
 } from "@/features/game-app-hooks/singleplayerLifecycle";
 import { useAutoHidePopup } from "@/features/game-app-hooks/useAutoHidePopup";
 import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
-import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 import {
   advanceImposterReveal,
   createInitialImposterSnapshot,

@@ -19,7 +19,7 @@ describe("room recovery controls", () => {
     await user.click(screen.getByRole("button", { name: "Leave lobby" }));
     expect(emit).not.toHaveBeenCalled();
     await user.click(screen.getByRole("button", { name: "Confirm" }));
-    expect(emit).toHaveBeenCalledWith("lobby:leave", undefined);
+    expect(emit).toHaveBeenCalledWith("lobby:leave");
     expect(screen.getByRole("alert")).toHaveTextContent("Connection lost. Retry.");
     expect(screen.getByRole("button", { name: "Confirm" })).toBeEnabled();
   });

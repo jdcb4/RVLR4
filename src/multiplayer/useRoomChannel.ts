@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
 
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
+import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
 import {
   type SessionCredentials,
   sessionCredentialsSchema,
 } from "@/domain/multiplayer/sessionCredentials";
 import { clearActiveGameBookmark, readActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
-import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
 import { discardStoredRecord, readStoredJson, roomSessionStorage } from "@/services/browserStorage";
 import { requestSocketAck } from "@/services/networkRequests";
 
@@ -59,10 +60,7 @@ export type RoomChannelHandle = {
   readonly retryConnection: () => void;
   readonly actionError: string | null;
   readonly clearActionError: () => void;
-  readonly emitWithAck: (
-    event: string,
-    payload?: unknown,
-  ) => Promise<{ ok?: boolean; error?: string } | undefined>;
+  readonly emitWithAck: EmitWithAck;
 };
 
 export function useRoomChannel(code: string | undefined, enabled: boolean): RoomChannelHandle {
@@ -212,8 +210,8 @@ export function useRoomChannel(code: string | undefined, enabled: boolean): Room
     };
   }, [code, enabled, socket]);
 
-  const emitWithAck = useCallback(
-    (event: string, payload?: unknown) => {
+  const emitWithAck = useCallback<EmitWithAck>(
+    (...[event, payload]) => {
       if (!connected || !socket.connected || !enabled) {
         return Promise.resolve({ ok: false, error: "Reconnecting to the room." });
       }

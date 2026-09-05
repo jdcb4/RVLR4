@@ -4,14 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { GameResultActions } from "@/components/GameResultActions";
 import { GameShell } from "@/components/GameShell";
+import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { leaveMultiplayerRoomForHub } from "@/multiplayer/leaveRoomForHub";
 import { buildMultiplayerReplayUi } from "@/multiplayer/replayUi";
-import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 type ReplaySync = RoomSyncPayload["replay"];
 

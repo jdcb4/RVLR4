@@ -3,21 +3,12 @@ import type { Dispatch, SetStateAction } from "react";
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
 import { getHatGameContext } from "@/domain/hat-game/engine";
 import type { HatGameSession } from "@/domain/hat-game/types";
+import type { HatSyncDto } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
+import type { ReplaySync } from "@/domain/multiplayer/protocol";
 import { MultiplayerEndGameActions } from "@/features/multiplayer/MultiplayerGameShell";
 import { MultiplayerSkipCorrectFooter } from "@/features/multiplayer/MultiplayerSkipCorrectFooter";
-import type { HatSyncDto } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
-
-type ReplaySync = {
-  readonly offerActive: boolean;
-  readonly acceptedIds: readonly string[];
-  readonly cancelledByDisconnect: boolean;
-};
 
 export function HatMultiplayerFooter({
   session,

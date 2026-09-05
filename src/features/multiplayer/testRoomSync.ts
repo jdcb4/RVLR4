@@ -1,6 +1,6 @@
 import { createDefaultDrawNGuessSettings } from "@/domain/drawnguess/engine";
+import type { LobbyDto, RoomSyncPayload } from "@/domain/multiplayer/protocol";
 import { createDefaultSettings } from "@/domain/whowhatwhere/setup";
-import type { LobbyDto, RoomSyncPayload } from "@/multiplayer/roomTypes";
 
 export function buildLobby(overrides: Partial<LobbyDto> = {}): LobbyDto {
   return {

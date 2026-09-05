@@ -1,12 +1,5 @@
-import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
-
-export type ImposterSyncDto = {
-  readonly snapshot: ImposterSnapshot;
-  /** Sequential reveal: active subject. Parallel reveal: viewer's own id for convenience. */
-  readonly revealSubjectId: string | null;
-  /** Whether that subject is an imposter — wire-safe substitute for checking hidden IDs. */
-  readonly revealSubjectIsImposter: boolean;
-};
+import type { ImposterSnapshot } from "@/domain/imposter/types";
+import type { ImposterSyncDto } from "@/domain/multiplayer/protocol";
 
 function scrubRoundForViewer(snapshot: ImposterSnapshot, viewerId: string): ImposterSnapshot {
   const round = snapshot.round;

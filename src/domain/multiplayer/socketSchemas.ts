@@ -115,7 +115,8 @@ const drawNGuessDrawingSchema = z
     }
 
     if (
-      Buffer.byteLength(JSON.stringify(drawing), "utf8") > DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES
+      new TextEncoder().encode(JSON.stringify(drawing)).byteLength >
+      DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES
     ) {
       context.addIssue({ code: z.ZodIssueCode.custom, message: "Drawing is too large." });
     }

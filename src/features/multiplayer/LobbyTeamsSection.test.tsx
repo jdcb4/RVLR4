@@ -2,9 +2,9 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
+import type { LobbyDto } from "@/domain/multiplayer/protocol";
 import { LobbyTeamsSection } from "@/features/multiplayer/LobbyTeamsSection";
 import { buildLobby } from "@/features/multiplayer/testRoomSync";
-import type { LobbyDto } from "@/multiplayer/roomTypes";
 
 function buildTeamLobby(overrides: Partial<LobbyDto> = {}) {
   return buildLobby({

@@ -18,6 +18,8 @@ import type {
   DrawNGuessPacket,
   DrawNGuessSyncDto,
 } from "@/domain/drawnguess/types";
+import type { ReplaySync } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck, SocketReply, SocketRequestArgs } from "@/domain/multiplayer/protocol";
 import {
   MultiplayerEndGameActions,
   MultiplayerGameShell,
@@ -29,20 +31,11 @@ import { createBlankDrawing, renderDrawing } from "./drawingCanvas";
 import { DrawNGuessDrawingPreview } from "./DrawNGuessDrawingPreview";
 import { DrawNGuessWhiteboard } from "./DrawNGuessWhiteboard";
 
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
-
 type DrawNGuessViewProps = {
   readonly payload: DrawNGuessSyncDto;
   readonly viewerPlayerId: string;
   readonly isHost: boolean;
-  readonly replaySync: {
-    readonly offerActive: boolean;
-    readonly acceptedIds: readonly string[];
-    readonly cancelledByDisconnect: boolean;
-  };
+  readonly replaySync: ReplaySync;
   readonly roomControls?: ReactNode;
   readonly emitWithAck: EmitWithAck;
 };
@@ -97,13 +90,13 @@ function DrawNGuessTurnView({
     }
   }, [payload.public.phase]);
 
-  const runAction = async (event: string, body: Record<string, unknown>, submit = false) => {
+  const runAction = async (send: () => Promise<SocketReply>, submit = false) => {
     const actionId = ++latestAction.current;
     if (submit) setBusy(true);
     setError("");
 
     try {
-      const ack = await emitWithAck(event, { ...body, turnKey });
+      const ack = await send();
       if (actionId !== latestAction.current) return;
 
       if (ack?.ok !== true) {
@@ -134,10 +127,12 @@ function DrawNGuessTurnView({
       promptDraft,
       drawingDraft,
       guessDraft,
+      turnKey,
     });
 
     if (!config.disabled) {
-      await runAction(config.event, config.payload, true);
+      const request = config.request;
+      if (request) await runAction(() => emitWithAck(...request), true);
     }
   };
   const handleTextSubmitKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
@@ -185,15 +180,20 @@ function DrawNGuessTurnView({
         viewerPlayerId={viewerPlayerId}
         onDrawingChange={(next) => {
           setDrawingDraft(next);
-          void runAction("drawnguess:updateDrawingDraft", { drawing: next });
+          if (next.format === "strokes-v1")
+            void runAction(() =>
+              emitWithAck("drawnguess:updateDrawingDraft", { drawing: next, turnKey }),
+            );
         }}
         onGuessChange={(next) => {
           setGuessDraft(next);
-          void runAction("drawnguess:updateGuessDraft", { text: next });
+          void runAction(() => emitWithAck("drawnguess:updateGuessDraft", { text: next, turnKey }));
         }}
         onPromptChange={(next) => {
           setPromptDraft(next);
-          void runAction("drawnguess:updatePromptDraft", { text: next });
+          void runAction(() =>
+            emitWithAck("drawnguess:updatePromptDraft", { text: next, turnKey }),
+          );
         }}
         onTextSubmitKeyDown={handleTextSubmitKeyDown}
       />
@@ -379,11 +379,7 @@ function DrawNGuessFooter({
   readonly drawingDraft: DrawNGuessDrawing;
   readonly isHost: boolean;
   readonly localGalleryOpen: boolean;
-  readonly replaySync: {
-    readonly offerActive: boolean;
-    readonly acceptedIds: readonly string[];
-    readonly cancelledByDisconnect: boolean;
-  };
+  readonly replaySync: ReplaySync;
   readonly viewerPlayerId: string;
   readonly emitWithAck: EmitWithAck;
   readonly onSubmit: () => Promise<void>;
@@ -484,12 +480,14 @@ function DrawNGuessSubmitFooter({
 }
 
 function getDrawNGuessSubmitConfig({
+  turnKey,
   mode,
   editing,
   promptDraft,
   drawingDraft,
   guessDraft,
 }: {
+  readonly turnKey?: string;
   readonly mode: NonNullable<DrawNGuessSyncDto["private"]["assignment"]>["mode"];
   readonly editing: boolean;
   readonly promptDraft: string;
@@ -499,21 +497,30 @@ function getDrawNGuessSubmitConfig({
   const configs = {
     "custom-prompt": {
       disabled: promptDraft.trim().length === 0,
-      event: "drawnguess:submitPrompt",
+      request: [
+        "drawnguess:submitPrompt",
+        { text: promptDraft, turnKey },
+      ] satisfies SocketRequestArgs,
       label: editing ? "Update prompt" : "Submit prompt",
-      payload: { text: promptDraft },
     },
     drawing: {
       disabled: drawingDraft.format !== "strokes-v1",
-      event: "drawnguess:submitDrawing",
+      request:
+        drawingDraft.format === "strokes-v1"
+          ? ([
+              "drawnguess:submitDrawing",
+              { drawing: drawingDraft, turnKey },
+            ] satisfies SocketRequestArgs)
+          : null,
       label: editing ? "Update drawing" : "Submit drawing",
-      payload: { drawing: drawingDraft },
     },
     guessing: {
       disabled: guessDraft.trim().length === 0,
-      event: "drawnguess:submitGuess",
+      request: [
+        "drawnguess:submitGuess",
+        { text: guessDraft, turnKey },
+      ] satisfies SocketRequestArgs,
       label: editing ? "Update guess" : "Submit guess",
-      payload: { text: guessDraft },
     },
   } as const;
 

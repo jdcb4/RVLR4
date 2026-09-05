@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
+import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
 import { clearActiveGameBookmark, writeActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
-import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
 
 export function useActiveRoomBookmark(sync: RoomSyncPayload | null) {
   const playingBookmarkCommittedRef = useRef(false);

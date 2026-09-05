@@ -1,11 +1,16 @@
+import type { z } from "zod";
+
 import type { DrawNGuessSettings, DrawNGuessSyncDto } from "@/domain/drawnguess/types";
 import type { HatGameSession } from "@/domain/hat-game/types";
+import type { ImposterSnapshot } from "@/domain/imposter/types";
 import type { LobbyStartReadiness } from "@/domain/multiplayer/lobbyReadiness";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
-import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 import type { AvatarId } from "@/multiplayer/avatarCatalog";
 
-/** Mirrors `server/sync.ts` — lightweight typing without a shared package boundary. */
+import type { gameKindSchema } from "./sessionCredentials";
+import type { SocketEventName, socketSchemas } from "./socketSchemas";
+
+/** Shared wire shapes. Server projections remain responsible for hiding private data. */
 export type LobbyPlayerDto = {
   readonly id: string;
   readonly name: string;
@@ -50,7 +55,7 @@ export type HatSyncDto = {
   readonly canReturnSkipped: boolean;
 };
 
-/** Mirrors `server/sync.ts` — scrubbed snapshot + reveal rotation hints for the viewer. */
+/** Scrubbed snapshot and reveal hints for the authenticated viewer. */
 export type ImposterSyncDto = {
   readonly snapshot: ImposterSnapshot;
   readonly revealSubjectId: string | null;
@@ -59,8 +64,8 @@ export type ImposterSyncDto = {
 
 export type RoomSyncPayload = {
   readonly code: string;
-  readonly gameKind: "whowhatwhere" | "hat" | "imposter" | "drawnguess";
-  readonly phase: "lobby" | "playing" | "ended";
+  readonly gameKind: GameKind;
+  readonly phase: RoomPhase;
   readonly you: {
     readonly playerId: string;
     readonly isHost: boolean;
@@ -77,3 +82,32 @@ export type RoomSyncPayload = {
     readonly cancelledByDisconnect: boolean;
   };
 };
+
+export type GameKind = z.infer<typeof gameKindSchema>;
+export type RoomPhase = "lobby" | "playing" | "ended";
+export type ReplaySync = RoomSyncPayload["replay"];
+
+export type SocketErrorCode =
+  | "INVALID_REQUEST"
+  | "PAYLOAD_TOO_LARGE"
+  | "RATE_LIMITED"
+  | "INTERNAL_ERROR"
+  | "ROOM_NOT_FOUND"
+  | "SESSION_EXPIRED";
+/** Unknown future server codes may be displayed by older clients. */
+export type SocketReply = { ok: boolean; error?: string; code?: string };
+export type SocketAck = (reply: SocketReply & { code?: SocketErrorCode }) => void;
+
+type ReadonlyInput<T> = T extends object ? { readonly [K in keyof T]: ReadonlyInput<T[K]> } : T;
+export type SocketInput<E extends SocketEventName> = ReadonlyInput<
+  z.input<(typeof socketSchemas)[E]>
+>;
+/** A union of correlated tuples prevents a payload for one event being sent to another. */
+export type SocketRequestArgs<E extends SocketEventName = SocketEventName> =
+  E extends SocketEventName
+    ? undefined extends SocketInput<E>
+      ? [event: E, payload?: SocketInput<E>]
+      : [event: E, payload: SocketInput<E>]
+    : never;
+export type EmitWithAck = (...args: SocketRequestArgs) => Promise<SocketReply>;
+export type { SocketEventName } from "./socketSchemas";
