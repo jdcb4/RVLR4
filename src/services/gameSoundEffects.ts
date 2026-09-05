@@ -1,8 +1,6 @@
-/**
- * Shared game sound effects. These patterns are based on the multiplayer
- * Who What Where cues and are the canonical sounds for matching actions across
- * games and play modes.
- */
+import { play, type SoundName } from "cuelume";
+
+/** Game events stay independent of the audio provider. See docs/AUDIO.md. */
 export type GameSoundEffect =
   | "correct"
   | "skip"
@@ -12,81 +10,29 @@ export type GameSoundEffect =
   | "victory"
   | "defeat"
   | "phaseAdvance"
-  | "turnStart";
+  | "turnStart"
+  | "phaseOneWord"
+  | "phaseCharades";
 
-let toneStarted = false;
-
-async function ensureTone(): Promise<boolean> {
-  try {
-    const Tone = await import("tone");
-    if (!toneStarted) {
-      await Tone.start();
-      toneStarted = true;
-    }
-    return true;
-  } catch {
-    return false;
-  }
-}
+export const GAME_SOUND_MAP = {
+  correct: "success",
+  skip: "droplet",
+  returnSkipped: "page",
+  warn10: "scan",
+  timeout: "error",
+  victory: "sparkle",
+  defeat: "whisper",
+  phaseAdvance: "arrival",
+  turnStart: "ready",
+  phaseOneWord: "chime",
+  phaseCharades: "bloom",
+} as const satisfies Record<GameSoundEffect, SoundName>;
 
 export async function playGameSoundEffect(name: GameSoundEffect): Promise<void> {
-  const ok = await ensureTone();
-  if (!ok) {
-    return;
+  try {
+    // Keep playback in the interaction stack; the shared context is lazy.
+    play(GAME_SOUND_MAP[name], { volume: 0.65 });
+  } catch {
+    // Unavailable audio must never interrupt a game action or timer.
   }
-
-  const Tone = await import("tone");
-  const synth = new Tone.PolySynth(Tone.Synth).toDestination();
-  synth.volume.value = -8;
-
-  const now = Tone.now();
-
-  switch (name) {
-    case "correct": {
-      synth.triggerAttackRelease(["C5", "E5"], "8n", now);
-      break;
-    }
-    case "skip": {
-      synth.triggerAttackRelease("A3", "16n", now);
-      break;
-    }
-    case "returnSkipped": {
-      synth.triggerAttackRelease(["E4", "A4"], "16n", now);
-      synth.triggerAttackRelease("B4", "16n", now + 0.08);
-      break;
-    }
-    case "warn10": {
-      synth.triggerAttackRelease("G5", "16n", now);
-      synth.triggerAttackRelease("G5", "16n", now + 0.15);
-      break;
-    }
-    case "timeout": {
-      synth.triggerAttackRelease(["G4", "D4"], "8n", now);
-      break;
-    }
-    case "victory": {
-      synth.triggerAttackRelease(["C5", "E5", "G5", "C6"], "8n", now);
-      synth.triggerAttackRelease(["E5", "G5"], "8n", now + 0.12);
-      break;
-    }
-    case "defeat": {
-      synth.triggerAttackRelease(["E4", "D4", "C4"], "4n", now);
-      break;
-    }
-    case "phaseAdvance": {
-      synth.triggerAttackRelease(["C5", "G5"], "16n", now);
-      break;
-    }
-    case "turnStart": {
-      synth.triggerAttackRelease(["G4", "C5"], "16n", now);
-      break;
-    }
-    default: {
-      break;
-    }
-  }
-
-  window.setTimeout(() => {
-    synth.dispose();
-  }, 900);
 }

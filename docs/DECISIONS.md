@@ -258,3 +258,27 @@ Maintaining a sanitizing conversion script would add an unnecessary second
 coverage format and could conceal mapping errors.
 
 **Supersedes:** The previous implicit use of Vitest's V8 coverage adapter.
+
+---
+
+## 2026-09-05: Cuelume replaces Tone and the Hat phase recordings
+
+**Decision:** Use `cuelume@0.2.2` through `src/services/gameSoundEffects.ts`
+for all eleven game cues. Keep game event names independent of library names;
+the complete mapping and playback contract are in [AUDIO.md](AUDIO.md).
+
+**Reasoning:** The app needs short feedback cues, not a music engine. The
+published MIT package has no runtime dependencies, generates sounds locally,
+and lazily shares one AudioContext. Its 47,845-byte unpacked package replaces
+Tone's substantially larger synthesis bundle and two recordings. Playback
+requires no CDN or media downloads. Visual instructions remain authoritative.
+
+**Rejected alternatives:** ReactSounds 1.0.30 offers a larger clip catalog, but
+adds Howler and either CDN delivery or a local asset-copy workflow. Neither
+benefits these eleven short cues enough to justify the extra moving parts.
+Both packages and their published implementations were inspected. Sources:
+[Cuelume docs](https://cuelume-site.pages.dev/docs/),
+[Cuelume source](https://github.com/Danilaa1/cuelume), and
+[ReactSounds source](https://github.com/e3ntity/react-sounds).
+
+**Supersedes:** The 2026-05-10 Tone.js decision and bundled Hat phase WAVs.

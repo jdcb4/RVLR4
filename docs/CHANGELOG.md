@@ -2,6 +2,12 @@
 
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
 
+## 0.23.0 - 2026-09-05
+
+- **Audio:** Replace Tone and both Hat phase WAVs with eleven mapped Cuelume
+  cues. All modes share the same local synthesis service with no media/CDN
+  downloads. Keep phase instructions visible and audio failure nonblocking.
+
 ## 0.22.10 - 2026-09-05
 
 - **Team capacity:** Reject undersized team-count choices before changing
