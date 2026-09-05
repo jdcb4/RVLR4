@@ -20,12 +20,16 @@ export function ModalDialog({
     const dialog = dialogRef.current;
     const previous = document.activeElement;
     dialog?.showModal();
-    closeRef.current?.focus();
     return () => {
       dialog?.close();
       if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
     };
   }, []);
+
+  useEffect(() => {
+    // A new confirmation can remove the focused action while reusing this dialog.
+    closeRef.current?.focus();
+  }, [title]);
 
   return (
     <dialog

@@ -48,6 +48,7 @@ export function hatClueEntryScreen(controller: HatSingleplayerAppController): Sc
                 {index + 1}.
               </span>
               <input
+                aria-label={`Famous figure ${index + 1}`}
                 autoCapitalize="words"
                 autoComplete="off"
                 className={`${HAT_CLUE_INPUT_CLASS} min-w-0 flex-1`}
@@ -74,7 +75,7 @@ export function hatClueEntryScreen(controller: HatSingleplayerAppController): Sc
               <FooterIconSlotButton
                 compact
                 icon={<span aria-hidden="true">⚡</span>}
-                label="Lightning suggestion"
+                label={`Suggest famous figure ${index + 1}`}
                 onClick={() => controller.fillSuggestion(player.id, index)}
               />
             </div>

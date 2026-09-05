@@ -41,6 +41,8 @@ export function ImposterRemindMeCard({
         Forgotten your role? Tap here to check. Be careful not to let anyone see it.
       </p>
       <button
+        aria-label={flipped ? undefined : "Show my role reminder"}
+        aria-expanded={flipped}
         className={cn(
           "relative min-h-[88px] w-full rounded-md border-2 border-dashed border-border bg-muted/30 p-4 text-left transition-colors",
           flipped && "border-primary bg-background",

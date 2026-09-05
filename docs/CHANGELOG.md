@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.24.10
+
+- Keep keyboard focus inside room recovery confirmations when their content
+  replaces the action that opened them. Closing still restores the original
+  dialog opener; routine room updates do not move focus.
+- Name each Hat clue input and suggestion button by its row in both play modes.
+- Give the concealed Imposter role-reminder button an accessible name and
+  expanded state while keeping the private role absent until requested.
+- Initialize each new multiplayer Hat countdown from its deadline so assistive
+  technology does not announce expiry at the start of a live turn.
+
 ## 0.24.9
 
 - Correct Fallow's entry graph to scan actual app/server/gallery entry points,

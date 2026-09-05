@@ -8,12 +8,20 @@ import { OptionButton, OptionGroup } from "@/components/setup/OptionGroup";
 
 function Harness() {
   const [open, setOpen] = useState(false);
+  const [confirming, setConfirming] = useState(false);
   return (
     <>
       <button onClick={() => setOpen(true)}>Open options</button>
       {open ? (
-        <ModalDialog title="Game options" onClose={() => setOpen(false)}>
-          <button>Confirm</button>
+        <ModalDialog
+          title={confirming ? "End this match?" : "Game options"}
+          onClose={() => setOpen(false)}
+        >
+          {confirming ? (
+            <button>End match</button>
+          ) : (
+            <button onClick={() => setConfirming(true)}>Confirm</button>
+          )}
         </ModalDialog>
       ) : null}
     </>
@@ -21,6 +29,16 @@ function Harness() {
 }
 
 describe("accessible controls", () => {
+  it("places focus on a stable control when the dialog changes to a confirmation", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    await user.click(screen.getByRole("button", { name: "Open options" }));
+    await user.click(screen.getByRole("button", { name: "Confirm" }));
+    expect(screen.getByRole("dialog", { name: "End this match?" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Close dialog" })).toHaveFocus();
+    await user.click(screen.getByRole("button", { name: "Close dialog" }));
+    expect(screen.getByRole("button", { name: "Open options" })).toHaveFocus();
+  });
   it("names the modal, opens it in the native top layer, and restores focus after cancel", async () => {
     const user = userEvent.setup();
     const show = vi.spyOn(HTMLDialogElement.prototype, "showModal");

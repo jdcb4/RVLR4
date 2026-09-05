@@ -101,20 +101,24 @@ function useHatMultiplayerCues(payload: HatSyncDto) {
   const session = payload.session;
   const activeTurn = session.activeTurn;
   const endsAt = activeTurn?.endsAt;
-  const [secondsLeft, setSecondsLeft] = useState(0);
+  const [countdown, setCountdown] = useState(() => ({
+    endsAt,
+    secondsLeft: getCountdownSeconds(endsAt),
+  }));
+  // A newly received turn must not render the previous turn's zero before effects run.
+  const secondsLeft =
+    countdown.endsAt === endsAt ? countdown.secondsLeft : getCountdownSeconds(endsAt);
   const warned10Ref = useRef<string | null>(null);
   const timedOutRef = useRef<string | null>(null);
   const prevPhaseRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (session.stage !== "turn" || !endsAt) {
-      setSecondsLeft(0);
-
       return undefined;
     }
 
     const tick = () => {
-      setSecondsLeft(getCountdownSeconds(endsAt));
+      setCountdown({ endsAt, secondsLeft: getCountdownSeconds(endsAt) });
     };
 
     tick();

@@ -41,7 +41,8 @@ describe("hatClueEntryScreen", () => {
 
     const inputs = screen.getAllByPlaceholderText("Enter a famous figure");
     expect(inputs[0]).toHaveClass("h-11");
-    expect(screen.getAllByRole("button", { name: "Lightning suggestion" })[0]).toHaveClass("h-11");
+    expect(screen.getByRole("textbox", { name: "Famous figure 1" })).toBe(inputs[0]);
+    expect(screen.getByRole("button", { name: "Suggest famous figure 1" })).toHaveClass("h-11");
 
     inputs[0]!.focus();
     act(() => vi.advanceTimersByTime(250));

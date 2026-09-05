@@ -216,7 +216,7 @@ function HatLobbyFamousFiguresSection({
                   <FooterIconSlotButton
                     compact
                     icon={<span aria-hidden="true">{"\u26a1"}</span>}
-                    label="Lightning suggestion"
+                    label={`Suggest famous figure ${index + 1}`}
                     onClick={() => {
                       void emitWithAck("lobby:hatSuggestClue", { clueIndex: index });
                     }}
@@ -298,6 +298,7 @@ function HatClueDraftInput({
 
   return (
     <input
+      aria-label={`Famous figure ${clueIndex + 1}`}
       autoCapitalize="words"
       autoComplete="off"
       className={`${HAT_CLUE_INPUT_CLASS} w-full min-w-0`}
