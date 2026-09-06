@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.24.12
+
+- Support 280px viewports without the body's former 320px minimum. Stack
+  game-picker cards and paired Who What Where settings below 320px; let setup
+  options wrap while retaining at least 44px touch targets. DrawNGuess prompt
+  and guess inputs shrink to their card width instead of exceeding it.
+- Add narrow-viewport regression checks covering page and card overflow,
+  setup controls, dialogs, drawing, and footer access.
+
 ## 0.24.11
 
 - Align Railway dev's exact origin allow-list with its custom public domain,

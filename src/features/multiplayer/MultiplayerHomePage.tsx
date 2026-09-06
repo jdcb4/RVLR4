@@ -192,7 +192,7 @@ export function MultiplayerHomePage() {
               return (
                 <li key={game.id}>
                   <button
-                    className="flex w-full gap-4 rounded-xl border border-border bg-background p-3 text-left shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="flex w-full gap-4 rounded-xl border border-border bg-background p-3 text-left shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring max-[319px]:flex-col"
                     type="button"
                     onClick={() =>
                       navigate(`/name?intent=host&game=${encodeURIComponent(game.id)}`)

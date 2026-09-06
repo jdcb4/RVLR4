@@ -15,11 +15,9 @@ export function OptionGroup({
   readonly optionsClassName?: string;
 }) {
   return (
-    <fieldset className={cn("grid gap-3", className)}>
+    <fieldset className={cn("grid min-w-0 gap-3", className)}>
       <legend className="text-typ-ui font-semibold">{label}</legend>
-      <div className={cn("grid grid-flow-col auto-cols-fr gap-2", optionsClassName)}>
-        {children}
-      </div>
+      <div className={cn("flex flex-wrap gap-2", optionsClassName)}>{children}</div>
     </fieldset>
   );
 }
@@ -36,7 +34,7 @@ export function OptionButton({
   return (
     <Button
       aria-pressed={selected}
-      className="h-11"
+      className="h-auto min-h-11 min-w-11 flex-1 whitespace-normal"
       variant={selected ? "default" : "outline"}
       onClick={onClick}
       type="button"

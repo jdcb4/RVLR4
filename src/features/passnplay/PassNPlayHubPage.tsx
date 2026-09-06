@@ -54,7 +54,7 @@ export function PassNPlayHubPage() {
               return (
                 <li key={game.id}>
                   <Link
-                    className="flex gap-4 rounded-xl border border-border bg-background p-3 shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="flex gap-4 rounded-xl border border-border bg-background p-3 shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring max-[319px]:flex-col"
                     to={game.to}
                   >
                     <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-semantic-primary-well-bg text-primary">

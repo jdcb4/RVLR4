@@ -71,6 +71,23 @@ Environment variables are documented in `docs/DEPLOYMENT.md`. Optional diagnosti
 | R7   | Visit an unknown route or encounter a route load error                  | Home/Reload recovery works without a blank page                                                               |
 | R8   | Use option selectors and DrawNGuess text entry                          | Selected state is exposed, inputs have labels, errors are associated, routine room updates do not steal focus |
 
+## Responsive layout
+
+Check at 280×653, 320×653, 390×844, and 667×375 CSS pixels. Include
+Pass-and-Play screens when changing shared setup controls or the page shell.
+
+| Step | Action | Expected |
+| ---- | ------ | -------- |
+| V1 | Visit both game pickers, enter a name, and open lobby settings | No page-level horizontal scrolling; cards and inputs fit their containers |
+| V2 | Open Imposter player counts and Who What Where / Hat setup | Options wrap as needed without overlapping; each target stays at least 44px wide and high |
+| V3 | Open the room QR dialog; draw and submit a DrawNGuess response, then enter a guess | Dialog, canvas, toolbar, and text entry fit; footer actions remain reachable |
+| V4 | Scroll long content and use the primary footer action | Content scrolls vertically without trapping or covering the footer |
+
+Measure document width and overflowing descendants inside the shell's scrolling
+region. Checking only the document misses content clipped by `overflow-x-hidden`.
+Exclude deliberately scrollable regions, such as the Hat readiness table, and
+screen-reader-only text. Viewport emulation does not replace physical-device QA.
+
 ## Production-shaped check (optional)
 
 ```bash
