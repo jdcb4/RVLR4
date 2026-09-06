@@ -30,10 +30,7 @@ export function TeamRosterSetupScreen({
   readonly onBack: () => void;
   /** e.g. “Finalise teams” (WWW) or “Review teams” (Hat Game) — used only by parent footer labels. */
   readonly omitHeading?: boolean;
-  readonly addPlayerToRoster: (
-    teams: readonly RosterTeamRow[],
-    teamId: string,
-  ) => RosterTeamRow[];
+  readonly addPlayerToRoster: (teams: readonly RosterTeamRow[], teamId: string) => RosterTeamRow[];
   readonly removePlayerFromRoster: (
     teams: readonly RosterTeamRow[],
     teamId: string,
@@ -62,9 +59,7 @@ export function TeamRosterSetupScreen({
             <p className="font-medium text-typ-ui text-primary">
               Team {teamIndex + 1} of {teamCount}
             </p>
-            <h2 className="font-semibold text-typ-section-title">
-              Name this team
-            </h2>
+            <h2 className="font-semibold text-typ-section-title">Name this team</h2>
           </div>
         )}
 
@@ -72,11 +67,7 @@ export function TeamRosterSetupScreen({
           label="Team name"
           value={team.name}
           onChange={(value) =>
-            onTeamsChange(
-              teams.map((row) =>
-                row.id === team.id ? { ...row, name: value } : row,
-              ),
-            )
+            onTeamsChange(teams.map((row) => (row.id === team.id ? { ...row, name: value } : row)))
           }
         />
 
@@ -89,10 +80,7 @@ export function TeamRosterSetupScreen({
           </div>
 
           {team.players.map((player, playerIndex) => (
-            <div
-              key={player.id}
-              className="flex min-w-0 max-w-full items-center gap-2"
-            >
+            <div key={player.id} className="flex min-w-0 max-w-full items-center gap-2">
               <span className="w-7 shrink-0 text-right font-semibold text-typ-ui text-muted-foreground">
                 {playerIndex + 1}.
               </span>
@@ -123,11 +111,7 @@ export function TeamRosterSetupScreen({
                   aria-label={`Remove ${player.name}`}
                   size="icon"
                   variant="outline"
-                  onClick={() =>
-                    onTeamsChange(
-                      removePlayerFromRoster(teams, team.id, player.id),
-                    )
-                  }
+                  onClick={() => onTeamsChange(removePlayerFromRoster(teams, team.id, player.id))}
                 >
                   <IconTrash className="size-4" aria-hidden="true" />
                 </Button>

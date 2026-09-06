@@ -1,5 +1,5 @@
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
-import clueSuggestions from "@/data/clueSuggestions.json";
+import { getHatClueSuggestions } from "@/domain/hat-game/clueSuggestions";
 import type { ClueSubmissionMap, Player } from "@/domain/hat-game/types";
 
 import type { Room } from "./roomStore.ts";
@@ -69,7 +69,7 @@ export function buildHatClueSubmissionsFromLobby(
 
 /** Random unused celebrity suggestion for lightning-fill (Hat lobby). */
 export function pickSuggestedHatClue(drafts: Record<string, string[]>, rng: () => number): string {
-  const list = clueSuggestions as string[];
+  const list = getHatClueSuggestions();
   const used = new Set(
     Object.values(drafts).flatMap((row) => row.map((entry) => entry.trim()).filter(Boolean)),
   );

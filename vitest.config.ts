@@ -23,8 +23,33 @@ export default defineConfig({
       "**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*",
     ],
     coverage: {
-      provider: "v8",
-      reporter: ["text", "html"],
+      provider: "istanbul",
+      include: ["server/**/*.ts", "src/**/*.{ts,tsx}"],
+      exclude: [
+        "**/*.test.{ts,tsx}",
+        "**/*.d.ts",
+        "**/*Types.ts",
+        "**/types.ts",
+        "src/ui-gallery/**",
+        "src/tests/**",
+        "server/index.ts",
+      ],
+      reporter: ["text", "html", "json"],
+      thresholds: {
+        "{server/{sync,whoWhatWhereViews,hatViews,imposterViews,drawnguessViews,drawnguessGallery},src/multiplayer/mergeRoomSync}.ts":
+          {
+            lines: 95,
+            statements: 95,
+            functions: 100,
+            branches: 90,
+          },
+        "{server/{boundarySchemas,secrets,rateLimiter},src/domain/multiplayer/socketSchemas}.ts": {
+          lines: 100,
+          statements: 100,
+          functions: 100,
+          branches: 90,
+        },
+      },
     },
   },
 });

@@ -1,8 +1,7 @@
 # Naming conventions
 
-Single source of truth for symbol, file, and folder names in this repo.
-Companion to `docs/NAMING_AUDIT.md` (the one-shot audit that produced these
-rules). Re-run `pnpm run audit:names` after large refactors.
+Single source of truth for symbol, file, and folder names in this repo. Re-run
+`pnpm run audit:names` after large refactors.
 
 ## 1. Game brand tokens
 
@@ -15,11 +14,11 @@ export type GameKind = "whowhatwhere" | "hat" | "imposter";
 
 Symbols must follow this in their case-folded forms:
 
-| Game | Literal | camelCase | PascalCase | Folder |
-|---|---|---|---|---|
+| Game           | Literal          | camelCase      | PascalCase     | Folder          |
+| -------------- | ---------------- | -------------- | -------------- | --------------- |
 | Who What Where | `"whowhatwhere"` | `whoWhatWhere` | `WhoWhatWhere` | `whowhatwhere/` |
-| Hat Game | `"hat"` | `hat` | `Hat` | `hat-game/` |
-| Imposter | `"imposter"` | `imposter` | `Imposter` | `imposter/` |
+| Hat Game       | `"hat"`          | `hat`          | `Hat`          | `hat-game/`     |
+| Imposter       | `"imposter"`     | `imposter`     | `Imposter`     | `imposter/`     |
 
 **`Www*` / `www*` short forms are banned in new code.** They obscure
 search-ability without shortening symbols meaningfully on a screen.
@@ -34,9 +33,9 @@ Every other Hat symbol uses `Hat*` / `hat*`.
 Two play modes. The **UX** labels are "Multi-Device" and "Pass-and-Play",
 but the **code** uses different tokens for clarity and history:
 
-| Mode | UX label | Code modifier | Notes |
-|---|---|---|---|
-| Multi-Device | "Multi-Device mode" | `Multiplayer*` / `multiplayer*` | Matches what the implementation actually is (networked rooms via Socket.IO). |
+| Mode          | UX label             | Code modifier                     | Notes                                                                                     |
+| ------------- | -------------------- | --------------------------------- | ----------------------------------------------------------------------------------------- |
+| Multi-Device  | "Multi-Device mode"  | `Multiplayer*` / `multiplayer*`   | Matches what the implementation actually is (networked rooms via Socket.IO).              |
 | Pass-and-Play | "Pass-and-Play mode" | `Singleplayer*` / `singleplayer*` | Disambiguates pass-and-play code from its multiplayer counterpart when read in isolation. |
 
 ### When to apply a modifier
@@ -44,14 +43,14 @@ but the **code** uses different tokens for clarity and history:
 Add a mode modifier to a symbol when it has a counterpart in the **other**
 mode for the same game. Otherwise leave it bare.
 
-| Surface | Bare | With modifier |
-|---|---|---|
-| Top-level app component (per game) | (banned) | `HatSingleplayerApp`, `WhoWhatWhereMultiplayerView` |
-| Mode-shell component | (banned for mode-specific UI) | `MultiplayerGameShell`, `MultiplayerHomePage` |
-| Hook (per game) | (banned) | `useHatSingleplayerApp`, `useRoomChannel` (mode-shell hook) |
-| Domain logic, shared utilities | bare | `createMatch`, `useAutoHidePopup` |
-| Server-only code under `server/` | bare | Location implies multiplayer; no suffix needed |
-| Wire-format event names | bare game | `hat:correct`, `www:revealHint` |
+| Surface                            | Bare                          | With modifier                                               |
+| ---------------------------------- | ----------------------------- | ----------------------------------------------------------- |
+| Top-level app component (per game) | (banned)                      | `HatSingleplayerApp`, `WhoWhatWhereMultiplayerView`         |
+| Mode-shell component               | (banned for mode-specific UI) | `MultiplayerGameShell`, `MultiplayerHomePage`               |
+| Hook (per game)                    | (banned)                      | `useHatSingleplayerApp`, `useRoomChannel` (mode-shell hook) |
+| Domain logic, shared utilities     | bare                          | `createMatch`, `useAutoHidePopup`                           |
+| Server-only code under `server/`   | bare                          | Location implies multiplayer; no suffix needed              |
+| Wire-format event names            | bare game                     | `hat:correct`, `www:revealHint`                             |
 
 The server folder is treated as multiplayer-only by convention — server
 exports don't get a `Multiplayer*` prefix even though they implement the
@@ -72,18 +71,18 @@ modifier.
 When a function name starts with a verb, use the canonical verb from this
 table. Synonyms are banned to keep grep-ability high.
 
-| Concept | Canonical verb | Example |
-|---|---|---|
-| Build a plain value/structure | `build*` | `buildGameLandingScreen` |
-| Construct a domain entity | `create*` | `createMatch`, `createHatGameSession` |
-| Initiate a runtime process | `start*` | `startWhoWhatWhereMatch`, `startTurn`, `startRoomIdleSweeper` |
-| Apply an action to state | `apply*` | `applyWhoWhatWhereCorrect` |
-| Read from storage | `load*` | `loadServerEnv`, `loadSession` |
-| Persist to storage | `save*` / `persist*` | `saveSetup`, `persistSession` |
-| Wipe storage | `clear*` | `clearSession` |
-| Get a derived value | `get*` / `format*` / `compute*` | `getActiveContext`, `formatSavedAt`, `computeResumeEligible` |
-| React hook | `use*` | `useRoomChannel` |
-| Type-guard predicate | `is*` / `can*` / `should*` | `isStoragePayload`, `canQueueSkipped` |
+| Concept                       | Canonical verb                  | Example                                                       |
+| ----------------------------- | ------------------------------- | ------------------------------------------------------------- |
+| Build a plain value/structure | `build*`                        | `buildGameLandingScreen`                                      |
+| Construct a domain entity     | `create*`                       | `createMatch`, `createHatGameSession`                         |
+| Initiate a runtime process    | `start*`                        | `startWhoWhatWhereMatch`, `startTurn`, `startRoomIdleSweeper` |
+| Apply an action to state      | `apply*`                        | `applyWhoWhatWhereCorrect`                                    |
+| Read from storage             | `load*`                         | `loadServerEnv`, `loadSession`                                |
+| Persist to storage            | `save*` / `persist*`            | `saveSetup`, `persistSession`                                 |
+| Wipe storage                  | `clear*`                        | `clearSession`                                                |
+| Get a derived value           | `get*` / `format*` / `compute*` | `getActiveContext`, `formatSavedAt`, `computeResumeEligible`  |
+| React hook                    | `use*`                          | `useRoomChannel`                                              |
+| Type-guard predicate          | `is*` / `can*` / `should*`      | `isStoragePayload`, `canQueueSkipped`                         |
 
 **Banned synonyms:** `begin*`, `commence*`, `launch*`, `initiate*` (use
 `start*`); `make*` / `construct*` (use `create*` or `build*`); `fetch*` for
@@ -100,16 +99,16 @@ apply<Game><Verb><Object>
 
 The canonical action vocabulary, locked in:
 
-| Concept | Canonical name fragment |
-|---|---|
-| Start the active turn | `StartTurn` |
-| End the active turn | `EndTurn` |
-| Mark the current word/clue correct | `Correct` |
-| Skip the current word/clue | `Skip` |
-| Return a skipped word | `ReturnSkipped` |
-| Transition match to final-scores stage | `ShowFinalScores` |
-| Reveal a hint for the current word | `RevealHint` |
-| Server-side timer expiry | `ExpireTurn` |
+| Concept                                | Canonical name fragment |
+| -------------------------------------- | ----------------------- |
+| Start the active turn                  | `StartTurn`             |
+| End the active turn                    | `EndTurn`               |
+| Mark the current word/clue correct     | `Correct`               |
+| Skip the current word/clue             | `Skip`                  |
+| Return a skipped word                  | `ReturnSkipped`         |
+| Transition match to final-scores stage | `ShowFinalScores`       |
+| Reveal a hint for the current word     | `RevealHint`            |
+| Server-side timer expiry               | `ExpireTurn`            |
 
 So: `applyHatCorrect`, `applyWhoWhatWhereCorrect`, `applyHatSkip`,
 `applyWhoWhatWhereSkip`, `applyHatShowFinalScores`,
@@ -133,12 +132,12 @@ Shared utility hooks describe the behavior, not a subject: `useRoomChannel`,
 
 ## 6. File names
 
-| Kind | Case | Examples |
-|---|---|---|
-| React component (one primary export) | `PascalCase.tsx` | `HatMultiplayerView.tsx`, `RoomPage.tsx` |
-| Screen *builder* function (returns `ScreenModel`) | `camelCase.tsx` | `hatLandingScreen.tsx`, `imposterResultsScreen.tsx` |
-| Hooks, utilities, types | `camelCase.ts` | `useRoomChannel.ts`, `viewModel.ts` |
-| Folders | `kebab-case` | `hat-game/`, `team-setup/`, `final-results/` |
+| Kind                                              | Case             | Examples                                            |
+| ------------------------------------------------- | ---------------- | --------------------------------------------------- |
+| React component (one primary export)              | `PascalCase.tsx` | `HatMultiplayerView.tsx`, `RoomPage.tsx`            |
+| Screen _builder_ function (returns `ScreenModel`) | `camelCase.tsx`  | `hatLandingScreen.tsx`, `imposterResultsScreen.tsx` |
+| Hooks, utilities, types                           | `camelCase.ts`   | `useRoomChannel.ts`, `viewModel.ts`                 |
+| Folders                                           | `kebab-case`     | `hat-game/`, `team-setup/`, `final-results/`        |
 
 ## 7. Tooling
 
@@ -149,5 +148,3 @@ Shared utility hooks describe the behavior, not a subject: `useRoomChannel`,
   by the audit script, not the linter (categorical rules can't express
   "your function must use the same verb as the parallel one in another
   game").
-- See [`docs/NAMING_AUDIT.md`](NAMING_AUDIT.md) for the original audit
-  data and remediation sequence.

@@ -1,9 +1,17 @@
 import type { Socket } from "socket.io";
 
-import type { Room, RoomPlayer, RoomStore } from "./roomStore.ts";
-import { type SocketEventName, type SocketPayload, socketSchemas } from "./socketSchemas.ts";
+import {
+  type SocketEventName,
+  type SocketPayload,
+  socketSchemas,
+} from "@/domain/multiplayer/socketSchemas";
 
-export type SocketAck = (payload?: { ok?: boolean; error?: string }) => void;
+import type { TokenBucketStore } from "./rateLimiter.ts";
+import type { Room, RoomPlayer, RoomStore } from "./roomStore.ts";
+import { consumeMutationBudget, isDrawingPayloadTooLarge } from "./socketBudgets.ts";
+import { readSocketRequest, reportSocketFailure } from "./socketRequest.ts";
+
+export type { SocketAck } from "@/domain/multiplayer/protocol";
 
 export type HandlerContext = {
   readonly socket: Socket;
@@ -38,7 +46,7 @@ function requireActor(socket: Socket, store: RoomStore): { room: Room; actor: Ro
 /**
  * Registers a Socket.IO handler that:
  * - validates `rawPayload` against the schema declared for `event` in
- *   `server/socketSchemas.ts` (rejects with "Invalid request." on failure),
+ *   `src/domain/multiplayer/socketSchemas.ts` (rejects with "Invalid request." on failure),
  * - looks up the actor + room from `socket.data`,
  * - awaits `fn`,
  * - acks `{ ok: true }` on success or `{ ok: false, error }` on throw.
@@ -54,19 +62,53 @@ export function registerHandler<E extends SocketEventName>(
 ) {
   const schema = socketSchemas[event];
 
-  socket.on(event as string, async (rawPayload: unknown, ack?: SocketAck) => {
+  socket.on(event as string, async (...args: unknown[]) => {
+    const { payload: rawPayload, valid, ack } = readSocketRequest(args, event);
+
     try {
       const parsed = schema.safeParse(rawPayload);
 
-      if (!parsed.success) {
-        throw new Error("Invalid request.");
+      if (!valid || !parsed.success) {
+        const payloadTooLarge = isDrawingPayloadTooLarge(event, rawPayload);
+        ack?.({
+          ok: false,
+          error: payloadTooLarge ? "Request payload is too large." : "Invalid request.",
+          code: payloadTooLarge ? "PAYLOAD_TOO_LARGE" : "INVALID_REQUEST",
+        });
+
+        return;
       }
 
       const { room, actor } = requireActor(socket, store);
+      if (room.starting) throw new Error("The game is starting. Wait a moment and try again.");
+      const limiter = socket.data.rateLimiter as TokenBucketStore | undefined;
+
+      if (limiter) {
+        const budget = consumeMutationBudget(limiter, socket, event, parsed.data);
+
+        if (!budget.allowed) {
+          const reporter = socket.data.rateLimitReporter as
+            { record(operation: string): void } | undefined;
+          reporter?.record(
+            event === "drawnguess:updateDrawingDraft" || event === "drawnguess:submitDrawing"
+              ? "socket.drawing_mutation"
+              : "socket.general_mutation",
+          );
+          ack?.({
+            ok: false,
+            error: "Too many requests. Try again shortly.",
+            code: "RATE_LIMITED",
+          });
+
+          return;
+        }
+      }
 
       await fn({ socket, store, room, actor }, parsed.data as SocketPayload<E>);
       ack?.({ ok: true });
     } catch (error) {
+      reportSocketFailure(event, error);
+
       ack?.({
         ok: false,
         error: error instanceof Error ? error.message : fallbackErrorMessage,

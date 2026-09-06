@@ -5,16 +5,18 @@ export function RoomConnectionBanners({
   connected,
   shuttingDown,
   children,
+  active = true,
 }: {
   readonly connected: boolean;
   readonly shuttingDown: boolean;
   readonly children: ReactNode;
+  readonly active?: boolean;
 }) {
-  const showOfflineBanner = useDelayedOfflineBanner(connected);
+  const showOfflineBanner = useDelayedOfflineBanner(connected || !active);
 
   return (
     <>
-      {shuttingDown ? <ShutdownBanner /> : null}
+      {shuttingDown && active ? <ShutdownBanner /> : null}
       {!shuttingDown && showOfflineBanner ? <OfflineBanner /> : null}
       {children}
     </>
@@ -49,7 +51,7 @@ function ShutdownBanner() {
       className="fixed inset-x-0 top-0 z-50 bg-primary px-4 py-2 text-center text-typ-ui text-primary-foreground shadow-md"
       role="status"
     >
-      The server is restarting - keep this tab open, the room will reopen in a moment.
+      The server is restarting. This room will be lost; the host will need to create a new room.
     </div>
   );
 }

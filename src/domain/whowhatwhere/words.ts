@@ -1,9 +1,4 @@
-import {
-  CATEGORIES,
-  type Category,
-  type GameSettings,
-  type WordEntry,
-} from "./types";
+import { CATEGORIES, type Category, type GameSettings, type WordEntry } from "./types";
 
 const CATEGORY_WEIGHTS: Record<Category, number> = {
   What: 2,
@@ -22,10 +17,7 @@ export function chooseWeightedCategory(
   random = Math.random,
 ): Category {
   const categories = selectedCategories.length > 0 ? selectedCategories : CATEGORIES;
-  const totalWeight = categories.reduce(
-    (total, category) => total + CATEGORY_WEIGHTS[category],
-    0,
-  );
+  const totalWeight = categories.reduce((total, category) => total + CATEGORY_WEIGHTS[category], 0);
   let threshold = random() * totalWeight;
 
   for (const category of categories) {
@@ -64,10 +56,7 @@ function shuffleWords(words: readonly WordEntry[], random: () => number) {
 
   for (let index = shuffled.length - 1; index > 0; index -= 1) {
     const swapIndex = Math.floor(random() * (index + 1));
-    [shuffled[index], shuffled[swapIndex]] = [
-      shuffled[swapIndex]!,
-      shuffled[index]!,
-    ];
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex]!, shuffled[index]!];
   }
 
   return shuffled;

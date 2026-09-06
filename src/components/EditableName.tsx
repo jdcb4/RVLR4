@@ -21,21 +21,27 @@ export function EditableName({
 
   if (isEditing) {
     return (
-      <label
-        className={cn("grid min-w-0 gap-2 font-medium text-typ-ui", className)}
-      >
+      <label className={cn("grid min-w-0 gap-2 font-medium text-typ-ui", className)}>
         {!hideLabel && label}
         <span className="p-0.5">
           <input
             aria-label={label}
-            autoFocus
+            autoCapitalize="words"
+            autoComplete="off"
+            ref={(input) => {
+              input?.focus();
+            }}
             className="keyboard-safe-input h-12 w-full rounded-md border bg-background px-3 text-typ-input outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+            enterKeyHint="done"
+            inputMode="text"
             maxLength={24}
+            spellCheck={false}
+            type="text"
             value={value}
             onBlur={() => setIsEditing(false)}
             onChange={(event) => onChange(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key === "Enter") {
+              if (event.key === "Enter" && !event.nativeEvent.isComposing) {
                 event.currentTarget.blur();
               }
             }}

@@ -37,8 +37,8 @@ export async function applyWhoWhatWhereStartTurn(room: Room) {
     throw new Error("The game is not waiting on a new turn.");
   }
 
-  const { wordDeck } = await import("@/data/words.generated");
-  room.wwwMatch = startTurn(match, wordDeck);
+  const { getWhoWhatWhereWordList } = await import("@/domain/whowhatwhere/wordList");
+  room.wwwMatch = startTurn(match, getWhoWhatWhereWordList());
   room.wwwReadyReveal = false;
 }
 
@@ -54,11 +54,7 @@ export function applyWhoWhatWhereSkip(room: Room, actorId: string) {
   room.wwwMatch = skipWord(match);
 }
 
-export function applyWhoWhatWhereReturnSkipped(
-  room: Room,
-  actorId: string,
-  skippedWordId: string,
-) {
+export function applyWhoWhatWhereReturnSkipped(room: Room, actorId: string, skippedWordId: string) {
   const match = requireActiveTurn(room);
   assertActorIsDescriber(match, actorId);
   room.wwwMatch = returnSkippedWord(match, skippedWordId);

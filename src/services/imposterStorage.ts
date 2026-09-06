@@ -1,25 +1,12 @@
+import type { ImposterStoragePayload } from "@/features/imposter/imposterSingleplayerAppTypes";
+import { localGameStorage, readValidatedRecord } from "@/services/browserStorage";
+import { imposterSavedStateSchema } from "@/services/savedStates/imposter";
+
 const STORAGE_KEY = "imposter.state.v1";
-
-export const loadImposterSavedState = async <T>() => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return null;
-    }
-    return JSON.parse(raw) as T;
-  } catch {
-    return null;
-  }
-};
-
-export const saveImposterState = async (value: unknown) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-  } catch {
-    // Private mode / quota — gameplay can still continue in memory.
-  }
-};
-
+export const loadImposterSavedState = async () =>
+  readValidatedRecord(STORAGE_KEY, imposterSavedStateSchema);
+export const saveImposterState = async (value: ImposterStoragePayload) =>
+  localGameStorage.write(STORAGE_KEY, JSON.stringify(value));
 export const clearImposterSavedState = async () => {
-  localStorage.removeItem(STORAGE_KEY);
+  localGameStorage.remove(STORAGE_KEY);
 };

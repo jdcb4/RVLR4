@@ -44,7 +44,13 @@ describe("playHatActionSoundEffects", () => {
   it("plays correct on mark-correct", () => {
     const playCue = vi.fn();
     const session = stubSession({ stage: "turn", phaseNumber: 1 });
-    playHatActionSoundEffects(session, session, { type: "mark-correct" }, { current: null }, playCue);
+    playHatActionSoundEffects(
+      session,
+      session,
+      { type: "mark-correct" },
+      { current: null },
+      playCue,
+    );
     expect(playCue).toHaveBeenCalledWith("correct");
   });
 

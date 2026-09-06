@@ -1,6 +1,344 @@
 # Changelog
 
+## 0.24.12
+
+- Support 280px viewports without the body's former 320px minimum. Stack
+  game-picker cards and paired Who What Where settings below 320px; let setup
+  options wrap while retaining at least 44px touch targets. DrawNGuess prompt
+  and guess inputs shrink to their card width instead of exceeding it.
+- Add narrow-viewport regression checks covering page and card overflow,
+  setup controls, dialogs, drawing, and footer access.
+
+## 0.24.11
+
+- Align Railway dev's exact origin allow-list with its custom public domain,
+  preserving the generated domain. Browser asset requests and room entry can
+  now use `rvlry-dev.jboxgames.com`; the runbook checks browser origins as well
+  as the health endpoint. Production configuration is unchanged.
+
+## 0.24.10
+
+- Keep keyboard focus inside room recovery confirmations when their content
+  replaces the action that opened them. Closing still restores the original
+  dialog opener; routine room updates do not move focus.
+- Name each Hat clue input and suggestion button by its row in both play modes.
+- Give the concealed Imposter role-reminder button an accessible name and
+  expanded state while keeping the private role absent until requested.
+- Initialize each new multiplayer Hat countdown from its deadline so assistive
+  technology does not announce expiry at the start of a live turn.
+
+## 0.24.9
+
+- Correct Fallow's entry graph to scan actual app/server/gallery entry points,
+  tests, and scripts. Remove the unused client environment wrapper, obsolete
+  nginx configuration, four icons, setup helper, sound wrapper, unused types,
+  and unnecessary exports. Keep separate game-domain contracts and live routes.
+- Align the screen map, multiplayer QA, configuration/security guidance, and
+  persistence policy with current routes, private per-device reveals, validated
+  browser saves, and single-process multiplayer storage.
+- Restrict optional multiplayer debug output to operational counts, game kind,
+  and cleanup reasons; remove room codes and player identifiers from its calls.
+
 Notable changes by version. Newest at the top. Bumps follow `docs/VERSIONING.md`.
+
+## 0.24.8 - 2026-09-05
+
+- **Local preview:** `pnpm run preview` runs the built app and multiplayer
+  server together with exact loopback origins and production mode. HTTP preview
+  keeps CSP protections without forcing asset requests to HTTPS. Invalid port
+  numbers fail at startup.
+- **Operations:** Document one replica, room loss on process replacement,
+  health/version checks, rollback, and a sole-maintainer branch-rule proposal.
+
+## 0.24.7 - 2026-09-05
+
+- **Gallery transfer:** Current clients receive completed drawing books once
+  per connection and reuse them for replay/presence updates. Missing cache
+  triggers a fresh bind; reconnect always resends full data. Earlier clients
+  retain the full-snapshot protocol. Gallery rendering and exports use the
+  original strokes without lossy encoding.
+
+## 0.24.6 - 2026-09-05
+
+- **Drawing input:** Keep the last valid stroke at point, stroke, and byte
+  limits, show a limit notice, quantize coordinates, and disable submitted
+  drawing tools. Commit a visible stroke at the client deadline.
+- **Drawing updates:** Coalesce drafts with one request in flight, preserve
+  the latest edit, and submit only after prior drafts settle. Editing withdraws
+  submitted status immediately. Private drafts sync only to their owning tabs;
+  public progress still reaches everyone. Match mutations copy changed paths
+  instead of cloning completed books on every input.
+
+## 0.24.5 - 2026-09-05
+
+- **Shared protocol:** Client and server now use one set of room/replay DTOs,
+  schema-derived event inputs, and acknowledgement types. Event names and
+  payloads are checked together at UI call sites. Imposter's shared state
+  types live in the domain layer, and runtime payload validation stays strict.
+- **Input cleanup:** Delayed keyboard scrolling checks its input's document
+  and attachment, so a closed screen cannot leave a callback using torn-down UI.
+
+## 0.24.4 - 2026-09-05
+
+- **Development dependencies:** Update patched toolchain packages, including
+  Vite 6.4.3, and move from end-of-life ESLint 9 to ESLint 10 with compatible
+  Hooks/Refresh plugins. Preserve the existing Hooks and accessibility rules.
+  Review the narrowly scoped JSX accessibility plugin peer exception in
+  `docs/VERIFICATION.md` when updating the linter.
+
+## 0.24.3 - 2026-09-05
+
+- **Runtime dependencies:** Resolve Express/body-parser's `qs` dependency to
+  patched 6.16.0 and gate production dependency audit in CI.
+
+## 0.24.2 - 2026-09-05
+
+- **Failure navigation:** Unknown links and failed route/chunk rendering show
+  friendly home/reload actions. Binding distinguishes lost rooms from expired
+  seats, clears their stale credentials/bookmark, and stops futile reconnects.
+  Restart copy explains that rooms in RAM are lost and a new room is required.
+
+## 0.24.1 - 2026-09-05
+
+- **Saved games:** Validate nested game state and references with versioned
+  Zod boundaries, migrate supported bare/older saves, and recover from corrupt
+  records. Contain storage reads/writes/removals with a tab-local fallback and
+  visible persistence notice. Browser and server share session validation;
+  successful HTTP entry responses are validated before saving credentials.
+
+## 0.24.0 - 2026-09-05
+
+- **Room recovery:** Room options let guests leave, hosts remove away lobby
+  seats or close a lobby, and hosts end a stuck match and return everyone to
+  the lobby after confirmation. Removed seats lose their reconnect secrets
+  and Hat clue drafts. New seats count as away until a socket binds; joining
+  again with the same name creates a new seat. Match start locks competing
+  commands while its initial data loads.
+
+## 0.23.1 - 2026-09-05
+
+- **Accessibility:** QR, app information, and team-move overlays use named
+  native dialogs with contained focus, Escape dismissal, and focus return.
+  Options expose selection, drawing fields and brush colors have accessible
+  names, and entry errors are announced. Enable the installed accessibility
+  lint rules and avoid opening the keyboard automatically on drawing turns.
+
+## 0.23.0 - 2026-09-05
+
+- **Audio:** Replace Tone and both Hat phase WAVs with eleven mapped Cuelume
+  cues. All modes share the same local synthesis service with no media/CDN
+  downloads. Keep phase instructions visible and audio failure nonblocking.
+
+## 0.22.10 - 2026-09-05
+
+- **Team capacity:** Reject undersized team-count choices before changing
+  settings or seats. Shared readiness enforces both minimum and maximum team
+  sizes, and Who What Where settings stay aligned with the lobby team count.
+
+## 0.22.9 - 2026-09-05
+
+- **Replay recovery:** A cancelled offer can be replaced after everyone
+  reconnects. Duplicate host offers preserve votes, and current clients send
+  the offer ID so delayed acceptance cannot join a replacement offer.
+
+## 0.22.8 - 2026-09-05
+
+- **Bounded requests:** Socket binds/actions and HTTP room requests have an
+  eight-second deadline. Disconnects settle pending actions, incomplete replies
+  show an error, and connection failures offer retry and home navigation.
+  HTTP deadlines include reading the body; leaving entry screens cancels work.
+
+## 0.22.7 - 2026-09-05
+
+- **Connection ownership:** Leaving a room screen now closes its socket and
+  clears stale state. Rebinding leaves the previous room before joining the
+  next. Presence stays online while any tab for that player is connected, and
+  broadcasts discard stale memberships instead of failing the room.
+
+## 0.22.6 - 2026-09-05
+
+- **DrawNGuess drafts:** Keep local edits stable through peer broadcasts and
+  delayed acknowledgements; retain spaces while typing, trim only final text,
+  and reset drafts on a new turn. Submitting locks the editor until its result.
+- **Turn integrity:** New clients identify the turn with each draft/submission
+  so delayed responses cannot update a later turn. Older clients remain
+  compatible with the additive field.
+
+## 0.22.5 - 2026-09-05
+
+- **Type safety:** The typecheck gate now checks client, server, configuration,
+  tests, and utility scripts. Fixed nullable game-state handling, exact optional
+  resets, settings-patch boundaries, and mismatched replay/transport types found
+  by the previously missing server check.
+- **Test tooling:** Upgrade Vitest and its Istanbul adapter together to 3.2.7
+  to remove the Vite 5/6 configuration-type mismatch and receive the patched
+  Vitest 3 release. Existing assertions and coverage thresholds are retained.
+
+## 0.22.4 - 2026-09-05
+
+- **Answer privacy:** Mask live-turn word and clue history for guessers and
+  observers, including skipped answers returned to play. Completed turn recaps
+  still show their answers. Transition tests inspect the whole serialized view.
+
+## 0.22.3 - 2026-09-05
+
+- **Socket resilience:** Reject malformed argument lists before mutations, safely
+  handle optional acknowledgements, and record redacted error classes for all
+  handler failures. Regression tests keep a second room usable after malformed
+  bind and game commands.
+
+## 0.22.2 - 2026-08-13
+
+- **Mobile Hat entry:** Clue fields now follow the visual viewport when the
+  on-screen keyboard opens, scroll the active field into view, and use denser
+  rows while preserving the existing Enter-to-advance flow.
+- **Compact setup:** Who What Where pairs timing, round, skip, and hint controls
+  into two-column groups to reduce vertical scrolling on phone screens.
+- **Adaptive lobbies:** Team lobbies switch to compact two-column player cards
+  from six participants onward while retaining readiness, captain, host,
+  connection, rename, join, and host-move controls.
+
+## 0.22.1 - 2026-08-09
+
+- **Deployment:** Moved the optional manual Docker recipe to
+  `docker/Dockerfile` so Railway no longer auto-detects it ahead of Railpack;
+  `pnpm run docker:build` continues to build the portability image explicitly.
+
+## 0.22.0 - 2026-08-09
+
+- **Production security:** Added Helmet with a same-origin SPA CSP, disabled
+  `X-Powered-By`, and made a validated `CLIENT_ORIGIN` allow-list mandatory in
+  production while retaining origin-free navigation and health clients.
+- **Operations:** Added `/api/health` readiness/shutdown responses, Railway
+  health-check configuration, redacted structured startup/shutdown/error logs,
+  and aggregate-only rate-limit reporting.
+- **Deployment:** Railway now waits up to 30 seconds for `/api/health` before
+  activating a deployment.
+- **Maintainability:** Split socket registration into session, lobby, replay,
+  and per-game modules, extracted game-specific single-player transitions and
+  persistence from large hooks, and added fake-clock server timer coverage.
+- **Verification:** Coverage now includes production client/server sources,
+  emits JSON for Fallow, and enforces elevated thresholds for projections,
+  sync, validation, reconnect secrets, and request limiting.
+
+## 0.21.7 - 2026-08-09
+
+- **Abuse controls:** Added bounded, sweepable in-memory token buckets for room
+  creation/lookups/joins, socket connections, session binding, general game
+  mutations, and size-weighted drawing mutations. Railway-only `X-Real-IP`
+  trust is explicit and validated.
+- **Payload limits:** HTTP JSON bodies are capped at 16 KiB, Socket.IO messages
+  at 256 KiB, and DrawNGuess drawings at 200 strokes, 2,000 points per stroke,
+  6,000 total points, and 192 KiB serialized data.
+- **Errors:** Oversized and throttled HTTP/socket requests return stable
+  `PAYLOAD_TOO_LARGE` or `RATE_LIMITED` codes; HTTP throttling includes
+  `Retry-After`.
+
+## 0.21.6 - 2026-08-09
+
+- **Validation:** Added strict Zod schemas for every HTTP and Socket.IO input,
+  including normalized names/codes, current UI setting enums, UUID identifiers,
+  exact string limits, strict objects, and payload-free events.
+- **Errors:** Invalid boundary requests now include the stable
+  `INVALID_REQUEST` code while retaining human-readable errors.
+- **Reconnect security:** Reconnect secrets are shape-validated and compared
+  with `crypto.timingSafeEqual` without throwing on malformed input.
+
+## 0.21.5 - 2026-08-09
+
+- **Privacy:** Hat lobby sync now sends only the authenticated player's clue
+  drafts. Server-only WWW word reserves and Hat clue pools are scrubbed from
+  live viewer projections.
+- **Capacity:** DrawNGuess rejects a ninth lobby participant before creating or
+  broadcasting a player record.
+- **Tests:** Added table-driven viewer projection invariants covering every
+  game, role-specific secrets, all relevant stages, and reconnect lobby sync.
+
+## 0.21.4 - 2026-08-09
+
+- **Security:** Upgraded vulnerable production dependencies and pinned patched
+  transitive releases for the Express and Socket.IO stacks. The production
+  dependency audit now reports no known vulnerabilities.
+
+## 0.21.3 - 2026-08-09
+
+- **Audit:** Completed RM-06's fresh security and maintainability baseline using
+  dependency advisories, coverage, Fallow, source scans, current tests, and a
+  manual review of HTTP, Socket.IO, reconnect, projection, and room boundaries.
+- **Plan:** Added a ranked active remediation plan covering dependency
+  vulnerabilities, Hat lobby draft privacy, capacity and abuse controls,
+  schema validation, production origins and headers, projection invariants,
+  health/error signals, timing-safe secret comparison, and targeted complexity
+  reductions.
+- **Roadmap:** Moved RM-06 into active work. No future roadmap items remain.
+
+## 0.21.2 - 2026-08-09
+
+- **Documentation:** Consolidated the maintained docs into a current canonical
+  set organized by audience in `PROJECT_INDEX.md`, with an explicit lifecycle
+  rule for completed audits and implementation plans.
+- **Cleanup:** Removed seven obsolete point-in-time reports and completed plans
+  after preserving reusable naming, shared-UI, and quality guidance in
+  `NAMING.md`, `ARCHITECTURE.md`, `AGENTS.md`, and RM-06.
+- **Roadmap:** Closed RM-05. RM-06 remains as a fresh security and
+  maintainability audit based on current evidence rather than stale metrics.
+
+## 0.21.1 - 2026-08-09
+
+- **Deployment:** Made GitHub-to-Railway the primary deployment path and added
+  repository config that explicitly selects Railpack instead of the retained
+  root Dockerfile.
+- **Docker:** Kept the Dockerfile and manual image-build command for portability
+  and self-hosting, made the command cross-platform, and removed Docker builds
+  from routine deployment and verification guidance.
+- **Roadmap:** Removed RM-01, RM-02, and RM-03 at Joe's direction and closed
+  RM-04 after implementing the Railway-first policy.
+
+## 0.21.0 - 2026-08-09
+
+- **Performance:** Kept the multiplayer home route eager while lazy-loading
+  room, name, pass-and-play, and single-player routes behind an accessible
+  loading state. The production entry bundle fell from about 623 kB/193 kB
+  gzip to 345 kB/111 kB gzip.
+- **Lobby UX:** Added server-authored start-readiness blockers for connection,
+  player-count, team-size, Hat clue, and ready-up requirements. Hosts now see
+  every blocker and cannot start until the authoritative rules pass.
+- **Mobile UX:** Standardized capitalization, autocomplete, keyboard hints,
+  input modes, spellcheck, and Enter behavior across names, team names, join
+  codes, Hat clues, and DrawNGuess text responses.
+- **Accessibility:** Kept countdowns visually live while limiting polite screen
+  reader announcements to the final-ten-seconds milestone and time expiry.
+- **Tests:** Added route loading, readiness parity, mobile interaction, and
+  countdown announcement coverage.
+
+## 0.20.5 - 2026-08-09
+
+- **Fix (multiplayer):** Re-bind stored player sessions after every Socket.IO
+  reconnect and keep room commands unavailable until binding succeeds.
+- **Resilience:** Handle missing, expired, and stale session binding attempts
+  without presenting an unbound transport as a usable room connection.
+- **Tests:** Added client lifecycle and real Socket.IO reconnect coverage that
+  confirms room commands and synchronization resume after rebinding.
+
+## 0.20.4 - 2026-08-09
+
+- **Data:** Moved all curated word, prompt, clue, and generated-name content to
+  JSON assets with typed, runtime-validated loaders instead of executable data
+  modules or unchecked JSON casts.
+- **Performance:** Preserved on-demand loading of the 3,129-entry Who What
+  Where deck for both pass-and-play and multiplayer turns.
+- **Validation:** Added content-integrity coverage for every shipped game-data
+  list, including shape, category, uniqueness, and migration inventory checks.
+
+## 0.20.3 - 2026-08-09
+
+- **Delivery workflow:** Established `dev` as the default integration branch
+  and review candidate, with explicit owner approval required before promotion
+  to the production `main` branch.
+- **Deployments:** Mapped Railway `dev` to `dev` while retaining `main` as the
+  Railway production source, and documented the live configuration contract.
+- **CI:** Run the deterministic GitHub Actions gate for pushes and pull
+  requests involving either `dev` or `main`.
 
 ## 0.20.2 - 2026-06-14
 

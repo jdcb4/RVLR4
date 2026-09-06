@@ -5,11 +5,11 @@ import { GamePanel } from "@/components/game/GamePanel";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { ReadyProgressCard } from "@/components/game/ReadyProgressCard";
 import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
+import type { WhoWhatWherePeerRole } from "@/domain/multiplayer/protocol";
 import { getActiveContext } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 import { LastTurnCard } from "@/features/whowhatwhere/summary/LastTurnCard";
 import { Scoreboard } from "@/features/whowhatwhere/summary/Scoreboard";
-import type { WhoWhatWherePeerRole } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
 
 export function ReadyScreen({
@@ -82,9 +82,9 @@ export function ReadyScreen({
     } else {
       nextStepsPrimary = (
         <>
-          <span className="font-semibold text-foreground">{nextTeamName}</span> is up next.
-          Waiting for{" "}
-          <span className="font-semibold text-foreground">{describerName}</span> to start the turn.
+          <span className="font-semibold text-foreground">{nextTeamName}</span> is up next. Waiting
+          for <span className="font-semibold text-foreground">{describerName}</span> to start the
+          turn.
         </>
       );
     }
@@ -101,9 +101,8 @@ export function ReadyScreen({
       </>
     ) : (
       <>
-        Only{" "}
-        <span className="font-semibold text-foreground">{describerName}</span> should peek when words
-        appear.
+        Only <span className="font-semibold text-foreground">{describerName}</span> should peek when
+        words appear.
       </>
     );
   } else {
@@ -116,8 +115,7 @@ export function ReadyScreen({
       </>
     ) : (
       <>
-        Give the phone to{" "}
-        <span className="font-semibold text-foreground">{describerName}</span>.
+        Give the phone to <span className="font-semibold text-foreground">{describerName}</span>.
       </>
     );
   }

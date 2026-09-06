@@ -94,7 +94,9 @@ export function PlayerAvatarBadge({
       ) : null}
       <div className="min-w-0">
         <p className="truncate text-typ-ui font-semibold text-foreground">{name}</p>
-        {detail ? <p className="truncate text-typ-ui-snug text-muted-foreground">{detail}</p> : null}
+        {detail ? (
+          <p className="truncate text-typ-ui-snug text-muted-foreground">{detail}</p>
+        ) : null}
       </div>
     </div>
   );

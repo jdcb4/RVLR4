@@ -5,11 +5,7 @@ import { useEffect } from "react";
  * Imposter pass-and-play to dismiss a transient overlay without forcing the
  * user to tap to close.
  */
-export function useAutoHidePopup(
-  open: boolean,
-  onClose: () => void,
-  delayMs = 5000,
-): void {
+export function useAutoHidePopup(open: boolean, onClose: () => void, delayMs = 5000): void {
   useEffect(() => {
     if (!open) {
       return undefined;

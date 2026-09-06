@@ -1,9 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-
 import {
-  PrimaryFooterButton,
-  SecondaryFooterButton,
-} from "@/components/game/GameFooterButtons";
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+import { AccessibleCountdownValue } from "@/components/game/AccessibleCountdownValue";
+import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { IconArrowLeft, IconChevronRight, IconShare } from "@/components/icons";
@@ -14,6 +18,8 @@ import type {
   DrawNGuessPacket,
   DrawNGuessSyncDto,
 } from "@/domain/drawnguess/types";
+import type { ReplaySync } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck, SocketRequestArgs } from "@/domain/multiplayer/protocol";
 import {
   MultiplayerEndGameActions,
   MultiplayerGameShell,
@@ -21,53 +27,72 @@ import {
 import { type AvatarId, isAvatarId } from "@/multiplayer/avatarCatalog";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
+import { createDraftQueue } from "./draftQueue";
 import { createBlankDrawing, renderDrawing } from "./drawingCanvas";
 import { DrawNGuessDrawingPreview } from "./DrawNGuessDrawingPreview";
 import { DrawNGuessWhiteboard } from "./DrawNGuessWhiteboard";
 
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
+type DrawNGuessViewProps = {
+  readonly payload: DrawNGuessSyncDto;
+  readonly viewerPlayerId: string;
+  readonly isHost: boolean;
+  readonly replaySync: ReplaySync;
+  readonly roomControls?: ReactNode;
+  readonly emitWithAck: EmitWithAck;
+};
 
-export function DrawNGuessMultiplayerView({
+export function DrawNGuessMultiplayerView(props: DrawNGuessViewProps) {
+  return (
+    <DrawNGuessTurnView
+      key={`${props.viewerPlayerId}:${drawNGuessTurnKey(props.payload)}`}
+      {...props}
+    />
+  );
+}
+
+function DrawNGuessTurnView({
   payload,
   viewerPlayerId,
   isHost,
   replaySync,
+  roomControls,
   emitWithAck,
-}: {
-  readonly payload: DrawNGuessSyncDto;
-  readonly viewerPlayerId: string;
-  readonly isHost: boolean;
-  readonly replaySync: {
-    readonly offerActive: boolean;
-    readonly acceptedIds: readonly string[];
-    readonly cancelledByDisconnect: boolean;
-  };
-  readonly emitWithAck: EmitWithAck;
-}) {
-  const turnKey = `${payload.public.turnIndex}:${payload.public.turnMode}:${payload.public.deadlineAt ?? 0}`;
+}: DrawNGuessViewProps) {
+  const turnKey = drawNGuessTurnKey(payload);
   const ownSubmission = payload.private.ownSubmission;
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [editing, setEditing] = useState(false);
-  const [promptDraft, setPromptDraft] = useState("");
-  const [guessDraft, setGuessDraft] = useState("");
-  const [drawingDraft, setDrawingDraft] = useState<DrawNGuessDrawing>(() => createBlankDrawing());
+  const [promptDraft, setPromptDraft] = useState(ownSubmission?.promptText ?? "");
+  const [guessDraft, setGuessDraft] = useState(ownSubmission?.guessText ?? "");
+  const [drawingDraft, setDrawingDraft] = useState<DrawNGuessDrawing>(
+    () => ownSubmission?.drawing ?? createBlankDrawing(),
+  );
+  const queueRef = useRef<ReturnType<typeof createDraftQueue> | null>(null);
   const [localGalleryOpen, setLocalGalleryOpen] = useState(false);
   const secondsLeft = useCountdownSeconds(payload.public.deadlineAt);
   const deadlineOpen = payload.public.deadlineAt ? Date.now() <= payload.public.deadlineAt : true;
 
   useDrawNGuessWarningSound(payload);
 
+  // The keyed turn view initializes from the server on entry/recovery. During
+  // that turn this device owns its draft; peer broadcasts and delayed echoes
+  // must not replace text or close an edit in progress.
   useEffect(() => {
-    setEditing(false);
-    setError("");
-    setPromptDraft(ownSubmission?.promptText ?? "");
-    setGuessDraft(ownSubmission?.guessText ?? "");
-    setDrawingDraft(ownSubmission?.drawing ?? createBlankDrawing());
-  }, [ownSubmission, turnKey]);
+    const queue = createDraftQueue(emitWithAck, (reply) => {
+      if (!reply.ok)
+        setError(reply.error ?? "Your draft could not be saved. Submit again to retry.");
+    });
+    queueRef.current = queue;
+    return () => {
+      queue.dispose();
+      queueRef.current = null;
+    };
+  }, [emitWithAck]);
+
+  useEffect(() => {
+    if (!deadlineOpen) void queueRef.current?.flush();
+  }, [deadlineOpen]);
 
   useEffect(() => {
     if (payload.public.phase !== "reveal") {
@@ -75,23 +100,50 @@ export function DrawNGuessMultiplayerView({
     }
   }, [payload.public.phase]);
 
-  const runAction = async (event: string, body?: unknown) => {
-    setBusy(true);
+  const queueDraft = (request: SocketRequestArgs) => {
     setError("");
-
-    try {
-      const ack = await emitWithAck(event, body);
-
-      if (ack?.ok === false) {
-        setError(ack.error ?? "That action did not work.");
-      }
-    } finally {
-      setBusy(false);
-    }
+    queueRef.current?.update(request);
   };
 
   const assignment = payload.private.assignment;
   const submitted = payload.private.hasSubmitted && !editing;
+  const submitCurrentResponse = async () => {
+    if (!assignment || submitted || busy || !deadlineOpen) {
+      return;
+    }
+
+    const config = getDrawNGuessSubmitConfig({
+      mode: assignment.mode,
+      editing,
+      promptDraft,
+      drawingDraft,
+      guessDraft,
+      turnKey,
+    });
+
+    if (!config.disabled) {
+      const request = config.request;
+      if (request) {
+        setBusy(true);
+        setError("");
+        try {
+          const ack = await queueRef.current?.submit(request);
+          if (ack?.ok) setEditing(false);
+          else setError(ack?.error ?? "Your response was not saved. Try submitting again.");
+        } finally {
+          setBusy(false);
+        }
+      }
+    }
+  };
+  const handleTextSubmitKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter" || event.nativeEvent.isComposing || busy || !deadlineOpen) {
+      return;
+    }
+
+    event.preventDefault();
+    void submitCurrentResponse();
+  };
   const footer = (
     <DrawNGuessFooter
       busy={busy}
@@ -107,15 +159,27 @@ export function DrawNGuessMultiplayerView({
       replaySync={replaySync}
       submitted={submitted}
       viewerPlayerId={viewerPlayerId}
-      onAction={runAction}
-      onEdit={() => setEditing(true)}
+      onEdit={() => {
+        setEditing(true);
+        // Withdraw the submitted status immediately, before further typing or drawing.
+        const mode = assignment?.mode;
+        if (mode === "custom-prompt")
+          queueDraft(["drawnguess:updatePromptDraft", { text: promptDraft, turnKey }]);
+        else if (mode === "guessing")
+          queueDraft(["drawnguess:updateGuessDraft", { text: guessDraft, turnKey }]);
+        else if (mode === "drawing" && drawingDraft.format === "strokes-v1")
+          queueDraft(["drawnguess:updateDrawingDraft", { drawing: drawingDraft, turnKey }]);
+        void queueRef.current?.flush();
+      }}
       onGoToGallery={() => setLocalGalleryOpen(true)}
+      onSubmit={submitCurrentResponse}
     />
   );
 
   return (
-    <MultiplayerGameShell footer={footer} title="DrawNGuess">
+    <MultiplayerGameShell footer={footer} title="DrawNGuess" headerRight={roomControls}>
       <DrawNGuessBody
+        disabled={busy || !deadlineOpen}
         assignment={assignment}
         drawingDraft={drawingDraft}
         error={error}
@@ -128,22 +192,25 @@ export function DrawNGuessMultiplayerView({
         viewerPlayerId={viewerPlayerId}
         onDrawingChange={(next) => {
           setDrawingDraft(next);
-          void runAction("drawnguess:updateDrawingDraft", { drawing: next });
+          if (next.format === "strokes-v1")
+            queueDraft(["drawnguess:updateDrawingDraft", { drawing: next, turnKey }]);
         }}
         onGuessChange={(next) => {
           setGuessDraft(next);
-          void runAction("drawnguess:updateGuessDraft", { text: next });
+          queueDraft(["drawnguess:updateGuessDraft", { text: next, turnKey }]);
         }}
         onPromptChange={(next) => {
           setPromptDraft(next);
-          void runAction("drawnguess:updatePromptDraft", { text: next });
+          queueDraft(["drawnguess:updatePromptDraft", { text: next, turnKey }]);
         }}
+        onTextSubmitKeyDown={handleTextSubmitKeyDown}
       />
     </MultiplayerGameShell>
   );
 }
 
 function DrawNGuessBody({
+  disabled,
   payload,
   assignment,
   submitted,
@@ -157,7 +224,9 @@ function DrawNGuessBody({
   onPromptChange,
   onGuessChange,
   onDrawingChange,
+  onTextSubmitKeyDown,
 }: {
+  readonly disabled: boolean;
   readonly payload: DrawNGuessSyncDto;
   readonly assignment: DrawNGuessSyncDto["private"]["assignment"];
   readonly submitted: boolean;
@@ -171,6 +240,7 @@ function DrawNGuessBody({
   readonly onPromptChange: (next: string) => void;
   readonly onGuessChange: (next: string) => void;
   readonly onDrawingChange: (next: DrawNGuessDrawing) => void;
+  readonly onTextSubmitKeyDown: (event: ReactKeyboardEvent<HTMLInputElement>) => void;
 }) {
   if (payload.public.phase === "complete" || localGalleryOpen) {
     return <DrawNGuessResultsScreen payload={payload} />;
@@ -183,14 +253,18 @@ function DrawNGuessBody({
   if (!assignment) {
     return (
       <GamePanel title="Waiting for the next page" subtitle="The server is assigning packets.">
-        <TurnTimer secondsLeft={secondsLeft} />
+        <TurnTimer countdownKey={drawNGuessTurnKey(payload)} secondsLeft={secondsLeft} />
       </GamePanel>
     );
   }
 
   if (submitted) {
     return (
-      <DrawNGuessWaitingPanel payload={payload} secondsLeft={secondsLeft} submission={payload.private.ownSubmission} />
+      <DrawNGuessWaitingPanel
+        payload={payload}
+        secondsLeft={secondsLeft}
+        submission={payload.private.ownSubmission}
+      />
     );
   }
 
@@ -201,28 +275,51 @@ function DrawNGuessBody({
         subtitle="Pick a word or short phrase to pass around the room."
         title="Pick your prompt"
       >
-        <TurnTimer secondsLeft={secondsLeft} />
+        <TurnTimer countdownKey={drawNGuessTurnKey(payload)} secondsLeft={secondsLeft} />
         <input
-          autoFocus
-          className="rounded-xl border border-input bg-background px-3 py-3 text-typ-body-relaxed outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+          disabled={disabled}
+          autoCapitalize="sentences"
+          autoComplete="off"
+          aria-label="Your prompt"
+          aria-describedby={error ? "prompt-error" : undefined}
+          aria-invalid={Boolean(error)}
+          className="w-full min-w-0 rounded-xl border border-input bg-background px-3 py-3 text-typ-body-relaxed outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+          enterKeyHint="send"
+          inputMode="text"
           maxLength={42}
           placeholder="e.g. Robot chef"
+          spellCheck={false}
+          type="text"
           value={promptDraft}
           onChange={(event) => onPromptChange(event.target.value)}
+          onKeyDown={onTextSubmitKeyDown}
         />
+        {error ? (
+          <p id="prompt-error" role="alert" className="text-typ-ui text-destructive">
+            {error}
+          </p>
+        ) : null}
       </GamePanel>
     );
   }
 
   if (assignment.mode === "drawing") {
     return (
-      <GamePanel eyebrow={turnEyebrow(payload)} subtitle="Draw the prompt without using text." title="Draw this">
-        <TurnTimer secondsLeft={secondsLeft} />
+      <GamePanel
+        eyebrow={turnEyebrow(payload)}
+        subtitle="Draw the prompt without using text."
+        title="Draw this"
+      >
+        <TurnTimer countdownKey={drawNGuessTurnKey(payload)} secondsLeft={secondsLeft} />
         <p className="rounded-xl border border-border bg-background p-4 text-center text-typ-section-title font-bold">
           {assignment.promptText}
         </p>
-        <DrawNGuessWhiteboard value={drawingDraft} onChange={onDrawingChange} />
-        {error ? <p className="text-typ-ui text-destructive">{error}</p> : null}
+        <DrawNGuessWhiteboard disabled={disabled} value={drawingDraft} onChange={onDrawingChange} />
+        {error ? (
+          <p role="alert" className="text-typ-ui text-destructive">
+            {error}
+          </p>
+        ) : null}
       </GamePanel>
     );
   }
@@ -233,17 +330,31 @@ function DrawNGuessBody({
       subtitle="Type what you think the previous player drew."
       title="Guess the drawing"
     >
-      <TurnTimer secondsLeft={secondsLeft} />
+      <TurnTimer countdownKey={drawNGuessTurnKey(payload)} secondsLeft={secondsLeft} />
       <DrawNGuessDrawingPreview drawing={assignment.drawing} />
       <input
-        autoFocus
-        className="rounded-xl border border-input bg-background px-3 py-3 text-typ-body-relaxed outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+        disabled={disabled}
+        autoCapitalize="sentences"
+        autoComplete="off"
+        aria-label="Your guess"
+        aria-describedby={error ? "guess-error" : undefined}
+        aria-invalid={Boolean(error)}
+        className="w-full min-w-0 rounded-xl border border-input bg-background px-3 py-3 text-typ-body-relaxed outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+        enterKeyHint="send"
+        inputMode="text"
         maxLength={42}
         placeholder="Your guess"
+        spellCheck={false}
+        type="text"
         value={guessDraft}
         onChange={(event) => onGuessChange(event.target.value)}
+        onKeyDown={onTextSubmitKeyDown}
       />
-      {error ? <p className="text-typ-ui text-destructive">{error}</p> : null}
+      {error ? (
+        <p id="guess-error" role="alert" className="text-typ-ui text-destructive">
+          {error}
+        </p>
+      ) : null}
     </GamePanel>
   );
 }
@@ -262,7 +373,7 @@ function DrawNGuessFooter({
   replaySync,
   viewerPlayerId,
   emitWithAck,
-  onAction,
+  onSubmit,
   onEdit,
   onGoToGallery,
 }: {
@@ -276,14 +387,10 @@ function DrawNGuessFooter({
   readonly drawingDraft: DrawNGuessDrawing;
   readonly isHost: boolean;
   readonly localGalleryOpen: boolean;
-  readonly replaySync: {
-    readonly offerActive: boolean;
-    readonly acceptedIds: readonly string[];
-    readonly cancelledByDisconnect: boolean;
-  };
+  readonly replaySync: ReplaySync;
   readonly viewerPlayerId: string;
   readonly emitWithAck: EmitWithAck;
-  readonly onAction: (event: string, body?: unknown) => Promise<void>;
+  readonly onSubmit: () => Promise<void>;
   readonly onEdit: () => void;
   readonly onGoToGallery: () => void;
 }) {
@@ -303,12 +410,7 @@ function DrawNGuessFooter({
   }
 
   if (submitted) {
-    return (
-      <DrawNGuessSubmittedFooter
-        deadlineOpen={deadlineOpen}
-        onEdit={onEdit}
-      />
-    );
+    return <DrawNGuessSubmittedFooter deadlineOpen={deadlineOpen} onEdit={onEdit} />;
   }
 
   if (!payload.private.assignment) {
@@ -318,12 +420,13 @@ function DrawNGuessFooter({
   return (
     <DrawNGuessSubmitFooter
       busy={busy}
+      deadlineOpen={deadlineOpen}
       drawingDraft={drawingDraft}
       editing={editing}
       guessDraft={guessDraft}
       payload={payload}
       promptDraft={promptDraft}
-      onAction={onAction}
+      onSubmit={onSubmit}
     />
   );
 }
@@ -345,19 +448,21 @@ function DrawNGuessSubmittedFooter({
 function DrawNGuessSubmitFooter({
   payload,
   busy,
+  deadlineOpen,
   editing,
   promptDraft,
   drawingDraft,
   guessDraft,
-  onAction,
+  onSubmit,
 }: {
   readonly payload: DrawNGuessSyncDto;
   readonly busy: boolean;
+  readonly deadlineOpen: boolean;
   readonly editing: boolean;
   readonly promptDraft: string;
   readonly drawingDraft: DrawNGuessDrawing;
   readonly guessDraft: string;
-  readonly onAction: (event: string, body?: unknown) => Promise<void>;
+  readonly onSubmit: () => Promise<void>;
 }) {
   const assignment = payload.private.assignment;
 
@@ -365,35 +470,69 @@ function DrawNGuessSubmitFooter({
     return null;
   }
 
-  const configs = {
-    "custom-prompt": {
-      disabled: promptDraft.trim().length === 0,
-      event: "drawnguess:submitPrompt",
-      label: editing ? "Update prompt" : "Submit prompt",
-      payload: { text: promptDraft },
-    },
-    drawing: {
-      disabled: drawingDraft.format !== "strokes-v1",
-      event: "drawnguess:submitDrawing",
-      label: editing ? "Update drawing" : "Submit drawing",
-      payload: { drawing: drawingDraft },
-    },
-    guessing: {
-      disabled: guessDraft.trim().length === 0,
-      event: "drawnguess:submitGuess",
-      label: editing ? "Update guess" : "Submit guess",
-      payload: { text: guessDraft },
-    },
-  } as const;
-  const config = configs[assignment.mode];
+  const config = getDrawNGuessSubmitConfig({
+    mode: assignment.mode,
+    editing,
+    promptDraft,
+    drawingDraft,
+    guessDraft,
+  });
 
   return (
     <PrimaryFooterButton
-      disabled={busy || config.disabled}
+      disabled={busy || !deadlineOpen || config.disabled}
       label={config.label}
-      onClick={() => void onAction(config.event, config.payload)}
+      onClick={() => void onSubmit()}
     />
   );
+}
+
+function getDrawNGuessSubmitConfig({
+  turnKey,
+  mode,
+  editing,
+  promptDraft,
+  drawingDraft,
+  guessDraft,
+}: {
+  readonly turnKey?: string;
+  readonly mode: NonNullable<DrawNGuessSyncDto["private"]["assignment"]>["mode"];
+  readonly editing: boolean;
+  readonly promptDraft: string;
+  readonly drawingDraft: DrawNGuessDrawing;
+  readonly guessDraft: string;
+}) {
+  const configs = {
+    "custom-prompt": {
+      disabled: promptDraft.trim().length === 0,
+      request: [
+        "drawnguess:submitPrompt",
+        { text: promptDraft, turnKey },
+      ] satisfies SocketRequestArgs,
+      label: editing ? "Update prompt" : "Submit prompt",
+    },
+    drawing: {
+      disabled: drawingDraft.format !== "strokes-v1",
+      request:
+        drawingDraft.format === "strokes-v1"
+          ? ([
+              "drawnguess:submitDrawing",
+              { drawing: drawingDraft, turnKey },
+            ] satisfies SocketRequestArgs)
+          : null,
+      label: editing ? "Update drawing" : "Submit drawing",
+    },
+    guessing: {
+      disabled: guessDraft.trim().length === 0,
+      request: [
+        "drawnguess:submitGuess",
+        { text: guessDraft, turnKey },
+      ] satisfies SocketRequestArgs,
+      label: editing ? "Update guess" : "Submit guess",
+    },
+  } as const;
+
+  return configs[mode];
 }
 
 function DrawNGuessWaitingPanel({
@@ -414,7 +553,7 @@ function DrawNGuessWaitingPanel({
       subtitle="You can edit until the timer expires."
       title="Response submitted"
     >
-      <TurnTimer secondsLeft={secondsLeft} />
+      <TurnTimer countdownKey={drawNGuessTurnKey(payload)} secondsLeft={secondsLeft} />
       {submission?.drawing ? <DrawNGuessDrawingPreview drawing={submission.drawing} /> : null}
       {submission?.guessText ? (
         <p className="rounded-xl border border-border bg-background p-4 text-center text-typ-section-title font-bold">
@@ -429,7 +568,9 @@ function DrawNGuessWaitingPanel({
       <div className="rounded-xl border border-border bg-background p-3">
         <p className="text-typ-ui font-semibold">Still working</p>
         <p className="mt-1 text-typ-ui-snug text-muted-foreground">
-          {pending.length === 0 ? "Everyone has submitted." : pending.map((player) => player.name).join(", ")}
+          {pending.length === 0
+            ? "Everyone has submitted."
+            : pending.map((player) => player.name).join(", ")}
         </p>
       </div>
     </GamePanel>
@@ -458,11 +599,7 @@ function DrawNGuessPresentationScreen({
   );
 }
 
-function DrawNGuessResultsScreen({
-  payload,
-}: {
-  readonly payload: DrawNGuessSyncDto;
-}) {
+function DrawNGuessResultsScreen({ payload }: { readonly payload: DrawNGuessSyncDto }) {
   const packets = payload.public.packets ?? [];
   const roster = payload.public.roster;
   const [selectedPacketId, setSelectedPacketId] = useState<string | null>(null);
@@ -521,7 +658,11 @@ function DrawNGuessBookDisplay({
   return (
     <div className="space-y-3">
       <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm">
-        <PlayerAvatar avatarId={avatarIdFor(owner.avatarId)} className="size-12" name={owner.name} />
+        <PlayerAvatar
+          avatarId={avatarIdFor(owner.avatarId)}
+          className="size-12"
+          name={owner.name}
+        />
         <div className="min-w-0">
           <p className="truncate text-typ-card-title font-semibold">{owner.name}'s book</p>
           <p className="truncate text-typ-ui text-muted-foreground">{originalPrompt(packet)}</p>
@@ -578,25 +719,47 @@ function GalleryPacketButton({
       onClick={onClick}
     >
       {owner ? (
-        <PlayerAvatar avatarId={avatarIdFor(owner.avatarId)} className="size-11" name={owner.name} />
+        <PlayerAvatar
+          avatarId={avatarIdFor(owner.avatarId)}
+          className="size-11"
+          name={owner.name}
+        />
       ) : null}
       <div className="min-w-0 flex-1">
-        <p className="truncate text-typ-card-title font-semibold">{owner?.name ?? "Player"}'s book</p>
+        <p className="truncate text-typ-card-title font-semibold">
+          {owner?.name ?? "Player"}'s book
+        </p>
         <p className="truncate text-typ-ui text-muted-foreground">{originalPrompt(packet)}</p>
       </div>
     </button>
   );
 }
 
-function TurnTimer({ secondsLeft }: { readonly secondsLeft: number | null }) {
+function TurnTimer({
+  secondsLeft,
+  countdownKey,
+}: {
+  readonly secondsLeft: number | null;
+  readonly countdownKey: string;
+}) {
+  const formattedValue = secondsLeft === null ? "--" : `${secondsLeft}s`;
+
   return (
     <div className="flex items-center justify-between rounded-xl border border-border bg-background px-3 py-2">
       <span className="text-typ-ui font-medium text-muted-foreground">Time left</span>
       <span className="font-mono text-typ-section-title font-bold tabular-nums">
-        {secondsLeft === null ? "--" : `${secondsLeft}s`}
+        <AccessibleCountdownValue
+          countdownKey={countdownKey}
+          formattedValue={formattedValue}
+          secondsLeft={secondsLeft}
+        />
       </span>
     </div>
   );
+}
+
+function drawNGuessTurnKey(payload: DrawNGuessSyncDto): string {
+  return `${payload.public.turnIndex}:${payload.public.turnMode ?? "waiting"}:${payload.public.deadlineAt ?? 0}`;
 }
 
 function RevealEntry({

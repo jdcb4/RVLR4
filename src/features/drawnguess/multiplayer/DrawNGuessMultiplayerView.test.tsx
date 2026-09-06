@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -130,6 +130,135 @@ afterEach(() => {
 });
 
 describe("DrawNGuessMultiplayerView", () => {
+  it("submits a text response with Enter and exposes mobile keyboard hints", async () => {
+    const user = userEvent.setup();
+    const emitWithAck = vi.fn(async () => ({ ok: true }));
+    const now = Date.now();
+    const payload: DrawNGuessSyncDto = {
+      public: {
+        ...guessingTurnPayload.public,
+        startedAt: now,
+        deadlineAt: now + 60_000,
+      },
+      private: {
+        ...guessingTurnPayload.private,
+        ownSubmission: {
+          playerId: "host",
+          status: "draft",
+          updatedAt: now,
+          guessText: "Robot chef",
+        },
+      },
+    };
+
+    render(
+      <MemoryRouter>
+        <DrawNGuessMultiplayerView
+          emitWithAck={emitWithAck}
+          isHost
+          payload={payload}
+          replaySync={{ offerActive: false, acceptedIds: [], cancelledByDisconnect: false }}
+          viewerPlayerId="host"
+        />
+      </MemoryRouter>,
+    );
+
+    const input = await screen.findByPlaceholderText("Your guess");
+    await waitFor(() => expect(input).toHaveValue("Robot chef"));
+    expect(input).toHaveAttribute("enterkeyhint", "send");
+    expect(input).toHaveAttribute("autocapitalize", "sentences");
+    expect(input).toHaveAttribute("spellcheck", "false");
+
+    await user.click(input);
+    await user.keyboard("{Enter}");
+
+    await waitFor(() =>
+      expect(emitWithAck).toHaveBeenCalledWith("drawnguess:submitGuess", {
+        text: "Robot chef",
+        turnKey: `1:guessing:${now + 60_000}`,
+      }),
+    );
+  });
+
+  it.each(["guessing", "custom-prompt"] as const)(
+    "preserves a %s edit across peer broadcasts and delayed acknowledgements",
+    async (mode) => {
+      const now = Date.now();
+      const field = mode === "guessing" ? "guessText" : "promptText";
+      const payload: DrawNGuessSyncDto = {
+        public: { ...guessingTurnPayload.public, turnMode: mode, deadlineAt: now + 60_000 },
+        private: {
+          ...guessingTurnPayload.private,
+          assignment:
+            mode === "guessing"
+              ? guessingTurnPayload.private.assignment
+              : { mode, packetId: "packet-host", starterPlayerId: "host" },
+          hasSubmitted: true,
+          ownSubmission: {
+            playerId: "host",
+            status: "submitted",
+            updatedAt: now,
+            [field]: "Robot",
+          },
+        },
+      };
+      const replies: ((ack: { ok: boolean; error?: string }) => void)[] = [];
+      const emitWithAck = vi.fn(
+        () => new Promise<{ ok: boolean; error?: string }>((resolve) => replies.push(resolve)),
+      );
+      const view = (next: DrawNGuessSyncDto) => (
+        <MemoryRouter>
+          <DrawNGuessMultiplayerView
+            payload={next}
+            emitWithAck={emitWithAck}
+            isHost
+            viewerPlayerId="host"
+            replaySync={{ offerActive: false, acceptedIds: [], cancelledByDisconnect: false }}
+          />
+        </MemoryRouter>
+      );
+      const { rerender } = render(view(payload));
+      fireEvent.click(screen.getByRole("button", { name: "Edit response" }));
+      const input = screen.getByRole("textbox");
+      fireEvent.change(input, { target: { value: "Robot " } });
+      rerender(
+        view({
+          ...payload,
+          private: {
+            ...payload.private,
+            ownSubmission: { ...payload.private.ownSubmission!, [field]: "Robot" },
+          },
+        }),
+      );
+      expect(screen.getByRole("textbox")).toHaveValue("Robot ");
+      fireEvent.change(input, { target: { value: "Robot chef" } });
+      await act(async () => {
+        replies[0]!({ ok: false, error: "Stale failure" });
+      });
+      expect(screen.getByRole("textbox")).toHaveValue("Robot chef");
+      expect(screen.queryByText("Stale failure")).not.toBeInTheDocument();
+      fireEvent.click(
+        screen.getByRole("button", {
+          name: mode === "guessing" ? "Update guess" : "Update prompt",
+        }),
+      );
+      expect(input).toBeDisabled();
+      await act(async () => {
+        await Promise.resolve();
+        replies[1]!({ ok: true });
+      });
+      expect(screen.getByText("Response submitted")).toBeInTheDocument();
+      rerender(
+        view({
+          ...payload,
+          public: { ...payload.public, deadlineAt: now + 90_000 },
+          private: { ...payload.private, hasSubmitted: false, ownSubmission: null },
+        }),
+      );
+      expect(screen.getByRole("textbox")).toHaveValue("");
+    },
+  );
+
   it("opens final gallery packets locally without dispatching a room reveal event", async () => {
     const user = userEvent.setup();
     const emitWithAck = vi.fn(async () => ({ ok: true }));
@@ -156,10 +285,7 @@ describe("DrawNGuessMultiplayerView", () => {
 
     expect(screen.getByText("Page 3 of 3")).toBeInTheDocument();
     expect(screen.getByText("Beach tower")).toBeInTheDocument();
-    expect(emitWithAck).not.toHaveBeenCalledWith(
-      "drawnguess:openRevealPacket",
-      expect.anything(),
-    );
+    expect(emitWithAck).not.toHaveBeenCalledWith("drawnguess:openRevealPacket", expect.anything());
   });
 
   it("shows each player only their own presentation book with local page controls", async () => {
@@ -188,10 +314,7 @@ describe("DrawNGuessMultiplayerView", () => {
     await user.click(screen.getByRole("button", { name: /Next page/i }));
 
     expect(screen.getByText("Dinner")).toBeInTheDocument();
-    expect(emitWithAck).not.toHaveBeenCalledWith(
-      "drawnguess:advanceReveal",
-      expect.anything(),
-    );
+    expect(emitWithAck).not.toHaveBeenCalledWith("drawnguess:advanceReveal", expect.anything());
   });
 
   it("lets a player move locally from presentation to the final gallery", async () => {

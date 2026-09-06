@@ -1,3 +1,5 @@
+// fallow-ignore-file duplicate-export
+// Player, Team, and ActiveTurn are game-specific types with direct imports; no shared barrel.
 export type Player = {
   id: string;
   seat: number;
@@ -38,7 +40,7 @@ export type SkippedClue = {
 
 export type ClueHistoryEntry = {
   clue: string;
-  status: 'correct' | 'skipped';
+  status: "correct" | "skipped";
   timestamp: string;
   poolIndex: number;
   phaseNumber?: number;
@@ -103,7 +105,7 @@ export type HatGameSession = {
   teams: Team[];
   settings: HatGameSettings;
   /** After the last turn, recap before overall results (matches WWW `finalSummary`). */
-  stage: 'ready' | 'turn' | 'finalSummary' | 'results';
+  stage: "ready" | "turn" | "finalSummary" | "results";
   roundNumber: number;
   phaseNumber: number;
   teamOrder: string[];
@@ -119,12 +121,12 @@ export type HatGameSession = {
 };
 
 export type HatGameAction =
-  | { type: 'start-turn' }
-  | { type: 'end-turn' }
-  | { type: 'mark-correct' }
-  | { type: 'skip-clue' }
-  | { type: 'return-skipped-clue'; payload?: { poolIndex?: number } }
+  | { type: "start-turn" }
+  | { type: "end-turn" }
+  | { type: "mark-correct" }
+  | { type: "skip-clue" }
+  | { type: "return-skipped-clue"; payload?: { poolIndex?: number } }
   /** Advance from post-match recap to the leaderboard (`stage` → `results`). */
-  | { type: 'view-results' };
+  | { type: "view-results" };
 
 export type HatGameActionResult = HatGameSession | { error: string };

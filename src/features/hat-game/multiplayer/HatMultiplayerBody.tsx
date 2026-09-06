@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 
+import { AccessibleCountdownValue } from "@/components/game/AccessibleCountdownValue";
 import { BetweenTurnsLayout } from "@/components/game/BetweenTurnsLayout";
 import { FinalResultsBody } from "@/components/game/final-results/FinalResultsBody";
 import { ResultsConfetti } from "@/components/game/final-results/ResultsConfetti";
@@ -19,17 +20,13 @@ import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
 import { getHatGameContext, getHatGamePhaseMeta } from "@/domain/hat-game/engine";
 import { formatCountdown } from "@/domain/hat-game/time";
 import type { HatGameSession } from "@/domain/hat-game/types";
+import type { HatSyncDto } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { HatActiveTurnPanel } from "@/features/hat-game/HatActiveTurnPanel";
 import { HatPhaseBanner } from "@/features/hat-game/HatPhaseBanner";
 import { HatScoreboard } from "@/features/hat-game/screens/HatScoreboard";
-import type { HatSyncDto } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 export function HatMultiplayerBody({
   payload,
@@ -138,7 +135,7 @@ function HatFinalResultsSection({
   );
 }
 
-export function HatReadyMultiplayerBody({
+function HatReadyMultiplayerBody({
   session,
   payload,
   error,
@@ -380,7 +377,7 @@ function HatSpectatorTurnSnapshotCard({
   secondsLeft,
   teams,
 }: {
-  readonly activeTurn: { readonly score: number };
+  readonly activeTurn: { readonly score: number; readonly startedAt: string };
   readonly activeDescriberAvatarId?: string | undefined;
   readonly context: { readonly activeDescriberName: string };
   readonly secondsLeft: number;
@@ -396,7 +393,16 @@ function HatSpectatorTurnSnapshotCard({
         name={context.activeDescriberName}
       />
       <div className="mt-3 grid grid-cols-2 gap-3">
-        <Metric label="Time left" value={formatCountdown(secondsLeft)} />
+        <Metric
+          label="Time left"
+          value={
+            <AccessibleCountdownValue
+              countdownKey={activeTurn.startedAt}
+              formattedValue={formatCountdown(secondsLeft)}
+              secondsLeft={secondsLeft}
+            />
+          }
+        />
         <Metric label="Turn score" value={String(activeTurn.score)} />
       </div>
       <div className="mt-4 border-t border-border pt-4">

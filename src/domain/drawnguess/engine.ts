@@ -7,7 +7,9 @@ import {
   DRAWNGUESS_MAX_PLAYERS,
   DRAWNGUESS_MAX_POINTS_PER_STROKE,
   DRAWNGUESS_MAX_PROMPT_LENGTH,
+  DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES,
   DRAWNGUESS_MAX_STROKES,
+  DRAWNGUESS_MAX_TOTAL_POINTS,
   DRAWNGUESS_MIN_PLAYERS,
   type DrawNGuessActiveTurn,
   type DrawNGuessAssignment,
@@ -155,12 +157,12 @@ export function updatePromptDraft(
   text: string,
   now = Date.now(),
 ): DrawNGuessMatch {
-  const trimmed = trimPrompt(text);
+  const draft = text.slice(0, DRAWNGUESS_MAX_PROMPT_LENGTH);
 
   return upsertSubmission(match, playerId, now, {
     mode: "custom-prompt",
     status: "draft",
-    promptText: trimmed,
+    promptText: draft,
   });
 }
 
@@ -219,12 +221,12 @@ export function updateGuessDraft(
   text: string,
   now = Date.now(),
 ): DrawNGuessMatch {
-  const trimmed = trimGuess(text);
+  const draft = text.slice(0, DRAWNGUESS_MAX_GUESS_LENGTH);
 
   return upsertSubmission(match, playerId, now, {
     mode: "guessing",
     status: "draft",
-    guessText: trimmed,
+    guessText: draft,
   });
 }
 
@@ -264,7 +266,7 @@ export function advanceTurn(match: DrawNGuessMatch, now = Date.now()): DrawNGues
     throw new Error("Turn is still in progress.");
   }
 
-  const next = cloneMatch(match);
+  const next = { ...match };
   const nextTurn = requireActiveTurn(next);
 
   next.packets = lockTurnEntries(next, nextTurn, now);
@@ -304,7 +306,7 @@ export function advanceReveal(
     throw new Error("Reveal is not available yet.");
   }
 
-  const next = cloneMatch(match);
+  const next = { ...match };
   const packet = packetAt(next, next.revealPacketIndex);
   const lastEntryIndex = Math.max(0, packet.entries.length - 1);
 
@@ -354,7 +356,7 @@ export function openRevealPacket(match: DrawNGuessMatch, starterPlayerId: string
     throw new Error("Unknown packet.");
   }
 
-  const next = cloneMatch(match);
+  const next = { ...match };
   next.phase = "reveal";
   next.revealPacketIndex = packetIndex;
   next.revealEntryIndex = 0;
@@ -418,13 +420,16 @@ function upsertSubmission(
   const turn = requireActiveTurn(match);
   assertSubmissionAllowed(match, turn, playerId, patch.mode, now);
 
-  const next = cloneMatch(match);
-  const nextTurn = requireActiveTurn(next);
-  const previous = nextTurn.submissions[playerId];
-
-  nextTurn.submissions[playerId] = buildTurnSubmission(playerId, now, patch, previous);
-
-  return next;
+  return {
+    ...match,
+    activeTurn: {
+      ...turn,
+      submissions: {
+        ...turn.submissions,
+        [playerId]: buildTurnSubmission(playerId, now, patch, turn.submissions[playerId]),
+      },
+    },
+  };
 }
 
 function assertSubmissionAllowed(
@@ -588,7 +593,7 @@ function entryFromSubmission(
   };
 }
 
-export function createNoResponseDrawing(): DrawNGuessDrawing {
+function createNoResponseDrawing(): DrawNGuessDrawing {
   return {
     format: "placeholder-v1",
     text: "No response submitted",
@@ -756,8 +761,22 @@ function validateDrawing(drawing: DrawNGuessDrawing) {
     throw new Error("Drawing has too many strokes.");
   }
 
+  let totalPoints = 0;
+
   for (const stroke of drawing.strokes) {
     validateStroke(stroke);
+    totalPoints += stroke.points.length;
+  }
+
+  if (totalPoints > DRAWNGUESS_MAX_TOTAL_POINTS) {
+    throw new Error("Drawing has too many total points.");
+  }
+
+  if (
+    new TextEncoder().encode(JSON.stringify(drawing)).byteLength >
+    DRAWNGUESS_MAX_SERIALIZED_DRAWING_BYTES
+  ) {
+    throw new Error("Drawing is too large.");
   }
 }
 
@@ -803,8 +822,4 @@ function packetAt(match: DrawNGuessMatch, index: number): DrawNGuessPacket {
   }
 
   return packet;
-}
-
-function cloneMatch(match: DrawNGuessMatch): DrawNGuessMatch {
-  return structuredClone(match) as DrawNGuessMatch;
 }

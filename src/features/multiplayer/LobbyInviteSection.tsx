@@ -1,6 +1,7 @@
 import { QRCode } from "react-qr-code";
 
-import { IconClipboard, IconQrCode, IconShare, IconX } from "@/components/icons";
+import { IconClipboard, IconQrCode, IconShare } from "@/components/icons";
+import { ModalDialog } from "@/components/ModalDialog";
 import { Button } from "@/components/ui/button";
 
 export function LobbyInviteSection({
@@ -8,6 +9,7 @@ export function LobbyInviteSection({
   connected,
   canNativeShare,
   copiedToast,
+  compact = false,
   onCopyLink,
   onShareLink,
   onOpenQrToast,
@@ -16,15 +18,19 @@ export function LobbyInviteSection({
   readonly connected: boolean;
   readonly canNativeShare: boolean;
   readonly copiedToast: boolean;
+  readonly compact?: boolean;
   readonly onCopyLink: () => Promise<void>;
   readonly onShareLink: () => Promise<void>;
   readonly onOpenQrToast: () => void;
 }) {
   return (
     <>
-      <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+      <section
+        className={`rounded-2xl border border-border bg-card shadow-sm ${compact ? "p-3" : "p-4"}`}
+        data-compact={compact || undefined}
+      >
         <p className="text-typ-overline text-primary">Share code</p>
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div className={`${compact ? "mt-2" : "mt-3"} flex flex-wrap items-center gap-x-4 gap-y-2`}>
           <span className="font-mono text-typ-display font-bold tracking-[0.25em]">{code}</span>
           <span className="flex items-center gap-2">
             <Button
@@ -75,28 +81,13 @@ export function QrJoinDialog({
   readonly onClose: () => void;
 }) {
   return (
-    <div
-      className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-black/50 px-4 py-8"
-      role="dialog"
-      onClick={onClose}
-    >
-      <div
-        className="w-full max-w-sm cursor-default rounded-2xl border border-border bg-card p-5 shadow-xl"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="flex items-start justify-between gap-3">
-          <p className="text-typ-card-title font-semibold">Scan to join</p>
-          <Button aria-label="Close" size="icon" variant="ghost" onClick={onClose}>
-            <IconX className="size-5" />
-          </Button>
-        </div>
-        <p className="mt-1 text-typ-ui-snug text-muted-foreground">
-          Opens the name screen with this room code filled in.
-        </p>
-        <div className="mt-4 flex justify-center rounded-xl bg-white p-4">
-          <QRCode size={200} value={joinLink} />
-        </div>
+    <ModalDialog title="Scan to join" onClose={onClose}>
+      <p className="mt-1 text-typ-ui-snug text-muted-foreground">
+        Opens the name screen with this room code filled in.
+      </p>
+      <div className="mt-4 flex justify-center rounded-xl bg-white p-4">
+        <QRCode size={200} value={joinLink} title="Room invitation QR code" />
       </div>
-    </div>
+    </ModalDialog>
   );
 }

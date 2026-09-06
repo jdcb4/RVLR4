@@ -31,17 +31,13 @@ export function imposterResultsScreen(
             <p className="text-typ-overline font-semibold uppercase tracking-wide text-muted-foreground">
               Imposter
             </p>
-            <p className="mt-2 text-typ-display font-bold text-foreground">
-              {imposterNames}
-            </p>
+            <p className="mt-2 text-typ-display font-bold text-foreground">{imposterNames}</p>
           </div>
           <div>
             <p className="text-typ-overline font-semibold uppercase tracking-wide text-muted-foreground">
               Secret word
             </p>
-            <p className="mt-2 text-typ-display font-bold text-foreground">
-              {secretWord}
-            </p>
+            <p className="mt-2 text-typ-display font-bold text-foreground">{secretWord}</p>
           </div>
         </div>
       </GamePanel>

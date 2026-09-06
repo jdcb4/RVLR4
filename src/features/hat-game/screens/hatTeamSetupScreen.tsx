@@ -7,10 +7,7 @@ import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
 import type { HatSingleplayerAppController } from "@/features/hat-game/useHatSingleplayerApp";
 
 export function hatTeamSetupScreen(controller: HatSingleplayerAppController): ScreenModel {
-  const rosterRows = hatStateToRosterRows(
-    controller.snapshot.teams,
-    controller.snapshot.players,
-  );
+  const rosterRows = hatStateToRosterRows(controller.snapshot.teams, controller.snapshot.players);
 
   return {
     content: (

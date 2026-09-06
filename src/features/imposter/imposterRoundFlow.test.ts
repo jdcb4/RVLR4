@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 
+import type { ImposterSnapshot } from "@/domain/imposter/types";
 import {
   createImposterRevealRound,
   validateImposterSnapshotSetup,
 } from "@/features/imposter/imposterRoundFlow";
-import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
 
 function buildSnapshot(): ImposterSnapshot {
   return {

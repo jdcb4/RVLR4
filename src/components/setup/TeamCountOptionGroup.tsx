@@ -1,4 +1,4 @@
-import { type SharedTeamCount,TEAM_COUNT_OPTIONS } from "@/config/teamRoster";
+import { type SharedTeamCount, TEAM_COUNT_OPTIONS } from "@/config/teamRoster";
 
 import { OptionButton, OptionGroup } from "./OptionGroup";
 

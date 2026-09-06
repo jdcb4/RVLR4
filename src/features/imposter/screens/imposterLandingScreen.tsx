@@ -2,9 +2,7 @@ import { buildGameLandingScreen } from "@/components/game/buildGameLandingScreen
 import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTypes";
 import type { ImposterSingleplayerAppController } from "@/features/imposter/useImposterSingleplayerApp";
 
-export function imposterLandingScreen(
-  controller: ImposterSingleplayerAppController,
-): ScreenModel {
+export function imposterLandingScreen(controller: ImposterSingleplayerAppController): ScreenModel {
   return buildGameLandingScreen({
     controller,
     subtitle:

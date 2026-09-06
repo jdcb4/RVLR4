@@ -1,12 +1,9 @@
-import type { LobbyDto } from "@/multiplayer/roomTypes";
+import type { LobbyDto } from "@/domain/multiplayer/protocol";
 
 /**
  * Captain = lexicographically smallest player id on the team (deterministic, matches server).
  */
-export function captainPlayerIdForTeam(
-  lobby: LobbyDto,
-  teamIndex: number,
-): string | undefined {
+export function captainPlayerIdForTeam(lobby: LobbyDto, teamIndex: number): string | undefined {
   const members = lobby.players.filter((player) => (player.teamIndex ?? 0) === teamIndex);
 
   if (members.length === 0) {

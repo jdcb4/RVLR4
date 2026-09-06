@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 import { IconHouse } from "@/components/icons";
+import { useVisualViewportHeight } from "@/components/useVisualViewportHeight";
 import { cn } from "@/lib/utils";
 import { typography } from "@/typography/tiers";
 
@@ -20,9 +21,15 @@ export function GameShell({
   children: ReactNode;
   footer?: ReactNode;
 }) {
+  const visualViewportHeight = useVisualViewportHeight();
+
   return (
-    <div className="h-dvh overflow-hidden bg-background text-foreground">
-      <div className="safe-screen mx-auto flex h-dvh w-full max-w-md flex-col pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
+    <div
+      className="h-dvh overflow-hidden bg-background text-foreground"
+      data-visual-viewport={visualViewportHeight === null ? "unavailable" : "active"}
+      style={visualViewportHeight === null ? undefined : { height: `${visualViewportHeight}px` }}
+    >
+      <div className="safe-screen mx-auto flex h-full w-full max-w-md flex-col pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
         <header className="flex items-center justify-between gap-2 border-b border-semantic-border-muted py-3">
           <Link
             aria-label="Back to game picker"

@@ -7,9 +7,7 @@ export function buildTeamSetupsFromLobby(room: Room): TeamSetup[] {
   const setups: TeamSetup[] = [];
 
   for (let teamIndex = 0; teamIndex < room.teamCount; teamIndex += 1) {
-    const roster = [...room.players.values()].filter(
-      (player) => player.teamIndex === teamIndex,
-    );
+    const roster = [...room.players.values()].filter((player) => player.teamIndex === teamIndex);
 
     setups.push({
       id: `team-${teamIndex + 1}`,

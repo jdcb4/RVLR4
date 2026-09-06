@@ -10,9 +10,7 @@ export function reviewDisplayRowsFromHat(
   return teams.map((team) => ({
     id: team.id,
     name: team.name,
-    playerNames: players
-      .filter((player) => player.teamId === team.id)
-      .map((player) => player.name),
+    playerNames: players.filter((player) => player.teamId === team.id).map((player) => player.name),
   }));
 }
 

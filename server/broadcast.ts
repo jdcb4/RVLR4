@@ -1,5 +1,6 @@
 import type { Server } from "socket.io";
 
+import { prepareDrawNGuessGallerySync } from "./drawnguessGallery.ts";
 import type { RoomStore } from "./roomStore.ts";
 import { buildRoomSync } from "./sync.ts";
 
@@ -7,7 +8,12 @@ export function roomChannel(code: string) {
   return `room:${code}`;
 }
 
-export async function broadcastRoom(io: Server, store: RoomStore, code: string) {
+export async function broadcastRoom(
+  io: Server,
+  store: RoomStore,
+  code: string,
+  onlyPlayerId?: string,
+) {
   const room = store.getRoom(code);
 
   if (!room) {
@@ -22,10 +28,19 @@ export async function broadcastRoom(io: Server, store: RoomStore, code: string) 
   for (const socket of sockets) {
     const playerId = socket.data.playerId as string | undefined;
 
-    if (!playerId) {
+    if (!playerId || socket.data.roomCode !== code || !room.players.has(playerId)) {
+      await socket.leave(roomChannel(code));
       continue;
     }
 
-    socket.emit("room:sync", buildRoomSync(room, playerId));
+    if (onlyPlayerId && onlyPlayerId !== playerId) continue;
+    let sync = buildRoomSync(room, playerId);
+    if (socket.data.galleryCache === "drawnguess-v1") {
+      const prepared = prepareDrawNGuessGallerySync(sync, socket.data.lastGalleryId);
+      sync = prepared.sync;
+      if (prepared.galleryId) socket.data.lastGalleryId = prepared.galleryId;
+      else delete socket.data.lastGalleryId;
+    }
+    socket.emit("room:sync", sync);
   }
 }

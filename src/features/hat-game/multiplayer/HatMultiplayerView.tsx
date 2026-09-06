@@ -1,19 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
 import { getCountdownSeconds } from "@/domain/hat-game/time";
+import type { ReplaySync } from "@/domain/multiplayer/protocol";
+import type { HatSyncDto } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { MultiplayerGameShell } from "@/features/multiplayer/MultiplayerGameShell";
-import type { HatSyncDto } from "@/multiplayer/roomTypes";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import { playSoundCue } from "@/services/hatSound";
 
 import { HatMultiplayerBody } from "./HatMultiplayerBody";
 import { HatMultiplayerFooter } from "./HatMultiplayerFooter";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 export function HatMultiplayerView({
   payload,
@@ -21,15 +18,13 @@ export function HatMultiplayerView({
   viewerPlayerId,
   isHost,
   replaySync,
+  roomControls,
 }: {
   readonly payload: HatSyncDto;
   readonly viewerPlayerId: string;
   readonly isHost: boolean;
-  readonly replaySync: {
-    readonly offerActive: boolean;
-    readonly acceptedIds: readonly string[];
-    readonly cancelledByDisconnect: boolean;
-  };
+  readonly replaySync: ReplaySync;
+  readonly roomControls?: ReactNode;
   readonly emitWithAck: EmitWithAck;
 }) {
   const session = payload.session;
@@ -78,7 +73,12 @@ export function HatMultiplayerView({
           onShowScoresPane={() => setShowScoresPane(true)}
         />
       }
-      headerRight={headerRight}
+      headerRight={
+        <>
+          {headerRight}
+          {roomControls}
+        </>
+      }
       title="Hat Game"
     >
       <HatMultiplayerBody
@@ -101,20 +101,24 @@ function useHatMultiplayerCues(payload: HatSyncDto) {
   const session = payload.session;
   const activeTurn = session.activeTurn;
   const endsAt = activeTurn?.endsAt;
-  const [secondsLeft, setSecondsLeft] = useState(0);
+  const [countdown, setCountdown] = useState(() => ({
+    endsAt,
+    secondsLeft: getCountdownSeconds(endsAt),
+  }));
+  // A newly received turn must not render the previous turn's zero before effects run.
+  const secondsLeft =
+    countdown.endsAt === endsAt ? countdown.secondsLeft : getCountdownSeconds(endsAt);
   const warned10Ref = useRef<string | null>(null);
   const timedOutRef = useRef<string | null>(null);
   const prevPhaseRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (session.stage !== "turn" || !endsAt) {
-      setSecondsLeft(0);
-
       return undefined;
     }
 
     const tick = () => {
-      setSecondsLeft(getCountdownSeconds(endsAt));
+      setCountdown({ endsAt, secondsLeft: getCountdownSeconds(endsAt) });
     };
 
     tick();

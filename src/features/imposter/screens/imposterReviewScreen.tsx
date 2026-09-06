@@ -1,14 +1,9 @@
-import {
-  PrimaryFooterButton,
-  SecondaryFooterButton,
-} from "@/components/game/GameFooterButtons";
+import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GamePanel } from "@/components/game/GamePanel";
 import type { ScreenModel } from "@/features/imposter/imposterSingleplayerAppTypes";
 import type { ImposterSingleplayerAppController } from "@/features/imposter/useImposterSingleplayerApp";
 
-export function imposterReviewScreen(
-  controller: ImposterSingleplayerAppController,
-): ScreenModel {
+export function imposterReviewScreen(controller: ImposterSingleplayerAppController): ScreenModel {
   const { snapshot } = controller;
 
   return {
@@ -20,14 +15,8 @@ export function imposterReviewScreen(
       >
         <ul className="divide-y divide-border rounded-lg border border-border bg-muted/30">
           {snapshot.players.map((player, index) => (
-            <li
-              key={player.id}
-              className="px-4 py-3 text-typ-body font-medium text-foreground"
-            >
-              <span className="tabular-nums text-muted-foreground">
-                {index + 1}.
-              </span>{" "}
-              {player.name}
+            <li key={player.id} className="px-4 py-3 text-typ-body font-medium text-foreground">
+              <span className="tabular-nums text-muted-foreground">{index + 1}.</span> {player.name}
             </li>
           ))}
         </ul>
@@ -35,10 +24,7 @@ export function imposterReviewScreen(
     ),
     actions: (
       <>
-        <SecondaryFooterButton
-          label="Edit names"
-          onClick={() => controller.backToRoster()}
-        />
+        <SecondaryFooterButton label="Edit names" onClick={() => controller.backToRoster()} />
         <PrimaryFooterButton
           label="Start round"
           onClick={() => controller.confirmReviewStartRound()}

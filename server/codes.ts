@@ -6,5 +6,8 @@ const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
 export const generateRoomCode = customAlphabet(CODE_ALPHABET, 6);
 
 export function normalizeRoomCode(code: string): string {
-  return code.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return code
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "");
 }

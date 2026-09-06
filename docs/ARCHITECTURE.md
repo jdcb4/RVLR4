@@ -1,5 +1,21 @@
 # Architecture — RVLRY
 
+Browser save boundaries and supported migrations are documented in
+[PERSISTENCE.md](PERSISTENCE.md). Game-owned controllers consume validated
+snapshots; the storage service contains failures and provides a tab-local
+fallback with an explicit durability notice.
+
+## Room recovery
+
+Room options provide explicit lobby departure, host removal of away guests,
+and host lobby closure. Removal invalidates that seat's reconnect secret and
+Hat clue drafts; connected guests cannot be removed. A new HTTP join is away
+until its socket binds, and a matching display name never restores identity.
+During play, the host can confirm ending the match and return all players to
+the lobby. This clears live scores/turns/drawings and readiness while preserving
+players, teams, settings, and Hat lobby clues. There is no live-seat replacement
+or host transfer. Commands are locked during asynchronous match startup.
+
 ## Runtime shape
 
 **Vite React SPA** (`src/`) paired with a **Node HTTP server** (`server/index.ts`) that serves **`dist/`**, exposes REST endpoints under **`/api/*`**, and coordinates realtime gameplay via **Socket.IO**.
@@ -16,11 +32,45 @@ Networked game views currently cover Who What Where, Hat Game, Imposter, and Dra
 
 Runtime multiplayer state lives **only in the Node process RAM** (rooms keyed by short codes). Clients reconnect with per-player secrets stored in **`sessionStorage`** (`jd-multiplayer:*`).
 
+A room screen owns one socket and closes it on unmount or room changes.
+The single-process Socket.IO adapter supplies presence: a player is away only
+after their final bound tab disconnects. Rebinding first releases the previous
+room membership; viewer broadcasts also check membership before projection.
+
+Browser requests use `src/services/networkRequests.ts`: an eight-second limit
+covers HTTP headers and body reading, and Socket.IO clears outstanding acks on
+timeout/disconnect. Actions are never automatically replayed. Room screens
+surface failures and offer connection retry or home navigation. Entry requests
+are cancelled on unmount and duplicate form submissions are prevented.
+
+Replay offers are identified by a fresh UUID. Disconnecting the last tab for
+a player cancels the current offer; reconnection clears the notice once everyone
+is back, but never restores old votes. The host explicitly makes a fresh offer.
+Current clients include its ID in acceptance requests; absent IDs remain accepted
+for older clients. Repeating an active host offer is idempotent.
+
+Lobby synchronization includes a server-authored start-readiness result. The
+same pure evaluator gates `lobby:startGame` and supplies host-facing blocker
+copy, so client guidance cannot diverge from server enforcement.
+
 Legacy solo flows still persist in **`localStorage`** where applicable. Web Audio cues remain client-side.
 
-Deploy targets: **Docker (`pnpm run docker:build`)** and **Railway/Node** (see `docs/DEPLOYMENT.md`).
+The primary deployment path is **GitHub repository -> Railway**, with
+`railway.json` explicitly selecting Railpack even though the repository retains
+a Dockerfile. Docker (`pnpm run docker:build`) is a manual portability and
+self-hosting option only; it is not part of routine deployment or verification.
+See `docs/DEPLOYMENT.md`.
 
 ## Module boundaries
+
+`src/domain/multiplayer/protocol.ts` defines the room/replay DTOs and
+acknowledgements used on both sides. Event input types derive from the Zod
+schemas in `src/domain/multiplayer/socketSchemas.ts`; `EmitWithAck` keeps event
+names paired with their payloads. `server/sync.ts` and the per-game views still
+own viewer-specific privacy projection. Shared types do not sanitize data.
+Imposter snapshots live in `src/domain/imposter/types.ts`, independent of UI.
+The network adapter accepts unknown responses and validates them before
+returning a shared reply. There is no generated code or separate shared package.
 
 Use clear layers. Adapt the names if the project demands it, but keep the separation.
 
@@ -29,6 +79,17 @@ Use clear layers. Adapt the names if the project demands it, but keep the separa
 Use `@/components/game/GamePanel` as the **default wrapper for primary in-game content** on each screen inside `GameShell`: titled card (`bg-card`, border, rounded corners) with optional eyebrow and subtitle. Who What Where, Hat Game, and Imposter follow this.
 
 Shared roster UI (`TeamRosterSetupScreen`) can hide its built-in heading (`omitHeading`) when the parent supplies headings via `GamePanel`. **Primary navigation on roster steps** (Next team / Start round / Review teams) lives in the **`GameShell` footer**, not inside `TeamRosterSetupScreen`.
+
+### Shared screen composition
+
+Share stable presentation structure, not game state machines. Cross-game
+layouts such as `LandingScreenLayout`, `BetweenTurnsLayout`, shared review
+panels, and final-results components own consistent order, spacing, and chrome.
+Game-specific settings, active-turn content, last-turn details, and Hat's
+private clue-entry flow stay in their feature modules and compose those shared
+pieces. Do not replace them with a conditional cross-game mega-builder; extract
+a new shared shell only after at least two durable call sites demonstrate the
+same structure.
 
 ### Typography tiers (`text-typ-*`)
 
@@ -45,7 +106,7 @@ Use **semantic theme tokens** for tinted surfaces, soft borders, scrims, and dev
 - `src/domain` — framework-independent business rules. Free of React, IO, and database imports.
 - `src/services` — IO wrappers (storage, HTTP, filesystem).
 - `src/data` — local data, JSON files, fixtures.
-- `src/config` — typed config + environment parsing (Zod).
+- `src/config` — typed game defaults, roster limits, and product metadata.
 - `src/lib` — small generic helpers without domain knowledge.
 - `src/tests` — shared test utilities and integration tests.
 
@@ -59,22 +120,46 @@ Use **semantic theme tokens** for tinted surfaces, soft borders, scrims, and dev
 
 ## Persistence
 
-Default: JSON files in `src/data/` validated with Zod on load. Move to a database only when JSON is unsuitable, and document the migration in `docs/DECISIONS.md`.
-
-When a database is needed:
-
-- Drizzle ORM, with SQLite for development and Postgres for production.
-- Schemas in `src/db/schema.ts` (or `apps/server/src/db/schema.ts` in monorepo presets).
-- Migrations in `drizzle/`.
-- Seed scripts under `scripts/`.
+Curated static game content lives in JSON files under `src/data/` and
+is parsed once through game-owned Zod loaders. Large content, such as the Who
+What Where deck, stays behind a dynamic loader so it is not part of the initial
+client bundle. Multiplayer rooms live in process memory; browser saves and
+credentials use the validated adapters in [PERSISTENCE.md](PERSISTENCE.md).
+There is no database or ORM. Adding durable multiplayer storage requires an
+explicitly approved scope and a `docs/DECISIONS.md` entry describing the actual
+need, migration, and recovery contract; no database stack is preselected.
 
 ## Validation
 
 Zod is the validation default. Validate every external input: forms, URL params, request bodies, environment variables, JSON file loads, third-party API responses, Socket.io events.
 
+HTTP and Socket.IO boundaries use strict schemas, stable error codes, explicit
+payload-size limits, and bounded in-memory token buckets. Viewer projections
+are server-authored and must remove other players' private data and game
+secrets; client-side hiding is never an authorization boundary.
+
+The Express runtime applies Helmet's reviewed header baseline, exact
+production origin allow-listing, and a minimal `/api/health` readiness signal.
+Operational logs use allow-listed metadata only and never include room codes,
+player identifiers, names, reconnect secrets, clues, drawings, bodies, or
+headers.
+
+Socket registration is a small composition layer in `server/socketHandlers.ts`.
+Session, lobby, replay, and each multiplayer game's handlers live under
+`server/socketHandlers/`; every authenticated mutation still enters through
+the common schema, actor lookup, and token-budget guard in `socketHandle.ts`.
+
+Single-player orchestration remains game-specific. Pure setup, handoff,
+resume, and replay transitions live beside their owning feature, while browser
+persistence is isolated from the React controller. Do not combine the three
+games into a generic reducer or hook.
+
 ## Configuration
 
-Environment variables flow through Zod: **`src/config/env.ts`** (Vite client) and **`server/env.ts`** (Node server). Missing or malformed values must fail fast at startup.
+Node environment variables are validated at startup in **`server/env.ts`**.
+The client uses Vite's built-in values, including `BASE_URL`, and has no custom
+environment schema. If a future feature adds `VITE_*` input, validate it where
+the client configuration is consumed and remember it is public build output.
 
 ## Testing
 
@@ -82,6 +167,9 @@ Environment variables flow through Zod: **`src/config/env.ts`** (Vite client) an
 - React Testing Library for component behaviour.
 - Deterministic unit tests for domain logic. Integration tests for important flows.
 - Inject fakes for time, randomness, IDs.
+- Coverage includes production `server/**/*.ts` and `src/**/*.{ts,tsx}` and
+  enforces higher glob-specific gates for projections, sync, validation,
+  reconnect-secret comparison, and rate limiting.
 
 ## Deployment
 

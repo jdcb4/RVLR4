@@ -15,6 +15,11 @@ Version sources (must all match):
 
 Pre-1.0: use `MINOR` for meaningful feature milestones and `PATCH` for fixes.
 
+Browser save `schemaVersion` is independent of the application version. Current
+records remain version 1; older unversioned records have explicit migrations
+in the storage boundary. See [PERSISTENCE.md](PERSISTENCE.md) before adding or
+removing a saved field. Valid supported saves must keep loading across fixes.
+
 ## Process
 
 Before every commit, decide whether the work changes:

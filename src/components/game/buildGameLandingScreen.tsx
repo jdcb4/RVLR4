@@ -1,9 +1,6 @@
 import type { ReactNode } from "react";
 
-import {
-  PrimaryFooterButton,
-  SecondaryFooterButton,
-} from "@/components/game/GameFooterButtons";
+import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { LandingScreenLayout } from "@/components/game/LandingScreenLayout";
 import { ResumeGameCard } from "@/components/game/ResumeGameCard";
 import { formatSavedAt } from "@/lib/formatSavedAt";
@@ -61,10 +58,7 @@ export function buildGameLandingScreen({
 
   const actions = controller.confirmNewGame ? (
     <>
-      <SecondaryFooterButton
-        label="Cancel"
-        onClick={() => controller.setConfirmNewGame(false)}
-      />
+      <SecondaryFooterButton label="Cancel" onClick={() => controller.setConfirmNewGame(false)} />
       <PrimaryFooterButton
         label="Discard saved game"
         onClick={() => void controller.startNewGame()}
@@ -76,10 +70,7 @@ export function buildGameLandingScreen({
       onClick={() => controller.setConfirmNewGame(true)}
     />
   ) : (
-    <PrimaryFooterButton
-      label="Start game"
-      onClick={() => void controller.startNewGame()}
-    />
+    <PrimaryFooterButton label="Start game" onClick={() => void controller.startNewGame()} />
   );
 
   return { content, actions };

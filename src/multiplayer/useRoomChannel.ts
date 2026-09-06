@@ -1,7 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
 
-import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
+import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
+import {
+  type SessionCredentials,
+  sessionCredentialsSchema,
+} from "@/domain/multiplayer/sessionCredentials";
+import { clearActiveGameBookmark, readActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
+import { discardStoredRecord, readStoredJson, roomSessionStorage } from "@/services/browserStorage";
+import { requestSocketAck } from "@/services/networkRequests";
+
+import { mergeRoomSync } from "./mergeRoomSync";
 
 const SOCKET_PATH = "/socket.io";
 
@@ -13,42 +23,24 @@ function connectSocket(): Socket {
   });
 }
 
-export type SessionCredentials = {
-  readonly code: string;
-  readonly playerId: string;
-  readonly secret: string;
-};
+export type { SessionCredentials } from "@/domain/multiplayer/sessionCredentials";
 
 export function persistSession(creds: SessionCredentials) {
-  sessionStorage.setItem(sessionKey(creds.code), JSON.stringify(creds));
+  return roomSessionStorage.write(sessionKey(creds.code), JSON.stringify(creds));
 }
 
 export function loadSession(code: string): SessionCredentials | null {
-  const raw = sessionStorage.getItem(sessionKey(code));
-
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    const parsed = JSON.parse(raw) as SessionCredentials;
-
-    if (
-      typeof parsed.code !== "string" ||
-      typeof parsed.playerId !== "string" ||
-      typeof parsed.secret !== "string"
-    ) {
-      return null;
-    }
-
-    return parsed;
-  } catch {
-    return null;
-  }
+  const key = sessionKey(code);
+  const raw = readStoredJson(roomSessionStorage, key);
+  if (raw === null) return null;
+  const parsed = sessionCredentialsSchema.safeParse(raw);
+  if (parsed.success && parsed.data.code === code.toUpperCase()) return parsed.data;
+  discardStoredRecord(roomSessionStorage, key);
+  return null;
 }
 
 export function clearSession(code: string) {
-  sessionStorage.removeItem(sessionKey(code));
+  roomSessionStorage.remove(sessionKey(code));
 }
 
 function sessionKey(code: string) {
@@ -60,27 +52,29 @@ export type RoomChannelHandle = {
   readonly sync: RoomSyncPayload | null;
   readonly connected: boolean;
   readonly bindError: string | null;
+  readonly bindErrorCode: string | null;
   /**
    * True after the server emits `server:shuttingDown` (graceful shutdown on
    * SIGTERM/SIGINT). UI should show a "server restarting" banner; the socket
    * will disconnect shortly after.
    */
   readonly shuttingDown: boolean;
-  readonly emitWithAck: (
-    event: string,
-    payload?: unknown,
-  ) => Promise<{ ok?: boolean; error?: string } | undefined>;
+  readonly retryConnection: () => void;
+  readonly actionError: string | null;
+  readonly clearActionError: () => void;
+  readonly emitWithAck: EmitWithAck;
 };
 
-export function useRoomChannel(
-  code: string | undefined,
-  enabled: boolean,
-): RoomChannelHandle {
+export function useRoomChannel(code: string | undefined, enabled: boolean): RoomChannelHandle {
   const socketRef = useRef<Socket | null>(null);
+  const bindAttemptRef = useRef(0);
   const [sync, setSync] = useState<RoomSyncPayload | null>(null);
+  const latestSyncRef = useRef<RoomSyncPayload | null>(null);
   const [connected, setConnected] = useState(false);
   const [bindError, setBindError] = useState<string | null>(null);
+  const [bindErrorCode, setBindErrorCode] = useState<string | null>(null);
   const [shuttingDown, setShuttingDown] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const socket = useMemo(() => {
     if (!socketRef.current) {
@@ -91,89 +85,180 @@ export function useRoomChannel(
   }, []);
 
   useEffect(() => {
+    setConnected(false);
+    setSync(null);
+    latestSyncRef.current = null;
+    setBindError(null);
+    setBindErrorCode(null);
+    setShuttingDown(false);
+    setActionError(null);
     if (!enabled || !code) {
+      socket.disconnect();
       return undefined;
     }
 
-    const creds = loadSession(code);
+    const forgetSession = () => {
+      clearSession(code);
+      if (readActiveGameBookmark()?.code === code.toUpperCase()) clearActiveGameBookmark();
+    };
 
-    if (!creds) {
+    if (!loadSession(code)) {
+      forgetSession();
       setBindError("Missing session. Go back and enter your name again.");
-
+      setBindErrorCode("SESSION_EXPIRED");
       return undefined;
     }
 
     const handleSync = (payload: RoomSyncPayload) => {
-      setSync(payload);
+      const creds = loadSession(code);
+      if (payload.code !== code.toUpperCase() || payload.you.playerId !== creds?.playerId) return;
+      const merged = mergeRoomSync(latestSyncRef.current, payload);
+      if (!merged) {
+        // A new bind clears the server's per-socket cache and restores full data.
+        socket.disconnect().connect();
+        return;
+      }
+      latestSyncRef.current = merged;
+      setSync(merged);
     };
 
-    const handleConnect = () => {
-      setConnected(true);
-      // Reconnected — the server is back. Clear any stale shutdown banner.
-      setShuttingDown(false);
-    };
-
-    const handleDisconnect = () => {
+    const bindSession = () => {
+      const creds = loadSession(code);
+      const bindAttempt = bindAttemptRef.current + 1;
+      bindAttemptRef.current = bindAttempt;
       setConnected(false);
+      setShuttingDown(false);
+
+      if (!creds) {
+        setBindError("Missing session. Go back and enter your name again.");
+        setBindErrorCode("SESSION_EXPIRED");
+        socket.disconnect();
+        return;
+      }
+
+      void requestSocketAck(socket, "session:bind", {
+        ...creds,
+        galleryCache: "drawnguess-v1",
+      }).then((ack) => {
+        if (bindAttempt !== bindAttemptRef.current || !socket.connected) {
+          return;
+        }
+
+        if (ack?.ok === true) {
+          setBindError(null);
+          setBindErrorCode(null);
+          setConnected(true);
+        } else {
+          setConnected(false);
+          setBindError(ack?.error ?? "Unable to reconnect.");
+          setBindErrorCode(ack.code ?? null);
+          if (ack.code === "ROOM_NOT_FOUND" || ack.code === "SESSION_EXPIRED") {
+            forgetSession();
+            setSync(null);
+            socket.disconnect();
+          }
+        }
+      });
+    };
+
+    const handleDisconnect = (reason?: string) => {
+      bindAttemptRef.current += 1;
+      setConnected(false);
+      if (reason === "io server disconnect") {
+        setBindError("The room connection was closed. Retry to check whether it still exists.");
+      }
     };
 
     const handleShutdown = () => {
       setShuttingDown(true);
     };
 
-    socket.on("connect", handleConnect);
+    const handleSessionEnded = (payload: { code: string }) => {
+      if (payload.code !== code.toUpperCase()) return;
+      forgetSession();
+      setSync(null);
+      setBindError("You left this lobby in another tab. Join again to take a new seat.");
+      setBindErrorCode("SESSION_EXPIRED");
+      socket.disconnect();
+    };
+
+    const handleRoomExpired = (payload: { code: string }) => {
+      if (payload.code !== code.toUpperCase()) return;
+      forgetSession();
+      setSync(null);
+      setBindError("This room expired. Host or join a new room to continue.");
+      setBindErrorCode("ROOM_NOT_FOUND");
+      socket.disconnect();
+    };
+
+    const handleConnectError = () => {
+      setConnected(false);
+      setBindErrorCode(null);
+      setBindError("Could not connect to the room. Check your connection, then retry.");
+    };
+
+    socket.on("connect", bindSession);
+    socket.on("connect_error", handleConnectError);
     socket.on("disconnect", handleDisconnect);
     socket.on("room:sync", handleSync);
     socket.on("server:shuttingDown", handleShutdown);
+    socket.on("session:ended", handleSessionEnded);
+    socket.on("room:expired", handleRoomExpired);
 
-    if (!socket.connected) {
+    if (socket.connected) {
+      bindSession();
+    } else {
       socket.connect();
     }
 
-    socket.emit(
-      "session:bind",
-      {
-        code: creds.code,
-        playerId: creds.playerId,
-        secret: creds.secret,
-      },
-      (ack?: { ok?: boolean; error?: string }) => {
-        if (ack && ack.ok === false) {
-          setBindError(ack.error ?? "Unable to reconnect.");
-        } else {
-          setBindError(null);
-        }
-      },
-    );
-
     return () => {
-      socket.off("connect", handleConnect);
+      bindAttemptRef.current += 1;
+      socket.off("connect", bindSession);
+      socket.off("connect_error", handleConnectError);
       socket.off("disconnect", handleDisconnect);
       socket.off("room:sync", handleSync);
       socket.off("server:shuttingDown", handleShutdown);
+      socket.off("session:ended", handleSessionEnded);
+      socket.off("room:expired", handleRoomExpired);
+      latestSyncRef.current = null;
+      socket.disconnect();
     };
   }, [code, enabled, socket]);
 
-  const emitWithAck = useCallback(
-    (event: string, payload?: unknown) =>
-      new Promise<{ ok?: boolean; error?: string } | undefined>((resolve, reject) => {
-        try {
-          socket.emit(event, payload ?? {}, (ack?: { ok?: boolean; error?: string }) => {
-            resolve(ack);
-          });
-        } catch (error) {
-          reject(error);
-        }
-      }),
-    [socket],
+  const emitWithAck = useCallback<EmitWithAck>(
+    (...[event, payload]) => {
+      if (!connected || !socket.connected || !enabled) {
+        return Promise.resolve({ ok: false, error: "Reconnecting to the room." });
+      }
+
+      setActionError(null);
+      const requestBindAttempt = bindAttemptRef.current;
+      return requestSocketAck(socket, event, payload).then((reply) => {
+        if (!reply.ok && requestBindAttempt === bindAttemptRef.current)
+          setActionError(reply.error ?? "The action did not complete. Try again.");
+        return reply;
+      });
+    },
+    [connected, enabled, socket],
   );
+
+  const retryConnection = useCallback(() => {
+    if (!enabled || !code) return;
+    setBindError(null);
+    setConnected(false);
+    socket.disconnect().connect();
+  }, [code, enabled, socket]);
 
   return {
     socket,
-    sync,
-    connected,
+    sync: enabled && sync?.code === code?.toUpperCase() ? sync : null,
+    connected: enabled && connected,
     bindError,
+    bindErrorCode,
     shuttingDown,
+    retryConnection,
+    actionError,
+    clearActionError: () => setActionError(null),
     emitWithAck,
   };
 }

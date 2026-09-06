@@ -3,10 +3,7 @@ import { useMemo, useState } from "react";
 import { MemoryRouter, useNavigate } from "react-router-dom";
 
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
-import {
-  PrimaryFooterButton,
-  SecondaryFooterButton,
-} from "@/components/game/GameFooterButtons";
+import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameScreenHeaderActions } from "@/components/game/GameScreenHeaderActions";
 import { PassAndPlayGameResultActions } from "@/components/GameResultActions";
 import { GameShell } from "@/components/GameShell";
@@ -22,10 +19,7 @@ import { WhoWhatWhereReviewTeamsScreen } from "@/features/whowhatwhere/setup/Who
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
 import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
 import { WhoWhatWhereLandingScreen } from "@/features/whowhatwhere/WhoWhatWhereLandingScreen";
-import {
-  createHatGalleryController,
-  hatGallerySnapshots,
-} from "@/ui-gallery/hatGalleryController";
+import { createHatGalleryController, hatGallerySnapshots } from "@/ui-gallery/hatGalleryController";
 import {
   whoWhatWhereGalleryMatchActiveFrozen,
   whoWhatWhereGalleryMatchFinalSummary,
@@ -74,21 +68,13 @@ function buildSlides(): readonly SlideSpec[] {
           onResume={noop}
         />
       ),
-      wwwFooter: () =>
-        footerWrap(
-          <PrimaryFooterButton label="Start game" onClick={noop} />,
-        ),
+      wwwFooter: () => footerWrap(<PrimaryFooterButton label="Start game" onClick={noop} />),
     },
     {
       label: "Game settings · Game settings",
       hat: () => createHatGalleryController(hatGallerySnapshots.settings),
-      wwwContent: () => (
-        <SettingsScreen settings={demoWwwSettings} onChange={noop} />
-      ),
-      wwwFooter: () =>
-        footerWrap(
-          <PrimaryFooterButton label="Next: Team 1" onClick={noop} />,
-        ),
+      wwwContent: () => <SettingsScreen settings={demoWwwSettings} onChange={noop} />,
+      wwwFooter: () => footerWrap(<PrimaryFooterButton label="Next: Team 1" onClick={noop} />),
     },
     {
       label: "Team count · Team 1 roster",
@@ -103,10 +89,7 @@ function buildSlides(): readonly SlideSpec[] {
           onTeamsChange={noop}
         />
       ),
-      wwwFooter: () =>
-        footerWrap(
-          <PrimaryFooterButton label="Next: Team 2" onClick={noop} />,
-        ),
+      wwwFooter: () => footerWrap(<PrimaryFooterButton label="Next: Team 2" onClick={noop} />),
     },
     {
       label: "Team 1 names · Team 2 roster",
@@ -121,10 +104,7 @@ function buildSlides(): readonly SlideSpec[] {
           onTeamsChange={noop}
         />
       ),
-      wwwFooter: () =>
-        footerWrap(
-          <PrimaryFooterButton label="Finalise teams" onClick={noop} />,
-        ),
+      wwwFooter: () => footerWrap(<PrimaryFooterButton label="Finalise teams" onClick={noop} />),
     },
     {
       label: "Review teams · Review teams",
@@ -141,9 +121,7 @@ function buildSlides(): readonly SlideSpec[] {
     {
       label: "Private clue pass · Round ready (first)",
       hat: () => createHatGalleryController(hatGallerySnapshots.clueHidden),
-      wwwContent: () => (
-        <ReadyScreen error="" handoffRevealed={false} match={wwwFresh} />
-      ),
+      wwwContent: () => <ReadyScreen error="" handoffRevealed={false} match={wwwFresh} />,
       wwwFooter: () =>
         footerWrap(
           <PrimaryFooterButton
@@ -155,9 +133,7 @@ function buildSlides(): readonly SlideSpec[] {
     {
       label: "Enter clues · Active turn",
       hat: () => createHatGalleryController(hatGallerySnapshots.clueForm),
-      wwwContent: () => (
-        <ActiveTurnScreen match={wwwActive} onReturnSkipped={noop} />
-      ),
+      wwwContent: () => <ActiveTurnScreen match={wwwActive} onReturnSkipped={noop} />,
       wwwFooter: () =>
         footerWrap(
           <>
@@ -178,11 +154,8 @@ function buildSlides(): readonly SlideSpec[] {
     },
     {
       label: "Between turns (handoff hidden)",
-      hat: () =>
-        createHatGalleryController(hatGallerySnapshots.readyRecapHandoffOff),
-      wwwContent: () => (
-        <ReadyScreen error="" handoffRevealed={false} match={wwwAfterTurn} />
-      ),
+      hat: () => createHatGalleryController(hatGallerySnapshots.readyRecapHandoffOff),
+      wwwContent: () => <ReadyScreen error="" handoffRevealed={false} match={wwwAfterTurn} />,
       wwwFooter: () =>
         footerWrap(
           <PrimaryFooterButton
@@ -193,24 +166,15 @@ function buildSlides(): readonly SlideSpec[] {
     },
     {
       label: "Between turns (start turn)",
-      hat: () =>
-        createHatGalleryController(hatGallerySnapshots.readyRecapHandoffOn),
-      wwwContent: () => (
-        <ReadyScreen error="" handoffRevealed match={wwwAfterTurn} />
-      ),
-      wwwFooter: () =>
-        footerWrap(
-          <PrimaryFooterButton label="Start turn" onClick={noop} />,
-        ),
+      hat: () => createHatGalleryController(hatGallerySnapshots.readyRecapHandoffOn),
+      wwwContent: () => <ReadyScreen error="" handoffRevealed match={wwwAfterTurn} />,
+      wwwFooter: () => footerWrap(<PrimaryFooterButton label="Start turn" onClick={noop} />),
     },
     {
       label: "Final turn recap · Final turn recap",
       hat: () => createHatGalleryController(hatGallerySnapshots.finalTurnRecap),
       wwwContent: () => <FinalTurnRecapScreen match={wwwFinal} />,
-      wwwFooter: () =>
-        footerWrap(
-          <PrimaryFooterButton label="Final scores" onClick={noop} />,
-        ),
+      wwwFooter: () => footerWrap(<PrimaryFooterButton label="Final scores" onClick={noop} />),
       wwwShowEndTurn: false,
     },
     {
@@ -218,12 +182,7 @@ function buildSlides(): readonly SlideSpec[] {
       hat: () => createHatGalleryController(hatGallerySnapshots.results),
       wwwContent: () => <ResultsScreen match={wwwResults} />,
       wwwFooter: () =>
-        footerWrap(
-          <PassAndPlayGameResultActions
-            onPickAnotherGame={noop}
-            onPlayAgain={noop}
-          />,
-        ),
+        footerWrap(<PassAndPlayGameResultActions onPickAnotherGame={noop} onPlayAgain={noop} />),
     },
   ];
 }
@@ -238,26 +197,18 @@ function GalleryChrome() {
   const hatScreen = buildHatSingleplayerScreen(hatController, navigate);
 
   const hatShowEndTurn =
-    hatController.snapshot.step === "game" &&
-    hatController.snapshot.session?.stage === "turn";
+    hatController.snapshot.step === "game" && hatController.snapshot.session?.stage === "turn";
 
   const hatHeaderRight = (
-    <GameScreenHeaderActions
-      {...(hatShowEndTurn ? { endTurn: { onClick: noop } } : {})}
-    />
+    <GameScreenHeaderActions {...(hatShowEndTurn ? { endTurn: { onClick: noop } } : {})} />
   );
 
   const wwwHeaderRight = (
-    <GameScreenHeaderActions
-      {...(slide.wwwShowEndTurn
-        ? { endTurn: { onClick: noop } }
-        : {})}
-    />
+    <GameScreenHeaderActions {...(slide.wwwShowEndTurn ? { endTurn: { onClick: noop } } : {})} />
   );
 
   const goPrev = () => setIndex((current) => Math.max(0, current - 1));
-  const goNext = () =>
-    setIndex((current) => Math.min(slides.length - 1, current + 1));
+  const goNext = () => setIndex((current) => Math.min(slides.length - 1, current + 1));
 
   return (
     <div className="min-h-dvh bg-semantic-gallery text-semantic-gallery-foreground">
@@ -312,9 +263,12 @@ function GalleryChrome() {
           </h2>
           <div className="pointer-events-none select-none overflow-hidden rounded-lg border border-border bg-background shadow-sm">
             <FooterActionLockContext.Provider value={false}>
-              <GameShell footer={hatScreen.actions ? footerWrap(hatScreen.actions) : undefined} headerRight={hatHeaderRight} title="Hat Game">
-                {hatController.error &&
-                hatController.snapshot.step !== "team" ? (
+              <GameShell
+                footer={hatScreen.actions ? footerWrap(hatScreen.actions) : undefined}
+                headerRight={hatHeaderRight}
+                title="Hat Game"
+              >
+                {hatController.error && hatController.snapshot.step !== "team" ? (
                   <p className="mb-3 font-medium text-typ-ui text-destructive">
                     {hatController.error}
                   </p>

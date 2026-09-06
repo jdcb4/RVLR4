@@ -4,10 +4,7 @@ import { GamePanel } from "@/components/game/GamePanel";
 import { HatLastTurnCard } from "@/components/game/HatLastTurnCard";
 import { ReadyNextStepsCard } from "@/components/game/ReadyNextStepsCard";
 import { ReadyProgressCard } from "@/components/game/ReadyProgressCard";
-import {
-  getHatGameContext,
-  getHatGamePhaseMeta,
-} from "@/domain/hat-game/engine";
+import { getHatGameContext, getHatGamePhaseMeta } from "@/domain/hat-game/engine";
 import type { HatGameSession } from "@/domain/hat-game/types";
 import type { ScreenModel } from "@/features/hat-game/hatSingleplayerAppTypes";
 import { HatScoreboard } from "@/features/hat-game/screens/HatScoreboard";
@@ -25,37 +22,23 @@ export function hatReadyScreen(
 
   const nextStepsGivePhone = controller.snapshot.handoffRevealed ? (
     <>
-      <span className="font-semibold text-foreground">
-        {context.activeDescriberName}
-      </span>{" "}
-      has the phone — start the turn from the footer when everyone is ready.
+      <span className="font-semibold text-foreground">{context.activeDescriberName}</span> has the
+      phone — start the turn from the footer when everyone is ready.
     </>
   ) : (
     <>
       Give the phone to{" "}
-      <span className="font-semibold text-foreground">
-        {context.activeDescriberName}
-      </span>
-      .
+      <span className="font-semibold text-foreground">{context.activeDescriberName}</span>.
     </>
   );
 
   return {
     content: (
       <BetweenTurnsLayout
-        heading={
-          <GamePanel
-            title={`${context.activeTeam?.name ?? "Next team"} up next`}
-          />
-        }
-        lastTurnCard={
-          previousTurn ? <HatLastTurnCard summary={previousTurn} /> : null
-        }
+        heading={<GamePanel title={`${context.activeTeam?.name ?? "Next team"} up next`} />}
+        lastTurnCard={previousTurn ? <HatLastTurnCard summary={previousTurn} /> : null}
         nextSteps={
-          <ReadyNextStepsCard
-            givePhoneLine={nextStepsGivePhone}
-            primaryText={nextStepsPrimary}
-          />
+          <ReadyNextStepsCard givePhoneLine={nextStepsGivePhone} primaryText={nextStepsPrimary} />
         }
         progressCard={
           <ReadyProgressCard label="Phase">

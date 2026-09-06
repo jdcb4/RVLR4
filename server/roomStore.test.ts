@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import { IMPOSTER_MAX_PLAYERS } from "@/config/imposterDefaults";
 import { MAX_PLAYERS_PER_TEAM } from "@/config/teamRoster";
+import { DRAWNGUESS_MAX_PLAYERS } from "@/domain/drawnguess/types";
 
 import { startHatMatch } from "./hatRuntime.ts";
 import { startImposterMatch } from "./imposterRuntime.ts";
@@ -181,6 +182,21 @@ describe("RoomStore.joinRoom", () => {
     expect(() => store.joinRoom({ code, name: "Overflow" })).toThrow(/Imposter room is full/);
   });
 
+  it("accepts eight DrawNGuess players and rejects the ninth", () => {
+    const store = new RoomStore();
+    const { room } = store.createRoom({ gameKind: "drawnguess", hostName: "Host" });
+
+    for (let index = 1; index < DRAWNGUESS_MAX_PLAYERS; index += 1) {
+      store.joinRoom({ code: room.code, name: `Player ${index + 1}` });
+    }
+
+    expect(room.players.size).toBe(DRAWNGUESS_MAX_PLAYERS);
+    expect(() => store.joinRoom({ code: room.code, name: "Overflow" })).toThrow(
+      /DrawNGuess room is full/,
+    );
+    expect(room.players.size).toBe(DRAWNGUESS_MAX_PLAYERS);
+  });
+
   it("rejects joins after the lobby has started", () => {
     const store = new RoomStore();
     const { room } = store.createRoom({ gameKind: "hat", hostName: "Host" });
@@ -338,13 +354,15 @@ describe("computeResumeEligible", () => {
     });
     room.phase = "playing";
     hostPlayer.optedOutOfResume = true;
+    hostPlayer.disconnectedAt = null;
 
     expect(computeResumeEligible(room)).toBe(false);
   });
 
   it("returns true when at least one connected player has not opted out", () => {
     const store = new RoomStore();
-    const { room } = store.createRoom({ gameKind: "hat", hostName: "Host" });
+    const { room, hostPlayer } = store.createRoom({ gameKind: "hat", hostName: "Host" });
+    hostPlayer.disconnectedAt = null;
     room.phase = "playing";
 
     expect(computeResumeEligible(room)).toBe(true);
@@ -486,6 +504,7 @@ describe("RoomStore.peek", () => {
     expect(lower?.code).toBe(room.code);
     expect(lower?.resumeEligible).toBe(false); // still lobby
 
+    room.players.get(room.hostId)!.disconnectedAt = null;
     room.phase = "playing";
     expect(store.peek(room.code)?.resumeEligible).toBe(true);
   });

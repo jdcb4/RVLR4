@@ -37,9 +37,7 @@ type SharedResults = {
   readonly isTie: boolean;
 };
 
-function sortedLeaderboard<T extends SharedLeaderboardEntry>(
-  entries: readonly T[],
-): T[] {
+function sortedLeaderboard<T extends SharedLeaderboardEntry>(entries: readonly T[]): T[] {
   return [...entries].sort((left, right) => right.score - left.score);
 }
 
@@ -71,8 +69,7 @@ function buildFinalResultsVm(
 
   if (results.isTie) {
     heroHeadline = "It's a tie!";
-    heroSubline =
-      winnerLabels.length > 0 ? winnerLabels.join(" · ") : "Shared top score";
+    heroSubline = winnerLabels.length > 0 ? winnerLabels.join(" · ") : "Shared top score";
   } else {
     heroHeadline = winnerLabels[0] ?? "Winner";
     heroSubline = winnerLabels.length > 1 ? winnerLabels.slice(1).join(" · ") : undefined;
@@ -136,10 +133,7 @@ export function mapFinalResultsFromHat(results: HatGameResults): FinalResultsVie
 }
 
 /** True if this viewer's Hat team is among winners (confetti on their device). */
-export function viewerHatTeamIsWinner(
-  session: HatGameSession,
-  viewerPlayerId: string,
-): boolean {
+export function viewerHatTeamIsWinner(session: HatGameSession, viewerPlayerId: string): boolean {
   const results = session.results;
 
   if (!results) {

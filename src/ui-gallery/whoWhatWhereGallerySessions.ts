@@ -1,4 +1,3 @@
-import { wordDeck } from "@/data/words.generated";
 import {
   correctWord,
   createMatch,
@@ -8,9 +7,11 @@ import {
 } from "@/domain/whowhatwhere/game";
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
+import { getWhoWhatWhereWordList } from "@/domain/whowhatwhere/wordList";
 
 const galleryNow = new Date("2026-05-10T12:00:00.000Z");
 const tick = new Date("2026-05-10T12:00:03.000Z");
+const wordDeck = getWhoWhatWhereWordList();
 
 export function whoWhatWhereGallerySettings(): GameSettings {
   return createDefaultSettings();

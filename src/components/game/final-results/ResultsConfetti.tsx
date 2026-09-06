@@ -21,10 +21,7 @@ export function ResultsConfetti() {
   );
 
   return (
-    <div
-      className="pointer-events-none fixed inset-0 z-40 overflow-hidden"
-      aria-hidden
-    >
+    <div className="pointer-events-none fixed inset-0 z-40 overflow-hidden" aria-hidden>
       {pieces.map((piece) => (
         <span
           key={piece.id}

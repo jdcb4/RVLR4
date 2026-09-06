@@ -27,10 +27,7 @@ export function WhoWhatWhereLandingScreen({
       }
       resumeSlot={
         pendingMatch && !confirmDiscardPending ? (
-          <ResumeGameCard
-            savedAtLabel={formatSavedAt(pendingMatch.savedAt)}
-            onResume={onResume}
-          />
+          <ResumeGameCard savedAtLabel={formatSavedAt(pendingMatch.savedAt)} onResume={onResume} />
         ) : null
       }
       subtitle="Teams race to describe mystery words from categories you choose — timed turns, skips, and quick scoring on one shared phone."

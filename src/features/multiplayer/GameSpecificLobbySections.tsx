@@ -5,26 +5,21 @@ import { TeamCountOptionGroup } from "@/components/setup/TeamCountOptionGroup";
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import type { SharedTeamCount } from "@/config/teamRoster";
 import { maxImpostersForPlayers } from "@/domain/imposter/round";
+import type { LobbyDto, RoomSyncPayload } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { HAT_CLUE_INPUT_CLASS } from "@/features/hat-game/screens/hatScreenTokens";
 import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
-import type { LobbyDto, RoomSyncPayload } from "@/multiplayer/roomTypes";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
+import { keepKeyboardSafeInputVisible } from "@/lib/keyboardSafeInput";
 
 export function GameSpecificLobbySections({
   sync,
   lobby,
   isHost,
-  myPlayerId,
   emitWithAck,
 }: {
   readonly sync: RoomSyncPayload;
   readonly lobby: LobbyDto;
   readonly isHost: boolean;
-  readonly myPlayerId: string;
   readonly emitWithAck: EmitWithAck;
 }) {
   return (
@@ -32,7 +27,7 @@ export function GameSpecificLobbySections({
       {sync.gameKind === "hat" ? (
         <HatLobbyFamousFiguresSection
           clueSlots={GAME_DEFAULTS.cluesPerPlayer}
-          drafts={lobby.hatClueDrafts[myPlayerId] ?? []}
+          drafts={lobby.myHatClueDrafts}
           emitWithAck={emitWithAck}
         />
       ) : null}
@@ -96,7 +91,7 @@ function DrawNGuessLobbySettingsCard({
               value={settings.startingPromptMode}
               onChange={(event) => {
                 void emitWithAck("lobby:hostPatchDrawNGuessSettings", {
-                  startingPromptMode: event.target.value,
+                  startingPromptMode: event.target.value === "custom" ? "custom" : "predetermined",
                 });
               }}
             >
@@ -107,11 +102,11 @@ function DrawNGuessLobbySettingsCard({
             <TimerSelect
               id="drawnguess-draw-timer"
               label="Drawing timer"
-              seconds={drawSeconds}
-              values={[45, 60, 90, 120]}
-              onChange={(seconds) => {
+              durationMs={settings.drawingDurationMs}
+              values={[45000, 60000, 90000, 120000]}
+              onChange={(durationMs) => {
                 void emitWithAck("lobby:hostPatchDrawNGuessSettings", {
-                  drawingDurationMs: seconds * 1000,
+                  drawingDurationMs: durationMs,
                 });
               }}
             />
@@ -119,11 +114,11 @@ function DrawNGuessLobbySettingsCard({
             <TimerSelect
               id="drawnguess-guess-timer"
               label="Guessing timer"
-              seconds={guessSeconds}
-              values={[20, 30, 45, 60]}
-              onChange={(seconds) => {
+              durationMs={settings.guessDurationMs}
+              values={[20000, 30000, 45000, 60000]}
+              onChange={(durationMs) => {
                 void emitWithAck("lobby:hostPatchDrawNGuessSettings", {
-                  guessDurationMs: seconds * 1000,
+                  guessDurationMs: durationMs,
                 });
               }}
             />
@@ -138,18 +133,18 @@ function DrawNGuessLobbySettingsCard({
   );
 }
 
-function TimerSelect({
+function TimerSelect<const Value extends number>({
   id,
   label,
-  seconds,
+  durationMs,
   values,
   onChange,
 }: {
   readonly id: string;
   readonly label: string;
-  readonly seconds: number;
-  readonly values: readonly number[];
-  readonly onChange: (seconds: number) => void;
+  readonly durationMs: number;
+  readonly values: readonly Value[];
+  readonly onChange: (durationMs: Value) => void;
 }) {
   return (
     <div>
@@ -159,12 +154,15 @@ function TimerSelect({
       <select
         className="mt-2 w-full rounded-xl border border-input bg-background px-3 py-2 text-typ-ui"
         id={id}
-        value={seconds}
-        onChange={(event) => onChange(Number(event.target.value))}
+        value={durationMs}
+        onChange={(event) => {
+          const selected = values.find((value) => String(value) === event.target.value);
+          if (selected !== undefined) onChange(selected);
+        }}
       >
         {values.map((value) => (
           <option key={value} value={value}>
-            {value} seconds
+            {value / 1000} seconds
           </option>
         ))}
       </select>
@@ -198,25 +196,27 @@ function HatLobbyFamousFiguresSection({
         Enter six people or characters your table will recognize. Tap the lightning if you want a
         random suggestion for that row.
       </p>
-      <div className="mt-4 overflow-x-auto">
+      <div className="mt-3 overflow-x-auto">
         <table className="w-full min-w-[280px] border-collapse text-typ-ui">
           <tbody>
             {Array.from({ length: clueSlots }).map((_, index) => (
               <tr className="border-b border-border last:border-b-0" key={index}>
-                <td className="py-2 pr-2 align-middle tabular-nums text-muted-foreground">
+                <td className="py-1 pr-2 align-middle tabular-nums text-muted-foreground">
                   {index + 1}
                 </td>
-                <td className="py-2 pr-2 align-middle">
+                <td className="py-1 pr-2 align-middle">
                   <HatClueDraftInput
                     clueIndex={index}
                     emitWithAck={emitWithAck}
+                    isLast={index === clueSlots - 1}
                     value={rowValues[index] ?? ""}
                   />
                 </td>
-                <td className="w-14 py-2 align-middle">
+                <td className="w-14 py-1 align-middle">
                   <FooterIconSlotButton
+                    compact
                     icon={<span aria-hidden="true">{"\u26a1"}</span>}
-                    label="Lightning suggestion"
+                    label={`Suggest famous figure ${index + 1}`}
                     onClick={() => {
                       void emitWithAck("lobby:hatSuggestClue", { clueIndex: index });
                     }}
@@ -233,10 +233,12 @@ function HatLobbyFamousFiguresSection({
 
 function HatClueDraftInput({
   clueIndex,
+  isLast,
   value,
   emitWithAck,
 }: {
   readonly clueIndex: number;
+  readonly isLast: boolean;
   readonly value: string;
   readonly emitWithAck: EmitWithAck;
 }) {
@@ -296,9 +298,17 @@ function HatClueDraftInput({
 
   return (
     <input
+      aria-label={`Famous figure ${clueIndex + 1}`}
+      autoCapitalize="words"
+      autoComplete="off"
       className={`${HAT_CLUE_INPUT_CLASS} w-full min-w-0`}
+      data-hat-clue-index={clueIndex}
+      enterKeyHint={isLast ? "done" : "next"}
+      inputMode="text"
       maxLength={GAME_DEFAULTS.maxClueLength}
       placeholder="Enter a famous figure"
+      spellCheck={false}
+      type="text"
       value={draft}
       onBlur={() => {
         focusedRef.current = false;
@@ -309,8 +319,25 @@ function HatClueDraftInput({
         setDraft(next);
         scheduleFlush(next);
       }}
-      onFocus={() => {
+      onFocus={(event) => {
         focusedRef.current = true;
+        keepKeyboardSafeInputVisible(event.currentTarget);
+      }}
+      onKeyDown={(event) => {
+        if (event.key !== "Enter" || event.nativeEvent.isComposing) {
+          return;
+        }
+
+        event.preventDefault();
+        flushDraft(event.currentTarget.value);
+        const nextInput = event.currentTarget
+          .closest("section")
+          ?.querySelector<HTMLInputElement>(`[data-hat-clue-index="${clueIndex + 1}"]`);
+        if (nextInput) {
+          nextInput.focus();
+        } else {
+          event.currentTarget.blur();
+        }
       }}
     />
   );

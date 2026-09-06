@@ -1,13 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import type { RoomSyncPayload } from "@/multiplayer/roomTypes";
+import type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 
 import { buildRoomShareUrl } from "./roomInvite";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 export function useRoomInviteControls({
   code,

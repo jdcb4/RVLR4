@@ -6,20 +6,22 @@ import {
   TEAM_COUNT_OPTIONS,
 } from "@/config/teamRoster";
 import { createDefaultDrawNGuessSettings } from "@/domain/drawnguess/engine";
-import type { DrawNGuessMatch, DrawNGuessSettings } from "@/domain/drawnguess/types";
+import {
+  DRAWNGUESS_MAX_PLAYERS,
+  type DrawNGuessMatch,
+  type DrawNGuessSettings,
+} from "@/domain/drawnguess/types";
 import type { HatGameSession } from "@/domain/hat-game/types";
 import { clampImposterCount, defaultImposterCount, shuffleWithRng } from "@/domain/imposter/round";
+import type { ImposterSnapshot } from "@/domain/imposter/types";
+import type { GameKind, RoomPhase } from "@/domain/multiplayer/protocol";
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState } from "@/domain/whowhatwhere/types";
-import type { ImposterSnapshot } from "@/features/imposter/imposterSingleplayerAppTypes";
-import { type AvatarId,normalizeAvatarId } from "@/multiplayer/avatarCatalog";
+import { type AvatarId, normalizeAvatarId } from "@/multiplayer/avatarCatalog";
 
 import { generateRoomCode, normalizeRoomCode } from "./codes.ts";
-import { generateSecretToken } from "./secrets.ts";
-
-export type GameKind = "whowhatwhere" | "hat" | "imposter" | "drawnguess";
-
-export type RoomPhase = "lobby" | "playing" | "ended";
+import { generateSecretToken, verifySecretToken } from "./secrets.ts";
+export type { GameKind, RoomPhase } from "@/domain/multiplayer/protocol";
 
 export type RoomPlayer = {
   readonly id: string;
@@ -49,6 +51,8 @@ export type Room = {
   /** Updated whenever the room is broadcast after a meaningful change (see `broadcastRoom`). */
   lastActivityAt: number;
   phase: RoomPhase;
+  /** Locks mutations while the initial word pack is being loaded. */
+  starting?: boolean;
   /** 2–4 for team games; Imposter stores `0` (unused). */
   teamCount: number;
   /** One display name per team bench (team games only). */
@@ -79,6 +83,7 @@ export type Room = {
   hatClueDrafts?: Record<string, string[]>;
   /** Results replay: host offered to play again in the same room. */
   replayOfferActive?: boolean;
+  replayOfferId?: string;
   /** Player ids who accepted rematch in the current offer round. */
   replayAcceptedPlayerIds?: string[];
   /** Set when a disconnect cancels an in-flight replay offer so clients stop waiting. */
@@ -106,7 +111,7 @@ function countTeamPlayers(room: Room): number[] {
 
   for (const player of room.players.values()) {
     if (player.teamIndex !== null && player.teamIndex >= 0 && player.teamIndex < counts.length) {
-      counts[player.teamIndex] += 1;
+      counts[player.teamIndex] = (counts[player.teamIndex] ?? 0) + 1;
     }
   }
 
@@ -114,15 +119,16 @@ function countTeamPlayers(room: Room): number[] {
 }
 
 function clearActiveMatchState(room: Room): void {
-  room.wwwMatch = undefined;
-  room.hatSession = undefined;
-  room.imposterSnapshot = undefined;
-  room.drawnguessMatch = undefined;
-  room.wwwReadyReveal = undefined;
-  room.hatReadyReveal = undefined;
-  room.replayOfferActive = undefined;
-  room.replayAcceptedPlayerIds = undefined;
-  room.replayCancelledByDisconnect = undefined;
+  delete room.wwwMatch;
+  delete room.hatSession;
+  delete room.imposterSnapshot;
+  delete room.drawnguessMatch;
+  delete room.wwwReadyReveal;
+  delete room.hatReadyReveal;
+  delete room.replayOfferActive;
+  delete room.replayOfferId;
+  delete room.replayAcceptedPlayerIds;
+  delete room.replayCancelledByDisconnect;
 }
 
 export class RoomStore {
@@ -195,7 +201,7 @@ export class RoomStore {
       isHost: true,
       teamIndex: isTeamGame(args.gameKind) ? 0 : null,
       ready: false,
-      disconnectedAt: null,
+      disconnectedAt: Date.now(),
       optedOutOfResume: false,
     };
 
@@ -214,17 +220,18 @@ export class RoomStore {
     return { room, hostPlayer };
   }
 
-  joinRoom(args: {
-    code: string;
-    name: string;
-    avatarId?: unknown;
-  }): { room: Room; player: RoomPlayer } {
+  joinRoom(args: { code: string; name: string; avatarId?: unknown }): {
+    room: Room;
+    player: RoomPlayer;
+  } {
     const code = normalizeRoomCode(args.code);
     const room = this.roomsByCode.get(code);
 
     if (!room || room.phase !== "lobby") {
       throw new Error("That join code is not available.");
     }
+
+    assertFlatRoomCapacity(room);
 
     const trimmedName = args.name.trim().slice(0, 32) || "Player";
     const playerId = crypto.randomUUID();
@@ -239,27 +246,11 @@ export class RoomStore {
       isHost: false,
       teamIndex: null,
       ready: false,
-      disconnectedAt: null,
+      disconnectedAt: Date.now(),
       optedOutOfResume: false,
     };
 
-    if (room.gameKind === "imposter") {
-      if (room.players.size >= IMPOSTER_MAX_PLAYERS) {
-        throw new Error("This Imposter room is full.");
-      }
-      player.teamIndex = null;
-    } else if (room.gameKind === "drawnguess") {
-      player.teamIndex = null;
-    } else {
-      player.teamIndex = pickSmallestTeamIndex(room);
-      const nextCounts = previewCountsAfterJoin(room, player.teamIndex);
-
-      for (const count of nextCounts) {
-        if (count > MAX_PLAYERS_PER_TEAM) {
-          throw new Error(`Teams can have at most ${MAX_PLAYERS_PER_TEAM} players for this game.`);
-        }
-      }
-    }
+    assignJoiningPlayerTeam(room, player);
 
     room.players.set(playerId, player);
 
@@ -299,7 +290,7 @@ export class RoomStore {
 
     const player = room.players.get(args.playerId);
 
-    if (!player || player.secret !== args.secret) {
+    if (!player || !verifySecretToken(player.secret, args.secret)) {
       return null;
     }
 
@@ -374,10 +365,35 @@ function previewCountsAfterJoin(room: Room, newPlayerTeamIndex: number): number[
   const counts = countTeamPlayers(room);
 
   if (newPlayerTeamIndex >= 0 && newPlayerTeamIndex < counts.length) {
-    counts[newPlayerTeamIndex] += 1;
+    counts[newPlayerTeamIndex] = (counts[newPlayerTeamIndex] ?? 0) + 1;
   }
 
   return counts;
+}
+
+function assertFlatRoomCapacity(room: Room): void {
+  if (room.gameKind === "imposter" && room.players.size >= IMPOSTER_MAX_PLAYERS) {
+    throw new Error("This Imposter room is full.");
+  }
+
+  if (room.gameKind === "drawnguess" && room.players.size >= DRAWNGUESS_MAX_PLAYERS) {
+    throw new Error("This DrawNGuess room is full.");
+  }
+}
+
+function assignJoiningPlayerTeam(room: Room, player: RoomPlayer): void {
+  if (!isTeamGame(room.gameKind)) {
+    player.teamIndex = null;
+    return;
+  }
+
+  player.teamIndex = pickSmallestTeamIndex(room);
+
+  if (
+    previewCountsAfterJoin(room, player.teamIndex).some((count) => count > MAX_PLAYERS_PER_TEAM)
+  ) {
+    throw new Error(`Teams can have at most ${MAX_PLAYERS_PER_TEAM} players for this game.`);
+  }
 }
 
 /** Keeps Imposter counts aligned with actual lobby size (no manual roster target). */
@@ -405,6 +421,17 @@ export function resetLobbyAfterReplay(room: Room): void {
   }
 }
 
+/** Lobby-only removal invalidates the reconnect secret and game-owned drafts. */
+export function removeLobbyGuest(room: Room, playerId: string): void {
+  if (room.phase !== "lobby") throw new Error("Players can only leave in the lobby.");
+  const player = room.players.get(playerId);
+  if (!player) throw new Error("This seat is already gone.");
+  if (player.isHost) throw new Error("The host must close the lobby instead.");
+  room.players.delete(playerId);
+  if (room.hatClueDrafts) delete room.hatClueDrafts[playerId];
+  clampImposterLobbyCounts(room);
+}
+
 /** Validates minimum players per team when starting (called from game layer). */
 export function assertTeamLobbyReady(room: Room): void {
   if (!isTeamGame(room.gameKind)) {
@@ -419,6 +446,11 @@ export function assertTeamLobbyReady(room: Room): void {
     if (count < MIN_PLAYERS_PER_TEAM) {
       throw new Error(
         `Team ${index + 1} needs at least ${MIN_PLAYERS_PER_TEAM} players before you can start.`,
+      );
+    }
+    if (count > MAX_PLAYERS_PER_TEAM) {
+      throw new Error(
+        `Team ${index + 1} can have at most ${MAX_PLAYERS_PER_TEAM} players. Move players or add a team.`,
       );
     }
   }

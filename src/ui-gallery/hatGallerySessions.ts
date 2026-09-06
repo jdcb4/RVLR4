@@ -4,7 +4,7 @@ import { buildDefaultSetup } from "@/domain/hat-game/setup";
 import type { ClueSubmissionMap, HatGameSession } from "@/domain/hat-game/types";
 
 /** Deterministic options aligned with `domain/hat-game/engine.test.ts`. */
-export const galleryHatActionOpts = {
+const galleryHatActionOpts = {
   rng: () => 0.5,
   nowMs: () => Date.UTC(2026, 5, 10, 12, 0, 0),
   toIso: (timestamp: number) => new Date(timestamp).toISOString(),
@@ -19,7 +19,7 @@ function unwrap<T>(result: T | { error: string }): T {
   return result as T;
 }
 
-export function makeGalleryClueSubmissions(
+function makeGalleryClueSubmissions(
   players: readonly { readonly id: string }[],
 ): ClueSubmissionMap {
   return Object.fromEntries(
@@ -42,7 +42,7 @@ export function getGalleryHatSetup() {
   return { teams, players, clueSubmissions };
 }
 
-export function hatGalleryBaseSession(): HatGameSession {
+function hatGalleryBaseSession(): HatGameSession {
   const { teams, players, clueSubmissions } = getGalleryHatSetup();
   return createHatGameSession({
     teams,
@@ -56,34 +56,22 @@ export function hatGalleryBaseSession(): HatGameSession {
 /** Between-turns screen with a recap card from the previous turn. */
 export function hatGallerySessionReadyWithSummary(): HatGameSession {
   let session = hatGalleryBaseSession();
-  session = unwrap(
-    applyHatGameAction(session, { type: "start-turn" }, galleryHatActionOpts),
-  );
-  session = unwrap(
-    applyHatGameAction(session, { type: "mark-correct" }, galleryHatActionOpts),
-  );
-  session = unwrap(
-    applyHatGameAction(session, { type: "end-turn" }, galleryHatActionOpts),
-  );
+  session = unwrap(applyHatGameAction(session, { type: "start-turn" }, galleryHatActionOpts));
+  session = unwrap(applyHatGameAction(session, { type: "mark-correct" }, galleryHatActionOpts));
+  session = unwrap(applyHatGameAction(session, { type: "end-turn" }, galleryHatActionOpts));
   return session;
 }
 
-export function hatGallerySessionMidTurn(): HatGameSession {
+function hatGallerySessionMidTurn(): HatGameSession {
   return unwrap(
-    applyHatGameAction(
-      hatGalleryBaseSession(),
-      { type: "start-turn" },
-      galleryHatActionOpts,
-    ),
+    applyHatGameAction(hatGalleryBaseSession(), { type: "start-turn" }, galleryHatActionOpts),
   );
 }
 
 /** Includes at least one skipped clue so the dashed “waiting” panel appears. */
 export function hatGallerySessionMidTurnWithSkips(): HatGameSession {
   let session = hatGallerySessionMidTurn();
-  session = unwrap(
-    applyHatGameAction(session, { type: "skip-clue" }, galleryHatActionOpts),
-  );
+  session = unwrap(applyHatGameAction(session, { type: "skip-clue" }, galleryHatActionOpts));
   return session;
 }
 
@@ -91,20 +79,14 @@ export function hatGallerySessionFinalTurnRecap(): HatGameSession {
   let session = hatGalleryBaseSession();
   while (session.stage !== "finalSummary") {
     if (session.stage === "ready") {
-      session = unwrap(
-        applyHatGameAction(session, { type: "start-turn" }, galleryHatActionOpts),
-      );
+      session = unwrap(applyHatGameAction(session, { type: "start-turn" }, galleryHatActionOpts));
     }
-    session = unwrap(
-      applyHatGameAction(session, { type: "mark-correct" }, galleryHatActionOpts),
-    );
+    session = unwrap(applyHatGameAction(session, { type: "mark-correct" }, galleryHatActionOpts));
   }
   return session;
 }
 
 export function hatGallerySessionResults(): HatGameSession {
   const session = hatGallerySessionFinalTurnRecap();
-  return unwrap(
-    applyHatGameAction(session, { type: "view-results" }, galleryHatActionOpts),
-  );
+  return unwrap(applyHatGameAction(session, { type: "view-results" }, galleryHatActionOpts));
 }

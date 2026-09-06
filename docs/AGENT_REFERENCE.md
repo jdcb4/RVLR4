@@ -6,7 +6,7 @@ Detailed reference for AI agents working in this project. Load on demand — not
 
 - **TypeScript** strict mode, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`. Path alias `@/*` → `src/*`.
 - **Package manager** pnpm 9+. Do not switch to npm or yarn without a `docs/DECISIONS.md` entry.
-- **Build** Vite (or framework-specific equivalent — Cloudflare Workers uses Wrangler).
+- **Build** Vite for the browser; `tsx` runs the Express/Socket.IO server.
 - **Lint/format** ESLint flat config + Prettier. Errors fail CI; warnings should be cleaned before merge.
 - **Test** Vitest + React Testing Library. `jsdom` for component tests; `node` for domain/server tests.
 - **Validation** Zod everywhere external input lands.
@@ -65,11 +65,14 @@ Do not blindly follow these tools. False positives are common for framework entr
 
 ## Persistence policy
 
-1. **Default to JSON files** in `src/data/`. Validate on read with a Zod schema. This covers most small projects.
-2. **Move to SQLite + Drizzle** when relational queries, transactions, or larger datasets become awkward in JSON.
-3. **Move to Postgres + Drizzle** when concurrency, advanced queries, or production scale demand it.
+- Curated content is validated JSON in `src/data/`.
+- Multiplayer sessions live only in one Node process's RAM. Do not add a database
+  without explicit approval of that scope and a `docs/DECISIONS.md` entry.
+- Browser snapshots and reconnect credentials use the adapters and versioned
+  validators documented in [PERSISTENCE.md](PERSISTENCE.md).
 
-Every move between tiers needs a `docs/DECISIONS.md` entry and migration logic that handles existing data.
+Any storage change must justify its user benefit and describe migration and
+recovery. No ORM or future database stack is prescribed for this application.
 
 ## Persistence and schema changes
 
@@ -118,6 +121,9 @@ git diff --stat
 ## Token-efficient agent workflow
 
 - `docs/PROJECT_INDEX.md` is the navigation entry point. Keep it current.
+- Prefer current, audience-owned references over dated audit snapshots. Once a
+  one-shot plan is complete, extract lasting rules into the canonical doc and
+  delete the plan; use `docs/CHANGELOG.md` and git for shipped history.
 - Maintain short module-level notes for complex folders.
 - Prefer small files with clear names over large files mixing concerns.
 - Use descriptive commit messages that include version impact.
@@ -128,7 +134,7 @@ git diff --stat
 
 ## Working on Windows (PowerShell)
 
-The user's local dev environment is Windows with PowerShell (5.1 or 7). CI and Docker run Linux bash, so commands inside `Dockerfile`, `.github/workflows/*.yml`, and `package.json` scripts can stay bash-flavoured (npm/pnpm spawn cmd.exe on Windows for script execution, which supports `&&`).
+The user's local dev environment is Windows with PowerShell (5.1 or 7). CI and Docker run Linux bash, so commands inside `docker/Dockerfile`, `.github/workflows/*.yml`, and `package.json` scripts can stay bash-flavoured (npm/pnpm spawn cmd.exe on Windows for script execution, which supports `&&`).
 
 Rules for shell commands you run **interactively** during local development:
 
@@ -143,16 +149,16 @@ Rules for shell commands you run **interactively** during local development:
 
 ### Cross-shell command equivalents
 
-| Task                              | Bash                              | PowerShell                                   |
-| --------------------------------- | --------------------------------- | -------------------------------------------- |
-| Sequence (always run B)           | `A; B` or `A && B`                | `A; B`                                       |
-| Conditional (run B if A succeeds) | `A && B`                          | `A; if ($?) { B }`                           |
-| Set env var inline                | `FOO=bar pnpm dev`                | `$env:FOO="bar"; pnpm dev`                   |
-| Multi-line                        | `cmd \`<br>` --flag`              | `cmd `` ` ``<br>` --flag`                    |
-| Make dir incl. parents            | `mkdir -p path/to/dir`            | `mkdir path/to/dir`                          |
-| Remove dir recursively            | `rm -rf dir`                      | `Remove-Item -Recurse -Force dir`            |
-| Suppress output                   | `cmd > /dev/null 2>&1`            | `cmd > $null 2> $null`                       |
-| Read env var                      | `echo $FOO`                       | `$env:FOO` or `Write-Output $env:FOO`        |
+| Task                              | Bash                   | PowerShell                            |
+| --------------------------------- | ---------------------- | ------------------------------------- |
+| Sequence (always run B)           | `A; B` or `A && B`     | `A; B`                                |
+| Conditional (run B if A succeeds) | `A && B`               | `A; if ($?) { B }`                    |
+| Set env var inline                | `FOO=bar pnpm dev`     | `$env:FOO="bar"; pnpm dev`            |
+| Multi-line                        | `cmd \`<br>` --flag`   | `cmd `` ` ``<br>` --flag`             |
+| Make dir incl. parents            | `mkdir -p path/to/dir` | `mkdir path/to/dir`                   |
+| Remove dir recursively            | `rm -rf dir`           | `Remove-Item -Recurse -Force dir`     |
+| Suppress output                   | `cmd > /dev/null 2>&1` | `cmd > $null 2> $null`                |
+| Read env var                      | `echo $FOO`            | `$env:FOO` or `Write-Output $env:FOO` |
 
 ### When to use bash anyway
 
@@ -160,8 +166,8 @@ If you absolutely need bash semantics (running a POSIX shell script, complex pip
 
 ### When documenting commands in `/docs`
 
-- For commands that run in CI/Docker (Linux): bash syntax is correct, label fences as ```` ```bash ````.
-- For commands the user runs locally: write them so they work in both shells when possible (single-line `pnpm` invocations, no chains). When that's impossible, label the fence as ```` ```powershell ```` and provide the PowerShell form.
+- For commands that run in CI/Docker (Linux): bash syntax is correct, label fences as ` ```bash `.
+- For commands the user runs locally: write them so they work in both shells when possible (single-line `pnpm` invocations, no chains). When that's impossible, label the fence as ` ```powershell ` and provide the PowerShell form.
 
 ## When blocked
 

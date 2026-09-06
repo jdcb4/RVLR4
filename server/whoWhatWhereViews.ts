@@ -1,10 +1,6 @@
-import {
-  getActiveContext,
-  getCurrentWord,
-} from "@/domain/whowhatwhere/game";
+import type { WhoWhatWherePeerRole } from "@/domain/multiplayer/protocol";
+import { getActiveContext, getCurrentWord } from "@/domain/whowhatwhere/game";
 import type { ActiveTurn, MatchState, WordEntry } from "@/domain/whowhatwhere/types";
-
-export type WhoWhatWherePeerRole = "describer" | "guesser" | "observer";
 
 export function classifyWhoWhatWhereRole(
   match: MatchState,
@@ -36,6 +32,7 @@ function scrubActiveTurn(turn: ActiveTurn): ActiveTurn {
   return {
     ...turn,
     wordQueue: turn.wordQueue.map((entry) => scrubWordEntry(entry)),
+    wordHistory: turn.wordHistory.map((entry) => ({ ...entry, word: scrubWordEntry(entry.word) })),
     skippedWords: turn.skippedWords.map((skipped) => ({
       ...skipped,
       word: scrubWordEntry(skipped.word),
@@ -49,26 +46,32 @@ function scrubActiveTurn(turn: ActiveTurn): ActiveTurn {
   };
 }
 
+function scrubWordReserves(match: MatchState): MatchState["wordReserves"] {
+  return Object.fromEntries(
+    Object.entries(match.wordReserves).map(([category, words]) => [
+      category,
+      words?.map((word) => scrubWordEntry(word)),
+    ]),
+  );
+}
+
 /**
  * Strips secret words for anyone who is not the active describer during a live turn.
  * Category + timers remain so teammates can follow along without peeking.
  */
-export function projectWhoWhatWhereMatch(
-  match: MatchState,
-  viewerPlayerId: string,
-): MatchState {
+export function projectWhoWhatWhereMatch(match: MatchState, viewerPlayerId: string): MatchState {
+  const projectedBase = { ...match, wordReserves: scrubWordReserves(match) };
+
   if (match.stage !== "turn" || !match.activeTurn) {
-    return match;
+    return projectedBase;
   }
 
-  const role = classifyWhoWhatWhereRole(match, viewerPlayerId);
-
-  if (role === "describer") {
-    return match;
+  if (classifyWhoWhatWhereRole(match, viewerPlayerId) === "describer") {
+    return projectedBase;
   }
 
   return {
-    ...match,
+    ...projectedBase,
     activeTurn: scrubActiveTurn(match.activeTurn),
   };
 }
@@ -84,10 +87,7 @@ export function shouldShowWhoWhatWhereTurnFooter(
   );
 }
 
-export function canReturnSkippedWords(
-  match: MatchState,
-  viewerPlayerId: string,
-): boolean {
+export function canReturnSkippedWords(match: MatchState, viewerPlayerId: string): boolean {
   return (
     match.stage === "turn" &&
     Boolean(match.activeTurn) &&

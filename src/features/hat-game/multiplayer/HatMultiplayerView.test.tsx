@@ -1,11 +1,15 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { HatGameSession } from "@/domain/hat-game/types";
+import type { HatSyncDto } from "@/domain/multiplayer/protocol";
 import { HatMultiplayerBody } from "@/features/hat-game/multiplayer/HatMultiplayerBody";
 import { HatMultiplayerFooter } from "@/features/hat-game/multiplayer/HatMultiplayerFooter";
-import type { HatSyncDto } from "@/multiplayer/roomTypes";
+import { HatMultiplayerView } from "@/features/hat-game/multiplayer/HatMultiplayerView";
+
+afterEach(() => vi.useRealTimers());
 
 function buildSession(overrides: Partial<HatGameSession> = {}): HatGameSession {
   return {
@@ -52,6 +56,48 @@ function buildPayload(overrides: Partial<HatSyncDto> = {}): HatSyncDto {
 }
 
 describe("Hat multiplayer primitives", () => {
+  it("does not announce expiry when a new timed turn arrives", () => {
+    vi.useFakeTimers();
+    const view = (session: HatGameSession) => (
+      <MemoryRouter>
+        <HatMultiplayerView
+          payload={buildPayload({ session, role: "guesser" })}
+          emitWithAck={vi.fn(async () => ({ ok: true }))}
+          viewerPlayerId="guesser"
+          isHost={false}
+          replaySync={{ offerActive: false, acceptedIds: [], cancelledByDisconnect: false }}
+        />
+      </MemoryRouter>
+    );
+    const { rerender } = render(view(buildSession()));
+    rerender(
+      view(
+        buildSession({
+          stage: "turn",
+          activeTurn: {
+            startedAt: new Date().toISOString(),
+            endsAt: new Date(Date.now() + 45_000).toISOString(),
+            durationSeconds: 45,
+            clueQueue: [],
+            queueIndex: 0,
+            score: 0,
+            correctCount: 0,
+            skippedCount: 0,
+            skipsRemaining: 1,
+            skippedClues: [],
+            currentSkippedCluePoolIndex: null,
+            clueHistory: [],
+          },
+        }),
+      ),
+    );
+    expect(screen.getByText("0:45")).toBeInTheDocument();
+    expect(screen.queryByText("Time is up.")).not.toBeInTheDocument();
+    act(() => vi.advanceTimersByTime(35_000));
+    expect(screen.getByText("10 seconds remaining.")).toBeInTheDocument();
+    act(() => vi.advanceTimersByTime(10_000));
+    expect(screen.getByText("Time is up.")).toBeInTheDocument();
+  });
   it("dispatches the start-turn event from the extracted ready footer", async () => {
     const user = userEvent.setup();
     const emitWithAck = vi.fn(async () => ({ ok: true }));

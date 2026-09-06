@@ -1,6 +1,6 @@
 import { PlayerAvatar } from "@/components/PlayerAvatar";
 import { cn } from "@/lib/utils";
-import { AVATAR_IDS, type AvatarId,pickRandomAvatarId } from "@/multiplayer/avatarCatalog";
+import { AVATAR_IDS, type AvatarId, pickRandomAvatarId } from "@/multiplayer/avatarCatalog";
 
 export function AvatarPicker({
   value,

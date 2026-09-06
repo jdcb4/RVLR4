@@ -1,23 +1,14 @@
 import type { Dispatch, SetStateAction } from "react";
 
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
+import type { WhoWhatWherePeerRole } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
+import type { ReplaySync } from "@/domain/multiplayer/protocol";
 import { canQueueSkipped, getActiveContext } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
 import { MultiplayerEndGameActions } from "@/features/multiplayer/MultiplayerGameShell";
 import { MultiplayerSkipCorrectFooter } from "@/features/multiplayer/MultiplayerSkipCorrectFooter";
-import type { WhoWhatWherePeerRole } from "@/multiplayer/roomTypes";
 import { multiplayerUpNextHeadingTitle } from "@/multiplayer/upNextHeading";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
-
-type ReplaySync = {
-  readonly offerActive: boolean;
-  readonly acceptedIds: readonly string[];
-  readonly cancelledByDisconnect: boolean;
-};
 
 export function WhoWhatWhereMultiplayerFooter({
   match,

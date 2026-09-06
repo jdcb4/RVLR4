@@ -1,6 +1,6 @@
 import { createDefaultDrawNGuessSettings } from "@/domain/drawnguess/engine";
+import type { LobbyDto, RoomSyncPayload } from "@/domain/multiplayer/protocol";
 import { createDefaultSettings } from "@/domain/whowhatwhere/setup";
-import type { LobbyDto, RoomSyncPayload } from "@/multiplayer/roomTypes";
 
 export function buildLobby(overrides: Partial<LobbyDto> = {}): LobbyDto {
   return {
@@ -32,7 +32,16 @@ export function buildLobby(overrides: Partial<LobbyDto> = {}): LobbyDto {
         disconnectedAt: null,
       },
     ],
-    hatClueDrafts: {},
+    myHatClueDrafts: [],
+    startReadiness: {
+      canStart: false,
+      blockers: [
+        {
+          code: "player-count",
+          message: "Imposter needs 4–10 players (currently 2).",
+        },
+      ],
+    },
     ...overrides,
   };
 }

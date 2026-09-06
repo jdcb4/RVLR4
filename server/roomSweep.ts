@@ -31,17 +31,16 @@ async function sweepIdleRooms(io: Server, store: RoomStore) {
       .map((p) => p.disconnectedAt)
       .filter((t): t is number => t !== null);
 
-    const everyoneDisconnected =
-      playerCount > 0 && disconnectedAts.length === playerCount;
+    const everyoneDisconnected = playerCount > 0 && disconnectedAts.length === playerCount;
 
     const staleByEveryoneAway =
-      everyoneDisconnected &&
-      now - Math.max(...disconnectedAts) >= ALL_DISCONNECTED_GRACE_MS;
+      everyoneDisconnected && now - Math.max(...disconnectedAts) >= ALL_DISCONNECTED_GRACE_MS;
 
     const empty = playerCount === 0;
 
     if (empty || staleByActivity || staleByEveryoneAway) {
       try {
+        io.in(roomChannel(code)).emit("room:expired", { code });
         await io.in(roomChannel(code)).disconnectSockets(true);
       } catch {
         // Best-effort cleanup; room is still removed from memory.
@@ -50,7 +49,6 @@ async function sweepIdleRooms(io: Server, store: RoomStore) {
       store.deleteRoom(code);
 
       mpDebug("room swept (idle)", {
-        code,
         empty,
         staleByActivity,
         staleByEveryoneAway,

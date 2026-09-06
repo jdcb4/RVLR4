@@ -1,7 +1,4 @@
-import {
-  IMPOSTER_MAX_PLAYERS,
-  IMPOSTER_MIN_PLAYERS,
-} from "@/config/imposterDefaults";
+import { IMPOSTER_MAX_PLAYERS, IMPOSTER_MIN_PLAYERS } from "@/config/imposterDefaults";
 
 /** Fisher–Yates shuffle using the supplied RNG (0 inclusive, 1 exclusive). */
 export function shuffleWithRng<T>(items: readonly T[], rng: () => number): T[] {
@@ -37,10 +34,7 @@ export function defaultImposterCount(playerCount: number): number {
 }
 
 /** Clamp user-chosen imposter count to valid range for this player count. */
-export function clampImposterCount(
-  playerCount: number,
-  requested: number,
-): number {
+export function clampImposterCount(playerCount: number, requested: number): number {
   const max = maxImpostersForPlayers(playerCount);
   return Math.min(max, Math.max(1, Math.trunc(requested)));
 }
@@ -74,8 +68,7 @@ export function dealImposterRound(args: {
     throw new Error("Imposter: imposter count exceeds cap for this group.");
   }
 
-  const secretWord =
-    wordBank[Math.floor(rng() * wordBank.length)] ?? wordBank[0]!;
+  const secretWord = wordBank[Math.floor(rng() * wordBank.length)] ?? wordBank[0]!;
   const order = shuffleWithRng(playerIds, rng);
   const imposterPlayerIds = order.slice(0, imposterCount);
   return { secretWord, imposterPlayerIds };
@@ -88,10 +81,7 @@ export function getImposterSetupError(args: {
   readonly playerNames: readonly string[];
 }): string | null {
   const { playerCount, imposterCount, playerNames } = args;
-  if (
-    playerCount < IMPOSTER_MIN_PLAYERS ||
-    playerCount > IMPOSTER_MAX_PLAYERS
-  ) {
+  if (playerCount < IMPOSTER_MIN_PLAYERS || playerCount > IMPOSTER_MAX_PLAYERS) {
     return `Choose ${IMPOSTER_MIN_PLAYERS}–${IMPOSTER_MAX_PLAYERS} players.`;
   }
   if (playerNames.length !== playerCount) {

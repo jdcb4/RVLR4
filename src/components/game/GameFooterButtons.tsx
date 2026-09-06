@@ -1,4 +1,4 @@
-import { type ReactNode,useContext } from "react";
+import { type ReactNode, useContext } from "react";
 
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { Button } from "@/components/ui/button";
@@ -87,17 +87,20 @@ export function FooterIconSlotButton({
   icon,
   onClick,
   variant = "secondary",
+  compact = false,
 }: {
   label: string;
   icon: ReactNode;
   onClick: () => void;
   variant?: "secondary" | "outline";
+  /** Retains the 44px mobile touch minimum while saving space in dense input rows. */
+  compact?: boolean;
 }) {
   const footerLocked = useContext(FooterActionLockContext);
   return (
     <Button
       aria-label={label}
-      className="h-12 shrink-0 px-3"
+      className={compact ? "h-11 shrink-0 px-3" : "h-12 shrink-0 px-3"}
       disabled={footerLocked}
       onClick={onClick}
       type="button"

@@ -1,27 +1,18 @@
 import type { ReactNode } from "react";
 
 import { PrimaryFooterButton } from "@/components/game/GameFooterButtons";
-import type {
-  ImposterRoundState,
-  ImposterSnapshot,
-} from "@/features/imposter/imposterSingleplayerAppTypes";
+import type { ImposterRoundState, ImposterSnapshot } from "@/domain/imposter/types";
+import type { ImposterSyncDto } from "@/domain/multiplayer/protocol";
+import type { SocketInput } from "@/domain/multiplayer/protocol";
 import { MultiplayerEndGameActions } from "@/features/multiplayer/MultiplayerGameShell";
-import type { ImposterSyncDto } from "@/multiplayer/roomTypes";
 
 import { getParallelRevealProgress } from "./imposterMultiplayerReveal";
+export type ImposterMultiplayerDispatch = (
+  action: SocketInput<"imposter:dispatch">,
+) => Promise<void>;
 
-export type ImposterMultiplayerDispatch = (action: { readonly type: string }) => Promise<void>;
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
-
-type ReplaySync = {
-  readonly offerActive: boolean;
-  readonly acceptedIds: readonly string[];
-  readonly cancelledByDisconnect: boolean;
-};
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
+import type { ReplaySync } from "@/domain/multiplayer/protocol";
 
 export function ImposterMultiplayerFooter({
   payload,
@@ -223,7 +214,7 @@ function HostAdvanceFooter({
   onDispatch,
 }: {
   readonly label: string;
-  readonly actionType: string;
+  readonly actionType: SocketInput<"imposter:dispatch">["type"];
   readonly busy: boolean;
   readonly isHost: boolean;
   readonly onDispatch: ImposterMultiplayerDispatch;

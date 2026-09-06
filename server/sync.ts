@@ -1,86 +1,29 @@
-import type { DrawNGuessSyncDto } from "@/domain/drawnguess/types";
-import type { HatGameSession } from "@/domain/hat-game/types";
-import type { MatchState } from "@/domain/whowhatwhere/types";
+import type {
+  HatSyncDto,
+  ImposterSyncDto,
+  LobbyDto,
+  LobbyPlayerDto,
+  RoomSyncPayload,
+  WhoWhatWhereSyncDto,
+} from "@/domain/multiplayer/protocol";
+export type { RoomSyncPayload } from "@/domain/multiplayer/protocol";
 
 import { buildDrawNGuessSyncDto } from "./drawnguessViews.ts";
 import {
   canHatReturnSkipped,
   classifyHatRole,
-  type HatPeerRole,
   projectHatSessionForViewer,
   shouldShowHatTurnFooter,
 } from "./hatViews.ts";
-import { buildImposterSyncDto, type ImposterSyncDto } from "./imposterViews.ts";
-import type { GameKind, Room, RoomPhase, RoomPlayer } from "./roomStore.ts";
+import { buildImposterSyncDto } from "./imposterViews.ts";
+import { getRoomLobbyStartReadiness } from "./lobbyReadiness.ts";
+import type { Room, RoomPlayer } from "./roomStore.ts";
 import {
   canReturnSkippedWords,
   classifyWhoWhatWhereRole,
   projectWhoWhatWhereMatch,
   shouldShowWhoWhatWhereTurnFooter,
-  type WhoWhatWherePeerRole,
 } from "./whoWhatWhereViews.ts";
-
-export type LobbyPlayerDto = {
-  readonly id: string;
-  readonly name: string;
-  readonly avatarId: RoomPlayer["avatarId"];
-  readonly isHost: boolean;
-  readonly teamIndex: number | null;
-  readonly ready: boolean;
-  readonly disconnectedAt: number | null;
-};
-
-export type LobbyDto = {
-  readonly teamCount: number;
-  readonly teamNames: readonly string[];
-  readonly wwwSettings: Room["wwwSettings"];
-  readonly hatTurnDurationSeconds: number;
-  readonly hatSkipsPerTurn: number;
-  readonly imposterPlayerCount: number;
-  readonly imposterImposterCount: number;
-  readonly drawnguessSettings: Room["drawnguessSettings"];
-  readonly players: readonly LobbyPlayerDto[];
-  /** Hat only — each player's six famous-figure drafts. */
-  readonly hatClueDrafts: Record<string, readonly string[]>;
-};
-
-export type WhoWhatWhereSyncDto = {
-  readonly match: MatchState;
-  readonly role: WhoWhatWherePeerRole;
-  readonly readyReveal: boolean;
-  readonly showTurnFooter: boolean;
-  readonly canReturnSkipped: boolean;
-};
-
-export type HatSyncDto = {
-  readonly session: HatGameSession;
-  readonly role: HatPeerRole;
-  readonly readyReveal: boolean;
-  readonly showTurnFooter: boolean;
-  readonly canReturnSkipped: boolean;
-};
-
-export type { ImposterSyncDto };
-export type { DrawNGuessSyncDto };
-
-export type RoomSyncPayload = {
-  readonly code: string;
-  readonly gameKind: GameKind;
-  readonly phase: RoomPhase;
-  readonly you: {
-    readonly playerId: string;
-    readonly isHost: boolean;
-  };
-  readonly lobby: LobbyDto | null;
-  readonly www: WhoWhatWhereSyncDto | null;
-  readonly hat: HatSyncDto | null;
-  readonly imposter: ImposterSyncDto | null;
-  readonly drawnguess: DrawNGuessSyncDto | null;
-  readonly replay: {
-    readonly offerActive: boolean;
-    readonly acceptedIds: readonly string[];
-  };
-};
 
 function lobbyPlayers(room: Room): LobbyPlayerDto[] {
   return [...room.players.values()].map((player) => toLobbyPlayerDto(player));
@@ -98,7 +41,7 @@ function toLobbyPlayerDto(player: RoomPlayer): LobbyPlayerDto {
   };
 }
 
-function buildLobbyDto(room: Room): LobbyDto {
+function buildLobbyDto(room: Room, viewerPlayerId: string): LobbyDto {
   return {
     teamCount: room.teamCount,
     teamNames: room.teamNames,
@@ -109,7 +52,8 @@ function buildLobbyDto(room: Room): LobbyDto {
     imposterImposterCount: room.imposterImposterCount,
     drawnguessSettings: room.drawnguessSettings,
     players: lobbyPlayers(room),
-    hatClueDrafts: room.hatClueDrafts ?? {},
+    myHatClueDrafts: room.hatClueDrafts?.[viewerPlayerId] ?? [],
+    startReadiness: getRoomLobbyStartReadiness(room),
   };
 }
 
@@ -120,7 +64,7 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     throw new Error("Player not part of this room.");
   }
 
-  const lobby = room.phase === "lobby" ? buildLobbyDto(room) : null;
+  const lobby = room.phase === "lobby" ? buildLobbyDto(room, viewerPlayerId) : null;
 
   let www: WhoWhatWhereSyncDto | null = null;
 
@@ -173,6 +117,7 @@ export function buildRoomSync(room: Room, viewerPlayerId: string): RoomSyncPaylo
     drawnguess,
     replay: {
       offerActive: Boolean(room.replayOfferActive),
+      ...(room.replayOfferId ? { offerId: room.replayOfferId } : {}),
       acceptedIds: room.replayAcceptedPlayerIds ?? [],
       cancelledByDisconnect: Boolean(room.replayCancelledByDisconnect),
     },

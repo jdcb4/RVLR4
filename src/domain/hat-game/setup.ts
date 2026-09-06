@@ -1,33 +1,12 @@
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
-import {
-  MAX_PLAYERS_PER_TEAM,
-  MIN_PLAYERS_PER_TEAM,
-} from "@/config/teamRoster";
-import namePacks from "@/data/namePacks.json";
+import { MAX_PLAYERS_PER_TEAM, MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 import type { RosterTeamRow } from "@/domain/shared/rosterRow";
 
+import { getHatNameData } from "./nameData";
 import { sortPlayersBySeat } from "./teamUtils";
 import type { Player, Team } from "./types";
 
-type NamePack = {
-  teamName: string;
-  playerNames: string[];
-};
-
-const fallbackNames = [
-  'Alex',
-  'Sam',
-  'Jordan',
-  'Casey',
-  'Riley',
-  'Morgan',
-  'Jamie',
-  'Taylor',
-  'Cameron',
-  'Quinn',
-  'Avery',
-  'Rowan'
-];
+const { packs: namePacks, fallbackNames } = getHatNameData();
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, Math.trunc(value)));
@@ -46,10 +25,7 @@ export const getHatGameSetupError = ({
   if (teamCount < GAME_DEFAULTS.minTeams || teamCount > GAME_DEFAULTS.maxTeams) {
     return `Choose ${GAME_DEFAULTS.minTeams}-${GAME_DEFAULTS.maxTeams} teams.`;
   }
-  if (
-    playerCount < GAME_DEFAULTS.minPlayers ||
-    playerCount > GAME_DEFAULTS.maxPlayers
-  ) {
+  if (playerCount < GAME_DEFAULTS.minPlayers || playerCount > GAME_DEFAULTS.maxPlayers) {
     return `This setup supports ${GAME_DEFAULTS.minPlayers}-${GAME_DEFAULTS.maxPlayers} players total.`;
   }
   if (playerCount < teamCount * MIN_PLAYERS_PER_TEAM) {
@@ -73,7 +49,7 @@ export const getHatGameSetupError = ({
 };
 
 const shuffledPacks = () =>
-  [...(namePacks as NamePack[])]
+  [...namePacks]
     .map((pack) => ({ pack, sort: Math.random() }))
     .sort((left, right) => left.sort - right.sort)
     .map(({ pack }) => pack);
@@ -85,7 +61,7 @@ export const buildDefaultSetup = (playerCount: number, teamCount: number) => {
   const teams: Team[] = Array.from({ length: safeTeamCount }, (_, index) => ({
     id: `team-${String.fromCharCode(97 + index)}`,
     name: packs[index]?.teamName ?? `Team ${index + 1}`,
-    score: 0
+    score: 0,
   }));
   const players: Player[] = Array.from({ length: safePlayerCount }, (_, index) => {
     const teamIndex = index % safeTeamCount;
@@ -177,10 +153,7 @@ export function addPlayerToHatTeam(
 
   const newPlayer: Player = {
     id: `player-${nextIdNum}`,
-    name:
-      packName ??
-      fallbackNames[nextIdNum % fallbackNames.length] ??
-      `Player ${nextIdNum}`,
+    name: packName ?? fallbackNames[nextIdNum % fallbackNames.length] ?? `Player ${nextIdNum}`,
     teamId,
     seat: players.length,
   };

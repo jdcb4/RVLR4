@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 
+import { AccessibleCountdownValue } from "@/components/game/AccessibleCountdownValue";
 import { viewerWhoWhatWhereTeamIsWinner } from "@/components/game/final-results/viewModel";
 import { TeamStandingsList } from "@/components/game/TeamStandingsList";
 import { Metric } from "@/components/Metric";
 import { PlayerAvatarBadge } from "@/components/PlayerAvatar";
+import type { WhoWhatWherePeerRole, WhoWhatWhereSyncDto } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
 import { getActiveContext, getSecondsLeft } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
@@ -11,13 +14,7 @@ import { FinalTurnRecapScreen } from "@/features/whowhatwhere/results/FinalTurnR
 import { ResultsScreen } from "@/features/whowhatwhere/results/ResultsScreen";
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
 import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
-import type { WhoWhatWherePeerRole, WhoWhatWhereSyncDto } from "@/multiplayer/roomTypes";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 function wwwOutcomeTone(match: MatchState, viewerPlayerId: string): "none" | "win" | "lose" {
   const hasResults =
@@ -174,7 +171,16 @@ export function GuessOrObserveTurn({
           name={context.describer.name}
         />
         <div className="mt-3 grid grid-cols-2 gap-3">
-          <Metric label="Time left" value={formatWhoWhatWhereTurnClock(secondsLeft)} />
+          <Metric
+            label="Time left"
+            value={
+              <AccessibleCountdownValue
+                countdownKey={activeTurn.startedAt}
+                formattedValue={formatWhoWhatWhereTurnClock(secondsLeft)}
+                secondsLeft={secondsLeft}
+              />
+            }
+          />
           <Metric label="Turn score" value={String(activeTurn.score)} />
           <Metric label="Category" value={activeTurn.category} />
         </div>

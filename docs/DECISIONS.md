@@ -141,15 +141,178 @@ case.
 
 **Rejected alternatives:**
 
-- *Canonical `HatGame*` everywhere* — would force renaming the wire-format
-  literal `"hat"` → `"hatGame"`, breaking the server↔client contract for
+- _Canonical `HatGame_`everywhere* — would force renaming the wire-format
+  literal`"hat"`→`"hatGame"`, breaking the server↔client contract for
   no clarity gain.
-- *Rename `Multiplayer*` → `MultiDevice*` in code* — touches `~11`
+- _Rename `Multiplayer_`→`MultiDevice*` in code* — touches `~11`
   symbols, `src/multiplayer/` folder, and the `MULTIPLAYER_DEBUG` env
   var; the wire-facing env var rename is deploy-affecting. No semantic
   gain.
-- *No `Singleplayer*` modifier, just bare names on the older side* — keeps
-  the existing asymmetry; agents reading `WhoWhatWhereSingleplayerApp` in isolation
+- _No `Singleplayer_`modifier, just bare names on the older side* — keeps
+  the existing asymmetry; agents reading`WhoWhatWhereSingleplayerApp` in isolation
   can't tell which mode they're in without opening the file.
 
 **Supersedes:** N/A — this is the first naming-conventions decision.
+
+---
+
+## 2026-08-09: Dev-to-main promotion pipeline
+
+**Decision:** Use `dev` as the GitHub default and integration branch, deploy it
+to Railway's `dev` environment, and deploy `main` only to Railway production
+after Joe reviews and explicitly approves a `dev` -> `main` promotion.
+
+**Reasoning:** Separating the continuously changing integration line from the
+production line provides a stable review target and makes the deployed branch
+for each Railway environment unambiguous. Running CI for both branches and for
+pull requests targeting either branch keeps the same deterministic gate at
+integration and promotion time.
+
+**Rejected alternatives:** Continuing to develop and deploy directly from
+`main` leaves no durable pre-production review line. Pointing both Railway
+environments at `main` makes the dev environment an exact duplicate rather
+than a promotion candidate.
+
+**Supersedes:** The previous implicit main-only working and deployment flow.
+
+---
+
+## 2026-08-09: Curated game content uses validated JSON
+
+**Decision:** Store shipped word, prompt, clue-suggestion, and generated-name
+content as game-owned JSON assets in `src/data`, parsed once by lightweight
+TypeScript loaders with Zod validation. Keep large assets dynamically loaded
+when they are not needed for initial rendering.
+
+**Reasoning:** The content is static, bundled, and small enough to load as
+files; separating it from executable TypeScript makes editing and validation
+explicit. Domain loaders provide readonly typed data to browser and server
+consumers, while the Who What Where loader preserves the existing lazy chunk.
+
+**Rejected alternatives:** Executable TypeScript arrays obscure the boundary
+between content and code. Raw JSON imports with type assertions provide no
+runtime integrity checks. SQLite adds browser/server integration, dependency,
+and query complexity without a persistence or indexing requirement.
+
+**Supersedes:** Generalizes the 2026-05-10 Imposter JSON decision to all
+curated static game content.
+
+---
+
+## 2026-08-09: Railway is the primary deployment path
+
+**Decision:** Deploy RVLRY from its GitHub repository to Railway using Railpack.
+Keep `railway.json` as the repository-owned build/start contract. Retain the
+manual portability recipe at `docker/Dockerfile`, outside Railway's root-level
+Dockerfile auto-detection, and invoke it only through `pnpm run docker:build`.
+
+**Reasoning:** GitHub branch deployments already provide the development and
+production promotion flow. Railway always auto-detects a root file named
+`Dockerfile`, even when config-as-code selects Railpack, so the manual recipe
+must live at a non-default path. This retains a portable image option without
+spending routine Railway compute on that recipe.
+
+**Rejected alternatives:** Removing Docker entirely would discard a useful
+self-hosting escape hatch. Keeping the recipe at the repository root makes
+Docker the effective Railway builder. Building or publishing images on every
+commit duplicates Railway's source-based build work.
+
+**Supersedes:** Earlier guidance that treated Docker and Railway as equal deploy
+targets or described Docker as the recommended self-hosted default.
+
+---
+
+## 2026-08-09: Helmet owns the production HTTP header baseline
+
+**Decision:** Use `helmet@8.3.0` on the Express server with an explicit
+same-origin SPA Content Security Policy; keep the policy enabled and tune its
+directives when a reviewed asset or connection requirement changes.
+
+**Reasoning:** Helmet provides a maintained baseline for CSP and related
+browser security headers with less bespoke middleware. The explicit policy
+permits the app's same-origin scripts, WebSocket connections, inline Tailwind
+styles, and data/blob images while disabling objects and framing.
+
+**Rejected alternatives:** Hand-maintaining every header duplicates a mature
+package and is easier to drift. Disabling CSP wholesale would give up the most
+useful browser-side control to avoid a small amount of configuration.
+
+**Supersedes:** The previous implicit reliance on browser and Express defaults.
+
+---
+
+## 2026-08-09: Istanbul is the coverage interchange format
+
+**Decision:** Use Vitest's Istanbul coverage adapter and emit text, HTML, and
+`coverage-final.json` reports. Apply glob-specific thresholds to security and
+viewer-projection modules and pass the JSON report directly to Fallow.
+
+**Reasoning:** Both Vitest adapters can enforce thresholds, but Fallow expects
+Istanbul source locations and counters. Using the matching adapter avoids a
+lossy source-map conversion step and keeps one deterministic artifact for local
+review and CI tooling.
+
+**Rejected alternatives:** V8 coverage generated valid Vitest reports but its
+negative source-map column offsets were rejected by Fallow's Istanbul reader.
+Maintaining a sanitizing conversion script would add an unnecessary second
+coverage format and could conceal mapping errors.
+
+**Supersedes:** The previous implicit use of Vitest's V8 coverage adapter.
+
+---
+
+## 2026-09-05: Cuelume replaces Tone and the Hat phase recordings
+
+**Decision:** Use `cuelume@0.2.2` through `src/services/gameSoundEffects.ts`
+for all eleven game cues. Keep game event names independent of library names;
+the complete mapping and playback contract are in [AUDIO.md](AUDIO.md).
+
+**Reasoning:** The app needs short feedback cues, not a music engine. The
+published MIT package has no runtime dependencies, generates sounds locally,
+and lazily shares one AudioContext. Its 47,845-byte unpacked package replaces
+Tone's substantially larger synthesis bundle and two recordings. Playback
+requires no CDN or media downloads. Visual instructions remain authoritative.
+
+**Rejected alternatives:** ReactSounds 1.0.30 offers a larger clip catalog, but
+adds Howler and either CDN delivery or a local asset-copy workflow. Neither
+benefits these eleven short cues enough to justify the extra moving parts.
+Both packages and their published implementations were inspected. Sources:
+[Cuelume docs](https://cuelume-site.pages.dev/docs/),
+[Cuelume source](https://github.com/Danilaa1/cuelume), and
+[ReactSounds source](https://github.com/e3ntity/react-sounds).
+
+**Supersedes:** The 2026-05-10 Tone.js decision and bundled Hat phase WAVs.
+
+---
+
+## 2026-09-05: One protocol boundary inside the repository
+
+**Decision:** Share room DTOs, replay state, acknowledgements, and schema-derived
+event inputs under `src/domain/multiplayer`. Move Imposter state types from its
+solo UI into the domain. Server handlers continue validating every request.
+
+**Reasoning:** Separate client/server declarations had already disagreed on a
+replay field. Correlated event/payload types now catch misspelled events, missing
+payloads, and payloads intended for another command during the normal typecheck.
+This removes repeated declarations without changing the in-memory architecture.
+
+**Rejected alternatives:** A package, code generator, universal game engine, or
+monorepo would add setup and maintenance work without serving another consumer.
+
+---
+
+## 2026-09-05: Reuse completed drawing galleries on opted-in connections
+
+**Decision:** Send completed packet arrays once per Socket.IO binding, then
+send their cache identity with ordinary replay/presence state. Negotiate this
+additive capability so older clients still receive complete snapshots.
+
+**Reasoning:** The dense eight-player probe produced 4.73 MB per viewer per
+broadcast. Navigation is already local, but replay votes and reconnects would
+otherwise retransmit unchanged drawings. A small merge boundary removes those
+repeat transfers and the duplicate selected packet. Rebinding recovers a missing
+cache. There is no persistence, compression dependency, or new service.
+
+**Rejected alternatives:** Binary drawing encoding, a media service, and a
+general delta-sync framework add substantially more complexity than this one
+immutable, measured payload warrants. The existing stroke renderer/export stays.

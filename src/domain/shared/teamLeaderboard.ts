@@ -14,9 +14,7 @@ export type LeaderboardRow = {
   score: number;
 };
 
-export function buildLeaderboardRowsFromTeams(
-  teams: readonly TeamScored[],
-): LeaderboardRow[] {
+export function buildLeaderboardRowsFromTeams(teams: readonly TeamScored[]): LeaderboardRow[] {
   return [...teams]
     .sort((left, right) => right.score - left.score)
     .map((team) => ({

@@ -26,18 +26,23 @@ pnpm run dev
 
 ## Common scripts
 
-| Script               | Purpose                                                    |
-| -------------------- | ---------------------------------------------------------- |
-| `pnpm run dev`       | Full multiplayer dev stack (Vite + Node).                |
-| `pnpm run start`     | Production Node server (run `pnpm run build` first).     |
-| `pnpm run typecheck` | TypeScript checking.                                       |
-| `pnpm run lint`      | ESLint.                                                    |
-| `pnpm test`          | Vitest once.                                               |
-| `pnpm run test:watch`| Vitest in watch mode.                                      |
-| `pnpm run build`     | Production client bundle (`dist/`).                       |
-| `pnpm run verify`    | Run typecheck, lint, test, and build (commit gate).        |
+| Script                  | Purpose                                              |
+| ----------------------- | ---------------------------------------------------- |
+| `pnpm run dev`          | Full multiplayer dev stack (Vite + Node).            |
+| `pnpm run start`        | Production Node server (run `pnpm run build` first). |
+| `pnpm run preview`      | Built client and multiplayer with local origins.     |
+| `pnpm run typecheck`    | TypeScript checking.                                 |
+| `pnpm run lint`         | ESLint.                                              |
+| `pnpm test`             | Vitest once.                                         |
+| `pnpm run test:watch`   | Vitest in watch mode.                                |
+| `pnpm run build`        | Production client bundle (`dist/`).                  |
+| `pnpm run verify`       | Run typecheck, lint, test, and build (commit gate).  |
+| `pnpm run docker:build` | Manually build the optional portability image.       |
 
-See `docs/PROJECT_INDEX.md` for the full list and `docs/DEPLOYMENT.md` for deploy instructions.
+The primary deployment path is GitHub-to-Railway using Railpack. Docker is an
+optional manual portability/self-hosting path and is not built during routine
+verification. See `docs/PROJECT_INDEX.md` for the full command list and
+`docs/DEPLOYMENT.md` for deploy instructions.
 
 ## Documentation
 

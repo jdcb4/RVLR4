@@ -1,29 +1,22 @@
-export type RoomEntrySession = {
-  readonly code: string;
-  readonly playerId: string;
-  readonly secret: string;
-};
+import { roomEntrySchema, type SessionCredentials } from "@/domain/multiplayer/sessionCredentials";
 
-type RoomEntryPayload = {
-  readonly code?: string;
-  readonly playerId?: string;
-  readonly secret?: string;
-  readonly error?: string;
-};
-
+export type RoomEntrySession = SessionCredentials;
 export async function readRoomEntrySession(
   response: Response,
   fallbackError: string,
 ): Promise<RoomEntrySession> {
-  const payload = (await response.json()) as RoomEntryPayload;
-
-  if (!response.ok || !payload.code || !payload.playerId || !payload.secret) {
-    throw new Error(payload.error ?? fallbackError);
+  const payload: unknown = await response.json().catch(() => null);
+  const parsed = roomEntrySchema.safeParse(payload);
+  if (!response.ok || !parsed.success) {
+    const error =
+      payload &&
+      typeof payload === "object" &&
+      "error" in payload &&
+      typeof payload.error === "string"
+        ? payload.error
+        : fallbackError;
+    throw new Error(error);
   }
-
-  return {
-    code: payload.code,
-    playerId: payload.playerId,
-    secret: payload.secret,
-  };
+  const { code, playerId, secret } = parsed.data;
+  return { code, playerId, secret };
 }

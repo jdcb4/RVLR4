@@ -95,11 +95,7 @@ function tokenMatches(name: string, tokens: readonly string[]): string[] {
   return [...hits];
 }
 
-function analyzeNode(
-  node: ts.Node,
-  file: string,
-  rows: Row[],
-): void {
+function analyzeNode(node: ts.Node, file: string, rows: Row[]): void {
   const tryEmit = (name: string, kind: string) => {
     const isComponent = /^[A-Z]/.test(name) && /tsx$/.test(file);
     const isHook = /^use[A-Z]/.test(name);
@@ -131,19 +127,19 @@ function analyzeNode(
         tryEmit(decl.name.text, "variable");
       }
     }
-  } else if (ts.isExportDeclaration(node) && node.exportClause && ts.isNamedExports(node.exportClause)) {
+  } else if (
+    ts.isExportDeclaration(node) &&
+    node.exportClause &&
+    ts.isNamedExports(node.exportClause)
+  ) {
     for (const spec of node.exportClause.elements) {
       tryEmit(spec.name.text, "re-export");
     }
   }
 }
 
-function hasExportModifier(
-  node: ts.Node & { modifiers?: ts.NodeArray<ts.ModifierLike> },
-): boolean {
-  return (node.modifiers ?? []).some(
-    (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword,
-  );
+function hasExportModifier(node: ts.Node & { modifiers?: ts.NodeArray<ts.ModifierLike> }): boolean {
+  return (node.modifiers ?? []).some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword);
 }
 
 function main() {
@@ -167,7 +163,9 @@ function main() {
     process.stdout.write(JSON.stringify(row) + "\n");
   }
 
-  process.stderr.write(`\n[audit-names] ${rows.length} exported symbols across ${TARGETS.join(", ")}\n`);
+  process.stderr.write(
+    `\n[audit-names] ${rows.length} exported symbols across ${TARGETS.join(", ")}\n`,
+  );
 }
 
 main();

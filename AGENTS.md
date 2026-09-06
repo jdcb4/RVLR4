@@ -7,7 +7,9 @@ This file holds the rules an agent must obey **on every turn**. Detailed referen
 ## Project shape
 
 - Preset: `client + server` (Vite React SPA + Express + Socket.IO)
-- Deploy targets: **Docker (recommended self-host)**, **Railway/Node platforms**, and optional static GitHub Pages (legacy)
+- Primary deploy target: **Railway from the GitHub repository using Railpack**.
+  Docker remains an optional manual portability/self-hosting path and is not
+  part of routine build, verification, or publishing work.
 - Stack defaults: TypeScript strict, pnpm, Vite, ESLint + Prettier, Vitest + RTL, Zod, Tailwind + shadcn-style components.
 - **Multiplayer state is in-memory on the Node process** (no database). A future database would need a `docs/DECISIONS.md` entry.
 - Auth: **do not implement auth** unless the user explicitly asks for it.
@@ -24,6 +26,27 @@ Before making changes:
 
 If docs are missing, stale, or inconsistent with the code, fix them as part of the change.
 
+Durable docs must describe the current system or an active future decision.
+When a one-shot audit or implementation plan is complete, move reusable rules
+to the relevant canonical doc, keep shipped history in `docs/CHANGELOG.md` and
+git, then delete the obsolete plan and repair inbound links.
+
+## Branch and promotion workflow
+
+- **`dev` is the default working and integration branch.** Start routine work
+  from an up-to-date `dev`. If a short-lived branch is useful, branch from
+  `dev` and merge it back into `dev`.
+- **Railway `dev` deploys `dev`.** Use that environment to validate the
+  integrated change before production promotion.
+- **`main` is the reviewed production branch.** Do not use `main` for routine
+  work and do not promote `dev` into `main` until Joe has reviewed the exact
+  candidate and explicitly approved the promotion.
+- Promote with a `dev` -> `main` pull request (or an explicitly requested
+  equivalent merge). Railway production deploys `main`.
+- If an emergency change is ever made directly on `main`, merge it back into
+  `dev` immediately so the integration branch does not lose the production
+  fix.
+
 ## Hard rules
 
 1. **No auth without explicit request.** If a task seems to need auth, surface that as a question rather than building it.
@@ -35,6 +58,14 @@ If docs are missing, stale, or inconsistent with the code, fix them as part of t
 7. **Do not commit secrets, build output, `node_modules`, or local env files.** See `.gitignore` and `SECURITY.md`.
 8. **Do not weaken or skip tests to make them pass.** Fix the underlying issue.
 9. **Local dev is Windows PowerShell.** When running shell commands locally use PowerShell syntax (no `&&`/`||` chains, env vars are `$env:NAME`, line continuation is backtick). CI and Docker run on Linux bash — that's fine, just don't conflate the two. Cheatsheet in `docs/AGENT_REFERENCE.md`.
+10. **Respect the branch promotion contract.** Routine work integrates into
+    `dev`; moving it to `main` requires Joe's explicit review and approval.
+11. **Treat Railway as the default deployment path.** Keep `railway.json`, the
+    GitHub source mappings, and `docs/DEPLOYMENT.md` aligned. Do not build or
+    publish Docker images unless a Docker-specific task is explicitly active.
+12. **Do not accumulate completed plan documents.** Canonical docs explain the
+    current system; `docs/ROADMAP.md` holds only future work; the changelog and
+    git history preserve completed implementation history.
 
 ## Deterministic checks before commit
 
@@ -53,7 +84,8 @@ For significant implementation changes, also run Fallow and consider its feedbac
 pnpm dlx fallow --no-cache --format human
 ```
 
-`docs/VERIFICATION.md` lists preset-specific extra checks (Docker build, deploy preview, etc.).
+`docs/VERIFICATION.md` lists preset-specific extra checks. Docker builds apply
+only to explicitly active Docker work, not routine Railway deployment changes.
 
 ## Documentation map
 

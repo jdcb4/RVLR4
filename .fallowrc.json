@@ -1,14 +1,18 @@
 {
   "$schema": "https://fallow.dev/schema.json",
   "entry": [
-    "src/**/*.{ts,tsx}",
+    "src/main.tsx",
+    "src/ui-gallery/main.tsx",
+    "server/index.ts",
     "src/**/*.test.{ts,tsx}",
+    "server/**/*.test.ts",
     "tests/**/*.{ts,tsx}",
-    "scripts/**/*.{ts,mjs,js}"
+    "scripts/**/*.{ts,mts,mjs,js}"
   ],
   "ignorePatterns": [
     "**/*.generated.*",
     "dist/**",
+    "dist-ui-gallery/**",
     "build/**",
     "coverage/**",
     ".turbo/**",

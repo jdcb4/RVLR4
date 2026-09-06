@@ -7,6 +7,7 @@ import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 import { clearActiveGameBookmark, readActiveGameBookmark } from "@/multiplayer/activeGameBookmark";
 import { gameKindLabel } from "@/multiplayer/gameKindLabel";
 import { loadSession } from "@/multiplayer/useRoomChannel";
+import { requestHttp } from "@/services/networkRequests";
 
 const games = [
   {
@@ -61,15 +62,22 @@ export function MultiplayerHomePage() {
     }
 
     let cancelled = false;
+    const controller = new AbortController();
 
     void (async () => {
       try {
-        const response = await fetch(`/api/rooms/${encodeURIComponent(bookmark.code)}`);
-        const data = (await response.json()) as {
-          exists?: boolean;
-          phase?: string;
-          resumeEligible?: boolean;
-        };
+        const { response, data } = await requestHttp(
+          `/api/rooms/${encodeURIComponent(bookmark.code)}`,
+          async (response) => ({
+            response,
+            data: (await response.json()) as {
+              exists?: boolean;
+              phase?: string;
+              resumeEligible?: boolean;
+            },
+          }),
+          { signal: controller.signal },
+        );
 
         if (cancelled) {
           return;
@@ -96,6 +104,7 @@ export function MultiplayerHomePage() {
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, []);
 
@@ -154,10 +163,13 @@ export function MultiplayerHomePage() {
               autoCapitalize="characters"
               autoComplete="off"
               className="rounded-xl border border-input bg-background px-3 py-2 text-typ-body-relaxed outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+              enterKeyHint="go"
               id="join-code"
               inputMode="text"
               maxLength={8}
               placeholder="Join code. e.g. ABC123"
+              spellCheck={false}
+              type="text"
               value={joinCode}
               onChange={(event) => setJoinCode(event.target.value)}
             />
@@ -180,7 +192,7 @@ export function MultiplayerHomePage() {
               return (
                 <li key={game.id}>
                   <button
-                    className="flex w-full gap-4 rounded-xl border border-border bg-background p-3 text-left shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="flex w-full gap-4 rounded-xl border border-border bg-background p-3 text-left shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring max-[319px]:flex-col"
                     type="button"
                     onClick={() =>
                       navigate(`/name?intent=host&game=${encodeURIComponent(game.id)}`)

@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
+import type { ReplaySync } from "@/domain/multiplayer/protocol";
+import type { ImposterSyncDto } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { MultiplayerGameShell } from "@/features/multiplayer/MultiplayerGameShell";
-import type { ImposterSyncDto } from "@/multiplayer/roomTypes";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 import { ImposterMultiplayerBody } from "./ImposterMultiplayerBody";
@@ -10,26 +12,19 @@ import {
   ImposterMultiplayerFooter,
 } from "./ImposterMultiplayerFooter";
 
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
-
 export function ImposterMultiplayerView({
   payload,
   viewerPlayerId,
   isHost,
   replaySync,
+  roomControls,
   emitWithAck,
 }: {
   readonly payload: ImposterSyncDto;
   readonly viewerPlayerId: string;
   readonly isHost: boolean;
-  readonly replaySync: {
-    readonly offerActive: boolean;
-    readonly acceptedIds: readonly string[];
-    readonly cancelledByDisconnect: boolean;
-  };
+  readonly replaySync: ReplaySync;
+  readonly roomControls?: ReactNode;
   readonly emitWithAck: EmitWithAck;
 }) {
   const step = payload.snapshot.step;
@@ -69,7 +64,7 @@ export function ImposterMultiplayerView({
   );
 
   return (
-    <MultiplayerGameShell footer={footer} title="Imposter">
+    <MultiplayerGameShell footer={footer} title="Imposter" headerRight={roomControls}>
       <ImposterMultiplayerBody
         error={error}
         isHost={isHost}

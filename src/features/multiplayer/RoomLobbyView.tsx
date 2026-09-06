@@ -3,16 +3,13 @@ import { GameShell } from "@/components/GameShell";
 import { IconCheck } from "@/components/icons";
 import { PlayerAvatar } from "@/components/PlayerAvatar";
 import { Button } from "@/components/ui/button";
+import type { LobbyDto, LobbyPlayerDto, RoomSyncPayload } from "@/domain/multiplayer/protocol";
+import type { EmitWithAck } from "@/domain/multiplayer/protocol";
 import { GameSpecificLobbySections } from "@/features/multiplayer/GameSpecificLobbySections";
 import { LobbyInviteSection, QrJoinDialog } from "@/features/multiplayer/LobbyInviteSection";
 import { LobbyTeamsSection } from "@/features/multiplayer/LobbyTeamsSection";
+import { RoomOptions } from "@/features/multiplayer/RoomOptions";
 import { cn } from "@/lib/utils";
-import type { LobbyDto, LobbyPlayerDto, RoomSyncPayload } from "@/multiplayer/roomTypes";
-
-type EmitWithAck = (
-  event: string,
-  body?: unknown,
-) => Promise<{ ok?: boolean; error?: string } | undefined>;
 
 export function RoomLobbyView({
   sync,
@@ -48,15 +45,18 @@ export function RoomLobbyView({
   const isHost = sync.you.isHost;
   const myId = sync.you.playerId;
   const isTeamGame = sync.gameKind === "whowhatwhere" || sync.gameKind === "hat";
+  const denseLobby = isTeamGame && lobby.players.length >= 6;
 
   return (
     <>
       <GameShell
+        headerRight={<RoomOptions sync={sync} connected={connected} emitWithAck={emitWithAck} />}
         footer={
           isHost ? (
             <div className="flex w-full flex-col gap-2">
               <SecondaryFooterButton
-                label="Start game (everyone must ready up)"
+                disabled={!connected || !lobby.startReadiness.canStart}
+                label="Start game"
                 onClick={() => {
                   void onStartGame();
                 }}
@@ -71,12 +71,13 @@ export function RoomLobbyView({
         }
         title="Lobby"
       >
-        <div className="flex flex-col gap-4 pb-6">
+        <div className={`flex flex-col ${denseLobby ? "gap-3 pb-4" : "gap-4 pb-6"}`}>
           <LobbyInviteSection
             canNativeShare={canNativeShare}
             code={sync.code}
             connected={connected}
             copiedToast={copiedToast}
+            compact={denseLobby}
             onCopyLink={onCopyLink}
             onOpenQrToast={onOpenQrToast}
             onShareLink={onShareLink}
@@ -97,12 +98,16 @@ export function RoomLobbyView({
             emitWithAck={emitWithAck}
             isHost={isHost}
             lobby={lobby}
-            myPlayerId={myId}
             sync={sync}
           />
 
+          {isHost ? <LobbyStartStatus connected={connected} lobby={lobby} /> : null}
+
           {startError ? (
-            <p className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-typ-ui text-destructive">
+            <p
+              role="alert"
+              className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-typ-ui text-destructive"
+            >
               {startError}
             </p>
           ) : null}
@@ -111,6 +116,33 @@ export function RoomLobbyView({
 
       {qrToastOpen ? <QrJoinDialog joinLink={joinLink} onClose={onCloseQrToast} /> : null}
     </>
+  );
+}
+
+function LobbyStartStatus({
+  connected,
+  lobby,
+}: {
+  readonly connected: boolean;
+  readonly lobby: LobbyDto;
+}) {
+  const messages = connected
+    ? lobby.startReadiness.blockers.map(({ message }) => message)
+    : ["Reconnecting before the game can start."];
+
+  return (
+    <section className="rounded-2xl border border-border bg-card p-4 shadow-sm" aria-live="polite">
+      <p className="text-typ-card-title font-semibold">Ready to start?</p>
+      {messages.length === 0 ? (
+        <p className="mt-2 text-typ-ui text-emerald-700">Everyone is ready.</p>
+      ) : (
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-typ-ui text-muted-foreground">
+          {messages.map((message) => (
+            <li key={message}>{message}</li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 

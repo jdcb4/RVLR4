@@ -9,11 +9,17 @@ import { Server } from "socket.io";
 import { startDrawNGuessTurnTicker } from "./drawnguessTicker.ts";
 import { loadServerEnv } from "./env.ts";
 import { startHatTurnTicker } from "./hatTicker.ts";
-import { registerHttpRoutes } from "./httpRoutes.ts";
+import { registerHealthRoute } from "./health.ts";
+import { handleJsonBodyError, registerHttpRoutes } from "./httpRoutes.ts";
 import { initMultiplayerDebug } from "./multiplayerDebug.ts";
+import { operationalLog, RateLimitReporter, startRateLimitReporter } from "./operationalLog.ts";
+import { createCorsOriginValidator } from "./originPolicy.ts";
+import { startRateLimiterSweeper, TokenBucketStore } from "./rateLimiter.ts";
 import { RoomStore } from "./roomStore.ts";
 import { startRoomIdleSweeper } from "./roomSweep.ts";
+import { createSecurityHeaders } from "./securityHeaders.ts";
 import { registerSocketHandlers } from "./socketHandlers.ts";
+import { APP_VERSION } from "./version.ts";
 import { startWhoWhatWhereTurnTicker } from "./whoWhatWhereTicker.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -21,41 +27,27 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const env = loadServerEnv(process.env);
 initMultiplayerDebug(env.MULTIPLAYER_DEBUG);
 const store = new RoomStore();
+const limiter = new TokenBucketStore();
+const rateLimitReporter = new RateLimitReporter();
+const isRailway = Boolean(process.env.RAILWAY_ENVIRONMENT_ID || process.env.RAILWAY_PROJECT_ID);
+const security = { limiter, isRailway, rateLimitReporter };
+startRateLimiterSweeper(limiter);
+startRateLimitReporter(rateLimitReporter);
 
 const app = express();
-app.use(express.json());
+app.disable("x-powered-by");
+app.use(
+  createSecurityHeaders(
+    env.CLIENT_ORIGINS.length > 0 &&
+      env.CLIENT_ORIGINS.every((origin) => origin.startsWith("https://")),
+  ),
+);
+app.use(express.json({ limit: "16kb" }));
+app.use(handleJsonBodyError);
 
 const allowedOrigins =
-  env.CLIENT_ORIGIN?.split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean) ?? [];
-
-/**
- * Pick the `origin` setting passed to `cors()` and Socket.IO.
- *
- * - Explicit `CLIENT_ORIGIN` → use that list (strict).
- * - Development without `CLIENT_ORIGIN` → allow Vite's dev server.
- * - Production without `CLIENT_ORIGIN` → allow-any (`true`) with a loud
- *   warning at boot. We used to fail-fast here (v0.14.4) but Railway-style
- *   deployments don't know their own public origin at container start, so
- *   refusing to boot just put the service in a crashloop. Operators can
- *   tighten by setting `CLIENT_ORIGIN` in their platform config; see
- *   `docs/DEPLOYMENT.md`.
- */
-const corsOrigin: string[] | boolean =
-  allowedOrigins.length > 0
-    ? allowedOrigins
-    : env.NODE_ENV === "development"
-      ? ["http://localhost:5173"]
-      : true;
-
-if (env.NODE_ENV === "production" && allowedOrigins.length === 0) {
-  console.warn(
-    "[server] CLIENT_ORIGIN is not set — accepting all browser origins. " +
-      "Set CLIENT_ORIGIN=https://your-host (comma-separated list allowed) " +
-      "to lock CORS down. See docs/DEPLOYMENT.md.",
-  );
-}
+  env.CLIENT_ORIGINS.length > 0 ? env.CLIENT_ORIGINS : ["http://localhost:5173"];
+const corsOrigin = createCorsOriginValidator(allowedOrigins);
 
 app.use(
   cors({
@@ -63,7 +55,9 @@ app.use(
   }),
 );
 
-registerHttpRoutes(app, store);
+const healthState = { shuttingDown: false };
+registerHealthRoute(app, healthState, APP_VERSION);
+registerHttpRoutes(app, store, security);
 
 const clientDist = path.resolve(__dirname, "../dist");
 
@@ -79,15 +73,44 @@ app.use((request, response) => {
   response.sendFile(path.join(clientDist, "index.html"));
 });
 
+app.use(
+  (
+    error: unknown,
+    _request: express.Request,
+    response: express.Response,
+    _next: express.NextFunction,
+  ) => {
+    if (error instanceof Error && error.message === "Origin is not allowed.") {
+      response.status(403).json({ error: "Origin is not allowed.", code: "INVALID_REQUEST" });
+
+      return;
+    }
+
+    operationalLog("error", "http_error", {
+      operation: "http.unhandled",
+      errorClass: error instanceof Error ? error.name : "UnknownError",
+    });
+    response.status(500).json({ error: "Internal server error.", code: "INTERNAL_ERROR" });
+  },
+);
+
 const server = http.createServer(app);
 
 const io = new Server(server, {
+  maxHttpBufferSize: 256 * 1_024,
   cors: {
     origin: corsOrigin,
   },
 });
 
-registerSocketHandlers(io, store);
+io.engine.on("connection_error", (error) => {
+  operationalLog("warn", "socket_connection_error", {
+    operation: "socket.handshake",
+    errorClass: error instanceof Error ? error.name : "ConnectionError",
+  });
+});
+
+registerSocketHandlers(io, store, security);
 startWhoWhatWhereTurnTicker(io, store);
 startHatTurnTicker(io, store);
 startDrawNGuessTurnTicker(io, store);
@@ -98,7 +121,7 @@ const port = env.PORT;
 // Bind to all interfaces (0.0.0.0) so Docker / Railway can route traffic to the container.
 // Listening only on localhost would make the service unreachable from outside the container.
 server.listen(port, "0.0.0.0", () => {
-  console.log(`Multiplayer server listening on 0.0.0.0:${port}`);
+  operationalLog("info", "server_started", { version: APP_VERSION, port });
   if (env.MULTIPLAYER_DEBUG) {
     console.log("[multiplayer] debug logging enabled (MULTIPLAYER_DEBUG)");
   }
@@ -115,8 +138,10 @@ function shutdown(signal: string) {
     return;
   }
   shuttingDown = true;
+  healthState.shuttingDown = true;
 
-  console.log(`[server] received ${signal}, shutting down`);
+  operationalLog("info", "server_shutdown", { signal, version: APP_VERSION });
+  rateLimitReporter.flush();
   io.emit("server:shuttingDown");
 
   // Give connected clients ~500ms to receive the event before closing.
@@ -130,7 +155,7 @@ function shutdown(signal: string) {
 
   // Hard exit if anything hangs past 5s.
   setTimeout(() => {
-    console.error("[server] shutdown timed out, forcing exit");
+    operationalLog("error", "server_shutdown_timeout", { operation: "shutdown" });
     process.exit(1);
   }, 5000).unref();
 }

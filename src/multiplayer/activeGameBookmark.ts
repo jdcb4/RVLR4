@@ -1,55 +1,21 @@
+import { z } from "zod";
+
+import { gameKindSchema, roomCodeSchema } from "@/domain/multiplayer/sessionCredentials";
+import { localGameStorage, readValidatedRecord } from "@/services/browserStorage";
+
 const STORAGE_KEY = "jd-multiplayer-active-game";
-
-/** Single saved row for “resume” on the home page while a match is still in progress. */
-export type ActiveGameBookmark = {
-  readonly code: string;
-  readonly gameKind: "whowhatwhere" | "hat" | "imposter" | "drawnguess";
-  /** ISO timestamp — set locally when we first see the room enter `playing`. */
-  readonly startedAtIso: string;
-};
-
+const bookmarkSchema = z.object({
+  code: roomCodeSchema,
+  gameKind: gameKindSchema,
+  startedAtIso: z.string().datetime({ offset: true }),
+});
+export type ActiveGameBookmark = z.infer<typeof bookmarkSchema>;
 export function writeActiveGameBookmark(entry: ActiveGameBookmark): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(entry));
-  } catch {
-    // private mode / quota — ignore
-  }
+  localGameStorage.write(STORAGE_KEY, JSON.stringify(entry));
 }
-
 export function readActiveGameBookmark(): ActiveGameBookmark | null {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return null;
-    }
-
-    const parsed = JSON.parse(raw) as Partial<ActiveGameBookmark>;
-
-    if (
-      typeof parsed.code !== "string" ||
-      (parsed.gameKind !== "whowhatwhere" &&
-        parsed.gameKind !== "hat" &&
-        parsed.gameKind !== "imposter" &&
-        parsed.gameKind !== "drawnguess") ||
-      typeof parsed.startedAtIso !== "string"
-    ) {
-      return null;
-    }
-
-    return {
-      code: parsed.code.toUpperCase(),
-      gameKind: parsed.gameKind,
-      startedAtIso: parsed.startedAtIso,
-    };
-  } catch {
-    return null;
-  }
+  return readValidatedRecord(STORAGE_KEY, bookmarkSchema);
 }
-
 export function clearActiveGameBookmark(): void {
-  try {
-    localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // ignore
-  }
+  localGameStorage.remove(STORAGE_KEY);
 }

@@ -17,6 +17,7 @@ import {
   submitPrompt,
   updateDrawingDraft,
   updateGuessDraft,
+  updatePromptDraft,
 } from "./engine";
 import type { DrawNGuessDrawing, DrawNGuessPlayer, DrawNGuessWordPrompt } from "./types";
 
@@ -60,6 +61,67 @@ const drawing: DrawNGuessDrawing = {
 };
 
 describe("DrawNGuess engine", () => {
+  it("copies changed paths without mutating prior drafts or completed drawing history", () => {
+    const original = createDrawNGuessMatch({
+      players: players.slice(0, 3),
+      wordSource: prompts,
+      now: 1000,
+    });
+    const draft = updateDrawingDraft(original, "p1", drawing, 1100);
+    expect(original.activeTurn!.submissions).toEqual({});
+    expect(draft.packets).toBe(original.packets);
+    const before = JSON.stringify(draft);
+    const next = updateDrawingDraft(draft, "p2", drawing, 1200);
+    expect(next.activeTurn!.submissions.p1).toBe(draft.activeTurn!.submissions.p1);
+    expect(JSON.stringify(draft)).toBe(before);
+    const advanced = advanceTurn(next, 1_000_000);
+    expect(next.packets.every((packet) => packet.entries.length === 1)).toBe(true);
+    expect(advanced.packets[0]?.entries[0]).toBe(next.packets[0]?.entries[0]);
+    expect(advanced.packets[0]?.entries[1]).toMatchObject({ drawing });
+  });
+  it("preserves draft whitespace but trims submitted and expired entries", () => {
+    let match = createDrawNGuessMatch({
+      players: players.slice(0, 3),
+      wordSource: prompts,
+      settings: createDefaultDrawNGuessSettings({ startingPromptMode: "custom" }),
+      now: 1_000,
+    });
+    match = updatePromptDraft(match, "p1", "Robot ", 1_100);
+    expect(getPrivatePlayerSnapshot(match, "p1").ownSubmission?.promptText).toBe("Robot ");
+    match = submitPrompt(match, "p1", "Robot chef ", 1_200);
+    expect(getPrivatePlayerSnapshot(match, "p1").ownSubmission?.promptText).toBe("Robot chef");
+    match = advanceTurn(match, 1_000_000);
+    match = advanceTurn(match, 2_000_000);
+    match = updateGuessDraft(match, "p1", "Robot ", 2_000_100);
+    expect(getPrivatePlayerSnapshot(match, "p1").ownSubmission?.guessText).toBe("Robot ");
+    match = advanceTurn(match, 3_000_000);
+    expect(JSON.stringify(match.packets)).toContain('"text":"Robot"');
+    expect(JSON.stringify(match.packets)).not.toContain('"text":"Robot "');
+  });
+  it("rejects drawings beyond the total point budget", () => {
+    const match = createDrawNGuessMatch({
+      players: players.slice(0, 3),
+      wordSource: prompts,
+      now: 1_000,
+    });
+    const oversized: DrawNGuessDrawing = {
+      format: "strokes-v1",
+      width: 512,
+      height: 512,
+      strokes: Array.from({ length: 4 }, (_, strokeIndex) => ({
+        id: `stroke-${strokeIndex}`,
+        color: "#111827",
+        size: 6,
+        tool: "pen" as const,
+        points: Array.from({ length: 1_501 }, () => ({ x: 0.5, y: 0.5 })),
+      })),
+    };
+
+    expect(() => updateDrawingDraft(match, "p1", oversized, 1_100)).toThrow(
+      /too many total points/,
+    );
+  });
+
   it("alternates turn modes and rotates packets across every player", () => {
     expect(getTurnMode(0)).toBe("drawing");
     expect(getTurnMode(1)).toBe("guessing");

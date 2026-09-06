@@ -1,16 +1,31 @@
 import { z } from "zod";
 
 import rawPrompts from "@/data/drawnguessWordPrompts.json";
+import { addDuplicateIssues, staticTextSchema } from "@/data/staticDataSchemas";
 
 import { DRAWNGUESS_DEFAULT_WORD_PACK_ID, type DrawNGuessWordPrompt } from "./types";
 
-const promptSchema = z.object({
-  phrase: z.string().min(1).max(80),
-  category: z.enum(["Kids", "Sports", "Standard"]),
-  difficulty: z.enum(["Easy", "Hard"]),
-});
+const promptSchema = z
+  .object({
+    phrase: staticTextSchema.max(80),
+    category: z.enum(["Kids", "Sports", "Standard"]),
+    difficulty: z.enum(["Easy", "Hard"]),
+  })
+  .strict();
 
-const promptListSchema = z.array(promptSchema);
+export const drawNGuessPromptListSchema = z
+  .array(promptSchema)
+  .min(1)
+  .superRefine((prompts, context) => {
+    addDuplicateIssues(
+      prompts,
+      (prompt) => `${prompt.category}:${prompt.difficulty}:${prompt.phrase}`,
+      context,
+      "category/difficulty/phrase combination",
+    );
+  });
+
+const prompts = drawNGuessPromptListSchema.parse(rawPrompts);
 
 export type DrawNGuessWordPack = {
   readonly id: string;
@@ -27,7 +42,5 @@ export function getDefaultDrawNGuessWordPack(): DrawNGuessWordPack {
 }
 
 export function loadDrawNGuessPrompts(): readonly DrawNGuessWordPrompt[] {
-  const parsed = promptListSchema.parse(rawPrompts);
-
-  return parsed.filter((prompt) => prompt.difficulty === "Easy");
+  return prompts.filter((prompt) => prompt.difficulty === "Easy");
 }

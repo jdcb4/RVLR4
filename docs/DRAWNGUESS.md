@@ -14,15 +14,15 @@ DrawNGuess is a production multiplayer game in RVLRY. It is a Telestrations-styl
 
 ## Main Files
 
-| Area | Files |
-| --- | --- |
-| Pure rules | `src/domain/drawnguess/engine.ts`, `src/domain/drawnguess/types.ts` |
-| Word packs | `src/domain/drawnguess/wordPacks.ts`, `src/data/drawnguessWordPrompts.json` |
-| Server runtime | `server/drawnguessRuntime.ts`, `server/drawnguessTicker.ts`, `server/drawnguessViews.ts` |
-| Socket wiring | `server/socketHandlers.ts`, `server/socketSchemas.ts`, `server/sync.ts` |
-| Production UI | `src/features/drawnguess/multiplayer/DrawNGuessMultiplayerView.tsx` |
-| Drawing UI | `src/features/drawnguess/multiplayer/DrawNGuessWhiteboard.tsx`, `src/features/drawnguess/multiplayer/DrawNGuessDrawingPreview.tsx` |
-| Avatars | `src/multiplayer/avatarCatalog.ts`, `src/components/PlayerAvatar.tsx`, `src/features/multiplayer/AvatarPicker.tsx`, `src/assets/avatars/` |
+| Area           | Files                                                                                                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Pure rules     | `src/domain/drawnguess/engine.ts`, `src/domain/drawnguess/types.ts`                                                                       |
+| Word packs     | `src/domain/drawnguess/wordPacks.ts`, `src/data/drawnguessWordPrompts.json`                                                               |
+| Server runtime | `server/drawnguessRuntime.ts`, `server/drawnguessTicker.ts`, `server/drawnguessViews.ts`                                                  |
+| Socket wiring  | `server/socketHandlers.ts`, `src/domain/multiplayer/socketSchemas.ts`, `server/sync.ts`                                                   |
+| Production UI  | `src/features/drawnguess/multiplayer/DrawNGuessMultiplayerView.tsx`                                                                       |
+| Drawing UI     | `src/features/drawnguess/multiplayer/DrawNGuessWhiteboard.tsx`, `src/features/drawnguess/multiplayer/DrawNGuessDrawingPreview.tsx`        |
+| Avatars        | `src/multiplayer/avatarCatalog.ts`, `src/components/PlayerAvatar.tsx`, `src/features/multiplayer/AvatarPicker.tsx`, `src/assets/avatars/` |
 
 ## Runtime Flow
 
@@ -35,6 +35,44 @@ DrawNGuess is a production multiplayer game in RVLRY. It is a Telestrations-styl
 7. Players can submit, wait, and edit before the deadline. The server stores drafts so timer expiry can preserve partial entries.
 8. Presentation starts when all books are complete. Each player controls their own book locally.
 9. Final gallery lets any player review and export any completed book.
+
+Each turn view initializes its draft from the server once. Later room broadcasts
+update progress but cannot overwrite that device's editor or cancel an edit.
+Draft text retains whitespace; explicit submission and timer expiry trim it.
+All six draft/submission requests from current clients include a `turnKey`
+(`turnIndex:turnMode:deadlineAt`), which the server checks before mutation. The
+field is optional only for compatibility with clients loaded before its addition.
+
+The editor enforces the server's 200-stroke, 2,000-points-per-stroke,
+6,000-total-point, and 192-KiB drawing limits. Coordinates round to three decimal
+places (at most 0.32px error at 640px width); repeated identical points are
+ignored. When a limit is reached, existing work stays submitable and a notice
+offers undo/clear. Active strokes finish at the client deadline.
+
+Drafts coalesce at a one-second interval with one request in flight and one
+latest pending value. Explicit submission cancels unsent drafts and waits for
+an in-flight draft before sending the final value. A turn change cancels queued
+work; actions are not replayed after a lost connection. Editing a submitted
+response immediately withdraws its submitted status. Private draft-only updates
+sync to the player's bound tabs; status changes still broadcast to all players.
+The engine copies changed paths and treats previously stored drawings as
+immutable, so adding a draft does not clone all prior books.
+
+Current clients opt into `galleryCache: "drawnguess-v1"` during session binding.
+The first completed gallery includes `packets` plus a unique `galleryId`;
+later replay/presence updates reuse that ID and omit unchanged packets. The
+client merges only a matching room, viewer, and gallery. If its cache is
+missing, it reconnects for full data. Every bind clears the per-socket marker.
+Older clients keep receiving full snapshots, including the legacy selected
+packet. Cache IDs use weak references to immutable packet arrays; sockets keep
+only an ID, so this does not retain old match data.
+
+Budget reference: eight valid 6,000-point drawings per drawing turn produced
+about 4.2 MB of completed books in the dense synthetic case. Keep a full gallery
+under 6.5 MB at the existing eight-player/192-KiB-per-drawing caps. Routine
+gallery progress/replay updates should remain under 4 KiB. Re-measure these
+budgets before raising player, point, or drawing-byte limits. This is a local
+engineering budget, not a measured Railway room-capacity or cost guarantee.
 
 ## Data And Settings
 
