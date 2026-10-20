@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RVLRY · Phone flow proposal</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #193c38;
+        --muted: #536763;
+        --teal: #12695c;
+        --soft: #e7f1ed;
+        --paper: #faf8f3;
+        --line: #bacbc3;
+        --amber: #825000;
+        --amber-bg: #fff2d8;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #eeeee7;
+        color: var(--ink);
+        font:
+          16px/1.45 "Segoe UI",
+          sans-serif;
+      }
+      button,
+      a {
+        touch-action: manipulation;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid #a44f19;
+        outline-offset: 3px;
+      }
+      ::selection {
+        background: #c2ded1;
+      }
+      header.intro {
+        max-width: 1240px;
+        margin: 40px auto 24px;
+        padding: 0 24px;
+      }
+      h1 {
+        font-size: 34px;
+        letter-spacing: -0.025em;
+        margin: 0 0 12px;
+      }
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      header.intro > p {
+        max-width: 75ch;
+        color: var(--muted);
+      }
+      nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 22px 0;
+      }
+      nav button {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--paper);
+        padding: 12px 16px;
+        min-height: 48px;
+      }
+      nav button[aria-pressed="true"] {
+        background: var(--ink);
+        color: white;
+        border-color: var(--ink);
+      }
+      .board {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 392px));
+        gap: 32px 24px;
+        max-width: 1240px;
+        margin: auto;
+        padding: 0 24px 48px;
+      }
+      .spec > h2 {
+        font-size: 20px;
+        margin-bottom: 6px;
+      }
+      .note {
+        color: var(--muted);
+        font-size: 15px;
+        min-height: 66px;
+        margin-bottom: 14px;
+      }
+      .phone {
+        background: var(--paper);
+        border: 1px solid #8eaaa0;
+        border-radius: 24px;
+        height: 804px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .top {
+        padding: 18px 20px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 15px;
+        font-weight: 650;
+        min-height: 64px;
+      }
+      .top span:last-child {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .progress {
+        padding: 8px 20px 16px;
+        border-bottom: 1px solid var(--line);
+      }
+      .rounds {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 9px;
+      }
+      .rounds span {
+        height: 5px;
+        background: #d5dfd9;
+        flex: 1;
+        border-radius: 2px;
+      }
+      .rounds .done {
+        background: #77998a;
+      }
+      .rounds .current {
+        background: var(--teal);
+        height: 7px;
+      }
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      .teams {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+      .team {
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        padding: 8px 5px;
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.35;
+      }
+      .team b {
+        display: block;
+        font-size: 14px;
+      }
+      .team.active {
+        background: var(--teal);
+        border-color: var(--teal);
+        color: white;
+      }
+      .team.complete {
+        background: #edf0eb;
+        color: #4c635a;
+      }
+      .body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        scrollbar-color: #9ab3a7 transparent;
+      }
+      .body h3 {
+        font-size: 29px;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+      .body p {
+        color: var(--muted);
+      }
+      .body .big {
+        font-size: 38px;
+        line-height: 1.12;
+        letter-spacing: -0.025em;
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .identity {
+        background: var(--soft);
+        border: 1px solid #98b7a8;
+        border-radius: 14px;
+        padding: 18px;
+      }
+      .identity strong {
+        font-size: 25px;
+        display: block;
+      }
+      .identity p {
+        color: #315e51;
+      }
+      .identity .role {
+        margin-top: 7px;
+      }
+      .next {
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+        font-size: 15px;
+      }
+      .next strong {
+        display: block;
+      }
+      .grow {
+        flex: 1;
+      }
+      .footer {
+        padding: 12px 20px 24px;
+        border-top: 1px solid var(--line);
+        background: var(--paper);
+        display: grid;
+        gap: 10px;
+      }
+      .btn {
+        border-radius: 13px;
+        min-height: 56px;
+        padding: 12px 14px;
+        border: 1px solid #809c90;
+        background: transparent;
+        color: var(--ink);
+        font-weight: 650;
+        text-align: center;
+        width: 100%;
+      }
+      .btn.primary {
+        background: var(--teal);
+        border-color: var(--teal);
+        color: white;
+      }
+      .btn.quiet {
+        border-color: transparent;
+        min-height: 48px;
+        font-weight: 500;
+      }
+      .btn.warn {
+        color: var(--amber);
+        background: var(--amber-bg);
+        border-color: #b38b49;
+      }
+      .btn:hover {
+        filter: brightness(0.96);
+      }
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1.35fr;
+        gap: 12px;
+      }
+      .actions .btn {
+        min-height: 76px;
+        font-size: 23px;
+      }
+      .clock {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .clock strong {
+        font-size: 32px;
+        font-variant-numeric: tabular-nums;
+      }
+      .clock span {
+        font-size: 16px;
+      }
+      .clue {
+        padding: 20px 12px;
+        border: 1px solid #87ac9a;
+        border-radius: 14px;
+        background: var(--soft);
+        text-align: center;
+        min-height: 145px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 8px;
+      }
+      .clue p {
+        color: #315e51;
+      }
+      .clue strong {
+        font-size: 35px;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+      .body .recent h3 {
+        font-size: 15px;
+        margin: 0 0 8px;
+      }
+      .wordrow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 1px solid #d6ded7;
+        padding: 9px 0;
+        font-size: 16px;
+      }
+      .wordrow span {
+        font-size: 13px;
+        color: var(--teal);
+      }
+      .wordrow.skipped span {
+        color: var(--amber);
+      }
+      button.wordrow {
+        background: var(--amber-bg);
+        border: 1px solid #c6a875;
+        border-radius: 9px;
+        padding: 11px;
+        width: 100%;
+        min-height: 48px;
+        text-align: left;
+        color: var(--ink);
+      }
+      .turn .body {
+        gap: 12px;
+        padding-top: 13px;
+      }
+      .turn .footer {
+        gap: 7px;
+      }
+      .minor {
+        font-size: 14px !important;
+      }
+      .scores {
+        display: grid;
+        gap: 0;
+      }
+      .scores > div {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .scores .ours {
+        font-weight: 700;
+        color: var(--teal);
+      }
+      .steps {
+        display: flex;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .steps b {
+        color: var(--teal);
+      }
+      .field {
+        padding: 14px;
+        border: 1px solid #91aa9d;
+        border-radius: 10px;
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        min-height: 52px;
+      }
+      .field small {
+        color: var(--muted);
+      }
+      .people {
+        display: grid;
+        gap: 10px;
+      }
+      .saved {
+        border: 1px solid #98b7a8;
+        border-radius: 14px;
+        padding: 18px;
+        background: var(--soft);
+      }
+      .saved h3 {
+        font-size: 24px;
+      }
+      .saved p {
+        margin-top: 10px;
+      }
+      .alternative {
+        max-width: 1192px;
+        margin: 0 auto 50px;
+        border-top: 1px solid var(--line);
+        padding: 28px 0;
+      }
+      .alternative p {
+        max-width: 75ch;
+        margin: 10px 0;
+        color: var(--muted);
+      }
+      .matrix {
+        display: grid;
+        grid-template-columns: 90px repeat(3, 1fr);
+        gap: 5px;
+        max-width: 550px;
+      }
+      .matrix span {
+        padding: 10px;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        font-size: 14px;
+      }
+      .matrix .active {
+        background: var(--teal);
+        color: white;
+      }
+      .matrix .done {
+        background: #dce8df;
+      }
+      .spec[hidden] {
+        display: none;
+      }
+      .board.single {
+        grid-template-columns: minmax(0, 392px);
+        justify-content: center;
+      }
+      .decision {
+        max-width: 1192px;
+        margin: 0 auto 32px;
+        padding: 0 24px;
+      }
+      dialog {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--paper);
+        color: var(--ink);
+        max-width: 360px;
+        padding: 24px;
+      }
+      dialog::backdrop {
+        background: #193c3870;
+      }
+      dialog h2 {
+        font-size: 24px;
+      }
+      dialog p {
+        margin: 12px 0 20px;
+      }
+      dialog .btn {
+        margin-top: 8px;
+      }
+      .feedback {
+        font-size: 14px;
+        color: var(--muted);
+        min-height: 22px;
+        margin-top: 8px;
+      }
+      @media (max-width: 1050px) {
+        .board {
+          grid-template-columns: repeat(2, minmax(0, 392px));
+          justify-content: center;
+        }
+        .alternative {
+          margin: 0 24px 32px;
+        }
+      }
+      @media (max-width: 650px) {
+        header.intro {
+          margin-top: 24px;
+          padding: 0 16px;
+        }
+        h1 {
+          font-size: 28px;
+        }
+        .board {
+          grid-template-columns: minmax(0, 412px);
+          padding: 0 12px 32px;
+          gap: 30px;
+        }
+        .phone {
+          height: 804px;
+          border-radius: 18px;
+        }
+        .note {
+          min-height: 0;
+        }
+        nav {
+          gap: 6px;
+        }
+        nav button {
+          padding: 10px;
+        }
+        .alternative {
+          margin: 0 16px 24px;
+        }
+        .matrix {
+          grid-template-columns: 65px repeat(3, 1fr);
+        }
+        .matrix span {
+          padding: 8px 3px;
+          font-size: 12px;
+        }
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        button {
+          transition: background-color 0.12s ease-out;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="intro">
+      <h1>A clearer turn, from pickup to pass-on.</h1>
+      <p>
+        RVLRY · Who What Where design proposal. Illustrative names, scores and words. This is a
+        clickable storyboard, not the game or a replacement APK. The warm background and teal
+        identity stay; roles, progress and reachable controls do more work.
+      </p>
+      <nav aria-label="Preview screens"></nav>
+      <p class="feedback" id="feedback" aria-live="polite">
+        Select a screen, or compare all eight below. Buttons move through the proposed flow.
+      </p>
+    </header>
+    <main class="board" id="board">
+      <section class="spec" data-name="Saved game">
+        <h2>1. Return or start fresh</h2>
+        <p class="note">
+          Make both paths available immediately. Resuming never starts the clock or exposes a clue.
+        </p>
+        <article class="phone">
+          <div class="top">RVLRY <span>Who What Where</span></div>
+          <div class="body">
+            <h3>Ready when you are.</h3>
+            <p>Your game is saved on this phone.</p>
+            <div class="saved">
+              <h3>Who What Where</h3>
+              <p><strong>Round 2 of 3 · Team 2 of 3</strong><br />Otters · Maya presenting</p>
+              <p>
+                Turn paused with <strong>24 seconds</strong> left.<br />Scores and words are saved.
+              </p>
+            </div>
+            <div class="grow"></div>
+            <p class="minor">
+              Starting fresh replaces this game only after you confirm. You can keep the same teams
+              and settings.
+            </p>
+          </div>
+          <div class="footer">
+            <button class="btn primary" data-go="6">Resume saved game</button
+            ><button class="btn" data-new>Start new game</button>
+          </div>
+        </article>
+      </section>
+      <section class="spec" data-name="Setup">
+        <h2>2. Prepare the group</h2>
+        <p class="note">
+          Setup has its own short sequence. Team order and who presents first are explicit before
+          play.
+        </p>
+        <article class="phone">
+          <div class="top">Who What Where <span>Setup</span></div>
+          <div class="progress">
+            <div class="steps">Settings <b>Teams</b> Review</div>
+          </div>
+          <div class="body">
+            <h3>Meet the Otters.</h3>
+            <p>Team 2 of 3 · plays after Foxes</p>
+            <div class="field"><strong>Otters</strong><small>Team name</small></div>
+            <div class="people">
+              <div class="field"><strong>Maya</strong><small>Presents first</small></div>
+              <div class="field"><strong>Sam</strong><small>Presents next round</small></div>
+            </div>
+            <p class="minor">
+              Presenter order follows this list. The other players on the team guess.
+            </p>
+            <button
+              class="btn"
+              data-demo="Add player would open an inline name field; keyboard-aware layout is part of implementation."
+            >
+              Add player
+            </button>
+            <div class="grow"></div>
+            <div class="next">
+              <strong>Next: set up Owls</strong>Then review all teams before starting.
+            </div>
+          </div>
+          <div class="footer">
+            <button class="btn primary" data-go="2">Preview handoff</button
+            ><button class="btn quiet" data-go="0">Save setup and leave</button>
+          </div>
+        </article>
+      </section>
+      <section class="spec" data-name="Handoff">
+        <h2>3. Pass the phone</h2>
+        <p class="note">
+          Name the recipient before anything else. One ownership acknowledgement, then an explicit
+          start.
+        </p>
+        <article class="phone">
+          <div class="top">Who What Where <span>Pass the phone</span></div>
+          <div class="progress" data-progress="active"></div>
+          <div class="body">
+            <h3>Pass to Maya.</h3>
+            <div class="identity">
+              <strong>Otters</strong>
+              <p class="role">Maya presents.<br />Sam guesses.</p>
+            </div>
+            <p>Everyone else: look away.<br />The next word stays hidden until Maya starts.</p>
+            <div class="grow"></div>
+            <div class="next"><strong>After this: Leo · Owls</strong>Final team of this round.</div>
+          </div>
+          <div class="footer">
+            <button class="btn primary" id="handoff">I’m Maya — ready</button
+            ><button class="btn quiet" data-go="6">Pause / save and leave</button>
+          </div>
+        </article>
+      </section>
+      <section class="spec" data-name="Playing">
+        <h2>4. Play within thumb reach</h2>
+        <p class="note">
+          The clue leads. Three recent words remain visible; Skip and Correct have large, separated
+          targets.
+        </p>
+        <article class="phone turn">
+          <div class="top">Otters · Maya presents <span>Sam guesses</span></div>
+          <div class="progress" data-progress="active"></div>
+          <div class="body">
+            <div class="clock">
+              <strong id="clock">0:24</strong><span><b id="score">4</b> correct this turn</span>
+            </div>
+            <div class="clue">
+              <p>What</p>
+              <strong id="clue">Hot-air balloon</strong>
+            </div>
+            <div class="recent">
+              <h3>Recent words · this turn</h3>
+              <div id="history">
+                <div class="wordrow">Telescope <span>Correct</span></div>
+                <button class="wordrow skipped" data-retry="Lighthouse">
+                  Lighthouse <span>Skipped · retry</span>
+                </button>
+                <div class="wordrow">Accordion <span>Correct</span></div>
+              </div>
+            </div>
+            <div class="grow"></div>
+          </div>
+          <div class="footer">
+            <div class="actions">
+              <button class="btn warn" id="skip">Skip</button
+              ><button class="btn primary" id="correct">Correct</button>
+            </div>
+            <button class="btn quiet" data-go="6">Pause turn</button>
+          </div>
+        </article>
+      </section>
+      <section class="spec" data-name="Turn recap">
+        <h2>5. Close this turn clearly</h2>
+        <p class="note">
+          Keep the finished team in focus until the phone is passed. Show the word list without a
+          hidden disclosure.
+        </p>
+        <article class="phone">
+          <div class="top">Who What Where <span>Turn finished</span></div>
+          <div class="progress" data-progress="recap"></div>
+          <div class="body">
+            <h3>Otters scored 5.</h3>
+            <p>Maya’s turn is finished.<br />Otters now have 12 points.</p>
+            <div class="recent">
+              <h3>This turn’s words</h3>
+              <div class="wordrow">Hot-air balloon <span>Correct</span></div>
+              <div class="wordrow">Telescope <span>Correct</span></div>
+              <div class="wordrow skipped">Lighthouse <span>Skipped</span></div>
+              <div class="wordrow">Accordion <span>Correct</span></div>
+              <div class="wordrow">Compass <span>Correct</span></div>
+              <div class="wordrow">Trampoline <span>Correct</span></div>
+            </div>
+            <div class="grow"></div>
+            <div class="next">
+              <strong>Next: Leo presents for Owls</strong>Team 3 of 3 · last turn of Round 2.
+            </div>
+          </div>
+          <div class="footer">
+            <button class="btn primary" data-go="2">Pass phone to Leo</button
+            ><button
+              class="btn quiet"
+              data-demo="The complete scoreboard would open here, keeping the recap in place."
+            >
+              View scores
+            </button>
+          </div>
+        </article>
+      </section>
+      <section class="spec" data-name="Round complete">
+        <h2>6. Mark the round boundary</h2>
+        <p class="note">
+          Use the same tracker with all teams complete. State who opens the next round and that
+          presenters rotate.
+        </p>
+        <article class="phone">
+          <div class="top">Who What Where <span>Round finished</span></div>
+          <div class="progress" data-progress="complete"></div>
+          <div class="body">
+            <h3>Round 2 complete.</h3>
+            <p>All three teams have played.</p>
+            <div class="scores">
+              <div><span>Foxes</span><strong>14</strong></div>
+              <div class="ours"><span>Otters</span><strong>12</strong></div>
+              <div><span>Owls</span><strong>11</strong></div>
+            </div>
+            <p class="minor">The last team’s full word recap comes before this screen.</p>
+            <div class="grow"></div>
+            <div class="identity">
+              <strong>Next: Round 3</strong>
+              <p class="role">Alex presents for Foxes.<br />Final round · Team 1 of 3</p>
+            </div>
+          </div>
+          <div class="footer">
+            <button class="btn primary" data-go="2">Pass phone to Alex</button
+            ><button class="btn quiet" data-go="6">Save and leave</button>
+          </div>
+        </article>
+      </section>
+      <section class="spec" data-name="Paused">
+        <h2>7. Pause without losing your place</h2>
+        <p class="note">
+          Hide the clue, preserve the same context, and make starting fresh possible from here too.
+        </p>
+        <article class="phone">
+          <div class="top">Who What Where <span>Paused</span></div>
+          <div class="progress" data-progress="active"></div>
+          <div class="body">
+            <h3>Take your time.</h3>
+            <p>The timer is paused. Your place is saved.</p>
+            <div class="identity">
+              <strong>Maya · Otters</strong>
+              <p class="role">24 seconds remaining<br />4 correct this turn</p>
+            </div>
+            <p>Give the phone back to Maya before resuming. The current word stays hidden here.</p>
+            <div class="grow"></div>
+            <div class="next">
+              <strong>Next: Leo · Owls</strong>One more team before Round 2 ends.
+            </div>
+          </div>
+          <div class="footer">
+            <button class="btn primary" data-go="3">Resume Maya’s turn</button
+            ><button class="btn" data-go="0">Save and leave</button
+            ><button class="btn quiet" data-new>Start new game</button>
+          </div>
+        </article>
+      </section>
+      <section class="spec" data-name="Final results">
+        <h2>8. Finish, then choose what’s next</h2>
+        <p class="note">
+          No “next team” at the end. Reuse the roster without carrying over scores or a resumable
+          completed match.
+        </p>
+        <article class="phone">
+          <div class="top">Who What Where <span>Game finished</span></div>
+          <div class="progress">
+            <div class="rounds">
+              <span class="done"></span><span class="done"></span><span class="done"></span>
+            </div>
+            <strong>3 of 3 rounds complete</strong>
+          </div>
+          <div class="body">
+            <h3>Foxes win.</h3>
+            <p>All teams have finished their final turn.</p>
+            <div class="scores">
+              <div class="ours"><span>1 · Foxes</span><strong>21</strong></div>
+              <div><span>2 · Otters</span><strong>19</strong></div>
+              <div><span>3 · Owls</span><strong>17</strong></div>
+            </div>
+            <div class="grow"></div>
+            <p>Another game with this group?<br />Keep the teams and review settings first.</p>
+          </div>
+          <div class="footer">
+            <button class="btn primary" data-go="1">Play again with these teams</button
+            ><button class="btn" data-go="0">Back to games</button>
+          </div>
+        </article>
+      </section>
+    </main>
+    <section class="alternative">
+      <h2>Recommended: a compact two-level tracker</h2>
+      <p>
+        The round segments show the whole game. The labeled team strip shows this round: complete,
+        current, next. Text and borders carry the meaning as well as color. The tracker is
+        informational; tapping it must never jump the game forward.
+      </p>
+      <p>
+        During play it stays quiet. At handoff and recap it expands into plain-language
+        instructions. Setup uses Settings → Teams → Review instead, because rounds have not started.
+      </p>
+      <h3>Alternative: show the whole game as a grid</h3>
+      <p>
+        This makes every turn visible, but takes more space from words and controls. I would put it
+        behind “Game progress,” rather than keep it on every screen.
+      </p>
+      <div class="matrix">
+        <span></span><span>Foxes</span><span>Otters</span><span>Owls</span><span>Round 1</span
+        ><span class="done">Done</span><span class="done">Done</span><span class="done">Done</span
+        ><span>Round 2</span><span class="done">Done</span><span class="active">Now · Maya</span
+        ><span>Next · Leo</span><span>Round 3</span><span>Alex</span><span>Sam</span
+        ><span>Nina</span>
+      </div>
+      <p>
+        Before implementation: decide how much history to keep visible, whether handoff needs the
+        two-step acknowledgement, and whether this tracker reads naturally at a glance. Long names,
+        four teams, optional hints, larger text and keyboard layouts need dedicated implementation
+        checks.
+      </p>
+    </section>
+    <dialog id="newgame">
+      <h2>Replace the saved game?</h2>
+      <p>
+        The current scores and turn will be removed. Keep your teams and settings to start again.
+      </p>
+      <button class="btn primary" id="confirmnew">Replace game and review setup</button
+      ><button class="btn" id="cancelnew">Keep saved game</button>
+    </dialog>
+    <script>
+      const specs = [...document.querySelectorAll(".spec")],
+        board = document.querySelector("#board"),
+        nav = document.querySelector("nav");
+      function show(index) {
+        specs.forEach((s, i) => (s.hidden = index !== -1 && i !== index));
+        board.classList.toggle("single", index !== -1);
+        [...nav.children].forEach((b, i) =>
+          b.setAttribute("aria-pressed", String(i === index + 1)),
+        );
+        document.querySelector("#feedback").textContent =
+          index === -1
+            ? "Compare the proposed screens below."
+            : `Preview: ${specs[index].dataset.name} · illustrative state, not saved gameplay`;
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
+      ["All screens", ...specs.map((s) => s.dataset.name)].forEach((name, i) => {
+        const b = document.createElement("button");
+        b.textContent = name;
+        b.setAttribute("aria-pressed", String(i === 0));
+        b.onclick = () => show(i - 1);
+        nav.append(b);
+      });
+      document.querySelectorAll("[data-progress]").forEach((el) => {
+        const mode = el.dataset.progress;
+        el.innerHTML = `<div class="rounds" aria-label="Round 2 of 3"><span class="done"></span><span class="current"></span><span></span></div><div class="progress-label"><strong>Round 2 of 3</strong><span>${mode === "complete" ? "All teams finished" : "Team 2 of 3"}</span></div><div class="teams"><div class="team complete"><b>Foxes</b>Complete</div><div class="team ${mode === "complete" ? "complete" : "active"}"><b>Otters</b>${mode === "recap" || mode === "complete" ? "Complete" : "Now · Maya"}</div><div class="team ${mode === "complete" ? "complete" : ""}"><b>Owls</b>${mode === "complete" ? "Complete" : "Next · Leo"}</div></div>`;
+      });
+      document.querySelectorAll("[data-go]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            show(Number(b.dataset.go));
+            if (b.textContent.includes("Leo") || b.textContent.includes("Alex"))
+              document.querySelector("#feedback").textContent =
+                "Storyboard note: the real handoff would show " +
+                (b.textContent.includes("Leo")
+                  ? "Leo / Owls, Team 3 of Round 2."
+                  : "Alex / Foxes, Team 1 of Round 3.") +
+                " The example handoff below shows Maya.";
+          }),
+      );
+      document
+        .querySelectorAll("[data-demo]")
+        .forEach(
+          (b) =>
+            (b.onclick = () => (document.querySelector("#feedback").textContent = b.dataset.demo)),
+        );
+      const dialog = document.querySelector("#newgame");
+      document
+        .querySelectorAll("[data-new]")
+        .forEach((b) => (b.onclick = () => dialog.showModal()));
+      document.querySelector("#cancelnew").onclick = () => dialog.close();
+      document.querySelector("#confirmnew").onclick = () => {
+        dialog.close();
+        show(1);
+      };
+      let ready = false;
+      document.querySelector("#handoff").onclick = (e) => {
+        if (ready) {
+          show(3);
+          return;
+        }
+        ready = true;
+        e.target.textContent = "Start my 45-second turn";
+        document.querySelector("#feedback").textContent =
+          "Phone ownership confirmed. A second deliberate tap starts the timer; no clue has been shown yet.";
+      };
+      let wordIndex = 0;
+      const words = ["Hot-air balloon", "Snow globe", "Roller coaster", "Binoculars"];
+      function mark(correct) {
+        const clue = document.querySelector("#clue"),
+          row = document.createElement(correct ? "div" : "button");
+        row.className = "wordrow" + (correct ? "" : " skipped");
+        row.append(document.createTextNode(clue.textContent));
+        const label = document.createElement("span");
+        label.textContent = correct ? "Correct" : "Skipped · retry";
+        row.append(label);
+        if (!correct)
+          row.onclick = () => {
+            clue.textContent = row.firstChild.textContent;
+            row.remove();
+          };
+        const history = document.querySelector("#history");
+        history.prepend(row);
+        while (history.children.length > 3) history.lastChild.remove();
+        if (correct)
+          document.querySelector("#score").textContent =
+            Number(document.querySelector("#score").textContent) + 1;
+        clue.textContent = words[++wordIndex % words.length];
+      }
+      document.querySelector("#correct").onclick = () => mark(true);
+      document.querySelector("#skip").onclick = () => mark(false);
+      document.querySelectorAll("[data-retry]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            document.querySelector("#clue").textContent = b.dataset.retry;
+            b.remove();
+          }),
+      );
+    </script>
+  </body>
+</html>

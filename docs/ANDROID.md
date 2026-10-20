@@ -87,8 +87,9 @@ last short draft interval or return a small amount of countdown time.
   game settings → Team 1 roster, with enabled controls and no storage error.
 - Browser checks at 412 × 915 and 360 × 640 covered setup restoration, paused
   countdown recovery, retained scores/current word and bounded play-screen layout.
-- Emulator checks use Android 15/API 35 with WebView 124. Pixel 10 testing and
-  APK-over-APK upgrade testing remain the acceptance checkpoint above.
+- Emulator checks use Android 15/API 35 with WebView 124. Joe subsequently tested
+  the prototype on his Pixel 10 and reported no recovery issues across closes
+  and force-closes. APK-over-APK upgrade testing remains unverified.
 - Fallow ran and was reviewed; it was not clean (26 dead-code findings and
   54 health thresholds). Most dead code belongs to retained legacy routes;
   native runtime dependencies are not recognized by its JavaScript graph.
@@ -97,3 +98,29 @@ last short draft interval or return a small amount of countdown time.
 
 The handoff artifact is `out/RVLRY-0.25.0-prototype.apk`, with a companion SHA-256
 file. These local build artifacts are intentionally excluded from git.
+
+## Phone UX review
+
+Joe's first phone feedback confirms interruption recovery but identifies substantial
+UX work: thumb reach, visible word history, explicit current/next participants,
+round/team position, stronger grouping and hierarchy, and starting a new game
+without first resuming the saved one.
+
+The [clickable phone storyboard](design/phone-flow-proposal.html) is a design
+proposal, not shipped behavior. It preserves the existing warm/teal identity and
+explores a consistent round/team tracker, larger bottom actions, visible recent
+words, full turn recaps, explicit handoffs and direct resume/new-game choices.
+Illustrative content and limited interactions are labeled in the artifact.
+The tracker is informational; it must not navigate the game state.
+
+The existing rules give every team one turn per round and rotate that team's
+presenter on its next turn. A recap must retain the completed turn's identity even
+after the domain has advanced to the next team. Round boundaries and the final
+turn must be presented separately. The resume/new-game choice must be reachable
+before restoration sends the user straight to the paused screen. Replacing a
+save requires confirmation; resumable state must remain intact until the new
+state is durably committed.
+
+This proposal focuses on Who What Where. Hat Game and Imposter need separate
+role/privacy and phase reviews before adapting the same visual principles;
+their flows must not inherit Who What Where's team/round assumptions.
