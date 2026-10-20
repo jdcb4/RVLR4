@@ -8,7 +8,19 @@ import prettier from "eslint-config-prettier";
 
 export default tseslint.config(
   {
-    ignores: ["dist", "build", "coverage", ".claude", ".turbo", ".wrangler", "**/*.generated.*"],
+    ignores: [
+      "dist",
+      "build",
+      "coverage",
+      ".claude",
+      ".turbo",
+      ".wrangler",
+      "**/*.generated.*",
+      "android/**/build/**",
+      "android/**/.gradle/**",
+      "android/app/src/main/assets/**",
+      "android/capacitor-cordova-android-plugins/**",
+    ],
   },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],

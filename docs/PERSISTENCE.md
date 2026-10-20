@@ -1,5 +1,32 @@
 # Browser persistence
 
+## Android prototype
+
+Who What Where uses a separate complete session snapshot through
+`nativeSnapshotStore.ts`, not the historical browser keys below. The snapshot
+includes setup position, names/settings, exact match state and timer remaining.
+The native `RvlryDevice` plugin stores current and previous checkpoints in SQLite.
+Writes, reads and clears share an ordered queue. Successful native writes
+acknowledge only after committing the transaction.
+
+Loads validate the record before enabling writes; corrupt current data can
+recover from a valid previous checkpoint. Unsupported versions are retained and
+reported rather than silently discarded. Failed writes surface retry UI.
+The web preview stores both checkpoints in one localStorage item; it is a
+development adapter and cannot establish native durability.
+
+Cold restoration is paused and concealed. Draft changes are briefly debounced;
+confirmed transitions save promptly and active timer progress is checkpointed.
+Android may terminate without a final callback, so recovery uses the latest
+durable checkpoint. Clearing application data/uninstalling removes local saves.
+Native backups are disabled in the prototype to avoid restoring private rounds
+unexpectedly. No automatic import of the original website's saves is performed.
+
+Hat and Imposter's historical browser flows below are not exposed in the
+prototype. Their conversion follows the Pixel 10 checkpoint.
+
+## Historical web storage
+
 Multiplayer rooms live only in server RAM. Browser session credentials identify
 a seat; they are not a backup of the room and cannot survive server room loss.
 The `sessionCredentials` schema is shared by socket binding, HTTP entry parsing,

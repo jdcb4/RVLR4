@@ -2,23 +2,24 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 
-import { MultiplayerHomePage } from "@/features/multiplayer/MultiplayerHomePage";
+import { PassNPlayHubPage } from "@/features/passnplay/PassNPlayHubPage";
 
-describe("MultiplayerHomePage", () => {
-  it("lists join + host entry points", () => {
+describe("Android prototype home", () => {
+  it("offers the converted game and clearly identifies the next games", () => {
     render(
       <MemoryRouter>
-        <MultiplayerHomePage />
+        <PassNPlayHubPage />
       </MemoryRouter>,
     );
     expect(screen.getByRole("heading", { name: /RVLRY/i })).toBeInTheDocument();
-    expect(screen.getByText(/Multi-Device mode/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Multi-Device mode/i)).not.toBeInTheDocument();
     expect(screen.getByText(/Who What Where/i)).toBeInTheDocument();
-    expect(screen.getByText(/Hat Game/i)).toBeInTheDocument();
-    expect(screen.getByText(/Imposter/i)).toBeInTheDocument();
-    const joinCode = screen.getByPlaceholderText(/Join code/i);
-    expect(joinCode).toHaveAttribute("enterkeyhint", "go");
-    expect(joinCode).toHaveAttribute("autocapitalize", "characters");
-    expect(joinCode).toHaveAttribute("spellcheck", "false");
+    expect(screen.getByText("Hat Game")).toBeInTheDocument();
+    expect(screen.getByText("Imposter")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Who What Where/ })).toHaveAttribute(
+      "href",
+      "/games/whowhatwhere",
+    );
+    expect(screen.getByRole("button", { name: /Check for new words/ })).toBeDisabled();
   });
 });

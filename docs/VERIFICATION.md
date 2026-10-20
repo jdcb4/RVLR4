@@ -1,5 +1,18 @@
 # Verification
 
+## Android prototype
+
+The integrated TypeScript checks below still include retained historical web
+source. Additionally run `pnpm android:build`, `pnpm android:test` and
+`pnpm android:test-device` for changes to the native host/save bridge.
+`docs/ANDROID.md` defines the Pixel 10 manual acceptance checklist.
+Browser storage/lifecycle tests cannot establish real Android persistence.
+No Railway or multiplayer two-browser QA is required for Android-only changes
+that leave the historical server unchanged.
+
+The APK contains only reachable Android routes; Hat and Imposter conversion,
+word updates and release signing are later milestones in the active plan.
+
 Run these deterministic checks before commit:
 
 ```bash

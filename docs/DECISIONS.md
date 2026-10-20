@@ -316,3 +316,17 @@ cache. There is no persistence, compression dependency, or new service.
 **Rejected alternatives:** Binary drawing encoding, a media service, and a
 general delta-sync framework add substantially more complexity than this one
 immutable, measured payload warrants. The existing stroke renderer/export stays.
+
+## 2026-10-20: Standalone offline Android prototype
+
+Use Capacitor 8 with React/Vite for the accepted Android conversion. Add exact
+@capacitor/core, android, cli and app dependencies. The first acceptance gate is
+Who What Where on Joe's Pixel 10; Hat/Imposter conversion follows that gate.
+Keep the original Git remote untouched and do not deploy this branch to Railway.
+
+Use a narrow local Android plugin with platform SQLite transactions for game
+snapshots, plus keep-awake and privacy window flags. This avoids a third-party
+SQLite plugin dependency while preserving a small, testable current/previous
+snapshot API. Native writes acknowledge after commit; browser previews use a
+separate localStorage adapter and are not evidence of native durability.
+This local database stores offline saves, not multiplayer sessions.

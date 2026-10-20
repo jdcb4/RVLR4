@@ -10,6 +10,7 @@
     "scripts/**/*.{ts,mts,mjs,js}"
   ],
   "ignorePatterns": [
+    "android/**",
     "**/*.generated.*",
     "dist/**",
     "dist-ui-gallery/**",

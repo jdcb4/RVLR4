@@ -21,12 +21,9 @@ describe("app routes", () => {
   });
 
   it.each([
+    ["/", "RVLRY"],
     ["/passnplay", "RVLRY"],
-    ["/name?intent=host&game=hat", "Your name"],
-    ["/room/ABC123", "Session unavailable"],
     ["/games/whowhatwhere", "Who What Where"],
-    ["/games/hat", "Hat Game"],
-    ["/games/imposter", "Imposter"],
   ])("lazy-loads %s on direct navigation", async (path, heading) => {
     const memoryRouter = createMemoryRouter(appRoutes, { initialEntries: [path] });
     render(<RouterProvider router={memoryRouter} />);
@@ -35,17 +32,14 @@ describe("app routes", () => {
     expect(await screen.findByRole("heading", { level: 1, name: heading })).toBeInTheDocument();
   });
 
-  it("uses a name-oriented mobile keyboard on room entry", async () => {
+  it("does not expose the old networked room entry", async () => {
     const memoryRouter = createMemoryRouter(appRoutes, {
       initialEntries: ["/name?intent=host&game=hat"],
     });
     render(<RouterProvider router={memoryRouter} />);
     await act(() => vi.dynamicImportSettled());
 
-    const nameInput = await screen.findByLabelText("Display name");
-    expect(nameInput).toHaveAttribute("autocomplete", "nickname");
-    expect(nameInput).toHaveAttribute("autocapitalize", "words");
-    expect(nameInput).toHaveAttribute("enterkeyhint", "go");
+    expect(await screen.findByRole("heading", { name: "Page not found" })).toBeInTheDocument();
   });
 
   it("provides a home link for unknown routes", async () => {

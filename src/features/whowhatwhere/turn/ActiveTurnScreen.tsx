@@ -10,12 +10,14 @@ import { Button } from "@/components/ui/button";
 import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
 import { getActiveContext, getCurrentWord, getSecondsLeft } from "@/domain/whowhatwhere/game";
 import type { MatchState } from "@/domain/whowhatwhere/types";
+import { WhoWhatWhereDeviceTurn } from "@/features/whowhatwhere/turn/WhoWhatWhereDeviceTurn";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 
 export function ActiveTurnScreen({
   match,
   onReturnSkipped,
   onRevealHint,
+  secondsRemaining,
 }: {
   readonly match: MatchState;
   readonly onReturnSkipped: (skippedWordId: string) => void;
@@ -24,6 +26,8 @@ export function ActiveTurnScreen({
    * enabled can omit it; when omitted the hint button is hidden entirely.
    */
   readonly onRevealHint?: () => void;
+  /** The local Android session supplies its monotonic clock; multiplayer keeps its server deadline. */
+  readonly secondsRemaining?: number;
 }) {
   const [, setTick] = useState(0);
   const activeTurn = match.activeTurn!;
@@ -39,6 +43,7 @@ export function ActiveTurnScreen({
   const hintButtonDisabled = hintsRemaining <= 0 || hintRevealed || !currentWord;
 
   useEffect(() => {
+    if (secondsRemaining !== undefined) return undefined;
     const interval = window.setInterval(() => {
       setTick((tick) => tick + 1);
 
@@ -55,7 +60,18 @@ export function ActiveTurnScreen({
     }, 250);
 
     return () => window.clearInterval(interval);
-  }, [activeTurn]);
+  }, [activeTurn, secondsRemaining]);
+
+  if (secondsRemaining !== undefined) {
+    return (
+      <WhoWhatWhereDeviceTurn
+        match={match}
+        secondsRemaining={secondsRemaining}
+        onReturnSkipped={onReturnSkipped}
+        {...(onRevealHint ? { onRevealHint } : {})}
+      />
+    );
+  }
 
   return (
     <section className="flex flex-1 flex-col gap-5 pb-4">

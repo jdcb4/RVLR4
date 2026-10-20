@@ -1,6 +1,6 @@
 {
-  "name": "jd-multiplayer-games",
-  "version": "0.24.12",
+  "name": "rvlry-android",
+  "version": "0.25.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.12.0",
@@ -8,12 +8,12 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "dev": "concurrently -k \"pnpm run dev:client\" \"pnpm run dev:server\"",
+    "dev": "vite",
     "dev:client": "vite",
     "dev:server": "tsx watch --tsconfig server/tsconfig.json server/index.ts",
     "ui-gallery": "vite --config vite.ui-gallery.config.ts",
     "build": "tsc -b && vite build",
-    "preview": "tsx --tsconfig server/tsconfig.json scripts/preview.mts",
+    "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit && tsc -p server/tsconfig.json --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -26,9 +26,16 @@
     "smoke:server-imports": "tsx --tsconfig server/tsconfig.json scripts/smoke-server-imports.ts",
     "audit:names": "tsx scripts/audit-names.mts",
     "fallow:hygiene": "pnpm dlx fallow --no-cache --format human --only dead-code,dupes",
-    "docker:build": "tsx scripts/build-docker.mts"
+    "docker:build": "tsx scripts/build-docker.mts",
+    "android:build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1",
+    "android:sync": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task Sync",
+    "android:test": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task Test",
+    "android:test-device": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task DeviceTest"
   },
   "dependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.5.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
@@ -47,6 +54,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@capacitor/cli": "8.5.3",
     "@eslint/js": "^10.0.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.3",
@@ -59,7 +67,6 @@
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/coverage-istanbul": "^3.2.7",
     "autoprefixer": "^10.5.5",
-    "concurrently": "^9.2.4",
     "eslint": "^10.10.0",
     "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-jsx-a11y": "^6.10.2",

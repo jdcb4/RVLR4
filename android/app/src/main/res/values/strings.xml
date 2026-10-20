@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">RVLRY</string>
+    <string name="title_activity_main">RVLRY</string>
+    <string name="package_name">au.joed.rvlry</string>
+    <string name="custom_url_scheme">au.joed.rvlry</string>
+</resources>

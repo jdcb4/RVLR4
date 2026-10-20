@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.25.0 — Android device-test prototype
+
+- Add a bundled offline Capacitor Android app (`au.joed.rvlry`) and repeatable
+  APK/native-test commands.
+- Make Who What Where the first converted game; mark Hat Game and Imposter as
+  upcoming. Remove multiplayer routes from the app entry point.
+- Add ordered, validated native SQLite current/previous snapshots with
+  transaction acknowledgements, failure reporting, and recovery.
+- Persist Who What Where setup position and game state, pause on interruption,
+  require explicit resume, and checkpoint remaining turn time.
+- Add native Back handling, active-play keep-awake and private task previews.
+- Adapt the phone shell and controls; include an explicitly unconfigured
+  word-update entry pending the later content-update milestone.
+- Retain historical web source/tests for the staged conversion. No original
+  Railway deployment or Git remote changes.
+
 ## 0.24.12
 
 - Support 280px viewports without the body's former 320px minimum. Stack

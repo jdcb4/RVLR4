@@ -1,88 +1,68 @@
 import { Link } from "react-router-dom";
 
 import { IconDisguise, IconQuestionMark, IconTopHat } from "@/components/icons";
-import { LandingAttribution } from "@/components/LandingAttribution";
-import { ModeSwitchCard } from "@/components/ModeSwitchCard";
 
-const games = [
-  {
-    id: "whowhatwhere",
-    title: "Who What Where",
-    description:
-      "Teams race to describe mystery words across What, Who, and Where categories before the timer runs out.",
-    to: "/games/whowhatwhere",
-    icon: IconQuestionMark,
-  },
-  {
-    id: "hat",
-    title: "Hat Game",
-    description: "Celebrity-style clues in three phases using your own figure list.",
-    to: "/games/hat",
-    icon: IconTopHat,
-  },
-  {
-    id: "imposter",
-    title: "Imposter",
-    description: "Hidden roles and one secret word - pass the phone for private reveals.",
-    to: "/games/imposter",
-    icon: IconDisguise,
-  },
-] as const;
+import packageJson from "../../../package.json";
 
-/** Pass-and-Play hub — pick a game when you have one phone to share around the table. */
+/** The first Android device-test build intentionally exposes one converted game. */
 export function PassNPlayHubPage() {
   return (
-    <div className="min-h-dvh bg-background text-foreground">
-      <div className="safe-screen mx-auto w-full max-w-md pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
-        <header className="py-6 text-center">
-          <h1 className="text-typ-display font-bold tracking-tight text-primary">RVLRY</h1>
-          <p className="mx-auto mt-2 max-w-prose text-typ-body-relaxed text-muted-foreground">
-            <span className="font-semibold text-foreground">Pass-and-Play mode</span> — share a
-            phone
-          </p>
-        </header>
-
-        <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-          <h2 className="text-typ-card-title font-semibold">Pick a game</h2>
-          <p className="mt-1 text-typ-ui-snug text-muted-foreground">
-            Hand the device around the table — no codes, no second devices needed.
-          </p>
-          <ul className="mt-3 grid gap-3">
-            {games.map((game) => {
-              const Icon = game.icon;
-
-              return (
-                <li key={game.id}>
-                  <Link
-                    className="flex gap-4 rounded-xl border border-border bg-background p-3 shadow-sm transition-colors hover:border-semantic-primary-border hover:bg-semantic-accent-hover-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring max-[319px]:flex-col"
-                    to={game.to}
-                  >
-                    <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-semantic-primary-well-bg text-primary">
-                      <Icon className="size-6" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-typ-card-title font-semibold">{game.title}</h3>
-                      <p className="mt-0.5 text-typ-ui-snug text-muted-foreground">
-                        {game.description}
-                      </p>
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-
-        <ModeSwitchCard
-          ariaLabel="Switch to Multi-Device mode"
-          description="Host on one phone and let everyone join with a short code from their own device."
-          eyebrow="Everyone has a phone?"
-          title="Use Multi-Device mode"
-          to="/"
-        />
-
-        <LandingAttribution />
-      </div>
-    </div>
+    <main className="safe-screen mx-auto flex min-h-dvh w-full max-w-md flex-col gap-7 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(2rem,env(safe-area-inset-top))]">
+      <header>
+        <h1 className="text-typ-display font-bold tracking-tight text-primary">RVLRY</h1>
+        <p className="mt-2 text-typ-body text-muted-foreground">One phone. Everyone plays.</p>
+      </header>
+      <section aria-labelledby="pick-game">
+        <h2 id="pick-game" className="mb-3 text-typ-panel-title font-semibold">
+          Pick a game
+        </h2>
+        <Link
+          className="flex flex-col gap-4 rounded-2xl bg-primary p-5 text-primary-foreground transition-colors hover:bg-semantic-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+          to="/games/whowhatwhere"
+        >
+          <IconQuestionMark className="size-9" />
+          <div>
+            <h3 className="text-typ-section-title font-bold">Who What Where</h3>
+            <p className="mt-2 text-typ-body">Describe the word. Beat the timer. Pass the phone.</p>
+          </div>
+          <span className="text-typ-body font-semibold">Play or resume →</span>
+        </Link>
+      </section>
+      <section aria-labelledby="next-games">
+        <h2 id="next-games" className="text-typ-card-title font-semibold">
+          Coming next
+        </h2>
+        <p className="mt-1 text-typ-ui text-muted-foreground">
+          Hat Game and Imposter follow after this phone test.
+        </p>
+        <ul className="mt-2 divide-y divide-border">
+          <li className="flex items-center gap-3 py-4">
+            <IconTopHat className="size-6" />
+            <span>Hat Game</span>
+          </li>
+          <li className="flex items-center gap-3 py-4">
+            <IconDisguise className="size-6" />
+            <span>Imposter</span>
+          </li>
+        </ul>
+      </section>
+      <details className="mt-auto rounded-xl border border-border p-4">
+        <summary className="min-h-12 cursor-pointer content-center font-semibold">
+          Settings &amp; app info
+        </summary>
+        <div className="space-y-3 pt-3 text-typ-ui text-muted-foreground">
+          <p>Android prototype · {packageJson.version}</p>
+          <p>Words are included on your phone. No internet connection is needed to play.</p>
+          <button
+            type="button"
+            disabled
+            className="min-h-12 w-full rounded-md border border-border px-3 text-left"
+          >
+            Check for new words — not configured yet
+          </button>
+          <p>A word-update source will be added before the friends-testing release.</p>
+        </div>
+      </details>
+    </main>
   );
 }

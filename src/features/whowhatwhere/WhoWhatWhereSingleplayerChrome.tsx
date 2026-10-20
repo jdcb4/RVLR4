@@ -11,7 +11,7 @@ import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
 import { TeamSetupScreen } from "@/features/whowhatwhere/setup/TeamSetupScreen";
 import { WhoWhatWhereReviewTeamsScreen } from "@/features/whowhatwhere/setup/WhoWhatWhereReviewTeamsScreen";
 import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
-import { ReadyScreen } from "@/features/whowhatwhere/turn/ReadyScreen";
+import { WhoWhatWhereDeviceReady } from "@/features/whowhatwhere/turn/WhoWhatWhereDeviceReady";
 import type { WhoWhatWhereSingleplayerController } from "@/features/whowhatwhere/useWhoWhatWhereSingleplayerApp";
 import { WhoWhatWhereLandingScreen } from "@/features/whowhatwhere/WhoWhatWhereLandingScreen";
 
@@ -26,6 +26,48 @@ export function WhoWhatWhereFooter({
   readonly game: WhoWhatWhereSingleplayerController;
   readonly onPickAnotherGame: () => void;
 }) {
+  if (game.loaded === false) return null;
+  if (game.storageError) {
+    if (game.hydrationFailed && game.confirmDiscardPending) {
+      return (
+        <FooterStack>
+          <SecondaryFooterButton
+            label="Cancel"
+            onClick={() => game.setConfirmDiscardPending(false)}
+          />
+          <PrimaryFooterButton
+            label="Discard saved game"
+            onClick={() => void game.discardUnavailableSave()}
+          />
+        </FooterStack>
+      );
+    }
+    return (
+      <FooterStack>
+        <PrimaryFooterButton
+          label={game.hydrationFailed ? "Retry loading" : "Retry saving"}
+          onClick={() => void game.retrySave()}
+        />
+        {game.hydrationFailed ? (
+          <SecondaryFooterButton
+            label="Discard saved game"
+            onClick={() => game.setConfirmDiscardPending(true)}
+          />
+        ) : null}
+      </FooterStack>
+    );
+  }
+  if (game.paused) {
+    return (
+      <FooterStack>
+        <PrimaryFooterButton
+          label={game.match?.stage === "turn" ? "Resume turn" : "Continue"}
+          onClick={() => void game.resumeGame()}
+        />
+        <SecondaryFooterButton label="Save and leave" onClick={onPickAnotherGame} />
+      </FooterStack>
+    );
+  }
   if (game.activeMode === "landing") {
     return (
       <LandingFooter
@@ -73,7 +115,7 @@ export function WhoWhatWhereFooter({
 
   if (game.activeMode === "turn" && game.match?.activeTurn) {
     return (
-      <FooterStack>
+      <div className="grid w-full grid-cols-2 gap-3">
         <SecondaryFooterButton
           disabled={!canQueueSkipped(game.match.activeTurn)}
           icon={<IconSkipForward className="size-5" />}
@@ -85,7 +127,7 @@ export function WhoWhatWhereFooter({
           label="Correct"
           onClick={game.correct}
         />
-      </FooterStack>
+      </div>
     );
   }
 
@@ -180,6 +222,54 @@ export function WhoWhatWhereModeContent({
 }: {
   readonly game: WhoWhatWhereSingleplayerController;
 }) {
+  if (game.loaded === false) {
+    return (
+      <p role="status" className="text-typ-body text-muted-foreground">
+        Loading saved game…
+      </p>
+    );
+  }
+  if (game.storageError || game.paused) {
+    return (
+      <section className="flex min-h-full flex-col justify-center gap-4 py-6">
+        <h2 className="text-typ-section-title font-semibold">
+          {game.hydrationFailed
+            ? "Saved game unavailable"
+            : game.storageError
+              ? "Progress needs saving"
+              : "Game paused"}
+        </h2>
+        {game.storageError ? (
+          <div role="alert" className="space-y-2 text-typ-body">
+            <p>
+              {game.hydrationFailed
+                ? game.confirmDiscardPending
+                  ? "Discard this saved game? This permanently removes its setup and progress from this phone."
+                  : "Your saved game has been kept. Retry loading it, or deliberately discard it to start again."
+                : "Your latest changes are still in memory. Retry saving before continuing."}
+            </p>
+            <p className="text-typ-ui text-destructive">{game.storageError}</p>
+          </div>
+        ) : (
+          <p className="text-typ-body text-muted-foreground">
+            {game.match?.stage === "turn"
+              ? `Pass to ${getActiveContext(game.match).describer.name}. Resume when only they can see the screen.`
+              : "Continue when everyone is ready. Your setup and game are kept on this phone."}
+          </p>
+        )}
+        {game.match?.stage === "turn" ? (
+          <p className="text-typ-body font-semibold tabular-nums">
+            {game.secondsRemaining} seconds remaining
+          </p>
+        ) : null}
+        {game.storageNotice ? (
+          <p role="status" className="text-typ-ui text-muted-foreground">
+            {game.storageNotice}
+          </p>
+        ) : null}
+      </section>
+    );
+  }
   if (game.activeMode === "landing") {
     return (
       <WhoWhatWhereLandingScreen
@@ -217,7 +307,7 @@ export function WhoWhatWhereModeContent({
 
   if (game.activeMode === "ready") {
     return (
-      <ReadyScreen
+      <WhoWhatWhereDeviceReady
         key={`${game.match.roundNumber}-${game.match.teamIndex}`}
         error={game.turnError}
         handoffRevealed={game.readyHandoffRevealed}
@@ -230,6 +320,7 @@ export function WhoWhatWhereModeContent({
     return (
       <ActiveTurnScreen
         match={game.match}
+        secondsRemaining={game.secondsRemaining}
         onRevealHint={game.revealHint}
         onReturnSkipped={game.returnSkipped}
       />

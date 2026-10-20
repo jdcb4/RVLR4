@@ -1,5 +1,25 @@
 # Architecture — RVLRY
 
+## Android prototype (0.25.0)
+
+The production entry point in this checkout now opens the offline game picker.
+Only Who What Where is enabled until the Pixel 10 checkpoint. Capacitor bundles
+the Vite output; native builds use hash routing, with no server or remote web URL.
+The retained multiplayer source below is historical and is not imported by the
+app router. Its eventual removal follows the staged conversion.
+
+`nativeSnapshotStore` serializes per-game operations and validates complete
+snapshots. `RvlryDevice` commits current/previous records in a native SQLite
+transaction. The browser preview uses a separate localStorage pair. App/DOM
+lifecycle events are deduplicated; active turns pause on interruption, checkpoint
+remaining time, and require explicit resume. Native Back first dispatches a
+cancelable `rvlry:back` event for the game to save/pause before navigation.
+
+See [Android build/test instructions](ANDROID.md) and the active
+[implementation plan](ANDROID_IMPLEMENTATION_PLAN.md).
+
+## Historical web architecture
+
 Browser save boundaries and supported migrations are documented in
 [PERSISTENCE.md](PERSISTENCE.md). Game-owned controllers consume validated
 snapshots; the storage service contains failures and provides a tab-local

@@ -15,11 +15,13 @@ export function GameShell({
   headerRight,
   children,
   footer,
+  onHome,
 }: {
   title: string;
   headerRight?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
+  onHome?: () => void;
 }) {
   const visualViewportHeight = useVisualViewportHeight();
 
@@ -29,12 +31,18 @@ export function GameShell({
       data-visual-viewport={visualViewportHeight === null ? "unavailable" : "active"}
       style={visualViewportHeight === null ? undefined : { height: `${visualViewportHeight}px` }}
     >
-      <div className="safe-screen mx-auto flex h-full w-full max-w-md flex-col pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
+      <div className="safe-screen mx-auto flex h-full w-full max-w-md flex-col pb-[env(safe-area-inset-bottom)] pt-[max(0.5rem,env(safe-area-inset-top))]">
         <header className="flex items-center justify-between gap-2 border-b border-semantic-border-muted py-3">
           <Link
             aria-label="Back to game picker"
-            className="flex size-10 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-accent"
+            className="flex size-12 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-accent"
             to="/"
+            onClick={(event) => {
+              if (onHome) {
+                event.preventDefault();
+                onHome();
+              }
+            }}
           >
             <IconHouse className="size-5" />
           </Link>
@@ -51,7 +59,7 @@ export function GameShell({
         </main>
 
         {footer ? (
-          <footer className="z-20 shrink-0 border-t border-border bg-semantic-surface-elevated py-3 backdrop-blur supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <footer className="z-20 shrink-0 border-t border-border bg-semantic-surface-elevated py-3">
             {footer}
           </footer>
         ) : null}

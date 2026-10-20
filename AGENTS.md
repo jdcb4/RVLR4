@@ -1,4 +1,28 @@
-# Agent Instructions — JD Multiplayer Games
+# Agent Instructions — RVLRY Android
+
+## Active Android conversion
+
+Joe approved a standalone offline Android project in this checkout. This
+section supersedes the original web deployment/branch guidance below for
+the Android conversion.
+
+- Work on `android-prototype`; do not push to the original web app's `dev`
+  or `main`, run Railway deployment, or merge into those branches.
+- First delivery is Who What Where with native durability and phone testing.
+  Hat/Imposter follow the Pixel 10 checkpoint in `docs/ANDROID_IMPLEMENTATION_PLAN.md`.
+- React/Vite/Capacitor is the current runtime. Native SQLite snapshots store
+  local game state; there is no runtime multiplayer server.
+- Legacy multiplayer source is temporarily retained for regression/reference
+  but must not be imported by Android routes.
+- Keep dependencies/architecture in `docs/DECISIONS.md`, preserve tests,
+  and bump app/native versions together for behaviour changes. Commit each bump
+  with the code and changelog. Do not commit APKs, generated web assets or keys.
+- GPT-6.1-Sol high subagents are authorized for bounded work. The coordinator
+  owns shared contracts, integration, manifests/lockfiles and final review.
+- Read `docs/ANDROID.md` for native builds/tests; browser-only checks do not
+  establish Android durability.
+
+## Historical web-project guidance
 
 This project began as a pass-and-play hub; it is now a **Vite + Express + Socket.IO** multiplayer app. Legacy pass-and-play routes still live under `/legacy` and `/games/*` for the solo flow.
 
