@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "rvlry-recess-materials",
+  "producer": "rvlry-android",
+  "revision": 1,
+  "title": "RVLRY: Recess beyond colour and type",
+  "summary": "Compare three interactive treatments with rotation, shadows, stickers and irregular paper shapes. The app is unchanged.",
+  "format": "markdown",
+  "context_ref": "codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/recess-materials",
+  "tags": ["rvlry", "android", "design-review"],
+  "body": "Three isolated Recess mockups explore how much physical character to add. These are proposals; none has been incorporated into the app.\n\nOpen JNAS → Media → DropBox → RVLRY-recess-materials → index.html, or extract RVLRY-recess-materials.zip and open index.html. The entire folder works offline. Kestrel collects your feedback; interactive mockups open separately.\n\n| Direction | Treatment |\n| --- | --- |\n| A · Sticker Stack | Restrained rotation, layered stickers and crisp offset shadows. |\n| B · Cut-Paper Playground | More expressive, irregular rounded paper surfaces and dimensional controls. |\n| C · Craft-Table Collage | The boldest torn/scissor-cut silhouettes and assembled collage details. |\n\nCompare the same picker, handoff, play and results screens. Try Correct, Skip, returning skipped words, Hint and Pause to feel the press states. Sample data is illustrative; no game progress is saved. Text, timers and action controls stay level during play, with decoration concentrated in their backing shapes.\n\nMy starting recommendation is B for menus and handoffs, with the quieter treatment during play. You can also mix individual details. Similar material treatments could later give Pub Trivia ticket edges, Margin Note folded paper/highlighter details, and Observatory engraved corners and metallic layers. Those other theme changes are not included in this implementation.\n\nAnswers are stored in Kestrel and reviewed when this work resumes; submitting does not automatically start an agent or update the app.",
+  "questions": [
+    {
+      "id": "direction",
+      "kind": "single_choice",
+      "label": "Which direction should we develop?",
+      "options": [
+        "A · Sticker Stack",
+        "B · Cut-Paper Playground",
+        "C · Craft-Table Collage",
+        "Mix details / discuss first",
+        "Keep the current app styling"
+      ]
+    },
+    {
+      "id": "details",
+      "kind": "text",
+      "label": "Which shapes, rotations, shadows or press effects should we keep or change? Should menus be more expressive than active play?",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#fff9eb" />
+    <title>RVLRY · Recess material studies</title>
+    <link rel="stylesheet" href="materials.css" />
+    <script src="materials.js" defer></script>
+  </head>
+  <body>
+    <main class="review">
+      <header class="review-header">
+        <div>
+          <h1>Recess, off the grid.</h1>
+          <p>Three ways to give RVLRY a little more paper, personality and play.</p>
+        </div>
+        <span class="prototype-label">Interactive material studies</span>
+      </header>
+      <div class="review-controls">
+        <nav class="screen-tabs" aria-label="Preview screen">
+          <button data-screen="picker">Picker</button><button data-screen="handoff">Handoff</button
+          ><button data-screen="play" aria-current="page">Play</button
+          ><button data-screen="results">Results</button>
+        </nav>
+        <button class="reset" id="reset">Reset demos</button>
+      </div>
+      <nav class="direction-tabs" aria-label="Material direction">
+        <button data-direction="a">A · Sticker stack</button
+        ><button data-direction="b" aria-current="true">B · Cut-paper</button
+        ><button data-direction="c">C · Collage</button>
+      </nav>
+      <section class="studies" aria-label="Recess directions">
+        <article class="study" data-study="a">
+          <header class="study-heading">
+            <span class="direction-letter">A</span>
+            <div>
+              <h2>Sticker stack</h2>
+              <p>Just enough mischief.</p>
+            </div>
+          </header>
+          <div class="phone variant-a" data-phone="a" aria-label="Sticker stack prototype"></div>
+          <p class="study-note">
+            A measured first step: slight rotation, sticker rims and short shadows. Familiar
+            rectangles keep the game calm; most character lives on the picker and handoff.
+          </p>
+        </article>
+        <article class="study recommended" data-study="b">
+          <header class="study-heading">
+            <span class="direction-letter">B</span>
+            <div>
+              <h2>Cut-paper playground</h2>
+              <p>The sweet spot.</p>
+            </div>
+            <span class="recommendation">Recommended</span>
+          </header>
+          <div
+            class="phone variant-b"
+            data-phone="b"
+            aria-label="Cut-paper playground prototype"
+          ></div>
+          <p class="study-note">
+            Asymmetric corners, overlapping sheets and a bigger shadow step. Enough shape to feel
+            made by hand, with straight text and steady controls during a timed turn.
+          </p>
+        </article>
+        <article class="study" data-study="c">
+          <header class="study-heading">
+            <span class="direction-letter">C</span>
+            <div>
+              <h2>Craft-table collage</h2>
+              <p>Turn the personality up.</p>
+            </div>
+          </header>
+          <div
+            class="phone variant-c"
+            data-phone="c"
+            aria-label="Craft-table collage prototype"
+          ></div>
+          <p class="study-note">
+            Scissor-cut edges, taped paper and a looser composition. The most distinctive option;
+            extra edges add visual activity, especially around lists and small controls.
+          </p>
+        </article>
+      </section>
+      <footer class="review-notes">
+        <p>
+          <strong>Try the material:</strong> switch screens above, press Correct or Skip, reveal a
+          hint, tap a skipped word to bring it back, then pause and resume. Each phone is
+          independent.
+        </p>
+        <p>
+          Illustrative Who What Where data. This is a design review, not the app: no saves, scoring
+          rules or native behaviour are being changed. The sample clock starts when you begin or
+          resume a turn. Other game tiles open a preview cover.
+        </p>
+        <p>
+          One shared compact layout across all three studies. Play text stays level; expressive
+          angles sit on decorative layers. Correct keeps two thirds of the bottom action row, Skip
+          one third. All assets are bundled for offline review.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
