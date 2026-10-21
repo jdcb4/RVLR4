@@ -24,7 +24,7 @@ export default defineConfig({
     ],
     coverage: {
       provider: "istanbul",
-      include: ["server/**/*.ts", "src/**/*.{ts,tsx}"],
+      include: ["src/**/*.{ts,tsx}"],
       exclude: [
         "**/*.test.{ts,tsx}",
         "**/*.d.ts",
@@ -35,21 +35,6 @@ export default defineConfig({
         "server/index.ts",
       ],
       reporter: ["text", "html", "json"],
-      thresholds: {
-        "{server/{sync,whoWhatWhereViews,hatViews,imposterViews,drawnguessViews,drawnguessGallery},src/multiplayer/mergeRoomSync}.ts":
-          {
-            lines: 95,
-            statements: 95,
-            functions: 100,
-            branches: 90,
-          },
-        "{server/{boundarySchemas,secrets,rateLimiter},src/domain/multiplayer/socketSchemas}.ts": {
-          lines: 100,
-          statements: 100,
-          functions: 100,
-          branches: 90,
-        },
-      },
     },
   },
 });

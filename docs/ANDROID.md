@@ -6,8 +6,7 @@
 Imposter, remote word installation and friend-release signing follow the Pixel
 checkpoint. The picker has separate Settings and Info icon buttons. Settings truthfully
 indicates no update source is configured.
-Historical multiplayer code remains in the checkout but is unreachable from the
-Android router and absent from its production route chunks.
+Historical multiplayer and Draw & Guess code were retired in 0.26.5; the original implementation remains in git history.
 
 ## Toolchain
 
@@ -265,3 +264,10 @@ maintenance work, not a clean gate.
 
 Artifact: out/RVLRY-0.26.4-prototype.apk, copied and checksum-verified to
 JNAS Media/DropBox. SHA-256: 450AA77131CAFE1A43A9C0C2D2297E1A3B17818AF65A7CC382507E1451D5771E.
+
+## Foundation cleanup — 22 October 2026
+
+0.26.5 / versionCode 7 passes pnpm run verify (181 tests / 37 files), Android assembly, all eight native device tests and both separate force-stop checkpoint phases. Retired tests covered removed multiplayer/Draw & Guess code; surviving game and native regression checks are preserved. Shared roster presentation, controller subscription and clock helpers retain WWW v1 saves. Fallow remains non-clean and includes conversion files still in progress; final integration will recheck it.
+
+APK: out/RVLRY-0.26.5-cleanup.apk, copied and hash-verified to JNAS Media/DropBox. SHA-256: 5F90C4A22E3FD94890CDFDBDBD5D01AAF5AFE4782527F216110AAED45556D3C4.
+

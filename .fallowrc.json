@@ -3,9 +3,7 @@
   "entry": [
     "src/main.tsx",
     "src/ui-gallery/main.tsx",
-    "server/index.ts",
     "src/**/*.test.{ts,tsx}",
-    "server/**/*.test.ts",
     "tests/**/*.{ts,tsx}",
     "scripts/**/*.{ts,mts,mjs,js}"
   ],

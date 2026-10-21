@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.26.5 — Android foundation cleanup
+
+- Removed unreachable multiplayer server/client, Draw & Guess and web deployment tooling after auditing imports. Retained shared avatars, game rules, word data and their regression tests.
+- Shared controller subscription and monotonic turn-clock helpers preserve Who What Where version-1 saves.
+- CI now targets android-prototype; obsolete server-only coverage targets were retired with their source.
+
+
 ## 0.26.4 — Setup navigation and concise turn recaps
 
 - Move team Back actions below Save team and name their destinations.

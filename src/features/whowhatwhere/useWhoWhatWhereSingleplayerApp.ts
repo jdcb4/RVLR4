@@ -1,19 +1,17 @@
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 
+import { useDeviceController } from "@/features/game-app-hooks/useDeviceController";
 import { useFooterActionLockOnKeyChange } from "@/features/game-app-hooks/useFooterActionLockOnKeyChange";
 import { WhoWhatWhereDeviceController } from "@/features/whowhatwhere/whoWhatWhereDeviceController";
 import type { WhoWhatWhereAppMode } from "@/features/whowhatwhere/whoWhatWhereSingleplayerTransitions";
 import type { PersistedMatch } from "@/services/whowhatwherePersistence";
 
 export function useWhoWhatWhereSingleplayerApp() {
-  const [controller] = useState(() => new WhoWhatWhereDeviceController());
-  const view = useSyncExternalStore(controller.subscribe, controller.getSnapshot);
+  const { controller, view } = useDeviceController(() => new WhoWhatWhereDeviceController());
   const [confirmDiscardPending, setConfirmDiscardPending] = useState(false);
   const { session } = view;
   const { match } = session;
   const activeMode: WhoWhatWhereAppMode = match?.stage ?? session.mode;
-
-  useEffect(() => controller.mount(), [controller]);
 
   const actionLock = useFooterActionLockOnKeyChange(
     [

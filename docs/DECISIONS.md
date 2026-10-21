@@ -338,3 +338,8 @@ This local database stores offline saves, not multiplayer sessions.
 **Reasoning:** Joe requested Lucide as the default. A shared package replaces hand-maintained standard glyphs and the literal information letter with consistent SVG icons. Named imports let Vite include only used icons.
 
 **Rejected alternatives:** Keeping a text information glyph or copying more SVG paths would retain inconsistent maintenance and appearance.
+
+
+## 2026-10-22 — Standalone Android boundary
+
+After the Pixel durability checkpoint, retire the unreachable multiplayer server/client and Draw & Guess, including Express/Socket.IO/QR dependencies and Railway/Docker tooling. Keep reusable rules, content, avatar presentation and tests. Share persistence/lifecycle/clock/UI primitives by composition; game controllers retain separate validated sessions and rules. Isolated design demos do not choose a production theme. No new dependency is introduced.

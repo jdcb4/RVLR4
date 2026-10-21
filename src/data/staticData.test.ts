@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import rawHatNameData from "@/data/hatNameData.json";
 import rawWhoWhatWhereNamePacks from "@/data/whoWhatWhereNamePacks.json";
-import { drawNGuessPromptListSchema, loadDrawNGuessPrompts } from "@/domain/drawnguess/wordPacks";
 import { getHatClueSuggestions, hatClueSuggestionsSchema } from "@/domain/hat-game/clueSuggestions";
 import { getHatNameData, hatNameDataSchema } from "@/domain/hat-game/nameData";
 import { getImposterWordList, imposterWordListSchema } from "@/domain/imposter/wordList";
@@ -11,7 +10,6 @@ import {
   getWhoWhatWhereWordList,
   whoWhatWhereWordListSchema,
 } from "@/domain/whowhatwhere/wordList";
-import { getMultiplayerDisplayNames } from "@/multiplayer/displayNames";
 
 import { uniqueStaticTextListSchema } from "./staticDataSchemas";
 
@@ -28,9 +26,7 @@ describe("static game data", () => {
     expect(whoWhatWhereWords).toHaveLength(3_129);
     expect(counts).toEqual({ What: 844, Who: 908, Where: 1_377 });
     expect(getHatClueSuggestions()).toHaveLength(1_018);
-    expect(loadDrawNGuessPrompts()).toHaveLength(300);
     expect(getImposterWordList()).toHaveLength(12);
-    expect(getMultiplayerDisplayNames()).toHaveLength(60);
     expect(getHatNameData()).toMatchObject({
       packs: expect.arrayContaining([expect.objectContaining({ playerNames: expect.any(Array) })]),
       fallbackNames: expect.any(Array),
@@ -70,11 +66,5 @@ describe("static game data", () => {
       false,
     );
     expect(imposterWordListSchema.safeParse(["Library", "library"]).success).toBe(false);
-    expect(
-      drawNGuessPromptListSchema.safeParse([
-        { phrase: "Apple", category: "Standard", difficulty: "Easy" },
-        { phrase: "apple", category: "Standard", difficulty: "Easy" },
-      ]).success,
-    ).toBe(false);
   });
 });

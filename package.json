@@ -1,6 +1,6 @@
 {
   "name": "rvlry-android",
-  "version": "0.26.4",
+  "version": "0.26.5",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.12.0",
@@ -10,23 +10,19 @@
   "scripts": {
     "dev": "vite",
     "dev:client": "vite",
-    "dev:server": "tsx watch --tsconfig server/tsconfig.json server/index.ts",
     "ui-gallery": "vite --config vite.ui-gallery.config.ts",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit && tsc -p server/tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "start": "tsx --tsconfig server/tsconfig.json server/index.ts",
     "verify": "pnpm run typecheck && pnpm run lint && pnpm test && pnpm run build",
-    "smoke:server-imports": "tsx --tsconfig server/tsconfig.json scripts/smoke-server-imports.ts",
     "audit:names": "tsx scripts/audit-names.mts",
     "fallow:hygiene": "pnpm dlx fallow --no-cache --format human --only dead-code,dupes",
-    "docker:build": "tsx scripts/build-docker.mts",
     "android:build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1",
     "android:sync": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task Sync",
     "android:test": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task Test",
@@ -38,18 +34,12 @@
     "@capacitor/core": "8.5.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "cors": "^2.8.5",
     "cuelume": "0.2.2",
-    "express": "^4.21.2",
-    "helmet": "8.3.0",
     "lucide-react": "1.61.0",
     "nanoid": "^5.1.16",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-qr-code": "^2.0.21",
     "react-router-dom": "^7.18.2",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
     "tailwind-merge": "^2.5.4",
     "tsx": "^4.23.11",
     "zod": "^3.23.8"
@@ -60,8 +50,6 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.7",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^4.17.25",
     "@types/node": "^22.20.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
@@ -88,12 +76,6 @@
       "allowedVersions": {
         "eslint-plugin-jsx-a11y@6.10.2>eslint": "10.10.0"
       }
-    },
-    "overrides": {
-      "body-parser@<1.20.6": "1.20.6",
-      "qs@<6.16.0": "6.16.0",
-      "socket.io-parser@<4.2.7": "4.2.7",
-      "ws@<8.21.0": "8.21.0"
     }
   }
 }

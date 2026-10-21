@@ -2,17 +2,15 @@
 
 Standalone offline pass-and-play Android app, derived from RVLR4.
 
-Version 0.26.4 refines the reviewed phone UX to playable **Who What Where**.
+Version 0.26.5 refines the reviewed phone UX to playable **Who What Where**.
 The first Pixel 10 interruption tests passed; Hat Game and Imposter remain later milestones.
-The APK has no multiplayer routes or backend dependency. Historical multiplayer
-source/tests remain in this checkout during the staged conversion, but are not
-reachable or imported by the app entry point.
+The APK has no multiplayer routes or backend dependency. Historical multiplayer source and its server dependencies have been removed after an import audit.
 
 ## Develop and verify
 
 Use Node 22 and pnpm 9.12.0. Install with `pnpm install --frozen-lockfile`.
 `pnpm dev` starts the browser preview. `pnpm run verify` runs type checking,
-lint, tests, and a production web build (including retained legacy-source checks).
+lint, tests, and a production web build.
 
 ## Android
 

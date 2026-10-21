@@ -20,8 +20,8 @@ import squirrelUrl from "@/assets/avatars/squirrel.webp";
 import tigerUrl from "@/assets/avatars/tiger.webp";
 import turtleUrl from "@/assets/avatars/turtle.webp";
 import wolfUrl from "@/assets/avatars/wolf.webp";
+import { type AvatarId, isAvatarId } from "@/lib/avatarCatalog";
 import { cn } from "@/lib/utils";
-import { type AvatarId, isAvatarId } from "@/multiplayer/avatarCatalog";
 
 const avatarUrls: Record<AvatarId, string> = {
   bear: bearUrl,

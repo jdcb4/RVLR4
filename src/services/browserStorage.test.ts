@@ -1,17 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { clearSession, loadSession, persistSession } from "@/multiplayer/useRoomChannel";
-
 import { createBrowserStorage, getStorageNotice } from "./browserStorage";
 
-const creds = {
-  code: "ZZZ234",
-  playerId: "07672d0a-8ab8-4a0d-9dc2-dad2f0f3897e",
-  secret: "a".repeat(32),
-};
 afterEach(() => {
   vi.restoreAllMocks();
-  clearSession(creds.code);
 });
 
 describe("browser storage failures", () => {
@@ -43,31 +35,5 @@ describe("browser storage failures", () => {
     expect(storage.write("denied", "persisted again")).toBe(true);
     expect(localStorage.getItem("denied")).toBe("persisted again");
     expect(storage.remove("denied")).toBe(true);
-  });
-
-  it("can bind using in-memory credentials when session storage is blocked", () => {
-    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
-      throw new Error("blocked");
-    });
-    expect(persistSession(creds)).toBe(false);
-    expect(loadSession(creds.code)).toEqual(creds);
-    vi.spyOn(Storage.prototype, "removeItem").mockImplementation(() => {
-      throw new Error("blocked");
-    });
-    expect(() => clearSession(creds.code)).not.toThrow();
-    expect(loadSession(creds.code)).toBeNull();
-  });
-
-  it("rejects a malformed or mismatched saved identity", () => {
-    sessionStorage.setItem(
-      `jd-multiplayer:${creds.code}`,
-      JSON.stringify({ ...creds, code: "ABC234" }),
-    );
-    expect(loadSession(creds.code)).toBeNull();
-    sessionStorage.setItem(
-      `jd-multiplayer:${creds.code}`,
-      JSON.stringify({ ...creds, secret: [] }),
-    );
-    expect(loadSession(creds.code)).toBeNull();
   });
 });

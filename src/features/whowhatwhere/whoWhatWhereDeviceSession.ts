@@ -7,6 +7,7 @@ import {
   whoWhatWhereMatchSchema,
   whoWhatWhereSetupSchema,
 } from "@/services/savedStates/whowhatwhere";
+import { remainingTurnMs, turnDeadline } from "@/services/turnClock";
 
 export const WHO_WHAT_WHERE_SESSION_KEY = "whowhatwhere.device-session.v1";
 
@@ -90,7 +91,7 @@ export function rebaseWhoWhatWhereTurn(match: MatchState, remainingMs: number): 
     ...match,
     activeTurn: {
       ...match.activeTurn,
-      endsAt: new Date(Date.now() + Math.max(0, remainingMs)).toISOString(),
+      endsAt: turnDeadline(remainingMs),
     },
   };
 }
@@ -104,5 +105,5 @@ export function sampleWhoWhatWhereSession(
   if (session.paused || session.match?.stage !== "turn" || session.remainingMs === null) {
     return session;
   }
-  return { ...session, remainingMs: Math.max(0, session.remainingMs - Math.max(0, now - anchor)) };
+  return { ...session, remainingMs: remainingTurnMs(session.remainingMs, anchor, now) };
 }

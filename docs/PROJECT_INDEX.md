@@ -2,8 +2,7 @@
 
 The current deliverable is a standalone offline Android prototype for
 Who What Where. Hat Game and Imposter follow after Joe tests the foundation
-on his Pixel 10. The original multiplayer source is retained temporarily for
-reference/regression checks, but no multiplayer routes are in the APK.
+on his Pixel 10. The original multiplayer server/client and Draw & Guess are removed; git retains their history.
 
 ## Active boundaries
 
