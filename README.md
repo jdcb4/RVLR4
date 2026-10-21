@@ -2,8 +2,8 @@
 
 Standalone offline pass-and-play Android app, derived from RVLR4.
 
-Version 0.25.0 is the first device-test prototype: **Who What Where** is playable.
-Hat Game and Imposter are planned after the Pixel 10 acceptance checkpoint.
+Version 0.26.0 adds the reviewed phone UX to playable **Who What Where**.
+The first Pixel 10 interruption tests passed; Hat Game and Imposter remain later milestones.
 The APK has no multiplayer routes or backend dependency. Historical multiplayer
 source/tests remain in this checkout during the staged conversion, but are not
 reachable or imported by the app entry point.

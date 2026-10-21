@@ -39,6 +39,7 @@ type SessionView = {
   readonly notice: string;
   readonly setupError: string;
   readonly turnError: string;
+  readonly savedGameAvailable: boolean;
 };
 
 /**
@@ -63,6 +64,8 @@ export class WhoWhatWhereDeviceController {
   private deviceActive = isDeviceActive();
   private keepAwake = false;
   private pauseEpoch = 0;
+  private savedGameAvailable = false;
+  private replacingSave = false;
   private view = this.makeView();
 
   private makeView(): SessionView {
@@ -75,6 +78,7 @@ export class WhoWhatWhereDeviceController {
       notice: this.notice,
       setupError: this.setupError,
       turnError: this.turnError,
+      savedGameAvailable: this.savedGameAvailable,
     };
   }
 
@@ -132,12 +136,20 @@ export class WhoWhatWhereDeviceController {
     const record = {
       ...session,
       ...(session.match?.stage === "results"
-        ? { match: null, mode: "settings" as const, teamStep: 0, remainingMs: null, paused: true }
+        ? {
+            match: null,
+            mode: "settings" as const,
+            teamStep: 0,
+            remainingMs: null,
+            paused: true,
+            presentationStage: null,
+          }
         : {}),
       savedAt: new Date().toISOString(),
     };
     try {
       await writeSnapshot(WHO_WHAT_WHERE_SESSION_KEY, record);
+      this.session = { ...this.session, savedAt: record.savedAt };
       return true;
     } catch (error) {
       this.failSave(error);
@@ -159,8 +171,18 @@ export class WhoWhatWhereDeviceController {
         this.loaded = true;
         const restored =
           value?.match?.stage === "results"
-            ? { ...value, match: null, remainingMs: null, mode: "settings" as const, teamStep: 0 }
+            ? {
+                ...value,
+                match: null,
+                remainingMs: null,
+                mode: "settings" as const,
+                teamStep: 0,
+                presentationStage: null,
+              }
             : value;
+        this.savedGameAvailable = Boolean(
+          restored && (restored.mode !== "landing" || restored.match),
+        );
         this.install(
           restored
             ? { ...restored, paused: restored.mode !== "landing" || restored.match !== null }
@@ -199,7 +221,12 @@ export class WhoWhatWhereDeviceController {
 
   private canAct() {
     return (
-      this.loaded && !this.saving && !this.storageError && !this.session.paused && this.deviceActive
+      this.loaded &&
+      !this.saving &&
+      !this.storageError &&
+      !this.savedGameAvailable &&
+      !this.session.paused &&
+      this.deviceActive
     );
   }
 
@@ -247,7 +274,14 @@ export class WhoWhatWhereDeviceController {
   private moveSetup(mode: WhoWhatWhereDeviceSession["mode"], teamStep = this.session.teamStep) {
     if (!this.canAct()) return;
     this.setupError = "";
-    void this.transition({ ...this.current(), mode, teamStep, match: null, remainingMs: null });
+    void this.transition({
+      ...this.current(),
+      mode,
+      teamStep,
+      match: null,
+      remainingMs: null,
+      presentationStage: null,
+    });
   }
 
   goBackFromTeamSetup = () =>
@@ -274,11 +308,18 @@ export class WhoWhatWhereDeviceController {
       return;
     }
     this.setupError = "";
-    void this.transition({ ...current, match: result.match, remainingMs: null, mode: "ready" });
+    void this.transition({
+      ...current,
+      match: result.match,
+      remainingMs: null,
+      mode: "ready",
+      presentationStage: null,
+    });
   };
 
   startNextTurn = async () => {
-    if (!this.canAct() || this.session.match?.stage !== "ready") return;
+    if (!this.canAct() || this.session.match?.stage !== "ready" || this.session.presentationStage)
+      return;
     this.saving = true;
     this.turnError = "";
     this.emit();
@@ -330,6 +371,12 @@ export class WhoWhatWhereDeviceController {
       match: nextMatch,
       mode: nextMatch.stage,
       remainingMs: nextMatch.stage === "turn" ? current.remainingMs : null,
+      presentationStage:
+        match.stage === "turn" && nextMatch.stage !== "turn"
+          ? ("recap" as const)
+          : nextMatch.stage === "results"
+            ? null
+            : (current.presentationStage ?? null),
     };
     if (sound) void playGameSoundEffect(expired ? "timeout" : sound);
     void this.transition(next);
@@ -343,7 +390,49 @@ export class WhoWhatWhereDeviceController {
   endTurn = () => {
     if (this.session.match?.stage === "turn") this.applyMatchAction(endTurn, "timeout");
   };
+  endPausedTurn = () => {
+    if (
+      !this.loaded ||
+      this.saving ||
+      this.storageError ||
+      this.savedGameAvailable ||
+      !this.deviceActive ||
+      !this.session.paused ||
+      this.session.match?.stage !== "turn"
+    )
+      return;
+    const current = this.current();
+    const match = endTurn(current.match!);
+    void playGameSoundEffect("timeout");
+    void this.transition({
+      ...current,
+      match,
+      mode: match.stage,
+      remainingMs: null,
+      presentationStage: "recap",
+      paused: false,
+    });
+  };
   viewResults = () => this.applyMatchAction(showResults, "victory");
+
+  advanceTurnRecap = () => {
+    if (!this.canAct() || this.session.presentationStage !== "recap") return;
+    const match = this.session.match;
+    if (match?.stage === "finalSummary") {
+      this.viewResults();
+      return;
+    }
+    if (match?.stage !== "ready") return;
+    void this.transition({
+      ...this.current(),
+      presentationStage: match.teamIndex === 0 ? "roundComplete" : null,
+    });
+  };
+
+  continueAfterRound = () => {
+    if (!this.canAct() || this.session.presentationStage !== "roundComplete") return;
+    void this.transition({ ...this.current(), presentationStage: null });
+  };
 
   backToSetup = () => this.moveSetup("landing", 0);
   playAgainFromSettings = () => this.moveSetup("settings", 0);
@@ -353,7 +442,8 @@ export class WhoWhatWhereDeviceController {
     this.pauseEpoch += 1;
     const next = { ...this.current(), paused: true };
     this.install(next);
-    if (!this.hydrationFailed) void this.save(next);
+    if (!this.hydrationFailed && !this.savedGameAvailable && !this.replacingSave)
+      void this.save(next);
   };
 
   resumeGame = async () => {
@@ -364,8 +454,53 @@ export class WhoWhatWhereDeviceController {
     this.saving = true;
     this.emit();
     if ((await this.save(current)) && this.deviceActive && this.pauseEpoch === pauseEpoch) {
+      this.savedGameAvailable = false;
       this.install({ ...this.current(), paused: false });
     }
+    this.saving = false;
+    this.emit();
+  };
+
+  openSavedGame = async () => {
+    if (!this.savedGameAvailable || this.saving || this.storageError || !this.deviceActive) return;
+    if (this.session.match?.stage === "turn") {
+      // Choosing the save reveals its pause summary; only Resume turn reveals the clue/clock.
+      this.savedGameAvailable = false;
+      this.emit();
+      return;
+    }
+    await this.resumeGame();
+  };
+
+  /** Called only after the UI confirms replacement; disk keeps the old save until commit. */
+  startOverFromPendingMatch = async () => {
+    if (!this.loaded || this.saving || this.storageError || this.hydrationFailed) return;
+    this.cancelDraft();
+    this.saving = true;
+    this.replacingSave = true;
+    this.pauseEpoch += 1;
+    const pauseEpoch = this.pauseEpoch;
+    const next: WhoWhatWhereDeviceSession = {
+      ...this.current(),
+      mode: "settings",
+      teamStep: 0,
+      match: null,
+      remainingMs: null,
+      paused: true,
+      presentationStage: null,
+    };
+    this.install({ ...this.current(), paused: true });
+    if (await this.save(next)) {
+      this.savedGameAvailable = false;
+      this.setupError = "";
+      this.turnError = "";
+      this.install({
+        ...next,
+        savedAt: this.session.savedAt,
+        paused: !this.deviceActive || this.pauseEpoch !== pauseEpoch,
+      });
+    }
+    this.replacingSave = false;
     this.saving = false;
     this.emit();
   };
@@ -409,6 +544,7 @@ export class WhoWhatWhereDeviceController {
     // A failed read never enabled edits; leaving keeps its original record untouched.
     if (this.hydrationFailed) return true;
     if (this.storageError) return false;
+    if (this.savedGameAvailable) return true;
     this.saving = true;
     this.install({ ...this.current(), paused: true });
     const saved = await this.save();

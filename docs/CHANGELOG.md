@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.26.0 — Compact Who What Where phone flow
+
+- Offer resume or confirmed new-game setup inside Who What Where, with saved
+  date/time and retained team settings.
+- Add explicit turn recaps and round boundaries, compact numbered-team progress,
+  concrete team-save actions and concise presenter handoffs.
+- Give active play a larger clock, category-colored clues, reachable controls,
+  separate skipped/guessed columns and visible overflow counts. Outstanding
+  skipped words remain available to retry.
+- Simplify pause/results copy and show tied best turns and most-skips highlights.
+- Preserve version-1 saves and persist presentation progress alongside the game.
+
 ## 0.25.0 — Android device-test prototype
 
 - Add a bundled offline Capacitor Android app (`au.joed.rvlry`) and repeatable

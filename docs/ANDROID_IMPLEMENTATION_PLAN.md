@@ -1,13 +1,13 @@
 # RVLRY Android implementation plan
 
-Status: implementation underway; first Who What Where device-test milestone.
+Status: Who What Where foundation phone-tested; approved phone UX implemented in 0.26.0.
 Prepared: 20 October 2026.
 Source baseline: RVLR4 `dev`, commit `8245a0e`, version 0.24.12.
 
 ## Current implementation boundary
 
-Version 0.25.0 implements the native host, snapshot/lifecycle infrastructure
-and Who What Where prototype. Hat/Imposter, downloadable word bundles, release
+Versions 0.25.0–0.26.0 implement the native host, snapshot/lifecycle infrastructure
+and Who What Where with reviewed phone UX. Hat/Imposter, downloadable word bundles, release
 signing and final removal of retained historical source remain after the Pixel
 checkpoint. The APK has no multiplayer routes or server dependency; retained
 source is still covered by the existing checks. See `ANDROID.md` for builds and

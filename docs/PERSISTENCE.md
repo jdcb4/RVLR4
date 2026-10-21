@@ -5,6 +5,10 @@
 Who What Where uses a separate complete session snapshot through
 `nativeSnapshotStore.ts`, not the historical browser keys below. The snapshot
 includes setup position, names/settings, exact match state and timer remaining.
+Version 0.26 adds an optional `presentationStage` to the same version-1 record:
+`recap`, `roundComplete`, or null. Existing 0.25 saves default to null and retain
+their setup, game and countdown. The engine may already point at the next team
+while the UI reviews the completed turn; this presentation position is saved too.
 The native `RvlryDevice` plugin stores current and previous checkpoints in SQLite.
 Writes, reads and clears share an ordered queue. Successful native writes
 acknowledge only after committing the transaction.
@@ -15,8 +19,14 @@ reported rather than silently discarded. Failed writes surface retry UI.
 The web preview stores both checkpoints in one localStorage item; it is a
 development adapter and cannot establish native durability.
 
-Cold restoration is paused and concealed. Draft changes are briefly debounced;
-confirmed transitions save promptly and active timer progress is checkpointed.
+Cold restoration is paused and concealed. The game first offers its saved
+date/time and Resume or Start new game. Opening
+an active saved turn shows its pause summary; only Resume turn reveals the clue.
+Confirmed replacement commits the new setup before replacing the in-memory
+game. A failed replacement retains the old game and exposes retry. Merely viewing
+or leaving the saved-game choice does not rewrite its saved timestamp.
+Draft changes are briefly debounced; confirmed transitions save promptly and
+active timer progress is checkpointed.
 Android may terminate without a final callback, so recovery uses the latest
 durable checkpoint. Clearing application data/uninstalling removes local saves.
 Native backups are disabled in the prototype to avoid restoring private rounds

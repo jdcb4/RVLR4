@@ -28,6 +28,8 @@ export function useWhoWhatWhereSingleplayerApp() {
       readyHandoffRevealed,
       match?.activeTurn?.startedAt,
       session.paused,
+      session.presentationStage,
+      view.savedGameAvailable,
     ].join(":"),
   );
 
@@ -39,6 +41,9 @@ export function useWhoWhatWhereSingleplayerApp() {
     match,
     // Whole-device sessions restore their exact screen behind an explicit resume cover.
     pendingMatch: null as PersistedMatch | null,
+    savedGameAvailable: view.savedGameAvailable,
+    savedAt: session.savedAt,
+    presentationStage: session.presentationStage ?? null,
     confirmDiscardPending,
     setConfirmDiscardPending,
     setupError: view.setupError,
@@ -62,8 +67,12 @@ export function useWhoWhatWhereSingleplayerApp() {
     advanceTeamSetup: controller.advanceTeamSetup,
     leaveReviewToTeamSetup: controller.leaveReviewToTeamSetup,
     startRoundFromReview: controller.startNewMatch,
-    resumePendingMatch: () => void controller.resumeGame(),
-    startOverFromPendingMatch: controller.backToSetup,
+    resumePendingMatch: controller.openSavedGame,
+    startOverFromPendingMatch: async () => {
+      await controller.startOverFromPendingMatch();
+      if (!controller.getSnapshot().storageError && !controller.getSnapshot().session.match)
+        setConfirmDiscardPending(false);
+    },
     startNextTurn: controller.startNextTurn,
     backToSetup: controller.backToSetup,
     playAgain: controller.startNewMatch,
@@ -73,7 +82,10 @@ export function useWhoWhatWhereSingleplayerApp() {
     returnSkipped: controller.returnSkipped,
     revealHint: controller.revealHint,
     endTurn: controller.endTurn,
+    endPausedTurn: controller.endPausedTurn,
     viewResults: controller.viewResults,
+    advanceTurnRecap: controller.advanceTurnRecap,
+    continueAfterRound: controller.continueAfterRound,
     pauseGame: controller.pauseGame,
     resumeGame: controller.resumeGame,
     retrySave: controller.retrySave,

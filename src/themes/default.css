@@ -8,6 +8,15 @@
   --semantic-primary-well-bg: hsl(var(--primary) / 0.15);
   --semantic-primary-border: hsl(var(--primary) / 0.4);
   --semantic-primary-hover: hsl(var(--primary) / 0.9);
+  --semantic-category-who-bg: #eee5f6;
+  --semantic-category-who-border: #a88abf;
+  --semantic-category-what-bg: #e2f0e8;
+  --semantic-category-what-border: #83ab97;
+  --semantic-category-where-bg: #e2edf8;
+  --semantic-category-where-border: #8ba7c4;
+  --semantic-skipped-bg: #fff2d8;
+  --semantic-skipped-border: #b38b49;
+  --semantic-skipped-foreground: #825000;
 
   --semantic-secondary-hover: hsl(var(--secondary) / 0.8);
 

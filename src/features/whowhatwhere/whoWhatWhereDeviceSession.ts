@@ -24,6 +24,8 @@ export type WhoWhatWhereDeviceSession = {
   readonly match: MatchState | null;
   readonly remainingMs: number | null;
   readonly paused: boolean;
+  /** The engine already points at the next team while the completed turn is reviewed. */
+  readonly presentationStage?: "recap" | "roundComplete" | null;
 };
 
 export const whoWhatWhereDeviceSessionSchema = z
@@ -45,6 +47,7 @@ export const whoWhatWhereDeviceSessionSchema = z
     match: whoWhatWhereMatchSchema.shape.match.nullable(),
     remainingMs: z.number().finite().min(0).max(75_000).nullable(),
     paused: z.boolean(),
+    presentationStage: z.enum(["recap", "roundComplete"]).nullable().default(null),
   })
   .refine(
     (value) =>
@@ -55,7 +58,12 @@ export const whoWhatWhereDeviceSessionSchema = z
       (value.match?.stage === "turn"
         ? value.remainingMs !== null &&
           value.remainingMs <= value.match.settings.turnDurationSeconds * 1000
-        : value.remainingMs === null),
+        : value.remainingMs === null) &&
+      (!value.presentationStage ||
+        (Boolean(value.match?.lastTurnSummary) &&
+          (value.presentationStage === "recap"
+            ? value.match?.stage === "ready" || value.match?.stage === "finalSummary"
+            : value.match?.stage === "ready" && value.match.teamIndex === 0))),
     "The saved setup position or turn clock is invalid.",
   )
   .transform((value): WhoWhatWhereDeviceSession => value);
@@ -66,11 +74,12 @@ export function createWhoWhatWhereDeviceSession(): WhoWhatWhereDeviceSession {
     schemaVersion: 1,
     savedAt: new Date().toISOString(),
     setup: { schemaVersion: 1, settings, teams: createTeamSetups(settings.teamCount) },
-    mode: "landing",
+    mode: "settings",
     teamStep: 0,
     match: null,
     remainingMs: null,
     paused: false,
+    presentationStage: null,
   };
 }
 

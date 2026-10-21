@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.25.0 is a debug-signed device-test prototype for Who What Where. Hat Game,
+0.26.0 is the debug-signed Who What Where build with the reviewed phone UX. Hat Game,
 Imposter, remote word installation and friend-release signing follow the Pixel
 checkpoint. The Settings entry truthfully indicates no update source is configured.
 Historical multiplayer code remains in the checkout but is unreachable from the
@@ -63,7 +63,7 @@ WebView and font/display-scale versions/settings with feedback.
    Time should remain paused while away; no points or turns should advance.
 4. Force-stop during play and relaunch. Resume should keep scores/current word
    and restore roughly the last timer checkpoint, without rerolling the turn.
-5. Try Home/Back, repeated taps, and opening/closing the skipped-word dialog.
+5. Try Home/Back, repeated taps, retrying skipped words and scrolling their column.
 6. Check keyboard visibility, long names, touch comfort, Gboard Next/Done, and
    larger font/display settings. Vertical scrolling is allowed when needed.
 7. Finish a game and replay. The old completed game should not become resumable.
@@ -99,79 +99,76 @@ last short draft interval or return a small amount of countdown time.
 The handoff artifact is `out/RVLRY-0.25.0-prototype.apk`, with a companion SHA-256
 file. These local build artifacts are intentionally excluded from git.
 
-## Phone UX review
+## UX build verification — 21 October 2026
 
-Joe's first phone feedback confirms interruption recovery but identifies substantial
-UX work: thumb reach, visible word history, explicit current/next participants,
-round/team position, stronger grouping and hierarchy, and starting a new game
-without first resuming the saved one.
+- Version 0.26.0 / Android versionCode 2: `pnpm run verify` passed typecheck,
+  lint, 408 tests across 76 files and the production build.
+- Debug assembly, two native JVM tests and all eight API-35 device tests passed.
+  The bundled app test now covers settings, team saves, review, handoff, skip,
+  correct, pause and cancelling replacement. Separate force-stop checkpoint
+  write/read runs also passed.
+- Installed 0.26.0 over 0.25.0 without uninstalling and successfully read the
+  native checkpoint written by the old APK. Version-1 game compatibility is
+  covered by controller tests; this does not replace Pixel upgrade testing.
+- Browser checks at 412 × 915 and 360 × 640 covered the compact layout, saved
+  recap restoration and round-complete restoration. The active screen fits at
+  360 × 640 with fixed actions and bounded word columns.
+- Fallow was reviewed: 26 dead-code findings and 56 health thresholds remain,
+  including retained legacy routes and controller/chrome complexity. These
+  findings are not a clean gate; no checks were suppressed.
+- The first Gradle invocation stalled while enumerating local file systems.
+  Retrying with `$env:GRADLE_OPTS='-Dorg.gradle.vfs.watch=false'` succeeded;
+  the same setting was used for native verification.
 
-The [clickable phone storyboard](design/phone-flow-proposal.html) is a design
-proposal, not shipped behavior. It preserves the existing warm/teal identity and
-explores a consistent round/team tracker, larger bottom actions, visible recent
-words, full turn recaps, explicit handoffs and direct resume/new-game choices.
-Illustrative content and limited interactions are labeled in the artifact.
-The tracker is informational; it must not navigate the game state.
+Artifact: `out/RVLRY-0.26.0-prototype.apk` (8,967,927 bytes), also copied to
+`\\JNAS\Media\DropBox\RVLRY-0.26.0-prototype.apk`. Both copies have SHA-256
+`8557DEB3CF16A7602B87B721CF5DC616B176DC871609D2D3D735EA3B91EC9EEB`.
+Install over the existing prototype to retain saves. Pixel 10 UX acceptance
+for this version remains a user checkpoint.
 
-The existing rules give every team one turn per round and rotate that team's
-presenter on its next turn. A recap must retain the completed turn's identity even
-after the domain has advanced to the next team. Round boundaries and the final
-turn must be presented separately. The resume/new-game choice must be reachable
-before restoration sends the user straight to the paused screen. Replacing a
-save requires confirmation; resumable state must remain intact until the new
-state is durably committed.
+## Current phone UX
 
-This proposal focuses on Who What Where. Hat Game and Imposter need separate
-role/privacy and phase reviews before adapting the same visual principles;
-their flows must not inherit Who What Where's team/round assumptions.
+Who What Where opens directly to settings on first use. If a session exists,
+its game entry offers Resume or confirmed Start new game with the saved date/time.
+The chooser lives inside the selected game, not the hub. Returning to an active
+turn first opens the paused summary; a separate Resume turn starts the clock.
 
-### Pending Kestrel feedback
+Setup follows Settings → Teams → Review. Save team advances through the teams;
+review precedes starting the game. Handoff identifies the presenter, asks for
+acknowledgement, then offers Start turn. A completed turn gets a word recap;
+a completed round adds standings before the next handoff. These presentation
+phases survive interruption even though the game engine has advanced.
 
-Published 21 October 2026: [phone UX review](https://kestrel.home.jboxtv.com/review/rvlry-phone-ux-review).
-Producer: `rvlry-android`; publication: `rvlry-phone-ux-review`; revision: `3`.
-Context: `codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-phone-ux`.
-The reproducible payload is `design/kestrel-phone-ux-review.json`.
-Kestrel carries the companion screen review and answer form; its renderer cannot
-embed the styled interactive mockups, which remain in the linked storyboard and
-JNAS Media/DropBox. Publishing was confirmed by the client.
+Between turns, numbered teams and round segments show current/completed/next.
+Active play omits this tracker and uses a compact game/round header, larger timer,
+category-labeled colored clue, and large bottom controls. Who is lilac, What green,
+Where blue. These colors supplement text and do not change game rules.
 
-When resuming this UX work, use the Kestrel skill to fetch `rvlry-android` responses
-before asking the questions again or implementing an assumed direction. Match the
-publication, revision and context, durably record answers and pending work, then
-acknowledge receipt. No responses have been collected or acknowledged yet.
-Submission does not automatically start an agent; the next-step answer determines
-whether to implement, revise mockups or discuss on the next authorized resume.
+Skipped and Guessed have separate columns. All outstanding skips remain retry
+buttons, including the selected word marked In play. They leave the queue only
+on Correct. Both columns indicate overflow; guessed history also counts older
+entries. Long lists scroll inside the columns while the actions stay fixed.
+Hints and configured skip limits remain supported.
 
-### Design feedback incorporated — 21 October 2026
+Pause keeps a compact presenter/time/score summary and resume/leave/new-game
+choices; End turn is available there. Final results show standings, tied best-turn
+leaders (player, team, points), and tied most-skips leaders using each player's
+skip actions across the game. No-skip games say No skips.
 
-Joe selected the compact two-level tracker over the whole-game grid. Use it
-between turns, with numbered teams; remove it during active play. Keep a compact
-game mark and round in the play header, a larger timer, more visible recent words
-and large bottom actions. Category-labeled clue panels use distinct proposed
-colors: Who lilac, What green, Where blue. Color must supplement the label.
+Communicate each fact once, keep vertical grouping tight, and aim for one screen
+at normal phone text sizes. Keyboard, long lists and larger accessibility text
+may scroll rather than shrink labels or targets. Review-only notes never belong
+in the app UI. Hat and Imposter need separate role/privacy reviews.
 
-The resume/new-game screen belongs inside the selected game, not the game hub.
-Display the save's date/time and useful game context; omit explanations of what
-saving means. Setup saves each team and advances to the next, then reviews the
-roster before starting. Keep the presenter's acknowledgement on handoff.
+## Design review record
 
-Avoid duplicated information across headings, tracker, body text and buttons.
-Remove redundant next-up paragraphs, completed-turn explanations and next-round
-bubbles. Pause needs its existing actions and a compact presenter/time/score
-summary. Final results add best turn (player, team, points) and most skips over
-a player's game (player, team, count). Proposed counting is skip actions, with
-tied leaders displayed together; do not claim this is already implemented.
-
-Aim for a single screen at normal phone text sizes with tight vertical grouping.
-Allow controlled scrolling for genuinely long lists, keyboard or accessibility
-sizes rather than shrinking text or targets. Review notes belong outside the
-phone frame, never in app copy. Updated storyboard interactions and all eight
-sample screen layouts were checked at 412px and 360px widths. The APK is unchanged.
-Kestrel had no pending responses when checked before this revision; this feedback
-came directly from the chat. Revision 2 asks only for remaining feedback/next steps.
-
-Screen 4 refinement: separate Skipped and Guessed columns. Guessed history has an
-explicit hidden-item count. Retain all outstanding skipped words as retry targets;
-if needed, scroll only that column with a visible remaining-below count. Retrying
-keeps the skipped entry until it is marked correct. The mockup confirms retry-to-
-correct transfer and overflow cues at 360px without scrolling the main content.
+Joe approved implementation in chat after three storyboard revisions. The
+[storyboard](design/phone-flow-proposal.html) is a historical design reference;
+the app is authoritative for implemented behavior. The Kestrel companion
+[review](https://kestrel.home.jboxtv.com/review/rvlry-phone-ux-review) has producer
+`rvlry-android`, publication `rvlry-phone-ux-review`, revision `3`, context
+`codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-phone-ux`.
+No pending answers were returned when implementation began on 21 October 2026;
+none were acknowledged. Chat approval supersedes the outstanding next-step
+question. Use the Kestrel skill to collect any later feedback when resuming;
+submitting a response does not automatically launch an agent.

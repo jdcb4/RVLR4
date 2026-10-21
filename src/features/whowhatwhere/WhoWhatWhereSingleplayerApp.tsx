@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { AppInfoHeaderButton, AppInfoOverlay } from "@/components/AppInfoOverlay";
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { GameShell } from "@/components/GameShell";
-import { Button } from "@/components/ui/button";
 import { useWhoWhatWhereSingleplayerApp } from "@/features/whowhatwhere/useWhoWhatWhereSingleplayerApp";
 import {
   WhoWhatWhereFooter,
@@ -20,6 +19,7 @@ export function WhoWhatWhereSingleplayerApp() {
   const leaveGame = game.leaveGame;
   const pauseGame = game.pauseGame;
   const goBack = game.goBack;
+  const setConfirmDiscardPending = game.setConfirmDiscardPending;
   const leaveToPicker = useCallback(() => {
     void leaveGame().then((saved) => {
       if (saved) navigate("/passnplay");
@@ -29,7 +29,14 @@ export function WhoWhatWhereSingleplayerApp() {
   useEffect(() => {
     const handleBack = (event: Event) => {
       event.preventDefault();
-      if (game.paused || game.activeMode === "landing" || game.activeMode === "results") {
+      if (game.confirmDiscardPending) {
+        setConfirmDiscardPending(false);
+      } else if (
+        game.savedGameAvailable ||
+        game.paused ||
+        game.activeMode === "landing" ||
+        game.activeMode === "results"
+      ) {
         leaveToPicker();
       } else if (game.match) {
         pauseGame();
@@ -39,7 +46,17 @@ export function WhoWhatWhereSingleplayerApp() {
     };
     window.addEventListener("rvlry:back", handleBack);
     return () => window.removeEventListener("rvlry:back", handleBack);
-  }, [game.activeMode, game.match, game.paused, goBack, leaveToPicker, pauseGame]);
+  }, [
+    game.activeMode,
+    game.confirmDiscardPending,
+    game.match,
+    game.paused,
+    game.savedGameAvailable,
+    setConfirmDiscardPending,
+    goBack,
+    leaveToPicker,
+    pauseGame,
+  ]);
 
   useEffect(() => {
     if (!showAppInfo) {
@@ -49,48 +66,31 @@ export function WhoWhatWhereSingleplayerApp() {
     return () => clearTimeout(timeout);
   }, [showAppInfo]);
 
-  const showEndTurn =
-    !game.pendingMatch &&
+  const playing =
+    !game.savedGameAvailable &&
     game.match &&
     game.activeMode === "turn" &&
     !game.paused &&
     !game.storageError &&
     Boolean(game.match.activeTurn);
-
-  const headerRight = (
-    <>
-      {showEndTurn ? (
-        <>
-          <Button
-            aria-label="Pause turn"
-            className="size-12 p-0"
-            variant="outline"
-            onClick={game.pauseGame}
-          >
-            <svg
-              aria-hidden="true"
-              className="size-5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              <path d="M8 5v14M16 5v14" />
-            </svg>
-          </Button>
-          <Button
-            aria-label="End turn"
-            className="h-12 px-3"
-            disabled={game.saving}
-            onClick={game.endTurn}
-          >
-            End
-          </Button>
-        </>
-      ) : (
-        <AppInfoHeaderButton onClick={() => setShowAppInfo(true)} />
-      )}
-    </>
+  const showRound =
+    game.match &&
+    !game.savedGameAvailable &&
+    !game.confirmDiscardPending &&
+    game.activeMode !== "results";
+  const displayedRound = game.match
+    ? game.presentationStage
+      ? Math.max(1, Math.ceil(game.match.turnSummaries.length / game.match.teamOrder.length))
+      : Math.min(game.match.roundNumber, game.match.settings.totalRounds)
+    : 1;
+  const headerRight = showRound ? (
+    <span className="text-right text-typ-micro text-muted-foreground">
+      Round {displayedRound}
+      <br />
+      of {game.match!.settings.totalRounds}
+    </span>
+  ) : (
+    <AppInfoHeaderButton onClick={() => setShowAppInfo(true)} />
   );
 
   const footer = <WhoWhatWhereFooter game={game} onPickAnotherGame={leaveToPicker} />;
@@ -98,10 +98,26 @@ export function WhoWhatWhereSingleplayerApp() {
   return (
     <FooterActionLockContext.Provider value={game.footerActionsLocked}>
       <GameShell
+        compact
         footer={footer}
         headerRight={headerRight}
         onHome={leaveToPicker}
-        title="Who What Where"
+        title={
+          <span className="flex items-center justify-center gap-2">
+            <svg
+              aria-hidden="true"
+              className="size-6 shrink-0 text-primary"
+              viewBox="0 0 28 28"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+            >
+              <rect x="2" y="2" width="18" height="22" rx="3" />
+              <path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3" />
+            </svg>
+            <span className={playing ? "text-typ-ui" : "text-typ-body"}>Who What Where</span>
+          </span>
+        }
       >
         <AppInfoOverlay
           open={showAppInfo}

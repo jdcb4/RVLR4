@@ -58,7 +58,7 @@ describe("WhoWhatWhereFooter", () => {
     expect(setConfirmDiscardPending).toHaveBeenCalledWith(true);
   });
 
-  it("renders cancel and discard actions after discard confirmation", async () => {
+  it("keeps the saved game or explicitly replaces it after confirmation", async () => {
     const user = userEvent.setup();
     const setConfirmDiscardPending = vi.fn();
     const startOverFromPendingMatch = vi.fn();
@@ -78,8 +78,8 @@ describe("WhoWhatWhereFooter", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: "Cancel" }));
-    await user.click(screen.getByRole("button", { name: "Discard saved game" }));
+    await user.click(screen.getByRole("button", { name: "Keep saved game" }));
+    await user.click(screen.getByRole("button", { name: "Replace game and review setup" }));
 
     expect(setConfirmDiscardPending).toHaveBeenCalledWith(false);
     expect(startOverFromPendingMatch).toHaveBeenCalledOnce();

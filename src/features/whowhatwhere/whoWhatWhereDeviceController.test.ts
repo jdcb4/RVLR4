@@ -278,7 +278,244 @@ describe("WWW device session durability and lifecycle", () => {
     await controller.discardUnavailableSave();
     expect(removeSnapshot).toHaveBeenCalledOnce();
     expect(controller.getSnapshot().hydrationFailed).toBe(false);
-    expect(controller.getSnapshot().session.mode).toBe("landing");
+    expect(controller.getSnapshot().session.mode).toBe("settings");
+  });
+
+  it("starts a fresh install in settings and offers a saved session before allowing edits", async () => {
+    const fresh = new WhoWhatWhereDeviceController();
+    await fresh.hydrate();
+    expect(fresh.getSnapshot()).toMatchObject({
+      savedGameAvailable: false,
+      session: { mode: "settings", paused: false },
+    });
+    fresh.goToTeamSetup();
+    await settle();
+    const original = structuredClone(device.saved) as WhoWhatWhereDeviceSession;
+    vi.setSystemTime(new Date("2026-10-21T12:00:00Z"));
+    const restored = new WhoWhatWhereDeviceController();
+    await restored.hydrate();
+    expect(restored.getSnapshot()).toMatchObject({
+      savedGameAvailable: true,
+      session: { mode: "team", savedAt: original.savedAt, paused: true },
+    });
+    restored.updateSettings({ ...original.setup.settings, totalRounds: 4 });
+    restored.pauseGame();
+    expect(await restored.leaveGame()).toBe(true);
+    expect(device.saved).toEqual(original);
+    await restored.resumeGame();
+    expect(restored.getSnapshot()).toMatchObject({
+      savedGameAvailable: false,
+      session: { mode: "team", paused: false, savedAt: "2026-10-21T12:00:00.000Z" },
+    });
+    expect(restored.getSnapshot().session.setup).toEqual(original.setup);
+  });
+
+  it("commits a confirmed replacement before removing the saved match and retains its roster", async () => {
+    await activeController();
+    const original = structuredClone(device.saved) as WhoWhatWhereDeviceSession;
+    const restored = new WhoWhatWhereDeviceController();
+    await restored.hydrate();
+    let finishWrite: (() => void) | undefined;
+    vi.mocked(writeSnapshot).mockImplementationOnce(
+      (_key, value) =>
+        new Promise<void>((resolve) => {
+          finishWrite = () => {
+            device.saved = structuredClone(value);
+            resolve();
+          };
+        }),
+    );
+    const replacing = restored.startOverFromPendingMatch();
+    expect(restored.getSnapshot().session.match).toEqual(original.match);
+    expect(restored.getSnapshot().savedGameAvailable).toBe(true);
+    expect(device.saved).toEqual(original);
+    // A second tap cannot replace the pending transaction.
+    await restored.startOverFromPendingMatch();
+    finishWrite?.();
+    await replacing;
+    expect(restored.getSnapshot()).toMatchObject({
+      savedGameAvailable: false,
+      session: { mode: "settings", match: null, paused: false, presentationStage: null },
+    });
+    expect(restored.getSnapshot().session.setup).toEqual(original.setup);
+    expect((device.saved as WhoWhatWhereDeviceSession).match).toBeNull();
+  });
+
+  it("opens a saved active turn behind its paused summary until Resume turn is selected", async () => {
+    await activeController();
+    const checkpoint = structuredClone(device.saved) as WhoWhatWhereDeviceSession;
+    const restored = new WhoWhatWhereDeviceController();
+    await restored.hydrate();
+    vi.mocked(writeSnapshot).mockClear();
+    await restored.openSavedGame();
+    expect(restored.getSnapshot()).toMatchObject({
+      savedGameAvailable: false,
+      session: { paused: true, remainingMs: checkpoint.remainingMs, match: checkpoint.match },
+    });
+    expect(writeSnapshot).not.toHaveBeenCalled();
+    monotonic += 60_000;
+    restored.correct();
+    expect(restored.getSnapshot().session.match).toEqual(checkpoint.match);
+    await restored.resumeGame();
+    expect(restored.getSnapshot().session.paused).toBe(false);
+    expect(restored.getSnapshot().session.remainingMs).toBe(checkpoint.remainingMs);
+  });
+
+  it("keeps the original match recoverable when replacing its save fails", async () => {
+    await activeController();
+    const original = structuredClone(device.saved) as WhoWhatWhereDeviceSession;
+    const restored = new WhoWhatWhereDeviceController();
+    await restored.hydrate();
+    vi.mocked(writeSnapshot).mockRejectedValueOnce(new Error("Disk is full"));
+    await restored.startOverFromPendingMatch();
+    expect(restored.getSnapshot()).toMatchObject({
+      savedGameAvailable: true,
+      storageError: "Disk is full",
+      session: { match: original.match, paused: true },
+    });
+    expect(device.saved).toEqual(original);
+    await restored.retrySave();
+    await restored.resumeGame();
+    expect(restored.getSnapshot().session.match).toEqual(original.match);
+    expect(restored.getSnapshot().session.paused).toBe(false);
+  });
+
+  it("does not overwrite a replacement with the old game when backgrounded during commit", async () => {
+    const controller = await activeController(true);
+    controller.pauseGame();
+    await settle();
+    let finishWrite: (() => void) | undefined;
+    vi.mocked(writeSnapshot).mockImplementationOnce(
+      (_key, value) =>
+        new Promise<void>((resolve) => {
+          finishWrite = () => {
+            device.saved = structuredClone(value);
+            resolve();
+          };
+        }),
+    );
+    const writeCount = vi.mocked(writeSnapshot).mock.calls.length;
+    const replacing = controller.startOverFromPendingMatch();
+    device.active = false;
+    device.activity?.(false);
+    finishWrite?.();
+    await replacing;
+    expect(writeSnapshot).toHaveBeenCalledTimes(writeCount + 1);
+    expect(controller.getSnapshot().session).toMatchObject({
+      mode: "settings",
+      match: null,
+      paused: true,
+    });
+    expect((device.saved as WhoWhatWhereDeviceSession).match).toBeNull();
+  });
+
+  it("durably shows each recap before handoff and round completion before the next round", async () => {
+    const controller = await activeController();
+    controller.correct();
+    await settle();
+    controller.endTurn();
+    await settle();
+    const firstSummary = controller.getSnapshot().session.match?.lastTurnSummary;
+    expect(controller.getSnapshot().session).toMatchObject({
+      presentationStage: "recap",
+      match: { stage: "ready", teamIndex: 1, roundNumber: 1 },
+    });
+    await controller.startNextTurn();
+    expect(controller.getSnapshot().session.match?.activeTurn).toBeNull();
+    const restored = new WhoWhatWhereDeviceController();
+    await restored.hydrate();
+    await restored.resumeGame();
+    expect(restored.getSnapshot().session.presentationStage).toBe("recap");
+    expect(restored.getSnapshot().session.match?.lastTurnSummary).toEqual(firstSummary);
+    restored.advanceTurnRecap();
+    await settle();
+    expect(restored.getSnapshot().session.presentationStage).toBeNull();
+    await restored.startNextTurn();
+    restored.endTurn();
+    await settle();
+    expect(restored.getSnapshot().session.match).toMatchObject({ roundNumber: 2, teamIndex: 0 });
+    restored.advanceTurnRecap();
+    await settle();
+    expect(restored.getSnapshot().session.presentationStage).toBe("roundComplete");
+    const nextRestore = new WhoWhatWhereDeviceController();
+    await nextRestore.hydrate();
+    await nextRestore.resumeGame();
+    expect(nextRestore.getSnapshot().session.presentationStage).toBe("roundComplete");
+    await nextRestore.startNextTurn();
+    expect(nextRestore.getSnapshot().session.match?.activeTurn).toBeNull();
+    nextRestore.continueAfterRound();
+    await settle();
+    await nextRestore.startNextTurn();
+    expect(nextRestore.getSnapshot().session.match?.stage).toBe("turn");
+  });
+
+  it("shows the final turn recap then results without an extra round-complete stage", async () => {
+    const controller = new WhoWhatWhereDeviceController();
+    await controller.hydrate();
+    controller.updateSettings({
+      ...createDefaultSettings(),
+      selectedCategories: ["What"],
+      totalRounds: 1,
+    });
+    controller.startNewMatch();
+    await settle();
+    await controller.startNextTurn();
+    controller.endTurn();
+    await settle();
+    controller.advanceTurnRecap();
+    await settle();
+    await controller.startNextTurn();
+    controller.endTurn();
+    await settle();
+    expect(controller.getSnapshot().session).toMatchObject({
+      presentationStage: "recap",
+      match: { stage: "finalSummary" },
+    });
+    controller.advanceTurnRecap();
+    await settle();
+    expect(controller.getSnapshot().session).toMatchObject({
+      presentationStage: null,
+      match: { stage: "results" },
+    });
+    expect((device.saved as WhoWhatWhereDeviceSession).match).toBeNull();
+  });
+
+  it("explicitly ends a paused turn once without running the timer or counting another score", async () => {
+    const controller = await activeController();
+    controller.correct();
+    await settle();
+    controller.pauseGame();
+    await settle();
+    monotonic += 90_000;
+    controller.endPausedTurn();
+    controller.endPausedTurn();
+    await settle();
+    expect(controller.getSnapshot().session).toMatchObject({
+      paused: false,
+      presentationStage: "recap",
+      remainingMs: null,
+      match: { stage: "ready", lastTurnSummary: { scoreDelta: 1 } },
+    });
+    expect(controller.getSnapshot().session.match?.turnSummaries).toHaveLength(1);
+    expect((device.saved as WhoWhatWhereDeviceSession).presentationStage).toBe("recap");
+  });
+
+  it("loads installed v1 saves without presentation fields and recovers a previous checkpoint", async () => {
+    await activeController();
+    const legacy = structuredClone(device.saved) as Record<string, unknown>;
+    delete legacy.presentationStage;
+    vi.mocked(readSnapshot).mockImplementationOnce(async (_key, schema) => ({
+      value: schema.parse(legacy),
+      recovered: true,
+    }));
+    const restored = new WhoWhatWhereDeviceController();
+    await restored.hydrate();
+    expect(restored.getSnapshot()).toMatchObject({
+      savedGameAvailable: true,
+      notice: "Recovered the previous saved checkpoint.",
+      session: { presentationStage: null, paused: true },
+    });
+    expect(restored.getSnapshot().session.match).toEqual(legacy.match);
   });
 
   it("retains the roster and settings after results, without resuming a completed match", async () => {

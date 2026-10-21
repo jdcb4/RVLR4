@@ -37,6 +37,15 @@ const config: Config = {
         },
         /** Semantic colors — values come from theme CSS (see src/themes/default.css). */
         semantic: {
+          "category-who-bg": "var(--semantic-category-who-bg)",
+          "category-who-border": "var(--semantic-category-who-border)",
+          "category-what-bg": "var(--semantic-category-what-bg)",
+          "category-what-border": "var(--semantic-category-what-border)",
+          "category-where-bg": "var(--semantic-category-where-bg)",
+          "category-where-border": "var(--semantic-category-where-border)",
+          "skipped-bg": "var(--semantic-skipped-bg)",
+          "skipped-border": "var(--semantic-skipped-border)",
+          "skipped-foreground": "var(--semantic-skipped-foreground)",
           "primary-soft-bg": "var(--semantic-primary-soft-bg)",
           "primary-well-bg": "var(--semantic-primary-well-bg)",
           "primary-border": "var(--semantic-primary-border)",

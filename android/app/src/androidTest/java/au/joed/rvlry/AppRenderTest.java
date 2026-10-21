@@ -39,6 +39,12 @@ public class AppRenderTest {
         throw new AssertionError("App did not render expected state: " + diagnostics);
     }
 
+    private void clickButton(MainActivity activity, String label) throws Exception {
+        String expression = "[...document.querySelectorAll('button')].find(button => button.textContent.trim()==='" + label + "' && !button.disabled)";
+        awaitCondition(activity, "!!(" + expression + ")");
+        evaluate(activity, "(" + expression + ").click()");
+    }
+
     @Test
     public void bundledApplicationRendersHubAndOpensWhoWhatWhere() throws Exception {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -62,15 +68,32 @@ public class AppRenderTest {
             workerField.setAccessible(true);
             worker = (ExecutorService) workerField.get(plugin);
             evaluate(activity, "document.querySelector('a[href*=whowhatwhere]').click()");
-            awaitCondition(activity, "location.hash.includes('whowhatwhere') && !document.body.innerText.includes('Pick a game') && [...document.querySelectorAll('button')].some(button => button.textContent.trim()==='Start game' && !button.disabled)");
-            System.out.println("RVLRY_RENDER_GAME " + evaluate(activity, "JSON.stringify({href:location.href,text:document.body.innerText.slice(0,1000)})"));
-            evaluate(activity, "[...document.querySelectorAll('button')].find(button => button.textContent.trim()==='Start game').click()");
             awaitCondition(activity, "document.body.innerText.includes('Game settings') && document.body.innerText.includes('Turn length') && document.body.innerText.includes('Categories')");
             System.out.println("RVLRY_RENDER_SETTINGS " + evaluate(activity, "JSON.stringify({href:location.href,text:document.body.innerText.slice(0,1000)})"));
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(button => button.textContent.trim()==='Next: Team 1' && !button.disabled)");
             evaluate(activity, "[...document.querySelectorAll('button')].find(button => button.textContent.trim()==='Next: Team 1').click()");
-            awaitCondition(activity, "document.body.innerText.includes('Name this team') && !!document.querySelector('button[aria-label=\"Edit Team name\"]') && !!document.querySelector('button[aria-label=\"Edit Player 1\"]') && !!document.querySelector('button[aria-label=\"Edit Player 2\"]') && !document.querySelector('[role=alert]') && !document.body.innerText.includes('Progress needs saving') && !document.body.innerText.includes('Saved game unavailable')");
-            System.out.println("RVLRY_RENDER_TEAM " + evaluate(activity, "JSON.stringify({href:location.href,teamSetup:document.body.innerText.includes('Name this team'),rosterEditors:document.querySelectorAll('button[aria-label^=Edit]').length,storageError:!!document.querySelector('[role=alert]')})"));
+            awaitCondition(activity, "document.body.innerText.includes('Team 1 of 2') && document.querySelectorAll('input').length >= 3");
+            clickButton(activity, "Save team");
+            awaitCondition(activity, "document.body.innerText.includes('Team 2 of 2')");
+            clickButton(activity, "Save team");
+            awaitCondition(activity, "document.body.innerText.includes('Review teams')");
+            clickButton(activity, "Start game");
+            awaitCondition(activity, "document.body.innerText.includes('Pass to')");
+            awaitCondition(activity, "[...document.querySelectorAll('button')].some(button => button.textContent.includes('— ready') && !button.disabled)");
+            evaluate(activity, "[...document.querySelectorAll('button')].find(button => button.textContent.includes('— ready')).click()");
+            clickButton(activity, "Start turn");
+            awaitCondition(activity, "!!document.querySelector('[aria-label=\"Active turn\"]')");
+            clickButton(activity, "Skip");
+            awaitCondition(activity, "document.body.innerText.includes('Skipped · 1')");
+            clickButton(activity, "Correct");
+            awaitCondition(activity, "document.body.innerText.includes('Guessed · 1')");
+            clickButton(activity, "Pause turn");
+            awaitCondition(activity, "document.body.innerText.includes('Take your time') && !document.querySelector('[aria-label=\"Active turn\"]') && !document.querySelector('[role=alert]')");
+            clickButton(activity, "Start new game");
+            awaitCondition(activity, "document.body.innerText.includes('Replace the saved game?')");
+            clickButton(activity, "Keep saved game");
+            awaitCondition(activity, "document.body.innerText.includes('Take your time')");
+            System.out.println("RVLRY_NATIVE_FLOW_OK: setup, handoff, skip, correct, pause, cancel replacement");
         } finally {
             if (worker != null) {
                 assertTrue("Native storage worker did not finish", worker.awaitTermination(10, TimeUnit.SECONDS));
