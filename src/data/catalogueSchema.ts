@@ -26,12 +26,20 @@ const entrySchema = z
     hint: z.string().max(240),
     difficulty: z.enum(["easy", "medium", "hard"]),
     kidAppropriate: z.boolean(),
+    kidTargeted: z.boolean().default(false),
     aliases: z.array(displayText),
     originalIds: z.array(z.string().regex(/^(www|hat|imposter):\d+$/u)),
     games: z.array(gameSchema).min(1),
   })
   .strict()
   .superRefine((entry, context) => {
+    if (entry.kidTargeted && !entry.kidAppropriate) {
+      context.addIssue({
+        code: "custom",
+        message: "Kids-targeted answers must be child-appropriate.",
+        path: ["kidAppropriate"],
+      });
+    }
     if (entry.games.includes("www") && !entry.hint.trim()) {
       context.addIssue({ code: "custom", message: "WWW entries need a hint.", path: ["hint"] });
     }

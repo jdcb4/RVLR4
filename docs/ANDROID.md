@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.31.0 is the debug-signed three-game build with expanded curated word pools, five app-wide themes and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. Catalogue difficulty/kids metadata is ready for future mode selectors. No word-update source is configured yet. Release signing and remote word installation remain future work.
+0.31.1 is the debug-signed three-game build with expanded curated word pools, five app-wide themes and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. Catalogue difficulty/kids metadata is ready for future mode selectors. No word-update source is configured yet. Release signing and remote word installation remain future work.
 
 Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
@@ -326,3 +326,11 @@ Fallow was reviewed: 39 existing findings and nine clone groups remain; no new c
 APK: `out/RVLRY-0.31.0-words.apk`, copied and checksum-verified to `\\JNAS\Media\DropBox\RVLRY-0.31.0-words.apk`. SHA-256: `80D5DEDE0F64F0867523DCEC4DB8E2D4F55113328BDCBD0D1CF13A27E6B1E2F8`.
 
 The same folder contains `RVLRY-word-catalogue.csv` for review and `RVLRY-word-lists-0.31.0.zip`, including the untouched originals, expanded catalogue and conventions. Difficulty/kids selectors and remote word installation remain deferred; see WORD_CATALOGUE.md for counts and editorial rules.
+
+## Children-first clue supplement — 22 October 2026
+
+0.31.1 / versionCode 15 adds 123 deliberately kids-targeted answers for ages 8–12, separately tagged and exported for review. Full verify passes (224 tests / 39 files), Android debug assembly passes, and both API-35 AppRenderTest cases pass, exercising native preference restoration and all three game flows with the expanded bundle. Storage code is unchanged; the full nine-device-test and force-stop suite passed at 0.31.0 and was not repeated for this content-only update. Pixel acceptance remains unverified.
+
+Fallow retains 39 existing findings and nine clone groups. Vite's bundled catalogue advisory remains visible at 903 kB (138 kB gzip). No dependencies, network requirements or save migrations were added.
+
+APK: `out/RVLRY-0.31.1-kids.apk`, copied and SHA-256 verified to `\\JNAS\Media\DropBox\RVLRY-0.31.1-kids.apk`. SHA-256: `77920EA12996A9CD1032A56CA0515C0F97D55982396A86F6212909B54D421A93`. The same folder contains checksum-verified `RVLRY-kids-targeted.csv` and the updated full `RVLRY-word-catalogue.csv`. A dedicated kids-mode selector remains deferred; the new entries join the existing game pools.

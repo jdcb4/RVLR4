@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.31.1 — 22 October 2026
+
+- Add 123 dedicated ages 8–12 answers: 23 Who, 81 What and 19 Where, built around children's play, stories, school experiences and imaginative adventures, with concrete child-friendly hints. Includes 23 Hat suggestions and 47 Imposter prompts.
+- Distinguish deliberately selected children's content using `kidTargeted`, separate from `kidAppropriate`. Export a kids-only review CSV alongside the full catalogue. Existing source archives, game saves and mode controls are unchanged.
+
 ## 0.31.0 — 22 October 2026
 
 - Add 870 unique answers, including 434 new ages 8–12 selections. Playable pools now contain 3,871 Who What Where answers, 1,191 Hat suggestions and 232 Imposter prompts, curated for broad recognition among educated Australians.

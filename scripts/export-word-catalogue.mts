@@ -15,6 +15,7 @@ const headers = [
   "Category",
   "Difficulty",
   "Kids ages 8–12",
+  "Deliberately kids-targeted",
   "Games",
   "Origin",
   "Original source IDs",
@@ -26,19 +27,25 @@ const rows = entries.map((entry) => [
   entry.category,
   entry.difficulty,
   entry.kidAppropriate ? "Yes" : "No",
+  entry.kidTargeted ? "Yes" : "No",
   entry.games.join("; "),
   entry.originalIds.length ? "Original" : "Added October 2026",
   entry.originalIds.join("; "),
   entry.aliases.join("; "),
   entry.hint,
 ]);
-const csv = [headers, ...rows]
-  .map((row) => row.map((cell) => `"${cell.replaceAll('"', '""')}"`).join(","))
-  .join("\r\n");
 mkdirSync(new URL("out/", root), { recursive: true });
-const output = new URL("out/RVLRY-word-catalogue.csv", root);
-writeFileSync(output, `\uFEFF${csv}\r\n`);
-console.log(`Exported ${entries.length} unique answers to ${fileURLToPath(output)}`);
+for (const [filename, selectedRows] of [
+  ["RVLRY-word-catalogue.csv", rows],
+  ["RVLRY-kids-targeted.csv", rows.filter((_, index) => entries[index]?.kidTargeted)],
+] as const) {
+  const csv = [headers, ...selectedRows]
+    .map((row) => row.map((cell) => `"${cell.replaceAll('"', '""')}"`).join(","))
+    .join("\r\n");
+  const output = new URL(`out/${filename}`, root);
+  writeFileSync(output, `\uFEFF${csv}\r\n`);
+  console.log(`Exported ${selectedRows.length} unique answers to ${fileURLToPath(output)}`);
+}
 for (const game of ["www", "hat", "imposter"] as const) {
   const pool = entries.filter((entry) => entry.games.includes(game));
   console.log(

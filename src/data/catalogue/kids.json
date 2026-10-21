@@ -1,0 +1,1675 @@
+[
+  {
+    "word": "Miffy",
+    "category": "Who",
+    "hint": "A small white rabbit from a Dutch picture-book series.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Pingu",
+    "category": "Who",
+    "hint": "A little penguin who gets into adventures with his family.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Doraemon",
+    "category": "Who",
+    "hint": "A blue robot cat who carries future gadgets in his pocket.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Sandy Cheeks",
+    "category": "Who",
+    "hint": "A clever squirrel who lives under the sea in a diving suit.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Big Bad Wolf",
+    "category": "Who",
+    "hint": "The scheming wolf who tries to trick the three little pigs.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Humpty Dumpty",
+    "category": "Who",
+    "hint": "A nursery-rhyme character who has a great fall from a wall.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Ender Dragon",
+    "category": "Who",
+    "hint": "Minecraft’s huge flying boss found in the End dimension.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Enderman",
+    "category": "Who",
+    "hint": "A tall Minecraft creature that can teleport and pick up blocks.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Roz (The Wild Robot)",
+    "category": "Who",
+    "hint": "A robot who learns to live among animals on an island.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Charmander",
+    "category": "Who",
+    "hint": "A small orange Pokémon with a flame burning on its tail.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Bulbasaur",
+    "category": "Who",
+    "hint": "A Pokémon with a plant bulb growing on its back.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Jigglypuff",
+    "category": "Who",
+    "hint": "A round pink Pokémon whose song makes listeners fall asleep.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Snorlax",
+    "category": "Who",
+    "hint": "A huge sleepy Pokémon that loves to eat and nap.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Goldilocks",
+    "category": "Who",
+    "hint": "A curious girl who tries three bowls of porridge in a fairy tale.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Cinderella",
+    "category": "Who",
+    "hint": "A kind girl who goes to a royal ball in a famous fairy tale.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "The Gingerbread Man",
+    "category": "Who",
+    "hint": "A runaway biscuit character from a familiar tale.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Little Red Riding Hood",
+    "category": "Who",
+    "hint": "A girl in a red cloak who meets a wolf on the way to her grandmother.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Waluigi",
+    "category": "Who",
+    "hint": "A lanky rival who appears in Mario sports and party games.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Bowser Jr.",
+    "category": "Who",
+    "hint": "Bowser’s mischievous son in the Mario games.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Diddy Kong",
+    "category": "Who",
+    "hint": "A small monkey who teams up with Donkey Kong in games.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "Dr Eggman",
+    "category": "Who",
+    "hint": "Sonic’s round-bodied enemy who builds machines to catch him.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [
+      "Doctor Eggman",
+      "Dr Robotnik",
+      "Doctor Robotnik"
+    ],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "The Tooth Fairy",
+    "category": "Who",
+    "hint": "A magical visitor who leaves a small gift after a child loses a tooth.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "The Queen of Hearts",
+    "category": "Who",
+    "hint": "A short-tempered ruler from Alice’s adventures in Wonderland.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "hat"
+    ]
+  },
+  {
+    "word": "School camp",
+    "category": "What",
+    "hint": "An overnight school trip with shared activities and cabins or tents.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "School excursion",
+    "category": "What",
+    "hint": "A class trip away from school to learn or explore together.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "School fete",
+    "category": "What",
+    "hint": "A school fundraiser with stalls, games and homemade treats.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Homework",
+    "category": "What",
+    "hint": "School work to finish at home after the school day.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Playdate",
+    "category": "What",
+    "hint": "A planned afternoon when friends meet to play together.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Prank",
+    "category": "What",
+    "hint": "A harmless trick played to surprise or make someone laugh.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Riddle",
+    "category": "What",
+    "hint": "A tricky question that has to be solved from its clues.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Pirate adventure",
+    "category": "What",
+    "hint": "An imaginary voyage with a crew searching for treasure.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Dragon",
+    "category": "What",
+    "hint": "A make-believe creature often shown with scales, wings or fire.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Fairy",
+    "category": "What",
+    "hint": "A tiny magical storybook creature, often shown with wings.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Mermaid",
+    "category": "What",
+    "hint": "A make-believe sea person with a fish’s tail.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Imaginary friend",
+    "category": "What",
+    "hint": "A pretend companion a child invents for games and stories.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Secret club",
+    "category": "What",
+    "hint": "A group of friends with a name, a meeting place and special rules.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Campfire story",
+    "category": "What",
+    "hint": "A tale told aloud while people sit around a fire at camp.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Classroom quiz",
+    "category": "What",
+    "hint": "A short set of questions that lets a class test what they know.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "School project",
+    "category": "What",
+    "hint": "A piece of work made over time to explore a subject.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Costume party",
+    "category": "What",
+    "hint": "A party where guests arrive dressed as characters or creatures.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Fairy tale",
+    "category": "What",
+    "hint": "A traditional make-believe story with magic and a memorable adventure.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Dinosaur dig",
+    "category": "What",
+    "hint": "A pretend or real fossil search using brushes and careful digging.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Pen-pal letter",
+    "category": "What",
+    "hint": "A message sent to a friend who lives far away.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Dragon egg",
+    "category": "What",
+    "hint": "A make-believe egg that might hatch into a flying, fire-breathing creature.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Fairy garden",
+    "category": "What",
+    "hint": "A miniature garden decorated as a tiny home for imaginary fairies.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Show-and-tell",
+    "category": "What",
+    "hint": "A classroom turn to bring something in and talk about it.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Book Week costume parade",
+    "category": "What",
+    "hint": "A school event where children dress as story characters.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "School disco",
+    "category": "What",
+    "hint": "A school dance with music, games and a decorated hall.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Classroom pet",
+    "category": "What",
+    "hint": "An animal cared for by a class during the school week.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Egg-and-spoon race",
+    "category": "What",
+    "hint": "A race where you try to carry an egg on a spoon without dropping it.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Three-legged race",
+    "category": "What",
+    "hint": "A partner race with each person’s inside leg tied to the other’s.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Sack race",
+    "category": "What",
+    "hint": "A race where you hop forward inside a large sack.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Water balloon toss",
+    "category": "What",
+    "hint": "A partner game of gently throwing a water-filled balloon.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Sprinkler run",
+    "category": "What",
+    "hint": "A warm-day game of racing through water from a garden sprinkler.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Sleepover",
+    "category": "What",
+    "hint": "A night spent at a friend’s house, often with games and a movie.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Marble run",
+    "category": "What",
+    "hint": "A track that lets small marbles roll through twists and drops.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Domino run",
+    "category": "What",
+    "hint": "A line of dominoes that tips over one after another.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Blanket fort",
+    "category": "What",
+    "hint": "A cosy hideout made by draping blankets over chairs or a table.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Treasure hunt",
+    "category": "What",
+    "hint": "A game of following clues to find a hidden prize.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Paper-plane contest",
+    "category": "What",
+    "hint": "A challenge to see whose folded paper plane flies farthest or best.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Four square",
+    "category": "What",
+    "hint": "A playground handball game played across four marked squares.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Hand-clapping game",
+    "category": "What",
+    "hint": "A rhythmic playground game where partners clap in a pattern.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Red light, green light",
+    "category": "What",
+    "hint": "A running game where you freeze when the caller says red light.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Duck, duck, goose",
+    "category": "What",
+    "hint": "A circle game where one player taps heads before choosing a chaser.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "What’s the time, Mr Wolf?",
+    "category": "What",
+    "hint": "A chasing game where the wolf’s answer can send everyone running.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "The floor is lava",
+    "category": "What",
+    "hint": "An imaginative game where you try to keep your feet off the floor.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Obstacle course",
+    "category": "What",
+    "hint": "A route that asks you to crawl, jump, balance or weave around things.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Friendship bracelet",
+    "category": "What",
+    "hint": "A colourful bracelet made by knotting threads together.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Paper fortune teller",
+    "category": "What",
+    "hint": "A folded paper game that opens to reveal a colour, number or message.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Origami crane",
+    "category": "What",
+    "hint": "A paper bird made by folding a square sheet in a sequence.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Slime",
+    "category": "What",
+    "hint": "A stretchy, squishy play mixture that can be squeezed, stretched and shaped.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Pinball machine",
+    "category": "What",
+    "hint": "A game where you launch a small metal ball through bumpers and targets.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Dress-up box",
+    "category": "What",
+    "hint": "A collection of clothes and props for pretending to be someone else.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Water pistol",
+    "category": "What",
+    "hint": "A small toy that squirts water when you squeeze its trigger.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Bubble wand",
+    "category": "What",
+    "hint": "A looped tool for making floating soap bubbles.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Pocket money",
+    "category": "What",
+    "hint": "A small amount of money a child can save or spend.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Lunchbox note",
+    "category": "What",
+    "hint": "A short message tucked into a child’s lunch for them to find.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "School planner",
+    "category": "What",
+    "hint": "A notebook for writing down homework, reminders and due dates.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Reading challenge",
+    "category": "What",
+    "hint": "A goal to finish a chosen number of books in a set time.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Secret handshake",
+    "category": "What",
+    "hint": "A special sequence of moves shared between friends.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Time capsule",
+    "category": "What",
+    "hint": "A box of keepsakes saved to be opened in the future.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Treasure map",
+    "category": "What",
+    "hint": "A drawing with clues that lead to a hidden prize.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Cardboard robot costume",
+    "category": "What",
+    "hint": "A pretend robot outfit made from decorated boxes.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Comic strip",
+    "category": "What",
+    "hint": "A short story told with pictures and speech bubbles.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Stop-motion movie",
+    "category": "What",
+    "hint": "A film made by photographing a toy in many tiny positions.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Puppet show",
+    "category": "What",
+    "hint": "A story acted out using puppets behind a small stage.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Leaf collection",
+    "category": "What",
+    "hint": "Leaves gathered and arranged to compare their shapes.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Bird feeder",
+    "category": "What",
+    "hint": "A hanging container that offers seeds to visiting birds.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Worm farm",
+    "category": "What",
+    "hint": "A container where worms help turn food scraps into rich soil.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Capybara",
+    "category": "What",
+    "hint": "A giant South American rodent that often enjoys sitting in water.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Axolotl",
+    "category": "What",
+    "hint": "A water-dwelling salamander with feathery external gills.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Tawny frogmouth",
+    "category": "What",
+    "hint": "An Australian bird that looks like a tree branch when still.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Quoll",
+    "category": "What",
+    "hint": "A spotted Australian marsupial that hunts at night.",
+    "difficulty": "hard",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Numbat",
+    "category": "What",
+    "hint": "A small striped Australian marsupial that eats termites.",
+    "difficulty": "hard",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Leafy seadragon",
+    "category": "What",
+    "hint": "A sea creature whose leafy fins help it blend with seaweed.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Frilled-neck lizard",
+    "category": "What",
+    "hint": "An Australian lizard that opens a wide frill around its neck.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Flying fox",
+    "category": "What",
+    "hint": "A large fruit-eating bat that roosts in noisy groups.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Red panda",
+    "category": "What",
+    "hint": "A reddish tree-climbing mammal with a ringed tail.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Meerkat",
+    "category": "What",
+    "hint": "A small social mammal often seen standing upright to watch for danger.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Dugong",
+    "category": "What",
+    "hint": "A gentle sea mammal that grazes on seagrass.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Hermit crab",
+    "category": "What",
+    "hint": "A crab that carries a borrowed shell as it grows.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Pufferfish",
+    "category": "What",
+    "hint": "A fish that can puff its body up when threatened.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Glow worm",
+    "category": "What",
+    "hint": "A tiny insect larva that shines to attract prey.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Blue-tongue lizard",
+    "category": "What",
+    "hint": "A chunky Australian lizard that shows a bright blue tongue.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Indoor climbing centre",
+    "category": "Where",
+    "hint": "A place with padded walls and routes to climb using handholds.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Splash pad",
+    "category": "Where",
+    "hint": "A flat play area where water jets pop up from the ground.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Ice-skating rink",
+    "category": "Where",
+    "hint": "A smooth indoor or outdoor surface for skating on ice.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Mini-golf course",
+    "category": "Where",
+    "hint": "A small putting course with ramps, tunnels and tricky holes.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Bike pump track",
+    "category": "Where",
+    "hint": "A looping bike track made of small bumps and banked turns.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Toy library",
+    "category": "Where",
+    "hint": "A place where families can borrow toys and games.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Indoor play centre",
+    "category": "Where",
+    "hint": "A big play space with soft climbing frames and slides.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Dinosaur museum",
+    "category": "Where",
+    "hint": "A museum with dinosaur skeletons, fossils or life-size models.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "School hall",
+    "category": "Where",
+    "hint": "A large room at school used for assemblies and indoor events.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Petting farm",
+    "category": "Where",
+    "hint": "A farm where visitors can meet and gently feed some animals.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Aquarium tunnel",
+    "category": "Where",
+    "hint": "A clear tunnel where fish and sharks swim overhead.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Board-game café",
+    "category": "Where",
+    "hint": "A café where friends can choose a game to play at the table.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Go-kart track",
+    "category": "Where",
+    "hint": "A course where drivers race small motorised karts.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Tree-top walk",
+    "category": "Where",
+    "hint": "A raised path through trees with views from above the forest floor.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Wildlife hospital",
+    "category": "Where",
+    "hint": "A place where injured wild animals receive care before release.",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www"
+    ]
+  },
+  {
+    "word": "Community garden",
+    "category": "Where",
+    "hint": "A shared garden where neighbours grow vegetables and flowers.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Haunted house",
+    "category": "Where",
+    "hint": "A spooky house in a story or at a pretend-play attraction.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Dragon’s lair",
+    "category": "Where",
+    "hint": "A hidden cave or den imagined as a dragon’s home.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  },
+  {
+    "word": "Secret hideout",
+    "category": "Where",
+    "hint": "A private place that a group of friends uses for their games.",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "kidTargeted": true,
+    "aliases": [],
+    "originalIds": [],
+    "games": [
+      "www",
+      "imposter"
+    ]
+  }
+]

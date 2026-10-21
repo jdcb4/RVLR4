@@ -18,6 +18,7 @@ const sample: CatalogueEntry = {
   hint: "Singer formerly in Destiny's Child",
   difficulty: "easy",
   kidAppropriate: false,
+  kidTargeted: false,
   aliases: ["Beyonce Knowles"],
   originalIds: ["hat:0"],
   games: ["hat", "www"],
@@ -77,6 +78,19 @@ describe("curated word catalogue", () => {
     );
     expect(getHatClueSuggestions()).toEqual(getCatalogueForGame("hat").map(({ word }) => word));
     expect(getImposterWordList()).toEqual(getCatalogueForGame("imposter").map(({ word }) => word));
+  });
+
+  it("distinguishes deliberately child-targeted answers from general suitable content", () => {
+    const entries = getWordCatalogue();
+    const targeted = entries.filter((entry) => entry.kidTargeted);
+    expect(targeted.length).toBeGreaterThanOrEqual(100);
+    expect(targeted.every((entry) => entry.kidAppropriate)).toBe(true);
+    expect(targeted.every((entry) => !/^(a|an) /iu.test(entry.word))).toBe(true);
+    expect(new Set(targeted.map((entry) => entry.category)).size).toBe(3);
+    expect(entries.some((entry) => entry.kidAppropriate && !entry.kidTargeted)).toBe(true);
+    expect(catalogueSchema.safeParse([{ ...sample, kidTargeted: true }]).success).toBe(false);
+    const { kidTargeted: _targeted, ...legacy } = sample;
+    expect(catalogueSchema.parse([legacy])[0]?.kidTargeted).toBe(false);
   });
 
   it("merges alternate names while preserving distinct homonyms and child suitability", () => {
