@@ -13,8 +13,7 @@ Deferred; not part of the current implementation:
 - **When category:** years/dates associated with significant historical events or famous days.
 - **Difficulty modes:** selectable challenge levels.
 - **Kids mode:** age-appropriate play and content.
-- **Themes:** selectable colour palettes.
-- **Game-like graphics:** apply the selected production visual direction after review. Four isolated playable studies were delivered in 0.27.0; selection/application remains pending.
+- **Game-like graphics:** further bespoke illustrations and game artwork beyond the five selectable visual themes shipped in 0.29.0.
 
 ## Android delivery follow-ups
 

@@ -6,6 +6,7 @@ import { AppInfoHeaderButton, AppInfoOverlay } from "@/components/AppInfoOverlay
 import { IconDisguise, IconTopHat, IconWhoWhatWhere } from "@/components/icons";
 import { ModalDialog } from "@/components/ModalDialog";
 import { Button } from "@/components/ui/button";
+import { ThemeChooser } from "@/themes/ThemeChooser";
 
 import packageJson from "../../../package.json";
 
@@ -14,7 +15,7 @@ export function PassNPlayHubPage() {
   const [openDialog, setOpenDialog] = useState<"settings" | "info" | null>(null);
 
   return (
-    <main className="safe-screen mx-auto flex min-h-dvh w-full max-w-md flex-col gap-7 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(2rem,env(safe-area-inset-top))]">
+    <main className="game-picker safe-screen mx-auto flex min-h-dvh w-full max-w-md flex-col gap-7 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(2rem,env(safe-area-inset-top))]">
       <header className="flex items-center justify-between gap-3">
         <h1 className="text-typ-display font-bold tracking-tight text-primary">RVLRY</h1>
         <div className="flex shrink-0 items-center gap-1">
@@ -58,7 +59,7 @@ export function PassNPlayHubPage() {
           ].map(({ title, description, path, Icon }) => (
             <Link
               key={path}
-              className="flex min-h-28 items-center gap-4 rounded-2xl border border-border bg-card p-5 text-foreground transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+              className="game-ticket flex min-h-28 items-center gap-4 rounded-2xl border border-border bg-card p-5 text-foreground transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
               to={`/games/${path}`}
             >
               <Icon className="size-12 shrink-0 text-primary" />
@@ -72,6 +73,7 @@ export function PassNPlayHubPage() {
       </section>
       {openDialog === "settings" && (
         <ModalDialog title="Settings" onClose={() => setOpenDialog(null)}>
+          <ThemeChooser />
           <div className="space-y-3 pt-3 text-typ-ui text-muted-foreground">
             <p>Words are included on your phone. No internet connection is needed to play.</p>
             <Button type="button" disabled variant="outline" className="w-full justify-start">

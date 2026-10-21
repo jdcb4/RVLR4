@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.28.0 is the debug-signed three-game build: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons; no word-update source is configured yet. Release signing and remote word installation remain future work.
+0.29.0 is the debug-signed three-game build with five app-wide themes: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. No word-update source is configured yet. Release signing and remote word installation remain future work.
 
 Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
@@ -290,3 +290,13 @@ Browser checks at 360x640 cover full Hat and Imposter flows, concealed same-role
 Fallow reviewed: zero unreachable files, 37 remaining export/member/dependency findings (including required Capacitor Android and indirect controller method references), 7 clone groups and 31 health thresholds; maintainability 90.7. Game-controller similarities are retained where their save/privacy semantics differ, rather than a universal state machine. No tests or quality findings were suppressed. Design detector flags the explicitly requested warm palette and font choices; the brief governs those studies.
 
 APK: out/RVLRY-0.28.0-three-games.apk. Copied/hash-verified to JNAS Media/DropBox, alongside cleanup 0.26.5 and Hat 0.27.0 checkpoints. SHA-256: EADDC530F0712DFBBFA0CE4C5CA8AB7324659EC2E1554842121AC6CD432CB0F2. Install over the existing prototype to retain saves.
+
+## Theme chooser verification — 22 October 2026
+
+0.29.0 / versionCode 10 passes pnpm run verify (217 tests / 38 files), Android assembly, all nine API-35 device tests and both separate force-stop storage checkpoint phases. The native app-flow test selects every theme, verifies its SQLite record, and exercises all three games in Observatory. A separate test restores Observatory from native storage at startup while preserving the original preference. The initial test-only reload attempt switched away from its injected temporary database; the checks were separated to test real startup and isolated game flows correctly.
+
+Browser review at 360x640 checked the chooser, all five active-play appearances, recap, Hat and Imposter settings; 412x915 checked the four themed pickers. No horizontal/page overflow was observed on those screens. Local fonts loaded; reduced-motion and theme-specific category/skip text are supported. Team progress uses a different highlight from primary actions. Pixel 10 visual/upgrade acceptance remains unverified.
+
+Fallow was reviewed: 37 existing export/member/dependency findings and eight clone groups remain; no theme-module dead-code findings. Scoped design scan returned no findings. No checks were weakened. Kestrel returned no pending design responses before implementation; chat authorizes all four optional themes plus Classic.
+
+Artifact: out/RVLRY-0.29.0-themes.apk, copied and SHA-256 verified to JNAS Media/DropBox/RVLRY-0.29.0-themes.apk. Install over the current build to retain games and preferences.

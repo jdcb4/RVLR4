@@ -33,6 +33,11 @@ type ButtonProps = ComponentProps<"button"> & VariantProps<typeof buttonVariants
 
 export function Button({ className, variant, size, ...props }: ButtonProps) {
   return (
-    <button type="button" className={cn(buttonVariants({ variant, size }), className)} {...props} />
+    <button
+      type="button"
+      data-ui-button={variant ?? "default"}
+      className={cn(buttonVariants({ variant, size }), className)}
+      {...props}
+    />
   );
 }

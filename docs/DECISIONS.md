@@ -346,3 +346,7 @@ After the Pixel durability checkpoint, retire the unreachable multiplayer server
 ## 2026-10-22 — Independent game sessions and review studies
 
 Hat and Imposter use their own version-1 session keys and game-owned controllers; WWW keeps its original key/payload compatibility. Generated private state commits before disclosure. Hat retains mid-turn phase changes; Imposter visibility is a foreground-only value. Shared roster/clock/subscription/history primitives eliminate presentation duplication without a universal game reducer. Retire obsolete browser/gallery code and unused nanoid after import analysis; the four independent offline studies replace the old gallery review role. Their fonts are locally bundled with license notices and they never enter the APK. Production theme selection remains pending user review.
+
+## 22 October 2026 — Shared visual themes
+
+Keep a single set of layouts/controllers and apply theme tokens and scoped component decoration. Classic preserves the incumbent styling; the four reviewed studies supply optional visual worlds. Local licensed fonts avoid runtime network dependencies. Store appearance in a separate validated native snapshot, committed before applying; do not mix preferences with game sessions or introduce a new storage dependency.

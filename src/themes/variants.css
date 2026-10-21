@@ -1,0 +1,644 @@
+/* Local display faces keep every theme available in airplane mode. */
+@font-face {
+  font-family: "RVLRY Barlow";
+  src: url("/fonts/BarlowCondensed-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "RVLRY Fraunces";
+  src: url("/fonts/Fraunces.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "RVLRY Bricolage";
+  src: url("/fonts/BricolageGrotesque.ttf") format("truetype");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "RVLRY Cinzel";
+  src: url("/fonts/Cinzel.ttf") format("truetype");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+html[data-theme="pub-trivia"] {
+  --semantic-progress-current: #a5b78b;
+  --semantic-progress-foreground: #1c211e;
+  color-scheme: dark;
+  --background: 144 8% 12%;
+  --foreground: 39 39% 93%;
+  --card: 137 9% 16%;
+  --card-foreground: 39 39% 93%;
+  --primary: 38 91% 55%;
+  --primary-foreground: 34 48% 10%;
+  --secondary: 130 9% 23%;
+  --secondary-foreground: 39 39% 93%;
+  --muted: 137 9% 19%;
+  --muted-foreground: 72 12% 75%;
+  --accent: 37 27% 25%;
+  --accent-foreground: 39 39% 93%;
+  --destructive: 8 87% 73%;
+  --destructive-foreground: 8 60% 12%;
+  --border: 82 13% 36%;
+  --input: 82 13% 42%;
+  --ring: 38 91% 55%;
+  --theme-display-font: "RVLRY Barlow", sans-serif;
+  --theme-radius: 5px;
+  --theme-category-foreground: #3d2314;
+  --semantic-category-who-bg: #f4efe6;
+  --semantic-category-who-border: #b6a38e;
+  --semantic-category-what-bg: #e6ebd8;
+  --semantic-category-what-border: #a2af87;
+  --semantic-category-where-bg: #e4e8e9;
+  --semantic-category-where-border: #96a7ae;
+  --semantic-skipped-bg: #372c1d;
+  --semantic-skipped-border: #ac874b;
+  --semantic-skipped-foreground: #f5cc87;
+  --semantic-progress-complete: #35452e;
+  --theme-background-decoration: radial-gradient(ellipse at 90% 0, #f5a62310, transparent 65%);
+}
+
+html[data-theme="bookclub"] {
+  --semantic-progress-current: #1b263b;
+  --semantic-progress-foreground: #faf6f0;
+  color-scheme: light;
+  --background: 36 50% 96%;
+  --foreground: 219 37% 17%;
+  --card: 40 35% 92%;
+  --card-foreground: 219 37% 17%;
+  --primary: 12 55% 40%;
+  --primary-foreground: 35 100% 98%;
+  --secondary: 98 19% 88%;
+  --secondary-foreground: 219 37% 17%;
+  --muted: 40 24% 89%;
+  --muted-foreground: 110 5% 37%;
+  --accent: 98 19% 88%;
+  --accent-foreground: 219 37% 17%;
+  --destructive: 0 66% 38%;
+  --destructive-foreground: 35 100% 98%;
+  --border: 97 10% 72%;
+  --input: 97 10% 59%;
+  --ring: 12 55% 40%;
+  --theme-display-font: "RVLRY Fraunces", Georgia, serif;
+  --theme-radius: 2px;
+  --theme-category-foreground: #1b263b;
+  --semantic-category-who-bg: #f0e6e4;
+  --semantic-category-who-border: #b9a09c;
+  --semantic-category-what-bg: #e0e7dc;
+  --semantic-category-what-border: #95a58b;
+  --semantic-category-where-bg: #e3e9ec;
+  --semantic-category-where-border: #98aab4;
+  --semantic-skipped-bg: #f3e5d5;
+  --semantic-skipped-border: #ae8052;
+  --semantic-skipped-foreground: #784b23;
+  --semantic-progress-complete: #d9e2d3;
+  --theme-background-decoration: none;
+}
+
+html[data-theme="recess"] {
+  --semantic-progress-current: #b53622;
+  --semantic-progress-foreground: #fffdf2;
+  color-scheme: light;
+  --background: 51 100% 97%;
+  --foreground: 219 53% 21%;
+  --card: 48 100% 90%;
+  --card-foreground: 219 53% 21%;
+  --primary: 221 83% 53%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 48 96% 53%;
+  --secondary-foreground: 219 53% 21%;
+  --muted: 48 65% 90%;
+  --muted-foreground: 220 28% 36%;
+  --accent: 48 96% 53%;
+  --accent-foreground: 219 53% 21%;
+  --destructive: 3 76% 38%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 219 25% 57%;
+  --input: 219 25% 50%;
+  --ring: 221 83% 53%;
+  --theme-display-font: "RVLRY Bricolage", sans-serif;
+  --theme-radius: 12px;
+  --theme-category-foreground: #192d52;
+  --semantic-category-who-bg: #facc15;
+  --semantic-category-who-border: #192d52;
+  --semantic-category-what-bg: #c7f0db;
+  --semantic-category-what-border: #377d69;
+  --semantic-category-where-bg: #d9e6ff;
+  --semantic-category-where-border: #4b6daa;
+  --semantic-skipped-bg: #fff0c2;
+  --semantic-skipped-border: #a27631;
+  --semantic-skipped-foreground: #784715;
+  --semantic-progress-complete: #bce7d5;
+  --theme-background-decoration: none;
+}
+
+html[data-theme="observatory"] {
+  --semantic-progress-current: #64ffda;
+  --semantic-progress-foreground: #0f1026;
+  color-scheme: dark;
+  --background: 237 43% 10%;
+  --foreground: 42 57% 91%;
+  --card: 245 33% 15%;
+  --card-foreground: 42 57% 91%;
+  --primary: 46 65% 52%;
+  --primary-foreground: 255 30% 11%;
+  --secondary: 271 26% 22%;
+  --secondary-foreground: 42 57% 91%;
+  --muted: 250 27% 19%;
+  --muted-foreground: 258 21% 79%;
+  --accent: 281 33% 24%;
+  --accent-foreground: 42 57% 91%;
+  --destructive: 354 100% 79%;
+  --destructive-foreground: 354 55% 12%;
+  --border: 282 11% 41%;
+  --input: 282 14% 50%;
+  --ring: 46 65% 52%;
+  --theme-display-font: "RVLRY Cinzel", Georgia, serif;
+  --theme-radius: 6px;
+  --theme-category-foreground: #f5edda;
+  --semantic-category-who-bg: #2d1b36;
+  --semantic-category-who-border: #a18a52;
+  --semantic-category-what-bg: #183c38;
+  --semantic-category-what-border: #518c80;
+  --semantic-category-where-bg: #242c4a;
+  --semantic-category-where-border: #7586b0;
+  --semantic-skipped-bg: #392535;
+  --semantic-skipped-border: #af889b;
+  --semantic-skipped-foreground: #f0c6dc;
+  --semantic-progress-complete: #273d40;
+  --theme-background-decoration:
+    radial-gradient(ellipse at 110% 75%, #64ffda0c, transparent 48%),
+    radial-gradient(ellipse at 0 40%, #884d921c, transparent 56%);
+}
+
+/* Classic has no overrides. These shared rules apply only to the four opt-in worlds. */
+html:is(
+  [data-theme="pub-trivia"],
+  [data-theme="bookclub"],
+  [data-theme="recess"],
+  [data-theme="observatory"]
+) {
+  --semantic-primary-soft-bg: hsl(var(--primary) / 0.09);
+  --semantic-primary-well-bg: hsl(var(--primary) / 0.18);
+  --semantic-primary-border: hsl(var(--primary) / 0.5);
+  --semantic-primary-hover: hsl(var(--primary) / 0.88);
+  --semantic-secondary-hover: hsl(var(--secondary) / 0.8);
+  --semantic-accent-hover-wash: hsl(var(--accent) / 0.5);
+  --semantic-muted-panel-bg: hsl(var(--muted) / 0.6);
+  --semantic-border-faint: hsl(var(--border) / 0.65);
+  --semantic-border-muted: hsl(var(--border) / 0.85);
+  --semantic-surface-elevated: hsl(var(--background));
+  --semantic-destructive-border-soft: hsl(var(--destructive) / 0.45);
+  --semantic-destructive-surface-soft: hsl(var(--destructive) / 0.1);
+  --semantic-scrim: hsl(0 0% 0% / 0.65);
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  body {
+  background-image: var(--theme-background-decoration);
+  background-attachment: fixed;
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  ::selection {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  * {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  a {
+  text-underline-offset: 4px;
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  input,
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  textarea,
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  select {
+  caret-color: hsl(var(--primary));
+  accent-color: hsl(var(--primary));
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  input::placeholder,
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  textarea::placeholder {
+  color: hsl(var(--muted-foreground));
+  opacity: 1;
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  h1,
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  h2:not(.text-typ-ui),
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  h3:not(.text-typ-ui, .text-typ-body),
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  .text-typ-display,
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  .text-typ-metric {
+  font-family: var(--theme-display-font);
+  text-wrap: balance;
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  .safe-screen {
+  padding-left: max(1.125rem, env(safe-area-inset-left));
+  padding-right: max(1.125rem, env(safe-area-inset-right));
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  [data-ui-button],
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  input,
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  textarea,
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  select,
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  .rounded-xl,
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  .rounded-2xl {
+  border-radius: var(--theme-radius);
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  [data-ui-button="default"],
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  [data-ui-button="secondary"],
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  [data-ui-button="outline"] {
+  box-shadow: none;
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  [data-ui-button="outline"]:hover:not(:disabled) {
+  color: hsl(var(--accent-foreground));
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  :is(.bg-semantic-category-who-bg, .bg-semantic-category-what-bg, .bg-semantic-category-where-bg) {
+  color: var(--theme-category-foreground);
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  .game-picker
+  > header
+  h1 {
+  font-size: 3.75rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  .game-ticket {
+  border-radius: var(--theme-radius);
+}
+
+html:is(
+    [data-theme="pub-trivia"],
+    [data-theme="bookclub"],
+    [data-theme="recess"],
+    [data-theme="observatory"]
+  )
+  .game-ticket
+  h3 {
+  line-height: 1.1;
+}
+
+html[data-theme="pub-trivia"] [data-ui-button="default"],
+html[data-theme="pub-trivia"] [data-ui-button="secondary"] {
+  font-family: var(--theme-display-font);
+  font-size: 1.125rem;
+  letter-spacing: 0.015em;
+}
+
+html[data-theme="pub-trivia"] .game-ticket {
+  color: #3d2314;
+  background: #f4efe6;
+  border-color: #f4efe6;
+  box-shadow: 0 6px 14px #0003;
+}
+
+html[data-theme="pub-trivia"] .game-ticket .text-primary {
+  color: #83521d;
+}
+
+html[data-theme="pub-trivia"] .game-ticket .text-muted-foreground {
+  color: #70583f;
+}
+
+html[data-theme="pub-trivia"] .game-ticket h3 {
+  font-size: 2rem;
+}
+
+html[data-theme="bookclub"] h1,
+html[data-theme="bookclub"] h2:not(.text-typ-ui),
+html[data-theme="bookclub"] h3:not(.text-typ-ui, .text-typ-body),
+html[data-theme="bookclub"] .text-typ-display {
+  font-weight: 500;
+}
+
+html[data-theme="bookclub"] .game-ticket {
+  background: #e0e7dc;
+  border-width: 1px 0;
+  border-color: #9ba68f;
+}
+
+html[data-theme="bookclub"]
+  :is(.bg-semantic-category-who-bg, .bg-semantic-category-what-bg, .bg-semantic-category-where-bg) {
+  border-width: 1px 0;
+  border-radius: 0;
+}
+
+html[data-theme="recess"] [data-ui-button="default"],
+html[data-theme="recess"] [data-ui-button="secondary"] {
+  border: 2px solid hsl(var(--foreground));
+  box-shadow: 2px 3px 0 hsl(var(--foreground));
+  font-weight: 700;
+}
+
+html[data-theme="recess"] [data-ui-button="default"]:active:not(:disabled),
+html[data-theme="recess"] [data-ui-button="secondary"]:active:not(:disabled) {
+  box-shadow: 1px 1px 0 hsl(var(--foreground));
+}
+
+html[data-theme="recess"] .game-ticket {
+  background: #facc15;
+  border: 2px solid hsl(var(--foreground));
+  box-shadow: 3px 4px 0 hsl(var(--foreground));
+  margin-right: 4px;
+}
+
+html[data-theme="recess"] .game-ticket .text-primary {
+  color: #192d52;
+}
+
+html[data-theme="recess"]
+  :is(.bg-semantic-category-who-bg, .bg-semantic-category-what-bg, .bg-semantic-category-where-bg) {
+  border-width: 2px;
+  box-shadow: 2px 3px 0 hsl(var(--foreground));
+  margin-right: 3px;
+}
+
+html[data-theme="observatory"] .game-ticket {
+  border-color: #a18a52;
+  background: #1c1a34;
+}
+
+html[data-theme="observatory"] .game-ticket h3 {
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+html[data-theme="observatory"] .game-picker > header h1 {
+  font-size: 3rem;
+  letter-spacing: 0.015em;
+}
+
+html[data-theme="observatory"] .text-typ-display {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+/* Each option remains a truthful miniature even when another theme is active. */
+.theme-option[data-preview-theme="classic"] {
+  --preview-bg: #faf9f5;
+  --preview-ink: #191d24;
+  --preview-accent: #1e7167;
+  --preview-soft: #e3e7ec;
+  --preview-font: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.theme-option[data-preview-theme="pub-trivia"] {
+  --preview-bg: #1c211e;
+  --preview-ink: #f4efe6;
+  --preview-accent: #f5a623;
+  --preview-soft: #606950;
+  --preview-font: "RVLRY Barlow", sans-serif;
+}
+
+.theme-option[data-preview-theme="bookclub"] {
+  --preview-bg: #faf6f0;
+  --preview-ink: #1b263b;
+  --preview-accent: #a0442e;
+  --preview-soft: #c4c9bc;
+  --preview-font: "RVLRY Fraunces", Georgia, serif;
+}
+
+.theme-option[data-preview-theme="recess"] {
+  --preview-bg: #fffdf2;
+  --preview-ink: #192d52;
+  --preview-accent: #2563eb;
+  --preview-soft: #facc15;
+  --preview-font: "RVLRY Bricolage", sans-serif;
+}
+
+.theme-option[data-preview-theme="observatory"] {
+  --preview-bg: #0f1026;
+  --preview-ink: #f5edda;
+  --preview-accent: #d4af37;
+  --preview-soft: #6e5c74;
+  --preview-font: "RVLRY Cinzel", Georgia, serif;
+}
+
+.theme-option {
+  background: var(--preview-bg);
+  color: var(--preview-ink);
+  border-color: var(--preview-soft);
+}
+
+.theme-option:has(input:checked) {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+.theme-option .theme-option-title {
+  font-family: var(--preview-font);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.theme-option[data-preview-theme="pub-trivia"] .theme-option-title {
+  font-size: 1.25rem;
+}
+
+.theme-option-swatches {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.theme-option-swatches > i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--preview-accent);
+}
+
+.theme-option-swatches > i:nth-child(2) {
+  background: var(--preview-ink);
+}
+
+.theme-option-swatches > i:nth-child(3) {
+  background: var(--preview-soft);
+}

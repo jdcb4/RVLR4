@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.29.0 — 22 October 2026
+
+- Added an app-wide Settings theme chooser: Classic plus After-Hours Social, The Margin Note, Recess and Midnight Observatory. Classic remains the default and preserves the original UI.
+- Bundled offline fonts and theme-specific surfaces, headings, buttons and accessible game colours across all three games.
+- Theme choice uses independent validated native SQLite snapshots, with save-failure feedback and load retry. Game save formats are unchanged.
+
 ## 0.28.0 — Three offline games
 
 - Enable Imposter with durable deals, concealed same-player restoration, private handoffs, clue/discussion guides and deliberate final reveal. No new game rules or in-app voting.

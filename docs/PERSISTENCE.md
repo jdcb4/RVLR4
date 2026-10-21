@@ -10,6 +10,10 @@ Each game owns a separate complete validated session through nativeSnapshotStore
 
 Who What Where version-1 compatibility is preserved: old records without presentationStage default to null. Tests load an installed-style active-turn envelope and prove its bytes remain unchanged while other games save or clear their own records.
 
+## App preferences
+
+`app.appearance.v1` stores `{ schemaVersion: 1, theme }` independently of every game. The theme enum is validated and uses the same native current/previous snapshot store. Selection is shown only after commit; unsupported/corrupt records are preserved, and Settings offers a load retry rather than silently replacing them. Browser previews use the same localStorage envelope adapter as game sessions.
+
 ## Recovery and privacy
 
 Validate before enabling writes. A corrupt current record may fall back to the valid previous record; repair preserves that validated checkpoint. Unsupported versions are retained with an explicit error. Failed writes stop play and offer retry. Replacement commits before discarding the old game; merely viewing a saved-game chooser does not update its timestamp.

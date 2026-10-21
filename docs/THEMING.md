@@ -8,7 +8,13 @@
 
 Components should use **`semantic-*`** utilities for any tinted surface, soft border, scrim, or gallery chrome—not raw palette utilities with `/opacity` modifiers.
 
-## Adding another theme later
+## App-wide chooser (0.29.0)
+
+Settings on the game picker offers Classic (the unchanged original), After-Hours Social, The Margin Note, Recess and Midnight Observatory. Selection commits through native SQLite under `app.appearance.v1` before the UI changes. Startup loads it before rendering the app; read failures leave Classic usable and expose Retry in Settings. Failed writes retain the previous selection and show a retry message. Game sessions are independent.
+
+`src/themes/themePreference.ts` owns validation, loading and selection; `ThemeChooser.tsx` renders native radio controls. `variants.css` overrides primitives, semantic tokens, display fonts and scoped decorative details via `html[data-theme]`. Classic has no overrides. Licensed fonts are bundled under `public/fonts` for offline use. Control positions, game logic and touch sizes remain shared; category and skip colours are adapted for contrast in dark themes. Reduced-motion preferences disable theme press motion.
+
+## Extending themes
 
 To swap palettes per game or route: load an alternate stylesheet (or swap a class on `<html>`) that overrides **`--semantic-*`** (and optionally primitives). Import order should stay **primitives → theme → app** so derived tokens resolve correctly.
 

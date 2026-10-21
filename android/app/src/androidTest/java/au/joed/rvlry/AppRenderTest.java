@@ -46,6 +46,27 @@ public class AppRenderTest {
     }
 
     @Test
+    public void bundledApplicationRestoresThemeFromNativeStorage() throws Exception {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String key = "app.appearance.v1";
+        try (SnapshotDatabase database = new SnapshotDatabase(context)) {
+            String[] original = database.read(key);
+            try {
+                database.write(key, "{\"storageVersion\":1,\"revision\":1,\"savedAt\":\"2026-10-22T00:00:00.000Z\",\"payload\":{\"schemaVersion\":1,\"theme\":\"observatory\"}}");
+                try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+                    AtomicReference<MainActivity> activity = new AtomicReference<>();
+                    scenario.onActivity(activity::set);
+                    awaitCondition(activity.get(), "document.documentElement.dataset.theme==='observatory' && !!document.querySelector('a[href*=whowhatwhere]')");
+                }
+            } finally {
+                database.remove(key);
+                if (original[1] != null) database.write(key, original[1]);
+                if (original[0] != null) database.write(key, original[0]);
+            }
+        }
+    }
+
+    @Test
     public void bundledApplicationRendersHubAndOpensWhoWhatWhere() throws Exception {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         String testDatabase = "snapshot-app-render-test.db";
@@ -67,6 +88,17 @@ public class AppRenderTest {
             Field workerField = RvlryDevicePlugin.class.getDeclaredField("storage");
             workerField.setAccessible(true);
             worker = (ExecutorService) workerField.get(plugin);
+            // Exercise the actual chooser and SQLite preference in the disposable database.
+            evaluate(activity, "document.querySelector('[aria-label=Settings]').click()");
+            for (String theme : new String[] { "pub-trivia", "bookclub", "recess", "classic", "observatory" }) {
+                awaitCondition(activity, "!!document.querySelector('input[value=\"" + theme + "\"]:enabled')");
+                evaluate(activity, "document.querySelector('input[value=\"" + theme + "\"]').click()");
+                awaitCondition(activity, "document.documentElement.dataset.theme==='" + theme + "' && !document.querySelector('fieldset[disabled]')");
+            }
+            try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
+                assertTrue(saved.read("app.appearance.v1")[0].contains("observatory"));
+            }
+            evaluate(activity, "document.querySelector('[aria-label=\"Close dialog\"]').click()");
             evaluate(activity, "document.querySelector('a[href*=whowhatwhere]').click()");
             awaitCondition(activity, "document.body.innerText.includes('Game settings') && document.body.innerText.includes('Turn length') && document.body.innerText.includes('Categories')");
             System.out.println("RVLRY_RENDER_SETTINGS " + evaluate(activity, "JSON.stringify({href:location.href,text:document.body.innerText.slice(0,1000)})"));
