@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.29.0 is the debug-signed three-game build with five app-wide themes: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. No word-update source is configured yet. Release signing and remote word installation remain future work.
+0.30.0 is the debug-signed three-game build with five app-wide themes and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. No word-update source is configured yet. Release signing and remote word installation remain future work.
 
 Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
@@ -308,3 +308,11 @@ Artifact: out/RVLRY-0.29.0-themes.apk, copied and SHA-256 verified to JNAS Media
 ## Dialog close refinement — 22 October 2026
 
 0.29.2 / versionCode 12 replaces the text close glyph with a 24px Lucide X in a 48px target nearer the dialog corner. Full verify (217 tests) and Android assembly passed. Browser inspection at 360x640 confirmed icon/target dimensions and closing; scoped design scan was clean. Native durability tests were not repeated for this presentation-only patch. APK out/RVLRY-0.29.2-themes.apk copied and hash-verified to JNAS Media/DropBox. SHA-256: EB02397EDB13472C5FF17DC32BF6726139F8A6DE24434E81F62313DB5E70C691. Pixel acceptance remains unverified.
+
+## Recess Option B — 22 October 2026
+
+0.30.0 / versionCode 13 applies the approved Cut-Paper Playground to Recess only. Full verify passed (217 tests / 38 files), Android assembly passed, nine API-35 tests and both force-stop storage phases passed. After the final Skip-button styling adjustment, the final APK passed both AppRenderTest cases again, including three-game flows with Recess selected and native preference restoration. A direct Gradle invocation initially lacked ANDROID_HOME; supplying the same SDK used by the helper resolved it.
+
+Browser 360x640 review checked picker, handoff, active play and Imposter conceal/reveal. Words and controls remain level; Skip and Correct retain 76px height and the 1:2 width ratio. Other themes have no paper pseudo-elements. Scoped design scan was clean. Fallow retains 39 findings (including two isolated mockup assets) and eight clone groups, reviewed without weakening checks. No pending Kestrel responses were returned; chat explicitly approved B. Pixel visual/upgrade acceptance remains unverified.
+
+APK: out/RVLRY-0.30.0-recess.apk, copied/hash-verified to JNAS Media/DropBox/RVLRY-0.30.0-recess.apk. SHA-256: 9B4DC72BA42E00E2E0B08755EE66439E55C1C394CD0D3EF5FFFC596A5F46F12E.

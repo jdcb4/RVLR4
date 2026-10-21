@@ -51,7 +51,7 @@ export function WhoWhatWhereDeviceTurn({
       </div>
 
       <div
-        className={`flex min-h-32 shrink-0 flex-col items-center justify-center gap-2 rounded-xl border px-4 py-4 text-center text-foreground ${categoryPanelClasses[turn.category]}`}
+        className={`material-clue flex min-h-32 shrink-0 flex-col items-center justify-center gap-2 rounded-xl border px-4 py-4 text-center text-foreground ${categoryPanelClasses[turn.category]}`}
         aria-label={`${turn.category} clue`}
       >
         <p className="text-typ-ui font-medium">{turn.category}</p>

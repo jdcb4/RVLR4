@@ -299,11 +299,11 @@ export function ImposterDevicePage() {
           <p className="text-typ-muted text-muted-foreground">
             Player {snapshot.round!.revealPlayerIndex + 1} of {snapshot.playerCount}
           </p>
-          <h2 className="break-words text-typ-section-title font-semibold">
+          <h2 className="material-callout break-words text-typ-section-title font-semibold">
             {game.roleVisible ? player.name : `Pass to ${player.name}`}
           </h2>
           {game.roleVisible ? (
-            <div className="space-y-3 rounded-2xl bg-secondary p-5">
+            <div className="material-clue space-y-3 rounded-2xl bg-secondary p-5">
               <h3 className="break-words text-typ-display font-semibold">
                 {imposter ? "You are the imposter" : snapshot.round!.secretWord}
               </h3>

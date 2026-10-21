@@ -123,7 +123,7 @@ export function WhoWhatWhereDeviceResults({ match }: { readonly match: MatchStat
   const skipLeaders = [...skips.values()].filter((player) => player.count === mostSkips);
   return (
     <section className="space-y-3">
-      <h2 className="break-words text-typ-section-title font-semibold">
+      <h2 className="material-winner break-words text-typ-section-title font-semibold">
         {winners.length === 1 ? `${winners[0]} win.` : `${winners.join(" & ")} tie.`}
       </h2>
       <WhoWhatWhereDeviceStandings match={match} />

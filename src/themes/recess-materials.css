@@ -1,0 +1,190 @@
+/* Recess: two paper sheets, with level text and a little play at the edges. */
+html[data-theme="recess"] {
+  --recess-ink: #192d52;
+  --recess-yellow: #facc15;
+  --recess-pink: #ffc6ca;
+  --recess-mint: #bce7d5;
+  --recess-blue: #d9e6ff;
+}
+
+html[data-theme="recess"] :is(.game-ticket, .material-clue, .material-callout, .material-winner) {
+  --paper-fill: var(--recess-yellow);
+  --paper-rear: var(--recess-pink);
+  --paper-angle: -1deg;
+  --paper-rear-angle: 2deg;
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  background: transparent;
+  border-color: transparent;
+  border-radius: 28px 12px 30px 13px;
+  box-shadow: none;
+  margin-inline: 7px;
+  margin-block: 7px 10px;
+}
+
+html[data-theme="recess"]
+  :is(.game-ticket, .material-clue, .material-callout, .material-winner)::before,
+html[data-theme="recess"]
+  :is(.game-ticket, .material-clue, .material-callout, .material-winner)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 2px solid var(--recess-ink);
+  border-radius: inherit;
+}
+
+html[data-theme="recess"]
+  :is(.game-ticket, .material-clue, .material-callout, .material-winner)::before {
+  z-index: -1;
+  background: var(--paper-fill);
+  box-shadow: 4px 6px 0 var(--recess-ink);
+  transform: rotate(var(--paper-angle));
+}
+
+html[data-theme="recess"]
+  :is(.game-ticket, .material-clue, .material-callout, .material-winner)::after {
+  z-index: -2;
+  background: var(--paper-rear);
+  border-radius: 12px 26px 13px 23px;
+  transform: rotate(var(--paper-rear-angle)) translate(1px, 1px);
+}
+
+html[data-theme="recess"] .game-ticket {
+  color: var(--recess-ink);
+  transition: color 130ms ease-out;
+}
+
+html[data-theme="recess"] .game-ticket:nth-child(2) {
+  --paper-fill: var(--recess-mint);
+  --paper-rear: var(--recess-yellow);
+  --paper-angle: 1.1deg;
+  --paper-rear-angle: -2deg;
+  border-radius: 12px 29px 13px 26px;
+}
+
+html[data-theme="recess"] .game-ticket:nth-child(3) {
+  --paper-fill: var(--recess-pink);
+  --paper-rear: var(--recess-blue);
+}
+
+html[data-theme="recess"] .game-ticket .text-muted-foreground {
+  color: #465571;
+}
+
+html[data-theme="recess"] .game-ticket::before {
+  transition:
+    box-shadow 130ms ease-out,
+    filter 130ms ease-out;
+}
+
+html[data-theme="recess"] .game-ticket:hover::before {
+  filter: brightness(0.98);
+}
+
+html[data-theme="recess"] .game-ticket:active::before {
+  box-shadow: 2px 3px 0 var(--recess-ink);
+}
+
+html[data-theme="recess"] .material-clue {
+  --paper-angle: -0.8deg;
+  --paper-rear-angle: 1.8deg;
+  --paper-rear: #c5d7ff;
+  border-radius: 24px 12px 28px 13px;
+}
+
+html[data-theme="recess"] .material-clue.bg-semantic-category-who-bg {
+  --paper-fill: var(--semantic-category-who-bg);
+}
+
+html[data-theme="recess"] .material-clue.bg-semantic-category-what-bg {
+  --paper-fill: var(--semantic-category-what-bg);
+  --paper-rear: var(--recess-pink);
+}
+
+html[data-theme="recess"] .material-clue.bg-semantic-category-where-bg {
+  --paper-fill: var(--semantic-category-where-bg);
+  --paper-rear: var(--recess-mint);
+}
+
+html[data-theme="recess"] :is(.material-callout, .material-winner) {
+  padding: 24px 20px;
+  color: var(--recess-ink);
+}
+
+html[data-theme="recess"] .material-callout {
+  --paper-angle: -1.4deg;
+  --paper-rear-angle: 2deg;
+  --paper-rear: var(--recess-mint);
+}
+
+html[data-theme="recess"] .material-winner {
+  --paper-rear: var(--recess-pink);
+  --paper-rear-angle: 2.2deg;
+}
+
+html[data-theme="recess"] [data-ui-button="default"],
+html[data-theme="recess"] [data-ui-button="secondary"],
+html[data-theme="recess"] footer [data-ui-button="outline"].bg-semantic-skipped-bg {
+  border-radius: 16px 9px 18px 11px;
+  box-shadow: 4px 5px 0 var(--recess-ink);
+  transition:
+    transform 130ms ease-out,
+    box-shadow 130ms ease-out,
+    background-color 130ms ease-out;
+}
+
+html[data-theme="recess"] [data-ui-button="default"]:active:not(:disabled),
+html[data-theme="recess"] [data-ui-button="secondary"]:active:not(:disabled),
+html[data-theme="recess"]
+  footer
+  [data-ui-button="outline"].bg-semantic-skipped-bg:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 3px 0 var(--recess-ink);
+}
+
+/* The same quiet paper edge for all three header controls, including Home. */
+html[data-theme="recess"] header [data-ui-button="secondary"] {
+  border-radius: 13px 17px 13px 16px;
+  background: #fffdf2;
+  color: var(--recess-ink);
+  border-width: 1.5px;
+  box-shadow: none;
+}
+
+html[data-theme="recess"] header [data-ui-button="secondary"]:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+/* The miniature advertises the material even while a different world is active. */
+.theme-option[data-preview-theme="recess"] {
+  border-radius: 16px 9px 18px 11px;
+  border-color: #192d52;
+  box-shadow: 2px 3px 0 #192d52;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="recess"] .game-ticket,
+  html[data-theme="recess"] .game-ticket::before,
+  html[data-theme="recess"] [data-ui-button="default"],
+  html[data-theme="recess"] [data-ui-button="secondary"],
+  html[data-theme="recess"] footer [data-ui-button="outline"].bg-semantic-skipped-bg {
+    transition: none;
+  }
+
+  html[data-theme="recess"] [data-ui-button="default"]:active:not(:disabled),
+  html[data-theme="recess"] [data-ui-button="secondary"]:active:not(:disabled),
+  html[data-theme="recess"]
+    footer
+    [data-ui-button="outline"].bg-semantic-skipped-bg:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+html[data-theme="recess"] footer [data-ui-button="outline"].bg-semantic-skipped-bg {
+  background: var(--recess-pink);
+  border: 2px solid var(--recess-ink);
+  color: var(--recess-ink);
+}

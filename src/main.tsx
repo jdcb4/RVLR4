@@ -1,6 +1,7 @@
 import "./index.css";
 import "./themes/default.css";
 import "./themes/variants.css";
+import "./themes/recess-materials.css";
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";

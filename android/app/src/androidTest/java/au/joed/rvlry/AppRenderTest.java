@@ -90,13 +90,13 @@ public class AppRenderTest {
             worker = (ExecutorService) workerField.get(plugin);
             // Exercise the actual chooser and SQLite preference in the disposable database.
             evaluate(activity, "document.querySelector('[aria-label=Settings]').click()");
-            for (String theme : new String[] { "pub-trivia", "bookclub", "recess", "classic", "observatory" }) {
+            for (String theme : new String[] { "pub-trivia", "bookclub", "observatory", "classic", "recess" }) {
                 awaitCondition(activity, "!!document.querySelector('input[value=\"" + theme + "\"]:enabled')");
                 evaluate(activity, "document.querySelector('input[value=\"" + theme + "\"]').click()");
                 awaitCondition(activity, "document.documentElement.dataset.theme==='" + theme + "' && !document.querySelector('fieldset[disabled]')");
             }
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
-                assertTrue(saved.read("app.appearance.v1")[0].contains("observatory"));
+                assertTrue(saved.read("app.appearance.v1")[0].contains("recess"));
             }
             evaluate(activity, "document.querySelector('[aria-label=\"Close dialog\"]').click()");
             evaluate(activity, "document.querySelector('a[href*=whowhatwhere]').click()");

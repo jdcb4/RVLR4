@@ -51,7 +51,7 @@ export function HatDeviceReady({ match }: { readonly match: HatGameSession }) {
     <section className="flex min-h-full flex-col">
       <HatDeviceProgress match={match} />
       <div className="flex flex-1 flex-col justify-center gap-3 pb-4">
-        <h2 className="break-words text-typ-section-title font-semibold">
+        <h2 className="material-callout break-words text-typ-section-title font-semibold">
           Pass to {context.activeDescriberName}.
         </h2>
         <p className="break-words text-typ-body">{context.activeTeam?.name} guessing</p>
@@ -110,7 +110,7 @@ export function HatDeviceTurn({
       <p className="min-h-10 text-typ-ui text-muted-foreground">{phase.instruction}</p>
       <div
         aria-label="Famous figure"
-        className="flex min-h-32 shrink-0 items-center justify-center rounded-xl border border-semantic-category-who-border bg-semantic-category-who-bg px-4 py-4 text-center"
+        className="material-clue flex min-h-32 shrink-0 items-center justify-center rounded-xl border border-semantic-category-who-border bg-semantic-category-who-bg px-4 py-4 text-center"
       >
         <p className="w-full break-words text-typ-display font-semibold">
           {saving ? "Saving figure…" : clue?.text}
@@ -259,7 +259,7 @@ export function HatDeviceResults({ match }: { readonly match: HatGameSession }) 
   const bestTurn = match.results?.bestTurn ?? match.bestTurnSummary;
   return (
     <section className="space-y-4">
-      <h2 className="break-words text-typ-section-title font-semibold">
+      <h2 className="material-winner break-words text-typ-section-title font-semibold">
         {winners.length > 1 ? "A shared victory." : `${winners[0]?.name} wins!`}
       </h2>
       <p className="text-typ-body text-muted-foreground">All three phases complete.</p>

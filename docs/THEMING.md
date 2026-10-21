@@ -37,3 +37,7 @@ To swap palettes per game or route: load an alternate stylesheet (or swap a clas
 | `--semantic-scrim`                    | Modal / overlay dim                      |
 | `--semantic-gallery-chrome`           | UI gallery shell (HSL components)        |
 | `--semantic-gallery-foreground`       | UI gallery default text                  |
+
+## Recess material treatment (0.30.0)
+
+Joe approved Option B of the isolated recess-materials study. src/themes/recess-materials.css loads after variants.css and scopes every rule to Recess. game-ticket, material-clue, material-callout and material-winner are presentation hooks; other themes ignore the new hooks. Pseudo-element paper layers are non-interactive, behind upright contents, with reserved gutters. Category colours retain semantic identity. Controls keep shared sizes and use pressed shadows; reduced motion suppresses translation. The study remains a historical proposal, not a runtime dependency.

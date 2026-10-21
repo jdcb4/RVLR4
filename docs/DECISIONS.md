@@ -350,3 +350,7 @@ Hat and Imposter use their own version-1 session keys and game-owned controllers
 ## 22 October 2026 — Shared visual themes
 
 Keep a single set of layouts/controllers and apply theme tokens and scoped component decoration. Classic preserves the incumbent styling; the four reviewed studies supply optional visual worlds. Local licensed fonts avoid runtime network dependencies. Store appearance in a separate validated native snapshot, committed before applying; do not mix preferences with game sessions or introduce a new storage dependency.
+
+## 22 October 2026 — Recess Option B in production
+
+Apply the approved Cut-Paper Playground through Recess-only CSS and explicit presentation classes. Decorative pseudo-elements provide layered surfaces without rotating text, adding image dependencies or changing gameplay. Keep category colours distinct and the current control geometry. Other themes retain their styles. The mockup remains a historical review artifact.

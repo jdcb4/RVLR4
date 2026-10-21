@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.30.0 — 22 October 2026
+
+- Applied approved Recess Option B: layered paper, slightly rotated backings, asymmetric rounded corners and tactile pressed shadows. Covers the picker and all three games' handoff/clue surfaces, plus team-game winner headings.
+- Text, countdowns and touch targets remain level; category colours, compact game layouts, other themes and saved-game formats are preserved. Reduced motion disables press translation.
+
 ## 0.29.2 — 22 October 2026
 
 - Dialog close controls use a clear 24px Lucide X within a 48px touch target, positioned nearer the top-right corner. Applies consistently to Settings and other dialogs.
