@@ -2,7 +2,6 @@
   "$schema": "https://fallow.dev/schema.json",
   "entry": [
     "src/main.tsx",
-    "src/ui-gallery/main.tsx",
     "src/**/*.test.{ts,tsx}",
     "tests/**/*.{ts,tsx}",
     "scripts/**/*.{ts,mts,mjs,js}"

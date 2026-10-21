@@ -93,6 +93,33 @@ public class AppRenderTest {
             clickButton(activity, "Keep saved game");
             awaitCondition(activity, "document.body.innerText.includes('Take your time')");
             System.out.println("RVLRY_NATIVE_FLOW_OK: setup, handoff, skip, correct, pause, cancel replacement");
+            evaluate(activity, "location.hash='/'");
+            awaitCondition(activity, "!!document.querySelector('a[href*=\"games/hat\"]')");
+            evaluate(activity, "document.querySelector('a[href*=\"games/hat\"]').click()");
+            clickButton(activity, "Next: Team 1");
+            clickButton(activity, "Save team");
+            clickButton(activity, "Save team");
+            clickButton(activity, "Enter private figures");
+            for (int player = 0; player < 4; player++) {
+                awaitCondition(activity, "[...document.querySelectorAll('footer button')].some(b=>b.textContent.includes('I’m')&&!b.disabled)");
+                evaluate(activity, "document.querySelector('footer button').click()");
+                awaitCondition(activity, "document.querySelectorAll('[data-hat-device-clue]').length===6");
+                for (int clue = 1; clue <= 6; clue++) {
+                    evaluate(activity, "document.querySelector('[aria-label=\"Suggest famous figure " + clue + "\"]').click()");
+                    Thread.sleep(80);
+                }
+                clickButton(activity, player == 3 ? "Confirm and start game" : "Confirm and pass on");
+            }
+            awaitCondition(activity, "[...document.querySelectorAll('footer button')].some(b=>b.textContent.includes(', start turn')&&!b.disabled)");
+            evaluate(activity, "document.querySelector('footer button').click()");
+            clickButton(activity, "Skip");
+            awaitCondition(activity, "document.body.innerText.includes('Skipped · 1')");
+            clickButton(activity, "Correct");
+            awaitCondition(activity, "document.body.innerText.includes('Guessed · 1')");
+            clickButton(activity, "Pause turn");
+            awaitCondition(activity, "document.body.innerText.includes('Take your time')&&!document.querySelector('[role=alert]')");
+            System.out.println("RVLRY_NATIVE_HAT_OK: private entry, handoff, skip, correct, pause");
+
         } finally {
             if (worker != null) {
                 assertTrue("Native storage worker did not finish", worker.awaitTermination(10, TimeUnit.SECONDS));

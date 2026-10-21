@@ -271,3 +271,17 @@ JNAS Media/DropBox. SHA-256: 450AA77131CAFE1A43A9C0C2D2297E1A3B17818AF65A7CC3825
 
 APK: out/RVLRY-0.26.5-cleanup.apk, copied and hash-verified to JNAS Media/DropBox. SHA-256: 5F90C4A22E3FD94890CDFDBDBD5D01AAF5AFE4782527F216110AAED45556D3C4.
 
+
+
+## Aesthetic review — 22 October 2026
+
+Four offline interactive studies live in docs/design/aesthetic-demos, copied to JNAS Media/DropBox/RVLRY-design-demos with companion RVLRY-design-demos.zip. Final 360×640 and desktop screenshots are included. All four passed the representative setup/handoff/play/hint/skip/replay/pause/recap/results flow, no active-play page overflow and offline font loading. They have no save persistence and do not enter the production bundle.
+
+Kestrel producer rvlry-android, publication rvlry-aesthetic-demos revision 1, context codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-aesthetics. Review: https://kestrel.home.jboxtv.com/review/rvlry-aesthetic-demos. Fetch answers before applying a production design; responses do not auto-start work. No pending prior responses were returned at implementation start.
+
+## Hat checkpoint — 22 October 2026
+
+0.27.0 / versionCode 8 adds Hat Game. Full verify passes 208 tests / 37 files in the integration workspace, including new Imposter/isolation tests pending route exposure. Eight native device tests and both force-stop checkpoint phases passed; the bundled flow now enters all four players' private figures and exercises Hat handoff, skip, correct and pause. A final completed-save hydration normalization passed focused and full TypeScript tests and was rebuilt; final three-game native verification follows. Browser 360x640 review confirmed setup, entry, play and pause.
+
+APK: out/RVLRY-0.27.0-hat.apk, copied/hash-verified to JNAS Media/DropBox. SHA-256: E1744E45E30AE46266815F86E51A4EDDA7277C7F51E627FB62027160D46189F7.
+

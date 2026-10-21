@@ -16,7 +16,7 @@ import {
   WhoWhatWhereDeviceTeamSetup,
   WhoWhatWhereSetupSteps,
 } from "@/features/whowhatwhere/setup/WhoWhatWhereDeviceSetup";
-import { ActiveTurnScreen } from "@/features/whowhatwhere/turn/ActiveTurnScreen";
+import { WhoWhatWhereDeviceTurn } from "@/features/whowhatwhere/turn/WhoWhatWhereDeviceTurn";
 import { WhoWhatWhereDeviceReady } from "@/features/whowhatwhere/turn/WhoWhatWhereDeviceReady";
 import type { WhoWhatWhereSingleplayerController } from "@/features/whowhatwhere/useWhoWhatWhereSingleplayerApp";
 import { WhoWhatWhereDeviceProgress } from "@/features/whowhatwhere/WhoWhatWhereDeviceProgress";
@@ -407,7 +407,7 @@ export function WhoWhatWhereModeContent({
     );
   if (game.activeMode === "turn" && game.match.activeTurn)
     return (
-      <ActiveTurnScreen
+      <WhoWhatWhereDeviceTurn
         match={game.match}
         secondsRemaining={game.secondsRemaining}
         onRevealHint={game.revealHint}

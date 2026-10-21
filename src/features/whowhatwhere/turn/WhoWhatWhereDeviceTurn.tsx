@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { formatWhoWhatWhereTurnClock } from "@/domain/whowhatwhere/formatClock";
 import { getCurrentWord } from "@/domain/whowhatwhere/game";
 import type { Category, MatchState } from "@/domain/whowhatwhere/types";
+import { useWordListOverflow } from "@/features/game-app-hooks/useWordListOverflow";
 
 import { SkippedWordsList } from "./SkippedWordsList";
-import { useWordListOverflow } from "./useWordListOverflow";
 
 const categoryPanelClasses: Record<Category, string> = {
   Who: "border-semantic-category-who-border bg-semantic-category-who-bg",

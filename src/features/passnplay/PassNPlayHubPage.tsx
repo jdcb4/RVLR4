@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 import packageJson from "../../../package.json";
 
-/** The first Android device-test build intentionally exposes one converted game. */
+/** Each game owns an independent durable session. */
 export function PassNPlayHubPage() {
   const [openDialog, setOpenDialog] = useState<"settings" | "info" | null>(null);
 
@@ -46,24 +46,20 @@ export function PassNPlayHubPage() {
           </div>
         </Link>
       </section>
-      <section aria-labelledby="next-games">
-        <h2 id="next-games" className="text-typ-card-title font-semibold">
-          Coming next
-        </h2>
-        <p className="mt-1 text-typ-ui text-muted-foreground">
-          Hat Game and Imposter follow after this phone test.
-        </p>
-        <ul className="mt-2 divide-y divide-border">
-          <li className="flex items-center gap-3 py-4">
-            <IconTopHat className="size-8 shrink-0" />
-            <span>Hat Game</span>
-          </li>
-          <li className="flex items-center gap-3 py-4">
-            <IconDisguise className="size-8 shrink-0" />
-            <span>Imposter</span>
-          </li>
-        </ul>
-      </section>
+      <Link
+        className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 text-foreground transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+        to="/games/hat"
+      >
+        <IconTopHat className="size-12 shrink-0" />
+        <div className="min-w-0">
+          <h3 className="text-typ-section-title font-bold">Hat Game</h3>
+          <p className="mt-2 text-typ-body">Your famous figures. Three ways to play.</p>
+        </div>
+      </Link>
+      <div className="flex items-center gap-3 text-muted-foreground">
+        <IconDisguise className="size-8" />
+        <span>Imposter · coming next</span>
+      </div>
       {openDialog === "settings" && (
         <ModalDialog title="Settings" onClose={() => setOpenDialog(null)}>
           <div className="space-y-3 pt-3 text-typ-ui text-muted-foreground">

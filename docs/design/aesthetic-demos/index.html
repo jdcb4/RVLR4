@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RVLRY · Four ways to game night</title>
+    <link rel="stylesheet" href="./demo.css" />
+    <style>
+      body {
+        background: #ebe9e1;
+        color: #21342b;
+      }
+      .catalogue {
+        max-width: 1200px;
+        margin: auto;
+        padding: 60px 32px;
+      }
+      .intro {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 32px;
+        margin-bottom: 45px;
+      }
+      .intro h1 {
+        font:
+          700 clamp(38px, 5vw, 64px)/0.98 Bricolage,
+          sans-serif;
+        letter-spacing: -0.035em;
+        max-width: 12ch;
+      }
+      .intro p {
+        max-width: 35ch;
+        font-size: 15px;
+        line-height: 1.65;
+        color: #4c5e53;
+      }
+      .directions {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+      .direction {
+        min-width: 0;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .direction:hover {
+        transform: translateY(-6px);
+      }
+      .cover {
+        height: 340px;
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+        padding: 24px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .cover > strong {
+        font-size: 18px;
+        letter-spacing: 0.03em;
+      }
+      .cover h2 {
+        font-size: 36px;
+        line-height: 0.97;
+        letter-spacing: -0.025em;
+        text-wrap: balance;
+      }
+      .mini-clue {
+        padding: 18px 10px;
+        text-align: center;
+        min-height: 112px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 8px;
+      }
+      .mini-clue span {
+        font:
+          12px "Segoe UI",
+          sans-serif;
+      }
+      .mini-clue b {
+        font-size: 26px;
+        line-height: 1.05;
+      }
+      .swatches {
+        display: flex;
+        gap: 5px;
+        margin-top: 20px;
+      }
+      .swatches i {
+        width: 24px;
+        height: 6px;
+        display: block;
+        background: var(--swatch);
+      }
+      .caption {
+        padding: 20px 2px;
+      }
+      .caption h3 {
+        font:
+          700 22px Bricolage,
+          sans-serif;
+        letter-spacing: -0.02em;
+      }
+      .caption p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #4c5e53;
+        margin-top: 7px;
+      }
+      .explore {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        font-weight: 700;
+        margin-top: 17px;
+      }
+      .explore svg {
+        width: 20px;
+        height: 20px;
+      }
+      .pub .cover {
+        background: #1c211e;
+        color: #f4efe6;
+        font-family: Barlow, serif;
+      }
+      .pub .mini-clue {
+        background: #f4efe6;
+        color: #3d2314;
+        box-shadow: 0 8px 18px #0004;
+        outline: 1px solid #b2a38c;
+        outline-offset: -6px;
+      }
+      .pub .cover:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 100% 0, #f5a6231e, transparent 65%);
+        pointer-events: none;
+      }
+      .book .cover {
+        background: #faf6f0;
+        color: #1b263b;
+        font-family: Fraunces, serif;
+      }
+      .book .mini-clue {
+        background: #e2e8dd;
+        border-block: 1px solid #7a8b7b;
+      }
+      .book .mini-clue b {
+        font-weight: 500;
+      }
+      .book .cover h2 {
+        font-weight: 500;
+      }
+      .recess .cover {
+        background: #2563eb;
+        color: #fffdf2;
+        font-family: Bricolage, sans-serif;
+      }
+      .recess .mini-clue {
+        background: #facc15;
+        color: #192d52;
+        transform: rotate(-3deg);
+        border: 2px solid #192d52;
+        box-shadow: 5px 5px 0 #192d52;
+        margin-right: 5px;
+        border-radius: 6px;
+      }
+      .observatory .cover {
+        background: radial-gradient(ellipse at 100% 85%, #64ffda20, transparent 50%), #0f1026;
+        color: #f4edda;
+        font-family: Cinzel, serif;
+      }
+      .observatory .cover h2 {
+        font-size: 29px;
+        font-weight: 500;
+      }
+      .observatory .mini-clue {
+        background: #2d1b36;
+        border: 1px solid #d4af37;
+        color: #f4edda;
+      }
+      .observatory .mini-clue b {
+        font-size: 22px;
+        font-weight: 500;
+      }
+      .catalogue > footer {
+        margin-top: 38px;
+        border-top: 1px solid #aebaae;
+        padding-top: 18px;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        font-size: 12px;
+        line-height: 1.6;
+        color: #4c5e53;
+      }
+      .catalogue > footer p {
+        max-width: 65ch;
+      }
+      @media (max-width: 1000px) {
+        .directions {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .cover {
+          height: 330px;
+        }
+        .intro {
+          align-items: start;
+        }
+      }
+      @media (max-width: 560px) {
+        .catalogue {
+          padding: 32px 20px;
+        }
+        .intro {
+          flex-direction: column;
+          gap: 18px;
+          margin-bottom: 30px;
+        }
+        .intro h1 {
+          font-size: 46px;
+          max-width: 11ch;
+        }
+        .directions {
+          grid-template-columns: 1fr;
+          gap: 25px;
+        }
+        .cover {
+          height: 340px;
+          padding: 26px;
+        }
+        .cover h2 {
+          font-size: 48px;
+          max-width: 7ch;
+        }
+        .cover > strong {
+          font-size: 22px;
+        }
+        .mini-clue b {
+          font-size: 32px;
+        }
+        .observatory .cover h2 {
+          font-size: 36px;
+        }
+        .observatory .mini-clue b {
+          font-size: 27px;
+        }
+        .caption {
+          padding-top: 17px;
+        }
+        .catalogue > footer {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="catalogue">
+      <header class="intro">
+        <h1>Four ways to game night.</h1>
+        <p>
+          The same RVLRY flow, four complete visual worlds. Open a demo to set up teams, pass the
+          phone and play a timed turn.
+        </p>
+      </header>
+      <div class="directions">
+        <a class="direction pub" href="./pub-trivia.html"
+          ><div class="cover">
+            <strong>RVLRY</strong>
+            <h2>Last orders.<br />First guesses.</h2>
+            <div class="mini-clue">
+              <span>Who</span><b>David<br />Attenborough</b>
+            </div>
+          </div>
+          <div class="swatches" aria-hidden="true">
+            <i style="--swatch: #1c211e"></i><i style="--swatch: #3d2314"></i
+            ><i style="--swatch: #f5a623"></i><i style="--swatch: #f4efe6"></i>
+          </div>
+          <div class="caption">
+            <h3>Pub Trivia</h3>
+            <p>
+              Warm slate, amber and paper tickets. Condensed lettering with the confidence of the
+              local quiz night.
+            </p>
+            <span class="explore"
+              >Try Pub Trivia
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg
+            ></span></div
+        ></a>
+        <a class="direction book" href="./bookclub.html"
+          ><div class="cover">
+            <strong>RVLRY</strong>
+            <h2>A splendid<br />little rivalry.</h2>
+            <div class="mini-clue">
+              <span>Who</span><b>David<br />Attenborough</b>
+            </div>
+          </div>
+          <div class="swatches" aria-hidden="true">
+            <i style="--swatch: #faf6f0"></i><i style="--swatch: #7a8b7b"></i
+            ><i style="--swatch: #c86d51"></i><i style="--swatch: #1b263b"></i>
+          </div>
+          <div class="caption">
+            <h3>Bookclub</h3>
+            <p>
+              Parchment, sage and editorial serif. Hairline structure and a terracotta flourish for
+              good company.
+            </p>
+            <span class="explore"
+              >Try Bookclub
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg
+            ></span></div
+        ></a>
+        <a class="direction recess" href="./recess.html"
+          ><div class="cover">
+            <strong>RVLRY</strong>
+            <h2>Big laughs.<br />Quick guesses.</h2>
+            <div class="mini-clue">
+              <span>Who</span><b>David<br />Attenborough</b>
+            </div>
+          </div>
+          <div class="swatches" aria-hidden="true">
+            <i style="--swatch: #fffdf2"></i><i style="--swatch: #2563eb"></i
+            ><i style="--swatch: #ff5938"></i><i style="--swatch: #facc15"></i
+            ><i style="--swatch: #10b981"></i>
+          </div>
+          <div class="caption">
+            <h3>Recess</h3>
+            <p>
+              Cobalt, yellow, mint and orange. Chunky lettering, cut paper and satisfyingly solid
+              controls.
+            </p>
+            <span class="explore"
+              >Try Recess
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg
+            ></span></div
+        ></a>
+        <a class="direction observatory" href="./observatory.html"
+          ><div class="cover">
+            <strong>RVLRY</strong>
+            <h2>Bright minds.<br />Late nights.</h2>
+            <div class="mini-clue">
+              <span>Who</span><b>David<br />Attenborough</b>
+            </div>
+          </div>
+          <div class="swatches" aria-hidden="true">
+            <i style="--swatch: #0f1026"></i><i style="--swatch: #2d1b36"></i
+            ><i style="--swatch: #d4af37"></i><i style="--swatch: #64ffda"></i>
+          </div>
+          <div class="caption">
+            <h3>Observatory</h3>
+            <p>
+              Indigo, plum, brass and a trace of aurora. Engraved serif and a little cosmic
+              ceremony.
+            </p>
+            <span class="explore"
+              >Try Observatory
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg
+            ></span></div
+        ></a>
+      </div>
+      <footer>
+        <p>
+          Design studies only. Each demo works offline and uses bundled fonts. The production
+          Android app is separate.
+        </p>
+        <span>Picker → setup → handoff → play → results</span>
+      </footer>
+    </main>
+  </body>
+</html>

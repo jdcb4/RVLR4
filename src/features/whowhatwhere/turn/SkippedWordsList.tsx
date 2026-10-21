@@ -2,8 +2,7 @@ import { useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import type { SkippedWord } from "@/domain/whowhatwhere/types";
-
-import { useWordListOverflow } from "./useWordListOverflow";
+import { useWordListOverflow } from "@/features/game-app-hooks/useWordListOverflow";
 
 /** Keep every pending word reachable and report actual hidden rows, including wrapped words. */
 export function SkippedWordsList({

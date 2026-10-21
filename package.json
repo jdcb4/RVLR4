@@ -1,6 +1,6 @@
 {
   "name": "rvlry-android",
-  "version": "0.26.5",
+  "version": "0.27.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.12.0",
@@ -10,7 +10,6 @@
   "scripts": {
     "dev": "vite",
     "dev:client": "vite",
-    "ui-gallery": "vite --config vite.ui-gallery.config.ts",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",

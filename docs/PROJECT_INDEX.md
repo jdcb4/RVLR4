@@ -13,7 +13,9 @@ on his Pixel 10. The original multiplayer server/client and Draw & Guess are rem
 - `src/features/whowhatwhere/` — converted controller, full setup/game recovery and UI.
 - `src/services/nativeSnapshotStore.ts` — ordered validated saves and recovery.
 - `src/services/deviceLifecycle.ts` — native/DOM lifecycle coordination.
-- `src/domain/whowhatwhere/` — existing game rules, retained separately from the controller.
+- `src/domain/` — independent Who What Where, Hat and Imposter game rules.
+- `src/features/hat-game/`, `src/features/imposter/` — native session/controller/page conversions.
+- `src/features/game-app-hooks/` — stable controller binding and bounded-history measurement.
 - `src/components/` — shared phone shell and UI.
 - `src/data/` — bundled words; downloadable packs are a later milestone.
 - `scripts/android-build.ps1` — repeatable build/test commands.
@@ -35,8 +37,4 @@ commands in [ANDROID.md](ANDROID.md); browser tests alone do not verify them.
 - [Verification](VERIFICATION.md), [Screens](SCREENS.md), [Theming](THEMING.md),
   [Typography](TYPOGRAPHY.md), [Audio](AUDIO.md), [UI gallery](UI_GALLERY.md).
 
-`DEPLOYMENT.md`, `MULTIPLAYER_QA.md`, `DRAWNGUESS.md` and historical sections
-of the other documents describe the original web product, not the Android
-prototype. Do not apply Railway promotion/deployment to this standalone branch.
-The active plan is retired after completion; durable contracts move to these
-canonical documents and shipped history stays in the changelog.
+`DEPLOYMENT.md` describes local APK delivery. Historical MULTIPLAYER_QA and DRAWNGUESS material is not applicable to this branch. Completed implementation plans are retired into canonical docs and changelog/git.

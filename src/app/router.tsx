@@ -19,6 +19,11 @@ const WhoWhatWhereSingleplayerApp = lazy(() =>
     default: module.WhoWhatWhereSingleplayerApp,
   })),
 );
+const HatGameDevicePage = lazy(() =>
+  import("@/features/hat-game/HatGameDevicePage").then((module) => ({
+    default: module.HatGameDevicePage,
+  })),
+);
 const baseUrl = import.meta.env.BASE_URL;
 
 export const appRoutes: RouteObject[] = [
@@ -32,6 +37,7 @@ export const appRoutes: RouteObject[] = [
       // Permanent redirect for shared links that pre-date the rename.
       { path: "legacy", element: <Navigate replace to="/passnplay" /> },
       { path: "games/whowhatwhere", element: <WhoWhatWhereSingleplayerApp /> },
+      { path: "games/hat", element: <HatGameDevicePage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

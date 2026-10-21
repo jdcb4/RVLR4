@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.27.0 — Durable Hat Game
+
+- Add offline Hat Game with private figure entry, independent SQLite save, concealed restoration, resume/replacement and retry on storage errors.
+- Preserve Describe → One Word → Charades, including phase changes within a running turn. Reuse roster UI, monotonic clock and bounded history overflow.
+- Add native bundled-flow coverage for Hat setup, private entry, handoff, skip/correct and pause.
+
 ## 0.26.5 — Android foundation cleanup
 
 - Removed unreachable multiplayer server/client, Draw & Guess and web deployment tooling after auditing imports. Retained shared avatars, game rules, word data and their regression tests.

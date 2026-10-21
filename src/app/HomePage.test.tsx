@@ -14,13 +14,13 @@ function renderHome() {
 }
 
 describe("Android prototype home", () => {
-  it("offers the converted game and clearly identifies the next games", () => {
+  it("offers converted games and identifies the remaining conversion", () => {
     renderHome();
     expect(screen.getByRole("heading", { name: /RVLRY/i })).toBeInTheDocument();
     expect(screen.queryByText(/Multi-Device mode/i)).not.toBeInTheDocument();
     expect(screen.getByText(/Who What Where/i)).toBeInTheDocument();
-    expect(screen.getByText("Hat Game")).toBeInTheDocument();
-    expect(screen.getByText("Imposter")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Hat Game/ })).toHaveAttribute("href", "/games/hat");
+    expect(screen.getByText("Imposter · coming next")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Who What Where/ })).toHaveAttribute(
       "href",
       "/games/whowhatwhere",
