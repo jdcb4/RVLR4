@@ -14,4 +14,9 @@ Deferred; not part of the current implementation:
 - **Difficulty modes:** selectable challenge levels.
 - **Kids mode:** age-appropriate play and content.
 - **Themes:** selectable colour palettes.
-- **Game-like graphics:** redesign the visuals to feel more like a game.
+- **Game-like graphics:** apply the selected production visual direction after review. Four isolated playable studies were delivered in 0.27.0; selection/application remains pending.
+
+## Android delivery follow-ups
+
+- Configure and implement validated, atomic word-pack updates from a fixed endpoint, with bundled offline fallback.
+- Establish a backed-up release signing identity before broader friend distribution.

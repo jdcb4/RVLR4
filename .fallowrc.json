@@ -4,7 +4,9 @@
     "src/main.tsx",
     "src/**/*.test.{ts,tsx}",
     "tests/**/*.{ts,tsx}",
-    "scripts/**/*.{ts,mts,mjs,js}"
+    "scripts/**/*.{ts,mts,mjs,js}",
+    "docs/design/aesthetic-demos/demo.js",
+    "docs/design/aesthetic-demos/demo.css"
   ],
   "ignorePatterns": [
     "android/**",

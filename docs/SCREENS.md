@@ -6,7 +6,7 @@ Who What Where: settings → per-team roster → review → named handoff → ti
 
 Hat: settings → per-team roster → review → private figure entry for every player → named handoff → timed turn → recap → next team/results. Describe, One Word and Charades are phases of the same shared deck; a phase may change during a turn without restarting the clock.
 
-Imposter: settings → roster → review → individual concealed/revealed roles → twice-around clues → discussion → final-reveal confirmation → results. Background/Back covers private roles; returning re-reveals the same player's assigned role. There is no vote, elimination or timer.
+Imposter: settings → roster → review → individual concealed/revealed roles → twice-around clues → discussion → final-reveal confirmation → results. Background/Back covers private roles; returning re-reveals the same player's assigned role. Voting happens socially; there is no in-app vote, elimination or timer.
 
 GameShell supplies compact header, safe-area body and fixed footer. DeviceTeamSetup/Review supply shared roster presentation; each game binds its own mutations. Device controllers own persistence and rules; React pages own dialogs and presentation only. Lucide is the standard control icon set; custom SVG identities distinguish games.
 

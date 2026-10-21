@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.28.0 — Three offline games
+
+- Enable Imposter with durable deals, concealed same-player restoration, private handoffs, clue/discussion guides and deliberate final reveal. No new game rules or in-app voting.
+- Present three game entries consistently; fit the default six-player Imposter roster on a small phone.
+- Show Hat best-turn highlights and distinguish unfinished recap figures without duplicating a replayed skip.
+- Retire unused browser UI/assets and nanoid; retain shared validated persistence, game rules and meaningful regression tests. Add cross-game isolation and installed WWW v1 compatibility coverage.
+- Extend native bundled-flow verification across all games and role cover/reveal.
+
 ## 0.27.0 — Durable Hat Game
 
 - Add offline Hat Game with private figure entry, independent SQLite save, concealed restoration, resume/replacement and retry on storage errors.
@@ -12,7 +20,6 @@
 - Shared controller subscription and monotonic turn-clock helpers preserve Who What Where version-1 saves.
 - CI now targets android-prototype; obsolete server-only coverage targets were retired with their source.
 
-
 ## 0.26.4 — Setup navigation and concise turn recaps
 
 - Move team Back actions below Save team and name their destinations.
@@ -21,7 +28,6 @@
 - Offer 30/45-second turns and reset defaults: 2 teams, 3 rounds, 30 seconds,
   1 skip, 0 hints and all categories. Existing saved turn lengths remain valid.
 - Record future category, mode, theme and graphics ideas in the roadmap only.
-
 
 ## 0.26.3 — Game identity and steadier phone layout
 
@@ -32,12 +38,10 @@
 - Start turns with one named handoff confirmation.
 - Keep team progress compact with circled numbers and bounded names, without presenter names.
 
-
 ## 0.26.2 — Header and team progression
 
 - Apply approved Option A: remove the round strip, keep the round number in the
   header and numbered team boxes for progress within the current round.
-
 
 ## 0.26.1 — Phone controls and visual clarity
 
@@ -46,7 +50,6 @@
 - Expand word history into available space, with reachable skips and overflow cues.
 - Make Correct taller and two thirds of the action row.
 - Use Lucide for standard icons, including a proper information icon.
-
 
 ## 0.26.0 — Compact Who What Where phone flow
 

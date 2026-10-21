@@ -2,9 +2,9 @@
 
 Standalone offline pass-and-play Android app, derived from RVLR4.
 
-Version 0.26.5 refines the reviewed phone UX to playable **Who What Where**.
-The first Pixel 10 interruption tests passed; Hat Game and Imposter remain later milestones.
-The APK has no multiplayer routes or backend dependency. Historical multiplayer source and its server dependencies have been removed after an import audit.
+Version 0.28.0 includes **Who What Where**, **Hat Game**, and **Imposter**, each with an independent local save. React/Vite/Capacitor renders the phone UI; a native SQLite plugin supplies durable checkpoints and lifecycle/privacy handling. No backend or multiplayer connection is required.
+
+Four offline design demos live in [docs/design/aesthetic-demos/index.html](docs/design/aesthetic-demos/index.html). They are isolated studies; the production aesthetic remains unchanged.
 
 ## Develop and verify
 
@@ -29,7 +29,7 @@ original application's Railway-connected branches.
 ## Documentation
 
 - [Project index](docs/PROJECT_INDEX.md)
-- [Implementation plan and remaining milestones](docs/ANDROID_IMPLEMENTATION_PLAN.md)
+- [Future work](docs/ROADMAP.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Save durability](docs/PERSISTENCE.md)
 - [Decisions](docs/DECISIONS.md)

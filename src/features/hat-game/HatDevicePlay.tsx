@@ -190,6 +190,19 @@ export function HatDeviceTurn({
 export function HatDeviceRecap({ match }: { readonly match: HatGameSession }) {
   const summary = match.lastTurnSummary;
   if (!summary) return null;
+  const unplayedIndex = match.lastSeenCluePoolIndex;
+  const unplayed =
+    !summary.phaseCompleted && unplayedIndex != null ? match.cluePool[unplayedIndex] : undefined;
+  // The unfinished figure may already have a skipped row in this phase.
+  const history = hatDeviceRecapHistory(summary.clues).filter(
+    (entry) =>
+      !(
+        unplayed &&
+        entry.status === "skipped" &&
+        entry.poolIndex === unplayedIndex &&
+        (entry.phaseNumber ?? 1) === match.phaseNumber
+      ),
+  );
   return (
     <section className="flex min-h-0 flex-1 flex-col gap-3">
       <h2 className="break-words text-typ-section-title font-semibold">
@@ -197,7 +210,7 @@ export function HatDeviceRecap({ match }: { readonly match: HatGameSession }) {
       </h2>
       <p className="text-typ-ui text-muted-foreground">{summary.describerName} · Turn recap</p>
       <ol className="min-h-0 flex-1 space-y-1 overflow-y-auto" aria-label="Turn figures">
-        {hatDeviceRecapHistory(summary.clues).map((entry, index) => (
+        {history.map((entry, index) => (
           <li
             key={index}
             className={`flex items-center justify-between gap-3 rounded-md px-3 py-2.5 text-typ-ui ${entry.status === "correct" ? "bg-card" : "bg-semantic-skipped-bg text-semantic-skipped-foreground"}`}
@@ -216,8 +229,19 @@ export function HatDeviceRecap({ match }: { readonly match: HatGameSession }) {
             </span>
           </li>
         ))}
+        {unplayed ? (
+          <li className="flex items-center justify-between gap-3 rounded-md border border-dashed border-border px-3 py-2.5 text-typ-ui text-muted-foreground">
+            <span className="min-w-0 break-words">
+              {unplayed.text}
+              <span className="block text-typ-meta">
+                {getHatGamePhaseMeta(match.phaseNumber).name}
+              </span>
+            </span>
+            <span className="shrink-0 text-typ-meta">Unplayed</span>
+          </li>
+        ) : null}
       </ol>
-      {!summary.clues.length ? (
+      {!summary.clues.length && !unplayed ? (
         <p className="text-typ-ui text-muted-foreground">No figures played.</p>
       ) : null}
       {match.stage === "ready" ? (
@@ -232,6 +256,7 @@ export function HatDeviceRecap({ match }: { readonly match: HatGameSession }) {
 export function HatDeviceResults({ match }: { readonly match: HatGameSession }) {
   const teams = [...match.teams].sort((a, b) => b.score - a.score);
   const winners = teams.filter((team) => team.score === teams[0]?.score);
+  const bestTurn = match.results?.bestTurn ?? match.bestTurnSummary;
   return (
     <section className="space-y-4">
       <h2 className="break-words text-typ-section-title font-semibold">
@@ -246,6 +271,17 @@ export function HatDeviceResults({ match }: { readonly match: HatGameSession }) 
           </li>
         ))}
       </ol>
+      {bestTurn ? (
+        <section aria-label="Best turn" className="space-y-1 border-t border-border pt-3">
+          <h3 className="text-typ-body font-semibold">
+            Best turn · {bestTurn.score} {bestTurn.score === 1 ? "point" : "points"}
+          </h3>
+          <p className="break-words text-typ-ui text-muted-foreground">
+            {bestTurn.describerName} · {bestTurn.teamName}
+          </p>
+          <p className="text-typ-ui text-muted-foreground">{bestTurn.phaseName}</p>
+        </section>
+      ) : null}
     </section>
   );
 }

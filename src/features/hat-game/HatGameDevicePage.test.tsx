@@ -5,8 +5,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { applyHatGameAction } from "@/domain/hat-game/engine";
 import { buildDefaultSetup } from "@/domain/hat-game/setup";
-import type { ClueHistoryEntry } from "@/domain/hat-game/types";
-import { HatDeviceRecap, HatDeviceTurn } from "@/features/hat-game/HatDevicePlay";
+import type { ClueHistoryEntry, HatGameAction, HatGameSession } from "@/domain/hat-game/types";
+import { HatDeviceRecap, HatDeviceResults, HatDeviceTurn } from "@/features/hat-game/HatDevicePlay";
 import {
   createHatDeviceSession,
   HAT_DEVICE_SESSION_KEY,
@@ -57,6 +57,12 @@ function page() {
       </Routes>
     </MemoryRouter>,
   );
+}
+
+function apply(match: HatGameSession, action: HatGameAction, expired = false) {
+  const result = applyHatGameAction(match, action, { isPast: () => expired });
+  if ("error" in result) throw new Error(result.error);
+  return result;
 }
 
 describe("Hat device phone flow", () => {
@@ -199,5 +205,88 @@ describe("Hat device phone flow", () => {
     expect(screen.getByLabelText("Famous figure")).toHaveTextContent("Saving figure…");
     expect(screen.getByText("In play")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: `${clue} In play` })).toBeDisabled();
+  });
+
+  it("distinguishes the unfinished timeout figure from correct guesses in the recap", () => {
+    const started = apply(fixture().snapshot.session!, { type: "start-turn" });
+    const guessed = started.activeTurn!.clueQueue[0]!.text;
+    const scored = apply(started, { type: "mark-correct" });
+    const unfinished = scored.activeTurn!.clueQueue[scored.activeTurn!.queueIndex]!.text;
+    const ended = apply(scored, { type: "mark-correct" }, true);
+    render(<HatDeviceRecap match={ended} />);
+    const list = within(screen.getByRole("list", { name: "Turn figures" }));
+    expect(list.getAllByRole("listitem")).toHaveLength(2);
+    expect(list.getByText(guessed).closest("li")).toHaveTextContent("Correct");
+    expect(list.getByText(unfinished).closest("li")).toHaveTextContent("Unplayed");
+    expect(ended.lastTurnSummary?.scoreDelta).toBe(1);
+  });
+
+  it("merges an unfinished replay with its skipped row within the current phase", () => {
+    let match = apply(fixture().snapshot.session!, { type: "start-turn" });
+    const poolSize = match.cluePool.length;
+    for (let index = 0; index < poolSize; index += 1)
+      match = apply(match, { type: "mark-correct" });
+    expect(match.phaseNumber).toBe(2);
+    match = apply(match, { type: "skip-clue" });
+    match = apply(match, { type: "return-skipped-clue" });
+    const unfinished = match.activeTurn!.clueQueue[match.activeTurn!.queueIndex]!.text;
+    match = apply(match, { type: "end-turn" });
+    render(<HatDeviceRecap match={match} />);
+    const list = within(screen.getByRole("list", { name: "Turn figures" }));
+    expect(list.getAllByRole("listitem")).toHaveLength(poolSize + 1);
+    expect(list.queryByText("Skipped")).not.toBeInTheDocument();
+    expect(list.getAllByText("Unplayed")).toHaveLength(1);
+    const rows = list.getAllByText(unfinished).map((element) => element.closest("li")!);
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toHaveTextContent("Describe");
+    expect(rows[0]).toHaveTextContent("Correct");
+    expect(rows[1]).toHaveTextContent("One Word");
+    expect(rows[1]).toHaveTextContent("Unplayed");
+  });
+
+  it("omits an unfinished figure when the final Charades queue is exhausted", () => {
+    let match = apply(fixture().snapshot.session!, { type: "start-turn" });
+    const total = match.cluePool.length * 3;
+    for (let index = 0; index < total; index += 1) match = apply(match, { type: "mark-correct" });
+    expect(match.stage).toBe("finalSummary");
+    expect(match.lastSeenCluePoolIndex).toBeNull();
+    render(<HatDeviceRecap match={match} />);
+    const list = within(screen.getByRole("list", { name: "Turn figures" }));
+    expect(list.queryByText("Unplayed")).not.toBeInTheDocument();
+    expect(list.getAllByText("Correct")).toHaveLength(total);
+  });
+
+  it("shows the existing best-turn presenter, team and points on the final screen", () => {
+    const match = fixture().snapshot.session!;
+    const bestTurn = {
+      teamId: match.teams[0]!.id,
+      teamName: "Foxes",
+      describerId: "alex",
+      describerName: "Alex",
+      score: 8,
+      phaseNumber: 2,
+      phaseName: "One Word",
+    };
+    const view = render(<HatDeviceResults match={{ ...match, bestTurnSummary: bestTurn }} />);
+    let highlight = within(screen.getByRole("region", { name: "Best turn" }));
+    expect(highlight.getByRole("heading", { name: "Best turn · 8 points" })).toBeInTheDocument();
+    expect(highlight.getByText("Alex · Foxes")).toBeInTheDocument();
+    expect(highlight.getByText("One Word")).toBeInTheDocument();
+    view.rerender(
+      <HatDeviceResults
+        match={{
+          ...match,
+          results: {
+            leaderboard: [],
+            winnerTeamIds: [],
+            isTie: false,
+            totalClues: match.cluePool.length,
+            bestTurn: { ...bestTurn, score: 1 },
+          },
+        }}
+      />,
+    );
+    highlight = within(screen.getByRole("region", { name: "Best turn" }));
+    expect(highlight.getByRole("heading", { name: "Best turn · 1 point" })).toBeInTheDocument();
   });
 });

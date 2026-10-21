@@ -8,8 +8,7 @@ the Android conversion.
 
 - Work on `android-prototype`; do not push to the original web app's `dev`
   or `main`, run Railway deployment, or merge into those branches.
-- First delivery is Who What Where with native durability and phone testing.
-  Hat/Imposter follow the Pixel 10 checkpoint in `docs/ANDROID_IMPLEMENTATION_PLAN.md`.
+- All three offline games are converted. Preserve independent native session keys and WWW version-1 compatibility; see docs/ANDROID.md and docs/PERSISTENCE.md.
 - React/Vite/Capacitor is the current runtime. Native SQLite snapshots store
   local game state; there is no runtime multiplayer server.
 - Historical multiplayer source is removed; do not reintroduce it into Android routes.

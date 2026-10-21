@@ -35,31 +35,41 @@ export function PassNPlayHubPage() {
         <h2 id="pick-game" className="mb-3 text-typ-panel-title font-semibold">
           Pick a game
         </h2>
-        <Link
-          className="flex items-center gap-4 rounded-2xl bg-primary p-5 text-primary-foreground transition-colors hover:bg-semantic-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
-          to="/games/whowhatwhere"
-        >
-          <IconWhoWhatWhere className="size-12 shrink-0" />
-          <div className="min-w-0">
-            <h3 className="text-typ-section-title font-bold">Who What Where</h3>
-            <p className="mt-2 text-typ-body">Describe the word. Beat the timer. Pass the phone.</p>
-          </div>
-        </Link>
-      </section>
-      <Link
-        className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 text-foreground transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
-        to="/games/hat"
-      >
-        <IconTopHat className="size-12 shrink-0" />
-        <div className="min-w-0">
-          <h3 className="text-typ-section-title font-bold">Hat Game</h3>
-          <p className="mt-2 text-typ-body">Your famous figures. Three ways to play.</p>
+        <div className="grid gap-3">
+          {[
+            {
+              title: "Who What Where",
+              description: "Describe the word. Beat the timer.",
+              path: "whowhatwhere",
+              Icon: IconWhoWhatWhere,
+            },
+            {
+              title: "Hat Game",
+              description: "Your famous figures. Three ways to play.",
+              path: "hat",
+              Icon: IconTopHat,
+            },
+            {
+              title: "Imposter",
+              description: "Give a clue. Spot the bluff.",
+              path: "imposter",
+              Icon: IconDisguise,
+            },
+          ].map(({ title, description, path, Icon }) => (
+            <Link
+              key={path}
+              className="flex min-h-28 items-center gap-4 rounded-2xl border border-border bg-card p-5 text-foreground transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+              to={`/games/${path}`}
+            >
+              <Icon className="size-12 shrink-0 text-primary" />
+              <div className="min-w-0">
+                <h3 className="text-typ-section-title font-bold">{title}</h3>
+                <p className="mt-1 text-typ-ui text-muted-foreground">{description}</p>
+              </div>
+            </Link>
+          ))}
         </div>
-      </Link>
-      <div className="flex items-center gap-3 text-muted-foreground">
-        <IconDisguise className="size-8" />
-        <span>Imposter · coming next</span>
-      </div>
+      </section>
       {openDialog === "settings" && (
         <ModalDialog title="Settings" onClose={() => setOpenDialog(null)}>
           <div className="space-y-3 pt-3 text-typ-ui text-muted-foreground">

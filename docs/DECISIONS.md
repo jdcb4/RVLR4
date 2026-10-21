@@ -339,7 +339,10 @@ This local database stores offline saves, not multiplayer sessions.
 
 **Rejected alternatives:** Keeping a text information glyph or copying more SVG paths would retain inconsistent maintenance and appearance.
 
-
 ## 2026-10-22 — Standalone Android boundary
 
 After the Pixel durability checkpoint, retire the unreachable multiplayer server/client and Draw & Guess, including Express/Socket.IO/QR dependencies and Railway/Docker tooling. Keep reusable rules, content, avatar presentation and tests. Share persistence/lifecycle/clock/UI primitives by composition; game controllers retain separate validated sessions and rules. Isolated design demos do not choose a production theme. No new dependency is introduced.
+
+## 2026-10-22 — Independent game sessions and review studies
+
+Hat and Imposter use their own version-1 session keys and game-owned controllers; WWW keeps its original key/payload compatibility. Generated private state commits before disclosure. Hat retains mid-turn phase changes; Imposter visibility is a foreground-only value. Shared roster/clock/subscription/history primitives eliminate presentation duplication without a universal game reducer. Retire obsolete browser/gallery code and unused nanoid after import analysis; the four independent offline studies replace the old gallery review role. Their fonts are locally bundled with license notices and they never enter the APK. Production theme selection remains pending user review.

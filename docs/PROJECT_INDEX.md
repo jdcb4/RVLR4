@@ -1,8 +1,6 @@
 # RVLRY Android project index
 
-The current deliverable is a standalone offline Android prototype for
-Who What Where. Hat Game and Imposter follow after Joe tests the foundation
-on his Pixel 10. The original multiplayer server/client and Draw & Guess are removed; git retains their history.
+The current deliverable is a standalone offline Android app with Who What Where, Hat Game and Imposter. Each game has its own native durable session. The original multiplayer server/client and Draw & Guess are removed; git retains their history.
 
 ## Active boundaries
 
@@ -29,7 +27,7 @@ commands in [ANDROID.md](ANDROID.md); browser tests alone do not verify them.
 
 ## Active documentation
 
-- [Implementation plan](ANDROID_IMPLEMENTATION_PLAN.md) — milestones and Pixel checkpoint.
+- [Roadmap](ROADMAP.md) — future work only.
 - [Android build and testing](ANDROID.md) — local toolchain, APK and device checks.
 - [Persistence](PERSISTENCE.md) — current Android save contract and historical browser saves.
 - [Architecture](ARCHITECTURE.md) — Android entry point and retained legacy architecture.

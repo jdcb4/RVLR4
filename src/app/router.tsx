@@ -24,6 +24,11 @@ const HatGameDevicePage = lazy(() =>
     default: module.HatGameDevicePage,
   })),
 );
+const ImposterDevicePage = lazy(() =>
+  import("@/features/imposter/ImposterDevicePage").then((module) => ({
+    default: module.ImposterDevicePage,
+  })),
+);
 const baseUrl = import.meta.env.BASE_URL;
 
 export const appRoutes: RouteObject[] = [
@@ -38,6 +43,7 @@ export const appRoutes: RouteObject[] = [
       { path: "legacy", element: <Navigate replace to="/passnplay" /> },
       { path: "games/whowhatwhere", element: <WhoWhatWhereSingleplayerApp /> },
       { path: "games/hat", element: <HatGameDevicePage /> },
+      { path: "games/imposter", element: <ImposterDevicePage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

@@ -2,17 +2,13 @@
   "schema_version": 1,
   "id": "rvlry-aesthetic-demos",
   "producer": "rvlry-android",
-  "revision": 1,
+  "revision": 2,
   "title": "RVLRY: four playable visual directions",
   "summary": "Compare Pub Trivia, Bookclub, Recess and Observatory; reply here with a direction and details to keep.",
   "format": "markdown",
   "context_ref": "codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-aesthetics",
-  "tags": [
-    "rvlry",
-    "android",
-    "design-review"
-  ],
-  "body": "Four isolated, interactive demos are ready. The Android app keeps its current design while you compare them.\n\n**Open:** JNAS → Media → DropBox → RVLRY-design-demos → index.html. Alternatively download RVLRY-design-demos.zip, extract the whole folder and open index.html. Keep the assets alongside the HTML. All demos work offline.\n\nKestrel displays the review and collects answers; its article format does not run the interactive demos. The folder also includes screenshots for a quick comparison.\n\n| Direction | What to look for |\n| --- | --- |\n| After-Hours Social / Pub Trivia | Warm slate, amber, condensed lettering and paper tickets. |\n| Margin Note / Bookclub | Parchment, sage, editorial serif and restrained terracotta. |\n| Recess & Construction Paper | Cobalt, yellow, cut-paper shapes, chunky lettering and pressable shadows. |\n| Midnight Observatory | Indigo, brass, engraved lettering and restrained cosmic motion. |\n\nEach uses the same picker → settings → teams → handoff → timed play → pause → recap → results flow. Try Correct, Skip, returning a skipped word and Hint. The Demo controls jump between screens and enable long names/four teams. These are representative design studies with sample words and no saved-game persistence.\n\nBoth new Android games are being integrated independently of this choice. Your selection here guides a later production styling change; it does not automatically apply a theme. Answers are saved in Kestrel for the next review and do not automatically start an agent.",
+  "tags": ["rvlry", "android", "design-review"],
+  "body": "Four isolated, interactive demos are ready. The Android app keeps its current design while you compare them.\n\n**Open:** JNAS → Media → DropBox → RVLRY-design-demos → index.html. Alternatively download RVLRY-design-demos.zip, extract the whole folder and open index.html. Keep the assets alongside the HTML. All demos work offline.\n\nKestrel displays the review and collects answers; its article format does not run the interactive demos. The folder also includes screenshots for a quick comparison.\n\n| Direction | What to look for |\n| --- | --- |\n| After-Hours Social / Pub Trivia | Warm slate, amber, condensed lettering and paper tickets. |\n| Margin Note / Bookclub | Parchment, sage, editorial serif and restrained terracotta. |\n| Recess & Construction Paper | Cobalt, yellow, cut-paper shapes, chunky lettering and pressable shadows. |\n| Midnight Observatory | Indigo, brass, engraved lettering and restrained cosmic motion. |\n\nEach uses the same picker → settings → teams → handoff → timed play → pause → recap → results flow. Try Correct, Skip, returning a skipped word and Hint. The Demo controls jump between screens and enable long names/four teams. These are representative design studies with sample words and no saved-game persistence.\n\nThe three-game Android build is ready: JNAS → Media → DropBox → RVLRY-0.28.0-three-games.apk. It includes Who What Where, Hat Game and Imposter. Install over the existing prototype to preserve saves. The automated checks pass, including the native three-game flow and force-stop storage recovery; the new build still needs your Pixel playtest. Your selection here guides a later production styling change; it does not automatically apply a theme. Answers are saved in Kestrel for the next review and do not automatically start an agent.",
   "questions": [
     {
       "id": "preferred-direction",

@@ -119,6 +119,36 @@ public class AppRenderTest {
             clickButton(activity, "Pause turn");
             awaitCondition(activity, "document.body.innerText.includes('Take your time')&&!document.querySelector('[role=alert]')");
             System.out.println("RVLRY_NATIVE_HAT_OK: private entry, handoff, skip, correct, pause");
+            evaluate(activity, "location.hash='/'");
+            awaitCondition(activity, "!!document.querySelector('a[href*=imposter]')");
+            evaluate(activity, "document.querySelector('a[href*=imposter]').click()");
+            clickButton(activity, "Continue to players");
+            clickButton(activity, "Review players");
+            clickButton(activity, "Deal roles");
+            for (int player = 0; player < 6; player++) {
+                awaitCondition(activity, "document.body.innerText.includes('Pass to Player " + (player + 1) + "')");
+                clickButton(activity, "Reveal my role");
+                if (player == 0) {
+                    String firstRole = evaluate(activity, "document.querySelector('main h3').textContent");
+                    evaluate(activity, "window.dispatchEvent(new Event('rvlry:back',{cancelable:true}))");
+                    awaitCondition(activity, "document.body.innerText.includes('Game covered')");
+                    clickButton(activity, "Continue");
+                    awaitCondition(activity, "document.body.innerText.includes('Pass to Player 1')");
+                    clickButton(activity, "Reveal my role");
+                    assertTrue("Role changed after interruption", firstRole.equals(evaluate(activity, "document.querySelector('main h3').textContent")));
+                }
+                clickButton(activity, player == 5 ? "Hide role and begin clues" : "Hide role and pass phone");
+            }
+            clickButton(activity, "Ready for discussion");
+            clickButton(activity, "Vote done");
+            clickButton(activity, "Reveal the answer");
+            awaitCondition(activity, "document.body.innerText.includes('The reveal') && document.body.innerText.includes('Secret word') && !document.querySelector('[role=alert]')");
+            clickButton(activity, "Game picker");
+            awaitCondition(activity, "!!document.querySelector('a[href*=whowhatwhere]')");
+            evaluate(activity, "document.querySelector('a[href*=whowhatwhere]').click()");
+            awaitCondition(activity, "document.body.innerText.includes('Resume saved game') || document.body.innerText.includes('Resume game')");
+            System.out.println("RVLRY_NATIVE_IMPOSTER_OK: private deal, cover/reveal same role, all players, discussion, final reveal, WWW save retained");
+
 
         } finally {
             if (worker != null) {

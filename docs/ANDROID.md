@@ -2,11 +2,9 @@
 
 ## Current milestone
 
-0.26.4 is the debug-signed Who What Where build with the reviewed phone UX. Hat Game,
-Imposter, remote word installation and friend-release signing follow the Pixel
-checkpoint. The picker has separate Settings and Info icon buttons. Settings truthfully
-indicates no update source is configured.
-Historical multiplayer and Draw & Guess code were retired in 0.26.5; the original implementation remains in git history.
+0.28.0 is the debug-signed three-game build: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons; no word-update source is configured yet. Release signing and remote word installation remain future work.
+
+Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
 ## Toolchain
 
@@ -271,13 +269,11 @@ JNAS Media/DropBox. SHA-256: 450AA77131CAFE1A43A9C0C2D2297E1A3B17818AF65A7CC3825
 
 APK: out/RVLRY-0.26.5-cleanup.apk, copied and hash-verified to JNAS Media/DropBox. SHA-256: 5F90C4A22E3FD94890CDFDBDBD5D01AAF5AFE4782527F216110AAED45556D3C4.
 
-
-
 ## Aesthetic review — 22 October 2026
 
 Four offline interactive studies live in docs/design/aesthetic-demos, copied to JNAS Media/DropBox/RVLRY-design-demos with companion RVLRY-design-demos.zip. Final 360×640 and desktop screenshots are included. All four passed the representative setup/handoff/play/hint/skip/replay/pause/recap/results flow, no active-play page overflow and offline font loading. They have no save persistence and do not enter the production bundle.
 
-Kestrel producer rvlry-android, publication rvlry-aesthetic-demos revision 1, context codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-aesthetics. Review: https://kestrel.home.jboxtv.com/review/rvlry-aesthetic-demos. Fetch answers before applying a production design; responses do not auto-start work. No pending prior responses were returned at implementation start.
+Kestrel producer rvlry-android, publication rvlry-aesthetic-demos revision 2, context codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-aesthetics. Review: https://kestrel.home.jboxtv.com/review/rvlry-aesthetic-demos. Fetch answers before applying a production design; responses do not auto-start work. No pending prior responses were returned at implementation start.
 
 ## Hat checkpoint — 22 October 2026
 
@@ -285,3 +281,12 @@ Kestrel producer rvlry-android, publication rvlry-aesthetic-demos revision 1, co
 
 APK: out/RVLRY-0.27.0-hat.apk, copied/hash-verified to JNAS Media/DropBox. SHA-256: E1744E45E30AE46266815F86E51A4EDDA7277C7F51E627FB62027160D46189F7.
 
+## Three-game verification — 22 October 2026
+
+0.28.0 / versionCode 9 passes pnpm run verify: 213 tests across 37 files, TypeScript, ESLint and production build. Android assembly, two JVM tests, all eight device tests and both separate force-stop checkpoint phases pass. The bundled native app flow covers WWW setup/play/pause, all four Hat private entries/play/pause, all six Imposter reveals, Back concealment with the same role on return, discussion/final reveal, and the original WWW save still available afterward. API-35 emulator verification supplements the earlier Pixel checkpoint; this new three-game build still needs Joe's Pixel playtest.
+
+Browser checks at 360x640 cover full Hat and Imposter flows, concealed same-role recovery, six-player roster fit and active-play bounds; the 412x915 picker also fits. Independent tests cover delayed/failed saves, generated-state retention, cold restoration, phase transitions, replay/unfinished recap, per-game isolation and old WWW v1 records without presentationStage.
+
+Fallow reviewed: zero unreachable files, 37 remaining export/member/dependency findings (including required Capacitor Android and indirect controller method references), 7 clone groups and 31 health thresholds; maintainability 90.7. Game-controller similarities are retained where their save/privacy semantics differ, rather than a universal state machine. No tests or quality findings were suppressed. Design detector flags the explicitly requested warm palette and font choices; the brief governs those studies.
+
+APK: out/RVLRY-0.28.0-three-games.apk. Copied/hash-verified to JNAS Media/DropBox, alongside cleanup 0.26.5 and Hat 0.27.0 checkpoints. SHA-256: EADDC530F0712DFBBFA0CE4C5CA8AB7324659EC2E1554842121AC6CD432CB0F2. Install over the existing prototype to retain saves.
