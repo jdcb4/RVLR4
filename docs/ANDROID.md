@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.26.3 is the debug-signed Who What Where build with the reviewed phone UX. Hat Game,
+0.26.4 is the debug-signed Who What Where build with the reviewed phone UX. Hat Game,
 Imposter, remote word installation and friend-release signing follow the Pixel
 checkpoint. The picker has separate Settings and Info icon buttons. Settings truthfully
 indicates no update source is configured.
@@ -135,7 +135,8 @@ The chooser lives inside the selected game, not the hub. Returning to an active
 turn first opens the paused summary; a separate Resume turn starts the clock.
 
 Setup follows Settings → Teams → Review. Save team advances through the teams;
-review precedes starting the game. Handoff identifies the presenter and offers
+the secondary footer names the previous team or Settings.
+Review precedes starting the game. Handoff identifies the presenter and offers
 one named confirmation that starts the turn. A completed turn gets a word recap;
 a completed round adds standings before the next handoff. These presentation
 phases survive interruption even though the game engine has advanced.
@@ -238,3 +239,29 @@ without suppression. The scoped design detector reported no findings.
 APK: `out/RVLRY-0.26.3-prototype.apk`, copied and checksum-verified to
 `\\JNAS\Media\DropBox\RVLRY-0.26.3-prototype.apk`. SHA-256:
 `CEDFA4B87B983C8C13675372A5142865804FC1001F2587BC0921E42D730594EA`.
+
+## Setup defaults and recap display
+
+Fresh and reset settings use 2 teams, 3 rounds, 30-second turns, 1 skip, 0 hints
+and all categories. The selector offers only 30 and 45 seconds; older saved
+60/75-second games remain readable and playable until settings are changed.
+Reset changes settings through the existing durable setup update.
+
+Live play shows its correct count only in the Guessed column. Overflow labels
+use `+N others`, counting partially or fully hidden rows once. The recap combines
+a skipped occurrence later guessed correctly into one Correct row with a replay
+icon; underlying action history and score/highlight calculations stay unchanged.
+
+## Setup and recap verification — 21 October 2026
+
+0.26.4 / versionCode 6 passed pnpm run verify (421 tests / 77 files), Android
+debug assembly and the API-35 bundled app-flow test. Browser checks at 360 × 640
+confirmed settings including Reset fit without scrolling, named footer Back
+actions, and one Correct recap row for a replayed word. Controller tests cover
+reset persistence/team resizing and unchanged loading of saved 60/75-second
+games. Native storage code is unchanged; the full native durability suite was
+not repeated. Scoped design scan was clean; Fallow findings remain reviewed
+maintenance work, not a clean gate.
+
+Artifact: out/RVLRY-0.26.4-prototype.apk, copied and checksum-verified to
+JNAS Media/DropBox. SHA-256: 450AA77131CAFE1A43A9C0C2D2297E1A3B17818AF65A7CC382507E1451D5771E.

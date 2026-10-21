@@ -6,6 +6,12 @@ Do not implement anything from this list unless the user explicitly asks for tha
 
 When the user mentions a future idea that is out of scope for the current task, add it here rather than implementing it opportunistically.
 
-There are currently no queued roadmap items. RM-06 is complete; its lasting
-security, architecture, deployment, and verification rules are maintained in
-the canonical documents linked from `docs/PROJECT_INDEX.md`.
+## Android game ideas — requested 21 October 2026
+
+Deferred; not part of the current implementation:
+
+- **When category:** years/dates associated with significant historical events or famous days.
+- **Difficulty modes:** selectable challenge levels.
+- **Kids mode:** age-appropriate play and content.
+- **Themes:** selectable colour palettes.
+- **Game-like graphics:** redesign the visuals to feel more like a game.

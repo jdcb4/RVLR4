@@ -12,8 +12,8 @@ export { MAX_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 export function createDefaultSettings(): GameSettings {
   return {
     teamCount: 2,
-    turnDurationSeconds: 45,
-    totalRounds: 2,
+    turnDurationSeconds: 30,
+    totalRounds: 3,
     skipLimit: 1,
     selectedCategories: CATEGORIES,
     difficultyMode: "easy",

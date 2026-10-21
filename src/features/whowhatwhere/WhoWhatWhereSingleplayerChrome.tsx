@@ -172,7 +172,15 @@ export function WhoWhatWhereFooter({
   if (game.activeMode === "settings")
     return <PrimaryFooterButton label="Next: Team 1" onClick={game.goToTeamSetup} />;
   if (game.activeMode === "team")
-    return <PrimaryFooterButton label="Save team" onClick={game.advanceTeamSetup} />;
+    return (
+      <FooterStack>
+        <PrimaryFooterButton label="Save team" onClick={game.advanceTeamSetup} />
+        <SecondaryFooterButton
+          label={game.teamStep === 0 ? "Back to settings" : `Back to Team ${game.teamStep}`}
+          onClick={game.goBackFromTeamSetup}
+        />
+      </FooterStack>
+    );
   if (game.activeMode === "review")
     return (
       <FooterStack>
@@ -377,7 +385,6 @@ export function WhoWhatWhereModeContent({
           error={game.setupError}
           teamIndex={game.teamStep}
           teams={game.teamSetups}
-          onBack={game.goBackFromTeamSetup}
           onTeamsChange={game.setTeamSetups}
         />
       </>

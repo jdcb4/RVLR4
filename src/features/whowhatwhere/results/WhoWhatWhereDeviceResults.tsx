@@ -1,5 +1,28 @@
-import type { MatchState } from "@/domain/whowhatwhere/types";
+import { RotateCcw } from "lucide-react";
+
+import type { MatchState, WordHistoryEntry } from "@/domain/whowhatwhere/types";
 import { WhoWhatWhereDeviceProgress } from "@/features/whowhatwhere/WhoWhatWhereDeviceProgress";
+
+function recapHistory(history: readonly WordHistoryEntry[]) {
+  const pending = new Map<string, number[][]>();
+  const resolvedSkips = new Set<number>();
+
+  history.forEach((entry, index) => {
+    // History has no skip IDs. Match full clues and consume one pending occurrence,
+    // so separate main-deck clues with the same spelling remain separate rows.
+    const key = JSON.stringify([entry.word.word, entry.word.category, entry.word.hint]);
+    const occurrences = pending.get(key) ?? [];
+    if (entry.status === "skipped") {
+      if (entry.source === "skipped" && occurrences[0]) occurrences[0].push(index);
+      else occurrences.push([index]);
+      pending.set(key, occurrences);
+    } else if (entry.source === "skipped") {
+      for (const skippedIndex of occurrences.shift() ?? []) resolvedSkips.add(skippedIndex);
+    }
+  });
+
+  return history.filter((_, index) => !resolvedSkips.has(index));
+}
 
 export function WhoWhatWhereDeviceStandings({ match }: { readonly match: MatchState }) {
   return (
@@ -29,7 +52,7 @@ export function WhoWhatWhereDeviceRecap({ match }: { readonly match: MatchState 
       </h2>
       <p className="mb-3 text-typ-ui text-muted-foreground">{summary.describerName}</p>
       <ol aria-label="Turn words" className="min-h-0 space-y-1 overflow-y-auto">
-        {summary.wordHistory.map((entry, index) => (
+        {recapHistory(summary.wordHistory).map((entry, index) => (
           <li
             key={`${index}-${entry.timestamp}`}
             className={`flex items-center justify-between gap-3 rounded-md px-3 py-2.5 text-typ-ui ${
@@ -39,7 +62,10 @@ export function WhoWhatWhereDeviceRecap({ match }: { readonly match: MatchState 
             }`}
           >
             <span className="min-w-0 break-words">{entry.word.word}</span>
-            <span className="shrink-0 text-typ-meta">
+            <span className="inline-flex shrink-0 items-center gap-1.5 text-typ-meta">
+              {entry.status === "correct" && entry.source === "skipped" ? (
+                <RotateCcw className="size-3.5" role="img" aria-label="Replayed" />
+              ) : null}
               {entry.status === "correct" ? "Correct" : "Skipped"}
             </span>
           </li>

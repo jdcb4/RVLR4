@@ -35,7 +35,7 @@ const teams = [
     ],
   },
 ];
-const baseMatch = createMatch(teams, createDefaultSettings());
+const baseMatch = createMatch(teams, { ...createDefaultSettings(), totalRounds: 2 });
 function summary(overrides: Partial<LastTurnSummary> = {}): LastTurnSummary {
   return {
     teamId: "team-1",
@@ -71,6 +71,26 @@ function controller(
 }
 
 describe("device turn flow", () => {
+  it("names the previous setup step below Save team", async () => {
+    const user = userEvent.setup();
+    const back = vi.fn();
+    const game = controller({
+      activeMode: "team",
+      teamStep: 0,
+      match: null,
+      goBackFromTeamSetup: back,
+    });
+    const view = render(<WhoWhatWhereFooter game={game} onPickAnotherGame={vi.fn()} />);
+    await user.click(screen.getByRole("button", { name: "Back to settings" }));
+    expect(back).toHaveBeenCalledOnce();
+    view.rerender(
+      <WhoWhatWhereFooter game={{ ...game, teamStep: 1 }} onPickAnotherGame={vi.fn()} />,
+    );
+    expect(screen.getByRole("button", { name: "Save team" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Back to Team 1" }));
+    expect(back).toHaveBeenCalledTimes(2);
+  });
+
   it("starts directly from the named presenter's confirmation", async () => {
     const user = userEvent.setup();
     const start = vi.fn();
@@ -106,7 +126,7 @@ describe("device turn flow", () => {
     expect(screen.queryByText(/Now ·/)).not.toBeInTheDocument();
   });
 
-  it("keeps every word action and the unplayed clue in the recap", () => {
+  it("combines a replayed correct word and retains the unplayed clue", () => {
     const word = { word: "Lighthouse", category: "What" as const, hint: "" };
     const last = summary({
       wordHistory: [
@@ -121,8 +141,9 @@ describe("device turn flow", () => {
       />,
     );
     const list = screen.getByRole("list", { name: "Turn words" });
-    expect(within(list).getAllByRole("listitem")).toHaveLength(3);
-    expect(within(list).getByText("Skipped")).toBeInTheDocument();
+    expect(within(list).getAllByRole("listitem")).toHaveLength(2);
+    expect(within(list).queryByText("Skipped")).not.toBeInTheDocument();
+    expect(within(list).getByLabelText("Replayed")).toBeInTheDocument();
     expect(within(list).getByText("Correct")).toBeInTheDocument();
     expect(within(list).getByText("Unplayed")).toBeInTheDocument();
   });
@@ -261,13 +282,7 @@ describe("device team setup", () => {
     const user = userEvent.setup();
     const change = vi.fn();
     render(
-      <WhoWhatWhereDeviceTeamSetup
-        teams={teams}
-        teamIndex={0}
-        error=""
-        onTeamsChange={change}
-        onBack={vi.fn()}
-      />,
+      <WhoWhatWhereDeviceTeamSetup teams={teams} teamIndex={0} error="" onTeamsChange={change} />,
     );
     const field = screen.getByRole("textbox", { name: "First presenter" });
     await user.type(field, "x");
@@ -288,13 +303,7 @@ describe("device team setup", () => {
   it("advances the keyboard between names and dismisses it after the final presenter", async () => {
     const user = userEvent.setup();
     render(
-      <WhoWhatWhereDeviceTeamSetup
-        teams={teams}
-        teamIndex={0}
-        error=""
-        onTeamsChange={vi.fn()}
-        onBack={vi.fn()}
-      />,
+      <WhoWhatWhereDeviceTeamSetup teams={teams} teamIndex={0} error="" onTeamsChange={vi.fn()} />,
     );
     await user.click(screen.getByRole("textbox", { name: "Team name" }));
     await user.keyboard("{Enter}");

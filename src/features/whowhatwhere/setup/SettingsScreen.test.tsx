@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { createDefaultSettings } from "@/domain/whowhatwhere/setup";
+import type { GameSettings } from "@/domain/whowhatwhere/types";
 import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
 
 describe("SettingsScreen", () => {
@@ -14,7 +15,9 @@ describe("SettingsScreen", () => {
 
     expect(
       within(screen.getByRole("group", { name: "Turn length" })).getAllByRole("button"),
-    ).toHaveLength(4);
+    ).toHaveLength(2);
+    expect(screen.queryByRole("button", { name: "60s" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "75s" })).not.toBeInTheDocument();
     expect(
       within(screen.getByRole("group", { name: "Hints / turn" })).getAllByRole("button"),
     ).toHaveLength(4);
@@ -25,8 +28,8 @@ describe("SettingsScreen", () => {
       within(screen.getByRole("group", { name: "Categories" })).getAllByRole("button"),
     ).toHaveLength(3);
 
-    await user.click(screen.getByRole("button", { name: "75s" }));
-    expect(onChange).toHaveBeenCalledWith({ ...settings, turnDurationSeconds: 75 });
+    await user.click(screen.getByRole("button", { name: "45s" }));
+    expect(onChange).toHaveBeenCalledWith({ ...settings, turnDurationSeconds: 45 });
 
     await user.click(
       within(screen.getByRole("group", { name: "Teams" })).getByRole("button", { name: "3" }),
@@ -37,6 +40,34 @@ describe("SettingsScreen", () => {
     expect(onChange).toHaveBeenCalledWith({
       ...settings,
       selectedCategories: settings.selectedCategories.filter((category) => category !== "Who"),
+    });
+  });
+
+  it("resets every setting through the existing change callback", async () => {
+    const user = userEvent.setup();
+    const settings: GameSettings = {
+      teamCount: 4,
+      turnDurationSeconds: 75,
+      totalRounds: 1,
+      skipLimit: -1,
+      selectedCategories: ["Who"],
+      difficultyMode: "hard",
+      hints: { enabled: true, perTurnLimit: 3 },
+    };
+    const onChange = vi.fn();
+    render(<SettingsScreen settings={settings} onChange={onChange} />);
+
+    // Rendering an older saved duration must not silently rewrite it.
+    expect(onChange).not.toHaveBeenCalled();
+    await user.click(screen.getByRole("button", { name: "Reset to defaults" }));
+    expect(onChange).toHaveBeenCalledExactlyOnceWith({
+      teamCount: 2,
+      turnDurationSeconds: 30,
+      totalRounds: 3,
+      skipLimit: 1,
+      selectedCategories: ["What", "Who", "Where"],
+      difficultyMode: "easy",
+      hints: { enabled: false, perTurnLimit: 0 },
     });
   });
 });

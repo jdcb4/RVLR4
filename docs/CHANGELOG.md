@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.26.4 — Setup navigation and concise turn recaps
+
+- Move team Back actions below Save team and name their destinations.
+- Remove the duplicate live correct count; simplify overflow labels to +N others.
+- Show replayed-and-guessed words once in the recap with a replay icon.
+- Offer 30/45-second turns and reset defaults: 2 teams, 3 rounds, 30 seconds,
+  1 skip, 0 hints and all categories. Existing saved turn lengths remain valid.
+- Record future category, mode, theme and graphics ideas in the roadmap only.
+
+
 ## 0.26.3 — Game identity and steadier phone layout
 
 - Give games distinct illustrated SVG symbols, aligned beside picker text.

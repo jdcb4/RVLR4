@@ -1,7 +1,8 @@
 import { GamePanel } from "@/components/game/GamePanel";
 import { OptionButton, OptionGroup } from "@/components/setup/OptionGroup";
 import { TeamCountOptionGroup } from "@/components/setup/TeamCountOptionGroup";
-import { toggleCategory } from "@/domain/whowhatwhere/setup";
+import { Button } from "@/components/ui/button";
+import { createDefaultSettings, toggleCategory } from "@/domain/whowhatwhere/setup";
 import {
   CATEGORIES,
   type GameSettings,
@@ -34,9 +35,9 @@ export function SettingsScreen({
         <OptionGroup
           inlineLayout
           label="Turn length"
-          optionsClassName="grid grid-cols-4 gap-1 [&>button]:px-2"
+          optionsClassName="grid grid-cols-2 gap-1 [&>button]:px-2"
         >
-          {[30, 45, 60, 75].map((seconds) => (
+          {[30, 45].map((seconds) => (
             <OptionButton
               key={seconds}
               selected={settings.turnDurationSeconds === seconds}
@@ -131,6 +132,14 @@ export function SettingsScreen({
           </OptionButton>
         ))}
       </OptionGroup>
+
+      <Button
+        className="min-h-11 justify-self-end px-3"
+        variant="outline"
+        onClick={() => onChange(createDefaultSettings())}
+      >
+        Reset to defaults
+      </Button>
     </>
   );
 

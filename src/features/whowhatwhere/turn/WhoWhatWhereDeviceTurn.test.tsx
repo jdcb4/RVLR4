@@ -137,17 +137,16 @@ describe("phone active turn", () => {
       <WhoWhatWhereDeviceTurn match={match} secondsRemaining={24} onReturnSkipped={vi.fn()} />,
     );
     const list = screen.getByRole("region", { name: "Skipped words, scroll to see more" });
-    expect(screen.getByText("+2 below · scroll")).toBeInTheDocument();
+    expect(screen.getByText("+2 others")).toBeInTheDocument();
     fireEvent.scroll(list, { target: { scrollTop: 52 } });
-    expect(screen.getByText("+1 above · +1 below · scroll")).toBeInTheDocument();
+    expect(screen.getByText("+2 others")).toBeInTheDocument();
     fireEvent.scroll(list, { target: { scrollTop: 104 } });
-    expect(screen.getByText("+2 above · scroll")).toBeInTheDocument();
+    expect(screen.getByText("+2 others")).toBeInTheDocument();
 
     rowHeight = 26;
     list.scrollTop = 0;
     act(() => resizeCallbacks.forEach((callback) => callback([], {} as ResizeObserver)));
-    expect(screen.queryByText(/below · scroll/)).toBeNull();
-    expect(screen.queryByText(/above.*scroll/)).toBeNull();
+    expect(screen.queryByText(/\+\d+ others/)).toBeNull();
     expect(within(list).getAllByRole("button")).toHaveLength(4);
   });
 
@@ -168,11 +167,11 @@ describe("phone active turn", () => {
     render(
       <WhoWhatWhereDeviceTurn match={match} secondsRemaining={24} onReturnSkipped={vi.fn()} />,
     );
-    expect(screen.getByText("+4 below · scroll")).toBeInTheDocument();
+    expect(screen.getByText("+4 others")).toBeInTheDocument();
     fireEvent.scroll(screen.getByRole("region", { name: "Latest guessed words" }), {
       target: { scrollTop: 246 },
     });
-    expect(screen.getByText("+4 above · scroll")).toBeInTheDocument();
+    expect(screen.getByText("+4 others")).toBeInTheDocument();
   });
 
   it.each(["Who", "What", "Where"] as const)(

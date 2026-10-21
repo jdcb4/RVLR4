@@ -48,9 +48,6 @@ export function WhoWhatWhereDeviceTurn({
             secondsLeft={secondsRemaining}
           />
         </p>
-        <p className="pb-1 text-typ-ui text-muted-foreground">
-          <span className="font-semibold text-foreground">{turn.score}</span> correct
-        </p>
       </div>
 
       <div

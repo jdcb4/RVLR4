@@ -12,10 +12,14 @@ import {
 } from "./setup";
 
 describe("setup domain", () => {
-  it("creates hidden future-ready defaults", () => {
+  it("starts with two teams, three 30-second rounds and one skip", () => {
     const settings = createDefaultSettings();
 
     expect(settings.selectedCategories).toEqual(["What", "Who", "Where"]);
+    expect(settings.teamCount).toBe(2);
+    expect(settings.totalRounds).toBe(3);
+    expect(settings.turnDurationSeconds).toBe(30);
+    expect(settings.skipLimit).toBe(1);
     expect(settings.difficultyMode).toBe("easy");
     expect(settings.hints).toEqual({ enabled: false, perTurnLimit: 0 });
   });

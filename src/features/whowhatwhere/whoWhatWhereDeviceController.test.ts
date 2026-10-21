@@ -310,6 +310,76 @@ describe("WWW device session durability and lifecycle", () => {
     expect(restored.getSnapshot().session.setup).toEqual(original.setup);
   });
 
+  it("persists reset defaults while keeping the first two teams and a valid roster step", async () => {
+    const session = createWhoWhatWhereDeviceSession();
+    const teams = createTeamSetups(4).map((team, index) => ({
+      ...team,
+      name: `Our team ${index + 1}`,
+    }));
+    device.saved = {
+      ...session,
+      mode: "team",
+      teamStep: 3,
+      setup: {
+        ...session.setup,
+        teams,
+        settings: {
+          ...session.setup.settings,
+          teamCount: 4,
+          turnDurationSeconds: 75,
+          totalRounds: 1,
+          skipLimit: -1,
+          selectedCategories: ["Who"],
+          hints: { enabled: true, perTurnLimit: 3 },
+        },
+      },
+    };
+    const controller = new WhoWhatWhereDeviceController();
+    await controller.hydrate();
+    await controller.resumeGame();
+    controller.updateSettings(createDefaultSettings());
+    expect(controller.getSnapshot().session.teamStep).toBe(1);
+    expect(controller.getSnapshot().session.setup.teams).toEqual(teams.slice(0, 2));
+    await advance(400);
+
+    const restored = new WhoWhatWhereDeviceController();
+    await restored.hydrate();
+    expect(restored.getSnapshot().session.setup.settings).toEqual(createDefaultSettings());
+    expect(restored.getSnapshot().session.setup.teams).toEqual(teams.slice(0, 2));
+    expect(restored.getSnapshot().session.teamStep).toBe(1);
+  });
+
+  it.each([60, 75] as const)(
+    "restores a saved %i-second game without changing its settings or countdown",
+    async (turnDurationSeconds) => {
+      const session = createWhoWhatWhereDeviceSession();
+      const settings = {
+        ...session.setup.settings,
+        turnDurationSeconds,
+        totalRounds: 2 as const,
+        selectedCategories: ["What" as const],
+      };
+      const match = startTurn(createMatch(session.setup.teams, settings), words);
+      device.saved = {
+        ...session,
+        setup: { ...session.setup, settings },
+        match,
+        mode: "turn",
+        remainingMs: turnDurationSeconds * 1000 - 7350,
+        paused: true,
+      };
+      const original = structuredClone(device.saved);
+      const controller = new WhoWhatWhereDeviceController();
+      await controller.hydrate();
+
+      expect(controller.getSnapshot().session.setup.settings).toEqual(settings);
+      expect(controller.getSnapshot().session.match).toEqual(match);
+      expect(controller.getSnapshot().session.remainingMs).toBe(turnDurationSeconds * 1000 - 7350);
+      expect(writeSnapshot).not.toHaveBeenCalled();
+      expect(device.saved).toEqual(original);
+    },
+  );
+
   it("commits a confirmed replacement before removing the saved match and retains its roster", async () => {
     await activeController();
     const original = structuredClone(device.saved) as WhoWhatWhereDeviceSession;

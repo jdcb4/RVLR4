@@ -1,6 +1,6 @@
 import type { KeyboardEvent } from "react";
 
-import { IconArrowLeft, IconPlus, IconTrash } from "@/components/icons";
+import { IconPlus, IconTrash } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { MAX_PLAYERS_PER_TEAM, MIN_PLAYERS_PER_TEAM } from "@/config/teamRoster";
 import {
@@ -52,13 +52,11 @@ export function WhoWhatWhereDeviceTeamSetup({
   teamIndex,
   error,
   onTeamsChange,
-  onBack,
 }: {
   readonly teams: readonly TeamSetup[];
   readonly teamIndex: number;
   readonly error: string;
   readonly onTeamsChange: (teams: TeamSetup[]) => void;
-  readonly onBack: () => void;
 }) {
   const team = teams[teamIndex];
   if (!team) return null;
@@ -70,9 +68,6 @@ export function WhoWhatWhereDeviceTeamSetup({
         <h2 className="text-typ-section-title font-semibold">
           Team {teamIndex + 1} of {teams.length}
         </h2>
-        <Button aria-label="Back" className="size-11 p-0" variant="ghost" onClick={onBack}>
-          <IconArrowLeft aria-hidden="true" className="size-5" />
-        </Button>
       </div>
       <label className="grid gap-1 text-typ-ui font-medium">
         Team name
