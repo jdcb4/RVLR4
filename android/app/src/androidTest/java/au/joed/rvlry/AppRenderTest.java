@@ -79,9 +79,8 @@ public class AppRenderTest {
             awaitCondition(activity, "document.body.innerText.includes('Review teams')");
             clickButton(activity, "Start game");
             awaitCondition(activity, "document.body.innerText.includes('Pass to')");
-            awaitCondition(activity, "[...document.querySelectorAll('button')].some(button => button.textContent.includes('— ready') && !button.disabled)");
-            evaluate(activity, "[...document.querySelectorAll('button')].find(button => button.textContent.includes('— ready')).click()");
-            clickButton(activity, "Start turn");
+            awaitCondition(activity, "[...document.querySelectorAll('button')].some(button => button.textContent.includes(', start turn') && !button.disabled)");
+            evaluate(activity, "[...document.querySelectorAll('button')].find(button => button.textContent.includes(', start turn')).click()");
             awaitCondition(activity, "!!document.querySelector('[aria-label=\"Active turn\"]')");
             clickButton(activity, "Skip");
             awaitCondition(activity, "document.body.innerText.includes('Skipped · 1')");

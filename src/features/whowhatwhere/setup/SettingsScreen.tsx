@@ -25,6 +25,7 @@ export function SettingsScreen({
   const controls = (
     <>
       <TeamCountOptionGroup
+        inlineLayout
         value={settings.teamCount}
         onChange={(count) => setSetting("teamCount", count as GameSettings["teamCount"])}
       />
@@ -110,7 +111,11 @@ export function SettingsScreen({
         </OptionGroup>
       </div>
 
-      <OptionGroup label="Categories">
+      <OptionGroup
+        inlineLayout
+        label="Categories"
+        optionsClassName="grid grid-cols-3 gap-1 [&>button]:px-2"
+      >
         {CATEGORIES.map((category) => (
           <OptionButton
             key={category}

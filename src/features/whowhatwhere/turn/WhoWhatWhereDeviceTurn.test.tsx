@@ -6,6 +6,7 @@ import {
   correctWord,
   createMatch,
   returnSkippedWord,
+  revealHint,
   skipWord,
   startTurn,
 } from "@/domain/whowhatwhere/game";
@@ -192,7 +193,7 @@ describe("phone active turn", () => {
     },
   );
 
-  it("retains optional hints and their disabled allowance state", async () => {
+  it("replaces the hint action with its text and disables the next word when exhausted", async () => {
     const onRevealHint = vi.fn();
     const match = createTurn();
     const props = { secondsRemaining: 24, onReturnSkipped: vi.fn(), onRevealHint };
@@ -200,16 +201,17 @@ describe("phone active turn", () => {
     await userEvent.click(screen.getByRole("button", { name: "Hint (1 left)" }));
     expect(onRevealHint).toHaveBeenCalledOnce();
 
-    view.rerender(
-      <WhoWhatWhereDeviceTurn
-        {...props}
-        match={{
-          ...match,
-          activeTurn: { ...match.activeTurn!, hintsRemaining: 0, currentWordHintRevealed: true },
-        }}
-      />,
+    const revealed = revealHint(match);
+    view.rerender(<WhoWhatWhereDeviceTurn {...props} match={revealed} />);
+    expect(screen.getByRole("region", { name: "Hint" })).toHaveTextContent(
+      match.activeTurn!.wordQueue[0]!.hint,
     );
-    expect(screen.getByRole("button", { name: "Hint shown" })).toBeDisabled();
-    expect(screen.getByText(match.activeTurn!.wordQueue[0]!.hint)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Hint/ })).toBeNull();
+    expect(screen.queryByText("Hint shown")).toBeNull();
+
+    view.rerender(<WhoWhatWhereDeviceTurn {...props} match={correctWord(revealed, now)} />);
+    expect(screen.getByRole("button", { name: "Hint (0 left)" })).toBeDisabled();
+    expect(screen.queryByRole("region", { name: "Hint" })).toBeNull();
+    expect(onRevealHint).toHaveBeenCalledOnce();
   });
 });

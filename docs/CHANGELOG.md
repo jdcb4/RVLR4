@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.26.3 — Game identity and steadier phone layout
+
+- Give games distinct illustrated SVG symbols, aligned beside picker text.
+- Put separate Settings and Info controls in the picker header; remove redundant copy.
+- Align every game-settings label consistently beside its selector row.
+- Replace the hint button with hint text in the same fixed space.
+- Start turns with one named handoff confirmation.
+- Keep team progress compact with circled numbers and bounded names, without presenter names.
+
+
 ## 0.26.2 — Header and team progression
 
 - Apply approved Option A: remove the round strip, keep the round number in the

@@ -2,9 +2,10 @@
 
 ## Current milestone
 
-0.26.2 is the debug-signed Who What Where build with the reviewed phone UX. Hat Game,
+0.26.3 is the debug-signed Who What Where build with the reviewed phone UX. Hat Game,
 Imposter, remote word installation and friend-release signing follow the Pixel
-checkpoint. The Settings entry truthfully indicates no update source is configured.
+checkpoint. The picker has separate Settings and Info icon buttons. Settings truthfully
+indicates no update source is configured.
 Historical multiplayer code remains in the checkout but is unreachable from the
 Android router and absent from its production route chunks.
 
@@ -134,13 +135,15 @@ The chooser lives inside the selected game, not the hub. Returning to an active
 turn first opens the paused summary; a separate Resume turn starts the clock.
 
 Setup follows Settings → Teams → Review. Save team advances through the teams;
-review precedes starting the game. Handoff identifies the presenter, asks for
-acknowledgement, then offers Start turn. A completed turn gets a word recap;
+review precedes starting the game. Handoff identifies the presenter and offers
+one named confirmation that starts the turn. A completed turn gets a word recap;
 a completed round adds standings before the next handoff. These presentation
 phases survive interruption even though the game engine has advanced.
 
 Between turns, violet numbered teams show current/completed/next within the
-current round, visually distinct from teal action buttons. The round number
+current round, visually distinct from teal action buttons. Circled team numbers
+sit above a two-line name area and short status; presenter names stay in the
+handoff heading rather than the tracker. The round number
 lives in the top-right header; there is no separate round strip (approved Option A).
 Active play omits this tracker and uses a compact game/round header, larger timer,
 category-labeled colored clue, and large bottom controls. Who is lilac, What green,
@@ -150,7 +153,8 @@ Skipped and Guessed have separate columns. All outstanding skips remain retry
 buttons, including the selected word marked In play. They leave the queue only
 on Correct. Both columns use available height and indicate overflow; guessed history retains
 all entries, newest first. Long lists scroll inside the columns while the actions stay fixed.
-Hints and configured skip limits remain supported.
+Hints replace their button inside a fixed-height area; long hints scroll inside it
+without moving the word columns. Configured skip limits remain supported.
 
 Pause keeps a compact presenter/time/score summary and resume/leave/new-game
 choices; End turn is available there. Final results show standings, tied best-turn
@@ -215,3 +219,22 @@ boxes without the strip. No persistence or native behavior changed; native
 device tests were not repeated for this removal-only layout patch.
 Artifact: out/RVLRY-0.26.2-prototype.apk, copied and checksum-verified to
 JNAS Media/DropBox. SHA-256: B0CBBAF619C1FD9017E3DB97192B1A9CE91F5300B3CEF31583696935AED527D6.
+
+## Picker and handoff refinement — 21 October 2026
+
+0.26.3 / versionCode 5 uses the same game identity symbols on the picker and
+game header: person/object/location, hat with slips, and disguise mask. Standard
+controls remain Lucide. Settings labels all sit beside horizontal selector rows.
+
+`pnpm run verify` passed 410 tests across 76 files, TypeScript, lint and production
+build. Android debug assembly, all eight device tests and both separate
+force-stop checkpoint phases passed. Browser checks at 360 × 640 confirmed
+settings fit, the four-team tracker stays 110px high even with long names, and
+hint reveal leaves both word columns at the same vertical position. The existing
+native app-render test now starts a turn with the single named confirmation.
+Fallow remains non-clean (26 dead-code findings / 56 health thresholds), reviewed
+without suppression. The scoped design detector reported no findings.
+
+APK: `out/RVLRY-0.26.3-prototype.apk`, copied and checksum-verified to
+`\\JNAS\Media\DropBox\RVLRY-0.26.3-prototype.apk`. SHA-256:
+`CEDFA4B87B983C8C13675372A5142865804FC1001F2587BC0921E42D730594EA`.

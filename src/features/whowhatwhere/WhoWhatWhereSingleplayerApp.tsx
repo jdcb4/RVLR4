@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AppInfoHeaderButton, AppInfoOverlay } from "@/components/AppInfoOverlay";
 import { FooterActionLockContext } from "@/components/footerActionLockContext";
 import { GameShell } from "@/components/GameShell";
+import { IconWhoWhatWhere } from "@/components/icons";
 import { useWhoWhatWhereSingleplayerApp } from "@/features/whowhatwhere/useWhoWhatWhereSingleplayerApp";
 import {
   WhoWhatWhereFooter,
@@ -104,17 +105,7 @@ export function WhoWhatWhereSingleplayerApp() {
         onHome={leaveToPicker}
         title={
           <span className="flex items-center justify-center gap-2">
-            <svg
-              aria-hidden="true"
-              className="size-6 shrink-0 text-primary"
-              viewBox="0 0 28 28"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.6"
-            >
-              <rect x="2" y="2" width="18" height="22" rx="3" />
-              <path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3" />
-            </svg>
+            <IconWhoWhatWhere className="size-7 shrink-0 text-primary" />
             <span className={playing ? "text-typ-ui" : "text-typ-body"}>Who What Where</span>
           </span>
         }

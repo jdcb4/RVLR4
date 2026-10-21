@@ -64,7 +64,6 @@ function controller(
     match: baseMatch,
     pendingMatch: null,
     confirmDiscardPending: false,
-    readyHandoffRevealed: false,
     setupError: "",
     turnError: "",
     ...overrides,
@@ -72,24 +71,18 @@ function controller(
 }
 
 describe("device turn flow", () => {
-  it("requires the named presenter's acknowledgement before starting", async () => {
+  it("starts directly from the named presenter's confirmation", async () => {
     const user = userEvent.setup();
-    const acknowledge = vi.fn();
     const start = vi.fn();
-    const game = controller({ setReadyHandoffRevealed: acknowledge, startNextTurn: start });
-    const { rerender } = render(<WhoWhatWhereFooter game={game} onPickAnotherGame={vi.fn()} />);
-    expect(screen.queryByRole("button", { name: "Start turn" })).not.toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "I’m Alex — ready" }));
-    expect(acknowledge).toHaveBeenCalledWith(true);
-    expect(start).not.toHaveBeenCalled();
-    rerender(
+    render(
       <WhoWhatWhereFooter
-        game={{ ...game, readyHandoffRevealed: true }}
+        game={controller({ startNextTurn: start })}
         onPickAnotherGame={vi.fn()}
       />,
     );
-    await user.click(screen.getByRole("button", { name: "Start turn" }));
+    await user.click(screen.getByRole("button", { name: "I’m Alex, start turn" }));
     expect(start).toHaveBeenCalledOnce();
+    expect(screen.queryByRole("button", { name: "Start turn" })).not.toBeInTheDocument();
   });
 
   it("shows the completed round and identity after the engine advances", () => {
@@ -136,10 +129,10 @@ describe("device turn flow", () => {
 
   it("keeps progress informational and numbers every team", () => {
     render(<WhoWhatWhereDeviceProgress match={baseMatch} />);
-    expect(screen.getByText("1 · Foxes")).toBeInTheDocument();
-    expect(screen.getByText("2 · Otters")).toBeInTheDocument();
-    expect(screen.getByText("Now · Alex")).toBeInTheDocument();
-    expect(screen.getByText("Next · Maya")).toBeInTheDocument();
+    expect(screen.getByText("Foxes")).toBeInTheDocument();
+    expect(screen.getByText("Otters")).toBeInTheDocument();
+    expect(screen.getByText("Now")).toBeInTheDocument();
+    expect(screen.getByText("Next")).toBeInTheDocument();
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 

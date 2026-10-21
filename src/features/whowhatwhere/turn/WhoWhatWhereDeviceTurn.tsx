@@ -64,20 +64,29 @@ export function WhoWhatWhereDeviceTurn({
       </div>
 
       {showHints ? (
-        <div className="grid shrink-0 gap-2">
+        <div className="h-12 shrink-0">
           {turn.currentWordHintRevealed && word?.hint ? (
-            <p aria-live="polite" className="text-center text-typ-ui text-foreground">
+            <div
+              aria-label="Hint"
+              aria-live="polite"
+              className="h-full overflow-y-auto overscroll-contain rounded-md border border-input px-3 py-2 text-center text-typ-ui text-foreground [overflow-wrap:anywhere] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              role="region"
+              // Keyboard users must be able to scroll a long hint inside this fixed-height region.
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+              tabIndex={0}
+            >
               {word.hint}
-            </p>
-          ) : null}
-          <Button
-            className="min-h-12 whitespace-normal"
-            disabled={turn.hintsRemaining <= 0 || turn.currentWordHintRevealed || !word}
-            variant="outline"
-            onClick={onRevealHint}
-          >
-            {turn.currentWordHintRevealed ? "Hint shown" : `Hint (${turn.hintsRemaining} left)`}
-          </Button>
+            </div>
+          ) : (
+            <Button
+              className="h-full w-full min-h-12 whitespace-normal"
+              disabled={turn.hintsRemaining <= 0 || turn.currentWordHintRevealed || !word}
+              variant="outline"
+              onClick={onRevealHint}
+            >
+              {`Hint (${turn.hintsRemaining} left)`}
+            </Button>
+          )}
         </div>
       ) : null}
 

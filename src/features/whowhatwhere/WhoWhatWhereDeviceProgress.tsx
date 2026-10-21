@@ -32,10 +32,6 @@ export function WhoWhatWhereDeviceProgress({
       >
         {match.teamOrder.map((teamId, index) => {
           const team = match.teams.find((row) => row.id === teamId)!;
-          const players = match.players
-            .filter((player) => player.teamId === teamId)
-            .sort((a, b) => a.seat - b.seat);
-          const presenter = players[(match.describerIndexes[teamId] ?? 0) % players.length];
           const complete = index < completedTeams;
           const current = phase === "active" && index === match.teamIndex;
           const next = !complete && !current && index === completedTeams;
@@ -43,22 +39,31 @@ export function WhoWhatWhereDeviceProgress({
             <li
               key={teamId}
               className={cn(
-                "min-w-0 rounded-lg border px-2 py-2 text-typ-micro",
+                "flex min-w-0 flex-col items-center gap-1 rounded-lg border px-1 py-2 text-center text-typ-micro",
                 current
                   ? "border-semantic-progress-current bg-semantic-progress-current text-semantic-progress-foreground"
                   : "border-border bg-muted text-muted-foreground",
               )}
             >
-              <strong className="block break-words font-semibold">
-                {index + 1} · {team.name}
+              <span
+                className="flex size-7 shrink-0 items-center justify-center rounded-full border border-current font-semibold"
+                aria-label={`Team ${index + 1}`}
+              >
+                {index + 1}
+              </span>
+              <strong
+                className="line-clamp-2 h-8 w-full break-words font-semibold leading-4"
+                title={team.name}
+              >
+                {team.name}
               </strong>
-              <span className="mt-0.5 block break-words">
+              <span>
                 {complete
                   ? "Complete"
                   : current
-                    ? `Now · ${presenter?.name ?? ""}`
+                    ? "Now"
                     : next || (phase === "active" && index === match.teamIndex + 1)
-                      ? `Next · ${presenter?.name ?? ""}`
+                      ? "Next"
                       : "Waiting"}
               </span>
             </li>

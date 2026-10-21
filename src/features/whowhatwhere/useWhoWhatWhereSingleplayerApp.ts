@@ -9,15 +9,11 @@ export function useWhoWhatWhereSingleplayerApp() {
   const [controller] = useState(() => new WhoWhatWhereDeviceController());
   const view = useSyncExternalStore(controller.subscribe, controller.getSnapshot);
   const [confirmDiscardPending, setConfirmDiscardPending] = useState(false);
-  const [readyHandoffRevealed, setReadyHandoffRevealed] = useState(false);
   const { session } = view;
   const { match } = session;
   const activeMode: WhoWhatWhereAppMode = match?.stage ?? session.mode;
 
   useEffect(() => controller.mount(), [controller]);
-  useEffect(() => {
-    setReadyHandoffRevealed(false);
-  }, [match?.roundNumber, match?.teamIndex, match?.stage, session.paused]);
 
   const actionLock = useFooterActionLockOnKeyChange(
     [
@@ -25,7 +21,6 @@ export function useWhoWhatWhereSingleplayerApp() {
       session.teamStep,
       match?.roundNumber,
       match?.teamIndex,
-      readyHandoffRevealed,
       match?.activeTurn?.startedAt,
       session.paused,
       session.presentationStage,
@@ -57,8 +52,6 @@ export function useWhoWhatWhereSingleplayerApp() {
     secondsRemaining: Math.ceil((session.remainingMs ?? 0) / 1000),
     isStartingTurn: view.saving,
     footerActionsLocked: actionLock || view.saving || !view.loaded,
-    readyHandoffRevealed,
-    setReadyHandoffRevealed,
     setTeamSetups: controller.setTeamSetups,
     updateSettings: controller.updateSettings,
     goToSettingsFromLanding: controller.goToSettingsFromLanding,

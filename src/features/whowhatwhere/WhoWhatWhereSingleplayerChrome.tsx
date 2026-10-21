@@ -186,17 +186,11 @@ export function WhoWhatWhereFooter({
         <PrimaryFooterButton
           disabled={game.isStartingTurn}
           label={
-            game.readyHandoffRevealed
-              ? game.isStartingTurn
-                ? "Loading words"
-                : "Start turn"
-              : `I’m ${getActiveContext(game.match).describer.name} — ready`
+            game.isStartingTurn
+              ? "Loading words"
+              : `I’m ${getActiveContext(game.match).describer.name}, start turn`
           }
-          onClick={
-            game.readyHandoffRevealed
-              ? () => void game.startNextTurn()
-              : () => game.setReadyHandoffRevealed(true)
-          }
+          onClick={() => void game.startNextTurn()}
         />
         <QuietFooterButton label="Save and leave" onClick={onPickAnotherGame} />
       </FooterStack>
@@ -401,7 +395,6 @@ export function WhoWhatWhereModeContent({
       <WhoWhatWhereDeviceReady
         key={`${game.match.roundNumber}-${game.match.teamIndex}`}
         error={game.turnError}
-        handoffRevealed={game.readyHandoffRevealed}
         match={game.match}
       />
     );

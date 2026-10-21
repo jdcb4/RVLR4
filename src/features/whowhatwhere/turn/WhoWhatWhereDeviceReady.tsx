@@ -4,11 +4,9 @@ import { WhoWhatWhereDeviceProgress } from "@/features/whowhatwhere/WhoWhatWhere
 
 export function WhoWhatWhereDeviceReady({
   match,
-  handoffRevealed,
   error,
 }: {
   readonly match: MatchState;
-  readonly handoffRevealed: boolean;
   readonly error: string;
 }) {
   const { describer } = getActiveContext(match);
@@ -17,13 +15,9 @@ export function WhoWhatWhereDeviceReady({
       <WhoWhatWhereDeviceProgress match={match} />
       <div className="flex flex-1 flex-col justify-center gap-2 pb-6">
         <h2 className="break-words text-typ-display font-semibold">
-          {handoffRevealed ? `Ready, ${describer.name}?` : `Pass to ${describer.name}.`}
+          {`Pass to ${describer.name}.`}
         </h2>
-        <p className="text-typ-body text-muted-foreground">
-          {handoffRevealed
-            ? `${match.settings.turnDurationSeconds}-second turn`
-            : "Everyone else: look away."}
-        </p>
+        <p className="text-typ-body text-muted-foreground">Everyone else: look away.</p>
       </div>
       {error ? (
         <p role="alert" className="text-typ-ui text-destructive">

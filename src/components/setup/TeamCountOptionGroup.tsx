@@ -8,12 +8,18 @@ import { OptionButton, OptionGroup } from "./OptionGroup";
 export function TeamCountOptionGroup({
   value,
   onChange,
+  inlineLayout = false,
 }: {
   readonly value: SharedTeamCount;
   readonly onChange: (count: SharedTeamCount) => void;
+  readonly inlineLayout?: boolean;
 }) {
   return (
-    <OptionGroup label="Teams">
+    <OptionGroup
+      inlineLayout={inlineLayout}
+      label="Teams"
+      optionsClassName={inlineLayout ? "grid grid-cols-3 gap-1 [&>button]:px-2" : ""}
+    >
       {TEAM_COUNT_OPTIONS.map((teamCount) => (
         <OptionButton
           key={teamCount}
