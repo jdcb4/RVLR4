@@ -15,6 +15,17 @@ Deferred; not part of the current implementation:
 - **Kids mode:** age-appropriate play and content. Catalogue entries now carry an independent ages 8–12 suitability flag; selection UI remains deferred.
 - **Game-like graphics:** further bespoke illustrations and game artwork beyond the five selectable visual themes shipped in 0.29.0.
 
+## Trivia game — requested 22 October 2026
+
+Deferred; roadmap only, not approved for implementation.
+
+- **Format:** one presenter reads questions to the group; no pass-and-play handoffs.
+- **Question bank:** maintain a reusable bank of trivia questions and answers. Let the presenter choose how many questions to select for a session.
+- **Answer timing:** choose to reveal answers after each question or together at the end.
+- **Open decision:** whether participants write answers in the app or simply remember them.
+- **Categories:** choose a balanced set appropriate for the audience during planning. Initial candidates: general knowledge, history, geography, science and nature, arts and literature, film and television, music, and sport and games.
+- **Baseline content — Joe:** find the old trivia app he made so its questions can be reviewed and reused as the starting bank.
+
 ## Android delivery follow-ups
 
 - Configure and implement validated, atomic word-pack updates from a fixed endpoint, with bundled offline fallback.
