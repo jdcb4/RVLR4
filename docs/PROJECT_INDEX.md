@@ -30,6 +30,7 @@ commands in [ANDROID.md](ANDROID.md); browser tests alone do not verify them.
 - [Roadmap](ROADMAP.md) — future work only.
 - [Android build and testing](ANDROID.md) — local toolchain, APK and device checks.
 - [Persistence](PERSISTENCE.md) — current Android save contract and historical browser saves.
+- [Word catalogue](WORD_CATALOGUE.md) — answer conventions, ratings, kids suitability and original-source provenance.
 - [Architecture](ARCHITECTURE.md) — Android entry point and retained legacy architecture.
 - [Decisions](DECISIONS.md), [Changelog](CHANGELOG.md), [Versioning](VERSIONING.md).
 - [Verification](VERIFICATION.md), [Screens](SCREENS.md), [Theming](THEMING.md),

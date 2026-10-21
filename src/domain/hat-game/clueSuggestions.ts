@@ -1,6 +1,6 @@
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
-import rawClueSuggestions from "@/data/hatClueSuggestions.json";
 import { uniqueStaticTextListSchema } from "@/data/staticDataSchemas";
+import { getCatalogueForGame } from "@/data/wordCatalogue";
 
 export const hatClueSuggestionsSchema = uniqueStaticTextListSchema().refine(
   (suggestions) =>
@@ -8,7 +8,9 @@ export const hatClueSuggestionsSchema = uniqueStaticTextListSchema().refine(
   `Suggestions must be at most ${GAME_DEFAULTS.maxClueLength} characters.`,
 );
 
-const suggestions = hatClueSuggestionsSchema.parse(rawClueSuggestions);
+const suggestions = hatClueSuggestionsSchema.parse(
+  getCatalogueForGame("hat").map(({ word }) => word),
+);
 
 export function getHatClueSuggestions(): readonly string[] {
   return suggestions;

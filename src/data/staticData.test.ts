@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 
+import originalHatSuggestions from "@/data/hatClueSuggestions.json";
 import rawHatNameData from "@/data/hatNameData.json";
+import originalImposterWords from "@/data/imposterWords.json";
 import rawWhoWhatWhereNamePacks from "@/data/whoWhatWhereNamePacks.json";
+import originalWhoWhatWhereWords from "@/data/whoWhatWhereWords.json";
 import { getHatClueSuggestions, hatClueSuggestionsSchema } from "@/domain/hat-game/clueSuggestions";
 import { getHatNameData, hatNameDataSchema } from "@/domain/hat-game/nameData";
 import { getImposterWordList, imposterWordListSchema } from "@/domain/imposter/wordList";
@@ -15,7 +18,7 @@ import { uniqueStaticTextListSchema } from "./staticDataSchemas";
 
 describe("static game data", () => {
   it("preserves the migrated data inventory", () => {
-    const whoWhatWhereWords = getWhoWhatWhereWordList();
+    const whoWhatWhereWords = whoWhatWhereWordListSchema.parse(originalWhoWhatWhereWords);
     const counts = Object.fromEntries(
       ["What", "Who", "Where"].map((category) => [
         category,
@@ -25,8 +28,11 @@ describe("static game data", () => {
 
     expect(whoWhatWhereWords).toHaveLength(3_129);
     expect(counts).toEqual({ What: 844, Who: 908, Where: 1_377 });
-    expect(getHatClueSuggestions()).toHaveLength(1_018);
-    expect(getImposterWordList()).toHaveLength(12);
+    expect(hatClueSuggestionsSchema.parse(originalHatSuggestions)).toHaveLength(1_018);
+    expect(imposterWordListSchema.parse(originalImposterWords)).toHaveLength(12);
+    expect(getWhoWhatWhereWordList().length).toBeGreaterThan(whoWhatWhereWords.length);
+    expect(getHatClueSuggestions().length).toBeGreaterThan(originalHatSuggestions.length);
+    expect(getImposterWordList().length).toBeGreaterThan(originalImposterWords.length);
     expect(getHatNameData()).toMatchObject({
       packs: expect.arrayContaining([expect.objectContaining({ playerNames: expect.any(Array) })]),
       fallbackNames: expect.any(Array),

@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.30.0 is the debug-signed three-game build with five app-wide themes and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. No word-update source is configured yet. Release signing and remote word installation remain future work.
+0.31.0 is the debug-signed three-game build with expanded curated word pools, five app-wide themes and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. Catalogue difficulty/kids metadata is ready for future mode selectors. No word-update source is configured yet. Release signing and remote word installation remain future work.
 
 Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
@@ -316,3 +316,13 @@ Artifact: out/RVLRY-0.29.0-themes.apk, copied and SHA-256 verified to JNAS Media
 Browser 360x640 review checked picker, handoff, active play and Imposter conceal/reveal. Words and controls remain level; Skip and Correct retain 76px height and the 1:2 width ratio. Other themes have no paper pseudo-elements. Scoped design scan was clean. Fallow retains 39 findings (including two isolated mockup assets) and eight clone groups, reviewed without weakening checks. No pending Kestrel responses were returned; chat explicitly approved B. Pixel visual/upgrade acceptance remains unverified.
 
 APK: out/RVLRY-0.30.0-recess.apk, copied/hash-verified to JNAS Media/DropBox/RVLRY-0.30.0-recess.apk. SHA-256: 9B4DC72BA42E00E2E0B08755EE66439E55C1C394CD0D3EF5FFFC596A5F46F12E.
+
+## Curated word expansion — 22 October 2026
+
+0.31.0 / versionCode 14 passes full verify (223 tests / 39 files), Android debug assembly, all nine API-35 device tests and both separate force-stop recovery phases. The native app-flow test exercises all three games against the expanded bundle. Original source hashes, complete provenance, metadata, alias collisions, homonym separation and legacy payload projections are covered by the new tests. Pixel acceptance of this build remains unverified.
+
+Fallow was reviewed: 39 existing findings and nine clone groups remain; no new catalogue findings. Vite reports the locally bundled catalogue chunk at 875 kB (133 kB gzip); the normal 500 kB advisory remains visible and is not suppressed. No network dependency or save migration was introduced.
+
+APK: `out/RVLRY-0.31.0-words.apk`, copied and checksum-verified to `\\JNAS\Media\DropBox\RVLRY-0.31.0-words.apk`. SHA-256: `80D5DEDE0F64F0867523DCEC4DB8E2D4F55113328BDCBD0D1CF13A27E6B1E2F8`.
+
+The same folder contains `RVLRY-word-catalogue.csv` for review and `RVLRY-word-lists-0.31.0.zip`, including the untouched originals, expanded catalogue and conventions. Difficulty/kids selectors and remote word installation remain deferred; see WORD_CATALOGUE.md for counts and editorial rules.

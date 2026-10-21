@@ -10,6 +10,8 @@ Each game owns a separate complete validated session through nativeSnapshotStore
 
 Who What Where version-1 compatibility is preserved: old records without presentationStage default to null. Tests load an installed-style active-turn envelope and prove its bytes remain unchanged while other games save or clear their own records.
 
+Bundled catalogue metadata is not stored in game snapshots. Game adapters project only the existing `{ word, category, hint }` or string values. Catalogue additions, canonical-name corrections and alias merges apply to newly generated content; a saved deck, submitted Hat clue or Imposter secret keeps its existing value when resumed.
+
 ## App preferences
 
 `app.appearance.v1` stores `{ schemaVersion: 1, theme }` independently of every game. The theme enum is validated and uses the same native current/previous snapshot store. Selection is shown only after commit; unsupported/corrupt records are preserved, and Settings offers a load retry rather than silently replacing them. Browser previews use the same localStorage envelope adapter as game sessions.

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { addDuplicateIssues, staticTextSchema } from "@/data/staticDataSchemas";
-import rawWords from "@/data/whoWhatWhereWords.json";
+import { getCatalogueForGame } from "@/data/wordCatalogue";
 
 import { CATEGORIES, type WordEntry } from "./types";
 
@@ -25,7 +25,9 @@ export const whoWhatWhereWordListSchema = z
     );
   });
 
-const words = whoWhatWhereWordListSchema.parse(rawWords) satisfies readonly WordEntry[];
+const words = whoWhatWhereWordListSchema.parse(
+  getCatalogueForGame("www").map(({ word, category, hint }) => ({ word, category, hint })),
+) satisfies readonly WordEntry[];
 
 export function getWhoWhatWhereWordList(): readonly WordEntry[] {
   return words;

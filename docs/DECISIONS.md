@@ -354,3 +354,7 @@ Keep a single set of layouts/controllers and apply theme tokens and scoped compo
 ## 22 October 2026 — Recess Option B in production
 
 Apply the approved Cut-Paper Playground through Recess-only CSS and explicit presentation classes. Decorative pseudo-elements provide layered surfaces without rotating text, adding image dependencies or changing gameplay. Keep category colours distinct and the current control geometry. Other themes retain their styles. The mockup remains a historical review artifact.
+
+## 22 October 2026 — Curated shared answer catalogue
+
+Keep the three original word JSON files as immutable archival inputs. A separate validated catalogue owns canonical answers, aliases, original source IDs, game membership, adult difficulty and ages 8–12 suitability. Sharing a referent between games uses one record; alternate names do not become extra draw-pool entries. Domain adapters project the existing word/string shapes, leaving version-1 snapshots intact. Difficulty and kids selectors remain deferred; this change prepares their content and expands current pools without introducing modes or a remote service. Naming and editorial rules live in WORD_CATALOGUE.md.

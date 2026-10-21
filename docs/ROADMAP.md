@@ -11,8 +11,8 @@ When the user mentions a future idea that is out of scope for the current task, 
 Deferred; not part of the current implementation:
 
 - **When category:** years/dates associated with significant historical events or famous days.
-- **Difficulty modes:** selectable challenge levels.
-- **Kids mode:** age-appropriate play and content.
+- **Difficulty modes:** selectable challenge levels. Catalogue entries now carry easy/medium/hard adult-recognition metadata; selection UI remains deferred.
+- **Kids mode:** age-appropriate play and content. Catalogue entries now carry an independent ages 8–12 suitability flag; selection UI remains deferred.
 - **Game-like graphics:** further bespoke illustrations and game artwork beyond the five selectable visual themes shipped in 0.29.0.
 
 ## Android delivery follow-ups

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.31.0 — 22 October 2026
+
+- Add 870 unique answers, including 434 new ages 8–12 selections. Playable pools now contain 3,871 Who What Where answers, 1,191 Hat suggestions and 232 Imposter prompts, curated for broad recognition among educated Australians.
+- Add easy/medium/hard adult-recognition ratings and independent kids-suitability metadata to every catalogue entry. Mode selectors remain deferred.
+- Preserve the original lists unchanged, track every original entry through source IDs, and consolidate alternate names and synonyms into single playable answers. Qualify distinct homonyms rather than merging them.
+- Establish naming and editorial conventions, strict catalogue validation, provenance regression tests and a CSV review export. Existing saved decks, clues and secrets retain their values.
+
 ## 0.30.0 — 22 October 2026
 
 - Applied approved Recess Option B: layered paper, slightly rotated backings, asymmetric rounded corners and tactile pressed shadows. Covers the picker and all three games' handoff/clue surfaces, plus team-game winner headings.
