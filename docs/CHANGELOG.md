@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.26.1 — Phone controls and visual clarity
+
+- Separate violet progression from teal actions; tracker structure alternatives remain review mockups.
+- Group game settings into horizontal rows and distinguish skipped/unplayed recap words.
+- Expand word history into available space, with reachable skips and overflow cues.
+- Make Correct taller and two thirds of the action row.
+- Use Lucide for standard icons, including a proper information icon.
+
+
 ## 0.26.0 — Compact Who What Where phone flow
 
 - Offer resume or confirmed new-game setup inside Who What Where, with saved

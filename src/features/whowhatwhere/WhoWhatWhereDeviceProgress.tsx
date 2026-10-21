@@ -32,7 +32,11 @@ export function WhoWhatWhereDeviceProgress({
             key={index}
             className={cn(
               "h-1.5 flex-1 rounded-full",
-              index + 1 < round ? "bg-primary/30" : index + 1 === round ? "bg-primary" : "bg-muted",
+              index + 1 < round
+                ? "bg-semantic-progress-complete"
+                : index + 1 === round
+                  ? "bg-semantic-progress-current"
+                  : "bg-muted",
             )}
           />
         ))}
@@ -56,7 +60,7 @@ export function WhoWhatWhereDeviceProgress({
               className={cn(
                 "min-w-0 rounded-lg border px-2 py-2 text-typ-micro",
                 current
-                  ? "border-primary bg-primary text-primary-foreground"
+                  ? "border-semantic-progress-current bg-semantic-progress-current text-semantic-progress-foreground"
                   : "border-border bg-muted text-muted-foreground",
               )}
             >

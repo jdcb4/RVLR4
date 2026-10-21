@@ -6,14 +6,12 @@ import { createDefaultSettings } from "@/domain/whowhatwhere/setup";
 import { SettingsScreen } from "@/features/whowhatwhere/setup/SettingsScreen";
 
 describe("SettingsScreen", () => {
-  it("pairs the compact timing and assist controls without changing their choices", async () => {
+  it("keeps timing and assist choices in single rows without changing their values", async () => {
     const user = userEvent.setup();
     const settings = createDefaultSettings();
     const onChange = vi.fn();
-    const { container } = render(<SettingsScreen settings={settings} onChange={onChange} />);
+    render(<SettingsScreen settings={settings} onChange={onChange} />);
 
-    expect(container.querySelector('[data-settings-pair="timing"]')).toHaveClass("grid-cols-2");
-    expect(container.querySelector('[data-settings-pair="assists"]')).toHaveClass("grid-cols-2");
     expect(
       within(screen.getByRole("group", { name: "Turn length" })).getAllByRole("button"),
     ).toHaveLength(4);

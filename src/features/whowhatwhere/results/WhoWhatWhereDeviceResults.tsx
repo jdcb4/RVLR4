@@ -28,25 +28,26 @@ export function WhoWhatWhereDeviceRecap({ match }: { readonly match: MatchState 
         {summary.teamName} scored {summary.scoreDelta}.
       </h2>
       <p className="mb-3 text-typ-ui text-muted-foreground">{summary.describerName}</p>
-      <ol
-        aria-label="Turn words"
-        className="min-h-0 divide-y divide-border overflow-y-auto rounded-lg bg-card px-3"
-      >
+      <ol aria-label="Turn words" className="min-h-0 space-y-1 overflow-y-auto">
         {summary.wordHistory.map((entry, index) => (
           <li
             key={`${index}-${entry.timestamp}`}
-            className="flex items-center justify-between gap-3 py-2.5 text-typ-ui"
+            className={`flex items-center justify-between gap-3 rounded-md px-3 py-2.5 text-typ-ui ${
+              entry.status === "correct"
+                ? "bg-card font-medium"
+                : "border border-dashed border-semantic-skipped-border bg-semantic-skipped-bg text-semantic-skipped-foreground"
+            }`}
           >
             <span className="min-w-0 break-words">{entry.word.word}</span>
-            <span className="shrink-0 text-typ-micro text-muted-foreground">
+            <span className="shrink-0 text-typ-meta">
               {entry.status === "correct" ? "Correct" : "Skipped"}
             </span>
           </li>
         ))}
         {summary.finalWord ? (
-          <li className="flex items-center justify-between gap-3 py-2.5 text-typ-ui">
+          <li className="flex items-center justify-between gap-3 rounded-md border border-dashed border-border px-3 py-2.5 text-typ-ui text-muted-foreground">
             <span className="min-w-0 break-words">{summary.finalWord.word}</span>
-            <span className="shrink-0 text-typ-micro text-muted-foreground">Unplayed</span>
+            <span className="shrink-0 text-typ-meta">Unplayed</span>
           </li>
         ) : null}
       </ol>

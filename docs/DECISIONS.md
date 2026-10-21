@@ -330,3 +330,11 @@ SQLite plugin dependency while preserving a small, testable current/previous
 snapshot API. Native writes acknowledge after commit; browser previews use a
 separate localStorage adapter and are not evidence of native durability.
 This local database stores offline saves, not multiplayer sessions.
+
+## 2026-10-21: Lucide as the default UI icon library
+
+**Decision:** Pin `lucide-react` 1.61.0 and use named imports for standard UI icons. Existing `Icon*` exports retain their API while rendering Lucide components. Custom Hat/Imposter/Who What Where identity symbols remain authored SVGs.
+
+**Reasoning:** Joe requested Lucide as the default. A shared package replaces hand-maintained standard glyphs and the literal information letter with consistent SVG icons. Named imports let Vite include only used icons.
+
+**Rejected alternatives:** Keeping a text information glyph or copying more SVG paths would retain inconsistent maintenance and appearance.

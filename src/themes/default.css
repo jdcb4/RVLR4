@@ -4,6 +4,9 @@
  * Components use Tailwind `semantic-*` utilities (see docs/THEMING.md).
  */
 :root {
+  --semantic-progress-current: #66518a;
+  --semantic-progress-complete: #ded5eb;
+  --semantic-progress-foreground: #ffffff;
   --semantic-primary-soft-bg: hsl(var(--primary) / 0.05);
   --semantic-primary-well-bg: hsl(var(--primary) / 0.15);
   --semantic-primary-border: hsl(var(--primary) / 0.4);

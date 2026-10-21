@@ -31,16 +31,16 @@ export function WhoWhatWhereDeviceTurn({
   const word = getCurrentWord(turn);
   const showHints = match.settings.hints.perTurnLimit > 0 && onRevealHint;
   const guessed = turn.wordHistory.filter((entry) => entry.status === "correct");
-  const recentGuessed = guessed.slice(-3).reverse();
+  const latestGuessed = [...guessed].reverse();
   const guessedRef = useRef<HTMLDivElement>(null);
-  const guessedOverflowCue = useWordListOverflow(guessedRef, recentGuessed);
+  const guessedOverflowCue = useWordListOverflow(guessedRef, latestGuessed);
   const pendingSkipped = turn.currentSkippedWord
     ? [turn.currentSkippedWord, ...turn.skippedWords]
     : turn.skippedWords;
 
   return (
-    <section className="flex min-h-full flex-col gap-3" aria-label="Active turn">
-      <div className="flex items-end justify-between gap-4">
+    <section className="flex min-h-full flex-1 flex-col gap-3" aria-label="Active turn">
+      <div className="flex shrink-0 items-end justify-between gap-4">
         <p className="text-[3.5rem] font-semibold leading-none tabular-nums">
           <AccessibleCountdownValue
             countdownKey={turn.startedAt}
@@ -64,7 +64,7 @@ export function WhoWhatWhereDeviceTurn({
       </div>
 
       {showHints ? (
-        <div className="grid gap-2">
+        <div className="grid shrink-0 gap-2">
           {turn.currentWordHintRevealed && word?.hint ? (
             <p aria-live="polite" className="text-center text-typ-ui text-foreground">
               {word.hint}
@@ -81,24 +81,24 @@ export function WhoWhatWhereDeviceTurn({
         </div>
       ) : null}
 
-      <div className="grid min-w-0 grid-cols-2 gap-3">
+      <div className="grid min-h-36 min-w-0 flex-1 grid-cols-2 gap-3">
         <SkippedWordsList
           words={pendingSkipped}
           currentSkippedId={turn.currentSkippedWord?.id}
           onReturnSkipped={onReturnSkipped}
         />
-        <section className="min-w-0" aria-label="Guessed words">
-          <h2 className="mb-2 text-typ-ui font-semibold">Guessed · {guessed.length}</h2>
+        <section className="flex min-h-0 min-w-0 flex-col" aria-label="Guessed words">
+          <h2 className="mb-2 shrink-0 text-typ-ui font-semibold">Guessed · {guessed.length}</h2>
           <div
             ref={guessedRef}
-            className="max-h-36 overflow-y-auto overscroll-contain rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            tabIndex={recentGuessed.length > 0 ? 0 : undefined}
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            tabIndex={latestGuessed.length > 0 ? 0 : undefined}
             role="region"
             aria-label="Latest guessed words"
           >
-            {recentGuessed.length > 0 ? (
+            {latestGuessed.length > 0 ? (
               <ol>
-                {recentGuessed.map((entry, index) => (
+                {latestGuessed.map((entry, index) => (
                   <li
                     key={`${entry.timestamp}-${index}`}
                     className="flex min-h-12 items-center break-words border-b border-semantic-border-faint py-2 text-typ-ui [overflow-wrap:anywhere]"
@@ -111,15 +111,8 @@ export function WhoWhatWhereDeviceTurn({
               <p className="py-2 text-typ-ui text-muted-foreground">None yet</p>
             )}
           </div>
-          <p className="mt-1 min-h-5 text-typ-meta text-muted-foreground">
-            {[
-              guessed.length > recentGuessed.length
-                ? `+${guessed.length - recentGuessed.length} more`
-                : "",
-              guessedOverflowCue,
-            ]
-              .filter(Boolean)
-              .join(" · ")}
+          <p className="mt-1 min-h-5 shrink-0 text-typ-meta text-muted-foreground">
+            {guessedOverflowCue}
           </p>
         </section>
       </div>

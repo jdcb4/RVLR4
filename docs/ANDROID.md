@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.26.0 is the debug-signed Who What Where build with the reviewed phone UX. Hat Game,
+0.26.1 is the debug-signed Who What Where build with the reviewed phone UX. Hat Game,
 Imposter, remote word installation and friend-release signing follow the Pixel
 checkpoint. The Settings entry truthfully indicates no update source is configured.
 Historical multiplayer code remains in the checkout but is unreachable from the
@@ -139,15 +139,17 @@ acknowledgement, then offers Start turn. A completed turn gets a word recap;
 a completed round adds standings before the next handoff. These presentation
 phases survive interruption even though the game engine has advanced.
 
-Between turns, numbered teams and round segments show current/completed/next.
+Between turns, violet numbered teams and round segments show current/completed/next,
+visually distinct from teal action buttons. Tracker alternatives in
+`docs/design/progression-options.html` remain proposals until Joe chooses one.
 Active play omits this tracker and uses a compact game/round header, larger timer,
 category-labeled colored clue, and large bottom controls. Who is lilac, What green,
 Where blue. These colors supplement text and do not change game rules.
 
 Skipped and Guessed have separate columns. All outstanding skips remain retry
 buttons, including the selected word marked In play. They leave the queue only
-on Correct. Both columns indicate overflow; guessed history also counts older
-entries. Long lists scroll inside the columns while the actions stay fixed.
+on Correct. Both columns use available height and indicate overflow; guessed history retains
+all entries, newest first. Long lists scroll inside the columns while the actions stay fixed.
 Hints and configured skip limits remain supported.
 
 Pause keeps a compact presenter/time/score summary and resume/leave/new-game
@@ -172,3 +174,35 @@ No pending answers were returned when implementation began on 21 October 2026;
 none were acknowledged. Chat approval supersedes the outstanding next-step
 question. Use the Kestrel skill to collect any later feedback when resuming;
 submitting a response does not automatically launch an agent.
+
+## Control refinement verification — 21 October 2026
+
+0.26.1 / versionCode 3 passed `pnpm run verify` (408 tests / 76 files), debug
+assembly and the bundled Android AppRenderTest on API 35 after installing over
+0.26.0. Native storage/lifecycle code is unchanged; the full durability suite
+was not repeated for this visual patch. Browser checks at 360 × 640 and
+412 × 915 confirmed settings fit without scrolling, fixed play actions, growing
+word columns with accurate overflow cues, and distinct recap statuses.
+Fallow retains 26 dead-code findings / 56 health thresholds. The design detector
+reported only the mockup's warm background, intentionally retained from the
+approved incumbent palette; no style suppression was added.
+
+APK: `out/RVLRY-0.26.1-prototype.apk`, copied and checksum-verified at
+`\\JNAS\Media\DropBox\RVLRY-0.26.1-prototype.apk`. SHA-256:
+`EACC45E492DF22EBB89DEB793FE4910F9964EB815F89960024E7E8ED5A05EABE`.
+
+Tracker choice remains pending. Interactive alternatives:
+[progression-options.html](design/progression-options.html), also copied as
+`RVLRY-progression-options.html` in that DropBox folder. A removes the round strip;
+B embeds round ticks in teams; C labels the round strip; D combines round/team
+position in one compact tracker. Standard UI icons now use Lucide; custom game
+identity symbols remain SVG.
+
+Kestrel publication `rvlry-progression-options`, revision 1, producer
+`rvlry-android`, context
+`codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-progression`:
+[review and respond](https://kestrel.home.jboxtv.com/review/rvlry-progression-options).
+Fetch producer responses before implementing the chosen alternative. No pending
+responses were returned at the start of this refinement. The source payload is
+`docs/design/kestrel-progression-review.json`. Answers are stored in Kestrel;
+submitting does not automatically launch work.

@@ -8,15 +8,24 @@ export function OptionGroup({
   children,
   className,
   optionsClassName,
+  inlineLayout = false,
 }: {
   readonly label: string;
   readonly children: ReactNode;
   readonly className?: string;
   readonly optionsClassName?: string;
+  readonly inlineLayout?: boolean;
 }) {
   return (
-    <fieldset className={cn("grid min-w-0 gap-3", className)}>
-      <legend className="text-typ-ui font-semibold">{label}</legend>
+    <fieldset className={cn("grid min-w-0 gap-3", inlineLayout && "block", className)}>
+      <legend
+        className={cn(
+          "text-typ-ui font-semibold",
+          inlineLayout && "float-left mr-2 flex min-h-11 w-[5.5rem] items-center",
+        )}
+      >
+        {label}
+      </legend>
       <div className={cn("flex flex-wrap gap-2", optionsClassName)}>{children}</div>
     </fieldset>
   );

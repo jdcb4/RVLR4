@@ -37,6 +37,9 @@ const config: Config = {
         },
         /** Semantic colors — values come from theme CSS (see src/themes/default.css). */
         semantic: {
+          "progress-current": "var(--semantic-progress-current)",
+          "progress-complete": "var(--semantic-progress-complete)",
+          "progress-foreground": "var(--semantic-progress-foreground)",
           "category-who-bg": "var(--semantic-category-who-bg)",
           "category-who-border": "var(--semantic-category-who-border)",
           "category-what-bg": "var(--semantic-category-what-bg)",

@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RVLRY · Progression alternatives</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #193c38;
+        --muted: #536763;
+        --teal: #12695c;
+        --paper: #faf8f3;
+        --line: #bacbc3;
+        --purple: #59466f;
+        --purple-soft: #eee8f4;
+        --slate: #526071;
+        --slate-soft: #edf0f3;
+        --track-line: #bbc0cc;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #eeeee7;
+        color: var(--ink);
+        font:
+          16px/1.45 "Segoe UI",
+          sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1 {
+        font-size: 34px;
+        letter-spacing: -0.025em;
+        line-height: 1.15;
+        margin-bottom: 10px;
+      }
+      button,
+      a {
+        touch-action: manipulation;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      button:focus-visible,
+      a:focus-visible {
+        outline: 3px solid #a44f19;
+        outline-offset: 3px;
+      }
+      ::selection {
+        background: #c2ded1;
+      }
+      .intro {
+        max-width: 1504px;
+        margin: 34px auto 24px;
+        padding: 0 24px;
+      }
+      .intro > p {
+        color: var(--muted);
+        max-width: 75ch;
+      }
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 20px 28px;
+        margin: 22px 0 12px;
+      }
+      .control-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+      }
+      .control-group button {
+        min-height: 44px;
+        padding: 9px 14px;
+        border: 1px solid var(--track-line);
+        background: var(--paper);
+        color: var(--slate);
+        border-radius: 9px;
+      }
+      .control-group button[aria-pressed="true"] {
+        background: var(--purple);
+        border-color: var(--purple);
+        color: white;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      button:not(:disabled):hover {
+        filter: brightness(0.95);
+      }
+      #position {
+        min-width: 150px;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+        color: var(--purple);
+        font-weight: 650;
+      }
+      .scenario {
+        color: var(--muted);
+        font-size: 14px;
+        min-height: 21px;
+      }
+      .board {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 22px;
+        max-width: 1504px;
+        margin: auto;
+        padding: 0 24px 30px;
+      }
+      .option {
+        min-width: 0;
+      }
+      .option > h2 {
+        font-size: 20px;
+        letter-spacing: -0.015em;
+        margin-bottom: 6px;
+      }
+      .note {
+        color: var(--muted);
+        font-size: 14px;
+        min-height: 62px;
+        margin-bottom: 13px;
+        max-width: 42ch;
+      }
+      .phone {
+        height: 650px;
+        border: 1px solid #8eaaa0;
+        border-radius: 24px;
+        background: var(--paper);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .top {
+        padding: 17px 17px 11px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: space-between;
+        min-height: 63px;
+      }
+      .brand {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 13px;
+        font-weight: 650;
+        white-space: nowrap;
+      }
+      .brand svg {
+        width: 21px;
+        height: 24px;
+        flex-shrink: 0;
+      }
+      .round-header {
+        font-size: 12px;
+        color: var(--slate);
+        text-align: right;
+        max-width: 80px;
+        line-height: 1.35;
+      }
+      .tracker {
+        padding: 2px 17px 13px;
+        border-bottom: 1px solid var(--line);
+        color: var(--slate);
+      }
+      .teams {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 5px;
+      }
+      .team {
+        border: 1px solid var(--track-line);
+        border-radius: 9px;
+        padding: 8px 3px;
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.4;
+        min-width: 0;
+      }
+      .team b {
+        display: block;
+        font-size: 13px;
+        font-weight: 650;
+      }
+      .team .status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        margin-top: 2px;
+      }
+      .team.current {
+        border: 2px solid var(--purple);
+        padding: 7px 2px;
+        background: var(--purple-soft);
+        color: var(--purple);
+      }
+      .team.done {
+        background: var(--slate-soft);
+        color: var(--slate);
+      }
+      .icon {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+        vertical-align: -1px;
+      }
+      .round-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 5px;
+        margin: 0 0 9px;
+      }
+      .round-strip span {
+        border: 1px solid var(--track-line);
+        border-radius: 5px;
+        padding: 5px 2px;
+        display: flex;
+        gap: 3px;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        line-height: 1.3;
+      }
+      .round-strip .current {
+        color: var(--purple);
+        border: 2px solid var(--purple);
+        padding: 4px 1px;
+        font-weight: 700;
+        background: var(--purple-soft);
+      }
+      .round-strip .done {
+        background: var(--slate-soft);
+      }
+      .checks-label {
+        font-size: 11px;
+        color: var(--slate);
+        margin: 0 0 5px;
+      }
+      .checks {
+        display: flex;
+        gap: 3px;
+        justify-content: center;
+        margin: 7px 0 1px;
+      }
+      .check {
+        width: 22px;
+        height: 23px;
+        border: 1px solid var(--track-line);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        background: var(--paper);
+      }
+      .check.done {
+        color: var(--slate);
+        background: #dce1e9;
+        border-color: #96a1b1;
+      }
+      .check.current {
+        border: 2px solid var(--purple);
+        color: var(--purple);
+        font-weight: 750;
+      }
+      .check .icon {
+        width: 13px;
+        height: 13px;
+      }
+      .inline-round {
+        font-size: 13px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 9px;
+      }
+      .inline-round b {
+        color: var(--purple);
+        font-size: 14px;
+      }
+      .inline-teams {
+        display: flex;
+        gap: 6px;
+        align-items: stretch;
+      }
+      .inline-team {
+        flex: 1;
+        min-width: 0;
+        padding: 7px 1px;
+        border-bottom: 1px solid var(--track-line);
+        font-size: 12px;
+        text-align: center;
+      }
+      .inline-team > b {
+        display: flex;
+        gap: 4px;
+        justify-content: center;
+        align-items: center;
+        font-size: 13px;
+      }
+      .inline-team > span {
+        display: block;
+        margin-top: 3px;
+      }
+      .inline-team.current {
+        border-bottom: 3px solid var(--purple);
+        color: var(--purple);
+        padding-bottom: 5px;
+      }
+      .inline-team.done {
+        color: var(--slate);
+      }
+      .body {
+        padding: 24px 18px 18px;
+        flex: 1;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        min-height: 0;
+        scrollbar-color: #9ab3a7 transparent;
+      }
+      .body h3 {
+        font-size: 29px;
+        line-height: 1.13;
+        letter-spacing: -0.025em;
+      }
+      .body.handoff {
+        justify-content: center;
+        gap: 8px;
+      }
+      .body .muted {
+        color: var(--muted);
+        font-size: 15px;
+      }
+      .rule {
+        border-top: 1px solid var(--line);
+        padding-top: 15px;
+      }
+      .wordrow {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 9px 0;
+        border-bottom: 1px solid #d6ded7;
+        font-size: 15px;
+      }
+      .wordrow span {
+        font-size: 12px;
+        color: var(--teal);
+      }
+      .wordrow.skip span {
+        color: #825000;
+      }
+      .footer {
+        padding: 11px 18px 20px;
+        border-top: 1px solid var(--line);
+      }
+      .primary {
+        min-height: 56px;
+        width: 100%;
+        border-radius: 13px;
+        padding: 12px 10px;
+        border: 1px solid var(--teal);
+        background: var(--teal);
+        color: white;
+        font-weight: 650;
+      }
+      .endnote {
+        max-width: 1504px;
+        padding: 0 24px 40px;
+        margin: auto;
+        color: var(--muted);
+        font-size: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 28px;
+        justify-content: space-between;
+      }
+      .endnote a {
+        color: var(--teal);
+        text-underline-offset: 3px;
+      }
+      .legend {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        color: var(--slate);
+      }
+      .legend span {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+      @media (max-width: 1200px) {
+        .board {
+          grid-template-columns: repeat(2, minmax(0, 380px));
+          justify-content: center;
+          gap: 28px 24px;
+        }
+        .intro,
+        .endnote {
+          max-width: 832px;
+        }
+        .note {
+          min-height: 42px;
+        }
+      }
+      @media (max-width: 650px) {
+        .intro {
+          margin-top: 24px;
+          padding: 0 16px;
+        }
+        h1 {
+          font-size: 28px;
+        }
+        .board {
+          grid-template-columns: minmax(0, 392px);
+          padding: 0 12px 28px;
+          gap: 28px;
+        }
+        .note {
+          min-height: 0;
+        }
+        .toolbar {
+          gap: 12px;
+        }
+        .control-group {
+          gap: 5px;
+        }
+        .control-group button {
+          padding: 9px 11px;
+        }
+        #position {
+          min-width: 140px;
+        }
+        .endnote {
+          padding: 0 16px 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="intro">
+      <h1>How much progression does the phone need?</h1>
+      <p>
+        Four alternatives, the same turn. Purple and slate carry progress; teal carries actions.
+      </p>
+      <div class="toolbar">
+        <div class="control-group" aria-label="Change turn">
+          <button id="previous" aria-label="Previous team turn">← Previous</button>
+          <span id="position" aria-live="polite"></span>
+          <button id="next" aria-label="Next team turn">Next →</button>
+        </div>
+        <div class="control-group" aria-label="Preview screen">
+          <button id="handoff" aria-pressed="true">Handoff</button>
+          <button id="recap" aria-pressed="false">Recap</button>
+        </div>
+        <div class="control-group"><button id="reset">Reset example</button></div>
+      </div>
+      <p class="scenario" id="scenario" aria-live="polite"></p>
+    </header>
+    <main class="board" id="board"></main>
+    <footer class="endnote">
+      <div class="legend" id="legend"></div>
+      <a href="phone-flow-proposal.html">Back to the phone flow</a>
+    </footer>
+    <script>
+      const icons = {
+        done: '<svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m3 8 3 3 7-7"/></svg>',
+        current:
+          '<svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 3v10l8-5z"/></svg>',
+        waiting:
+          '<svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="4.5"/></svg>',
+      };
+      const mark =
+        '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="2" width="18" height="22" rx="3"/><path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3"/></svg>';
+      const teams = ["Foxes", "Otters", "Owls"];
+      const presenters = ["Alex", "Maya", "Leo"];
+      const options = [
+        [
+          "A",
+          "Header + teams",
+          "The round lives in the header. Team boxes show only this round’s order.",
+        ],
+        [
+          "B",
+          "Rounds inside each team",
+          "Three read-only round boxes per team. A tick means that team has finished that round.",
+        ],
+        [
+          "C",
+          "Labeled round strip",
+          "Round labels make the upper row explicit. Team boxes show who plays within it.",
+        ],
+        [
+          "D",
+          "One compact tracker",
+          "Round and turn share one heading. Team names form a slim ordered line underneath.",
+        ],
+      ];
+      let turn = 4;
+      let phase = "handoff";
+      let ready = false;
+      const board = document.querySelector("#board");
+      function teamState(i) {
+        const active = turn % 3;
+        if (i < active || (phase === "recap" && i === active)) return "done";
+        return i === active ? "current" : "waiting";
+      }
+      function status(i) {
+        const state = teamState(i);
+        return state === "done"
+          ? "Complete"
+          : state === "current"
+            ? "Now"
+            : i === (turn % 3) + 1
+              ? "Next"
+              : "Waiting";
+      }
+      function roundState(r) {
+        const currentRound = Math.floor(turn / 3);
+        return r < currentRound || (r === currentRound && turn % 3 === 2 && phase === "recap")
+          ? "done"
+          : r === currentRound
+            ? "current"
+            : "waiting";
+      }
+      function teamBoxes(checks) {
+        return (
+          '<div class="teams">' +
+          teams
+            .map((name, i) => {
+              const state = teamState(i);
+              let boxes = "";
+              if (checks) {
+                boxes =
+                  '<div class="checks">' +
+                  [0, 1, 2]
+                    .map((r) => {
+                      const absoluteTurn = r * 3 + i;
+                      const state =
+                        absoluteTurn < turn || (absoluteTurn === turn && phase === "recap")
+                          ? "done"
+                          : absoluteTurn === turn
+                            ? "current"
+                            : "waiting";
+                      return (
+                        '<span class="check ' +
+                        state +
+                        '" role="img" aria-label="Round ' +
+                        (r + 1) +
+                        ": " +
+                        (state === "done"
+                          ? "complete"
+                          : state === "current"
+                            ? "current"
+                            : "upcoming") +
+                        '">' +
+                        (state === "done" ? icons.done : r + 1) +
+                        "</span>"
+                      );
+                    })
+                    .join("") +
+                  "</div>";
+              }
+              return (
+                '<div class="team ' +
+                state +
+                '"><b>' +
+                (i + 1) +
+                " · " +
+                name +
+                '</b><span class="status">' +
+                icons[state] +
+                status(i) +
+                "</span>" +
+                boxes +
+                "</div>"
+              );
+            })
+            .join("") +
+          "</div>"
+        );
+      }
+      function tracker(id) {
+        const round = Math.floor(turn / 3) + 1;
+        if (id === "D")
+          return (
+            '<div class="inline-round"><b>Round ' +
+            round +
+            " of 3</b><span>" +
+            (phase === "recap" ? "Turn " : "Team ") +
+            ((turn % 3) + 1) +
+            " of 3" +
+            (phase === "recap" ? " complete" : "") +
+            '</span></div><div class="inline-teams">' +
+            teams
+              .map(
+                (name, i) =>
+                  '<div class="inline-team ' +
+                  teamState(i) +
+                  '"><b>' +
+                  icons[teamState(i)] +
+                  name +
+                  "</b><span>" +
+                  status(i) +
+                  "</span></div>",
+              )
+              .join("") +
+            "</div>"
+          );
+        let strip = "";
+        if (id === "C")
+          strip =
+            '<div class="round-strip" aria-label="Rounds">' +
+            [0, 1, 2]
+              .map(
+                (r) =>
+                  '<span class="' +
+                  roundState(r) +
+                  '" aria-label="Round ' +
+                  (r + 1) +
+                  ", " +
+                  roundState(r) +
+                  '">' +
+                  icons[roundState(r)] +
+                  "Round " +
+                  (r + 1) +
+                  "</span>",
+              )
+              .join("") +
+            "</div>";
+        return (
+          strip +
+          (id === "B" ? '<p class="checks-label">Rounds 1 · 2 · 3</p>' : "") +
+          teamBoxes(id === "B")
+        );
+      }
+      function content() {
+        const i = turn % 3;
+        if (phase === "recap") {
+          const end = i === 2;
+          return (
+            "<h3>" +
+            teams[i] +
+            ' scored 5.</h3><div><div class="wordrow">Hot-air balloon <span>Correct</span></div><div class="wordrow">Telescope <span>Correct</span></div><div class="wordrow skip">Lighthouse <span>Skipped</span></div><div class="wordrow">Accordion <span>Correct</span></div><div class="wordrow">Compass <span>Correct</span></div><div class="wordrow">Trampoline <span>Correct</span></div></div>' +
+            (end
+              ? '<p class="muted rule">' +
+                (turn === 8
+                  ? "All three rounds complete."
+                  : "Round " + (Math.floor(turn / 3) + 1) + " complete.") +
+                "</p>"
+              : "")
+          );
+        }
+        return (
+          "<h3>" +
+          (ready ? "Ready, " + presenters[i] + "?" : "Pass to " + presenters[i] + ".") +
+          '</h3><p class="muted">' +
+          (ready ? "45-second turn" : "Everyone else: look away.") +
+          "</p>"
+        );
+      }
+      function actionLabel() {
+        if (phase === "recap")
+          return turn === 8 ? "Play again" : "Pass phone to " + presenters[(turn + 1) % 3];
+        return ready ? "Preview turn recap" : "I’m " + presenters[turn % 3] + " — ready";
+      }
+      function render() {
+        const round = Math.floor(turn / 3) + 1;
+        document.querySelector("#position").textContent =
+          "Round " + round + " · Team " + ((turn % 3) + 1);
+        document.querySelector("#previous").disabled = turn === 0;
+        document.querySelector("#next").disabled = turn === 8;
+        document
+          .querySelector("#handoff")
+          .setAttribute("aria-pressed", String(phase === "handoff"));
+        document.querySelector("#recap").setAttribute("aria-pressed", String(phase === "recap"));
+        document.querySelector("#scenario").textContent =
+          "Illustrative game · " +
+          teams[turn % 3] +
+          " · " +
+          (phase === "recap" ? "turn complete" : "phone handoff") +
+          " · all four previews stay in sync";
+        board.innerHTML = options
+          .map(
+            ([id, title, note]) =>
+              '<section class="option"><h2>' +
+              id +
+              " · " +
+              title +
+              '</h2><p class="note">' +
+              note +
+              '</p><article class="phone" aria-label="Option ' +
+              id +
+              ", " +
+              (phase === "recap" ? "turn recap" : "phone handoff") +
+              '"><div class="top"><span class="brand">' +
+              mark +
+              "Who What Where</span>" +
+              (id === "D" ? "" : '<span class="round-header">Round ' + round + " of 3</span>") +
+              '</div><div class="tracker">' +
+              tracker(id) +
+              '</div><div class="body' +
+              (phase === "handoff" ? " handoff" : "") +
+              '">' +
+              content() +
+              '</div><div class="footer"><button class="primary" data-action="' +
+              id +
+              '">' +
+              actionLabel() +
+              "</button></div></article></section>",
+          )
+          .join("");
+      }
+      function changeTurn(delta) {
+        turn = Math.max(0, Math.min(8, turn + delta));
+        phase = "handoff";
+        ready = false;
+        render();
+      }
+      document.querySelector("#previous").onclick = () => changeTurn(-1);
+      document.querySelector("#next").onclick = () => changeTurn(1);
+      document.querySelector("#handoff").onclick = () => {
+        phase = "handoff";
+        ready = false;
+        render();
+      };
+      document.querySelector("#recap").onclick = () => {
+        phase = "recap";
+        ready = false;
+        render();
+      };
+      document.querySelector("#reset").onclick = () => {
+        turn = 4;
+        phase = "handoff";
+        ready = false;
+        render();
+      };
+      board.onclick = (event) => {
+        const button = event.target.closest("[data-action]");
+        if (!button) return;
+        const id = button.dataset.action;
+        if (phase === "recap") {
+          turn = turn === 8 ? 0 : turn + 1;
+          phase = "handoff";
+          ready = false;
+        } else if (ready) {
+          phase = "recap";
+          ready = false;
+        } else ready = true;
+        render();
+        board.querySelector('[data-action="' + id + '"]').focus({ preventScroll: true });
+      };
+      document.querySelector("#legend").innerHTML =
+        "<span>" +
+        icons.done +
+        "Complete</span><span>" +
+        icons.current +
+        "Current</span><span>" +
+        icons.waiting +
+        "Upcoming</span>";
+      render();
+    </script>
+  </body>
+</html>

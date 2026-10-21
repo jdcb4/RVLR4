@@ -203,10 +203,10 @@ export function WhoWhatWhereFooter({
     );
   if (game.activeMode === "turn" && game.match?.activeTurn) {
     return (
-      <FooterStack>
-        <div className="grid w-full grid-cols-2 gap-3">
+      <div className="flex w-full flex-col gap-2 pb-1">
+        <div className="grid w-full grid-cols-[1fr_2fr] gap-3">
           <Button
-            className="min-h-16 border border-semantic-skipped-border bg-semantic-skipped-bg text-semantic-skipped-foreground"
+            className="min-h-[4.75rem] border border-semantic-skipped-border bg-semantic-skipped-bg text-semantic-skipped-foreground"
             disabled={locked || !canQueueSkipped(game.match.activeTurn)}
             variant="outline"
             onClick={game.skip}
@@ -214,13 +214,13 @@ export function WhoWhatWhereFooter({
             <IconSkipForward className="size-5" />
             Skip
           </Button>
-          <Button className="min-h-16" disabled={locked} onClick={game.correct}>
+          <Button className="min-h-[4.75rem]" disabled={locked} onClick={game.correct}>
             <IconCheck className="size-5" />
             Correct
           </Button>
         </div>
         <QuietFooterButton label="Pause turn" onClick={game.pauseGame} />
-      </FooterStack>
+      </div>
     );
   }
   if (game.match && game.activeMode === "finalSummary")

@@ -1,3 +1,5 @@
+import { Info } from "lucide-react";
+
 import { ModalDialog } from "@/components/ModalDialog";
 import { Button } from "@/components/ui/button";
 import { APP_DISPLAY_NAME } from "@/config/appMeta";
@@ -33,12 +35,12 @@ export function AppInfoHeaderButton({ onClick }: { readonly onClick: () => void 
   return (
     <Button
       aria-label="App information"
-      className="h-9 w-9 shrink-0 rounded-full p-0 text-typ-ui font-semibold"
+      className="h-12 w-12 shrink-0 rounded-full p-0 text-typ-ui font-semibold"
       onClick={onClick}
       type="button"
       variant="secondary"
     >
-      i
+      <Info className="size-5" aria-hidden="true" />
     </Button>
   );
 }

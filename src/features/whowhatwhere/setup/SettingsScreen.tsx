@@ -29,8 +29,12 @@ export function SettingsScreen({
         onChange={(count) => setSetting("teamCount", count as GameSettings["teamCount"])}
       />
 
-      <div className="grid grid-cols-2 gap-3 max-[319px]:grid-cols-1" data-settings-pair="timing">
-        <OptionGroup className="gap-2" label="Turn length" optionsClassName="grid grid-cols-2">
+      <div className="grid gap-3" data-settings-pair="timing">
+        <OptionGroup
+          inlineLayout
+          label="Turn length"
+          optionsClassName="grid grid-cols-4 gap-1 [&>button]:px-2"
+        >
           {[30, 45, 60, 75].map((seconds) => (
             <OptionButton
               key={seconds}
@@ -44,7 +48,11 @@ export function SettingsScreen({
           ))}
         </OptionGroup>
 
-        <OptionGroup className="gap-2" label="Rounds" optionsClassName="grid grid-cols-2">
+        <OptionGroup
+          inlineLayout
+          label="Rounds"
+          optionsClassName="grid grid-cols-4 gap-1 [&>button]:px-2"
+        >
           {[1, 2, 3, 4].map((rounds) => (
             <OptionButton
               key={rounds}
@@ -57,8 +65,12 @@ export function SettingsScreen({
         </OptionGroup>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 max-[319px]:grid-cols-1" data-settings-pair="assists">
-        <OptionGroup className="gap-2" label="Skips" optionsClassName="grid grid-cols-2">
+      <div className="grid gap-3" data-settings-pair="assists">
+        <OptionGroup
+          inlineLayout
+          label="Skips"
+          optionsClassName="grid grid-cols-4 gap-1 [&>button]:px-2"
+        >
           {[
             { label: "1", value: 1 },
             { label: "2", value: 2 },
@@ -75,7 +87,11 @@ export function SettingsScreen({
           ))}
         </OptionGroup>
 
-        <OptionGroup className="gap-2" label="Hints / turn" optionsClassName="grid grid-cols-2">
+        <OptionGroup
+          inlineLayout
+          label="Hints / turn"
+          optionsClassName="grid grid-cols-4 gap-1 [&>button]:px-2"
+        >
           {HINT_LIMIT_OPTIONS.map((value) => (
             <OptionButton
               key={value}

@@ -81,7 +81,7 @@ describe("phone active turn", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows only the latest correct history and counts older correct words without skip events", () => {
+  it("keeps the complete correct history newest first without skip events", () => {
     let match = createTurn();
     for (let index = 0; index < 4; index += 1) match = correctWord(match, now);
     match = skipWord(match, now);
@@ -101,13 +101,7 @@ describe("phone active turn", () => {
       within(guessed)
         .getAllByRole("listitem")
         .map((row) => row.textContent),
-    ).toEqual(
-      correctHistory
-        .slice(-3)
-        .reverse()
-        .map((entry) => entry.word.word),
-    );
-    expect(screen.getByText("+2 more")).toBeInTheDocument();
+    ).toEqual(correctHistory.reverse().map((entry) => entry.word.word));
     expect(within(guessed).queryByText(match.activeTurn!.skippedWords[0]!.word.word)).toBeNull();
   });
 
@@ -156,7 +150,7 @@ describe("phone active turn", () => {
     expect(within(list).getAllByRole("button")).toHaveLength(4);
   });
 
-  it("shows scroll cues when wrapped guessed words exceed the bounded latest list", () => {
+  it("shows actual scroll cues across the complete guessed history", () => {
     let match = createTurn();
     for (let index = 0; index < 5; index += 1) match = correctWord(match, now);
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (
@@ -173,11 +167,11 @@ describe("phone active turn", () => {
     render(
       <WhoWhatWhereDeviceTurn match={match} secondsRemaining={24} onReturnSkipped={vi.fn()} />,
     );
-    expect(screen.getByText("+2 more · +2 below · scroll")).toBeInTheDocument();
+    expect(screen.getByText("+4 below · scroll")).toBeInTheDocument();
     fireEvent.scroll(screen.getByRole("region", { name: "Latest guessed words" }), {
-      target: { scrollTop: 106 },
+      target: { scrollTop: 246 },
     });
-    expect(screen.getByText("+2 more · +2 above · scroll")).toBeInTheDocument();
+    expect(screen.getByText("+4 above · scroll")).toBeInTheDocument();
   });
 
   it.each(["Who", "What", "Where"] as const)(

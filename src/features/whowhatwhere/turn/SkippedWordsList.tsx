@@ -19,11 +19,11 @@ export function SkippedWordsList({
   const overflowCue = useWordListOverflow(listRef, words);
 
   return (
-    <section className="min-w-0" aria-label="Skipped words">
-      <h2 className="mb-2 text-typ-ui font-semibold">Skipped · {words.length}</h2>
+    <section className="flex min-h-0 min-w-0 flex-col" aria-label="Skipped words">
+      <h2 className="mb-2 shrink-0 text-typ-ui font-semibold">Skipped · {words.length}</h2>
       <div
         ref={listRef}
-        className="max-h-36 overflow-y-auto overscroll-contain rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         tabIndex={words.length > 0 ? 0 : undefined}
         role="region"
         aria-label="Skipped words, scroll to see more"
@@ -50,7 +50,7 @@ export function SkippedWordsList({
           <p className="py-2 text-typ-ui text-muted-foreground">None yet</p>
         )}
       </div>
-      <p className="mt-1 min-h-5 text-typ-meta text-muted-foreground">{overflowCue}</p>
+      <p className="mt-1 min-h-5 shrink-0 text-typ-meta text-muted-foreground">{overflowCue}</p>
     </section>
   );
 }

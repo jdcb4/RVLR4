@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "id": "rvlry-progression-options",
+  "producer": "rvlry-android",
+  "revision": 1,
+  "title": "RVLRY: choose the round and team tracker",
+  "summary": "Four interactive alternatives, plus the 0.26.1 control and word-list refinements.",
+  "format": "markdown",
+  "body": "Open **JNAS → Media → DropBox → RVLRY-progression-options.html** for four synchronized phone mockups. Use Previous/Next to move through teams and rounds, and Handoff/Recap to compare stages. The actual tracker structure has not changed in the APK; these are choices for review.\n\n| Option | What it communicates | Trade-off |\n|---|---|---|\n| A — Header + teams | Round number stays top right; team boxes show current-round order. | Cleanest and shortest; no multi-round history. |\n| B — Rounds inside each team | Each team has numbered round boxes that tick when completed. | Shows progress per team; more small symbols. Boxes are indicators, not controls. |\n| C — Labeled round strip | Explicit Round 1 / Round 2 / Round 3 above teams. | Most explicit but uses another row. |\n| D — One compact tracker | Round and team position share one heading above a slim team line. | Compact, but moves round information out of the header. |\n\nMy preference is A for minimalism, or B if seeing each team's round history is useful. Purple/slate indicates progress; teal indicates actions.\n\nVersion **0.26.1** implements the separate requests: settings in rows, more visible word history, distinct skipped/unplayed recap rows, taller Correct at two-thirds width, and Lucide standard icons including Info. The APK is in **JNAS → Media → DropBox → RVLRY-0.26.1-prototype.apk**. Install over the existing app.\n\nAnswers are stored in Kestrel and can be fetched by this project. Submitting does not automatically start an agent.",
+  "tags": [
+    "rvlry",
+    "android",
+    "design-review"
+  ],
+  "context_ref": "codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-progression",
+  "questions": [
+    {
+      "id": "tracker-choice",
+      "kind": "single_choice",
+      "label": "Which tracker should we take forward?",
+      "options": [
+        "A — Header + teams",
+        "B — Rounds inside each team",
+        "C — Labeled round strip",
+        "D — One compact tracker",
+        "Keep exploring"
+      ]
+    },
+    {
+      "id": "tracker-notes",
+      "kind": "text",
+      "label": "What would you change in that option or the updated APK?",
+      "required": false
+    }
+  ]
+}

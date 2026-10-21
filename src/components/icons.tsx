@@ -1,3 +1,20 @@
+import {
+  ArrowLeftRight,
+  ArrowRightToLine,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  ClipboardList,
+  Crown,
+  House,
+  Pencil,
+  Plus,
+  QrCode,
+  RotateCcw,
+  Share2,
+  SkipForward,
+  Trash2,
+} from "lucide-react";
 import type { SVGAttributes } from "react";
 
 type IconProps = SVGAttributes<SVGSVGElement>;
@@ -18,151 +35,66 @@ function iconProps(props: IconProps): IconProps {
 }
 
 export function IconArrowLeft(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="m15 18-6-6 6-6" />
-    </svg>
-  );
+  return <ChevronLeft size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconCheck(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
+  return <Check size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconSkipForward(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <polygon points="5 4 15 12 5 20 5 4" />
-      <line x1="19" x2="19" y1="5" y2="19" />
-    </svg>
-  );
+  return <SkipForward size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconPlus(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
-  );
+  return <Plus size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconTrash(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M3 6h18" />
-      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-    </svg>
-  );
+  return <Trash2 size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconRotateCcw(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-      <path d="M3 3v5h5" />
-    </svg>
-  );
+  return <RotateCcw size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconHouse(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-      <polyline points="9 22 9 12 15 12 15 22" />
-    </svg>
-  );
+  return <House size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconChevronRight(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="m9 18 6-6-6-6" />
-    </svg>
-  );
+  return <ChevronRight size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconPencil(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-      <path d="m15 5 4 4" />
-    </svg>
-  );
+  return <Pencil size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconCrown(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M2 18h20" />
-      <path d="M5 14h14v4H5z" />
-      <path d="m2 10 4 4 5-8 5 8 4-4" />
-    </svg>
-  );
+  return <Crown size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconClipboard(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <rect height="16" rx="2" width="8" x="8" y="2" />
-      <path d="M4 6h16v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z" />
-    </svg>
-  );
+  return <ClipboardList size="1em" aria-hidden="true" {...props} />;
 }
 
 /** Share icon — three dots connected by lines (universal share-sheet glyph). */
 export function IconShare(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <circle cx="18" cy="5" r="3" />
-      <circle cx="6" cy="12" r="3" />
-      <circle cx="18" cy="19" r="3" />
-      <path d="m8.59 13.51 6.83 3.98" />
-      <path d="m15.41 6.51-6.82 3.98" />
-    </svg>
-  );
+  return <Share2 size="1em" aria-hidden="true" {...props} />;
 }
 
 /** Compact QR-style grid for buttons (not a real QR bitmap). */
 export function IconQrCode(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <rect height="7" rx="1" width="7" x="3" y="3" />
-      <rect height="3" width="3" x="5" y="5" />
-      <rect height="7" rx="1" width="7" x="14" y="3" />
-      <rect height="3" width="3" x="16" y="5" />
-      <rect height="7" rx="1" width="7" x="3" y="14" />
-      <rect height="7" rx="1" width="7" x="14" y="14" />
-      <rect height="3" width="3" x="5" y="16" />
-      <rect height="3" width="3" x="16" y="16" />
-    </svg>
-  );
+  return <QrCode size="1em" aria-hidden="true" {...props} />;
 }
 
 export function IconArrowRightToLine(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M5 12h14" />
-      <path d="m13 6 6 6-6 6" />
-    </svg>
-  );
+  return <ArrowRightToLine size="1em" aria-hidden="true" {...props} />;
 }
 
 /** Host control: move a player to another team (horizontal arrows). */
 export function IconArrowLeftRight(props: IconProps) {
-  return (
-    <svg {...iconProps(props)}>
-      <path d="M8 12H3" />
-      <path d="m5 9-3 3 3 3" />
-      <path d="M16 12h5" />
-      <path d="m19 9 3 3-3 3" />
-    </svg>
-  );
+  return <ArrowLeftRight size="1em" aria-hidden="true" {...props} />;
 }
 
 /** Classic top hat (brim + crown + band) — used for Hat Game. */
