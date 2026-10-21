@@ -9,3 +9,5 @@ Use Picker, Handoff, Play and Results to compare; Correct, Skip, returned skippe
 Verified in Chromium at 1440px desktop and 360px mobile: all three play interactions, stable hint layout, pause/resume and no phone horizontal overflow. JavaScript syntax passed. The design scan flagged the explicitly requested cream palette and cut-paper contours; these are intentional. Real Android behavior is outside this mockup.
 
 Review companion: https://kestrel.home.jboxtv.com/review/rvlry-recess-materials (producer rvlry-android, revision 1, context codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/recess-materials). Feedback does not automatically start implementation.
+
+Single-file remote edition: ../RVLRY-recess-materials.html embeds CSS, JavaScript, font and its license. Rebuild with node scripts/package-recess-demo.mjs from the repository root. Copied to JNAS Media/DropBox/RVLRY-recess-materials.html; browser verified three phones, functioning Correct, loaded embedded font and no external resource requests.
