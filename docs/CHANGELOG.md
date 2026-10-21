@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.26.2 — Header and team progression
+
+- Apply approved Option A: remove the round strip, keep the round number in the
+  header and numbered team boxes for progress within the current round.
+
+
 ## 0.26.1 — Phone controls and visual clarity
 
 - Separate violet progression from teal actions; tracker structure alternatives remain review mockups.

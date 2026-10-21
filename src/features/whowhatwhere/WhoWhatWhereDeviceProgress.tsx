@@ -24,23 +24,8 @@ export function WhoWhatWhereDeviceProgress({
   return (
     <section
       aria-label={`Round ${round} of ${match.settings.totalRounds}, team progress`}
-      className="mb-4 space-y-2"
+      className="mb-4"
     >
-      <div aria-hidden="true" className="flex gap-1">
-        {Array.from({ length: match.settings.totalRounds }, (_, index) => (
-          <span
-            key={index}
-            className={cn(
-              "h-1.5 flex-1 rounded-full",
-              index + 1 < round
-                ? "bg-semantic-progress-complete"
-                : index + 1 === round
-                  ? "bg-semantic-progress-current"
-                  : "bg-muted",
-            )}
-          />
-        ))}
-      </div>
       <ol
         className="grid gap-1.5"
         style={{ gridTemplateColumns: `repeat(${match.teamOrder.length}, minmax(0, 1fr))` }}

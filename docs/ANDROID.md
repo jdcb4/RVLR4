@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.26.1 is the debug-signed Who What Where build with the reviewed phone UX. Hat Game,
+0.26.2 is the debug-signed Who What Where build with the reviewed phone UX. Hat Game,
 Imposter, remote word installation and friend-release signing follow the Pixel
 checkpoint. The Settings entry truthfully indicates no update source is configured.
 Historical multiplayer code remains in the checkout but is unreachable from the
@@ -139,9 +139,9 @@ acknowledgement, then offers Start turn. A completed turn gets a word recap;
 a completed round adds standings before the next handoff. These presentation
 phases survive interruption even though the game engine has advanced.
 
-Between turns, violet numbered teams and round segments show current/completed/next,
-visually distinct from teal action buttons. Tracker alternatives in
-`docs/design/progression-options.html` remain proposals until Joe chooses one.
+Between turns, violet numbered teams show current/completed/next within the
+current round, visually distinct from teal action buttons. The round number
+lives in the top-right header; there is no separate round strip (approved Option A).
 Active play omits this tracker and uses a compact game/round header, larger timer,
 category-labeled colored clue, and large bottom controls. Who is lilac, What green,
 Where blue. These colors supplement text and do not change game rules.
@@ -191,18 +191,27 @@ APK: `out/RVLRY-0.26.1-prototype.apk`, copied and checksum-verified at
 `\\JNAS\Media\DropBox\RVLRY-0.26.1-prototype.apk`. SHA-256:
 `EACC45E492DF22EBB89DEB793FE4910F9964EB815F89960024E7E8ED5A05EABE`.
 
-Tracker choice remains pending. Interactive alternatives:
+Joe selected Option A in chat; implemented in 0.26.2. Historical alternatives:
 [progression-options.html](design/progression-options.html), also copied as
 `RVLRY-progression-options.html` in that DropBox folder. A removes the round strip;
 B embeds round ticks in teams; C labels the round strip; D combines round/team
 position in one compact tracker. Standard UI icons now use Lucide; custom game
 identity symbols remain SVG.
 
-Kestrel publication `rvlry-progression-options`, revision 1, producer
+Kestrel publication `rvlry-progression-options`, revision 2, producer
 `rvlry-android`, context
 `codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-progression`:
 [review and respond](https://kestrel.home.jboxtv.com/review/rvlry-progression-options).
-Fetch producer responses before implementing the chosen alternative. No pending
+Chat selection resolves the tracker choice. Fetch any later feedback before further changes. No pending
 responses were returned at the start of this refinement. The source payload is
 `docs/design/kestrel-progression-review.json`. Answers are stored in Kestrel;
 submitting does not automatically launch work.
+
+## Option A verification — 21 October 2026
+
+0.26.2 / versionCode 4 passed the full verify command (408 tests / 76 files)
+and Android debug assembly. Browser review confirmed header round plus team
+boxes without the strip. No persistence or native behavior changed; native
+device tests were not repeated for this removal-only layout patch.
+Artifact: out/RVLRY-0.26.2-prototype.apk, copied and checksum-verified to
+JNAS Media/DropBox. SHA-256: B0CBBAF619C1FD9017E3DB97192B1A9CE91F5300B3CEF31583696935AED527D6.
