@@ -518,44 +518,169 @@
           transition: background-color 0.12s ease-out;
         }
       }
+
+      .body {
+        gap: 14px;
+      }
+      .top {
+        min-height: 58px;
+        padding: 14px 20px 8px;
+      }
+      .progress {
+        padding: 6px 20px 12px;
+      }
+      .rounds {
+        margin-bottom: 10px;
+      }
+      .team {
+        padding: 7px 3px;
+      }
+      .footer {
+        padding: 10px 20px 20px;
+      }
+      .clock strong {
+        font-size: 54px;
+        line-height: 1.1;
+      }
+      .clue {
+        min-height: 130px;
+        padding: 16px 12px;
+      }
+      .clue.who {
+        background: #eee5f6;
+        border-color: #a88abf;
+      }
+      .clue.what {
+        background: #e2f0e8;
+        border-color: #83ab97;
+      }
+      .clue.where {
+        background: #e2edf8;
+        border-color: #8ba7c4;
+      }
+      .clue p {
+        color: var(--ink);
+      }
+      .turn .body {
+        gap: 10px;
+      }
+      .turn .wordrow {
+        padding: 7px 0;
+        min-height: 36px;
+      }
+      .turn button.wordrow {
+        padding: 9px;
+        min-height: 48px;
+      }
+      .turn .actions .btn {
+        min-height: 80px;
+      }
+      .facts {
+        border-top: 1px solid var(--line);
+        display: grid;
+        gap: 16px;
+        padding-top: 18px;
+      }
+      .fact strong {
+        display: block;
+        font-size: 18px;
+      }
+      .fact p {
+        font-size: 15px;
+      }
+      .field {
+        width: 100%;
+        font: inherit;
+        color: var(--ink);
+      }
+      label.field {
+        display: grid;
+        gap: 5px;
+      }
+      label.field input {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        font: inherit;
+        color: var(--ink);
+        min-height: 32px;
+      }
+      label.field small {
+        font-size: 13px;
+      }
+      .people {
+        gap: 8px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .brand svg {
+        width: 27px;
+        height: 27px;
+        flex-shrink: 0;
+      }
+      .category-samples {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .category-samples span {
+        padding: 12px 22px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+      }
+      .category-samples .who {
+        background: #eee5f6;
+      }
+      .category-samples .what {
+        background: #e2f0e8;
+      }
+      .category-samples .where {
+        background: #e2edf8;
+      }
     </style>
   </head>
   <body>
     <header class="intro">
-      <h1>A clearer turn, from pickup to pass-on.</h1>
+      <h1>Less explanation. More room to play.</h1>
       <p>
-        RVLRY · Who What Where design proposal. Illustrative names, scores and words. This is a
-        clickable storyboard, not the game or a replacement APK. The warm background and teal
-        identity stay; roles, progress and reachable controls do more work.
+        RVLRY · Revised phone mockups, 21 October 2026. Notes outside the phone are for review only.
+        Names, timestamps, statistics and words are illustrative; this is not a replacement APK.
       </p>
       <nav aria-label="Preview screens"></nav>
-      <p class="feedback" id="feedback" aria-live="polite">
-        Select a screen, or compare all eight below. Buttons move through the proposed flow.
-      </p>
+      <p class="feedback" id="feedback" aria-live="polite">Choose a screen or compare all eight.</p>
     </header>
     <main class="board" id="board">
       <section class="spec" data-name="Saved game">
-        <h2>1. Return or start fresh</h2>
+        <h2>1. Inside the selected game</h2>
         <p class="note">
-          Make both paths available immediately. Resuming never starts the clock or exposes a clue.
+          Hub → choose Who What Where → this screen if a save exists. Without a save, go straight to
+          setup. Date and time below are illustrative.
         </p>
         <article class="phone">
-          <div class="top">RVLRY <span>Who What Where</span></div>
+          <div class="top">
+            <span class="brand"
+              ><svg
+                viewBox="0 0 28 28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <rect x="2" y="2" width="18" height="22" rx="3" />
+                <path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3" /></svg
+              ><span>Who What Where</span></span
+            ><span></span>
+          </div>
           <div class="body">
             <h3>Ready when you are.</h3>
-            <p>Your game is saved on this phone.</p>
             <div class="saved">
-              <h3>Who What Where</h3>
-              <p><strong>Round 2 of 3 · Team 2 of 3</strong><br />Otters · Maya presenting</p>
-              <p>
-                Turn paused with <strong>24 seconds</strong> left.<br />Scores and words are saved.
-              </p>
+              <h3>Saved game</h3>
+              <p>21 Oct 2026 · 7:42 pm</p>
+              <p><strong>Round 2 of 3 · Otters</strong><br />Maya presenting · 24 seconds left</p>
             </div>
-            <div class="grow"></div>
-            <p class="minor">
-              Starting fresh replaces this game only after you confirm. You can keep the same teams
-              and settings.
-            </p>
           </div>
           <div class="footer">
             <button class="btn primary" data-go="6">Resume saved game</button
@@ -564,40 +689,47 @@
         </article>
       </section>
       <section class="spec" data-name="Setup">
-        <h2>2. Prepare the group</h2>
+        <h2>2. Save each team, then review</h2>
         <p class="note">
-          Setup has its own short sequence. Team order and who presents first are explicit before
-          play.
+          Editable team fields. Save team advances to the next team; after the last team, review the
+          roster before starting. Try the button to see both states.
         </p>
         <article class="phone">
-          <div class="top">Who What Where <span>Setup</span></div>
-          <div class="progress">
-            <div class="steps">Settings <b>Teams</b> Review</div>
+          <div class="top">
+            <span class="brand"
+              ><svg
+                viewBox="0 0 28 28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <rect x="2" y="2" width="18" height="22" rx="3" />
+                <path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3" /></svg
+              ><span>Who What Where</span></span
+            ><span>Setup</span>
           </div>
           <div class="body">
-            <h3>Meet the Otters.</h3>
-            <p>Team 2 of 3 · plays after Foxes</p>
-            <div class="field"><strong>Otters</strong><small>Team name</small></div>
-            <div class="people">
-              <div class="field"><strong>Maya</strong><small>Presents first</small></div>
-              <div class="field"><strong>Sam</strong><small>Presents next round</small></div>
-            </div>
-            <p class="minor">
-              Presenter order follows this list. The other players on the team guess.
-            </p>
-            <button
-              class="btn"
-              data-demo="Add player would open an inline name field; keyboard-aware layout is part of implementation."
-            >
-              Add player
-            </button>
-            <div class="grow"></div>
-            <div class="next">
-              <strong>Next: set up Owls</strong>Then review all teams before starting.
+            <div class="steps">Settings <b>Teams</b> Review</div>
+            <div id="setup-content">
+              <h3>Team 2 of 3</h3>
+              <div class="people">
+                <label class="field"
+                  ><small>Team name</small
+                  ><input id="team-name" value="Otters" maxlength="30" /></label
+                ><label class="field"
+                  ><small>Presents first</small
+                  ><input id="player-one" value="Maya" maxlength="30" /></label
+                ><label class="field"
+                  ><small>Presents next round</small
+                  ><input id="player-two" value="Sam" maxlength="30"
+                /></label>
+              </div>
+              <button class="btn" id="add-player">Add player</button>
             </div>
           </div>
           <div class="footer">
-            <button class="btn primary" data-go="2">Preview handoff</button
+            <button class="btn primary" id="save-team">Save team</button
             ><button class="btn quiet" data-go="0">Save setup and leave</button>
           </div>
         </article>
@@ -605,53 +737,74 @@
       <section class="spec" data-name="Handoff">
         <h2>3. Pass the phone</h2>
         <p class="note">
-          Name the recipient before anything else. One ownership acknowledgement, then an explicit
-          start.
+          Keep the acknowledgement. The tracker handles next-team context; no repeated next-up
+          paragraph.
         </p>
         <article class="phone">
-          <div class="top">Who What Where <span>Pass the phone</span></div>
+          <div class="top">
+            <span class="brand"
+              ><svg
+                viewBox="0 0 28 28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <rect x="2" y="2" width="18" height="22" rx="3" />
+                <path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3" /></svg
+              ><span>Who What Where</span></span
+            ><span>Round 2 of 3</span>
+          </div>
           <div class="progress" data-progress="active"></div>
           <div class="body">
-            <h3>Pass to Maya.</h3>
-            <div class="identity">
-              <strong>Otters</strong>
-              <p class="role">Maya presents.<br />Sam guesses.</p>
-            </div>
-            <p>Everyone else: look away.<br />The next word stays hidden until Maya starts.</p>
-            <div class="grow"></div>
-            <div class="next"><strong>After this: Leo · Owls</strong>Final team of this round.</div>
+            <h3 id="pass-title">Pass to Maya.</h3>
+            <p>Everyone else: look away.</p>
           </div>
           <div class="footer">
             <button class="btn primary" id="handoff">I’m Maya — ready</button
-            ><button class="btn quiet" data-go="6">Pause / save and leave</button>
+            ><button class="btn quiet" data-go="0">Save and leave</button>
           </div>
         </article>
       </section>
       <section class="spec" data-name="Playing">
-        <h2>4. Play within thumb reach</h2>
+        <h2>4. More space for play</h2>
         <p class="note">
-          The clue leads. Three recent words remain visible; Skip and Correct have large, separated
-          targets.
+          No team timeline during play. A larger clock, five recent words and lower actions. The
+          category stays labeled as well as colored.
         </p>
         <article class="phone turn">
-          <div class="top">Otters · Maya presents <span>Sam guesses</span></div>
-          <div class="progress" data-progress="active"></div>
+          <div class="top">
+            <span class="brand"
+              ><svg
+                viewBox="0 0 28 28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <rect x="2" y="2" width="18" height="22" rx="3" />
+                <path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3" /></svg
+              ><span>Who What Where</span></span
+            ><span>Round 2 of 3</span>
+          </div>
           <div class="body">
             <div class="clock">
-              <strong id="clock">0:24</strong><span><b id="score">4</b> correct this turn</span>
+              <strong id="clock">0:24</strong><span><b id="score">4</b> correct</span>
             </div>
-            <div class="clue">
-              <p>What</p>
+            <div class="clue what">
+              <p id="category">What</p>
               <strong id="clue">Hot-air balloon</strong>
             </div>
             <div class="recent">
-              <h3>Recent words · this turn</h3>
+              <h3>Recent words</h3>
               <div id="history">
                 <div class="wordrow">Telescope <span>Correct</span></div>
                 <button class="wordrow skipped" data-retry="Lighthouse">
                   Lighthouse <span>Skipped · retry</span>
                 </button>
                 <div class="wordrow">Accordion <span>Correct</span></div>
+                <div class="wordrow">Compass <span>Correct</span></div>
+                <div class="wordrow">Trampoline <span>Correct</span></div>
               </div>
             </div>
             <div class="grow"></div>
@@ -666,19 +819,30 @@
         </article>
       </section>
       <section class="spec" data-name="Turn recap">
-        <h2>5. Close this turn clearly</h2>
+        <h2>5. Words, score, pass</h2>
         <p class="note">
-          Keep the finished team in focus until the phone is passed. Show the word list without a
-          hidden disclosure.
+          The score and button carry the message. No duplicate finished-turn or next-team
+          explanation.
         </p>
         <article class="phone">
-          <div class="top">Who What Where <span>Turn finished</span></div>
+          <div class="top">
+            <span class="brand"
+              ><svg
+                viewBox="0 0 28 28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <rect x="2" y="2" width="18" height="22" rx="3" />
+                <path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3" /></svg
+              ><span>Who What Where</span></span
+            ><span>Round 2 of 3</span>
+          </div>
           <div class="progress" data-progress="recap"></div>
           <div class="body">
             <h3>Otters scored 5.</h3>
-            <p>Maya’s turn is finished.<br />Otters now have 12 points.</p>
             <div class="recent">
-              <h3>This turn’s words</h3>
               <div class="wordrow">Hot-air balloon <span>Correct</span></div>
               <div class="wordrow">Telescope <span>Correct</span></div>
               <div class="wordrow skipped">Lighthouse <span>Skipped</span></div>
@@ -686,71 +850,76 @@
               <div class="wordrow">Compass <span>Correct</span></div>
               <div class="wordrow">Trampoline <span>Correct</span></div>
             </div>
-            <div class="grow"></div>
-            <div class="next">
-              <strong>Next: Leo presents for Owls</strong>Team 3 of 3 · last turn of Round 2.
-            </div>
           </div>
           <div class="footer">
-            <button class="btn primary" data-go="2">Pass phone to Leo</button
-            ><button
-              class="btn quiet"
-              data-demo="The complete scoreboard would open here, keeping the recap in place."
-            >
-              View scores
-            </button>
+            <button class="btn primary" data-pass="Leo">Pass phone to Leo</button
+            ><button class="btn quiet" data-go="5">View scores</button>
           </div>
         </article>
       </section>
       <section class="spec" data-name="Round complete">
-        <h2>6. Mark the round boundary</h2>
+        <h2>6. A simple round boundary</h2>
         <p class="note">
-          Use the same tracker with all teams complete. State who opens the next round and that
-          presenters rotate.
+          Round title, standings, then the handoff action. No next-round bubble or explanatory
+          filler.
         </p>
         <article class="phone">
-          <div class="top">Who What Where <span>Round finished</span></div>
+          <div class="top">
+            <span class="brand"
+              ><svg
+                viewBox="0 0 28 28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <rect x="2" y="2" width="18" height="22" rx="3" />
+                <path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3" /></svg
+              ><span>Who What Where</span></span
+            ><span>Round 2 of 3</span>
+          </div>
           <div class="progress" data-progress="complete"></div>
           <div class="body">
             <h3>Round 2 complete.</h3>
-            <p>All three teams have played.</p>
             <div class="scores">
               <div><span>Foxes</span><strong>14</strong></div>
               <div class="ours"><span>Otters</span><strong>12</strong></div>
               <div><span>Owls</span><strong>11</strong></div>
             </div>
-            <p class="minor">The last team’s full word recap comes before this screen.</p>
-            <div class="grow"></div>
-            <div class="identity">
-              <strong>Next: Round 3</strong>
-              <p class="role">Alex presents for Foxes.<br />Final round · Team 1 of 3</p>
-            </div>
           </div>
           <div class="footer">
-            <button class="btn primary" data-go="2">Pass phone to Alex</button
-            ><button class="btn quiet" data-go="6">Save and leave</button>
+            <button class="btn primary" data-pass="Alex">Pass phone to Alex</button
+            ><button class="btn quiet" data-go="0">Save and leave</button>
           </div>
         </article>
       </section>
       <section class="spec" data-name="Paused">
-        <h2>7. Pause without losing your place</h2>
+        <h2>7. A quieter pause</h2>
         <p class="note">
-          Hide the clue, preserve the same context, and make starting fresh possible from here too.
+          Keep the context and existing actions. No hidden-word explanation, save explanation or
+          next-up block.
         </p>
         <article class="phone">
-          <div class="top">Who What Where <span>Paused</span></div>
+          <div class="top">
+            <span class="brand"
+              ><svg
+                viewBox="0 0 28 28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <rect x="2" y="2" width="18" height="22" rx="3" />
+                <path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3" /></svg
+              ><span>Who What Where</span></span
+            ><span>Paused</span>
+          </div>
           <div class="progress" data-progress="active"></div>
           <div class="body">
             <h3>Take your time.</h3>
-            <p>The timer is paused. Your place is saved.</p>
             <div class="identity">
               <strong>Maya · Otters</strong>
               <p class="role">24 seconds remaining<br />4 correct this turn</p>
-            </div>
-            <p>Give the phone back to Maya before resuming. The current word stays hidden here.</p>
-            <div class="grow"></div>
-            <div class="next">
-              <strong>Next: Leo · Owls</strong>One more team before Round 2 ends.
             </div>
           </div>
           <div class="footer">
@@ -761,121 +930,178 @@
         </article>
       </section>
       <section class="spec" data-name="Final results">
-        <h2>8. Finish, then choose what’s next</h2>
+        <h2>8. Results with a little personality</h2>
         <p class="note">
-          No “next team” at the end. Reuse the roster without carrying over scores or a resumable
-          completed match.
+          Two compact game highlights. Most skips counts skip actions across all of a player’s
+          turns; tied leaders should share the highlight. Sample results below.
         </p>
         <article class="phone">
-          <div class="top">Who What Where <span>Game finished</span></div>
-          <div class="progress">
-            <div class="rounds">
-              <span class="done"></span><span class="done"></span><span class="done"></span>
-            </div>
-            <strong>3 of 3 rounds complete</strong>
+          <div class="top">
+            <span class="brand"
+              ><svg
+                viewBox="0 0 28 28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <rect x="2" y="2" width="18" height="22" rx="3" />
+                <path d="M8 6h7M8 11h7M8 16h4M23 7v16a3 3 0 0 1-3 3" /></svg
+              ><span>Who What Where</span></span
+            ><span>Game finished</span>
           </div>
           <div class="body">
             <h3>Foxes win.</h3>
-            <p>All teams have finished their final turn.</p>
             <div class="scores">
               <div class="ours"><span>1 · Foxes</span><strong>21</strong></div>
               <div><span>2 · Otters</span><strong>19</strong></div>
               <div><span>3 · Owls</span><strong>17</strong></div>
             </div>
-            <div class="grow"></div>
-            <p>Another game with this group?<br />Keep the teams and review settings first.</p>
+            <div class="facts">
+              <div class="fact">
+                <strong>Best turn · 8 points</strong>
+                <p>Alex · Foxes</p>
+              </div>
+              <div class="fact">
+                <strong>Most skips · 6</strong>
+                <p>Leo · Owls</p>
+              </div>
+            </div>
           </div>
           <div class="footer">
-            <button class="btn primary" data-go="1">Play again with these teams</button
-            ><button class="btn" data-go="0">Back to games</button>
+            <button class="btn primary" data-setup>Play again with these teams</button
+            ><button class="btn" data-hub>Back to games</button>
           </div>
         </article>
       </section>
     </main>
     <section class="alternative">
-      <h2>Recommended: a compact two-level tracker</h2>
+      <h2>Compact tracker, only where it helps</h2>
       <p>
-        The round segments show the whole game. The labeled team strip shows this round: complete,
-        current, next. Text and borders carry the meaning as well as color. The tracker is
-        informational; tapping it must never jump the game forward.
+        Use numbered teams and round segments between turns. During play, keep only the game mark
+        and round in the header. No whole-game grid.
       </p>
-      <p>
-        During play it stays quiet. At handoff and recap it expands into plain-language
-        instructions. Setup uses Settings → Teams → Review instead, because rounds have not started.
-      </p>
-      <h3>Alternative: show the whole game as a grid</h3>
-      <p>
-        This makes every turn visible, but takes more space from words and controls. I would put it
-        behind “Game progress,” rather than keep it on every screen.
-      </p>
-      <div class="matrix">
-        <span></span><span>Foxes</span><span>Otters</span><span>Owls</span><span>Round 1</span
-        ><span class="done">Done</span><span class="done">Done</span><span class="done">Done</span
-        ><span>Round 2</span><span class="done">Done</span><span class="active">Now · Maya</span
-        ><span>Next · Leo</span><span>Round 3</span><span>Alex</span><span>Sam</span
-        ><span>Nina</span>
+      <h3>Category colors</h3>
+      <div class="category-samples">
+        <span class="who">Who · lilac</span><span class="what">What · green</span
+        ><span class="where">Where · blue</span>
       </div>
       <p>
-        Before implementation: decide how much history to keep visible, whether handoff needs the
-        two-step acknowledgement, and whether this tracker reads naturally at a glance. Long names,
-        four teams, optional hints, larger text and keyboard layouts need dedicated implementation
-        checks.
+        Category text always remains visible. The clue panel changes color; Correct and Skip keep
+        consistent action colors. The live game keeps its configured category for the turn; the
+        mockup cycles categories only to demonstrate these colors.
+      </p>
+      <p>
+        Design rule: communicate each fact once, use tight vertical grouping and aim for one screen
+        at normal text size. Long lists, large accessibility text and the keyboard may need
+        controlled scrolling rather than smaller text or touch targets.
       </p>
     </section>
     <dialog id="newgame">
       <h2>Replace the saved game?</h2>
-      <p>
-        The current scores and turn will be removed. Keep your teams and settings to start again.
-      </p>
+      <p>The current game will be removed. Keep the teams and settings for your new game.</p>
       <button class="btn primary" id="confirmnew">Replace game and review setup</button
       ><button class="btn" id="cancelnew">Keep saved game</button>
+    </dialog>
+    <dialog id="hub">
+      <h2>Games</h2>
+      <button class="btn primary" id="choose-game">Who What Where</button>
+      <p>Hat Game and Imposter follow later.</p>
     </dialog>
     <script>
       const specs = [...document.querySelectorAll(".spec")],
         board = document.querySelector("#board"),
         nav = document.querySelector("nav");
-      function show(index) {
-        specs.forEach((s, i) => (s.hidden = index !== -1 && i !== index));
-        board.classList.toggle("single", index !== -1);
-        [...nav.children].forEach((b, i) =>
-          b.setAttribute("aria-pressed", String(i === index + 1)),
-        );
+      function show(i) {
+        specs.forEach((s, n) => (s.hidden = i !== -1 && n !== i));
+        board.classList.toggle("single", i !== -1);
+        [...nav.children].forEach((b, n) => b.setAttribute("aria-pressed", String(n === i + 1)));
         document.querySelector("#feedback").textContent =
-          index === -1
-            ? "Compare the proposed screens below."
-            : `Preview: ${specs[index].dataset.name} · illustrative state, not saved gameplay`;
+          i === -1 ? "Compare all eight revised screens." : "Preview: " + specs[i].dataset.name;
         window.scrollTo({ top: 0, behavior: "instant" });
       }
-      ["All screens", ...specs.map((s) => s.dataset.name)].forEach((name, i) => {
+      ["All screens", ...specs.map((s) => s.dataset.name)].forEach((name, n) => {
         const b = document.createElement("button");
         b.textContent = name;
-        b.setAttribute("aria-pressed", String(i === 0));
-        b.onclick = () => show(i - 1);
+        b.setAttribute("aria-pressed", String(n === 0));
+        b.onclick = () => show(n - 1);
         nav.append(b);
       });
-      document.querySelectorAll("[data-progress]").forEach((el) => {
-        const mode = el.dataset.progress;
-        el.innerHTML = `<div class="rounds" aria-label="Round 2 of 3"><span class="done"></span><span class="current"></span><span></span></div><div class="progress-label"><strong>Round 2 of 3</strong><span>${mode === "complete" ? "All teams finished" : "Team 2 of 3"}</span></div><div class="teams"><div class="team complete"><b>Foxes</b>Complete</div><div class="team ${mode === "complete" ? "complete" : "active"}"><b>Otters</b>${mode === "recap" || mode === "complete" ? "Complete" : "Now · Maya"}</div><div class="team ${mode === "complete" ? "complete" : ""}"><b>Owls</b>${mode === "complete" ? "Complete" : "Next · Leo"}</div></div>`;
-      });
-      document.querySelectorAll("[data-go]").forEach(
-        (b) =>
-          (b.onclick = () => {
-            show(Number(b.dataset.go));
-            if (b.textContent.includes("Leo") || b.textContent.includes("Alex"))
-              document.querySelector("#feedback").textContent =
-                "Storyboard note: the real handoff would show " +
-                (b.textContent.includes("Leo")
-                  ? "Leo / Owls, Team 3 of Round 2."
-                  : "Alex / Foxes, Team 1 of Round 3.") +
-                " The example handoff below shows Maya.";
-          }),
-      );
+      function tracker(el, mode = "active", team = 1, round = 2) {
+        el.innerHTML =
+          '<div class="rounds" aria-label="Round ' +
+          round +
+          ' of 3">' +
+          [1, 2, 3]
+            .map(
+              (n) =>
+                '<span class="' + (n < round ? "done" : n === round ? "current" : "") + '"></span>',
+            )
+            .join("") +
+          '</div><div class="teams">' +
+          ["Foxes", "Otters", "Owls"]
+            .map((name, i) => {
+              const complete = mode === "complete" || i < team || (mode === "recap" && i === team);
+              return (
+                '<div class="team ' +
+                (complete ? "complete" : i === team ? "active" : "") +
+                '"><b>' +
+                (i + 1) +
+                " · " +
+                name +
+                "</b>" +
+                (complete
+                  ? "Complete"
+                  : i === team
+                    ? "Now · " +
+                      (round === 3 ? ["Alex", "Sam", "Nina"] : ["Alex", "Maya", "Leo"])[i]
+                    : i === team + 1
+                      ? "Next · " +
+                        (round === 3 ? ["Alex", "Sam", "Nina"] : ["Alex", "Maya", "Leo"])[i]
+                      : "Waiting") +
+                "</div>"
+              );
+            })
+            .join("") +
+          "</div>";
+      }
       document
-        .querySelectorAll("[data-demo]")
-        .forEach(
-          (b) =>
-            (b.onclick = () => (document.querySelector("#feedback").textContent = b.dataset.demo)),
+        .querySelectorAll("[data-progress]")
+        .forEach((el) => tracker(el, el.dataset.progress));
+      document
+        .querySelectorAll("[data-go]")
+        .forEach((b) => (b.onclick = () => show(Number(b.dataset.go))));
+      let presenter = "Maya",
+        ready = false;
+      function handoff(name = "Maya") {
+        presenter = name;
+        ready = false;
+        document.querySelector("#pass-title").textContent = "Pass to " + name + ".";
+        document.querySelector("#handoff").textContent = "I’m " + name + " — ready";
+        const phone = specs[2];
+        phone.querySelector(".top>span:last-child").textContent =
+          "Round " + (name === "Alex" ? 3 : 2) + " of 3";
+        tracker(
+          phone.querySelector("[data-progress]"),
+          "active",
+          name === "Alex" ? 0 : name === "Leo" ? 2 : 1,
+          name === "Alex" ? 3 : 2,
         );
+        show(2);
+      }
+      document
+        .querySelectorAll("[data-pass]")
+        .forEach((b) => (b.onclick = () => handoff(b.dataset.pass)));
+      document.querySelector("#handoff").onclick = (e) => {
+        if (!ready) {
+          ready = true;
+          e.target.textContent = "Start my 45-second turn";
+        } else {
+          show(3);
+          document.querySelector("#feedback").textContent =
+            "Playing layout preview uses the illustrative Maya / Round 2 turn.";
+        }
+      };
       const dialog = document.querySelector("#newgame");
       document
         .querySelectorAll("[data-new]")
@@ -883,51 +1109,124 @@
       document.querySelector("#cancelnew").onclick = () => dialog.close();
       document.querySelector("#confirmnew").onclick = () => {
         dialog.close();
-        show(1);
+        showReview();
       };
-      let ready = false;
-      document.querySelector("#handoff").onclick = (e) => {
-        if (ready) {
-          show(3);
+      let setupTeam = 2;
+      const roster = [
+        { name: "Foxes", players: ["Alex", "Jo"] },
+        { name: "Otters", players: ["Maya", "Sam"] },
+        { name: "Owls", players: ["Leo", "Nina"] },
+      ];
+      function showReview() {
+        show(1);
+        document.querySelector(".steps").innerHTML = "Settings Teams <b>Review</b>";
+        document.querySelector("#setup-content").innerHTML =
+          '<h3>Review teams</h3><div class="scores">' +
+          roster
+            .map(
+              (t, i) =>
+                "<div><span>" +
+                (i + 1) +
+                " · " +
+                escapeText(t.name) +
+                "<br><small>" +
+                t.players.map(escapeText).join(" · ") +
+                "</small></span></div>",
+            )
+            .join("") +
+          "</div>";
+        document.querySelector("#save-team").textContent = "Start game";
+        setupTeam = 4;
+      }
+      function escapeText(v) {
+        const x = document.createElement("span");
+        x.textContent = v;
+        return x.innerHTML;
+      }
+      document.querySelector("#save-team").onclick = () => {
+        if (setupTeam === 4) {
+          handoff("Alex");
+          specs[2].querySelector(".top>span:last-child").textContent = "Round 1 of 3";
+          tracker(specs[2].querySelector("[data-progress]"), "active", 0, 1);
           return;
         }
-        ready = true;
-        e.target.textContent = "Start my 45-second turn";
-        document.querySelector("#feedback").textContent =
-          "Phone ownership confirmed. A second deliberate tap starts the timer; no clue has been shown yet.";
+        const fields = [...document.querySelectorAll("#setup-content input")];
+        if (fields.some((f) => !f.value.trim())) {
+          fields.find((f) => !f.value.trim()).focus();
+          return;
+        }
+        roster[setupTeam - 1] = {
+          name: fields[0].value.trim(),
+          players: fields.slice(1).map((f) => f.value.trim()),
+        };
+        if (setupTeam === 3) {
+          showReview();
+          return;
+        }
+        setupTeam = 3;
+        document.querySelector("#setup-content h3").textContent = "Team 3 of 3";
+        document.querySelector("#team-name").value = "Owls";
+        document.querySelector("#player-one").value = "Leo";
+        document.querySelector("#player-two").value = "Nina";
+        document.querySelectorAll("[data-added]").forEach((el) => el.remove());
+      };
+      document.querySelector("#add-player").onclick = () => {
+        const label = document.createElement("label");
+        label.className = "field";
+        label.dataset.added = "true";
+        label.innerHTML =
+          '<small>Next presenter</small><input maxlength="30" aria-label="Player name">';
+        document.querySelector(".people").append(label);
+        label.querySelector("input").focus();
+      };
+      document.querySelector("[data-setup]").onclick = showReview;
+      const hub = document.querySelector("#hub");
+      document.querySelector("[data-hub]").onclick = () => hub.showModal();
+      document.querySelector("#choose-game").onclick = () => {
+        hub.close();
+        show(0);
       };
       let wordIndex = 0;
-      const words = ["Hot-air balloon", "Snow globe", "Roller coaster", "Binoculars"];
+      const words = [
+        ["Hot-air balloon", "What"],
+        ["Sherlock Holmes", "Who"],
+        ["Eiffel Tower", "Where"],
+        ["Snow globe", "What"],
+      ];
+      function setClue(word, category) {
+        document.querySelector("#clue").textContent = word;
+        document.querySelector("#category").textContent = category;
+        document.querySelector(".clue").className = "clue " + category.toLowerCase();
+      }
       function mark(correct) {
         const clue = document.querySelector("#clue"),
+          word = clue.textContent,
+          category = document.querySelector("#category").textContent,
           row = document.createElement(correct ? "div" : "button");
         row.className = "wordrow" + (correct ? "" : " skipped");
-        row.append(document.createTextNode(clue.textContent));
+        row.append(document.createTextNode(word));
         const label = document.createElement("span");
         label.textContent = correct ? "Correct" : "Skipped · retry";
         row.append(label);
         if (!correct)
           row.onclick = () => {
-            clue.textContent = row.firstChild.textContent;
+            setClue(word, category);
             row.remove();
           };
         const history = document.querySelector("#history");
         history.prepend(row);
-        while (history.children.length > 3) history.lastChild.remove();
+        while (history.children.length > 5) history.lastChild.remove();
         if (correct)
           document.querySelector("#score").textContent =
             Number(document.querySelector("#score").textContent) + 1;
-        clue.textContent = words[++wordIndex % words.length];
+        setClue(...words[++wordIndex % words.length]);
       }
       document.querySelector("#correct").onclick = () => mark(true);
       document.querySelector("#skip").onclick = () => mark(false);
-      document.querySelectorAll("[data-retry]").forEach(
-        (b) =>
-          (b.onclick = () => {
-            document.querySelector("#clue").textContent = b.dataset.retry;
-            b.remove();
-          }),
-      );
+      document.querySelector("[data-retry]").onclick = (e) => {
+        setClue("Lighthouse", "What");
+        e.currentTarget.remove();
+      };
     </script>
   </body>
 </html>

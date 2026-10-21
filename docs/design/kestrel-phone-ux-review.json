@@ -2,67 +2,29 @@
   "schema_version": 1,
   "id": "rvlry-phone-ux-review",
   "producer": "rvlry-android",
-  "revision": 1,
-  "title": "RVLRY: review the phone UX mockups",
-  "summary": "Eight screen proposals covering thumb reach, visible words, team/round progress, handoffs and resume/new-game choices. Choose a direction and leave feedback here.",
+  "revision": 2,
+  "title": "RVLRY: revised compact phone UX",
+  "summary": "Updated after your screen-by-screen feedback: less copy, concrete team setup, tracker removed during play, category colors and results highlights.",
   "format": "markdown",
-  "body": "# RVLRY phone UX review\n\nThe Pixel test succeeded across closes and force-closes. APK-over-APK updating remains untested. These are UX proposals; the installed APK is unchanged.\n\n## Visual mockups\nOpen **JNAS → Media → DropBox → RVLRY-phone-flow-proposal.html** in a browser.\n\nWindows path: `\\\\JNAS\\Media\\DropBox\\RVLRY-phone-flow-proposal.html`\n\nKestrel strips the CSS and scripts used by the storyboard. This is its companion review; the original HTML contains the actual visual mockups. Names, words and scores are illustrative. It demonstrates selected interactions, not a complete game.\n\n## Recommended progress indicator\nUse two levels: round segments for the whole game, and labeled team cells for the current round. Text and borders carry meaning as well as color. The tracker is informational, never a way to jump turns.\n\n**Round 2 of 3 · Team 2 of 3**\n\n| Foxes | Otters | Owls |\n| --- | --- | --- |\n| Complete | NOW · Maya presents | NEXT · Leo presents |\n\nEach team gets one turn per round. Its presenter rotates on its next turn. Setup uses Settings → Teams → Review instead.\n\nThe alternative whole-game grid shows every team in every round, but uses more space. I recommend the compact strip, with the grid available on demand if useful.\n\n## Eight screen proposals\n\n| Screen | What should be obvious | Main action |\n| --- | --- | --- |\n| Saved game | Paused game, team, round and remaining time | Resume, with Start new game also visible |\n| Setup | Team being edited; first presenter and next presenter | Continue to next team, then review |\n| Handoff | Maya presents for Otters; Sam guesses; Leo follows | I'm Maya — ready, then Start my turn |\n| Playing | Current clue first; time and current team easy to find | Large bottom Skip and Correct |\n| Turn recap | Maya finished; Otters scored 5; all words visible | Pass phone to Leo |\n| Round complete | All teams finished; scores and next presenter | Pass phone to Alex for Round 3 |\n| Paused | Clock stopped; clue hidden; return phone to presenter | Resume, Save and leave, or Start new game |\n| Final results | All turns complete; winner and standings | Play again with these teams or Back to games |\n\n### Playing: hierarchy and thumb reach\nThe clue has the strongest emphasis. Three recent correct/skipped words remain visible; skipped rows can be tapped to retry. Skip and Correct are 76 pixels high in the mockup and separated by a gap. Pause sits below; ending a turn early should live in the pause options.\n\nImplementation must preserve access to older skipped words and optional hints, and check long names, four teams, larger text and keyboard layouts.\n\n### Recap and handoff\nKeep the finished team's identity through its full word recap even if the engine has already advanced. Then explicitly pass the phone. Mark round boundaries and name the next presenter. After the final turn, show results with no next-team prompt.\n\n### Resume versus new game\nOffer both immediately, without requiring a resume first. Confirm before replacing a save; allow retaining teams/settings. Cancelling preserves the current game.\n\n### Visual treatment\nRetain the warm background and teal identity. Strengthen borders and current-team emphasis; distinguish completed turns and amber skipped-word controls. Meaning must not depend on color alone.\n\n## Your feedback\nStart with Playing, Handoff and Turn recap in the HTML. Answer below and add screen-specific notes. Your next-step choice records the scope you want when work resumes; submitting does not launch an agent automatically.\n\nThis review covers Who What Where. Hat Game and Imposter need their own role/privacy and phase reviews before adapting these patterns.",
+  "body": "# Revised phone mockups\n\nYour 21 October feedback has been incorporated. Open **JNAS → Media → DropBox → RVLRY-phone-flow-proposal.html** for the updated visual storyboard. Refresh or reopen the file if you have the earlier version open. The APK is unchanged.\n\nKestrel provides this companion review and response form; the styled mockups remain in the HTML file.\n\n| Screen | Updated proposal |\n| --- | --- |\n| 1. Saved game | Inside the selected game, after the hub. Save date/time, useful context, Resume and Start new game. Redundant save explanations removed. |\n| 2. Setup | Save team advances to the next team. After the final team, Review teams then Start game. Editable sample fields demonstrate the interaction. |\n| 3. Handoff | Keep I'm Maya — ready. Remove the next-up paragraph and repeated participant explanation. |\n| 4. Playing | Remove the tracker. Compact game mark and round in header, larger timer, five recent words, large bottom actions. Category-colored clue panel with its text label. |\n| 5. Turn recap | Score and word list, followed by Pass phone to Leo. Remove redundant finished-turn and next-team explanations. |\n| 6. Round complete | Title, standings and handoff button. Remove explanatory paragraphs and next-round bubble. |\n| 7. Paused | Take your time, compact presenter/time/score summary, existing buttons. Remove other body copy. |\n| 8. Results | Standings plus best turn and most skips highlights. Remove obvious game-finished and replay explanations. |\n\n## Settled direction\nCompact two-level tracker between turns; numbered teams and round segments. No whole-game grid. Tight vertical grouping, communicate each fact once, and aim for one screen without internal scrollbars at normal sizes. Long lists, large accessibility text and keyboards may need controlled scrolling.\n\n## Category colors\nProposed: Who = lilac, What = green, Where = blue. Text labels remain. The mockup cycles category colors to demonstrate them; the live game's current category-per-turn rule is unchanged.\n\n## Results highlights\nBest turn: player, team and points. Most skips: player, team and total skip actions over their turns. Ties should show shared leaders. These are illustrative design values, not implemented statistics yet.\n\nThe sample layouts and setup transitions were checked at 412px and 360px widths. This is a revised design proposal, not a new APK. Answer below if anything still needs changing. Submitting stores feedback and does not automatically start an agent.",
   "tags": ["rvlry", "android", "design-review"],
   "context_ref": "codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-phone-ux",
   "questions": [
     {
-      "id": "progress",
-      "kind": "single_choice",
-      "label": "Which progress indicator should we develop?",
-      "options": [
-        "Compact round segments plus current-round team strip",
-        "Whole-game grid visible on gameplay screens",
-        "Compact strip with whole-game grid available on demand (recommended)",
-        "Rework the indicator; see my notes"
-      ]
-    },
-    {
-      "id": "word-history",
-      "kind": "single_choice",
-      "label": "What word visibility do you want during a turn? The full recap would remain afterward.",
-      "options": [
-        "Three recent words, with access to all skipped words",
-        "More recent words visible, even if the list scrolls",
-        "Prioritize outstanding skipped words over correct-word history",
-        "Mostly improve the end-of-turn recap; keep play simpler"
-      ]
-    },
-    {
-      "id": "handoff",
-      "kind": "single_choice",
-      "label": "How should starting a turn work after passing the phone?",
-      "options": [
-        "Confirm I am the presenter, then tap Start turn",
-        "One explicit Start turn button naming the presenter",
-        "Unsure; refine the handoff before deciding"
-      ]
-    },
-    {
-      "id": "screen-feedback",
-      "kind": "text",
       "required": false,
-      "label": "What would you change about controls, thumb reach, hierarchy, grouping, colors or current/next participant clarity? Mention screen names where useful."
+      "label": "What still needs changing in these revised mockups? Mention the screen number where useful.",
+      "id": "remaining-feedback",
+      "kind": "text"
     },
     {
+      "label": "What should happen when we resume?",
+      "options": [
+        "Implement this revised Who What Where UX",
+        "Revise the mockups further using my notes",
+        "Discuss the remaining points first"
+      ],
       "id": "next-step",
-      "kind": "single_choice",
-      "label": "What should happen when we resume this work?",
-      "options": [
-        "Implement the proposed Who What Where UX, incorporating my answers",
-        "Revise the mockups using my feedback before implementation",
-        "Discuss my feedback with me first"
-      ]
-    },
-    {
-      "id": "other",
-      "kind": "text",
-      "required": false,
-      "label": "Anything else, including resume/new-game options or the exact round and team flow?"
+      "kind": "single_choice"
     }
   ]
 }

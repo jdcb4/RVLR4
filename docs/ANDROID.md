@@ -128,7 +128,7 @@ their flows must not inherit Who What Where's team/round assumptions.
 ### Pending Kestrel feedback
 
 Published 21 October 2026: [phone UX review](https://kestrel.home.jboxtv.com/review/rvlry-phone-ux-review).
-Producer: `rvlry-android`; publication: `rvlry-phone-ux-review`; revision: `1`.
+Producer: `rvlry-android`; publication: `rvlry-phone-ux-review`; revision: `2`.
 Context: `codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-phone-ux`.
 The reproducible payload is `design/kestrel-phone-ux-review.json`.
 Kestrel carries the companion screen review and answer form; its renderer cannot
@@ -141,3 +141,31 @@ publication, revision and context, durably record answers and pending work, then
 acknowledge receipt. No responses have been collected or acknowledged yet.
 Submission does not automatically start an agent; the next-step answer determines
 whether to implement, revise mockups or discuss on the next authorized resume.
+
+### Design feedback incorporated — 21 October 2026
+
+Joe selected the compact two-level tracker over the whole-game grid. Use it
+between turns, with numbered teams; remove it during active play. Keep a compact
+game mark and round in the play header, a larger timer, more visible recent words
+and large bottom actions. Category-labeled clue panels use distinct proposed
+colors: Who lilac, What green, Where blue. Color must supplement the label.
+
+The resume/new-game screen belongs inside the selected game, not the game hub.
+Display the save's date/time and useful game context; omit explanations of what
+saving means. Setup saves each team and advances to the next, then reviews the
+roster before starting. Keep the presenter's acknowledgement on handoff.
+
+Avoid duplicated information across headings, tracker, body text and buttons.
+Remove redundant next-up paragraphs, completed-turn explanations and next-round
+bubbles. Pause needs its existing actions and a compact presenter/time/score
+summary. Final results add best turn (player, team, points) and most skips over
+a player's game (player, team, count). Proposed counting is skip actions, with
+tied leaders displayed together; do not claim this is already implemented.
+
+Aim for a single screen at normal phone text sizes with tight vertical grouping.
+Allow controlled scrolling for genuinely long lists, keyboard or accessibility
+sizes rather than shrinking text or targets. Review notes belong outside the
+phone frame, never in app copy. Updated storyboard interactions and all eight
+sample screen layouts were checked at 412px and 360px widths. The APK is unchanged.
+Kestrel had no pending responses when checked before this revision; this feedback
+came directly from the chat. Revision 2 asks only for remaining feedback/next steps.
