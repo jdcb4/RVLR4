@@ -124,3 +124,20 @@ state is durably committed.
 This proposal focuses on Who What Where. Hat Game and Imposter need separate
 role/privacy and phase reviews before adapting the same visual principles;
 their flows must not inherit Who What Where's team/round assumptions.
+
+### Pending Kestrel feedback
+
+Published 21 October 2026: [phone UX review](https://kestrel.home.jboxtv.com/review/rvlry-phone-ux-review).
+Producer: `rvlry-android`; publication: `rvlry-phone-ux-review`; revision: `1`.
+Context: `codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-phone-ux`.
+The reproducible payload is `design/kestrel-phone-ux-review.json`.
+Kestrel carries the companion screen review and answer form; its renderer cannot
+embed the styled interactive mockups, which remain in the linked storyboard and
+JNAS Media/DropBox. Publishing was confirmed by the client.
+
+When resuming this UX work, use the Kestrel skill to fetch `rvlry-android` responses
+before asking the questions again or implementing an assumed direction. Match the
+publication, revision and context, durably record answers and pending work, then
+acknowledge receipt. No responses have been collected or acknowledged yet.
+Submission does not automatically start an agent; the next-step answer determines
+whether to implement, revise mockups or discuss on the next authorized resume.
