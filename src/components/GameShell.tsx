@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 import { IconHouse } from "@/components/icons";
+import { buttonVariants } from "@/components/ui/buttonVariants";
 import { useVisualViewportHeight } from "@/components/useVisualViewportHeight";
 import { cn } from "@/lib/utils";
 import { typography } from "@/typography/tiers";
@@ -42,7 +43,11 @@ export function GameShell({
         >
           <Link
             aria-label="Back to game picker"
-            className="flex size-12 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-accent"
+            data-ui-button="secondary"
+            className={cn(
+              buttonVariants({ variant: "secondary", size: "icon" }),
+              "shrink-0 rounded-full",
+            )}
             to="/"
             onClick={(event) => {
               if (onHome) {

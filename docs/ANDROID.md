@@ -300,3 +300,7 @@ Browser review at 360x640 checked the chooser, all five active-play appearances,
 Fallow was reviewed: 37 existing export/member/dependency findings and eight clone groups remain; no theme-module dead-code findings. Scoped design scan returned no findings. No checks were weakened. Kestrel returned no pending design responses before implementation; chat authorizes all four optional themes plus Classic.
 
 Artifact: out/RVLRY-0.29.0-themes.apk, copied and SHA-256 verified to JNAS Media/DropBox/RVLRY-0.29.0-themes.apk. Install over the current build to retain games and preferences.
+
+## Home button consistency — 22 October 2026
+
+0.29.1 / versionCode 11 shares secondary icon-button styling between Home, Settings and Info, retaining link navigation and the 48px target. Full verify passed (217 tests), Android assembly passed, and browser review checked the five theme shapes with a Recess screenshot. Native durability tests were not repeated for this styling-only fix. Scoped design scan was clean. APK out/RVLRY-0.29.1-themes.apk copied and hash-verified to JNAS Media/DropBox. SHA-256: 56CF6D93E49FABDB899FF04DC07052202BBCF1E3216FAF4C8BE123CAF1597F44. Pixel acceptance remains unverified.

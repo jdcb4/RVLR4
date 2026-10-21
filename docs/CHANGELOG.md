@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.29.1 — 22 October 2026
+
+- Home navigation now shares the Settings/Info button styling, including themed colours, shape, shadows and keyboard focus. The Lucide icon and navigation behaviour are unchanged.
+
 ## 0.29.0 — 22 October 2026
 
 - Added an app-wide Settings theme chooser: Classic plus After-Hours Social, The Margin Note, Recess and Midnight Observatory. Classic remains the default and preserves the original UI.
