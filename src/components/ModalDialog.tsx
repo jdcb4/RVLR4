@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { type ReactNode, useEffect, useId, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -50,9 +51,11 @@ export function ModalDialog({
           aria-label="Close dialog"
           type="button"
           variant="ghost"
+          size="icon"
+          className="-mr-3 -mt-3 shrink-0 p-0"
           onClick={onClose}
         >
-          ×
+          <X className="size-6" aria-hidden="true" />
         </Button>
       </div>
       {children}

@@ -304,3 +304,7 @@ Artifact: out/RVLRY-0.29.0-themes.apk, copied and SHA-256 verified to JNAS Media
 ## Home button consistency — 22 October 2026
 
 0.29.1 / versionCode 11 shares secondary icon-button styling between Home, Settings and Info, retaining link navigation and the 48px target. Full verify passed (217 tests), Android assembly passed, and browser review checked the five theme shapes with a Recess screenshot. Native durability tests were not repeated for this styling-only fix. Scoped design scan was clean. APK out/RVLRY-0.29.1-themes.apk copied and hash-verified to JNAS Media/DropBox. SHA-256: 56CF6D93E49FABDB899FF04DC07052202BBCF1E3216FAF4C8BE123CAF1597F44. Pixel acceptance remains unverified.
+
+## Dialog close refinement — 22 October 2026
+
+0.29.2 / versionCode 12 replaces the text close glyph with a 24px Lucide X in a 48px target nearer the dialog corner. Full verify (217 tests) and Android assembly passed. Browser inspection at 360x640 confirmed icon/target dimensions and closing; scoped design scan was clean. Native durability tests were not repeated for this presentation-only patch. APK out/RVLRY-0.29.2-themes.apk copied and hash-verified to JNAS Media/DropBox. SHA-256: EB02397EDB13472C5FF17DC32BF6726139F8A6DE24434E81F62313DB5E70C691. Pixel acceptance remains unverified.

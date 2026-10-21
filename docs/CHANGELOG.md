@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.29.2 — 22 October 2026
+
+- Dialog close controls use a clear 24px Lucide X within a 48px touch target, positioned nearer the top-right corner. Applies consistently to Settings and other dialogs.
+
 ## 0.29.1 — 22 October 2026
 
 - Home navigation now shares the Settings/Info button styling, including themed colours, shape, shadows and keyboard focus. The Lucide icon and navigation behaviour are unchanged.
