@@ -128,7 +128,7 @@ their flows must not inherit Who What Where's team/round assumptions.
 ### Pending Kestrel feedback
 
 Published 21 October 2026: [phone UX review](https://kestrel.home.jboxtv.com/review/rvlry-phone-ux-review).
-Producer: `rvlry-android`; publication: `rvlry-phone-ux-review`; revision: `2`.
+Producer: `rvlry-android`; publication: `rvlry-phone-ux-review`; revision: `3`.
 Context: `codex-thread:01a158c2-05c5-71e0-8f92-6cf82c2fb324/rvlry-phone-ux`.
 The reproducible payload is `design/kestrel-phone-ux-review.json`.
 Kestrel carries the companion screen review and answer form; its renderer cannot
@@ -169,3 +169,9 @@ phone frame, never in app copy. Updated storyboard interactions and all eight
 sample screen layouts were checked at 412px and 360px widths. The APK is unchanged.
 Kestrel had no pending responses when checked before this revision; this feedback
 came directly from the chat. Revision 2 asks only for remaining feedback/next steps.
+
+Screen 4 refinement: separate Skipped and Guessed columns. Guessed history has an
+explicit hidden-item count. Retain all outstanding skipped words as retry targets;
+if needed, scroll only that column with a visible remaining-below count. Retrying
+keeps the skipped entry until it is marked correct. The mockup confirms retry-to-
+correct transfer and overflow cues at 360px without scrolling the main content.

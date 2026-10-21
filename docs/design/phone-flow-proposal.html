@@ -640,6 +640,57 @@
       .category-samples .where {
         background: #e2edf8;
       }
+
+      .word-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        min-height: 0;
+      }
+      .word-columns > section {
+        min-width: 0;
+      }
+      .word-columns h3 {
+        font-size: 15px !important;
+        margin-bottom: 8px;
+      }
+      .word-columns .wordrow {
+        overflow-wrap: anywhere;
+        display: block;
+        font-size: 15px;
+        min-height: 48px;
+      }
+      .word-columns .wordrow span {
+        display: block;
+        font-size: 12px;
+      }
+      .word-window {
+        height: 164px;
+        overflow-y: auto;
+        scrollbar-color: #a68243 #fff2d8;
+        scrollbar-width: thin;
+      }
+      .word-window .wordrow {
+        margin-bottom: 6px;
+      }
+      .word-window .wordrow:disabled {
+        cursor: default;
+        background: #ede8dc;
+        color: #59645e;
+      }
+      .overflow-cue {
+        font-size: 13px !important;
+        min-height: 21px;
+        margin-top: 6px;
+        color: var(--muted);
+      }
+      .guessed-list {
+        height: 164px;
+        overflow: hidden;
+      }
+      .empty-words {
+        font-size: 14px !important;
+      }
     </style>
   </head>
   <body>
@@ -769,8 +820,8 @@
       <section class="spec" data-name="Playing">
         <h2>4. More space for play</h2>
         <p class="note">
-          No team timeline during play. A larger clock, five recent words and lower actions. The
-          category stays labeled as well as colored.
+          Separate skipped and guessed columns. Skipped words remain available; both columns signal
+          overflow. The category stays labeled as well as colored.
         </p>
         <article class="phone turn">
           <div class="top">
@@ -795,17 +846,22 @@
               <p id="category">What</p>
               <strong id="clue">Hot-air balloon</strong>
             </div>
-            <div class="recent">
-              <h3>Recent words</h3>
-              <div id="history">
-                <div class="wordrow">Telescope <span>Correct</span></div>
-                <button class="wordrow skipped" data-retry="Lighthouse">
-                  Lighthouse <span>Skipped · retry</span>
-                </button>
-                <div class="wordrow">Accordion <span>Correct</span></div>
-                <div class="wordrow">Compass <span>Correct</span></div>
-                <div class="wordrow">Trampoline <span>Correct</span></div>
-              </div>
+            <div class="word-columns">
+              <section aria-label="Skipped words">
+                <h3 id="skipped-heading">Skipped · 4</h3>
+                <div
+                  id="skipped-list"
+                  class="word-window"
+                  tabindex="0"
+                  aria-label="Skipped words, scroll to see more"
+                ></div>
+                <p id="skipped-overflow" class="overflow-cue"></p>
+              </section>
+              <section aria-label="Guessed words">
+                <h3 id="guessed-heading">Guessed · 6</h3>
+                <div id="guessed-list" class="guessed-list"></div>
+                <p id="guessed-overflow" class="overflow-cue"></p>
+              </section>
             </div>
             <div class="grow"></div>
           </div>
@@ -1198,35 +1254,96 @@
         document.querySelector("#category").textContent = category;
         document.querySelector(".clue").className = "clue " + category.toLowerCase();
       }
-      function mark(correct) {
-        const clue = document.querySelector("#clue"),
-          word = clue.textContent,
-          category = document.querySelector("#category").textContent,
-          row = document.createElement(correct ? "div" : "button");
-        row.className = "wordrow" + (correct ? "" : " skipped");
-        row.append(document.createTextNode(word));
-        const label = document.createElement("span");
-        label.textContent = correct ? "Correct" : "Skipped · retry";
-        row.append(label);
-        if (!correct)
-          row.onclick = () => {
-            setClue(word, category);
-            row.remove();
+
+      let skippedId = 4,
+        activeRetry = null;
+      const skipped = [
+        { id: 1, word: "Lighthouse", category: "What" },
+        { id: 2, word: "Snow globe", category: "What" },
+        { id: 3, word: "Binoculars", category: "What" },
+        { id: 4, word: "Windmill", category: "What" },
+      ];
+      const guessed = ["Telescope", "Accordion", "Compass", "Trampoline", "Kite", "Teapot"];
+      document.querySelector("#score").textContent = guessed.length;
+      function overflowCue() {
+        const list = document.querySelector("#skipped-list"),
+          box = list.getBoundingClientRect();
+        const remaining = [...list.children].filter(
+          (c) => c.getBoundingClientRect().bottom > box.bottom + 1,
+        ).length;
+        document.querySelector("#skipped-overflow").textContent = remaining
+          ? "+ " + remaining + " below · scroll"
+          : list.scrollTop > 1
+            ? "More above · scroll"
+            : "";
+      }
+      function renderWords() {
+        const list = document.querySelector("#skipped-list"),
+          position = list.scrollTop;
+        list.replaceChildren();
+        document.querySelector("#skipped-heading").textContent = "Skipped · " + skipped.length;
+        for (const item of skipped) {
+          const button = document.createElement("button");
+          button.className = "wordrow skipped";
+          button.textContent = item.word;
+          button.disabled = activeRetry === item.id;
+          if (button.disabled) {
+            const status = document.createElement("span");
+            status.textContent = "In play";
+            button.append(status);
+          }
+          button.onclick = () => {
+            activeRetry = item.id;
+            setClue(item.word, item.category);
+            renderWords();
           };
-        const history = document.querySelector("#history");
-        history.prepend(row);
-        while (history.children.length > 5) history.lastChild.remove();
-        if (correct)
-          document.querySelector("#score").textContent =
-            Number(document.querySelector("#score").textContent) + 1;
+          list.append(button);
+        }
+        if (!skipped.length) {
+          const p = document.createElement("p");
+          p.className = "empty-words";
+          p.textContent = "None yet";
+          list.append(p);
+        }
+        list.scrollTop = position;
+        const recent = document.querySelector("#guessed-list");
+        recent.replaceChildren();
+        guessed.slice(0, 3).forEach((word) => {
+          const row = document.createElement("div");
+          row.className = "wordrow";
+          row.textContent = word;
+          recent.append(row);
+        });
+        document.querySelector("#guessed-heading").textContent = "Guessed · " + guessed.length;
+        document.querySelector("#guessed-overflow").textContent =
+          guessed.length > 3 ? "+ " + (guessed.length - 3) + " more" : "";
+        requestAnimationFrame(overflowCue);
+      }
+      function mark(correct) {
+        const word = document.querySelector("#clue").textContent,
+          category = document.querySelector("#category").textContent;
+        if (correct) {
+          guessed.unshift(word);
+          if (activeRetry !== null) {
+            const i = skipped.findIndex((w) => w.id === activeRetry);
+            if (i >= 0) skipped.splice(i, 1);
+          }
+          document.querySelector("#score").textContent = guessed.length;
+        } else if (activeRetry === null) {
+          skipped.push({ id: ++skippedId, word, category });
+        }
+        activeRetry = null;
         setClue(...words[++wordIndex % words.length]);
+        renderWords();
       }
       document.querySelector("#correct").onclick = () => mark(true);
       document.querySelector("#skip").onclick = () => mark(false);
-      document.querySelector("[data-retry]").onclick = (e) => {
-        setClue("Lighthouse", "What");
-        e.currentTarget.remove();
-      };
+      document.querySelector("#skipped-list").onscroll = overflowCue;
+      window.addEventListener("resize", overflowCue);
+      document
+        .querySelectorAll("nav button")
+        .forEach((b) => b.addEventListener("click", () => requestAnimationFrame(overflowCue)));
+      renderWords();
     </script>
   </body>
 </html>
