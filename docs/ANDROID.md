@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.35.0 is the debug-signed build with expanded curated word pools, five app-wide themes with matching illustrated game artwork and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. WWW and Imposter offer difficulty selection; app Settings offers Kids mode for new games and Hat suggestions. The separate Trivia content-storage foundation is implemented, with presenter-led Trivia available through Settings → Show Trivia (off by default), optional in-app answers, and no reviewed questions yet. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
+0.35.1 is the debug-signed build with expanded curated word pools, five app-wide themes with matching illustrated game artwork and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. WWW and Imposter offer difficulty selection; app Settings offers Kids mode for new games and Hat suggestions. The separate Trivia content-storage foundation is implemented, with presenter-led Trivia available through Settings → Show Trivia (off by default), optional in-app answers, and 30 source-checked starter questions for testing. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
 
 Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
@@ -372,3 +372,9 @@ APK: `out/RVLRY-0.34.1-screenshots.apk`, copied/hash-verified to `\\JNAS\Media\D
 - Fallow reviewed: 40 dead-code findings and 10 clone groups remain (existing exports/native dependency/design files, plus small controller/preference wiring similarities). No suppressions or weakened checks were added.
 - Delivered `\\JNAS\Media\DropBox\RVLRY-0.35.0-trivia.apk`; SHA-256 `08CFE1437C7591A43732AA0149CFEEA338ABD6633D28E0B54B042DC9436BD457` matches the local APK.
 - Enable via Settings → Show Trivia. The reviewed question bank is still empty and user-facing content updates are not configured, so new quizzes remain unavailable until reviewed content is supplied.
+
+## Starter Trivia bank — 0.35.1, 22 October 2026
+
+307 tests across 49 files, typecheck, ESLint and production build passed. Android assembly, all 19 device tests and separate force-stop snapshot/content recovery phases passed. Native coverage now starts a fresh 30-question quiz from bundled pack version 2, in addition to answer-entry/reload and self-marking checks. A test-only dialog selector was corrected during verification; no gameplay workaround was needed. Real Pixel testing remains outstanding.
+
+Delivered `\\JNAS\Media\DropBox\RVLRY-0.35.1-trivia-questions.apk`, SHA-256 `DF771B51BB01EA5FC53C78425B48F81E34E13166951B995A32B323C84EFE30B5`, verified against the local APK. Enable Settings → Show Trivia if hidden. The bank has 30 questions, including 21 Kids-suitable questions; use all categories and all difficulties for a full 30-question quiz.

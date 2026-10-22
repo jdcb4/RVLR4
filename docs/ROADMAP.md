@@ -17,7 +17,7 @@ Deferred; not part of the current implementation:
 
 Gameplay and storage implemented in 0.35.0 behind a default-off Settings toggle. Optional answers are written in-app and self-marked. See [Trivia content](TRIVIA_CONTENT.md).
 
-- **Reviewed question corpus:** design ingestion, validate candidate sources, fact-check and approve the first bank. The bundled bank remains empty.
+- **Reviewed question corpus:** expand beyond the 30-question source-checked testing bank in 0.35.1; design historical-source ingestion and wider editorial review.
 - **Corpus updates:** configure the publisher endpoint and connect user-facing installation to the implemented separate Trivia pack storage and downloader.
 - **Live question generation:** possible future extension; excluded from the first version.
 - **Baseline content:** TriviaManager repo inspected; local QuickQuiz has 365 candidate entries and TriviaNightCreator has 50 demo questions. Historical Docker volumes and a preserved old cluster backup were identified; live contents remain unverified while Docker is stopped. These are ingestion candidates only, not approved questions.

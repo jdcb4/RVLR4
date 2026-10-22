@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.35.1 — 22 October 2026
+
+- Bundle 30 newly authored, source-checked Trivia questions across all eight categories for testing, with difficulty ratings, answer variants and Kids mode suitability. Trivia pack version advances to 2; the default-off visibility toggle and existing quiz copies are preserved.
+
 ## 0.35.0 — 22 October 2026
 
 - Add presenter-led Trivia with category-balanced selection, question counts, difficulty, optional in-app team answers, answer reveals after each question or at the end, and self-marked scores.

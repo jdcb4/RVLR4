@@ -1,7 +1,503 @@
 {
   "schemaVersion": 1,
   "kind": "trivia",
-  "version": 1,
-  "publishedAt": "2026-10-22T00:00:00.000Z",
-  "questions": []
+  "version": 2,
+  "publishedAt": "2026-10-22T04:42:35.154Z",
+  "questions": [
+    {
+      "id": "trivia:largest-solar-system-planet",
+      "revision": 1,
+      "question": "Which is the largest planet in our solar system?",
+      "answer": "Jupiter",
+      "acceptableAnswers": [],
+      "category": "science-nature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:16Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://science.nasa.gov/jupiter/"]
+      }
+    },
+    {
+      "id": "trivia:adult-insect-leg-count",
+      "revision": 1,
+      "question": "How many legs does a typical adult insect have?",
+      "answer": "Six",
+      "acceptableAnswers": ["6"],
+      "category": "science-nature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:16Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.amnh.org/explore/ology/entomology/what-is-entomology"]
+      }
+    },
+    {
+      "id": "trivia:plants-sunlight-sugar-process",
+      "revision": 1,
+      "question": "What process lets green plants use sunlight to make sugars?",
+      "answer": "Photosynthesis",
+      "acceptableAnswers": [],
+      "category": "science-nature",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:16Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.kew.org/read-and-watch/what-can-you-spot-on-your-tree"]
+      }
+    },
+    {
+      "id": "trivia:element-symbol-w",
+      "revision": 1,
+      "question": "Which metal has the chemical symbol W?",
+      "answer": "Tungsten",
+      "acceptableAnswers": ["Wolfram"],
+      "category": "science-nature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:16Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://periodic-table.rsc.org/element/74/Tungsten"]
+      }
+    },
+    {
+      "id": "trivia:giza-pyramids-country",
+      "revision": 1,
+      "question": "In which country are the Pyramids of Giza?",
+      "answer": "Egypt",
+      "acceptableAnswers": ["Arab Republic of Egypt"],
+      "category": "geography",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:16Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://whc.unesco.org/en/list/86/"]
+      }
+    },
+    {
+      "id": "trivia:great-barrier-reef-state",
+      "revision": 1,
+      "question": "The Great Barrier Reef lies off the coast of which Australian state?",
+      "answer": "Queensland",
+      "acceptableAnswers": ["QLD"],
+      "category": "geography",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:16Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.qld.gov.au/environment/coasts-waterways/marine-parks/about/gbrc"]
+      }
+    },
+    {
+      "id": "trivia:japan-largest-island",
+      "revision": 1,
+      "question": "Which Japanese island is the largest by area?",
+      "answer": "Honshu",
+      "acceptableAnswers": [],
+      "category": "geography",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:16Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.mofa.go.jp/territory/page1we_000006.html"]
+      }
+    },
+    {
+      "id": "trivia:highest-mountain-sea-level",
+      "revision": 1,
+      "question": "Measured above sea level, what is Earth's highest mountain?",
+      "answer": "Mount Everest",
+      "acceptableAnswers": ["Everest"],
+      "category": "geography",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:16Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://whc.unesco.org/en/list/120/"]
+      }
+    },
+    {
+      "id": "trivia:bonjour-greeting-language",
+      "revision": 1,
+      "question": "In which language is 'bonjour' a common greeting?",
+      "answer": "French",
+      "acceptableAnswers": [],
+      "category": "general",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:16Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.open.edu/openlearn/mod/oucontent/view.php?id=109148&section=_unit2.2"
+        ]
+      }
+    },
+    {
+      "id": "trivia:word-same-backwards-name",
+      "revision": 1,
+      "question": "What do we call a word that reads the same forwards and backwards, such as 'level'?",
+      "answer": "Palindrome",
+      "acceptableAnswers": ["A palindrome"],
+      "category": "general",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:16Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/palindrome"]
+      }
+    },
+    {
+      "id": "trivia:first-moonwalker",
+      "revision": 1,
+      "question": "Who became the first person to walk on the Moon in 1969?",
+      "answer": "Neil Armstrong",
+      "acceptableAnswers": ["Armstrong", "Neil Alden Armstrong"],
+      "explanation": "Armstrong took the first steps on the lunar surface during Apollo 11.",
+      "category": "history",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:23Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nasa.gov/people/neil-a-armstrong/?linkId=536088590"],
+        "sourceRecord": "NASA astronaut biography: Armstrong became the first person to set foot on the Moon during Apollo 11."
+      }
+    },
+    {
+      "id": "trivia:australian-federation-year",
+      "revision": 1,
+      "question": "In what year did Australia's six colonies federate to form the Commonwealth of Australia?",
+      "answer": "1901",
+      "acceptableAnswers": ["1 January 1901", "January 1 1901"],
+      "explanation": "Federation took effect on 1 January 1901.",
+      "category": "history",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:23Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nma.gov.au/defining-moments/resources/federation"],
+        "sourceRecord": "National Museum of Australia Federation resource: formation of the Commonwealth on 1 January 1901."
+      }
+    },
+    {
+      "id": "trivia:magna-carta-king",
+      "revision": 1,
+      "question": "Which English king sealed Magna Carta at Runnymede in 1215?",
+      "answer": "King John",
+      "acceptableAnswers": ["John", "John of England"],
+      "explanation": "John affixed his seal to the charter after a rebellion by his barons.",
+      "category": "history",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:23Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.archives.gov/exhibits/featured-documents/magna-carta"],
+        "sourceRecord": "US National Archives Magna Carta exhibit: King John affixed his seal at Runnymede on 15 June 1215."
+      }
+    },
+    {
+      "id": "trivia:rosetta-stone-demotic",
+      "revision": 1,
+      "question": "The Rosetta Stone has hieroglyphic and Greek inscriptions. What is its third script?",
+      "answer": "Demotic",
+      "acceptableAnswers": ["Demotic script", "Egyptian Demotic"],
+      "explanation": "Demotic was a cursive script used to write Egyptian.",
+      "category": "history",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:23Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.ames.ox.ac.uk/demotic",
+          "https://www.britishmuseum.org/sites/default/files/2024-06/Museum_explorers_Ancient_Egypt.pdf"
+        ],
+        "sourceRecord": "Oxford Demotic overview read; British Museum explorer guide indexed text lists hieroglyphs, demotic and ancient Greek."
+      }
+    },
+    {
+      "id": "trivia:matilda-author",
+      "revision": 1,
+      "question": "Who wrote the children's novel Matilda?",
+      "answer": "Roald Dahl",
+      "acceptableAnswers": ["Dahl"],
+      "explanation": "Dahl's book follows a gifted young reader with extraordinary powers.",
+      "category": "arts-literature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:23Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://shop.roalddahlmuseum.org/products/matilda-large-paperback"],
+        "sourceRecord": "Roald Dahl Museum book listing identifies Matilda as Roald Dahl's novel."
+      }
+    },
+    {
+      "id": "trivia:alice-pocket-watch-animal",
+      "revision": 1,
+      "question": "Which animal carries a pocket watch in Alice's Adventures in Wonderland?",
+      "answer": "The White Rabbit",
+      "acceptableAnswers": ["White Rabbit", "Rabbit"],
+      "explanation": "The White Rabbit is always worried about being late.",
+      "category": "arts-literature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:23Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.vam.ac.uk/shop/bestsellers/the-rabbits-pocket-watch-compact-mirror-161631.html"
+        ],
+        "sourceRecord": "V&A artwork description identifies the White Rabbit's pocket watch from Alice's Adventures in Wonderland."
+      }
+    },
+    {
+      "id": "trivia:great-wave-artist",
+      "revision": 1,
+      "question": "Which Japanese artist created the woodblock print commonly called The Great Wave?",
+      "answer": "Katsushika Hokusai",
+      "acceptableAnswers": ["Hokusai"],
+      "explanation": "The print belongs to Hokusai's Thirty-six Views of Mount Fuji series.",
+      "category": "arts-literature",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:23Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.metmuseum.org/art/collection/search/39799"],
+        "sourceRecord": "Metropolitan Museum of Art collection record JP2569 gives artist, title, series and woodblock medium."
+      }
+    },
+    {
+      "id": "trivia:frankenstein-alternative-title",
+      "revision": 1,
+      "question": "Complete the title of Mary Shelley's novel: Frankenstein; or, The Modern ...?",
+      "answer": "Prometheus",
+      "acceptableAnswers": ["The Modern Prometheus", "Modern Prometheus"],
+      "explanation": "The novel's alternative title is The Modern Prometheus.",
+      "category": "arts-literature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:23Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://shelleygodwinarchive.org/contents/frankenstein/"],
+        "sourceRecord": "Shelley-Godwin Archive manuscript introduction gives the title Frankenstein, or the Modern Prometheus and Mary Shelley's authorship."
+      }
+    },
+    {
+      "id": "trivia:dozen-eggs-count",
+      "revision": 1,
+      "question": "How many eggs are in one dozen?",
+      "answer": "12",
+      "acceptableAnswers": ["Twelve"],
+      "explanation": "A dozen means twelve of something.",
+      "category": "general",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:23Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://dictionary.cambridge.org/us/dictionary/english/dozen"],
+        "sourceRecord": "Cambridge Dictionary indexed entry defines dozen as twelve and gives eggs as an example."
+      }
+    },
+    {
+      "id": "trivia:marzipan-nut",
+      "revision": 1,
+      "question": "Which nut is ground to make traditional marzipan?",
+      "answer": "Almond",
+      "acceptableAnswers": ["Almonds"],
+      "explanation": "Marzipan combines ground almonds with sugar to make a mouldable sweet paste.",
+      "category": "general",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T04:40:23Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.kingarthurbaking.com/recipes/homemade-marzipan-recipe"],
+        "sourceRecord": "King Arthur Baking's marzipan recipe describes an almond confection and lists almond flour and sugar."
+      }
+    },
+    {
+      "id": "trivia:bluey-younger-sister",
+      "revision": 1,
+      "question": "What is the name of Bluey's younger sister?",
+      "answer": "Bingo",
+      "acceptableAnswers": ["Bingo Heeler"],
+      "category": "film-tv",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:41:15Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.bluey.tv/characters/bingo/"],
+        "sourceRecord": "Official character profile identifies Bluey as Bingo's big sister and gives Bingo's full name."
+      }
+    },
+    {
+      "id": "trivia:frozen-snowman-name",
+      "revision": 1,
+      "question": "What is the name of the friendly snowman in Disney's Frozen?",
+      "answer": "Olaf",
+      "acceptableAnswers": [],
+      "category": "film-tv",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:41:15Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://disneyparksblog.com/disney-experiences/robotic-olaf-marks-new-era-of-disney-innovation/?facet1=powerpoint"
+        ],
+        "sourceRecord": "Disney's introduction identifies Olaf as the snowman from Walt Disney Animation Studios' Frozen."
+      }
+    },
+    {
+      "id": "trivia:toy-story-cowboy",
+      "revision": 1,
+      "question": "Which cowboy toy is Buzz Lightyear's friend in Toy Story?",
+      "answer": "Woody",
+      "acceptableAnswers": ["Sheriff Woody"],
+      "category": "film-tv",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:41:15Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.pixar.com/toy-story"],
+        "sourceRecord": "Pixar's film synopsis and Woody character section identify Woody as the cowboy and describe his alliance with Buzz."
+      }
+    },
+    {
+      "id": "trivia:inside-out-girl-name",
+      "revision": 1,
+      "question": "In Inside Out, what is the first name of the girl whose emotions include Joy and Sadness?",
+      "answer": "Riley",
+      "acceptableAnswers": ["Riley Andersen"],
+      "category": "film-tv",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:41:15Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.pixar.com/inside-out"],
+        "sourceRecord": "Pixar's synopsis identifies Riley and her emotions; its Riley character section gives Riley Andersen."
+      }
+    },
+    {
+      "id": "trivia:standard-acoustic-guitar-strings",
+      "revision": 1,
+      "question": "How many strings does a standard acoustic guitar have?",
+      "answer": "Six",
+      "acceptableAnswers": ["6", "Six strings"],
+      "category": "music",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:41:15Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.yamaha.com/en/musical_instrument_guide/acoustic_guitar/mechanism/mechanism002.html"
+        ],
+        "sourceRecord": "Yamaha's acoustic-guitar instrument guide states that guitars typically have six strings."
+      }
+    },
+    {
+      "id": "trivia:abba-eurovision-winning-song",
+      "revision": 1,
+      "question": "Which song won ABBA the Eurovision Song Contest in 1974?",
+      "answer": "Waterloo",
+      "acceptableAnswers": [],
+      "category": "music",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T04:41:15Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.eurovision.com/eurovision-song-contest/brighton-1974/"],
+        "sourceRecord": "Official Brighton 1974 contest record lists ABBA, Waterloo and Sweden as the winner."
+      }
+    },
+    {
+      "id": "trivia:nutcracker-ballet-composer",
+      "revision": 1,
+      "question": "Which composer wrote the music for the ballet The Nutcracker?",
+      "answer": "Tchaikovsky",
+      "acceptableAnswers": ["Pyotr Ilyich Tchaikovsky", "Peter Ilyich Tchaikovsky"],
+      "category": "music",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T04:41:15Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.rbo.org.uk/production/the-nutcracker-peter-wright"],
+        "sourceRecord": "Royal Ballet and Opera's production page attributes the orchestral score and the ballet's familiar tunes to Tchaikovsky."
+      }
+    },
+    {
+      "id": "trivia:tennis-forty-all-term",
+      "revision": 1,
+      "question": "In tennis, what word is used for a score of 40-all?",
+      "answer": "Deuce",
+      "acceptableAnswers": [],
+      "category": "sport-games",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:41:15Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.usta.com/en/home/improve/tips-and-instruction/national/tennis-terms-definitions.html"
+        ],
+        "sourceRecord": "USTA's tennis glossary defines deuce as a score of 40-all or 40-40."
+      }
+    },
+    {
+      "id": "trivia:soccer-team-maximum-players",
+      "revision": 1,
+      "question": "In a standard soccer match, what is the maximum number of players one team can have on the field, including the goalkeeper?",
+      "answer": "Eleven",
+      "acceptableAnswers": ["11", "Eleven players"],
+      "category": "sport-games",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:41:15Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.theifab.com/laws/latest/the-players/"],
+        "sourceRecord": "IFAB Law 3.1 states a maximum of eleven players per team, one of whom must be the goalkeeper."
+      }
+    },
+    {
+      "id": "trivia:olympic-symbol-ring-count",
+      "revision": 1,
+      "question": "How many rings are in the Olympic symbol?",
+      "answer": "Five",
+      "acceptableAnswers": ["5", "Five rings"],
+      "category": "sport-games",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T04:41:15Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.coni.it/en/news/olympic-winter-games-beijing-2022-medal-designs-unveiled.html"
+        ],
+        "sourceRecord": "The Italian National Olympic Committee describes the five Olympic rings engraved on Beijing 2022 medals."
+      }
+    }
+  ]
 }

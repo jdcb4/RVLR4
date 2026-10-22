@@ -285,6 +285,30 @@ public class AppRenderTest {
             awaitCondition(activity, "document.body.innerText.includes('Quiz complete') && document.body.innerText.includes('1 / 1') && !document.querySelector('[role=alert]')");
             System.out.println("RVLRY_NATIVE_TRIVIA_OK: visibility, saved quiz, written answer reload, reveal, marking, results");
 
+            evaluate(activity, "location.hash='/'");
+            awaitCondition(activity, "!!document.querySelector('a[href*=trivia]')");
+            evaluate(activity, "document.querySelector('[aria-label=Settings]').click()");
+            awaitCondition(activity, "!!document.querySelector('[aria-labelledby=kids-mode-label]:enabled')");
+            evaluate(activity, "if(document.querySelector('[aria-labelledby=kids-mode-label]').getAttribute('aria-checked')==='true')document.querySelector('[aria-labelledby=kids-mode-label]').click()");
+            awaitCondition(activity, "document.querySelector('[aria-labelledby=kids-mode-label]:enabled')?.getAttribute('aria-checked')==='false'");
+            evaluate(activity, "document.querySelector('[aria-label=\"Close dialog\"]').click()");
+            evaluate(activity, "document.querySelector('a[href*=trivia]').click()");
+            clickButton(activity, "Start new quiz");
+            awaitCondition(activity, "!!document.querySelector('dialog[open]')");
+            evaluate(activity, "[...document.querySelectorAll('dialog[open] button')].find(b=>b.textContent.trim()==='Start new quiz').click()");
+            awaitCondition(activity, "document.body.innerText.includes('Set up your quiz')");
+            evaluate(activity, "document.querySelector('details').open=true");
+            evaluate(activity, "document.querySelectorAll('input[type=checkbox]').forEach(box=>{if(!box.checked)box.click();})");
+            clickButton(activity, "30");
+            clickButton(activity, "Start quiz");
+            awaitCondition(activity, "document.body.innerText.includes('Question 1 of 30') && !document.querySelector('[role=alert]')");
+            try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
+                String snapshot = saved.read("trivia.device.v1")[0];
+                assertTrue("Starter bank version not captured", snapshot.contains("\"packVersion\":2"));
+                assertTrue("Synthetic fixture must not appear in the real bank", !snapshot.contains("native-fixture"));
+            }
+            System.out.println("RVLRY_NATIVE_TRIVIA_STARTER_OK: new 30-question quiz from bundled version 2");
+
 
         } finally {
             if (worker != null) {

@@ -1,6 +1,6 @@
 # Trivia content storage
 
-Storage foundation shipped in 0.33.0; presenter-led gameplay ships in 0.35.0 behind Settings → Show Trivia (off by default). No discovered question bank has been imported. The bundled `src/data/trivia/bundled.json` is intentionally empty at version 1; the first reviewed publication must use version 2 or higher.
+Storage foundation shipped in 0.33.0; presenter-led gameplay ships in 0.35.0 behind Settings → Show Trivia (off by default). No discovered historical question bank has been imported. Version 2 of `src/data/trivia/bundled.json` supplies 30 newly written, source-checked starter questions for testing in app 0.35.1. Future publications must use a higher version.
 
 ## Records and publishing
 
@@ -38,4 +38,10 @@ Trivia saves selected question/answer copies, order, progress, reveal state, opt
 
 ## Verification
 
-TypeScript tests cover empty fallback, isolation, full-byte validation, duplicate rejection, revision/version checks, failed reads/writes, corruption recovery, concurrent installs, native CAS handoff, expiry/kids filtering and streaming size bounds. Native instrumentation covers exact 8 MiB packs, chunk boundaries, transactions and rollback, reopen/recovery, kind/session isolation and bridge validation. `pnpm android:test-device` also runs both snapshot and content recovery phases separately with force-stop between write and read. Real Pixel acceptance remains separate from emulator tests.
+TypeScript tests cover bundled fallback, isolation, full-byte validation, duplicate rejection, revision/version checks, failed reads/writes, corruption recovery, concurrent installs, native CAS handoff, expiry/kids filtering and streaming size bounds. Native instrumentation covers exact 8 MiB packs, chunk boundaries, transactions and rollback, reopen/recovery, kind/session isolation and bridge validation. `pnpm android:test-device` also runs both snapshot and content recovery phases separately with force-stop between write and read. Real Pixel acceptance remains separate from emulator tests.
+
+## Starter testing bank — 0.35.1
+
+The 30-question pack was newly authored for Joe's testing request, not imported from the historical candidate apps. Questions use Australian English, concise standalone wording and one unambiguous expected answer; numeric or commonly accepted name variants are explicit. Stable facts have no expiry. IDs and normalised question texts are checked for duplicates, and all eight categories are represented. The pack has 15 easy, 11 medium and 4 hard questions; 21 are Kids-suitable.
+
+Every question records the authoritative page used for its answer check and identifies the reviewer as `Codex source check`. This is an AI-assisted source review for a testing bank, not a claim of separate human editorial approval. Difficulty is an estimate for the intended audience; Kids suitability additionally considers familiarity for ages 8–12, rather than only absence of adult themes. Broader editorial ingestion remains roadmap work.
