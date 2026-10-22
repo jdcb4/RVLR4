@@ -11,7 +11,7 @@ When the user mentions a future idea that is out of scope for the current task, 
 Deferred; not part of the current implementation:
 
 - **When category:** years/dates associated with significant historical events or famous days.
-- **Game-like graphics:** further bespoke illustrations and game artwork beyond the five selectable visual themes shipped in 0.29.0. Five theme-mapped artwork families are ready for review in [the portable artwork study](design/RVLRY-graphics-proposals.html); production adoption remains separate from the artwork review.
+
 
 ## Trivia game — requested 22 October 2026
 

@@ -10,7 +10,7 @@ Components should use **`semantic-*`** utilities for any tinted surface, soft bo
 
 ## App-wide chooser (0.29.0)
 
-Settings on the game picker offers Classic (the unchanged original), After-Hours Social, The Margin Note, Recess and Midnight Observatory. Selection commits through native SQLite under `app.appearance.v1` before the UI changes. Startup loads it before rendering the app; read failures leave Classic usable and expose Retry in Settings. Failed writes retain the previous selection and show a retry message. Game sessions are independent.
+Settings on the game picker offers Classic (the original palette and layout), After-Hours Social, The Margin Note, Recess and Midnight Observatory. Selection commits through native SQLite under `app.appearance.v1` before the UI changes. Startup loads it before rendering the app; read failures leave Classic usable and expose Retry in Settings. Failed writes retain the previous selection and show a retry message. Game sessions are independent.
 
 `src/themes/themePreference.ts` owns validation, loading and selection; `ThemeChooser.tsx` renders native radio controls. `variants.css` overrides primitives, semantic tokens, display fonts and scoped decorative details via `html[data-theme]`. Classic has no overrides. Licensed fonts are bundled under `public/fonts` for offline use. Control positions, game logic and touch sizes remain shared; category and skip colours are adapted for contrast in dark themes. Reduced-motion preferences disable theme press motion.
 
@@ -41,3 +41,9 @@ To swap palettes per game or route: load an alternate stylesheet (or swap a clas
 ## Recess material treatment (0.30.0)
 
 Joe approved Option B of the isolated recess-materials study. src/themes/recess-materials.css loads after variants.css and scopes every rule to Recess. game-ticket, material-clue, material-callout and material-winner are presentation hooks; other themes ignore the new hooks. Pseudo-element paper layers are non-interactive, behind upright contents, with reserved gutters. Category colours retain semantic identity. Controls keep shared sizes and use pressed shadows; reduced motion suppresses translation. The study remains a historical proposal, not a runtime dependency.
+
+## Game artwork (0.34.0)
+
+Each theme now selects its approved illustration family through `GameArtwork`: Classic → Tabletop; Recess → Paper; Midnight Observatory → Engraved; After-Hours Social → Timber/letterpress; The Margin Note → Ink/watercolour. All five PNG sheets are bundled under `public/artwork`. The engraved WWW illustration uses the map without a pin. Theme selection remains the same durable app preference; artwork updates on the committed theme change.
+
+The picker uses centred 80px artwork to the left of game titles. Shared game headers use 28px marks; handoffs and results use compact inline illustrations. Timed play keeps only the header mark, leaving words, recent history and thumb controls unchanged. Decorative artwork is hidden from assistive technology; text labels retain meaning. Controls (including Home/Settings/Info) remain Lucide. Fixed SVG dimensions prevent layout movement while images decode, and per-game clipping regions isolate adjacent source illustrations. Trivia artwork is bundled for future use without exposing an unfinished game.

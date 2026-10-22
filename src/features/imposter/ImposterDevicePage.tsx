@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
+import { GameArtwork } from "@/components/GameArtwork";
 import { GameShell } from "@/components/GameShell";
 import { IconDisguise } from "@/components/icons";
 import { DifficultySelect } from "@/components/setup/DifficultySelect";
@@ -331,7 +332,7 @@ export function ImposterDevicePage() {
             </div>
           ) : (
             <>
-              <EyeOff aria-hidden className="mx-auto size-10 text-primary" />
+              <GameArtwork game="imposter" className="mx-auto size-16 shrink-0" />
               <p>Only {player.name} should look at the next screen.</p>
             </>
           )}
@@ -368,7 +369,10 @@ export function ImposterDevicePage() {
       );
       content = (
         <section className="space-y-5">
-          <h2 className="text-typ-section-title font-semibold">The reveal</h2>
+          <div className="flex items-center gap-3">
+            <GameArtwork game="imposter" className="size-10 shrink-0" />
+            <h2 className="min-w-0 text-typ-section-title font-semibold">The reveal</h2>
+          </div>
           <div>
             <p className="text-typ-muted text-muted-foreground">Secret word</p>
             <p className="break-words text-typ-display font-semibold">

@@ -45,6 +45,32 @@ public class AppRenderTest {
         evaluate(activity, "(" + expression + ").click()");
     }
 
+    private void awaitBundledArtwork(MainActivity activity, String theme, String sheet) throws Exception {
+        String path = "/artwork/" + sheet + ".png";
+        awaitCondition(activity,
+            "(()=>{const artwork=[...document.querySelectorAll('main [data-game-artwork]')];"
+            + "return artwork.length===3 && ['www','hat','imposter'].every(game=>{"
+            + "const node=artwork.find(item=>item.dataset.gameArtwork===game);"
+            + "if(!node)return false;const bounds=node.getBoundingClientRect();"
+            + "const style=getComputedStyle(node);"
+            + "return node.dataset.artworkTheme==='" + theme + "'"
+            + "&& node.querySelector('image')?.getAttribute('href')==='" + path + "'"
+            + "&& bounds.width>0 && bounds.height>0 && style.display!=='none' && style.visibility==='visible';"
+            + "});})()");
+        // Decode through the APK's local WebView origin, without any remote image source.
+        evaluate(activity,
+            "(()=>{const image=new Image();window.__rvlryArtworkDecode={status:'pending'};"
+            + "image.src=new URL('" + path + "',location.origin).href;"
+            + "image.decode().then(()=>{window.__rvlryArtworkDecode={status:'loaded',"
+            + "width:image.naturalWidth,height:image.naturalHeight};},"
+            + "()=>{window.__rvlryArtworkDecode={status:'failed'};});})()");
+        awaitCondition(activity, "window.__rvlryArtworkDecode.status!=='pending'");
+        assertTrue("Bundled artwork failed to decode for " + theme + ": " + path,
+            "true".equals(evaluate(activity,
+                "window.__rvlryArtworkDecode.status==='loaded'"
+                + "&& window.__rvlryArtworkDecode.width>0 && window.__rvlryArtworkDecode.height>0")));
+    }
+
     @Test
     public void bundledApplicationRestoresThemeFromNativeStorage() throws Exception {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -102,10 +128,18 @@ public class AppRenderTest {
             awaitCondition(activity, "!!document.querySelector('[role=switch]:enabled')");
             evaluate(activity, "if(document.querySelector('[role=switch]').getAttribute('aria-checked')!=='true')document.querySelector('[role=switch]').click()");
             awaitCondition(activity, "document.querySelector('[role=switch]:enabled')?.getAttribute('aria-checked')==='true'");
-            for (String theme : new String[] { "pub-trivia", "bookclub", "observatory", "classic", "recess" }) {
+            for (String[] artwork : new String[][] {
+                { "pub-trivia", "pub" }, { "bookclub", "bookclub" },
+                { "observatory", "engraved" }, { "classic", "tabletop" }, { "recess", "paper" }
+            }) {
+                String theme = artwork[0];
                 awaitCondition(activity, "!!document.querySelector('input[value=\"" + theme + "\"]:enabled')");
                 evaluate(activity, "document.querySelector('input[value=\"" + theme + "\"]').click()");
                 awaitCondition(activity, "document.documentElement.dataset.theme==='" + theme + "' && !document.querySelector('fieldset[disabled]')");
+                evaluate(activity, "document.querySelector('[aria-label=\"Close dialog\"]').click()");
+                awaitCondition(activity, "!document.querySelector('[role=dialog]')");
+                awaitBundledArtwork(activity, theme, artwork[1]);
+                evaluate(activity, "document.querySelector('[aria-label=Settings]').click()");
             }
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
                 assertTrue(saved.read("app.appearance.v1")[0].contains("recess"));

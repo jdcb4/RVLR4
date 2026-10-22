@@ -2,6 +2,7 @@ import { RotateCcw } from "lucide-react";
 import { useRef } from "react";
 
 import { AccessibleCountdownValue } from "@/components/game/AccessibleCountdownValue";
+import { GameArtwork } from "@/components/GameArtwork";
 import { Button } from "@/components/ui/button";
 import { getHatGameContext, getHatGamePhaseMeta } from "@/domain/hat-game/engine";
 import { formatCountdown } from "@/domain/hat-game/time";
@@ -51,10 +52,15 @@ export function HatDeviceReady({ match }: { readonly match: HatGameSession }) {
     <section className="flex min-h-full flex-col">
       <HatDeviceProgress match={match} />
       <div className="flex flex-1 flex-col justify-center gap-3 pb-4">
-        <h2 className="material-callout break-words text-typ-section-title font-semibold">
-          Pass to {context.activeDescriberName}.
-        </h2>
-        <p className="break-words text-typ-body">{context.activeTeam?.name} guessing</p>
+        <div className="flex items-center gap-3">
+          <GameArtwork game="hat" className="size-12 shrink-0" />
+          <div className="min-w-0 space-y-3">
+            <h2 className="material-callout break-words text-typ-section-title font-semibold">
+              Pass to {context.activeDescriberName}.
+            </h2>
+            <p className="break-words text-typ-body">{context.activeTeam?.name} guessing</p>
+          </div>
+        </div>
         <h3 className="mt-3 text-typ-body font-semibold">
           Phase {match.phaseNumber}: {phase.name}
         </h3>
@@ -259,9 +265,12 @@ export function HatDeviceResults({ match }: { readonly match: HatGameSession }) 
   const bestTurn = match.results?.bestTurn ?? match.bestTurnSummary;
   return (
     <section className="space-y-4">
-      <h2 className="material-winner break-words text-typ-section-title font-semibold">
-        {winners.length > 1 ? "A shared victory." : `${winners[0]?.name} wins!`}
-      </h2>
+      <div className="flex items-center gap-3">
+        <GameArtwork game="hat" className="size-10 shrink-0" />
+        <h2 className="material-winner min-w-0 break-words text-typ-section-title font-semibold">
+          {winners.length > 1 ? "A shared victory." : `${winners[0]?.name} wins!`}
+        </h2>
+      </div>
       <p className="text-typ-body text-muted-foreground">All three phases complete.</p>
       <ol className="divide-y divide-border" aria-label="Final scores">
         {teams.map((team) => (

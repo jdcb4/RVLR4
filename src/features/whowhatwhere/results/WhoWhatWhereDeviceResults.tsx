@@ -1,5 +1,6 @@
 import { RotateCcw } from "lucide-react";
 
+import { GameArtwork } from "@/components/GameArtwork";
 import type { MatchState, WordHistoryEntry } from "@/domain/whowhatwhere/types";
 import { WhoWhatWhereDeviceProgress } from "@/features/whowhatwhere/WhoWhatWhereDeviceProgress";
 
@@ -123,9 +124,12 @@ export function WhoWhatWhereDeviceResults({ match }: { readonly match: MatchStat
   const skipLeaders = [...skips.values()].filter((player) => player.count === mostSkips);
   return (
     <section className="space-y-3">
-      <h2 className="material-winner break-words text-typ-section-title font-semibold">
-        {winners.length === 1 ? `${winners[0]} win.` : `${winners.join(" & ")} tie.`}
-      </h2>
+      <div className="flex items-center gap-3">
+        <GameArtwork game="www" className="size-10 shrink-0" />
+        <h2 className="material-winner min-w-0 break-words text-typ-section-title font-semibold">
+          {winners.length === 1 ? `${winners[0]} win.` : `${winners.join(" & ")} tie.`}
+        </h2>
+      </div>
       <WhoWhatWhereDeviceStandings match={match} />
       <div className="space-y-4 border-t border-border pt-3">
         <section aria-label="Best turn">

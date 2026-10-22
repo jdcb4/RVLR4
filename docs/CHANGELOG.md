@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.34.0 — 22 October 2026
+
+- Apply all five approved game-artwork families to their matching themes: Tabletop/Classic, Paper/Recess, Engraved/Midnight Observatory, Timber/After-Hours Social and Ink/The Margin Note. Engraved WWW uses a map without the location pin.
+- Add larger left-aligned picker artwork and compact game-header, handoff and results illustrations. Keep timed-play controls, word space and standard Lucide action icons intact. All artwork is bundled for offline use and follows the existing saved theme preference.
+
 ## 0.33.0 — 22 October 2026
 
 - Implement the approved Trivia content-storage foundation: strict question/review/expiry schema, separate versioned JSON packs and dedicated native SQLite storage with atomic activation and last-valid-pack recovery.

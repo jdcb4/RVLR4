@@ -60,10 +60,10 @@ export function PassNPlayHubPage() {
           ].map(({ title, description, path, Icon }) => (
             <Link
               key={path}
-              className="game-ticket flex min-h-28 items-center gap-4 rounded-2xl border border-border bg-card p-5 text-foreground transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+              className="game-ticket flex min-h-28 items-center gap-3 rounded-2xl border border-border bg-card p-3 text-foreground transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
               to={`/games/${path}`}
             >
-              <Icon className="size-12 shrink-0 text-primary" />
+              <Icon className="size-20 shrink-0" />
               <div className="min-w-0">
                 <h3 className="text-typ-section-title font-bold">{title}</h3>
                 <p className="mt-1 text-typ-ui text-muted-foreground">{description}</p>

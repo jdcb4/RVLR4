@@ -21,3 +21,5 @@ Rebuild with: node docs/design/graphics-proposals/build.mjs
 The builder uses the sheets, review.template.html, existing licensed fonts in public/fonts and installed React/Lucide packages. The generated HTML is deliberately tracked as a portable design deliverable. Trivia decisions are maintained separately in ../../TRIVIA_DISCOVERY.md.
 
 Verification: all five sheets decode; all 20 mapped-theme/screen combinations checked, including mobile 360px without page or phone-body overflow. Desktop 1320px visual inspection, fixed-height Hint and Correct interactions checked. No HTTP(S) resource requests. No production code changed; no new APK or native durability claim.
+
+All five families were approved for production and integrated in 0.34.0. This portable review remains a historical proposal; production assets/display regions live under public/artwork and src/themes/gameArtworkRegions.json.
