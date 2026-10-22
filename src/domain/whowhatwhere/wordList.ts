@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { addDuplicateIssues, staticTextSchema } from "@/data/staticDataSchemas";
-import { getCatalogueForGame } from "@/data/wordCatalogue";
+import { getCatalogueForGame, type WordPoolOptions } from "@/data/wordCatalogue";
 
 import { CATEGORIES, type WordEntry } from "./types";
 
@@ -29,6 +29,11 @@ const words = whoWhatWhereWordListSchema.parse(
   getCatalogueForGame("www").map(({ word, category, hint }) => ({ word, category, hint })),
 ) satisfies readonly WordEntry[];
 
-export function getWhoWhatWhereWordList(): readonly WordEntry[] {
-  return words;
+export function getWhoWhatWhereWordList(options: WordPoolOptions = {}): readonly WordEntry[] {
+  if ((!options.difficulty || options.difficulty === "all") && !options.kidsMode) return words;
+  return getCatalogueForGame("www", options).map(({ word, category, hint }) => ({
+    word,
+    category,
+    hint,
+  }));
 }

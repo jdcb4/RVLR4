@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
 import { GameShell } from "@/components/GameShell";
 import { IconDisguise } from "@/components/icons";
+import { DifficultySelect } from "@/components/setup/DifficultySelect";
 import { Button } from "@/components/ui/button";
 import { maxImpostersForPlayers } from "@/domain/imposter/round";
 import { useDeviceController } from "@/features/game-app-hooks/useDeviceController";
@@ -208,6 +209,11 @@ export function ImposterDevicePage() {
                 disabled={game.saving}
                 onChange={controller.updateImposterCount}
               />
+              <DifficultySelect
+                value={snapshot.wordDifficulty}
+                onChange={controller.updateWordDifficulty}
+                disabled={game.saving}
+              />
               <p className="text-typ-muted text-muted-foreground">
                 Everyone gets the secret word except the imposters. Give clues and work out who is
                 bluffing.
@@ -251,6 +257,16 @@ export function ImposterDevicePage() {
               <p>
                 {snapshot.playerCount} players · {snapshot.imposterCount}{" "}
                 {snapshot.imposterCount === 1 ? "imposter" : "imposters"}
+              </p>
+              <p className="text-typ-muted text-muted-foreground">
+                Difficulty:{" "}
+                {snapshot.wordDifficulty === "all"
+                  ? "All"
+                  : snapshot.wordDifficulty === "easy"
+                    ? "Easy"
+                    : snapshot.wordDifficulty === "medium"
+                      ? "Medium"
+                      : "Hard"}
               </p>
               <ol className="divide-y divide-border">
                 {snapshot.players.map((player) => (

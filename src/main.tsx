@@ -8,12 +8,13 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
 import { router } from "@/app/router";
+import { initializeContentPreferences } from "@/services/contentPreference";
 import { initializeTheme } from "@/themes/themePreference";
 
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("Missing #root element");
 
-void initializeTheme().then(() =>
+void Promise.all([initializeTheme(), initializeContentPreferences()]).then(() =>
   createRoot(rootEl).render(
     <StrictMode>
       <RouterProvider router={router} />

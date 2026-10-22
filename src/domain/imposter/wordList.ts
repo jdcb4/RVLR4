@@ -1,14 +1,12 @@
 import { staticTextSchema, uniqueStaticTextListSchema } from "@/data/staticDataSchemas";
-import { getCatalogueForGame } from "@/data/wordCatalogue";
-import { DEFAULT_IMPOSTER_THEME_ID, resolveImposterWordBank } from "@/domain/imposter/themeWords";
+import { getCatalogueForGame, type WordPoolOptions } from "@/data/wordCatalogue";
 
 export const imposterWordListSchema = uniqueStaticTextListSchema(staticTextSchema.max(80));
 
-const words = imposterWordListSchema.parse(getCatalogueForGame("imposter").map(({ word }) => word));
-
 /**
- * Word bank for a round (JSON seed list; may grow or be split by theme later).
+ * New rounds use the requested catalogue pool; an empty pool stays empty.
  */
-export function getImposterWordList(): readonly string[] {
-  return [...resolveImposterWordBank(DEFAULT_IMPOSTER_THEME_ID, words)];
+export function getImposterWordList(options: WordPoolOptions = {}): readonly string[] {
+  const words = getCatalogueForGame("imposter", options).map(({ word }) => word);
+  return words.length ? imposterWordListSchema.parse(words) : [];
 }

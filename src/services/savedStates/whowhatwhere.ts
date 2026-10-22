@@ -31,6 +31,8 @@ const settings = z.object({
     .max(3)
     .default([...defaults.selectedCategories]),
   difficultyMode: z.enum(["easy", "hard"]).default(defaults.difficultyMode),
+  wordDifficulty: z.enum(["all", "easy", "medium", "hard"]).default("all"),
+  kidsMode: z.boolean().default(false),
   hints: z
     .object({
       enabled: z.boolean().default(defaults.hints.enabled),
@@ -145,20 +147,18 @@ const match = z
     (value) => validTeamReferences(value) && (value.stage !== "turn" || value.activeTurn !== null),
     "Invalid match references.",
   )
-  .transform(
-    (value): MatchState => ({
-      ...value,
-      wordReserves: Object.fromEntries(
-        Object.entries(value.wordReserves).filter(([, words]) => words !== undefined),
-      ) as MatchState["wordReserves"],
-      activeTurn: value.activeTurn
-        ? {
-            ...value.activeTurn,
-            hintsRemaining: value.activeTurn.hintsRemaining ?? value.settings.hints.perTurnLimit,
-          }
-        : null,
-    }),
-  );
+  .transform((value): MatchState => ({
+    ...value,
+    wordReserves: Object.fromEntries(
+      Object.entries(value.wordReserves).filter(([, words]) => words !== undefined),
+    ) as MatchState["wordReserves"],
+    activeTurn: value.activeTurn
+      ? {
+          ...value.activeTurn,
+          hintsRemaining: value.activeTurn.hintsRemaining ?? value.settings.hints.perTurnLimit,
+        }
+      : null,
+  }));
 
 export const whoWhatWhereMatchSchema = z.object({
   schemaVersion: z.literal(1).default(1),

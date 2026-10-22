@@ -32,7 +32,7 @@ Every canonical entry, including entries inherited from the original lists, has 
 - `medium`: familiar general culture, school knowledge or a well-known field; may require a useful clue.
 - `hard`: less widely recognised or more specialised, but still a meaningful playable answer. Hard does not justify adding random obscurities.
 
-Ratings are editorial estimates for the adult audience, not measured success rates. The existing gameplay `difficultyMode` is a legacy rule setting and is not this metadata. Difficulty/kids filters remain a separate UI milestone.
+Ratings are editorial estimates for the adult audience, not measured success rates. The existing gameplay `difficultyMode` is a legacy rule setting and is not this metadata. WWW and Imposter expose `wordDifficulty`: All keeps every rating, while Easy, Medium and Hard each select that exact rating. App-wide Kids mode intersects this selection with `kidAppropriate`, not only `kidTargeted`. Hat automatic suggestions also honour Kids mode; manually entered clues are unchanged. Empty intersections show an error, never an unfiltered fallback. Imposter currently has no Hard kids-suitable entries.
 
 ## Provenance and maintenance
 

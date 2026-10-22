@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { getCatalogueForGame } from "@/data/wordCatalogue";
+import * as clueSuggestions from "@/domain/hat-game/clueSuggestions";
 import { applyHatGameAction } from "@/domain/hat-game/engine";
 import { hatStateToRosterRows } from "@/domain/hat-game/setup";
 import { HatDeviceController } from "@/features/hat-game/hatDeviceController";
@@ -14,6 +16,7 @@ import {
   createHatTeamSetup,
   startHatSession,
 } from "@/features/hat-game/hatSingleplayerTransitions";
+import { requireContentPreferences } from "@/services/contentPreference";
 import { setDeviceKeepAwake } from "@/services/deviceLifecycle";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import { readSnapshot, removeSnapshot, writeSnapshot } from "@/services/nativeSnapshotStore";
@@ -42,6 +45,9 @@ vi.mock("@/services/nativeSnapshotStore", () => ({
 }));
 vi.mock("@/services/gameSoundEffects", () => ({
   playGameSoundEffect: vi.fn(async () => undefined),
+}));
+vi.mock("@/services/contentPreference", () => ({
+  requireContentPreferences: vi.fn(),
 }));
 
 let monotonic = 0;
@@ -80,6 +86,24 @@ function activity(active: boolean) {
   device.active = active;
   device.activity?.(active);
 }
+async function enteringClues() {
+  const state = createHatDeviceSession();
+  const teams = createHatTeamSetup(state.snapshot);
+  if (!teams.snapshot) throw new Error(teams.error);
+  const entry = beginHatClueEntry(teams.snapshot);
+  if (!entry.snapshot) throw new Error(entry.error);
+  device.saved = { ...state, snapshot: entry.snapshot };
+  const controller = new HatDeviceController();
+  await controller.hydrate();
+  await controller.openSavedGame();
+  controller.revealClues();
+  await settle();
+  return controller;
+}
+function currentClues(controller: HatDeviceController) {
+  const snapshot = controller.getSnapshot().session.snapshot;
+  return snapshot.clueSubmissions[snapshot.players[snapshot.clueEntryIndex]!.id]!.clues;
+}
 
 describe("Hat native session ownership", () => {
   beforeEach(() => {
@@ -101,6 +125,7 @@ describe("Hat native session ownership", () => {
     vi.mocked(removeSnapshot).mockImplementation(async () => {
       device.saved = null;
     });
+    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: false });
     vi.clearAllMocks();
   });
   afterEach(async () => {
@@ -180,6 +205,125 @@ describe("Hat native session ownership", () => {
     expect(snapshot.clueSubmissions[snapshot.players[0]!.id]?.clues[0]).toBe(
       "A private partial figure",
     );
+  });
+
+  it("uses the global kids preference for automatic suggestions while preserving manual and saved figures", async () => {
+    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+    const controller = await enteringClues();
+    const adultFigure = getCatalogueForGame("hat").find((entry) => !entry.kidAppropriate)!.word;
+    controller.updateClue(1, adultFigure);
+    await controller.suggestClue(0);
+    const clue = currentClues(controller)[0];
+    expect(getCatalogueForGame("hat", { kidsMode: true }).some(({ word }) => word === clue)).toBe(
+      true,
+    );
+    expect(currentClues(controller)[1]).toBe(adultFigure);
+    await controller.leaveGame();
+    const restored = new HatDeviceController();
+    await restored.hydrate();
+    await restored.openSavedGame();
+    expect(currentClues(restored)[1]).toBe(adultFigure);
+  });
+
+  it("allows adult suggestions when the global kids preference is off", async () => {
+    const controller = await enteringClues();
+    const suggestions = clueSuggestions.getHatClueSuggestions();
+    const adultFigure = getCatalogueForGame("hat").find((entry) => !entry.kidAppropriate)!.word;
+    vi.spyOn(Math, "random").mockReturnValue(
+      (suggestions.indexOf(adultFigure) + 0.5) / suggestions.length,
+    );
+    await controller.suggestClue(0);
+    expect(currentClues(controller)[0]).toBe(adultFigure);
+  });
+
+  it("surfaces preference failures without replacing a figure or drawing from an unfiltered pool", async () => {
+    const controller = await enteringClues();
+    controller.updateClue(0, "My own figure");
+    vi.mocked(requireContentPreferences).mockRejectedValueOnce(
+      new Error("Content settings could not load."),
+    );
+    const getSuggestions = vi.spyOn(clueSuggestions, "getHatClueSuggestions");
+    await controller.suggestClue(0);
+    expect(controller.getSnapshot().error).toBe("Content settings could not load.");
+    expect(currentClues(controller)[0]).toBe("My own figure");
+    expect(getSuggestions).not.toHaveBeenCalled();
+  });
+
+  it.each([{ pool: [] }, { pool: ["Already in the hat"] }])(
+    "reports an empty or exhausted pool without a fallback: $pool",
+    async ({ pool }) => {
+      const controller = await enteringClues();
+      controller.updateClue(0, "Already in the hat");
+      vi.spyOn(clueSuggestions, "getHatClueSuggestions").mockReturnValue(pool);
+      await controller.suggestClue(1);
+      expect(currentClues(controller)).toEqual(["Already in the hat", "", "", "", "", ""]);
+      expect(controller.getSnapshot().error).toBe(
+        "No unused famous figures match the current content settings.",
+      );
+    },
+  );
+
+  it("ignores repeated suggestion taps and does not overwrite edits while preferences load", async () => {
+    const controller = await enteringClues();
+    let release: ((preferences: { kidsMode: boolean }) => void) | undefined;
+    vi.mocked(requireContentPreferences).mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          release = resolve;
+        }),
+    );
+    const pending = controller.suggestClue(0);
+    await controller.suggestClue(0);
+    expect(requireContentPreferences).toHaveBeenCalledTimes(1);
+    controller.updateClue(0, "My newer figure");
+    release?.({ kidsMode: true });
+    await pending;
+    expect(currentClues(controller)[0]).toBe("My newer figure");
+    expect(controller.getSnapshot().error).toBe("");
+  });
+
+  it.each(["handoff", "leave", "pause"])(
+    "does not apply a late suggestion after %s",
+    async (navigation) => {
+      const controller = await enteringClues();
+      for (let index = 0; index < 6; index += 1) controller.updateClue(index, `My figure ${index}`);
+      let release: ((preferences: { kidsMode: boolean }) => void) | undefined;
+      vi.mocked(requireContentPreferences).mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            release = resolve;
+          }),
+      );
+      const before = controller.getSnapshot().session.snapshot.clueSubmissions;
+      const pending = controller.suggestClue(0);
+      if (navigation === "handoff") controller.confirmClues();
+      else if (navigation === "leave") await controller.leaveGame();
+      else {
+        controller.pauseGame();
+        await controller.resumeGame();
+        controller.revealClues();
+      }
+      await settle();
+      release?.({ kidsMode: true });
+      await pending;
+      expect(controller.getSnapshot().session.snapshot.clueSubmissions).toEqual(before);
+    },
+  );
+
+  it("does not show late preference errors after leaving clue entry", async () => {
+    const controller = await enteringClues();
+    let reject: ((error: Error) => void) | undefined;
+    vi.mocked(requireContentPreferences).mockImplementationOnce(
+      () =>
+        new Promise((_resolve, rejectPromise) => {
+          reject = rejectPromise;
+        }),
+    );
+    const pending = controller.suggestClue(0);
+    await controller.leaveGame();
+    reject?.(new Error("Content settings unavailable"));
+    await pending;
+    expect(controller.getSnapshot().error).toBe("");
   });
 
   it("commits the generated queue before revealing and ignores repeated start taps", async () => {

@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { getCatalogueForGame } from "@/data/wordCatalogue";
+import * as wordLists from "@/domain/imposter/wordList";
 import { ImposterDeviceController } from "@/features/imposter/imposterDeviceController";
 import {
   createImposterDeviceSession,
@@ -7,6 +9,7 @@ import {
   type ImposterDeviceSession,
   imposterDeviceSessionSchema,
 } from "@/features/imposter/imposterDeviceSession";
+import { requireContentPreferences } from "@/services/contentPreference";
 import { setDeviceKeepAwake } from "@/services/deviceLifecycle";
 import { readSnapshot, removeSnapshot, writeSnapshot } from "@/services/nativeSnapshotStore";
 
@@ -19,6 +22,9 @@ vi.mock("@/services/nativeSnapshotStore", () => ({
   readSnapshot: vi.fn(),
   writeSnapshot: vi.fn(),
   removeSnapshot: vi.fn(),
+}));
+vi.mock("@/services/contentPreference", () => ({
+  requireContentPreferences: vi.fn(),
 }));
 vi.mock("@/services/deviceLifecycle", () => ({
   isDeviceActive: () => device.active,
@@ -44,6 +50,7 @@ beforeEach(() => {
   device.active = true;
   device.activity = null;
   device.saved = null;
+  vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: false });
   vi.mocked(readSnapshot).mockImplementation(async () => ({
     value: device.saved,
     recovered: false,
@@ -83,6 +90,7 @@ describe("Imposter durable device controller", () => {
         }),
     );
     const start = controller.startRound();
+    await Promise.resolve();
     controller.revealRole();
     expect(controller.getSnapshot().session.snapshot.step).toBe("review");
     expect(controller.getSnapshot().roleVisible).toBe(false);
@@ -153,6 +161,7 @@ describe("Imposter durable device controller", () => {
         }),
     );
     const start = controller.startRound();
+    await Promise.resolve();
     device.active = false;
     device.activity?.(false);
     resolve();
@@ -170,11 +179,13 @@ describe("Imposter durable device controller", () => {
     await controller.startRound();
     const attempted = vi.mocked(writeSnapshot).mock.calls.at(-1)![1] as ImposterDeviceSession;
     const randomCalls = random.mock.calls.length;
+    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
     expect(controller.getSnapshot().storageError).toBe("Disk full");
     expect(controller.getSnapshot().session.snapshot.step).toBe("review");
     await controller.startRound();
     await controller.retry();
     expect(random).toHaveBeenCalledTimes(randomCalls);
+    expect(requireContentPreferences).toHaveBeenCalledTimes(1);
     expect(controller.getSnapshot().session.snapshot.round).toEqual(attempted.snapshot.round);
     expect(controller.getSnapshot().roleVisible).toBe(false);
     controller.resume();
@@ -259,6 +270,104 @@ describe("Imposter durable device controller", () => {
     expect(removeSnapshot).toHaveBeenCalledWith(IMPOSTER_DEVICE_SESSION_KEY);
     expect(controller.getSnapshot().hydrationFailed).toBe(false);
   });
+
+  it("persists difficulty and uses its exact kids-safe pool only when dealing a new round", async () => {
+    vi.useFakeTimers();
+    const controller = new ImposterDeviceController();
+    await controller.hydrate();
+    expect(controller.getSnapshot().session.snapshot.wordDifficulty).toBe("all");
+    controller.updateWordDifficulty("medium");
+    await vi.advanceTimersByTimeAsync(400);
+    expect(device.saved?.snapshot.wordDifficulty).toBe("medium");
+    await controller.advanceSetup();
+    await controller.advanceSetup();
+    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+    await controller.startRound();
+    const originalRound = structuredClone(controller.getSnapshot().session.snapshot.round);
+    const pool = getCatalogueForGame("imposter", { difficulty: "medium", kidsMode: true });
+    expect(pool.length).toBeGreaterThan(0);
+    expect(pool.some(({ word }) => word === originalRound?.secretWord)).toBe(true);
+    vi.mocked(requireContentPreferences).mockRejectedValue(new Error("Unavailable preferences"));
+    const restored = new ImposterDeviceController();
+    await restored.hydrate();
+    restored.resume();
+    restored.revealRole();
+    expect(restored.getSnapshot().session.snapshot.round).toEqual(originalRound);
+    expect(restored.getSnapshot().session.snapshot.wordDifficulty).toBe("medium");
+    expect(requireContentPreferences).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not deal when preferences cannot load and allows retry without a storage error", async () => {
+    const controller = await setup();
+    const random = vi.spyOn(Math, "random");
+    const writes = vi.mocked(writeSnapshot).mock.calls.length;
+    vi.mocked(requireContentPreferences).mockRejectedValueOnce(
+      new Error("Kids mode could not be loaded. Retry in app settings before selecting new words."),
+    );
+    await controller.startRound();
+    expect(controller.getSnapshot().setupError).toContain("Kids mode could not be loaded");
+    expect(controller.getSnapshot().storageError).toBe("");
+    expect(controller.getSnapshot().session.snapshot.step).toBe("review");
+    expect(writeSnapshot).toHaveBeenCalledTimes(writes);
+    expect(random).not.toHaveBeenCalled();
+    await controller.startRound();
+    expect(controller.getSnapshot().session.snapshot.step).toBe("reveal");
+  });
+
+  it("explains an empty filtered pool without falling back or writing a deal", async () => {
+    const controller = await setup();
+    await controller.back();
+    await controller.back();
+    controller.updateWordDifficulty("hard");
+    await controller.advanceSetup();
+    await controller.advanceSetup();
+    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+    const words = vi.spyOn(wordLists, "getImposterWordList");
+    const writes = vi.mocked(writeSnapshot).mock.calls.length;
+    await controller.startRound();
+    expect(words).toHaveBeenCalledExactlyOnceWith({ difficulty: "hard", kidsMode: true });
+    expect(controller.getSnapshot().setupError).toContain("No words match these settings");
+    expect(controller.getSnapshot().session.snapshot.round).toBeNull();
+    expect(writeSnapshot).toHaveBeenCalledTimes(writes);
+  });
+
+  it("blocks repeat deals during preference loading and cancels when covered before generation", async () => {
+    const controller = await setup();
+    let resolve!: (value: { kidsMode: boolean }) => void;
+    vi.mocked(requireContentPreferences).mockImplementationOnce(
+      () =>
+        new Promise((done) => {
+          resolve = done;
+        }),
+    );
+    const writes = vi.mocked(writeSnapshot).mock.calls.length;
+    const start = controller.startRound();
+    await controller.startRound();
+    expect(controller.getSnapshot().saving).toBe(true);
+    expect(requireContentPreferences).toHaveBeenCalledTimes(1);
+    controller.pause();
+    resolve({ kidsMode: true });
+    await start;
+    expect(controller.getSnapshot().saving).toBe(false);
+    expect(controller.getSnapshot().paused).toBe(true);
+    expect(controller.getSnapshot().session.snapshot.round).toBeNull();
+    expect(writeSnapshot).toHaveBeenCalledTimes(writes);
+  });
+});
+
+it("loads old version-1 sessions with all difficulties and validates new selections", () => {
+  const session = createImposterDeviceSession();
+  const { wordDifficulty: _difficulty, ...legacySnapshot } = session.snapshot;
+  expect(
+    imposterDeviceSessionSchema.parse({ ...session, snapshot: legacySnapshot }).snapshot
+      .wordDifficulty,
+  ).toBe("all");
+  expect(
+    imposterDeviceSessionSchema.safeParse({
+      ...session,
+      snapshot: { ...session.snapshot, wordDifficulty: "extreme" },
+    }).success,
+  ).toBe(false);
 });
 
 it("rejects visible private roles, invalid roster references, unsupported formats and malformed deals", () => {

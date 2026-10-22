@@ -1,5 +1,7 @@
 // fallow-ignore-file duplicate-export
 // Player, Team, and ActiveTurn are game-specific types with direct imports; no shared barrel.
+import type { WordPoolOptions } from "@/data/wordCatalogue";
+
 export const CATEGORIES = ["What", "Who", "Where"] as const;
 
 export type Category = (typeof CATEGORIES)[number];
@@ -28,6 +30,8 @@ export type GameSettings = {
   readonly skipLimit: 1 | 2 | 3 | -1;
   readonly selectedCategories: readonly Category[];
   readonly difficultyMode: DifficultyMode;
+  readonly wordDifficulty: NonNullable<WordPoolOptions["difficulty"]>;
+  readonly kidsMode: boolean;
   readonly hints: HintSettings;
 };
 

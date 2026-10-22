@@ -194,7 +194,7 @@ describe("game domain", () => {
     const match = createMatch(createTeamSetups(2), settings);
 
     expect(() => startTurn(match, wordsFor("What"), now, () => 0)).toThrow(
-      "No words available for Where.",
+      "No words match these categories and word settings. Change the difficulty or categories.",
     );
   });
 });

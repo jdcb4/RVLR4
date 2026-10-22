@@ -21,6 +21,7 @@ import {
   createValidatedWhoWhatWhereMatch,
   nextWhoWhatWhereTeamStep,
 } from "@/features/whowhatwhere/whoWhatWhereSingleplayerTransitions";
+import { requireContentPreferences } from "@/services/contentPreference";
 import {
   isDeviceActive,
   setDeviceKeepAwake,
@@ -298,23 +299,45 @@ export class WhoWhatWhereDeviceController {
     this.moveSetup(next.mode, next.step);
   };
 
-  startNewMatch = () => {
+  startNewMatch = async () => {
     if (!this.canAct()) return;
     const current = this.current();
-    const result = createValidatedWhoWhatWhereMatch(current.setup.teams, current.setup.settings);
-    if (!result.match) {
-      this.setupError = result.error;
-      this.emit();
-      return;
-    }
+    const pauseEpoch = this.pauseEpoch;
+    this.saving = true;
     this.setupError = "";
-    void this.transition({
-      ...current,
-      match: result.match,
-      remainingMs: null,
-      mode: "ready",
-      presentationStage: null,
-    });
+    this.emit();
+    try {
+      const [{ kidsMode }, { getWhoWhatWhereWordList }] = await Promise.all([
+        requireContentPreferences(),
+        import("@/domain/whowhatwhere/wordList"),
+      ]);
+      if (this.session.paused || !this.deviceActive || this.pauseEpoch !== pauseEpoch) return;
+      const settings = { ...current.setup.settings, kidsMode };
+      const words = getWhoWhatWhereWordList({ difficulty: settings.wordDifficulty, kidsMode });
+      if (!words.some((word) => settings.selectedCategories.includes(word.category))) {
+        this.setupError =
+          "No words match these categories and word settings. Change the difficulty or categories.";
+        return;
+      }
+      const result = createValidatedWhoWhatWhereMatch(current.setup.teams, settings);
+      if (!result.match) {
+        this.setupError = result.error;
+        return;
+      }
+      await this.transition({
+        ...current,
+        setup: { ...current.setup, settings },
+        match: result.match,
+        remainingMs: null,
+        mode: "ready",
+        presentationStage: null,
+      });
+    } catch (error) {
+      this.setupError = error instanceof Error ? error.message : "Unable to load word settings.";
+    } finally {
+      this.saving = false;
+      this.emit();
+    }
   };
 
   startNextTurn = async () => {
@@ -329,7 +352,13 @@ export class WhoWhatWhereDeviceController {
       const { getWhoWhatWhereWordList } = await import("@/domain/whowhatwhere/wordList");
       // Backgrounding or navigating while the bundled module loads cancels this action.
       if (this.session.paused || !this.deviceActive || this.session.match !== expectedMatch) return;
-      const match = startTurn(expectedMatch, getWhoWhatWhereWordList());
+      const match = startTurn(
+        expectedMatch,
+        getWhoWhatWhereWordList({
+          difficulty: expectedMatch.settings.wordDifficulty,
+          kidsMode: expectedMatch.settings.kidsMode,
+        }),
+      );
       // Save the generated deck before a timer or private prompt becomes visible.
       const next = {
         ...this.current(),

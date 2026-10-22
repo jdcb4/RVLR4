@@ -51,17 +51,24 @@ public class AppRenderTest {
         String key = "app.appearance.v1";
         try (SnapshotDatabase database = new SnapshotDatabase(context)) {
             String[] original = database.read(key);
+            String[] originalContent = database.read("app.content.v1");
             try {
+                database.write("app.content.v1", "{\"storageVersion\":1,\"revision\":1,\"savedAt\":\"2026-10-22T00:00:00.000Z\",\"payload\":{\"schemaVersion\":1,\"kidsMode\":true}}");
                 database.write(key, "{\"storageVersion\":1,\"revision\":1,\"savedAt\":\"2026-10-22T00:00:00.000Z\",\"payload\":{\"schemaVersion\":1,\"theme\":\"observatory\"}}");
                 try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
                     AtomicReference<MainActivity> activity = new AtomicReference<>();
                     scenario.onActivity(activity::set);
                     awaitCondition(activity.get(), "document.documentElement.dataset.theme==='observatory' && !!document.querySelector('a[href*=whowhatwhere]')");
+                    evaluate(activity.get(), "document.querySelector('[aria-label=Settings]').click()");
+                    awaitCondition(activity.get(), "document.querySelector('[role=switch]')?.getAttribute('aria-checked')==='true'");
                 }
             } finally {
                 database.remove(key);
                 if (original[1] != null) database.write(key, original[1]);
                 if (original[0] != null) database.write(key, original[0]);
+                database.remove("app.content.v1");
+                if (originalContent[1] != null) database.write("app.content.v1", originalContent[1]);
+                if (originalContent[0] != null) database.write("app.content.v1", originalContent[0]);
             }
         }
     }
@@ -90,6 +97,11 @@ public class AppRenderTest {
             worker = (ExecutorService) workerField.get(plugin);
             // Exercise the actual chooser and SQLite preference in the disposable database.
             evaluate(activity, "document.querySelector('[aria-label=Settings]').click()");
+            awaitCondition(activity, "!!document.querySelector('[role=switch]:enabled')");
+            evaluate(activity, "document.querySelector('[role=switch]').click()");
+            awaitCondition(activity, "!!document.querySelector('[role=switch]:enabled')");
+            evaluate(activity, "if(document.querySelector('[role=switch]').getAttribute('aria-checked')!=='true')document.querySelector('[role=switch]').click()");
+            awaitCondition(activity, "document.querySelector('[role=switch]:enabled')?.getAttribute('aria-checked')==='true'");
             for (String theme : new String[] { "pub-trivia", "bookclub", "observatory", "classic", "recess" }) {
                 awaitCondition(activity, "!!document.querySelector('input[value=\"" + theme + "\"]:enabled')");
                 evaluate(activity, "document.querySelector('input[value=\"" + theme + "\"]').click()");
@@ -97,11 +109,14 @@ public class AppRenderTest {
             }
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
                 assertTrue(saved.read("app.appearance.v1")[0].contains("recess"));
+                assertTrue(saved.read("app.content.v1")[0].contains("\"kidsMode\":true"));
             }
             evaluate(activity, "document.querySelector('[aria-label=\"Close dialog\"]').click()");
             evaluate(activity, "document.querySelector('a[href*=whowhatwhere]').click()");
             awaitCondition(activity, "document.body.innerText.includes('Game settings') && document.body.innerText.includes('Turn length') && document.body.innerText.includes('Categories')");
             System.out.println("RVLRY_RENDER_SETTINGS " + evaluate(activity, "JSON.stringify({href:location.href,text:document.body.innerText.slice(0,1000)})"));
+            awaitCondition(activity, "!!document.querySelector('select:enabled')");
+            evaluate(activity, "(()=>{const select=document.querySelector('select');Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value').set.call(select,'easy');select.dispatchEvent(new Event('change',{bubbles:true}));})()");
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(button => button.textContent.trim()==='Next: Team 1' && !button.disabled)");
             evaluate(activity, "[...document.querySelectorAll('button')].find(button => button.textContent.trim()==='Next: Team 1').click()");
             awaitCondition(activity, "document.body.innerText.includes('Team 1 of 2') && document.querySelectorAll('input').length >= 3");
@@ -111,6 +126,11 @@ public class AppRenderTest {
             awaitCondition(activity, "document.body.innerText.includes('Review teams')");
             clickButton(activity, "Start game");
             awaitCondition(activity, "document.body.innerText.includes('Pass to')");
+            try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
+                String snapshot = saved.read("whowhatwhere.device-session.v1")[0];
+                assertTrue(snapshot.contains("\"kidsMode\":true"));
+                assertTrue(snapshot.contains("\"wordDifficulty\":\"easy\""));
+            }
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(button => button.textContent.includes(', start turn') && !button.disabled)");
             evaluate(activity, "[...document.querySelectorAll('button')].find(button => button.textContent.includes(', start turn')).click()");
             awaitCondition(activity, "!!document.querySelector('[aria-label=\"Active turn\"]')");
@@ -154,6 +174,8 @@ public class AppRenderTest {
             evaluate(activity, "location.hash='/'");
             awaitCondition(activity, "!!document.querySelector('a[href*=imposter]')");
             evaluate(activity, "document.querySelector('a[href*=imposter]').click()");
+            awaitCondition(activity, "!!document.querySelector('select:enabled')");
+            evaluate(activity, "(()=>{const select=document.querySelector('select');Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value').set.call(select,'easy');select.dispatchEvent(new Event('change',{bubbles:true}));})()");
             clickButton(activity, "Continue to players");
             clickButton(activity, "Review players");
             clickButton(activity, "Deal roles");

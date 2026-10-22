@@ -25,6 +25,27 @@ const sample: CatalogueEntry = {
 };
 
 describe("curated word catalogue", () => {
+  it("intersects difficulty and kids suitability for every game's selection pool", () => {
+    for (const game of ["www", "hat", "imposter"] as const) {
+      const all = getCatalogueForGame(game);
+      expect(getCatalogueForGame(game, { difficulty: "all", kidsMode: false })).toEqual(all);
+      for (const difficulty of ["all", "easy", "medium", "hard"] as const) {
+        for (const kidsMode of [false, true]) {
+          expect(getCatalogueForGame(game, { difficulty, kidsMode })).toEqual(
+            all.filter(
+              (entry) =>
+                (!kidsMode || entry.kidAppropriate) &&
+                (difficulty === "all" || entry.difficulty === difficulty),
+            ),
+          );
+        }
+      }
+      const kids = getCatalogueForGame(game, { kidsMode: true });
+      expect(kids.some((entry) => entry.kidTargeted)).toBe(true);
+      expect(kids.some((entry) => !entry.kidTargeted)).toBe(true);
+      expect(kids.length).toBeLessThan(all.length);
+    }
+  });
   it("preserves the exact original inventories independently of display corrections", () => {
     for (const [data, hash] of [
       [originalWww, "b71b21780c9ba2bd92bbf095e1f4424f9a466a0532234bf17e5c108930c2c17a"],

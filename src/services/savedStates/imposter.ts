@@ -28,6 +28,7 @@ const snapshot = z
     ]),
     playerCount: z.number().int().min(4).max(10),
     imposterCount: z.number().int().min(1).max(5),
+    wordDifficulty: z.enum(["all", "easy", "medium", "hard"]).default("all"),
     players: z.array(person).max(10),
     round: round.nullable(),
     cluesStartPlayerId: z.string().nullable().optional(),

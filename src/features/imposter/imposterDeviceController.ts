@@ -15,6 +15,7 @@ import {
   startImposterRound,
   updateImposterPlayerName,
 } from "@/features/imposter/imposterSingleplayerTransitions";
+import { requireContentPreferences } from "@/services/contentPreference";
 import {
   isDeviceActive,
   setDeviceKeepAwake,
@@ -28,6 +29,7 @@ export class ImposterDeviceController {
   private session = createImposterDeviceSession();
   private loaded = false;
   private saving = false;
+  private preparingRound = false;
   private storageError = "";
   private setupError = "";
   private notice = "";
@@ -48,7 +50,7 @@ export class ImposterDeviceController {
     return {
       session: this.session,
       loaded: this.loaded,
-      saving: this.saving,
+      saving: this.saving || this.preparingRound,
       storageError: this.storageError,
       setupError: this.setupError,
       notice: this.notice,
@@ -100,6 +102,7 @@ export class ImposterDeviceController {
     return (
       this.loaded &&
       !this.saving &&
+      !this.preparingRound &&
       !this.storageError &&
       !this.savedGameAvailable &&
       !this.paused &&
@@ -202,6 +205,10 @@ export class ImposterDeviceController {
     if (this.session.snapshot.step === "settings")
       this.draft(setImposterCount(this.session.snapshot, count));
   };
+  updateWordDifficulty = (wordDifficulty: ImposterSnapshot["wordDifficulty"]) => {
+    if (this.session.snapshot.step === "settings")
+      this.draft({ ...this.session.snapshot, wordDifficulty });
+  };
   updateName = (id: string, name: string) => {
     if (this.session.snapshot.step === "roster")
       this.draft(updateImposterPlayerName(this.session.snapshot, id, name.slice(0, 80)));
@@ -222,15 +229,30 @@ export class ImposterDeviceController {
   };
   startRound = async () => {
     if (!this.canAct() || this.session.snapshot.step !== "review") return;
-    const result = startImposterRound(
-      this.session.snapshot,
-      getImposterWordList(),
-      Math.random,
-      "Unable to deal this round.",
-    );
-    this.setupError = result.error ?? "";
+    this.preparingRound = true;
+    const epoch = this.epoch;
     this.emit();
-    if (result.snapshot) await this.transition(result.snapshot);
+    try {
+      const { kidsMode } = await requireContentPreferences();
+      if (!this.active || this.paused || epoch !== this.epoch) return;
+      const result = startImposterRound(
+        this.session.snapshot,
+        getImposterWordList({ difficulty: this.session.snapshot.wordDifficulty, kidsMode }),
+        Math.random,
+        "Unable to deal this round.",
+        "No words match these settings. Choose another difficulty or change Kids mode in app settings.",
+      );
+      this.setupError = result.error ?? "";
+      if (result.snapshot) await this.transition(result.snapshot);
+    } catch (error) {
+      this.setupError =
+        error instanceof Error
+          ? error.message
+          : "Content settings could not be loaded. Retry in app settings before dealing.";
+    } finally {
+      this.preparingRound = false;
+      this.emit();
+    }
   };
   revealRole = () => {
     if (this.canAct() && this.session.snapshot.step === "reveal") {
@@ -292,7 +314,14 @@ export class ImposterDeviceController {
     this.emit();
   };
   startNew = async () => {
-    if (!this.loaded || this.saving || this.storageError || this.hydrationFailed) return;
+    if (
+      !this.loaded ||
+      this.saving ||
+      this.preparingRound ||
+      this.storageError ||
+      this.hydrationFailed
+    )
+      return;
     const epoch = this.epoch;
     if (await this.transition({ ...this.session.snapshot, step: "settings", round: null })) {
       this.savedGameAvailable = false;
@@ -327,7 +356,7 @@ export class ImposterDeviceController {
     }
   };
   leave = async (): Promise<boolean> => {
-    if (!this.loaded || this.saving) return false;
+    if (!this.loaded || this.saving || this.preparingRound) return false;
     this.roleVisible = false;
     this.emit();
     if (this.hydrationFailed || this.savedGameAvailable) return true;

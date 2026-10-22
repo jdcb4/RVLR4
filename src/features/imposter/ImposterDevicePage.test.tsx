@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ImposterDevicePage } from "@/features/imposter/ImposterDevicePage";
 import { createImposterDeviceSession } from "@/features/imposter/imposterDeviceSession";
+import { readSnapshot, writeSnapshot } from "@/services/nativeSnapshotStore";
 
 const device = vi.hoisted(() => ({ activity: null as ((active: boolean) => void) | null }));
 const saved = () => {
@@ -51,6 +52,23 @@ function mount() {
 }
 
 describe("Imposter device privacy flow", () => {
+  it("selects difficulty in settings and retains it through review", async () => {
+    vi.mocked(readSnapshot).mockResolvedValueOnce({ value: null, recovered: false });
+    const user = userEvent.setup();
+    mount();
+    await screen.findByRole("heading", { name: "Game settings" });
+    const difficulty = screen.getByRole("combobox", { name: "Difficulty" });
+    expect(difficulty).toHaveValue("all");
+    await user.selectOptions(difficulty, "medium");
+    expect(difficulty).toHaveValue("medium");
+    await user.click(screen.getByRole("button", { name: "Continue to players" }));
+    await user.click(screen.getByRole("button", { name: "Review players" }));
+    expect(screen.getByText("Difficulty: Medium")).toBeInTheDocument();
+    expect(vi.mocked(writeSnapshot).mock.calls.at(-1)?.[1]).toMatchObject({
+      snapshot: { step: "review", wordDifficulty: "medium" },
+    });
+  });
+
   it("keeps saved role content out of the document until Resume and private reveal", async () => {
     const user = userEvent.setup();
     mount();

@@ -34,6 +34,7 @@ export type ImposterSnapshot = {
   step: ImposterStep;
   playerCount: number;
   imposterCount: number;
+  wordDifficulty: "all" | "easy" | "medium" | "hard";
   players: ImposterPlayer[];
   round: ImposterRoundState | null;
   /** Random starter for the clue circle (set when leaving parallel reveal). */

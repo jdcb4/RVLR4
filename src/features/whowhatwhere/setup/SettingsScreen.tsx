@@ -1,4 +1,5 @@
 import { GamePanel } from "@/components/game/GamePanel";
+import { DifficultySelect } from "@/components/setup/DifficultySelect";
 import { OptionButton, OptionGroup } from "@/components/setup/OptionGroup";
 import { TeamCountOptionGroup } from "@/components/setup/TeamCountOptionGroup";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,7 @@ export function SettingsScreen({
         onChange={(count) => setSetting("teamCount", count as GameSettings["teamCount"])}
       />
 
-      <div className="grid gap-3" data-settings-pair="timing">
+      <div className="grid gap-2" data-settings-pair="timing">
         <OptionGroup
           inlineLayout
           label="Turn length"
@@ -67,7 +68,7 @@ export function SettingsScreen({
         </OptionGroup>
       </div>
 
-      <div className="grid gap-3" data-settings-pair="assists">
+      <div className="grid gap-2" data-settings-pair="assists">
         <OptionGroup
           inlineLayout
           label="Skips"
@@ -112,6 +113,11 @@ export function SettingsScreen({
         </OptionGroup>
       </div>
 
+      <DifficultySelect
+        value={settings.wordDifficulty}
+        onChange={(difficulty) => setSetting("wordDifficulty", difficulty)}
+      />
+
       <OptionGroup
         inlineLayout
         label="Categories"
@@ -144,9 +150,9 @@ export function SettingsScreen({
   );
 
   return (
-    <section className="keyboard-safe-form flex flex-1 flex-col pb-4">
+    <section className="keyboard-safe-form flex flex-1 flex-col">
       {embedded ? (
-        <div className="space-y-4">{controls}</div>
+        <div className="space-y-2">{controls}</div>
       ) : (
         <GamePanel
           subtitle="Choose teams, timing, skips, and which word categories can appear."

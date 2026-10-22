@@ -30,4 +30,19 @@ describe("word selection", () => {
     expect(deck.reserveWords).toHaveLength(5);
     expect(deck.words[0]?.hint).toMatch(/^Hint /);
   });
+
+  it("chooses only selected categories that still contain matching words", () => {
+    const words: WordEntry[] = [{ word: "Park", category: "Where", hint: "Outside" }];
+    const deck = buildTurnDeck(words, createDefaultSettings(), () => 0);
+    expect(deck.category).toBe("Where");
+    expect(deck.words).toEqual(words);
+  });
+
+  it("reports an empty filtered pool without using other categories", () => {
+    const words: WordEntry[] = [{ word: "Park", category: "Where", hint: "Outside" }];
+    expect(() =>
+      buildTurnDeck(words, { ...createDefaultSettings(), selectedCategories: ["Who"] }),
+    ).toThrow("No words match these categories and word settings");
+    expect(() => chooseWeightedCategory([])).toThrow("No words match");
+  });
 });

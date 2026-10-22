@@ -2,12 +2,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createMatch, endTurn, startTurn } from "@/domain/whowhatwhere/game";
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
+import { getWhoWhatWhereWordList } from "@/domain/whowhatwhere/wordList";
 import { WhoWhatWhereDeviceController } from "@/features/whowhatwhere/whoWhatWhereDeviceController";
 import {
   createWhoWhatWhereDeviceSession,
   type WhoWhatWhereDeviceSession,
   whoWhatWhereDeviceSessionSchema,
 } from "@/features/whowhatwhere/whoWhatWhereDeviceSession";
+import { requireContentPreferences } from "@/services/contentPreference";
 import { setDeviceKeepAwake } from "@/services/deviceLifecycle";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
 import { readSnapshot, removeSnapshot, writeSnapshot } from "@/services/nativeSnapshotStore";
@@ -24,12 +26,16 @@ const words = Array.from({ length: 20 }, (_, index) => ({
 }));
 
 vi.mock("@/domain/whowhatwhere/wordList", () => ({
-  getWhoWhatWhereWordList: () =>
+  getWhoWhatWhereWordList: vi.fn(() =>
     Array.from({ length: 20 }, (_, index) => ({
       word: `Test clue ${index}`,
       category: "What",
       hint: `Hint ${index}`,
     })),
+  ),
+}));
+vi.mock("@/services/contentPreference", () => ({
+  requireContentPreferences: vi.fn(async () => ({ kidsMode: false })),
 }));
 vi.mock("@/services/gameSoundEffects", () => ({ playGameSoundEffect: vi.fn() }));
 vi.mock("@/services/deviceLifecycle", () => ({
@@ -71,8 +77,7 @@ async function activeController(mount = false) {
     selectedCategories: ["What"],
     turnDurationSeconds: 30,
   });
-  controller.startNewMatch();
-  await settle();
+  await controller.startNewMatch();
   await controller.startNextTurn();
   return controller;
 }
@@ -97,6 +102,8 @@ describe("WWW device session durability and lifecycle", () => {
       device.saved = null;
     });
     vi.clearAllMocks();
+    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: false });
+    vi.mocked(getWhoWhatWhereWordList).mockReturnValue(words);
   });
 
   afterEach(async () => {
@@ -104,6 +111,110 @@ describe("WWW device session durability and lifecycle", () => {
     await settle();
     vi.restoreAllMocks();
     vi.useRealTimers();
+  });
+
+  it("captures Kids mode once per match and keeps word settings through later turns and restoration", async () => {
+    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+    const controller = new WhoWhatWhereDeviceController();
+    await controller.hydrate();
+    controller.updateSettings({
+      ...createDefaultSettings(),
+      selectedCategories: ["What"],
+      wordDifficulty: "medium",
+    });
+    await controller.startNewMatch();
+    expect(controller.getSnapshot().session.match?.settings).toMatchObject({
+      wordDifficulty: "medium",
+      kidsMode: true,
+    });
+    expect(device.saved).toMatchObject({
+      setup: { settings: { wordDifficulty: "medium", kidsMode: true } },
+      match: { settings: { wordDifficulty: "medium", kidsMode: true } },
+    });
+
+    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: false });
+    await controller.startNextTurn();
+    controller.endTurn();
+    await settle();
+    controller.advanceTurnRecap();
+    await settle();
+
+    const restored = new WhoWhatWhereDeviceController();
+    await restored.hydrate();
+    await restored.openSavedGame();
+    await restored.startNextTurn();
+    expect(requireContentPreferences).toHaveBeenCalledTimes(1);
+    expect(getWhoWhatWhereWordList).toHaveBeenLastCalledWith({
+      difficulty: "medium",
+      kidsMode: true,
+    });
+    expect(restored.getSnapshot().session.match?.settings.kidsMode).toBe(true);
+
+    await restored.startOverFromPendingMatch();
+    await restored.startNewMatch();
+    expect(requireContentPreferences).toHaveBeenCalledTimes(2);
+    expect(restored.getSnapshot().session.match?.settings.kidsMode).toBe(false);
+  });
+
+  it("preserves v1 saves without treating the legacy difficulty as a word filter", async () => {
+    const settings = { ...createDefaultSettings(), difficultyMode: "hard" as const };
+    const session = createWhoWhatWhereDeviceSession();
+    const match = createMatch(session.setup.teams, settings);
+    const legacySettings = Object.fromEntries(
+      Object.entries(settings).filter(([key]) => key !== "wordDifficulty" && key !== "kidsMode"),
+    );
+    device.saved = {
+      ...session,
+      mode: "ready",
+      setup: { ...session.setup, settings: legacySettings },
+      match: { ...match, settings: legacySettings },
+    };
+    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+
+    const restored = new WhoWhatWhereDeviceController();
+    await restored.hydrate();
+    await restored.openSavedGame();
+    await restored.startNextTurn();
+    expect(restored.getSnapshot().session.match?.settings).toMatchObject({
+      difficultyMode: "hard",
+      wordDifficulty: "all",
+      kidsMode: false,
+    });
+    expect(requireContentPreferences).not.toHaveBeenCalled();
+    expect(getWhoWhatWhereWordList).toHaveBeenLastCalledWith({
+      difficulty: "all",
+      kidsMode: false,
+    });
+  });
+
+  it("keeps setup available when the filtered pool has no selected categories", async () => {
+    const controller = new WhoWhatWhereDeviceController();
+    await controller.hydrate();
+    controller.updateSettings({
+      ...createDefaultSettings(),
+      selectedCategories: ["Where"],
+      wordDifficulty: "hard",
+    });
+    await controller.startNewMatch();
+    expect(controller.getSnapshot().setupError).toContain("No words match");
+    expect(controller.getSnapshot().session.match).toBeNull();
+    expect(getWhoWhatWhereWordList).toHaveBeenCalledExactlyOnceWith({
+      difficulty: "hard",
+      kidsMode: false,
+    });
+  });
+
+  it("does not start a match when Kids mode preferences cannot be loaded", async () => {
+    const controller = new WhoWhatWhereDeviceController();
+    await controller.hydrate();
+    vi.mocked(requireContentPreferences).mockRejectedValue(
+      new Error("Retry Kids mode in app settings."),
+    );
+    await controller.startNewMatch();
+    expect(controller.getSnapshot().setupError).toBe("Retry Kids mode in app settings.");
+    expect(controller.getSnapshot().session.match).toBeNull();
+    expect(writeSnapshot).not.toHaveBeenCalled();
+    expect(getWhoWhatWhereWordList).not.toHaveBeenCalled();
   });
 
   it("flushes an unfinished roster and exact team step before navigation; restart resumes setup", async () => {
@@ -183,8 +294,7 @@ describe("WWW device session durability and lifecycle", () => {
     cleanups.push(controller.mount());
     await controller.hydrate();
     controller.updateSettings({ ...createDefaultSettings(), selectedCategories: ["What"] });
-    controller.startNewMatch();
-    await settle();
+    await controller.startNewMatch();
     let finishWrite: (() => void) | undefined;
     vi.mocked(writeSnapshot).mockImplementationOnce(
       (_key, value) =>
@@ -527,8 +637,7 @@ describe("WWW device session durability and lifecycle", () => {
       selectedCategories: ["What"],
       totalRounds: 1,
     });
-    controller.startNewMatch();
-    await settle();
+    await controller.startNewMatch();
     await controller.startNextTurn();
     controller.endTurn();
     await settle();

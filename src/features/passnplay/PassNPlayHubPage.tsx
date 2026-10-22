@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { AppInfoHeaderButton, AppInfoOverlay } from "@/components/AppInfoOverlay";
 import { IconDisguise, IconTopHat, IconWhoWhatWhere } from "@/components/icons";
+import { KidsModeSetting } from "@/components/KidsModeSetting";
 import { ModalDialog } from "@/components/ModalDialog";
 import { Button } from "@/components/ui/button";
 import { ThemeChooser } from "@/themes/ThemeChooser";
@@ -73,6 +74,7 @@ export function PassNPlayHubPage() {
       </section>
       {openDialog === "settings" && (
         <ModalDialog title="Settings" onClose={() => setOpenDialog(null)}>
+          <KidsModeSetting />
           <ThemeChooser />
           <div className="space-y-3 pt-3 text-typ-ui text-muted-foreground">
             <p>Words are included on your phone. No internet connection is needed to play.</p>

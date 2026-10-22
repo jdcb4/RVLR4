@@ -26,6 +26,7 @@ import {
   createHatTeamSetup,
   type HatTransitionResult,
 } from "@/features/hat-game/hatSingleplayerTransitions";
+import { requireContentPreferences } from "@/services/contentPreference";
 import {
   isDeviceActive,
   setDeviceKeepAwake,
@@ -53,6 +54,7 @@ export class HatDeviceController {
   private keepAwake = false;
   private warningTurn = "";
   private draftTimer: ReturnType<typeof setTimeout> | null = null;
+  private suggesting = false;
   private listeners = new Set<() => void>();
   private view = this.makeView();
 
@@ -319,14 +321,46 @@ export class HatDeviceController {
       clueSubmissions: { ...snapshot.clueSubmissions, [player.id]: { clues } },
     });
   };
-  suggestClue = (index: number) => {
-    const suggestions = getHatClueSuggestions();
-    const existing = Object.values(this.session.snapshot.clueSubmissions).flatMap(
-      (entry) => entry.clues,
-    );
-    const available = suggestions.filter((clue) => !existing.includes(clue));
-    const suggestion = available[Math.floor(Math.random() * available.length)];
-    if (suggestion) this.updateClue(index, suggestion);
+  suggestClue = async (index: number) => {
+    const snapshot = this.session.snapshot;
+    if (
+      !this.canAct() ||
+      this.suggesting ||
+      snapshot.step !== "clues" ||
+      !snapshot.clueEntryRevealed ||
+      !snapshot.players[snapshot.clueEntryIndex] ||
+      !Number.isInteger(index) ||
+      index < 0 ||
+      index >= GAME_DEFAULTS.cluesPerPlayer
+    )
+      return;
+    this.suggesting = true;
+    const pauseEpoch = this.pauseEpoch;
+    const stillCurrent = () =>
+      this.canAct() && this.session.snapshot === snapshot && this.pauseEpoch === pauseEpoch;
+    this.error = "";
+    this.emit();
+    try {
+      const { kidsMode } = await requireContentPreferences();
+      // Edits and navigation remain responsive while preferences load.
+      if (!stillCurrent()) return;
+      const suggestions = getHatClueSuggestions({ kidsMode });
+      const existing = Object.values(snapshot.clueSubmissions).flatMap((entry) => entry.clues);
+      const available = suggestions.filter((clue) => !existing.includes(clue));
+      const suggestion = available[Math.floor(Math.random() * available.length)];
+      if (!suggestion) {
+        this.error = "No unused famous figures match the current content settings.";
+        this.emit();
+        return;
+      }
+      this.updateClue(index, suggestion);
+    } catch (error) {
+      if (!stillCurrent()) return;
+      this.error = error instanceof Error ? error.message : "Content settings are unavailable.";
+      this.emit();
+    } finally {
+      this.suggesting = false;
+    }
   };
   confirmClues = () => {
     if (this.session.snapshot.step !== "clues" || !this.session.snapshot.clueEntryRevealed) return;

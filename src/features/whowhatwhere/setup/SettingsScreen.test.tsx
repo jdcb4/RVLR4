@@ -41,6 +41,12 @@ describe("SettingsScreen", () => {
       ...settings,
       selectedCategories: settings.selectedCategories.filter((category) => category !== "Who"),
     });
+
+    const difficulty = screen.getByRole("combobox", { name: "Difficulty" });
+    expect(within(difficulty).getAllByRole("option")).toHaveLength(4);
+    expect(difficulty).toHaveValue("all");
+    await user.selectOptions(difficulty, "medium");
+    expect(onChange).toHaveBeenCalledWith({ ...settings, wordDifficulty: "medium" });
   });
 
   it("resets every setting through the existing change callback", async () => {
@@ -52,6 +58,8 @@ describe("SettingsScreen", () => {
       skipLimit: -1,
       selectedCategories: ["Who"],
       difficultyMode: "hard",
+      wordDifficulty: "hard",
+      kidsMode: true,
       hints: { enabled: true, perTurnLimit: 3 },
     };
     const onChange = vi.fn();
@@ -67,6 +75,8 @@ describe("SettingsScreen", () => {
       skipLimit: 1,
       selectedCategories: ["What", "Who", "Where"],
       difficultyMode: "easy",
+      wordDifficulty: "all",
+      kidsMode: false,
       hints: { enabled: false, perTurnLimit: 0 },
     });
   });

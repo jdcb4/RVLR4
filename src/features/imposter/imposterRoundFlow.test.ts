@@ -11,6 +11,7 @@ function buildSnapshot(): ImposterSnapshot {
     step: "review",
     playerCount: 4,
     imposterCount: 1,
+    wordDifficulty: "all",
     players: [
       { id: "player-1", name: "Ada" },
       { id: "player-2", name: "Grace" },

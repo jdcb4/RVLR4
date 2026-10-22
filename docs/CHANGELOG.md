@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.32.0 — 22 October 2026
+
+- Add All/Easy/Medium/Hard difficulty selection to Who What Where and Imposter using catalogue ratings, with compact shared dropdowns. Defaults and legacy saves keep the full pool.
+- Add durable app-wide Kids mode in Settings. New WWW games, new Imposter deals and automatic Hat suggestions use only ages 8–12 suitable catalogue entries when enabled. Saved games, existing secrets and manual Hat clues remain unchanged.
+- Keep WWW's selected pool stable throughout a match. Block new selection when content preferences cannot be loaded; show an explicit error for empty filtered pools instead of falling back to unsuitable words. Imposter currently has no Hard kids-suitable entries.
+
 ## 0.31.1 — 22 October 2026
 
 - Add 123 dedicated ages 8–12 answers: 23 Who, 81 What and 19 Where, built around children's play, stories, school experiences and imaginative adventures, with concrete child-friendly hints. Includes 23 Hat suggestions and 47 Imposter prompts.

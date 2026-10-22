@@ -11,6 +11,21 @@ export function getWordCatalogue(): readonly CatalogueEntry[] {
   return catalogue;
 }
 
-export function getCatalogueForGame(game: CatalogueGame): readonly CatalogueEntry[] {
-  return catalogue.filter((entry) => entry.games.includes(game));
+export type WordPoolOptions = {
+  difficulty?: "all" | "easy" | "medium" | "hard";
+  kidsMode?: boolean;
+};
+
+export function getCatalogueForGame(
+  game: CatalogueGame,
+  options: WordPoolOptions = {},
+): readonly CatalogueEntry[] {
+  return catalogue.filter(
+    (entry) =>
+      entry.games.includes(game) &&
+      (!options.kidsMode || entry.kidAppropriate) &&
+      (!options.difficulty ||
+        options.difficulty === "all" ||
+        entry.difficulty === options.difficulty),
+  );
 }

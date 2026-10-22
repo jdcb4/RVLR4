@@ -20,6 +20,7 @@ const snapshotSchema = z
     ]),
     playerCount: z.number().int().min(4).max(10),
     imposterCount: z.number().int().min(1).max(2),
+    wordDifficulty: z.enum(["all", "easy", "medium", "hard"]).default("all"),
     players: z
       .array(z.object({ id: z.string().min(1), name: z.string().max(80) }))
       .min(4)

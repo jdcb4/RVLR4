@@ -1,4 +1,4 @@
-import { CATEGORIES, type Category, type GameSettings, type WordEntry } from "./types";
+import type { Category, GameSettings, WordEntry } from "./types";
 
 const CATEGORY_WEIGHTS: Record<Category, number> = {
   What: 2,
@@ -16,7 +16,12 @@ export function chooseWeightedCategory(
   selectedCategories: readonly Category[],
   random = Math.random,
 ): Category {
-  const categories = selectedCategories.length > 0 ? selectedCategories : CATEGORIES;
+  const categories = selectedCategories;
+  if (categories.length === 0) {
+    throw new Error(
+      "No words match these categories and word settings. Change the difficulty or categories.",
+    );
+  }
   const totalWeight = categories.reduce((total, category) => total + CATEGORY_WEIGHTS[category], 0);
   let threshold = random() * totalWeight;
 
@@ -35,7 +40,10 @@ export function buildTurnDeck(
   settings: GameSettings,
   random = Math.random,
 ): TurnDeck {
-  const category = chooseWeightedCategory(settings.selectedCategories, random);
+  const availableCategories = settings.selectedCategories.filter((category) =>
+    allWords.some((word) => word.category === category),
+  );
+  const category = chooseWeightedCategory(availableCategories, random);
   const matchingWords = allWords.filter((word) => word.category === category);
 
   if (matchingWords.length === 0) {

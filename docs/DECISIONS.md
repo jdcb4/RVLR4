@@ -358,3 +358,7 @@ Apply the approved Cut-Paper Playground through Recess-only CSS and explicit pre
 ## 22 October 2026 — Curated shared answer catalogue
 
 Keep the three original word JSON files as immutable archival inputs. A separate validated catalogue owns canonical answers, aliases, original source IDs, game membership, adult difficulty and ages 8–12 suitability. Sharing a referent between games uses one record; alternate names do not become extra draw-pool entries. Domain adapters project the existing word/string shapes, leaving version-1 snapshots intact. Difficulty and kids selectors remain deferred; this change prepares their content and expands current pools without introducing modes or a remote service. Naming and editorial rules live in WORD_CATALOGUE.md.
+
+## 22 October 2026 — Content selection preferences
+
+Use catalogue filters in game adapters, sharing one exact difficulty/kids predicate. Add independent native `app.content.v1` preference storage rather than coupling content selection to theme persistence. Default missing old game settings to All/Kids off and preserve the legacy WWW difficulty rule field. Freeze WWW pool settings at match creation; read the app preference for each new Imposter deal and Hat suggestion. Never reroll saved state or censor manual Hat input. Empty filtered pools and unreadable preferences fail visibly without widening selection. Native select controls preserve readable labels and compact settings rows at 360px. No new dependencies.

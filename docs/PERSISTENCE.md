@@ -14,6 +14,10 @@ Bundled catalogue metadata is not stored in game snapshots. Game adapters projec
 
 ## App preferences
 
+`app.content.v1` stores `{ schemaVersion: 1, kidsMode }` independently of themes and games. Defaults off only when no record exists; corrupt or unsupported preferences block new automatic selection until loading succeeds. Preference changes publish after durable commit; failed writes leave the last committed value active. A new pool waits for an outstanding preference write.
+
+WWW settings add `wordDifficulty` (all/easy/medium/hard) and a frozen `kidsMode` value captured when a match starts. Later turns use those saved settings; changing the app preference does not change an existing match. Legacy v1 settings default to all/false, independently of the retained legacy `difficultyMode` rule field. Imposter snapshots add `wordDifficulty`, defaulting old records to all; new deals read the global preference, while resumed secrets never regenerate. Hat suggestions read the preference per request and discard delayed results after edits or navigation; manual and already-submitted clues remain intact.
+
 `app.appearance.v1` stores `{ schemaVersion: 1, theme }` independently of every game. The theme enum is validated and uses the same native current/previous snapshot store. Selection is shown only after commit; unsupported/corrupt records are preserved, and Settings offers a load retry rather than silently replacing them. Browser previews use the same localStorage envelope adapter as game sessions.
 
 ## Recovery and privacy

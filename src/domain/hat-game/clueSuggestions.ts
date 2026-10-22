@@ -1,6 +1,6 @@
 import { GAME_DEFAULTS } from "@/config/hatDefaults";
 import { uniqueStaticTextListSchema } from "@/data/staticDataSchemas";
-import { getCatalogueForGame } from "@/data/wordCatalogue";
+import { getCatalogueForGame, type WordPoolOptions } from "@/data/wordCatalogue";
 
 export const hatClueSuggestionsSchema = uniqueStaticTextListSchema().refine(
   (suggestions) =>
@@ -8,10 +8,7 @@ export const hatClueSuggestionsSchema = uniqueStaticTextListSchema().refine(
   `Suggestions must be at most ${GAME_DEFAULTS.maxClueLength} characters.`,
 );
 
-const suggestions = hatClueSuggestionsSchema.parse(
-  getCatalogueForGame("hat").map(({ word }) => word),
-);
-
-export function getHatClueSuggestions(): readonly string[] {
-  return suggestions;
+export function getHatClueSuggestions(options: WordPoolOptions = {}): readonly string[] {
+  const suggestions = getCatalogueForGame("hat", options).map(({ word }) => word);
+  return suggestions.length === 0 ? [] : hatClueSuggestionsSchema.parse(suggestions);
 }

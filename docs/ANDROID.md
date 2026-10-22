@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.31.1 is the debug-signed three-game build with expanded curated word pools, five app-wide themes and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. Catalogue difficulty/kids metadata is ready for future mode selectors. No word-update source is configured yet. Release signing and remote word installation remain future work.
+0.32.0 is the debug-signed three-game build with expanded curated word pools, five app-wide themes and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. WWW and Imposter offer difficulty selection; app Settings offers Kids mode for new games and Hat suggestions. No word-update source is configured yet. Release signing and remote word installation remain future work.
 
 Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
@@ -334,3 +334,11 @@ The same folder contains `RVLRY-word-catalogue.csv` for review and `RVLRY-word-l
 Fallow retains 39 existing findings and nine clone groups. Vite's bundled catalogue advisory remains visible at 903 kB (138 kB gzip). No dependencies, network requirements or save migrations were added.
 
 APK: `out/RVLRY-0.31.1-kids.apk`, copied and SHA-256 verified to `\\JNAS\Media\DropBox\RVLRY-0.31.1-kids.apk`. SHA-256: `77920EA12996A9CD1032A56CA0515C0F97D55982396A86F6212909B54D421A93`. The same folder contains checksum-verified `RVLRY-kids-targeted.csv` and the updated full `RVLRY-word-catalogue.csv`. A dedicated kids-mode selector remains deferred; the new entries join the existing game pools.
+
+## Difficulty and Kids mode — 22 October 2026
+
+0.32.0 / versionCode 16 passes full verify (259 tests / 42 files), Android assembly, two JVM tests, nine API-35 device tests and both separate force-stop recovery phases. After the final compact WWW spacing adjustment, both AppRenderTest cases passed again against the final APK. Native checks restore Kids mode from SQLite, change it in app Settings, verify captured WWW difficulty/kids values, and exercise all three games with Kids mode enabled. Existing saves and manual Hat clues are preserved; new-generation filters and interrupted async operations have regression coverage. Pixel acceptance remains unverified.
+
+Browser review at 360x640 checked WWW and Imposter settings, the shared difficulty dropdown and the empty Hard + Kids Imposter pool. WWW settings fit without horizontal or vertical scrolling after removing excess spacing. App Settings was checked at 360px and 412x915, including the persisted Kids switch. The existing Settings dialog remains scrollable on short displays. Scoped design detection is clean. Fallow retains 39 findings and nine clone groups; no findings/tests were suppressed. The bundled catalogue remains approximately 903 kB (138 kB gzip), with Vite's advisory visible.
+
+APK: `out/RVLRY-0.32.0-modes.apk`, copied and SHA-256 verified to `\\JNAS\Media\DropBox\RVLRY-0.32.0-modes.apk`. SHA-256: `B04A8A7232D25886E076B5974BED286E07D63D53314AF32823E605AC1DC5B44A`. Install over the current prototype to retain saves and themes.
