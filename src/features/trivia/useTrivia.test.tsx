@@ -8,6 +8,7 @@ import {
   revealTriviaAnswer,
   setTriviaAnswer,
   setTriviaMark,
+  startTriviaAnswers,
   startTriviaQuiz,
   triviaSessionSchema,
 } from "@/domain/trivia/game";
@@ -301,6 +302,33 @@ describe("Trivia durable controller", () => {
       await hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "Wrong answer"));
       await hook.result.current.changeQuiz(nextTriviaQuestion);
     });
+    expect(hook.result.current.session?.quiz?.phase).toBe("ready");
+    expect(hook.result.current.session?.quiz?.items.map((item) => item.revealed)).toEqual([
+      false,
+      false,
+    ]);
+    expect(hook.result.current.session?.quiz?.items.map((item) => item.mark)).toEqual([null, null]);
+    const readyCheckpoint = await snapshots.readSnapshot(key, triviaSessionSchema);
+    expect(readyCheckpoint.value?.quiz?.phase).toBe("ready");
+    hook.unmount();
+    hook = await mount();
+    expect(hook.result.current.resumePending).toBe(true);
+    await act(async () => {
+      await hook.result.current.resume();
+      await hook.result.current.changeQuiz(nextTriviaQuestion);
+    });
+    expect(hook.result.current.session?.quiz?.phase).toBe("ready");
+    expect(hook.result.current.session?.quiz?.items.map((item) => item.revealed)).toEqual([
+      false,
+      false,
+    ]);
+    expect(hook.result.current.session?.quiz?.items.map((item) => item.mark)).toEqual([null, null]);
+    await act(async () => hook.result.current.changeQuiz(startTriviaAnswers));
+    expect(hook.result.current.session?.quiz?.phase).toBe("answers");
+    expect(hook.result.current.session?.quiz?.items.map((item) => item.revealed)).toEqual([
+      true,
+      false,
+    ]);
     expect(hook.result.current.session?.quiz?.items.map((item) => item.mark)).toEqual([true, null]);
     hook.unmount();
     hook = await mount();

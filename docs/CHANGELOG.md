@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.37.1 — 22 October 2026
+
+- Place Trivia Correct on the right and Incorrect on the left.
+- Save a Ready for the answers? step after the last end-mode question; reveal starts only after Go to answers.
+- Add horizontal drawing room around the shared scroll area so focus outlines and Recess button shadows are not clipped. Existing version-3 Trivia saves remain compatible.
+
 ## 0.37.0 — 22 October 2026
 
 - Add Correct/Incorrect self-marking to cooperative Trivia, with no teams, one shared score and a scrollable question recap. Revealed questions require a mark before advancing; marks can be overridden.

@@ -50,3 +50,5 @@ Cooperative Trivia uses `trivia.device.v3` with `schemaVersion: 3` in 0.37.0. It
 ## Screenshots (0.34.1)
 
 Screenshots, screen recording and Android recent-app previews are allowed throughout the app, including private words and roles, as requested by Joe. The native FLAG_SECURE setting and privacy bridge API have been removed. Background pause/conceal behavior and player handoff covers remain unchanged.
+
+Trivia 0.37.1 adds a persisted `ready` phase within v3 for end-mode quizzes. All played questions remain unrevealed until Go to answers, including after reload. Existing v3 questions/answers/results saves remain compatible.

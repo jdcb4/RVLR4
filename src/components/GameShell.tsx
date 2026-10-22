@@ -73,7 +73,7 @@ export function GameShell({
 
         <main
           className={cn(
-            "keyboard-safe-form flex min-h-0 flex-1 touch-pan-y flex-col overflow-x-hidden overflow-y-auto",
+            "keyboard-safe-form -mx-2 flex min-h-0 flex-1 touch-pan-y flex-col overflow-x-hidden overflow-y-auto px-2",
             compact ? "py-2" : "py-4",
           )}
         >

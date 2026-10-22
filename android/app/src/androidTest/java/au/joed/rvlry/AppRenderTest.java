@@ -267,7 +267,7 @@ public class AppRenderTest {
             clickButton(activity, "Resume");
             awaitCondition(activity, "document.body.innerText.includes('Native fixture question?') && document.querySelector('textarea')?.placeholder==='Your answer (optional)'");
             evaluate(activity, "(()=>{const field=document.querySelector('textarea');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(field,'fIXTURE ANSWER   ');field.dispatchEvent(new Event('input',{bubbles:true}));})()");
-            awaitCondition(activity, "[...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Reveal answers'&&!b.disabled)");
+            awaitCondition(activity, "[...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Finish questions'&&!b.disabled)");
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
                 assertTrue("Written answer was not committed", saved.read("trivia.device.v3")[0].contains("fIXTURE ANSWER"));
                 assertTrue("Visibility was not committed", saved.read("app.features.v1")[0].contains("\"triviaEnabled\":true"));
@@ -275,7 +275,13 @@ public class AppRenderTest {
             evaluate(activity, "location.reload()");
             clickButton(activity, "Resume");
             awaitCondition(activity, "document.querySelector('textarea')?.value==='fIXTURE ANSWER   '");
-            clickButton(activity, "Reveal answers");
+            clickButton(activity, "Finish questions");
+            awaitCondition(activity, "document.body.innerText.includes('Ready for the answers?')");
+            evaluate(activity, "location.reload()");
+            awaitCondition(activity, "document.body.innerText.includes('Your saved quiz')");
+            clickButton(activity, "Resume");
+            awaitCondition(activity, "document.body.innerText.includes('Ready for the answers?')");
+            clickButton(activity, "Go to answers");
             awaitCondition(activity, "document.body.innerText.includes('Fixture answer') && [...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Correct'&&b.getAttribute('aria-pressed')==='true')");
             clickButton(activity, "Incorrect");
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Incorrect'&&b.getAttribute('aria-pressed')==='true') && [...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Correct'&&b.getAttribute('aria-pressed')==='false')");

@@ -58,7 +58,7 @@ const quizSchema = z
       .min(1)
       .max(100),
     cursor: z.number().int().min(0).max(100),
-    phase: z.enum(["questions", "answers", "results"]),
+    phase: z.enum(["questions", "ready", "answers", "results"]),
     settings: triviaSettingsSchema,
     kidsMode: z.boolean(),
     packVersion: z.number().int().positive().safe(),
@@ -74,8 +74,13 @@ const quizSchema = z
     ) {
       issue("Invalid quiz position.");
     }
-    if (quiz.phase === "answers" && quiz.settings.revealMode !== "end")
+    if ((quiz.phase === "ready" || quiz.phase === "answers") && quiz.settings.revealMode !== "end")
       issue("Invalid answer phase.");
+    if (
+      quiz.phase === "ready" &&
+      quiz.cursor !== quiz.items.findIndex((item) => item.shownAt !== null && !item.excluded)
+    )
+      issue("Answer review must start at the first played question.");
     const ids = new Set<string>();
     const questions = new Set<string>();
     quiz.items.forEach((item, index) => {
@@ -128,7 +133,10 @@ const quizSchema = z
           issue("Answers revealed during question phase.");
       } else if (!item.excluded) {
         if (item.shownAt === null) issue("Unshown question after question phase.");
-        if (item.revealed !== (quiz.phase === "results" || index <= quiz.cursor))
+        if (quiz.phase === "ready") {
+          if (item.revealed || item.mark !== null)
+            issue("Answers cannot be revealed or marked before starting review.");
+        } else if (item.revealed !== (quiz.phase === "results" || index <= quiz.cursor))
           issue("Invalid answer reveal order.");
         if ((quiz.phase === "results" || index < quiz.cursor) && item.mark === null)
           issue("Reviewed answers must be marked.");
@@ -266,12 +274,7 @@ function revealWrittenAnswer(item: TriviaQuiz["items"][number]): TriviaQuiz["ite
 function finishQuestions(quiz: TriviaQuiz): TriviaQuiz {
   const cursor = quiz.items.findIndex((item) => item.shownAt !== null && !item.excluded);
   if (quiz.settings.revealMode === "end" && cursor >= 0) {
-    return {
-      ...quiz,
-      phase: "answers",
-      cursor,
-      items: quiz.items.map((item, index) => (index === cursor ? revealWrittenAnswer(item) : item)),
-    };
+    return { ...quiz, phase: "ready", cursor };
   }
   return { ...quiz, phase: "results", cursor: quiz.items.length };
 }
@@ -319,8 +322,19 @@ export function revealTriviaAnswer(quiz: TriviaQuiz): TriviaQuiz {
   };
 }
 
+export function startTriviaAnswers(quiz: TriviaQuiz): TriviaQuiz {
+  if (quiz.phase !== "ready" || quiz.settings.revealMode !== "end") return quiz;
+  return {
+    ...quiz,
+    phase: "answers",
+    items: quiz.items.map((item, index) =>
+      index === quiz.cursor ? revealWrittenAnswer(item) : item,
+    ),
+  };
+}
+
 export function nextTriviaQuestion(quiz: TriviaQuiz, now = Date.now()): TriviaQuiz {
-  if (quiz.phase === "results") return quiz;
+  if (quiz.phase === "ready" || quiz.phase === "results") return quiz;
   const current = quiz.items[quiz.cursor];
   if (quiz.phase === "questions") {
     if (quiz.settings.revealMode === "each" && (!current?.revealed || current.mark === null))

@@ -18,6 +18,7 @@ import {
   revealTriviaAnswer,
   setTriviaAnswer,
   setTriviaMark,
+  startTriviaAnswers,
   triviaCategoryLabels,
   type TriviaQuiz,
   type TriviaSettings,
@@ -94,6 +95,21 @@ export function TriviaPage() {
         blocked={!!error}
         onChange={(settings) => void game.saveSettings(settings).catch(ignoreFailure)}
         onStart={(settings) => void game.start(settings).catch(ignoreFailure)}
+      />
+    );
+  } else if (quiz.phase === "ready") {
+    content = (
+      <section className="flex flex-1 items-center justify-center">
+        <h2 className="material-callout text-center text-typ-section-title font-semibold">
+          Ready for the answers?
+        </h2>
+      </section>
+    );
+    footer = (
+      <PrimaryFooterButton
+        label="Go to answers"
+        disabled={busy || !!error}
+        onClick={() => changeQuiz(startTriviaAnswers)}
       />
     );
   } else if (quiz.phase === "results") {
@@ -456,7 +472,7 @@ function TriviaQuestionView({
         <label className="block space-y-1">
           <span className="sr-only">Your answer</span>
           <textarea
-                className={`${inputClass} w-full resize-y placeholder:text-muted-foreground`}
+            className={`${inputClass} w-full resize-y placeholder:text-muted-foreground`}
             placeholder="Your answer (optional)"
             disabled={blocked}
             rows={2}
@@ -477,7 +493,7 @@ function TriviaQuestionView({
       <div className="mt-auto space-y-2 pt-2">
         {item.revealed && (
           <div role="group" aria-label="Mark your answer" className="grid grid-cols-2 gap-2">
-            {([true, false] as const).map((correct) => {
+            {([false, true] as const).map((correct) => {
               const MarkIcon = correct ? Check : X;
               return (
                 <Button
@@ -503,7 +519,7 @@ function TriviaQuestionView({
                 ? "Reveal answer"
                 : atEnd
                   ? quiz.phase === "questions" && quiz.settings.revealMode === "end"
-                    ? "Reveal answers"
+                    ? "Finish questions"
                     : "Finish quiz"
                   : quiz.phase === "answers"
                     ? "Next answer"

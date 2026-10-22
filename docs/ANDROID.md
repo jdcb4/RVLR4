@@ -399,3 +399,11 @@ Full verify passed: TypeScript, ESLint, 340 tests across 51 files and production
 Browser review at 360x640 covered both reveal modes, manual marking and a 10-question recap (5 correct, 5 incorrect). The recap scrolls independently while score and footer remain visible. The answer placeholder uses the theme's muted foreground for contrast. Impeccable's scoped detector reported no findings. Fallow was reviewed: 41 existing/retained dead-code findings and 10 clone groups; no suppressions added. The existing Vite catalogue-size advisory remains.
 
 Delivered `\\JNAS\Media\DropBox\RVLRY-0.37.0-trivia-scoring.apk`, SHA-256 `B679A45976B1D18CFB0BBA0701406C98293F899B5D65E7EF168B476C4A686AE1`, matching `out/RVLRY-0.37.0-trivia-scoring.apk`. Earlier Trivia saves start fresh under schema/key v3; other games are unaffected.
+
+## Trivia answer handoff and edge clipping — 0.37.1, 22 October 2026
+
+Full verify passed (341 tests / 51 files, typecheck, ESLint and production build), along with Android assembly, all 19 API-35 device tests and separate snapshot/content force-stop recovery phases. Native flow reloads and resumes at Ready for the answers? before explicitly starting answer review. Existing v3 saves remain compatible. Pixel acceptance of the clipping fix remains unverified.
+
+Recess browser review at 360x640 covered setup shadows, the focused answer input, the ready screen and answer controls. The scroll area now leaves 8px drawing room on both sides without narrowing content; focus outlines and offset shadows are visible. The scoped Impeccable detector reported no findings. The existing Vite catalogue-size advisory remains.
+
+Delivered `\\JNAS\Media\DropBox\RVLRY-0.37.1-trivia-flow.apk`; SHA-256 `266488EFF7287D9B08CB79C7A4840F7CBC707437B2ADFA66E6C3209C9FE0EE25` matches the local `out/RVLRY-0.37.1-trivia-flow.apk`.

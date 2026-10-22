@@ -105,6 +105,11 @@ describe("Trivia phone flow", () => {
     await user.click(await screen.findByRole("button", { name: "Reveal answer" }));
     expect(await screen.findByText(/Synthetic answer/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Finish quiz" })).toBeDisabled();
+    expect(
+      within(screen.getByRole("group", { name: "Mark your answer" }))
+        .getAllByRole("button")
+        .map((b) => b.textContent),
+    ).toEqual(["Incorrect", "Correct"]);
     await user.click(screen.getByRole("button", { name: "Correct" }));
     await waitFor(() => expect(storage.value?.quiz?.items[0]?.mark).toBe(true));
     await user.click(screen.getByRole("button", { name: "Finish quiz" }));
@@ -148,7 +153,13 @@ describe("Trivia phone flow", () => {
     );
     await user.click(await screen.findByRole("button", { name: "Next question" }));
     expect(screen.queryByText(first)).not.toBeInTheDocument();
-    await user.click(await screen.findByRole("button", { name: "Reveal answers" }));
+    await user.click(await screen.findByRole("button", { name: "Finish questions" }));
+    expect(
+      await screen.findByRole("heading", { name: "Ready for the answers?" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(first)).not.toBeInTheDocument();
+    expect(storage.value?.quiz?.phase).toBe("ready");
+    await user.click(screen.getByRole("button", { name: "Go to answers" }));
     expect(await screen.findByRole("button", { name: "Correct" })).toHaveAttribute(
       "aria-pressed",
       "true",
@@ -162,6 +173,11 @@ describe("Trivia phone flow", () => {
     );
     await user.click(screen.getByRole("button", { name: "Next answer" }));
     expect(screen.getByRole("button", { name: "Finish quiz" })).toBeDisabled();
+    expect(
+      within(screen.getByRole("group", { name: "Mark your answer" }))
+        .getAllByRole("button")
+        .map((b) => b.textContent),
+    ).toEqual(["Incorrect", "Correct"]);
     await user.click(screen.getByRole("button", { name: "Correct" }));
     await user.click(await screen.findByRole("button", { name: "Finish quiz" }));
     expect(await screen.findByRole("heading", { name: "Quiz complete" })).toBeInTheDocument();
