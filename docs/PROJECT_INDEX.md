@@ -1,6 +1,6 @@
 # RVLRY Android project index
 
-The current deliverable is a standalone offline Android app with Who What Where, Hat Game and Imposter. Each game has its own native durable session. The original multiplayer server/client and Draw & Guess are removed; git retains their history.
+The current deliverable is a standalone offline Android app with Who What Where, Hat Game, Imposter and optional Trivia. Each game has its own native durable session. The original multiplayer server/client and Draw & Guess are removed; git retains their history.
 
 ## Active boundaries
 
@@ -28,8 +28,8 @@ commands in [ANDROID.md](ANDROID.md); browser tests alone do not verify them.
 ## Active documentation
 
 - [Roadmap](ROADMAP.md) — future work only.
-- [Trivia content storage](TRIVIA_CONTENT.md) — implemented pack/schema/publishing contract; corpus and game integration pending.
-- [Trivia discovery](TRIVIA_DISCOVERY.md) — source findings and high-level decisions pending review; no game/content implementation yet.
+- [Trivia content storage](TRIVIA_CONTENT.md) — implemented pack/schema/publishing contract; reviewed corpus and publisher integration pending.
+- [Trivia discovery](TRIVIA_DISCOVERY.md) — source findings and ingestion candidates; no candidate bank approved.
 - [Android build and testing](ANDROID.md) — local toolchain, APK and device checks.
 - [Persistence](PERSISTENCE.md) — current Android save contract and historical browser saves.
 - [Word catalogue](WORD_CATALOGUE.md) — answer conventions, ratings, kids suitability and original-source provenance.

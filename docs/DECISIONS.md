@@ -366,3 +366,11 @@ Use catalogue filters in game adapters, sharing one exact difficulty/kids predic
 ## 22 October 2026 — Separate Trivia corpus storage
 
 Implement the approved separately versioned Trivia JSON corpus with dedicated native content storage, sharing manifest/download contracts with future word updates. Store bounded full packs as 256 KiB SQLite BLOB chunks (8 MiB maximum) in a separate database; this avoids Android CursorWindow limits and keeps session envelopes small. Native transactions use FULL synchronous commit and exact-current compare-and-swap. Validate complete payload hashes, schemas, duplicate identities and revisions before activation. Retain the last valid checkpoint when replacing corrupt content. No new dependency or network endpoint is introduced. The bundled bank remains empty until questions pass editorial review; storage approval does not approve the discovered candidate banks.
+
+## 2026-10-22: Optional presenter-led Trivia
+
+**Decision:** Keep Trivia visibility in the durable default-off app feature preference; hiding its picker card preserves the independent quiz session. Store optional written team answers and self-marked scores with selected question copies.
+
+**Reasoning:** Allows release before the reviewed corpus is large enough, without coupling live sessions to content updates. Existing SQLite snapshots, React UI and domain functions need no new dependency.
+
+**Rejected alternatives:** Route-level access controls and live question generation add no value for this low-risk offline feature. Unreviewed historical banks are not silently activated.

@@ -1,17 +1,17 @@
 # Trivia discovery and decisions — 22 October 2026
 
-Joe approved the separate-corpus storage approach and implementation on 22 October 2026. The storage foundation is implemented in 0.33.0; see [TRIVIA_CONTENT.md](TRIVIA_CONTENT.md). No candidate questions have been approved or imported, and Trivia gameplay remains to be implemented.
+Joe approved the separate-corpus storage approach and implementation on 22 October 2026. The storage foundation is implemented in 0.33.0; see [TRIVIA_CONTENT.md](TRIVIA_CONTENT.md). No candidate questions have been approved or imported, and default-off Trivia gameplay is implemented in 0.35.0.
 
 ## Confirmed first-version direction
 
-- One presenter uses the phone. Written answers are optional and users self-mark; include a manual scoreboard. Joe confirmed optional writing but did not explicitly settle whether writing is on paper or in the app; resolve that interaction when designing the flow. No automatic marking.
+- One presenter uses the phone. Written answers are optional and users self-mark; include a manual scoreboard. Joe confirmed optional written answers inside the app. No automatic marking.
 - Select 10, 20, 30 or a custom number of questions from a reviewed offline bank, with balanced selected categories and no within-quiz duplicates. No runtime AI generation.
 - Reveal answers after each question or together at the end. Save question order, progress and reveal state across interruptions.
 - Confirmed categories: General Knowledge; History; Geography; Science & Nature; Arts & Literature; Film & TV; Music; Sport & Games.
 - Content records should carry stable IDs, question, answer/acceptable variants, category, difficulty, kids suitability, provenance/review information and optional expiry. Expired questions must not be presented, including after a resume. Exact expiry handling belongs in the later detailed plan.
 - Ingestion should preserve source records, normalise formats, deduplicate, verify facts, assess audience/expiry, review and publish a versioned offline pack. Existing ACTIVE/status flags are not proof of approval. Global Kids mode should apply to the reviewed Trivia pool.
 
-Joe confirmed question-count/reveal choices, categories and the reviewed offline approach. Live question generation may be considered later, not for this version. Storage implementation is approved; game flow and content ingestion remain separate work.
+Joe confirmed question-count/reveal choices, categories and the reviewed offline approach. Live question generation may be considered later, not for this version. Storage and game flow are implemented; reviewed content ingestion remains separate work.
 
 ## Approved corpus storage direction
 
@@ -19,7 +19,7 @@ Keep Trivia in its own question catalogue and independently versioned update pac
 
 Share one update workflow and manifest across word and Trivia packs, while retaining separate schemas, content versions and validation. The manifest can advertise newer versions of either pack independently. Prefer complete replacement packs initially: download, validate schema/checksum/unique IDs, then atomically activate; retain the last valid pack and offline bundled fallback on failure. No live server is needed to play.
 
-Use stable question IDs plus revisions so corrections and removals can be tracked without creating duplicates. Keep provenance/review history in the editorial source. A quiz saves its selected questions/answers and progress independently of pack replacement; expiry checks still apply before presenting an unshown question. The catalogue schema, shared manifest/download validation, separate native content database, replacement/recovery service and publishing command are implemented. The bundled Trivia pack is deliberately empty pending editorial review; no download endpoint is configured. Session snapshots and gameplay integration follow with the game.
+Use stable question IDs plus revisions so corrections and removals can be tracked without creating duplicates. Keep provenance/review history in the editorial source. A quiz saves its selected questions/answers and progress independently of pack replacement; expiry checks still apply before presenting an unshown question. The catalogue schema, shared manifest/download validation, separate native content database, replacement/recovery service and publishing command are implemented. The bundled Trivia pack is deliberately empty pending editorial review; no download endpoint is configured. Independent session snapshots and gameplay are implemented in 0.35.0.
 
 ## Source findings
 

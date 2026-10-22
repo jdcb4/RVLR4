@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.35.0 — 22 October 2026
+
+- Add presenter-led Trivia with category-balanced selection, question counts, difficulty, optional in-app team answers, answer reveals after each question or at the end, and self-marked scores.
+- Save Trivia independently, including question copies, written answers and scores; recheck expiry before unshown questions and honour global Kids mode for new quizzes.
+- Add Settings → Show Trivia, off by default. Hiding its picker button preserves saved quizzes. The bundled bank remains empty until reviewed questions are published; setup reports availability and prevents starting with insufficient content.
+
 ## 0.34.1 — 22 October 2026
 
 - Allow screenshots, screen recordings and recent-app previews throughout the app, including private words and roles. Remove the native secure-window flag and all game-controller calls that enabled it. Existing pause/conceal and keep-awake behavior stays intact.

@@ -241,6 +241,50 @@ public class AppRenderTest {
             awaitCondition(activity, "document.body.innerText.includes('Resume saved game') || document.body.innerText.includes('Resume game')");
             System.out.println("RVLRY_NATIVE_IMPOSTER_OK: private deal, cover/reveal same role, all players, discussion, final reveal, WWW save retained");
 
+            // Synthetic question exists only in the disposable test database, never the shipped corpus.
+            String triviaFixture = """
+                {"storageVersion":1,"revision":1,"savedAt":"2026-10-22T00:00:00.000Z","payload":{
+                  "schemaVersion":1,"savedAt":"2026-10-22T00:00:00.000Z",
+                  "settings":{"count":1,"categories":["general"],"revealMode":"each","difficulty":"all","teams":["Team 1","Team 2"]},
+                  "quiz":{"settings":{"count":1,"categories":["general"],"revealMode":"each","difficulty":"all","teams":["Team 1","Team 2"]},
+                    "cursor":0,"phase":"questions","kidsMode":true,"packVersion":1,"items":[{
+                      "question":{"id":"trivia:native-fixture","revision":1,"question":"Native fixture question?","answer":"Fixture answer",
+                        "acceptableAnswers":[],"category":"general","difficulty":"easy","kidAppropriate":true,
+                        "review":{"reviewedAt":"2026-10-22T00:00:00.000Z","reviewer":"Test fixture only","sources":["https://example.com"]}},
+                      "shownAt":"2026-10-22T00:00:00.000Z","writtenAnswers":["",""],"marks":[null,null],"revealed":false,"excluded":false}]}}}
+                """;
+            try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
+                saved.write("trivia.device.v1", triviaFixture);
+            }
+            evaluate(activity, "location.hash='/'");
+            awaitCondition(activity, "!!document.querySelector('a[href*=whowhatwhere]')");
+            assertTrue("Trivia must be hidden by default", "true".equals(evaluate(activity, "!document.querySelector('a[href*=trivia]')")));
+            evaluate(activity, "document.querySelector('[aria-label=Settings]').click()");
+            awaitCondition(activity, "!!document.querySelector('[aria-labelledby=trivia-enabled-label]:enabled')");
+            evaluate(activity, "document.querySelector('[aria-labelledby=trivia-enabled-label]').click()");
+            awaitCondition(activity, "document.querySelector('[aria-labelledby=trivia-enabled-label]:enabled')?.getAttribute('aria-checked')==='true'");
+            evaluate(activity, "document.querySelector('[aria-label=\"Close dialog\"]').click()");
+            awaitCondition(activity, "!!document.querySelector('a[href*=trivia]')");
+            evaluate(activity, "document.querySelector('a[href*=trivia]').click()");
+            clickButton(activity, "Resume");
+            awaitCondition(activity, "document.body.innerText.includes('Native fixture question?')");
+            clickButton(activity, "Write answers here (optional)");
+            evaluate(activity, "(()=>{const field=document.querySelector('textarea');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(field,'My saved answer');field.dispatchEvent(new Event('input',{bubbles:true}));})()");
+            awaitCondition(activity, "[...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Reveal answer'&&!b.disabled)");
+            try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
+                assertTrue("Written answer was not committed", saved.read("trivia.device.v1")[0].contains("My saved answer"));
+                assertTrue("Visibility was not committed", saved.read("app.features.v1")[0].contains("\"triviaEnabled\":true"));
+            }
+            evaluate(activity, "location.reload()");
+            clickButton(activity, "Resume");
+            awaitCondition(activity, "document.querySelector('textarea')?.value==='My saved answer'");
+            clickButton(activity, "Reveal answer");
+            awaitCondition(activity, "document.body.innerText.includes('Fixture answer')");
+            clickButton(activity, "Correct");
+            clickButton(activity, "See results");
+            awaitCondition(activity, "document.body.innerText.includes('Quiz complete') && document.body.innerText.includes('1 / 1') && !document.querySelector('[role=alert]')");
+            System.out.println("RVLRY_NATIVE_TRIVIA_OK: visibility, saved quiz, written answer reload, reveal, marking, results");
+
 
         } finally {
             if (worker != null) {

@@ -1,6 +1,6 @@
 # Trivia content storage
 
-Implemented foundation in 0.33.0. This is separate from Trivia gameplay, which is not yet exposed in the app. No discovered question bank has been imported. The bundled `src/data/trivia/bundled.json` is intentionally empty at version 1; the first reviewed publication must use version 2 or higher.
+Storage foundation shipped in 0.33.0; presenter-led gameplay ships in 0.35.0 behind Settings → Show Trivia (off by default). No discovered question bank has been imported. The bundled `src/data/trivia/bundled.json` is intentionally empty at version 1; the first reviewed publication must use version 2 or higher.
 
 ## Records and publishing
 
@@ -32,7 +32,9 @@ The `RvlryDevice` bridge exposes `readContent` and `installContent`. `rvlry-cont
 
 The browser development adapter uses `rvlry.content.trivia` and a single localStorage replacement; it is not evidence of native durability and is not a multi-tab transactional database. No game session keys are touched by content updates.
 
-When Trivia gameplay is built, save selected question/answer copies, order, progress, reveal state and manual scores in its own snapshot key. This keeps an in-progress quiz independent of pack replacement. Recheck expiry before unshown questions and handle exhausted eligible pools explicitly; do not silently widen Kids mode or difficulty. This session behavior is a required integration contract, not implemented gameplay in this milestone.
+Trivia saves selected question/answer copies, order, progress, reveal state, optional written answers and manual scores in `trivia.device.v1`. This keeps an in-progress quiz independent of pack replacement. Selection balances available categories without repeating questions. Expiry is rechecked before unshown questions, including on resume; expired unshown questions are excluded without replacement. Already shown questions retain their answer review. Insufficient pools block starting; Kids mode and difficulty are never silently widened. Team answers are optional, up to 500 characters each, and marking is manual. Quiz snapshots stay within the native 1 MiB limit; excessively large content or answers produce an explicit error.
+
+`app.features.v1` stores picker visibility independently of games and content. Turning Trivia off only hides its landing-page card; it does not delete saves or protect the route. New games use the current global Kids mode preference. Question installation and publisher configuration remain separate follow-up work.
 
 ## Verification
 

@@ -21,6 +21,10 @@ import { GameArtwork } from "./GameArtwork";
 
 type IconProps = SVGAttributes<SVGSVGElement>;
 
+export function IconTrivia({ className }: IconProps) {
+  return <GameArtwork game="trivia" className={className} />;
+}
+
 export function IconArrowLeft(props: IconProps) {
   return <ChevronLeft size="1em" aria-hidden="true" {...props} />;
 }

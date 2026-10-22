@@ -30,6 +30,9 @@ const ImposterDevicePage = lazy(() =>
   })),
 );
 const baseUrl = import.meta.env.BASE_URL;
+const TriviaPage = lazy(() =>
+  import("@/features/trivia/TriviaPage").then((module) => ({ default: module.TriviaPage })),
+);
 
 export const appRoutes: RouteObject[] = [
   {
@@ -44,6 +47,7 @@ export const appRoutes: RouteObject[] = [
       { path: "games/whowhatwhere", element: <WhoWhatWhereSingleplayerApp /> },
       { path: "games/hat", element: <HatGameDevicePage /> },
       { path: "games/imposter", element: <ImposterDevicePage /> },
+      { path: "games/trivia", element: <TriviaPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

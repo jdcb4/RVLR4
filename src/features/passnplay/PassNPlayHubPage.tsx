@@ -1,18 +1,31 @@
 import { Settings } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Link } from "react-router-dom";
 
 import { AppInfoHeaderButton, AppInfoOverlay } from "@/components/AppInfoOverlay";
-import { IconDisguise, IconTopHat, IconWhoWhatWhere } from "@/components/icons";
+import { IconDisguise, IconTopHat, IconTrivia, IconWhoWhatWhere } from "@/components/icons";
 import { KidsModeSetting } from "@/components/KidsModeSetting";
 import { ModalDialog } from "@/components/ModalDialog";
+import { TriviaAvailabilitySetting } from "@/components/TriviaAvailabilitySetting";
 import { Button } from "@/components/ui/button";
+import {
+  getFeaturePreferenceState,
+  initializeFeaturePreferences,
+  subscribeFeaturePreferences,
+} from "@/services/featurePreference";
 import { ThemeChooser } from "@/themes/ThemeChooser";
 
 import packageJson from "../../../package.json";
 
 /** Each game owns an independent durable session. */
 export function PassNPlayHubPage() {
+  const { triviaEnabled } = useSyncExternalStore(
+    subscribeFeaturePreferences,
+    getFeaturePreferenceState,
+  );
+  useEffect(() => {
+    void initializeFeaturePreferences();
+  }, []);
   const [openDialog, setOpenDialog] = useState<"settings" | "info" | null>(null);
 
   return (
@@ -57,6 +70,16 @@ export function PassNPlayHubPage() {
               path: "imposter",
               Icon: IconDisguise,
             },
+            ...(triviaEnabled
+              ? [
+                  {
+                    title: "Trivia",
+                    description: "Read the questions. Find your champions.",
+                    path: "trivia",
+                    Icon: IconTrivia,
+                  },
+                ]
+              : []),
           ].map(({ title, description, path, Icon }) => (
             <Link
               key={path}
@@ -75,6 +98,7 @@ export function PassNPlayHubPage() {
       {openDialog === "settings" && (
         <ModalDialog title="Settings" onClose={() => setOpenDialog(null)}>
           <KidsModeSetting />
+          <TriviaAvailabilitySetting />
           <ThemeChooser />
           <div className="space-y-3 pt-3 text-typ-ui text-muted-foreground">
             <p>Words are included on your phone. No internet connection is needed to play.</p>

@@ -13,3 +13,5 @@ GameShell supplies compact header, safe-area body and fixed footer. DeviceTeamSe
 Aim for one screen at default phone text size; preserve scroll access with keyboard, large text or long content rather than shrinking controls. Live word columns scroll internally with +N others cues. No duplicate instructional prose, no player names inside compact numbered team cards, no layout shift when hints reveal.
 
 Aesthetic demos are isolated under docs/design/aesthetic-demos and are not runtime screen specifications.
+
+Trivia (optional): setup → questions with optional per-team written answers → reveal and self-mark after each question, or review all answers after the questions → scores. Restore/background returns to the saved quiz chooser. Settings → Show Trivia controls only picker visibility and defaults off. An empty or insufficient eligible bank prevents starting. Team rosters and long answer content retain scroll access.

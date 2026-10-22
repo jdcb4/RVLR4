@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.34.1 is the debug-signed three-game build with expanded curated word pools, five app-wide themes with matching illustrated game artwork and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. WWW and Imposter offer difficulty selection; app Settings offers Kids mode for new games and Hat suggestions. The separate Trivia content-storage foundation is implemented, with no reviewed questions or Trivia gameplay yet. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
+0.35.0 is the debug-signed build with expanded curated word pools, five app-wide themes with matching illustrated game artwork and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. WWW and Imposter offer difficulty selection; app Settings offers Kids mode for new games and Hat suggestions. The separate Trivia content-storage foundation is implemented, with presenter-led Trivia available through Settings → Show Trivia (off by default), optional in-app answers, and no reviewed questions yet. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
 
 Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
@@ -362,3 +362,13 @@ APK: `out/RVLRY-0.34.0-artwork.apk` (18,440,631 bytes), copied and SHA-256 verif
 0.34.1 / versionCode 19 passes full verify (273 tests / 43 files), Android assembly and all three targeted AppRenderTest/DeviceBridgeTest cases. Native flow assertions confirm FLAG_SECURE remains absent across picker/settings, all game flows and private role reveals; keep-awake release still passes. After instrumentation cleanup, the final APK was reinstalled on the emulator and an actual rendered app screenshot was captured and visually verified at out/screenshots-0.34.1.png. Pixel acceptance remains unverified.
 
 APK: `out/RVLRY-0.34.1-screenshots.apk`, copied/hash-verified to `\\JNAS\Media\DropBox\RVLRY-0.34.1-screenshots.apk`. SHA-256: `39D1C10D9E8ED3D845DC3F5D1A3FA5EF35D0102BCFA2E82BB1950E6639029C12`.
+
+## Trivia milestone — 0.35.0, 22 October 2026
+
+- `pnpm run verify` passed: typecheck, ESLint, 305 tests across 48 files and production build. The existing large word-catalogue chunk advisory remains.
+- Android debug build, two JVM tests and 19 API-35 instrumentation tests passed. The extended native flow enables Trivia, restores a synthetic saved quiz, writes an optional team answer, reloads the WebView against native SQLite, reveals the answer, marks a team and reaches scores. Test questions exist only in the disposable test database.
+- Separate snapshot and content recovery write/read phases passed with force-stop between phases.
+- Browser inspection at 360×640 and 412×915 covered empty setup and compact question/marking screens. Real Pixel 10 testing of this version remains outstanding.
+- Fallow reviewed: 40 dead-code findings and 10 clone groups remain (existing exports/native dependency/design files, plus small controller/preference wiring similarities). No suppressions or weakened checks were added.
+- Delivered `\\JNAS\Media\DropBox\RVLRY-0.35.0-trivia.apk`; SHA-256 `08CFE1437C7591A43732AA0149CFEEA338ABD6633D28E0B54B042DC9436BD457` matches the local APK.
+- Enable via Settings → Show Trivia. The reviewed question bank is still empty and user-facing content updates are not configured, so new quizzes remain unavailable until reviewed content is supplied.

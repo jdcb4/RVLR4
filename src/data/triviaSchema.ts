@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { catalogueIdentity } from "./catalogueSchema";
 
-const triviaCategories = [
+export const triviaCategories = [
   "general",
   "history",
   "geography",
@@ -23,7 +23,7 @@ const text = (max: number) =>
       "Use trimmed NFC text.",
     );
 
-const triviaQuestionSchema = z
+export const triviaQuestionSchema = z
   .object({
     id: z.string().regex(/^trivia:[a-z0-9][a-z0-9-]{0,79}$/u),
     revision: z.number().int().positive().safe(),
