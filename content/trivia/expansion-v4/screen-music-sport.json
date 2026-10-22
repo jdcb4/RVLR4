@@ -1,0 +1,888 @@
+[
+  {
+    "id": "trivia:lion-king-lion-cub-name",
+    "revision": 1,
+    "question": "What is the name of the lion cub who grows up to become king in Disney's The Lion King?",
+    "answer": "Simba",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.disneyanimation.com/films/the-lion-king/"],
+      "sourceRecord": "Disney Animation identifies Simba as the lion cub at the centre of The Lion King."
+    }
+  },
+  {
+    "id": "trivia:peppa-pig-younger-brother",
+    "revision": 1,
+    "question": "What is the name of Peppa Pig's younger brother?",
+    "answer": "George",
+    "acceptableAnswers": ["George Pig"],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://peppapiglive.com/characters/george/"],
+      "sourceRecord": "The official Peppa Pig Live character page identifies George as Peppa's little brother."
+    }
+  },
+  {
+    "id": "trivia:paw-patrol-police-pup",
+    "revision": 1,
+    "question": "Which PAW Patrol pup wears a blue police hat and drives a police truck?",
+    "answer": "Chase",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://dev.pawpatrol.com/characters/chase"],
+      "sourceRecord": "The official character guide identifies Chase as the Police Pup, with a blue hat and Police Truck."
+    }
+  },
+  {
+    "id": "trivia:kung-fu-panda-po-name",
+    "revision": 1,
+    "question": "What is the name of the panda who becomes the Dragon Warrior in Kung Fu Panda?",
+    "answer": "Po",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.dreamworks.com/movies/kung-fu-panda"],
+      "sourceRecord": "DreamWorks describes Po as the dreamer who becomes the Dragon Warrior."
+    }
+  },
+  {
+    "id": "trivia:despicable-me-gru-helpers",
+    "revision": 1,
+    "question": "What are Gru's small yellow helpers called in Despicable Me?",
+    "answer": "Minions",
+    "acceptableAnswers": ["The Minions"],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.illumination.com/movie/despicable-me/"],
+      "sourceRecord": "Illumination's character list identifies the Minions as Gru's henchmen."
+    }
+  },
+  {
+    "id": "trivia:batman-protected-city",
+    "revision": 1,
+    "question": "Which fictional city does Batman protect?",
+    "answer": "Gotham City",
+    "acceptableAnswers": ["Gotham"],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.dc.com/characters/batman"],
+      "sourceRecord": "DC lists Gotham City as Batman's base of operations and describes his protection of the city."
+    }
+  },
+  {
+    "id": "trivia:doctor-who-time-machine",
+    "revision": 1,
+    "question": "What is the name of the Doctor's time machine, usually disguised as a blue police box, in Doctor Who?",
+    "answer": "TARDIS",
+    "acceptableAnswers": ["The TARDIS"],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.doctorwho.tv/characters/the-tardis"],
+      "sourceRecord": "Doctor Who's official TARDIS profile describes its blue police-box disguise and travel through time and space."
+    }
+  },
+  {
+    "id": "trivia:black-panther-tchalla-nation",
+    "revision": 1,
+    "question": "In Black Panther (2018), T'Challa becomes king of which fictional African nation?",
+    "answer": "Wakanda",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://movies.disney.com/black-panther"],
+      "sourceRecord": "Disney's synopsis says T'Challa succeeds his father as king of Wakanda."
+    }
+  },
+  {
+    "id": "trivia:et-elliott-alien-film",
+    "revision": 1,
+    "question": "Which 1982 film follows a boy named Elliott who befriends a stranded alien?",
+    "answer": "E.T. the Extra-Terrestrial",
+    "acceptableAnswers": ["E.T."],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://preview.universalpicturesathome.com/movies/et-the-extra-terrestrial"],
+      "sourceRecord": "Universal's synopsis identifies Elliott and the stranded alien in E.T. the Extra-Terrestrial; the copyright is 1982."
+    }
+  },
+  {
+    "id": "trivia:casablanca-rick-blaine-film",
+    "revision": 1,
+    "question": "Which 1942 film centres on Rick Blaine's café in wartime Morocco?",
+    "answer": "Casablanca",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://parkcircus.com/film/108105-casablanca"],
+      "sourceRecord": "Warner Bros distributor Park Circus dates Casablanca to 1942 and describes Rick Blaine's café in Morocco."
+    }
+  },
+  {
+    "id": "trivia:gandalf-film-actor",
+    "revision": 1,
+    "question": "Who plays Gandalf in Peter Jackson's The Lord of the Rings film trilogy?",
+    "answer": "Ian McKellen",
+    "acceptableAnswers": ["McKellen", "Sir Ian McKellen"],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.mckellen.com/cinema/lotr/"],
+      "sourceRecord": "Ian McKellen's account of filming Peter Jackson's trilogy states that he was cast as Gandalf."
+    }
+  },
+  {
+    "id": "trivia:simpsons-home-town",
+    "revision": 1,
+    "question": "What is the name of the fictional town where the Simpson family lives in The Simpsons?",
+    "answer": "Springfield",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.universalorlando.com/web/pt/br/universal-studios-florida/lands/springfield-home-of-the-simpsons"
+      ],
+      "sourceRecord": "Universal's licensed Simpsons destination identifies Springfield as the Simpsons' home and describes its residents."
+    }
+  },
+  {
+    "id": "trivia:jaws-score-composer",
+    "revision": 1,
+    "question": "Who composed the Oscar-winning original score for Jaws (1975)?",
+    "answer": "John Williams",
+    "acceptableAnswers": ["Williams"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.oscars.org/oscars/ceremonies/1976"],
+      "sourceRecord": "The Academy's 1976 awards list John Williams as the Original Score winner for Jaws."
+    }
+  },
+  {
+    "id": "trivia:mad-max-fury-road-director",
+    "revision": 1,
+    "question": "Which Australian filmmaker directed Mad Max: Fury Road (2015)?",
+    "answer": "George Miller",
+    "acceptableAnswers": ["Miller"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.classification.gov.au/titles/mad-max-fury-road"],
+      "sourceRecord": "Australian Classification's industry record lists George Miller as director of the 2015 film."
+    }
+  },
+  {
+    "id": "trivia:parasite-director",
+    "revision": 1,
+    "question": "Who directed the South Korean film Parasite (2019)?",
+    "answer": "Bong Joon-ho",
+    "acceptableAnswers": ["Bong"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.oscars.org/oscars/ceremonies/2020"],
+      "sourceRecord": "The Academy's 2020 Directing category credits Bong Joon Ho with Parasite."
+    }
+  },
+  {
+    "id": "trivia:piano-1993-director",
+    "revision": 1,
+    "question": "Who directed the 1993 film The Piano?",
+    "answer": "Jane Campion",
+    "acceptableAnswers": ["Campion"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.festival-cannes.com/en/f/the-piano/"],
+      "sourceRecord": "Cannes lists Jane Campion as director of The Piano, in competition in 1993."
+    }
+  },
+  {
+    "id": "trivia:nosferatu-1922-vampire-name",
+    "revision": 1,
+    "question": "What is the vampire's name in the original silent film Nosferatu (1922)?",
+    "answer": "Count Orlok",
+    "acceptableAnswers": ["Orlok"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.bfi.org.uk/film/3d4cb177-731b-53ff-b7e3-41ef1bbd0c9d/nosferatu"],
+      "sourceRecord": "BFI's film entry identifies Max Schreck's vampire character as Count Orlok."
+    }
+  },
+  {
+    "id": "trivia:foley-synchronised-sound-technique",
+    "revision": 1,
+    "question": "What is the film sound technique of recording everyday noises, such as footsteps, to match on-screen actions called?",
+    "answer": "Foley",
+    "acceptableAnswers": ["Foley sound", "Foley effects"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.acmi.net.au/education/school-program-and-resources/foley-sound/"],
+      "sourceRecord": "ACMI describes Foley artists recording ordinary objects as sound effects synchronised with on-screen action."
+    }
+  },
+  {
+    "id": "trivia:cannes-1994-palme-film",
+    "revision": 1,
+    "question": "Which Quentin Tarantino film won the Palme d'Or at Cannes in 1994?",
+    "answer": "Pulp Fiction",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.festival-cannes.com/en/f/pulp-fiction/"],
+      "sourceRecord": "Cannes lists Pulp Fiction, directed by Quentin Tarantino, as the 1994 Palme d'Or winner."
+    }
+  },
+  {
+    "id": "trivia:violin-string-playing-bow",
+    "revision": 1,
+    "question": "What is the stick with stretched hair that violinists draw across the strings called?",
+    "answer": "Bow",
+    "acceptableAnswers": ["A bow", "Violin bow"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://philharmonia.co.uk/resources/instruments/violin/"],
+      "sourceRecord": "The Philharmonia describes the violin bow as a wooden stick with horsehair stretched between its ends."
+    }
+  },
+  {
+    "id": "trivia:drums-cymbals-instrument-family",
+    "revision": 1,
+    "question": "Drums and cymbals belong to which family of musical instruments?",
+    "answer": "Percussion",
+    "acceptableAnswers": ["Percussion family", "Percussion instruments"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://philharmonia.co.uk/resources/instruments/percussion/"],
+      "sourceRecord": "The Philharmonia includes drums and cymbals in the percussion section."
+    }
+  },
+  {
+    "id": "trivia:xylophone-wooden-bars",
+    "revision": 1,
+    "question": "Which instrument beginning with X has wooden bars that you strike with small mallets?",
+    "answer": "Xylophone",
+    "acceptableAnswers": ["A xylophone"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/xylophone"],
+      "sourceRecord": "The dictionary defines a xylophone as graduated wooden bars sounded by striking with small hammers."
+    }
+  },
+  {
+    "id": "trivia:two-performer-musical-piece",
+    "revision": 1,
+    "question": "What is a musical piece written for two singers or instrumentalists to perform together called?",
+    "answer": "Duet",
+    "acceptableAnswers": ["A duet"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/duet"],
+      "sourceRecord": "The dictionary defines a duet as a composition for two performers."
+    }
+  },
+  {
+    "id": "trivia:organised-singing-group",
+    "revision": 1,
+    "question": "What is an organised group of singers who perform together called?",
+    "answer": "Choir",
+    "acceptableAnswers": ["A choir", "Chorus", "A chorus"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/choir"],
+      "sourceRecord": "The dictionary defines a choir as an organised company of singers."
+    }
+  },
+  {
+    "id": "trivia:school-woodwind-recorder",
+    "revision": 1,
+    "question": "Which simple woodwind instrument, often made of plastic, is commonly played by children in school music lessons?",
+    "answer": "Recorder",
+    "acceptableAnswers": ["A recorder"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.yamaha.com/en/musical_instrument_guide/recorder/"],
+      "sourceRecord": "Yamaha identifies the recorder as familiar from school lessons and links its resin and wooden forms."
+    }
+  },
+  {
+    "id": "trivia:adele-age-titled-albums",
+    "revision": 1,
+    "question": "Which singer released the albums 19, 21 and 25?",
+    "answer": "Adele",
+    "acceptableAnswers": ["Adele Adkins"],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.adele.com/?language=en-us"],
+      "sourceRecord": "Adele's official music page lists 19, 21 and 25."
+    }
+  },
+  {
+    "id": "trivia:three-little-birds-singer",
+    "revision": 1,
+    "question": "Which reggae singer recorded Three Little Birds with the Wailers?",
+    "answer": "Bob Marley",
+    "acceptableAnswers": ["Marley", "Robert Nesta Marley"],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.udiscovermusic.com/stories/bob-marley-three-little-birds-song-story/"
+      ],
+      "sourceRecord": "Universal Music's uDiscover article attributes Three Little Birds to Bob Marley and the Wailers."
+    }
+  },
+  {
+    "id": "trivia:didgeridoo-hollow-wood-instrument",
+    "revision": 1,
+    "question": "What is the familiar English name for the long, hollow wooden wind instrument traditionally played by Aboriginal peoples of northern Australia?",
+    "answer": "Didgeridoo",
+    "acceptableAnswers": ["Didjeridu", "Yidaki", "Mandapul"],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.abc.net.au/news/deeptime/yolngu-mandapul-yidaki/"],
+      "sourceRecord": "ABC's account from Yolngu knowledge holder Larry Girrawiwi identifies mandapul/yidaki as the didgeridoo and describes its hollow wood."
+    }
+  },
+  {
+    "id": "trivia:daft-punk-robot-helmets",
+    "revision": 1,
+    "question": "Which French electronic music duo became famous for performing in robot helmets?",
+    "answer": "Daft Punk",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.grammy.com/news/daft-punk-get-lucky-grammy-win-pharrell-williams-acceptance-speech-video-rewind/"
+      ],
+      "sourceRecord": "The Recording Academy describes French duo Daft Punk adopting signature robot helmets in 2001."
+    }
+  },
+  {
+    "id": "trivia:back-in-black-band",
+    "revision": 1,
+    "question": "Which rock band released the album Back in Black?",
+    "answer": "AC/DC",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.acdc.com/music"],
+      "sourceRecord": "AC/DC's official music archive lists Back in Black and its tracks."
+    }
+  },
+  {
+    "id": "trivia:opera-sung-drama",
+    "revision": 1,
+    "question": "What form of theatre tells a dramatic story mainly through singing, usually with an orchestra?",
+    "answer": "Opera",
+    "acceptableAnswers": ["An opera"],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/opera"],
+      "sourceRecord": "The dictionary defines opera as drama set to music, with vocal pieces and orchestral accompaniment."
+    }
+  },
+  {
+    "id": "trivia:rhapsody-in-blue-composer",
+    "revision": 1,
+    "question": "Who composed Rhapsody in Blue?",
+    "answer": "George Gershwin",
+    "acceptableAnswers": ["Gershwin"],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.laphil.com/works/rhapsody-in-blue"],
+      "sourceRecord": "LA Phil's work record credits George Gershwin with Rhapsody in Blue."
+    }
+  },
+  {
+    "id": "trivia:madama-butterfly-composer",
+    "revision": 1,
+    "question": "Who composed the opera Madama Butterfly?",
+    "answer": "Giacomo Puccini",
+    "acceptableAnswers": ["Puccini"],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.santafeopera.org/whats-on/madama-butterfly-2026/"],
+      "sourceRecord": "Santa Fe Opera's production record credits the music of Madama Butterfly to Giacomo Puccini."
+    }
+  },
+  {
+    "id": "trivia:treaty-yothu-yindi-band",
+    "revision": 1,
+    "question": "Which Australian band released the 1991 song Treaty, blending rock with Yolngu music?",
+    "answer": "Yothu Yindi",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nfsa.gov.au/collection/item/treaty-yothu-yindi"],
+      "sourceRecord": "NFSA credits Yothu Yindi with Treaty (1991) and explains its traditional Yolngu musical elements."
+    }
+  },
+  {
+    "id": "trivia:mama-africa-singer",
+    "revision": 1,
+    "question": "Which South African singer and anti-apartheid campaigner was nicknamed Mama Africa?",
+    "answer": "Miriam Makeba",
+    "acceptableAnswers": ["Makeba", "Zenzile Miriam Makeba"],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.archives.gov/research/african-americans/individuals/miriam-makeba"],
+      "sourceRecord": "The US National Archives identifies singer and civil-rights activist Miriam Makeba as Mama Africa."
+    }
+  },
+  {
+    "id": "trivia:i-put-a-spell-on-you-album-singer",
+    "revision": 1,
+    "question": "Which singer and pianist released the 1965 album I Put a Spell on You?",
+    "answer": "Nina Simone",
+    "acceptableAnswers": ["Simone"],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.ninasimone.com/albums/i-put-a-spell-on-you/"],
+      "sourceRecord": "Nina Simone's official album page credits her vocals and piano and gives Philips, 1965."
+    }
+  },
+  {
+    "id": "trivia:lark-ascending-composer",
+    "revision": 1,
+    "question": "Who composed the violin and orchestra piece The Lark Ascending?",
+    "answer": "Ralph Vaughan Williams",
+    "acceptableAnswers": ["Vaughan Williams"],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.laphil.com/works/the-lark-ascending"],
+      "sourceRecord": "LA Phil credits Ralph Vaughan Williams and describes the work as a romance for violin and orchestra."
+    }
+  },
+  {
+    "id": "trivia:mario-brother-luigi",
+    "revision": 1,
+    "question": "What is the name of Mario's brother, who usually wears green?",
+    "answer": "Luigi",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nintendo.com/us/store/characters/luigi/"],
+      "sourceRecord": "Nintendo's official Luigi page identifies him as Mario's brother."
+    }
+  },
+  {
+    "id": "trivia:tennis-ball-striking-implement",
+    "revision": 1,
+    "question": "What is the handheld frame with strings that a tennis player uses to hit the ball called?",
+    "answer": "Racket",
+    "acceptableAnswers": ["Racquet", "Tennis racket", "Tennis racquet"],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/racket"],
+      "sourceRecord": "The dictionary describes the handled, stringed frame used to strike a tennis ball and permits racket/racquet."
+    }
+  },
+  {
+    "id": "trivia:golf-putting-green-target",
+    "revision": 1,
+    "question": "What is the small cup in a putting green that golfers aim to get the ball into called?",
+    "answer": "Hole",
+    "acceptableAnswers": ["The hole", "Cup", "Golf hole"],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/hole"],
+      "sourceRecord": "The dictionary's golf definition identifies the shallow hole in a putting green into which the ball is played."
+    }
+  },
+  {
+    "id": "trivia:uno-last-card-call-game",
+    "revision": 1,
+    "question": "In which card game must you shout its name when you have just one card left?",
+    "answer": "UNO",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://service.mattel.com/instruction_sheets/UNO%20Basic%20IS.pdf"],
+      "sourceRecord": "Mattel's UNO rules require a player down to one card to call UNO."
+    }
+  },
+  {
+    "id": "trivia:bowling-first-ball-all-pins",
+    "revision": 1,
+    "question": "In ten-pin bowling, what do you call knocking down all the pins with the first ball of a frame?",
+    "answer": "Strike",
+    "acceptableAnswers": ["A strike"],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://bowl.com/welcome/bowling-lingo"],
+      "sourceRecord": "US Bowling Congress defines a strike as knocking down all ten pins with the first ball."
+    }
+  },
+  {
+    "id": "trivia:surfing-wave-riding-board",
+    "revision": 1,
+    "question": "What is the long board that a surfer stands on to ride waves called?",
+    "answer": "Surfboard",
+    "acceptableAnswers": ["A surfboard"],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/surfboard"],
+      "sourceRecord": "The dictionary defines a surfboard as a long, narrow buoyant board used in surfing."
+    }
+  },
+  {
+    "id": "trivia:rugby-union-grounding-score",
+    "revision": 1,
+    "question": "In rugby union, what is the score called when an attacking player legally grounds the ball in the opponent's in-goal area?",
+    "answer": "Try",
+    "acceptableAnswers": ["A try"],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://passport.world.rugby/laws-of-the-game/laws-by-number/21-in-goal/"],
+      "sourceRecord": "World Rugby Law 21.3 states that an attacking player grounding the ball in in-goal scores a try."
+    }
+  },
+  {
+    "id": "trivia:table-tennis-alternative-name",
+    "revision": 1,
+    "question": "What other familiar name is used for table tennis?",
+    "answer": "Ping-pong",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/ping-pong"],
+      "sourceRecord": "The dictionary records Ping-Pong as a name used for table tennis."
+    }
+  },
+  {
+    "id": "trivia:triathlon-middle-discipline",
+    "revision": 1,
+    "question": "In a standard triathlon, which discipline comes between swimming and running?",
+    "answer": "Cycling",
+    "acceptableAnswers": ["Bike riding", "Biking", "Bicycle riding"],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.triathlonireland.com/events/event-types/"],
+      "sourceRecord": "Triathlon Ireland's event guide orders the standard disciplines as swim, bike, run."
+    }
+  },
+  {
+    "id": "trivia:ice-hockey-rubber-disc",
+    "revision": 1,
+    "question": "What is the rubber disc hit by players in ice hockey called?",
+    "answer": "Puck",
+    "acceptableAnswers": ["A puck", "Hockey puck"],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/puck"],
+      "sourceRecord": "The dictionary defines a puck as the vulcanised rubber disc used in ice hockey."
+    }
+  },
+  {
+    "id": "trivia:indoor-volleyball-contact-limit",
+    "revision": 1,
+    "question": "In standard indoor volleyball, how many team hits are allowed to return the ball, excluding a block contact?",
+    "answer": "Three",
+    "acceptableAnswers": ["3", "Three hits"],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.fivb.com/volleyball/the-game/basic-rules/"],
+      "sourceRecord": "FIVB's basic rules allow three team hits to return the ball, in addition to a block contact."
+    }
+  },
+  {
+    "id": "trivia:monopoly-passing-go-salary",
+    "revision": 1,
+    "question": "In classic Monopoly, how many dollars do you collect when you pass GO in normal play?",
+    "answer": "Two hundred",
+    "acceptableAnswers": ["200", "Two hundred dollars", "200 dollars"],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.hasbro.com/common/instruct/00009.pdf"],
+      "sourceRecord": "Hasbro's Classic Monopoly rules pay a $200 salary when a player's token lands on or passes GO."
+    }
+  },
+  {
+    "id": "trivia:thomas-cup-sport",
+    "revision": 1,
+    "question": "The Thomas Cup is the world men's team championship in which sport?",
+    "answer": "Badminton",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://badminton.org.nz/news/2026/01/new-zealand-eyes-world-championships/"],
+      "sourceRecord": "Badminton New Zealand identifies the Thomas Cup as the men's BWF World Team Championship."
+    }
+  },
+  {
+    "id": "trivia:snooker-standard-maximum-break",
+    "revision": 1,
+    "question": "In snooker, how many points is a standard maximum break of fifteen reds with fifteen blacks, followed by all the colours?",
+    "answer": "One hundred and forty-seven",
+    "acceptableAnswers": ["147", "One hundred forty-seven", "147 points"],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.wst.tv/news/2022/november/06/maximum-magic-for-trump-in-bolton/"],
+      "sourceRecord": "WST describes fifteen reds with blacks and the colours as a 147 maximum. This question excludes free-ball breaks."
+    }
+  },
+  {
+    "id": "trivia:mens-decathlon-final-distance",
+    "revision": 1,
+    "question": "What distance, in metres, is the final running event in a standard men's outdoor decathlon?",
+    "answer": "One thousand five hundred",
+    "acceptableAnswers": ["1500", "Fifteen hundred", "1500 metres", "1500m"],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://olympic.ca/sports/athletics/"],
+      "sourceRecord": "The Canadian Olympic Committee's athletics guide lists 1500m last in the decathlon's second-day sequence."
+    }
+  },
+  {
+    "id": "trivia:goolagong-wimbledon-singles-titles",
+    "revision": 1,
+    "question": "Which Australian tennis player won the Wimbledon women's singles title in both 1971 and 1980?",
+    "answer": "Evonne Goolagong Cawley",
+    "acceptableAnswers": ["Evonne Goolagong", "Goolagong Cawley", "Goolagong", "Evonne Cawley"],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nma.gov.au/explore/collection/highlights/evonne-goolagong-cawley"],
+      "sourceRecord": "The National Museum holds Evonne Goolagong Cawley's 1971 and 1980 Wimbledon singles trophies."
+    }
+  },
+  {
+    "id": "trivia:go-intersection-stone-board-game",
+    "revision": 1,
+    "question": "Which board game uses black and white stones placed on a grid's intersections to surround territory?",
+    "answer": "Go",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.britgo.org/intro/intro2.html"],
+      "sourceRecord": "The British Go Association explains placing black and white stones on line intersections and scoring surrounded territory."
+    }
+  },
+  {
+    "id": "trivia:mexico-1968-high-jump-champion",
+    "revision": 1,
+    "question": "Which athlete won high jump gold at the 1968 Olympics using a distinctive backwards jumping technique?",
+    "answer": "Dick Fosbury",
+    "acceptableAnswers": ["Fosbury", "Richard Fosbury", "Richard Douglas Fosbury"],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:52:40Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.olympedia.org/results/60644"],
+      "sourceRecord": "Olympedia's 1968 high-jump results credit Dick Fosbury with gold and describe his backwards, head-first technique."
+    }
+  }
+]

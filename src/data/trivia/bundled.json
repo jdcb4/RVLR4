@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "kind": "trivia",
-  "version": 3,
-  "publishedAt": "2026-10-22T12:29:03.149Z",
+  "version": 4,
+  "publishedAt": "2026-10-22T12:56:15.059Z",
   "questions": [
     {
       "id": "trivia:largest-solar-system-planet",
@@ -2489,6 +2489,2468 @@
         "reviewer": "Codex source check",
         "sources": ["https://www.worldboccia.com/about-boccia/"],
         "sourceRecord": "World Boccia calls the white target ball the jack."
+      }
+    },
+    {
+      "id": "trivia:egyptian-preserved-body-name",
+      "revision": 1,
+      "question": "What is a preserved body from ancient Egypt called?",
+      "answer": "Mummy",
+      "acceptableAnswers": ["Mummies"],
+      "category": "history",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://australian.museum/learn/cultures/international-collection/ancient-egyptian/the-origins-of-mummification-in-ancient-egypt/"
+        ],
+        "sourceRecord": "Australian Museum defines a mummy as a person or animal body preserved without decay."
+      }
+    },
+    {
+      "id": "trivia:medieval-armoured-horseman",
+      "revision": 1,
+      "question": "What is the usual name for a medieval European warrior who wore armour and fought on horseback?",
+      "answer": "Knight",
+      "acceptableAnswers": ["Knights"],
+      "category": "history",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://historiska.se/en/explore-history/history-hub/knights-in-the-middle-ages/"
+        ],
+        "sourceRecord": "Swedish History Museum describes medieval knights as noble warriors on horseback, wearing armour."
+      }
+    },
+    {
+      "id": "trivia:aboriginal-returning-throwing-tool",
+      "revision": 1,
+      "question": "Which traditional Aboriginal Australian throwing tool has some forms designed to return to the thrower?",
+      "answer": "Boomerang",
+      "acceptableAnswers": [],
+      "category": "history",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nma.gov.au/exhibitions/defining-symbols-australia/boomerang"],
+        "sourceRecord": "National Museum of Australia identifies boomerangs and explicitly says some, but not most, are designed to return."
+      }
+    },
+    {
+      "id": "trivia:early-locomotive-vapour-power",
+      "revision": 1,
+      "question": "In many early railway locomotives, what hot water vapour pushed the pistons to turn the wheels?",
+      "answer": "Steam",
+      "acceptableAnswers": [],
+      "category": "history",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://blog.railwaymuseum.org.uk/flying-scotsman-returns/"],
+        "sourceRecord": "National Railway Museum explains that steam moves locomotive pistons and makes the wheels turn."
+      }
+    },
+    {
+      "id": "trivia:cleopatra-roman-allies",
+      "revision": 1,
+      "question": "Which queen of ancient Egypt formed famous alliances with Julius Caesar and Mark Antony?",
+      "answer": "Cleopatra",
+      "acceptableAnswers": ["Cleopatra VII"],
+      "category": "history",
+      "difficulty": "easy",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.globalegyptianmuseum.org/glossary.aspx?id=114"],
+        "sourceRecord": "Global Egyptian Museum identifies Cleopatra VII as queen of Egypt and describes her relationships with Caesar and Antony."
+      }
+    },
+    {
+      "id": "trivia:australian-november-commemoration",
+      "revision": 1,
+      "question": "Which Australian commemoration falls on 11 November each year?",
+      "answer": "Remembrance Day",
+      "acceptableAnswers": ["Armistice Day"],
+      "category": "history",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.awm.gov.au/commemoration/remembrance-day"],
+        "sourceRecord": "Australian War Memorial identifies Remembrance Day and explains that reflection takes place on 11 November each year."
+      }
+    },
+    {
+      "id": "trivia:wright-brothers-powered-flight",
+      "revision": 1,
+      "question": "Which brothers built and flew a powered aeroplane near Kitty Hawk in December 1903?",
+      "answer": "Wright brothers",
+      "acceptableAnswers": [
+        "Orville and Wilbur Wright",
+        "Wilbur and Orville Wright",
+        "The Wright brothers"
+      ],
+      "category": "history",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:53:06.957Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.nasa.gov/history/120-years-ago-the-first-powered-flight-at-kitty-hawk/"
+        ],
+        "sourceRecord": "NASA describes Orville and Wilbur Wright's December 1903 powered flights at Kill Devil Hills near Kitty Hawk."
+      }
+    },
+    {
+      "id": "trivia:nightingale-lady-lamp",
+      "revision": 1,
+      "question": "Which nurse became known as the Lady with the Lamp during the Crimean War?",
+      "answer": "Florence Nightingale",
+      "acceptableAnswers": ["Nightingale"],
+      "category": "history",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nam.ac.uk/explore/florence-nightingale-lady-lamp"],
+        "sourceRecord": "National Army Museum names Florence Nightingale and explains that she acquired the nickname during her work at Scutari."
+      }
+    },
+    {
+      "id": "trivia:british-militant-voting-campaigners",
+      "revision": 1,
+      "question": "What name was given to militant British campaigners for women's voting rights in the early 1900s?",
+      "answer": "Suffragettes",
+      "acceptableAnswers": ["Suffragette"],
+      "category": "history",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.parliament.uk/about/living-heritage/transformingsociety/electionsvoting/womenvote/overview/campaign/"
+        ],
+        "sourceRecord": "UK Parliament distinguishes militant early twentieth-century suffragettes from peaceful suffragists."
+      }
+    },
+    {
+      "id": "trivia:pilgrims-atlantic-ship",
+      "revision": 1,
+      "question": "Which ship carried the Pilgrims across the Atlantic to New England in 1620?",
+      "answer": "Mayflower",
+      "acceptableAnswers": ["The Mayflower"],
+      "category": "history",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://plimoth.org/plan-your-visit/explore-our-sites/mayflower-ii"],
+        "sourceRecord": "Plimoth Patuxet Museums describes the original Mayflower and its 1620 Pilgrim voyage, distinguishing the modern reproduction."
+      }
+    },
+    {
+      "id": "trivia:great-fire-1666-city",
+      "revision": 1,
+      "question": "Which city was devastated by a Great Fire in September 1666?",
+      "answer": "London",
+      "acceptableAnswers": [],
+      "category": "history",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.londonmuseum.org.uk/schools-communities/schools/resources/the-great-fire-of-london/"
+        ],
+        "sourceRecord": "London Museum school resources identify London as the city whose great fire occurred in September 1666."
+      }
+    },
+    {
+      "id": "trivia:eureka-stockade-victorian-city",
+      "revision": 1,
+      "question": "Near which Victorian city did miners build the Eureka Stockade in 1854?",
+      "answer": "Ballarat",
+      "acceptableAnswers": [],
+      "category": "history",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nma.gov.au/defining-moments/resources/eureka-stockade"],
+        "sourceRecord": "National Museum of Australia places the miners, Eureka diggings and 1854 stockade at Ballarat in Victoria."
+      }
+    },
+    {
+      "id": "trivia:bell-telephone-patent",
+      "revision": 1,
+      "question": "Which inventor received a US patent for the telephone in March 1876?",
+      "answer": "Alexander Graham Bell",
+      "acceptableAnswers": ["Bell", "Alexander Bell"],
+      "category": "history",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://guides.loc.gov/chronicling-america-telephone-invention"],
+        "sourceRecord": "Library of Congress dates Alexander Graham Bell's telephone patent to 7 March 1876 and notes the dispute with Elisha Gray."
+      }
+    },
+    {
+      "id": "trivia:yuan-dynasty-founder",
+      "revision": 1,
+      "question": "Which Mongol ruler established China's Yuan dynasty, with Xanadu as an early capital?",
+      "answer": "Kublai Khan",
+      "acceptableAnswers": ["Kubilai Khan"],
+      "category": "history",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://whc.unesco.org/en/list/1389"],
+        "sourceRecord": "UNESCO identifies Xanadu as Kublai Khan's capital and states that he established the Yuan dynasty from this base."
+      }
+    },
+    {
+      "id": "trivia:bayeux-1066-battle",
+      "revision": 1,
+      "question": "Which battle of 1066 is depicted in the Bayeux Tapestry?",
+      "answer": "Battle of Hastings",
+      "acceptableAnswers": ["Hastings", "The Battle of Hastings"],
+      "category": "history",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.bayeuxmuseum.com/en/the-bayeux-tapestry/discover-the-bayeux-tapestry/the_battle_of_hastings/"
+        ],
+        "sourceRecord": "Bayeux Museum explicitly identifies the Battle of Hastings in 1066 as the battle depicted in the embroidery."
+      }
+    },
+    {
+      "id": "trivia:haiti-independence-france",
+      "revision": 1,
+      "question": "Which Caribbean country won independence from France in 1804?",
+      "answer": "Haiti",
+      "acceptableAnswers": ["Republic of Haiti"],
+      "category": "history",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://history.state.gov/countries/haiti"],
+        "sourceRecord": "US Office of the Historian states that Haiti won independence from France in 1804."
+      }
+    },
+    {
+      "id": "trivia:paris-peace-germany-treaty",
+      "revision": 1,
+      "question": "Which treaty imposed reparations and military restrictions on Germany after the First World War?",
+      "answer": "Treaty of Versailles",
+      "acceptableAnswers": ["Versailles Treaty", "Versailles"],
+      "category": "history",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://history.state.gov/milestones/1914-1920/paris-peace"],
+        "sourceRecord": "US Office of the Historian identifies the Treaty of Versailles and describes restrictions on Germany's armed forces and reparations."
+      }
+    },
+    {
+      "id": "trivia:maori-crown-1840-agreement",
+      "revision": 1,
+      "question": "What treaty was first signed by Māori chiefs and representatives of the British Crown on 6 February 1840?",
+      "answer": "Treaty of Waitangi",
+      "acceptableAnswers": ["Te Tiriti o Waitangi", "Waitangi Treaty"],
+      "category": "history",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://nzhistory.govt.nz/the-treaty-of-waitangi-is-signed"],
+        "sourceRecord": "New Zealand Ministry for Culture and Heritage records the Treaty of Waitangi signing on 6 February 1840 and later signatures."
+      }
+    },
+    {
+      "id": "trivia:tenochtitlan-imperial-capital",
+      "revision": 1,
+      "question": "Tenochtitlan was the capital of which empire before the Spanish conquest?",
+      "answer": "Aztec Empire",
+      "acceptableAnswers": ["Aztecs", "The Aztec Empire"],
+      "category": "history",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://chssp.ucdavis.edu/resources/curriculum/lessons/tenochtitlan"],
+        "sourceRecord": "UC Davis California History-Social Science Project identifies Tenochtitlan as the capital of the Aztec Empire."
+      }
+    },
+    {
+      "id": "trivia:cinderella-lost-glass-slipper",
+      "revision": 1,
+      "question": "Which fairy-tale heroine leaves a glass slipper behind as she flees a royal ball?",
+      "answer": "Cinderella",
+      "acceptableAnswers": ["Cinderilla"],
+      "category": "arts-literature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.gutenberg.org/cache/epub/29021/pg29021-images.html"],
+        "sourceRecord": "Perrault's tale in Project Gutenberg states that Cinderilla leaves one glass slipper behind while the prince follows her."
+      }
+    },
+    {
+      "id": "trivia:red-riding-hood-cloak",
+      "revision": 1,
+      "question": "Which fairy-tale girl wears a red hooded cloak and meets a wolf on her way to visit her grandmother?",
+      "answer": "Little Red Riding Hood",
+      "acceptableAnswers": ["Red Riding Hood"],
+      "category": "arts-literature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.gutenberg.org/cache/epub/11592/pg11592-images.html"],
+        "sourceRecord": "The original story collection describes her red hooded cloak, grandmother visit and meeting with a wolf."
+      }
+    },
+    {
+      "id": "trivia:wax-coloured-drawing-sticks",
+      "revision": 1,
+      "question": "What are the coloured wax sticks children use for drawing called?",
+      "answer": "Crayons",
+      "acceptableAnswers": ["Crayon", "Wax crayons"],
+      "category": "arts-literature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.crayola.com/faqs/what-is-the-crayola-crayons-manufacturing-process-and-basic-ingredients-faq"
+        ],
+        "sourceRecord": "Crayola explains that its crayons are primarily paraffin wax mixed with coloured pigment."
+      }
+    },
+    {
+      "id": "trivia:artist-own-likeness-name",
+      "revision": 1,
+      "question": "What is a picture an artist makes of themself called?",
+      "answer": "Self-portrait",
+      "acceptableAnswers": ["A self-portrait"],
+      "category": "arts-literature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.npg.org.uk/schools-hub/art-explainer-what-is-a-self-portrait"],
+        "sourceRecord": "National Portrait Gallery's primary-school resource defines a self-portrait as art the artist makes of themselves."
+      }
+    },
+    {
+      "id": "trivia:neverland-boy-wont-grow",
+      "revision": 1,
+      "question": "Which boy in J. M. Barrie's stories can fly, lives in Neverland and refuses to grow up?",
+      "answer": "Peter Pan",
+      "acceptableAnswers": ["Peter"],
+      "category": "arts-literature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.gutenberg.org/cache/epub/16/pg16-images.html"],
+        "sourceRecord": "Barrie's Peter and Wendy describes Peter, Neverland, flight and his refusal to grow up."
+      }
+    },
+    {
+      "id": "trivia:peter-rabbit-jacket-colour",
+      "revision": 1,
+      "question": "What colour is Peter Rabbit's jacket in Beatrix Potter's original tale?",
+      "answer": "Blue",
+      "acceptableAnswers": [],
+      "category": "arts-literature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.gutenberg.org/files/14304/14304-h/14304-h"],
+        "sourceRecord": "The Tale of Peter Rabbit explicitly describes the jacket caught in the gooseberry net as blue with brass buttons."
+      }
+    },
+    {
+      "id": "trivia:pooh-owls-wood",
+      "revision": 1,
+      "question": "In A. A. Milne's Winnie-the-Pooh, what is the name of the wood where Owl lives?",
+      "answer": "Hundred Acre Wood",
+      "acceptableAnswers": ["The Hundred Acre Wood", "100 Acre Wood"],
+      "category": "arts-literature",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.gutenberg.org/cache/epub/67098/pg67098-images.html"],
+        "sourceRecord": "Milne's original text explicitly places Owl's home in the Hundred Acre Wood; the clue avoids assuming Pooh lives inside that wood."
+      }
+    },
+    {
+      "id": "trivia:paterson-mountain-horse-poem",
+      "revision": 1,
+      "question": "Which Banjo Paterson poem celebrates a young rider who pursues wild horses down a steep mountain?",
+      "answer": "The Man from Snowy River",
+      "acceptableAnswers": ["Man from Snowy River"],
+      "category": "arts-literature",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.gutenberg.org/cache/epub/213/pg213-images.html"],
+        "sourceRecord": "Paterson's poem describes the young rider descending the mountain after wild horses while the other riders watch."
+      }
+    },
+    {
+      "id": "trivia:namatjira-paint-medium",
+      "revision": 1,
+      "question": "Albert Namatjira is especially known for landscapes painted in which water-based medium?",
+      "answer": "Watercolour",
+      "acceptableAnswers": ["Watercolours", "Watercolour painting"],
+      "category": "arts-literature",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.portrait.gov.au/people/albert-namatjira-1902"],
+        "sourceRecord": "National Portrait Gallery discusses Namatjira's watercolour painting and his distinctive landscape style."
+      }
+    },
+    {
+      "id": "trivia:woven-pictorial-wall-hanging",
+      "revision": 1,
+      "question": "What is a pictorial wall hanging made by weaving coloured threads called?",
+      "answer": "Tapestry",
+      "acceptableAnswers": ["A tapestry"],
+      "category": "arts-literature",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.vam.ac.uk/articles/what-is-tapestry"],
+        "sourceRecord": "V&A describes tapestry as a woven textile technique used to produce pictorial wall hangings."
+      }
+    },
+    {
+      "id": "trivia:pointed-arch-cathedral-style",
+      "revision": 1,
+      "question": "Which medieval architectural style is known for pointed arches, rib vaults and flying buttresses?",
+      "answer": "Gothic",
+      "acceptableAnswers": ["Gothic architecture"],
+      "category": "arts-literature",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.vam.ac.uk/articles/the-gothic-style-an-introduction"],
+        "sourceRecord": "V&A identifies pointed arches, rib vaults and flying buttresses as characteristic features of Gothic architecture."
+      }
+    },
+    {
+      "id": "trivia:greek-winged-horse-name",
+      "revision": 1,
+      "question": "What is the name of the famous winged horse in Greek mythology?",
+      "answer": "Pegasus",
+      "acceptableAnswers": ["Pegasos"],
+      "category": "arts-literature",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.metmuseum.org/art/collection/search/195356"],
+        "sourceRecord": "The Metropolitan Museum of Art identifies Pegasus as the mythological winged horse associated with the muses."
+      }
+    },
+    {
+      "id": "trivia:christmas-carol-miser",
+      "revision": 1,
+      "question": "Which miser is visited by the ghosts of Christmas Past, Present and Yet to Come in Charles Dickens's A Christmas Carol?",
+      "answer": "Ebenezer Scrooge",
+      "acceptableAnswers": ["Scrooge"],
+      "category": "arts-literature",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.gutenberg.org/cache/epub/46/pg46-images.html"],
+        "sourceRecord": "Dickens's original text names Ebenezer Scrooge and depicts the three Christmas spirits visiting him."
+      }
+    },
+    {
+      "id": "trivia:detroit-industry-muralist",
+      "revision": 1,
+      "question": "Which Mexican artist painted the Detroit Industry murals in 1932–33?",
+      "answer": "Diego Rivera",
+      "acceptableAnswers": ["Rivera", "Diego M. Rivera"],
+      "category": "arts-literature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://dia.org/collection/detroit-industry-murals/58537"],
+        "sourceRecord": "Detroit Institute of Arts attributes Detroit Industry Murals, dated 1932–1933, to Mexican artist Diego M. Rivera."
+      }
+    },
+    {
+      "id": "trivia:tolstoy-happy-families-opening",
+      "revision": 1,
+      "question": "Which Leo Tolstoy novel opens with the observation that happy families are alike but unhappy families differ?",
+      "answer": "Anna Karenina",
+      "acceptableAnswers": [],
+      "category": "arts-literature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.gutenberg.org/cache/epub/1399/pg1399-images.html"],
+        "sourceRecord": "The Constance Garnett translation of Anna Karenina opens with the comparison between happy and unhappy families."
+      }
+    },
+    {
+      "id": "trivia:pilkington-three-girls-book",
+      "revision": 1,
+      "question": "Which Doris Pilkington book recounts three Aboriginal girls' escape from Moore River Native Settlement and their journey home?",
+      "answer": "Follow the Rabbit-Proof Fence",
+      "acceptableAnswers": [],
+      "category": "arts-literature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.uqp.com.au/books/follow-the-rabbit-proof-fence"],
+        "sourceRecord": "Publisher UQP identifies the book and describes the three girls' actual escape from Moore River and journey back to their homelands."
+      }
+    },
+    {
+      "id": "trivia:pearl-earring-dutch-painter",
+      "revision": 1,
+      "question": "Which Dutch artist painted Girl with a Pearl Earring?",
+      "answer": "Johannes Vermeer",
+      "acceptableAnswers": ["Vermeer", "Jan Vermeer"],
+      "category": "arts-literature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.mauritshuis.nl/en/our-collection/artworks/670-girl-with-a-pearl-earring"
+        ],
+        "sourceRecord": "Mauritshuis attributes Girl with a Pearl Earring to Johannes Vermeer and discusses his signature on the painting."
+      }
+    },
+    {
+      "id": "trivia:murasaki-shining-prince-novel",
+      "revision": 1,
+      "question": "Which Japanese novel by Murasaki Shikibu follows the life and loves of the Shining Prince?",
+      "answer": "The Tale of Genji",
+      "acceptableAnswers": ["Tale of Genji", "Genji monogatari"],
+      "category": "arts-literature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.metmuseum.org/exhibitions/listings/2019/tale-of-genji"],
+        "sourceRecord": "The Metropolitan Museum of Art identifies The Tale of Genji, its author Murasaki Shikibu and its Shining Prince protagonist."
+      }
+    },
+    {
+      "id": "trivia:west-african-oral-historian-name",
+      "revision": 1,
+      "question": "What term describes a traditional West African storyteller and oral historian who may also sing?",
+      "answer": "Griot",
+      "acceptableAnswers": ["Griots"],
+      "category": "arts-literature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:51:37.395Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://education.nationalgeographic.org/resource/storytelling-and-cultural-traditions/4th-grade/"
+        ],
+        "sourceRecord": "National Geographic Society defines griot as a West African storyteller and oral historian, and describes singing as part of the role."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:frog-young-tadpole",
+      "revision": 1,
+      "question": "What is a young frog called while it has a tail and lives in water?",
+      "answer": "Tadpole",
+      "acceptableAnswers": ["A tadpole"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://australian.museum/learn/animals/frogs/"],
+        "sourceRecord": "Australian Museum identifies tadpoles as frogs' aquatic larval stage, with tails and gills."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:breathing-pair-chest-organs",
+      "revision": 1,
+      "question": "Which pair of organs in your chest takes in air when you breathe?",
+      "answer": "Lungs",
+      "acceptableAnswers": ["The lungs"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nhlbi.nih.gov/health/lungs"],
+        "sourceRecord": "NHLBI describes the lungs as paired chest organs into which inhaled air enters."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:falling-objects-force",
+      "revision": 1,
+      "question": "What force pulls a dropped ball towards the ground?",
+      "answer": "Gravity",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://spaceplace.nasa.gov/what-is-gravity/en/"],
+        "sourceRecord": "NASA explains that Earth's gravity keeps objects on the ground and makes them fall."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:plant-water-absorbing-parts",
+      "revision": 1,
+      "question": "Which parts of a tree absorb water from the soil?",
+      "answer": "Roots",
+      "acceptableAnswers": ["The roots"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://extension.colostate.edu/resource/understanding-tree-roots/"],
+        "sourceRecord": "Colorado State University Extension states that roots absorb water and nutrients."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:saturn-ringed-sixth-planet",
+      "revision": 1,
+      "question": "Which planet is famous for its bright rings and is sixth from the Sun?",
+      "answer": "Saturn",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://science.nasa.gov/saturn/facts/"],
+        "sourceRecord": "NASA identifies Saturn as sixth from the Sun and describes its prominent rings."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:fish-oxygen-organs",
+      "revision": 1,
+      "question": "What organs do most fish use to take oxygen from water?",
+      "answer": "Gills",
+      "acceptableAnswers": ["Their gills"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.fisheries.noaa.gov/national/outreach-and-education/fun-facts-about-fascinating-fish"
+        ],
+        "sourceRecord": "NOAA describes fish obtaining oxygen with their gills as water passes over them."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:snakes-shed-outer-covering",
+      "revision": 1,
+      "question": "What outer covering do snakes regularly shed?",
+      "answer": "Skin",
+      "acceptableAnswers": ["Their skin", "Snakeskin"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.amnh.org/explore/ology/biodiversity/tree-of-life/lizards-and-snakes"
+        ],
+        "sourceRecord": "AMNH lists periodically shedding the whole skin as a characteristic of snakes and lizards."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "id": "trivia:leaves-green-pigment",
+      "revision": 1,
+      "question": "What pigment gives most leaves their green colour?",
+      "answer": "Chlorophyll",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.acs.org/molecule-of-the-week/archive/c/chlorophyll.html"],
+        "sourceRecord": "American Chemical Society identifies chlorophyll as the green pigment in plants."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "id": "trivia:floating-party-balloons-gas",
+      "revision": 1,
+      "question": "Which non-flammable gas is commonly used to make party balloons float?",
+      "answer": "Helium",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://periodic-table.rsc.org/element/2/helium"],
+        "sourceRecord": "Royal Society of Chemistry describes low-density, chemically inert helium filling decorative balloons."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "id": "trivia:rubbing-surfaces-resistance",
+      "revision": 1,
+      "question": "What is the name of the force that resists two touching surfaces sliding past each other?",
+      "answer": "Friction",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.grc.nasa.gov/WWW/k-12/FoilSim/Manual/fsim002r.htm"],
+        "sourceRecord": "NASA defines friction as resistance to relative motion between surfaces in contact."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "id": "trivia:flowers-pollen-transfer-process",
+      "revision": 1,
+      "question": "What process transfers pollen from a flower's anther to a stigma?",
+      "answer": "Pollination",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.doi.gov/sites/default/files/fws-attracting-pollinator-to-your-garden.pdf"
+        ],
+        "sourceRecord": "US Fish and Wildlife Service defines pollination as pollen moving from anther to stigma (PDF page 3)."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "id": "trivia:duck-billed-egg-laying-mammal",
+      "revision": 1,
+      "question": "Which egg-laying Australian mammal has a duck-like bill?",
+      "answer": "Platypus",
+      "acceptableAnswers": ["The platypus", "Duck-billed platypus"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://australian.museum/learn/animals/mammals/platypus/"],
+        "sourceRecord": "Australian Museum's platypus account describes its broad bill and female egg-laying."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "id": "trivia:earthquake-vibration-instrument",
+      "revision": 1,
+      "question": "What instrument detects and records ground vibrations from earthquakes?",
+      "answer": "Seismometer",
+      "acceptableAnswers": ["Seismograph"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.bgs.ac.uk/discovering-geology/earth-hazards/earthquakes/how-are-earthquakes-detected/"
+        ],
+        "sourceRecord": "British Geological Survey identifies seismometers or seismographs as instruments recording earthquake ground motion."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:fungal-walls-insect-shell-substance",
+      "revision": 1,
+      "question": "Which tough substance occurs in fungal cell walls as well as insect exoskeletons?",
+      "answer": "Chitin",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.kew.org/read-and-watch/the-wonderful-world-of-fungi"],
+        "sourceRecord": "Kew identifies chitin in most fungal cell walls and insect exoskeletons."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:force-si-unit-name",
+      "revision": 1,
+      "question": "What is the SI unit of force, symbol N?",
+      "answer": "Newton",
+      "acceptableAnswers": ["A newton"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.npl.co.uk/resources/q-a/what-is-the-si-unit-of-force"],
+        "sourceRecord": "National Physical Laboratory states that the SI force unit is the newton, symbol N."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:red-blood-oxygen-protein",
+      "revision": 1,
+      "question": "What iron-rich protein carries oxygen in red blood cells?",
+      "answer": "Haemoglobin",
+      "acceptableAnswers": ["Hemoglobin"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nhlbi.nih.gov/health/anemia/causes"],
+        "sourceRecord": "NHLBI identifies haemoglobin as an iron-rich oxygen-carrying protein in red blood cells."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:tectonic-rigid-outer-shell",
+      "revision": 1,
+      "question": "What is Earth's rigid outer shell, made of crust and uppermost mantle and divided into tectonic plates, called?",
+      "answer": "Lithosphere",
+      "acceptableAnswers": ["The lithosphere"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.noaa.gov/jetstream/tsunamis/tsunami-generation-earthquakes/jetstream-max-plate-tectonics-and-earthquakes"
+        ],
+        "sourceRecord": "NOAA defines the lithosphere as crust plus upper mantle, broken into tectonic plates."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:expanding-space-light-wavelength-term",
+      "revision": 1,
+      "question": "What is the astronomical term for light shifting to longer wavelengths as space expands?",
+      "answer": "Redshift",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.esa.int/Science_Exploration/Space_Science/What_is_red_shift"],
+        "sourceRecord": "ESA explains redshift as light stretching to longer wavelengths, including due to expanding space."
+      }
+    },
+    {
+      "category": "science-nature",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:octopus-blood-oxygen-metal",
+      "revision": 1,
+      "question": "Which metal in an octopus's oxygen-carrying blood protein helps give its blood a blue colour?",
+      "answer": "Copper",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.nhm.ac.uk/discover/octopuses-keep-surprising-us-here-are-eight-examples-how.html"
+        ],
+        "sourceRecord": "Natural History Museum explains that copper in haemocyanin accounts for oxygenated octopus blood's blue colour."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:red-kangaroo-native-country",
+      "revision": 1,
+      "question": "Red kangaroos are native to which country?",
+      "answer": "Australia",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.taronga.org.au/wildlife-and-conservation/animals/detail/red-kangaroo"
+        ],
+        "sourceRecord": "Taronga Zoo identifies the red kangaroo as an Australian animal and locates its range in central Australia."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:maple-leaf-national-flag",
+      "revision": 1,
+      "question": "Which country's flag features a red maple leaf?",
+      "answer": "Canada",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.canada.ca/en/canadian-heritage/services/flag-canada-description.html"
+        ],
+        "sourceRecord": "Canadian Heritage describes the red maple leaf at the centre of Canada's national flag."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:brazil-continent-location",
+      "revision": 1,
+      "question": "On which continent is Brazil?",
+      "answer": "South America",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://kids.nationalgeographic.com/geography/countries/article/brazil"],
+        "sourceRecord": "National Geographic Kids identifies Brazil as a country in South America."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:bunbury-coastal-ocean",
+      "revision": 1,
+      "question": "Which ocean lies off Bunbury on the coast of Western Australia?",
+      "answer": "Indian Ocean",
+      "acceptableAnswers": ["The Indian Ocean", "Indian"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.dcceew.gov.au/energy/renewable/offshore-wind/areas/bunbury"],
+        "sourceRecord": "DCCEEW locates the Bunbury offshore area in the Indian Ocean off Western Australia."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:earth-midway-poles-line",
+      "revision": 1,
+      "question": "What imaginary line circles Earth halfway between the North and South Poles?",
+      "answer": "Equator",
+      "acceptableAnswers": ["The Equator"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://education.nationalgeographic.org/resource/equator/"],
+        "sourceRecord": "National Geographic defines Earth's Equator as the imaginary line halfway between its poles."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:london-manchester-uk-country",
+      "revision": 1,
+      "question": "London and Manchester are cities in which of the UK's four countries?",
+      "answer": "England",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.visitbritain.org/destinations/london",
+          "https://www.visitbritain.org/destinations/manchester"
+        ],
+        "sourceRecord": "VisitBritain's official destination profiles locate both London and Manchester in England."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "id": "trivia:aotearoa-country-name",
+      "revision": 1,
+      "question": "Which country is also known by the Māori name Aotearoa?",
+      "answer": "New Zealand",
+      "acceptableAnswers": ["NZ", "Aotearoa New Zealand"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://nzhistory.govt.nz/media/interactive/naming-country-and-main-islands-map"
+        ],
+        "sourceRecord": "New Zealand's Ministry for Culture and Heritage lists Aotearoa and New Zealand as country names."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "id": "trivia:eastern-australia-dividing-range",
+      "revision": 1,
+      "question": "Which mountain system separates many east-flowing coastal rivers from west-flowing inland rivers in eastern Australia?",
+      "answer": "Great Dividing Range",
+      "acceptableAnswers": ["The Great Dividing Range"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.ga.gov.au/education/natural-hazards/flood"],
+        "sourceRecord": "Geoscience Australia describes the Great Dividing Range separating eastern coastal rivers from west-flowing rivers."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "id": "trivia:mekong-six-country-river",
+      "revision": 1,
+      "question": "Which river flows from the Tibetan Plateau through countries including Laos, Cambodia and Vietnam?",
+      "answer": "Mekong",
+      "acceptableAnswers": ["Mekong River", "The Mekong"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.mrcmekong.org/mekong-river-basin/"],
+        "sourceRecord": "Mekong River Commission traces the Mekong from Tibet through six countries including Laos, Cambodia and Vietnam."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "id": "trivia:atlantic-mediterranean-strait",
+      "revision": 1,
+      "question": "Which strait connects the Atlantic Ocean to the Mediterranean Sea?",
+      "answer": "Strait of Gibraltar",
+      "acceptableAnswers": ["Gibraltar Strait", "The Strait of Gibraltar"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.esa.int/Applications/Observing_the_Earth/Earth_from_Space_Strait_of_Gibraltar"
+        ],
+        "sourceRecord": "ESA describes the Strait of Gibraltar as connecting the Mediterranean Sea and Atlantic Ocean."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "id": "trivia:angkor-ruins-country",
+      "revision": 1,
+      "question": "In which country are the ruins of Angkor, including Angkor Wat?",
+      "answer": "Cambodia",
+      "acceptableAnswers": ["Kingdom of Cambodia"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://science.nasa.gov/earth/earth-observatory/angkor-ruins-4995/"],
+        "sourceRecord": "NASA Earth Observatory locates the ancient city of Angkor north of Tonle Sap Lake in Cambodia."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "id": "trivia:sweden-finland-estonia-sea",
+      "revision": 1,
+      "question": "Which sea has Sweden, Finland and Estonia among the countries on its shores?",
+      "answer": "Baltic Sea",
+      "acceptableAnswers": ["The Baltic Sea", "Baltic"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://stateofthebalticsea.helcom.fi/findings/activities/economic-impacts/"],
+        "sourceRecord": "HELCOM lists Sweden, Finland and Estonia among the nine countries bordering the Baltic Sea."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "id": "trivia:land-water-three-sides-term",
+      "revision": 1,
+      "question": "What is a piece of land almost surrounded by water but still connected to a mainland called?",
+      "answer": "Peninsula",
+      "acceptableAnswers": ["A peninsula"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://education.nationalgeographic.org/resource/peninsula/"],
+        "sourceRecord": "National Geographic defines a peninsula as land almost surrounded by water but connected to mainland on one side."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:madagascar-mainland-channel",
+      "revision": 1,
+      "question": "Which channel separates Madagascar from the coast of Mozambique?",
+      "answer": "Mozambique Channel",
+      "acceptableAnswers": ["The Mozambique Channel"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.cbd.int/marine/ebsa/booklet-03-sio-en.pdf"],
+        "sourceRecord": "Convention on Biological Diversity places Mozambique west and Madagascar east of the Mozambique Channel (PDF page 69)."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:south-africa-surrounded-country",
+      "revision": 1,
+      "question": "Which independent country is entirely surrounded by South Africa?",
+      "answer": "Lesotho",
+      "acceptableAnswers": ["Kingdom of Lesotho"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://travel.state.gov/en/international-travel/travel-advisories/lesotho.html"
+        ],
+        "sourceRecord": "US Department of State describes Lesotho as a landlocked country fully surrounded by South Africa."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:grand-canyon-main-river",
+      "revision": 1,
+      "question": "Which major river flows through the Grand Canyon in Arizona?",
+      "answer": "Colorado River",
+      "acceptableAnswers": ["Colorado", "The Colorado River"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nps.gov/grca/learn/nature/rivers.htm"],
+        "sourceRecord": "US National Park Service describes the Colorado River flowing through Grand Canyon National Park."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:alaska-russia-waterway",
+      "revision": 1,
+      "question": "Which strait separates mainland Alaska from the Russian Far East?",
+      "answer": "Bering Strait",
+      "acceptableAnswers": ["The Bering Strait"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.jpl.nasa.gov/images/pia10631-diomede-islands-bering-straight/"],
+        "sourceRecord": "NASA JPL locates the Bering Strait between Russia and Alaska, with the Diomede Islands in its middle."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:orangutan-island-besides-borneo",
+      "revision": 1,
+      "question": "Besides Borneo, which Indonesian island is part of orangutans' native range?",
+      "answer": "Sumatra",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.wwf.org.uk/learn/wildlife/orangutans"],
+        "sourceRecord": "WWF identifies Sumatra and Borneo as the two islands with wild orangutan populations."
+      }
+    },
+    {
+      "category": "geography",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:europe-asia-conventional-mountain-boundary",
+      "revision": 1,
+      "question": "Which mountain range runs north–south through western Russia and forms part of the conventional boundary between Europe and Asia?",
+      "answer": "Ural Mountains",
+      "acceptableAnswers": ["Urals", "The Urals", "The Ural Mountains"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://science.nasa.gov/earth/earth-observatory/the-ural-mountains-87198/",
+          "https://www.nationalgeographic.org/national-geographic-map-policy"
+        ],
+        "sourceRecord": "NASA describes the Urals dividing Europe and Asia; National Geographic includes them in its conventional continental boundary."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:hexagon-side-count",
+      "revision": 1,
+      "question": "How many sides does a hexagon have?",
+      "answer": "Six",
+      "acceptableAnswers": ["6"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/hexagon"],
+        "sourceRecord": "Merriam-Webster defines a hexagon as a polygon with six sides and six angles."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:hour-minute-count",
+      "revision": 1,
+      "question": "How many minutes are in one hour?",
+      "answer": "Sixty",
+      "acceptableAnswers": ["60", "Sixty minutes"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/hour"],
+        "sourceRecord": "Merriam-Webster defines an hour as 60 minutes."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:raisins-original-fruit",
+      "revision": 1,
+      "question": "Which fruit is dried to make raisins?",
+      "answer": "Grapes",
+      "acceptableAnswers": ["Grape"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/raisin"],
+        "sourceRecord": "Merriam-Webster defines a raisin as a dried grape."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:pronged-eating-utensil",
+      "revision": 1,
+      "question": "Which eating utensil has prongs for picking up pieces of food?",
+      "answer": "Fork",
+      "acceptableAnswers": ["A fork"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/fork"],
+        "sourceRecord": "Merriam-Webster defines a fork as a pronged implement used for eating and other tasks."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:pedestrian-stop-symbol-colour",
+      "revision": 1,
+      "question": "In Australia, what colour is the standing pedestrian symbol that tells you not to start crossing the road?",
+      "answer": "Red",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.nsw.gov.au/driving-boating-and-transport/driving-nsw/roads-safety-and-rules/stopping-giving-way-turning/traffic-lights"
+        ],
+        "sourceRecord": "NSW Government labels the red pedestrian symbol as meaning pedestrians must not start to cross."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "id": "trivia:common-year-twenty-eight-day-month",
+      "revision": 1,
+      "question": "Which calendar month has exactly 28 days in a non-leap year?",
+      "answer": "February",
+      "acceptableAnswers": ["Feb"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.timeanddate.com/calendar/months/february.html"],
+        "sourceRecord": "Time and Date states that February has 28 days in common years and 29 in leap years."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "id": "trivia:hummus-main-pulse",
+      "revision": 1,
+      "question": "Which pulses are puréed to make traditional hummus?",
+      "answer": "Chickpeas",
+      "acceptableAnswers": ["Chickpea", "Garbanzo beans", "Garbanzo bean"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/hummus"],
+        "sourceRecord": "Merriam-Webster defines hummus as a paste of puréed chickpeas, usually with sesame."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "id": "trivia:initial-letter-pronounced-word",
+      "revision": 1,
+      "question": "What is a word made from initial letters and pronounced as a word, such as NASA, called?",
+      "answer": "Acronym",
+      "acceptableAnswers": ["An acronym"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/acronym"],
+        "sourceRecord": "Merriam-Webster explains acronym formation from initial letters and distinguishes word pronunciation from initialisms."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "id": "trivia:thailand-currency-name",
+      "revision": 1,
+      "question": "What is the basic unit of currency in Thailand?",
+      "answer": "Baht",
+      "acceptableAnswers": ["Thai baht"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/baht"],
+        "sourceRecord": "Merriam-Webster identifies the baht as Thailand's basic monetary unit."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "id": "trivia:pdf-abbreviation-expansion",
+      "revision": 1,
+      "question": "What does PDF stand for in the name of the document file format?",
+      "answer": "Portable Document Format",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.adobe.com/acrobat/about-adobe-pdf.html"],
+        "sourceRecord": "Adobe, creator of PDF, expands the abbreviation as Portable Document Format."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "id": "trivia:eggs-simmered-shell-less-method",
+      "revision": 1,
+      "question": "What cooking method gently cooks an egg without its shell in simmering water?",
+      "answer": "Poaching",
+      "acceptableAnswers": ["Poach"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/poach"],
+        "sourceRecord": "Merriam-Webster defines poaching as cooking in simmering liquid."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "id": "trivia:feta-origin-country",
+      "revision": 1,
+      "question": "Feta cheese traditionally comes from which country?",
+      "answer": "Greece",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.gov.uk/protected-food-drink-names/pheta-slash-feta"],
+        "sourceRecord": "UK government's protected-food register records Greece as feta's country of origin."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:gapless-pattern-shapes-term",
+      "revision": 1,
+      "question": "What is a pattern of shapes that completely covers a flat surface without gaps or overlaps called?",
+      "answer": "Tessellation",
+      "acceptableAnswers": ["A tessellation", "Tiling"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/tessellation"],
+        "sourceRecord": "Merriam-Webster defines geometric tessellation as covering a plane with figures without gaps or overlaps."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:allspice-single-berry-spice",
+      "revision": 1,
+      "question": "Which spice, despite its name, is made from dried berries of one tree rather than a mixture of spices?",
+      "answer": "Allspice",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/allspice"],
+        "sourceRecord": "Merriam-Webster identifies allspice as dried berries from the tree Pimenta dioica."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:closed-spaces-phobia-name",
+      "revision": 1,
+      "question": "What is the term for an intense fear of being in closed or narrow spaces?",
+      "answer": "Claustrophobia",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/claustrophobia"],
+        "sourceRecord": "Merriam-Webster's definition identifies claustrophobia as an abnormal fear of closed or narrow spaces."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:rabbit-hole-tree-loop-knot",
+      "revision": 1,
+      "question": "Which knot makes a fixed loop and is often taught with a rabbit emerging from a hole and going around a tree?",
+      "answer": "Bowline",
+      "acceptableAnswers": ["A bowline", "Bowline knot"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://prod-cms.scouts.org.uk/media/2709/scout-adventures-simple-knots-guide.pdf"
+        ],
+        "sourceRecord": "Scout Association's knot guide describes the bowline's non-slip loop and rabbit/hole/tree teaching phrase (PDF page 4)."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:gemstone-mass-unit",
+      "revision": 1,
+      "question": "What unit of mass equal to 0.2 grams is used for diamonds and other gemstones?",
+      "answer": "Carat",
+      "acceptableAnswers": ["Metric carat"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.gia.edu/gia-about/4cs-carat"],
+        "sourceRecord": "Gemological Institute of America states that one metric carat is 0.2 grams."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:linen-source-plant",
+      "revision": 1,
+      "question": "Which plant supplies the fibres used to make linen?",
+      "answer": "Flax",
+      "acceptableAnswers": ["Flax plant"],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/linen"],
+        "sourceRecord": "Merriam-Webster defines linen as cloth or yarn made from flax."
+      }
+    },
+    {
+      "category": "general",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "id": "trivia:algebra-word-ultimate-language",
+      "revision": 1,
+      "question": "The mathematical word 'algebra' ultimately comes from which language?",
+      "answer": "Arabic",
+      "acceptableAnswers": [],
+      "review": {
+        "reviewedAt": "2026-10-22T12:48:38Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/algebra"],
+        "sourceRecord": "Merriam-Webster traces algebra through Medieval Latin to Arabic al-jabr."
+      }
+    },
+    {
+      "id": "trivia:lion-king-lion-cub-name",
+      "revision": 1,
+      "question": "What is the name of the lion cub who grows up to become king in Disney's The Lion King?",
+      "answer": "Simba",
+      "acceptableAnswers": [],
+      "category": "film-tv",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.disneyanimation.com/films/the-lion-king/"],
+        "sourceRecord": "Disney Animation identifies Simba as the lion cub at the centre of The Lion King."
+      }
+    },
+    {
+      "id": "trivia:peppa-pig-younger-brother",
+      "revision": 1,
+      "question": "What is the name of Peppa Pig's younger brother?",
+      "answer": "George",
+      "acceptableAnswers": ["George Pig"],
+      "category": "film-tv",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://peppapiglive.com/characters/george/"],
+        "sourceRecord": "The official Peppa Pig Live character page identifies George as Peppa's little brother."
+      }
+    },
+    {
+      "id": "trivia:paw-patrol-police-pup",
+      "revision": 1,
+      "question": "Which PAW Patrol pup wears a blue police hat and drives a police truck?",
+      "answer": "Chase",
+      "acceptableAnswers": [],
+      "category": "film-tv",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://dev.pawpatrol.com/characters/chase"],
+        "sourceRecord": "The official character guide identifies Chase as the Police Pup, with a blue hat and Police Truck."
+      }
+    },
+    {
+      "id": "trivia:kung-fu-panda-po-name",
+      "revision": 1,
+      "question": "What is the name of the panda who becomes the Dragon Warrior in Kung Fu Panda?",
+      "answer": "Po",
+      "acceptableAnswers": [],
+      "category": "film-tv",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.dreamworks.com/movies/kung-fu-panda"],
+        "sourceRecord": "DreamWorks describes Po as the dreamer who becomes the Dragon Warrior."
+      }
+    },
+    {
+      "id": "trivia:despicable-me-gru-helpers",
+      "revision": 1,
+      "question": "What are Gru's small yellow helpers called in Despicable Me?",
+      "answer": "Minions",
+      "acceptableAnswers": ["The Minions"],
+      "category": "film-tv",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.illumination.com/movie/despicable-me/"],
+        "sourceRecord": "Illumination's character list identifies the Minions as Gru's henchmen."
+      }
+    },
+    {
+      "id": "trivia:batman-protected-city",
+      "revision": 1,
+      "question": "Which fictional city does Batman protect?",
+      "answer": "Gotham City",
+      "acceptableAnswers": ["Gotham"],
+      "category": "film-tv",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.dc.com/characters/batman"],
+        "sourceRecord": "DC lists Gotham City as Batman's base of operations and describes his protection of the city."
+      }
+    },
+    {
+      "id": "trivia:doctor-who-time-machine",
+      "revision": 1,
+      "question": "What is the name of the Doctor's time machine, usually disguised as a blue police box, in Doctor Who?",
+      "answer": "TARDIS",
+      "acceptableAnswers": ["The TARDIS"],
+      "category": "film-tv",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.doctorwho.tv/characters/the-tardis"],
+        "sourceRecord": "Doctor Who's official TARDIS profile describes its blue police-box disguise and travel through time and space."
+      }
+    },
+    {
+      "id": "trivia:black-panther-tchalla-nation",
+      "revision": 1,
+      "question": "In Black Panther (2018), T'Challa becomes king of which fictional African nation?",
+      "answer": "Wakanda",
+      "acceptableAnswers": [],
+      "category": "film-tv",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://movies.disney.com/black-panther"],
+        "sourceRecord": "Disney's synopsis says T'Challa succeeds his father as king of Wakanda."
+      }
+    },
+    {
+      "id": "trivia:et-elliott-alien-film",
+      "revision": 1,
+      "question": "Which 1982 film follows a boy named Elliott who befriends a stranded alien?",
+      "answer": "E.T. the Extra-Terrestrial",
+      "acceptableAnswers": ["E.T."],
+      "category": "film-tv",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://preview.universalpicturesathome.com/movies/et-the-extra-terrestrial"],
+        "sourceRecord": "Universal's synopsis identifies Elliott and the stranded alien in E.T. the Extra-Terrestrial; the copyright is 1982."
+      }
+    },
+    {
+      "id": "trivia:casablanca-rick-blaine-film",
+      "revision": 1,
+      "question": "Which 1942 film centres on Rick Blaine's café in wartime Morocco?",
+      "answer": "Casablanca",
+      "acceptableAnswers": [],
+      "category": "film-tv",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://parkcircus.com/film/108105-casablanca"],
+        "sourceRecord": "Warner Bros distributor Park Circus dates Casablanca to 1942 and describes Rick Blaine's café in Morocco."
+      }
+    },
+    {
+      "id": "trivia:gandalf-film-actor",
+      "revision": 1,
+      "question": "Who plays Gandalf in Peter Jackson's The Lord of the Rings film trilogy?",
+      "answer": "Ian McKellen",
+      "acceptableAnswers": ["McKellen", "Sir Ian McKellen"],
+      "category": "film-tv",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.mckellen.com/cinema/lotr/"],
+        "sourceRecord": "Ian McKellen's account of filming Peter Jackson's trilogy states that he was cast as Gandalf."
+      }
+    },
+    {
+      "id": "trivia:simpsons-home-town",
+      "revision": 1,
+      "question": "What is the name of the fictional town where the Simpson family lives in The Simpsons?",
+      "answer": "Springfield",
+      "acceptableAnswers": [],
+      "category": "film-tv",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.universalorlando.com/web/pt/br/universal-studios-florida/lands/springfield-home-of-the-simpsons"
+        ],
+        "sourceRecord": "Universal's licensed Simpsons destination identifies Springfield as the Simpsons' home and describes its residents."
+      }
+    },
+    {
+      "id": "trivia:jaws-score-composer",
+      "revision": 1,
+      "question": "Who composed the Oscar-winning original score for Jaws (1975)?",
+      "answer": "John Williams",
+      "acceptableAnswers": ["Williams"],
+      "category": "film-tv",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.oscars.org/oscars/ceremonies/1976"],
+        "sourceRecord": "The Academy's 1976 awards list John Williams as the Original Score winner for Jaws."
+      }
+    },
+    {
+      "id": "trivia:mad-max-fury-road-director",
+      "revision": 1,
+      "question": "Which Australian filmmaker directed Mad Max: Fury Road (2015)?",
+      "answer": "George Miller",
+      "acceptableAnswers": ["Miller"],
+      "category": "film-tv",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.classification.gov.au/titles/mad-max-fury-road"],
+        "sourceRecord": "Australian Classification's industry record lists George Miller as director of the 2015 film."
+      }
+    },
+    {
+      "id": "trivia:parasite-director",
+      "revision": 1,
+      "question": "Who directed the South Korean film Parasite (2019)?",
+      "answer": "Bong Joon-ho",
+      "acceptableAnswers": ["Bong"],
+      "category": "film-tv",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.oscars.org/oscars/ceremonies/2020"],
+        "sourceRecord": "The Academy's 2020 Directing category credits Bong Joon Ho with Parasite."
+      }
+    },
+    {
+      "id": "trivia:piano-1993-director",
+      "revision": 1,
+      "question": "Who directed the 1993 film The Piano?",
+      "answer": "Jane Campion",
+      "acceptableAnswers": ["Campion"],
+      "category": "film-tv",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.festival-cannes.com/en/f/the-piano/"],
+        "sourceRecord": "Cannes lists Jane Campion as director of The Piano, in competition in 1993."
+      }
+    },
+    {
+      "id": "trivia:nosferatu-1922-vampire-name",
+      "revision": 1,
+      "question": "What is the vampire's name in the original silent film Nosferatu (1922)?",
+      "answer": "Count Orlok",
+      "acceptableAnswers": ["Orlok"],
+      "category": "film-tv",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.bfi.org.uk/film/3d4cb177-731b-53ff-b7e3-41ef1bbd0c9d/nosferatu"],
+        "sourceRecord": "BFI's film entry identifies Max Schreck's vampire character as Count Orlok."
+      }
+    },
+    {
+      "id": "trivia:foley-synchronised-sound-technique",
+      "revision": 1,
+      "question": "What is the film sound technique of recording everyday noises, such as footsteps, to match on-screen actions called?",
+      "answer": "Foley",
+      "acceptableAnswers": ["Foley sound", "Foley effects"],
+      "category": "film-tv",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.acmi.net.au/education/school-program-and-resources/foley-sound/"],
+        "sourceRecord": "ACMI describes Foley artists recording ordinary objects as sound effects synchronised with on-screen action."
+      }
+    },
+    {
+      "id": "trivia:cannes-1994-palme-film",
+      "revision": 1,
+      "question": "Which Quentin Tarantino film won the Palme d'Or at Cannes in 1994?",
+      "answer": "Pulp Fiction",
+      "acceptableAnswers": [],
+      "category": "film-tv",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.festival-cannes.com/en/f/pulp-fiction/"],
+        "sourceRecord": "Cannes lists Pulp Fiction, directed by Quentin Tarantino, as the 1994 Palme d'Or winner."
+      }
+    },
+    {
+      "id": "trivia:violin-string-playing-bow",
+      "revision": 1,
+      "question": "What is the stick with stretched hair that violinists draw across the strings called?",
+      "answer": "Bow",
+      "acceptableAnswers": ["A bow", "Violin bow"],
+      "category": "music",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://philharmonia.co.uk/resources/instruments/violin/"],
+        "sourceRecord": "The Philharmonia describes the violin bow as a wooden stick with horsehair stretched between its ends."
+      }
+    },
+    {
+      "id": "trivia:drums-cymbals-instrument-family",
+      "revision": 1,
+      "question": "Drums and cymbals belong to which family of musical instruments?",
+      "answer": "Percussion",
+      "acceptableAnswers": ["Percussion family", "Percussion instruments"],
+      "category": "music",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://philharmonia.co.uk/resources/instruments/percussion/"],
+        "sourceRecord": "The Philharmonia includes drums and cymbals in the percussion section."
+      }
+    },
+    {
+      "id": "trivia:xylophone-wooden-bars",
+      "revision": 1,
+      "question": "Which instrument beginning with X has wooden bars that you strike with small mallets?",
+      "answer": "Xylophone",
+      "acceptableAnswers": ["A xylophone"],
+      "category": "music",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/xylophone"],
+        "sourceRecord": "The dictionary defines a xylophone as graduated wooden bars sounded by striking with small hammers."
+      }
+    },
+    {
+      "id": "trivia:two-performer-musical-piece",
+      "revision": 1,
+      "question": "What is a musical piece written for two singers or instrumentalists to perform together called?",
+      "answer": "Duet",
+      "acceptableAnswers": ["A duet"],
+      "category": "music",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/duet"],
+        "sourceRecord": "The dictionary defines a duet as a composition for two performers."
+      }
+    },
+    {
+      "id": "trivia:organised-singing-group",
+      "revision": 1,
+      "question": "What is an organised group of singers who perform together called?",
+      "answer": "Choir",
+      "acceptableAnswers": ["A choir", "Chorus", "A chorus"],
+      "category": "music",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/choir"],
+        "sourceRecord": "The dictionary defines a choir as an organised company of singers."
+      }
+    },
+    {
+      "id": "trivia:school-woodwind-recorder",
+      "revision": 1,
+      "question": "Which simple woodwind instrument, often made of plastic, is commonly played by children in school music lessons?",
+      "answer": "Recorder",
+      "acceptableAnswers": ["A recorder"],
+      "category": "music",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.yamaha.com/en/musical_instrument_guide/recorder/"],
+        "sourceRecord": "Yamaha identifies the recorder as familiar from school lessons and links its resin and wooden forms."
+      }
+    },
+    {
+      "id": "trivia:adele-age-titled-albums",
+      "revision": 1,
+      "question": "Which singer released the albums 19, 21 and 25?",
+      "answer": "Adele",
+      "acceptableAnswers": ["Adele Adkins"],
+      "category": "music",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.adele.com/?language=en-us"],
+        "sourceRecord": "Adele's official music page lists 19, 21 and 25."
+      }
+    },
+    {
+      "id": "trivia:three-little-birds-singer",
+      "revision": 1,
+      "question": "Which reggae singer recorded Three Little Birds with the Wailers?",
+      "answer": "Bob Marley",
+      "acceptableAnswers": ["Marley", "Robert Nesta Marley"],
+      "category": "music",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.udiscovermusic.com/stories/bob-marley-three-little-birds-song-story/"
+        ],
+        "sourceRecord": "Universal Music's uDiscover article attributes Three Little Birds to Bob Marley and the Wailers."
+      }
+    },
+    {
+      "id": "trivia:didgeridoo-hollow-wood-instrument",
+      "revision": 1,
+      "question": "What is the familiar English name for the long, hollow wooden wind instrument traditionally played by Aboriginal peoples of northern Australia?",
+      "answer": "Didgeridoo",
+      "acceptableAnswers": ["Didjeridu", "Yidaki", "Mandapul"],
+      "category": "music",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.abc.net.au/news/deeptime/yolngu-mandapul-yidaki/"],
+        "sourceRecord": "ABC's account from Yolngu knowledge holder Larry Girrawiwi identifies mandapul/yidaki as the didgeridoo and describes its hollow wood."
+      }
+    },
+    {
+      "id": "trivia:daft-punk-robot-helmets",
+      "revision": 1,
+      "question": "Which French electronic music duo became famous for performing in robot helmets?",
+      "answer": "Daft Punk",
+      "acceptableAnswers": [],
+      "category": "music",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.grammy.com/news/daft-punk-get-lucky-grammy-win-pharrell-williams-acceptance-speech-video-rewind/"
+        ],
+        "sourceRecord": "The Recording Academy describes French duo Daft Punk adopting signature robot helmets in 2001."
+      }
+    },
+    {
+      "id": "trivia:back-in-black-band",
+      "revision": 1,
+      "question": "Which rock band released the album Back in Black?",
+      "answer": "AC/DC",
+      "acceptableAnswers": [],
+      "category": "music",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.acdc.com/music"],
+        "sourceRecord": "AC/DC's official music archive lists Back in Black and its tracks."
+      }
+    },
+    {
+      "id": "trivia:opera-sung-drama",
+      "revision": 1,
+      "question": "What form of theatre tells a dramatic story mainly through singing, usually with an orchestra?",
+      "answer": "Opera",
+      "acceptableAnswers": ["An opera"],
+      "category": "music",
+      "difficulty": "medium",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/opera"],
+        "sourceRecord": "The dictionary defines opera as drama set to music, with vocal pieces and orchestral accompaniment."
+      }
+    },
+    {
+      "id": "trivia:rhapsody-in-blue-composer",
+      "revision": 1,
+      "question": "Who composed Rhapsody in Blue?",
+      "answer": "George Gershwin",
+      "acceptableAnswers": ["Gershwin"],
+      "category": "music",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.laphil.com/works/rhapsody-in-blue"],
+        "sourceRecord": "LA Phil's work record credits George Gershwin with Rhapsody in Blue."
+      }
+    },
+    {
+      "id": "trivia:madama-butterfly-composer",
+      "revision": 1,
+      "question": "Who composed the opera Madama Butterfly?",
+      "answer": "Giacomo Puccini",
+      "acceptableAnswers": ["Puccini"],
+      "category": "music",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.santafeopera.org/whats-on/madama-butterfly-2026/"],
+        "sourceRecord": "Santa Fe Opera's production record credits the music of Madama Butterfly to Giacomo Puccini."
+      }
+    },
+    {
+      "id": "trivia:treaty-yothu-yindi-band",
+      "revision": 1,
+      "question": "Which Australian band released the 1991 song Treaty, blending rock with Yolngu music?",
+      "answer": "Yothu Yindi",
+      "acceptableAnswers": [],
+      "category": "music",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nfsa.gov.au/collection/item/treaty-yothu-yindi"],
+        "sourceRecord": "NFSA credits Yothu Yindi with Treaty (1991) and explains its traditional Yolngu musical elements."
+      }
+    },
+    {
+      "id": "trivia:mama-africa-singer",
+      "revision": 1,
+      "question": "Which South African singer and anti-apartheid campaigner was nicknamed Mama Africa?",
+      "answer": "Miriam Makeba",
+      "acceptableAnswers": ["Makeba", "Zenzile Miriam Makeba"],
+      "category": "music",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": [
+          "https://www.archives.gov/research/african-americans/individuals/miriam-makeba"
+        ],
+        "sourceRecord": "The US National Archives identifies singer and civil-rights activist Miriam Makeba as Mama Africa."
+      }
+    },
+    {
+      "id": "trivia:i-put-a-spell-on-you-album-singer",
+      "revision": 1,
+      "question": "Which singer and pianist released the 1965 album I Put a Spell on You?",
+      "answer": "Nina Simone",
+      "acceptableAnswers": ["Simone"],
+      "category": "music",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.ninasimone.com/albums/i-put-a-spell-on-you/"],
+        "sourceRecord": "Nina Simone's official album page credits her vocals and piano and gives Philips, 1965."
+      }
+    },
+    {
+      "id": "trivia:lark-ascending-composer",
+      "revision": 1,
+      "question": "Who composed the violin and orchestra piece The Lark Ascending?",
+      "answer": "Ralph Vaughan Williams",
+      "acceptableAnswers": ["Vaughan Williams"],
+      "category": "music",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.laphil.com/works/the-lark-ascending"],
+        "sourceRecord": "LA Phil credits Ralph Vaughan Williams and describes the work as a romance for violin and orchestra."
+      }
+    },
+    {
+      "id": "trivia:mario-brother-luigi",
+      "revision": 1,
+      "question": "What is the name of Mario's brother, who usually wears green?",
+      "answer": "Luigi",
+      "acceptableAnswers": [],
+      "category": "sport-games",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nintendo.com/us/store/characters/luigi/"],
+        "sourceRecord": "Nintendo's official Luigi page identifies him as Mario's brother."
+      }
+    },
+    {
+      "id": "trivia:tennis-ball-striking-implement",
+      "revision": 1,
+      "question": "What is the handheld frame with strings that a tennis player uses to hit the ball called?",
+      "answer": "Racket",
+      "acceptableAnswers": ["Racquet", "Tennis racket", "Tennis racquet"],
+      "category": "sport-games",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/racket"],
+        "sourceRecord": "The dictionary describes the handled, stringed frame used to strike a tennis ball and permits racket/racquet."
+      }
+    },
+    {
+      "id": "trivia:golf-putting-green-target",
+      "revision": 1,
+      "question": "What is the small cup in a putting green that golfers aim to get the ball into called?",
+      "answer": "Hole",
+      "acceptableAnswers": ["The hole", "Cup", "Golf hole"],
+      "category": "sport-games",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/hole"],
+        "sourceRecord": "The dictionary's golf definition identifies the shallow hole in a putting green into which the ball is played."
+      }
+    },
+    {
+      "id": "trivia:uno-last-card-call-game",
+      "revision": 1,
+      "question": "In which card game must you shout its name when you have just one card left?",
+      "answer": "UNO",
+      "acceptableAnswers": [],
+      "category": "sport-games",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://service.mattel.com/instruction_sheets/UNO%20Basic%20IS.pdf"],
+        "sourceRecord": "Mattel's UNO rules require a player down to one card to call UNO."
+      }
+    },
+    {
+      "id": "trivia:bowling-first-ball-all-pins",
+      "revision": 1,
+      "question": "In ten-pin bowling, what do you call knocking down all the pins with the first ball of a frame?",
+      "answer": "Strike",
+      "acceptableAnswers": ["A strike"],
+      "category": "sport-games",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://bowl.com/welcome/bowling-lingo"],
+        "sourceRecord": "US Bowling Congress defines a strike as knocking down all ten pins with the first ball."
+      }
+    },
+    {
+      "id": "trivia:surfing-wave-riding-board",
+      "revision": 1,
+      "question": "What is the long board that a surfer stands on to ride waves called?",
+      "answer": "Surfboard",
+      "acceptableAnswers": ["A surfboard"],
+      "category": "sport-games",
+      "difficulty": "easy",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/surfboard"],
+        "sourceRecord": "The dictionary defines a surfboard as a long, narrow buoyant board used in surfing."
+      }
+    },
+    {
+      "id": "trivia:rugby-union-grounding-score",
+      "revision": 1,
+      "question": "In rugby union, what is the score called when an attacking player legally grounds the ball in the opponent's in-goal area?",
+      "answer": "Try",
+      "acceptableAnswers": ["A try"],
+      "category": "sport-games",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://passport.world.rugby/laws-of-the-game/laws-by-number/21-in-goal/"],
+        "sourceRecord": "World Rugby Law 21.3 states that an attacking player grounding the ball in in-goal scores a try."
+      }
+    },
+    {
+      "id": "trivia:table-tennis-alternative-name",
+      "revision": 1,
+      "question": "What other familiar name is used for table tennis?",
+      "answer": "Ping-pong",
+      "acceptableAnswers": [],
+      "category": "sport-games",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/ping-pong"],
+        "sourceRecord": "The dictionary records Ping-Pong as a name used for table tennis."
+      }
+    },
+    {
+      "id": "trivia:triathlon-middle-discipline",
+      "revision": 1,
+      "question": "In a standard triathlon, which discipline comes between swimming and running?",
+      "answer": "Cycling",
+      "acceptableAnswers": ["Bike riding", "Biking", "Bicycle riding"],
+      "category": "sport-games",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.triathlonireland.com/events/event-types/"],
+        "sourceRecord": "Triathlon Ireland's event guide orders the standard disciplines as swim, bike, run."
+      }
+    },
+    {
+      "id": "trivia:ice-hockey-rubber-disc",
+      "revision": 1,
+      "question": "What is the rubber disc hit by players in ice hockey called?",
+      "answer": "Puck",
+      "acceptableAnswers": ["A puck", "Hockey puck"],
+      "category": "sport-games",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.merriam-webster.com/dictionary/puck"],
+        "sourceRecord": "The dictionary defines a puck as the vulcanised rubber disc used in ice hockey."
+      }
+    },
+    {
+      "id": "trivia:indoor-volleyball-contact-limit",
+      "revision": 1,
+      "question": "In standard indoor volleyball, how many team hits are allowed to return the ball, excluding a block contact?",
+      "answer": "Three",
+      "acceptableAnswers": ["3", "Three hits"],
+      "category": "sport-games",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.fivb.com/volleyball/the-game/basic-rules/"],
+        "sourceRecord": "FIVB's basic rules allow three team hits to return the ball, in addition to a block contact."
+      }
+    },
+    {
+      "id": "trivia:monopoly-passing-go-salary",
+      "revision": 1,
+      "question": "In classic Monopoly, how many dollars do you collect when you pass GO in normal play?",
+      "answer": "Two hundred",
+      "acceptableAnswers": ["200", "Two hundred dollars", "200 dollars"],
+      "category": "sport-games",
+      "difficulty": "medium",
+      "kidAppropriate": true,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.hasbro.com/common/instruct/00009.pdf"],
+        "sourceRecord": "Hasbro's Classic Monopoly rules pay a $200 salary when a player's token lands on or passes GO."
+      }
+    },
+    {
+      "id": "trivia:thomas-cup-sport",
+      "revision": 1,
+      "question": "The Thomas Cup is the world men's team championship in which sport?",
+      "answer": "Badminton",
+      "acceptableAnswers": [],
+      "category": "sport-games",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://badminton.org.nz/news/2026/01/new-zealand-eyes-world-championships/"],
+        "sourceRecord": "Badminton New Zealand identifies the Thomas Cup as the men's BWF World Team Championship."
+      }
+    },
+    {
+      "id": "trivia:snooker-standard-maximum-break",
+      "revision": 1,
+      "question": "In snooker, how many points is a standard maximum break of fifteen reds with fifteen blacks, followed by all the colours?",
+      "answer": "One hundred and forty-seven",
+      "acceptableAnswers": ["147", "One hundred forty-seven", "147 points"],
+      "category": "sport-games",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.wst.tv/news/2022/november/06/maximum-magic-for-trump-in-bolton/"],
+        "sourceRecord": "WST describes fifteen reds with blacks and the colours as a 147 maximum. This question excludes free-ball breaks."
+      }
+    },
+    {
+      "id": "trivia:mens-decathlon-final-distance",
+      "revision": 1,
+      "question": "What distance, in metres, is the final running event in a standard men's outdoor decathlon?",
+      "answer": "One thousand five hundred",
+      "acceptableAnswers": ["1500", "Fifteen hundred", "1500 metres", "1500m"],
+      "category": "sport-games",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://olympic.ca/sports/athletics/"],
+        "sourceRecord": "The Canadian Olympic Committee's athletics guide lists 1500m last in the decathlon's second-day sequence."
+      }
+    },
+    {
+      "id": "trivia:goolagong-wimbledon-singles-titles",
+      "revision": 1,
+      "question": "Which Australian tennis player won the Wimbledon women's singles title in both 1971 and 1980?",
+      "answer": "Evonne Goolagong Cawley",
+      "acceptableAnswers": ["Evonne Goolagong", "Goolagong Cawley", "Goolagong", "Evonne Cawley"],
+      "category": "sport-games",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.nma.gov.au/explore/collection/highlights/evonne-goolagong-cawley"],
+        "sourceRecord": "The National Museum holds Evonne Goolagong Cawley's 1971 and 1980 Wimbledon singles trophies."
+      }
+    },
+    {
+      "id": "trivia:go-intersection-stone-board-game",
+      "revision": 1,
+      "question": "Which board game uses black and white stones placed on a grid's intersections to surround territory?",
+      "answer": "Go",
+      "acceptableAnswers": [],
+      "category": "sport-games",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.britgo.org/intro/intro2.html"],
+        "sourceRecord": "The British Go Association explains placing black and white stones on line intersections and scoring surrounded territory."
+      }
+    },
+    {
+      "id": "trivia:mexico-1968-high-jump-champion",
+      "revision": 1,
+      "question": "Which athlete won high jump gold at the 1968 Olympics using a distinctive backwards jumping technique?",
+      "answer": "Dick Fosbury",
+      "acceptableAnswers": ["Fosbury", "Richard Fosbury", "Richard Douglas Fosbury"],
+      "category": "sport-games",
+      "difficulty": "hard",
+      "kidAppropriate": false,
+      "review": {
+        "reviewedAt": "2026-10-22T12:52:40Z",
+        "reviewer": "Codex source check",
+        "sources": ["https://www.olympedia.org/results/60644"],
+        "sourceRecord": "Olympedia's 1968 high-jump results credit Dick Fosbury with gold and describe his backwards, head-first technique."
       }
     }
   ]

@@ -1,5 +1,7 @@
 # Trivia editorial strategy
 
+Established for pack 3. The conventions below continue to apply; pack 4 allocation and preservation scope are recorded in [expansion-v4/PLAN.md](expansion-v4/PLAN.md). New batches must exclude facts from the entire current bank, not just the original 30.
+
 ## Audience and coverage
 
 Educated Australian adults playing a cooperative newspaper-style quiz, with a genuinely familiar subset for ages 8–12. Global topics are welcome; avoid niche US sports/celebrities, specialist terminology, trick questions and contested superlatives. Hard means a satisfying less-obvious fact about a broadly recognisable subject, not specialist minutiae.

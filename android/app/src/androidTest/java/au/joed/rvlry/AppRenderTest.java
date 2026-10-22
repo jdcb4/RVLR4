@@ -312,10 +312,10 @@ public class AppRenderTest {
             awaitCondition(activity, "document.body.innerText.includes('Question 1 of 30') && !document.querySelector('[role=alert]')");
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
                 String snapshot = saved.read("trivia.device.v3")[0];
-                assertTrue("Starter bank version not captured", snapshot.contains("\"packVersion\":3"));
+                assertTrue("Starter bank version not captured", snapshot.contains("\"packVersion\":4"));
                 assertTrue("Synthetic fixture must not appear in the real bank", !snapshot.contains("native-fixture"));
             }
-            System.out.println("RVLRY_NATIVE_TRIVIA_STARTER_OK: new 30-question quiz from bundled version 3");
+            System.out.println("RVLRY_NATIVE_TRIVIA_STARTER_OK: new 30-question quiz from bundled version 4");
 
 
         } finally {

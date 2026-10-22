@@ -1,0 +1,946 @@
+[
+  {
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:frog-young-tadpole",
+    "revision": 1,
+    "question": "What is a young frog called while it has a tail and lives in water?",
+    "answer": "Tadpole",
+    "acceptableAnswers": ["A tadpole"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://australian.museum/learn/animals/frogs/"],
+      "sourceRecord": "Australian Museum identifies tadpoles as frogs' aquatic larval stage, with tails and gills."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:breathing-pair-chest-organs",
+    "revision": 1,
+    "question": "Which pair of organs in your chest takes in air when you breathe?",
+    "answer": "Lungs",
+    "acceptableAnswers": ["The lungs"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nhlbi.nih.gov/health/lungs"],
+      "sourceRecord": "NHLBI describes the lungs as paired chest organs into which inhaled air enters."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:falling-objects-force",
+    "revision": 1,
+    "question": "What force pulls a dropped ball towards the ground?",
+    "answer": "Gravity",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://spaceplace.nasa.gov/what-is-gravity/en/"],
+      "sourceRecord": "NASA explains that Earth's gravity keeps objects on the ground and makes them fall."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:plant-water-absorbing-parts",
+    "revision": 1,
+    "question": "Which parts of a tree absorb water from the soil?",
+    "answer": "Roots",
+    "acceptableAnswers": ["The roots"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://extension.colostate.edu/resource/understanding-tree-roots/"],
+      "sourceRecord": "Colorado State University Extension states that roots absorb water and nutrients."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:saturn-ringed-sixth-planet",
+    "revision": 1,
+    "question": "Which planet is famous for its bright rings and is sixth from the Sun?",
+    "answer": "Saturn",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/saturn/facts/"],
+      "sourceRecord": "NASA identifies Saturn as sixth from the Sun and describes its prominent rings."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:fish-oxygen-organs",
+    "revision": 1,
+    "question": "What organs do most fish use to take oxygen from water?",
+    "answer": "Gills",
+    "acceptableAnswers": ["Their gills"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.fisheries.noaa.gov/national/outreach-and-education/fun-facts-about-fascinating-fish"
+      ],
+      "sourceRecord": "NOAA describes fish obtaining oxygen with their gills as water passes over them."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:snakes-shed-outer-covering",
+    "revision": 1,
+    "question": "What outer covering do snakes regularly shed?",
+    "answer": "Skin",
+    "acceptableAnswers": ["Their skin", "Snakeskin"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.amnh.org/explore/ology/biodiversity/tree-of-life/lizards-and-snakes"
+      ],
+      "sourceRecord": "AMNH lists periodically shedding the whole skin as a characteristic of snakes and lizards."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "id": "trivia:leaves-green-pigment",
+    "revision": 1,
+    "question": "What pigment gives most leaves their green colour?",
+    "answer": "Chlorophyll",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.acs.org/molecule-of-the-week/archive/c/chlorophyll.html"],
+      "sourceRecord": "American Chemical Society identifies chlorophyll as the green pigment in plants."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "id": "trivia:floating-party-balloons-gas",
+    "revision": 1,
+    "question": "Which non-flammable gas is commonly used to make party balloons float?",
+    "answer": "Helium",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://periodic-table.rsc.org/element/2/helium"],
+      "sourceRecord": "Royal Society of Chemistry describes low-density, chemically inert helium filling decorative balloons."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "id": "trivia:rubbing-surfaces-resistance",
+    "revision": 1,
+    "question": "What is the name of the force that resists two touching surfaces sliding past each other?",
+    "answer": "Friction",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.grc.nasa.gov/WWW/k-12/FoilSim/Manual/fsim002r.htm"],
+      "sourceRecord": "NASA defines friction as resistance to relative motion between surfaces in contact."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "id": "trivia:flowers-pollen-transfer-process",
+    "revision": 1,
+    "question": "What process transfers pollen from a flower's anther to a stigma?",
+    "answer": "Pollination",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.doi.gov/sites/default/files/fws-attracting-pollinator-to-your-garden.pdf"
+      ],
+      "sourceRecord": "US Fish and Wildlife Service defines pollination as pollen moving from anther to stigma (PDF page 3)."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "id": "trivia:duck-billed-egg-laying-mammal",
+    "revision": 1,
+    "question": "Which egg-laying Australian mammal has a duck-like bill?",
+    "answer": "Platypus",
+    "acceptableAnswers": ["The platypus", "Duck-billed platypus"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://australian.museum/learn/animals/mammals/platypus/"],
+      "sourceRecord": "Australian Museum's platypus account describes its broad bill and female egg-laying."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "id": "trivia:earthquake-vibration-instrument",
+    "revision": 1,
+    "question": "What instrument detects and records ground vibrations from earthquakes?",
+    "answer": "Seismometer",
+    "acceptableAnswers": ["Seismograph"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.bgs.ac.uk/discovering-geology/earth-hazards/earthquakes/how-are-earthquakes-detected/"
+      ],
+      "sourceRecord": "British Geological Survey identifies seismometers or seismographs as instruments recording earthquake ground motion."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:fungal-walls-insect-shell-substance",
+    "revision": 1,
+    "question": "Which tough substance occurs in fungal cell walls as well as insect exoskeletons?",
+    "answer": "Chitin",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.kew.org/read-and-watch/the-wonderful-world-of-fungi"],
+      "sourceRecord": "Kew identifies chitin in most fungal cell walls and insect exoskeletons."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:force-si-unit-name",
+    "revision": 1,
+    "question": "What is the SI unit of force, symbol N?",
+    "answer": "Newton",
+    "acceptableAnswers": ["A newton"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.npl.co.uk/resources/q-a/what-is-the-si-unit-of-force"],
+      "sourceRecord": "National Physical Laboratory states that the SI force unit is the newton, symbol N."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:red-blood-oxygen-protein",
+    "revision": 1,
+    "question": "What iron-rich protein carries oxygen in red blood cells?",
+    "answer": "Haemoglobin",
+    "acceptableAnswers": ["Hemoglobin"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nhlbi.nih.gov/health/anemia/causes"],
+      "sourceRecord": "NHLBI identifies haemoglobin as an iron-rich oxygen-carrying protein in red blood cells."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:tectonic-rigid-outer-shell",
+    "revision": 1,
+    "question": "What is Earth's rigid outer shell, made of crust and uppermost mantle and divided into tectonic plates, called?",
+    "answer": "Lithosphere",
+    "acceptableAnswers": ["The lithosphere"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.noaa.gov/jetstream/tsunamis/tsunami-generation-earthquakes/jetstream-max-plate-tectonics-and-earthquakes"
+      ],
+      "sourceRecord": "NOAA defines the lithosphere as crust plus upper mantle, broken into tectonic plates."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:expanding-space-light-wavelength-term",
+    "revision": 1,
+    "question": "What is the astronomical term for light shifting to longer wavelengths as space expands?",
+    "answer": "Redshift",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.esa.int/Science_Exploration/Space_Science/What_is_red_shift"],
+      "sourceRecord": "ESA explains redshift as light stretching to longer wavelengths, including due to expanding space."
+    }
+  },
+  {
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:octopus-blood-oxygen-metal",
+    "revision": 1,
+    "question": "Which metal in an octopus's oxygen-carrying blood protein helps give its blood a blue colour?",
+    "answer": "Copper",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.nhm.ac.uk/discover/octopuses-keep-surprising-us-here-are-eight-examples-how.html"
+      ],
+      "sourceRecord": "Natural History Museum explains that copper in haemocyanin accounts for oxygenated octopus blood's blue colour."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:red-kangaroo-native-country",
+    "revision": 1,
+    "question": "Red kangaroos are native to which country?",
+    "answer": "Australia",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.taronga.org.au/wildlife-and-conservation/animals/detail/red-kangaroo"
+      ],
+      "sourceRecord": "Taronga Zoo identifies the red kangaroo as an Australian animal and locates its range in central Australia."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:maple-leaf-national-flag",
+    "revision": 1,
+    "question": "Which country's flag features a red maple leaf?",
+    "answer": "Canada",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.canada.ca/en/canadian-heritage/services/flag-canada-description.html"
+      ],
+      "sourceRecord": "Canadian Heritage describes the red maple leaf at the centre of Canada's national flag."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:brazil-continent-location",
+    "revision": 1,
+    "question": "On which continent is Brazil?",
+    "answer": "South America",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://kids.nationalgeographic.com/geography/countries/article/brazil"],
+      "sourceRecord": "National Geographic Kids identifies Brazil as a country in South America."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:bunbury-coastal-ocean",
+    "revision": 1,
+    "question": "Which ocean lies off Bunbury on the coast of Western Australia?",
+    "answer": "Indian Ocean",
+    "acceptableAnswers": ["The Indian Ocean", "Indian"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.dcceew.gov.au/energy/renewable/offshore-wind/areas/bunbury"],
+      "sourceRecord": "DCCEEW locates the Bunbury offshore area in the Indian Ocean off Western Australia."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:earth-midway-poles-line",
+    "revision": 1,
+    "question": "What imaginary line circles Earth halfway between the North and South Poles?",
+    "answer": "Equator",
+    "acceptableAnswers": ["The Equator"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://education.nationalgeographic.org/resource/equator/"],
+      "sourceRecord": "National Geographic defines Earth's Equator as the imaginary line halfway between its poles."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:london-manchester-uk-country",
+    "revision": 1,
+    "question": "London and Manchester are cities in which of the UK's four countries?",
+    "answer": "England",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.visitbritain.org/destinations/london",
+        "https://www.visitbritain.org/destinations/manchester"
+      ],
+      "sourceRecord": "VisitBritain's official destination profiles locate both London and Manchester in England."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "id": "trivia:aotearoa-country-name",
+    "revision": 1,
+    "question": "Which country is also known by the Māori name Aotearoa?",
+    "answer": "New Zealand",
+    "acceptableAnswers": ["NZ", "Aotearoa New Zealand"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://nzhistory.govt.nz/media/interactive/naming-country-and-main-islands-map"
+      ],
+      "sourceRecord": "New Zealand's Ministry for Culture and Heritage lists Aotearoa and New Zealand as country names."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "id": "trivia:eastern-australia-dividing-range",
+    "revision": 1,
+    "question": "Which mountain system separates many east-flowing coastal rivers from west-flowing inland rivers in eastern Australia?",
+    "answer": "Great Dividing Range",
+    "acceptableAnswers": ["The Great Dividing Range"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.ga.gov.au/education/natural-hazards/flood"],
+      "sourceRecord": "Geoscience Australia describes the Great Dividing Range separating eastern coastal rivers from west-flowing rivers."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "id": "trivia:mekong-six-country-river",
+    "revision": 1,
+    "question": "Which river flows from the Tibetan Plateau through countries including Laos, Cambodia and Vietnam?",
+    "answer": "Mekong",
+    "acceptableAnswers": ["Mekong River", "The Mekong"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.mrcmekong.org/mekong-river-basin/"],
+      "sourceRecord": "Mekong River Commission traces the Mekong from Tibet through six countries including Laos, Cambodia and Vietnam."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "id": "trivia:atlantic-mediterranean-strait",
+    "revision": 1,
+    "question": "Which strait connects the Atlantic Ocean to the Mediterranean Sea?",
+    "answer": "Strait of Gibraltar",
+    "acceptableAnswers": ["Gibraltar Strait", "The Strait of Gibraltar"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.esa.int/Applications/Observing_the_Earth/Earth_from_Space_Strait_of_Gibraltar"
+      ],
+      "sourceRecord": "ESA describes the Strait of Gibraltar as connecting the Mediterranean Sea and Atlantic Ocean."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "id": "trivia:angkor-ruins-country",
+    "revision": 1,
+    "question": "In which country are the ruins of Angkor, including Angkor Wat?",
+    "answer": "Cambodia",
+    "acceptableAnswers": ["Kingdom of Cambodia"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/earth/earth-observatory/angkor-ruins-4995/"],
+      "sourceRecord": "NASA Earth Observatory locates the ancient city of Angkor north of Tonle Sap Lake in Cambodia."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "id": "trivia:sweden-finland-estonia-sea",
+    "revision": 1,
+    "question": "Which sea has Sweden, Finland and Estonia among the countries on its shores?",
+    "answer": "Baltic Sea",
+    "acceptableAnswers": ["The Baltic Sea", "Baltic"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://stateofthebalticsea.helcom.fi/findings/activities/economic-impacts/"],
+      "sourceRecord": "HELCOM lists Sweden, Finland and Estonia among the nine countries bordering the Baltic Sea."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "id": "trivia:land-water-three-sides-term",
+    "revision": 1,
+    "question": "What is a piece of land almost surrounded by water but still connected to a mainland called?",
+    "answer": "Peninsula",
+    "acceptableAnswers": ["A peninsula"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://education.nationalgeographic.org/resource/peninsula/"],
+      "sourceRecord": "National Geographic defines a peninsula as land almost surrounded by water but connected to mainland on one side."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:madagascar-mainland-channel",
+    "revision": 1,
+    "question": "Which channel separates Madagascar from the coast of Mozambique?",
+    "answer": "Mozambique Channel",
+    "acceptableAnswers": ["The Mozambique Channel"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.cbd.int/marine/ebsa/booklet-03-sio-en.pdf"],
+      "sourceRecord": "Convention on Biological Diversity places Mozambique west and Madagascar east of the Mozambique Channel (PDF page 69)."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:south-africa-surrounded-country",
+    "revision": 1,
+    "question": "Which independent country is entirely surrounded by South Africa?",
+    "answer": "Lesotho",
+    "acceptableAnswers": ["Kingdom of Lesotho"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://travel.state.gov/en/international-travel/travel-advisories/lesotho.html"
+      ],
+      "sourceRecord": "US Department of State describes Lesotho as a landlocked country fully surrounded by South Africa."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:grand-canyon-main-river",
+    "revision": 1,
+    "question": "Which major river flows through the Grand Canyon in Arizona?",
+    "answer": "Colorado River",
+    "acceptableAnswers": ["Colorado", "The Colorado River"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nps.gov/grca/learn/nature/rivers.htm"],
+      "sourceRecord": "US National Park Service describes the Colorado River flowing through Grand Canyon National Park."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:alaska-russia-waterway",
+    "revision": 1,
+    "question": "Which strait separates mainland Alaska from the Russian Far East?",
+    "answer": "Bering Strait",
+    "acceptableAnswers": ["The Bering Strait"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.jpl.nasa.gov/images/pia10631-diomede-islands-bering-straight/"],
+      "sourceRecord": "NASA JPL locates the Bering Strait between Russia and Alaska, with the Diomede Islands in its middle."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:orangutan-island-besides-borneo",
+    "revision": 1,
+    "question": "Besides Borneo, which Indonesian island is part of orangutans' native range?",
+    "answer": "Sumatra",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.wwf.org.uk/learn/wildlife/orangutans"],
+      "sourceRecord": "WWF identifies Sumatra and Borneo as the two islands with wild orangutan populations."
+    }
+  },
+  {
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:europe-asia-conventional-mountain-boundary",
+    "revision": 1,
+    "question": "Which mountain range runs north–south through western Russia and forms part of the conventional boundary between Europe and Asia?",
+    "answer": "Ural Mountains",
+    "acceptableAnswers": ["Urals", "The Urals", "The Ural Mountains"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://science.nasa.gov/earth/earth-observatory/the-ural-mountains-87198/",
+        "https://www.nationalgeographic.org/national-geographic-map-policy"
+      ],
+      "sourceRecord": "NASA describes the Urals dividing Europe and Asia; National Geographic includes them in its conventional continental boundary."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:hexagon-side-count",
+    "revision": 1,
+    "question": "How many sides does a hexagon have?",
+    "answer": "Six",
+    "acceptableAnswers": ["6"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/hexagon"],
+      "sourceRecord": "Merriam-Webster defines a hexagon as a polygon with six sides and six angles."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:hour-minute-count",
+    "revision": 1,
+    "question": "How many minutes are in one hour?",
+    "answer": "Sixty",
+    "acceptableAnswers": ["60", "Sixty minutes"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/hour"],
+      "sourceRecord": "Merriam-Webster defines an hour as 60 minutes."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:raisins-original-fruit",
+    "revision": 1,
+    "question": "Which fruit is dried to make raisins?",
+    "answer": "Grapes",
+    "acceptableAnswers": ["Grape"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/raisin"],
+      "sourceRecord": "Merriam-Webster defines a raisin as a dried grape."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:pronged-eating-utensil",
+    "revision": 1,
+    "question": "Which eating utensil has prongs for picking up pieces of food?",
+    "answer": "Fork",
+    "acceptableAnswers": ["A fork"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/fork"],
+      "sourceRecord": "Merriam-Webster defines a fork as a pronged implement used for eating and other tasks."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:pedestrian-stop-symbol-colour",
+    "revision": 1,
+    "question": "In Australia, what colour is the standing pedestrian symbol that tells you not to start crossing the road?",
+    "answer": "Red",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.nsw.gov.au/driving-boating-and-transport/driving-nsw/roads-safety-and-rules/stopping-giving-way-turning/traffic-lights"
+      ],
+      "sourceRecord": "NSW Government labels the red pedestrian symbol as meaning pedestrians must not start to cross."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "id": "trivia:common-year-twenty-eight-day-month",
+    "revision": 1,
+    "question": "Which calendar month has exactly 28 days in a non-leap year?",
+    "answer": "February",
+    "acceptableAnswers": ["Feb"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.timeanddate.com/calendar/months/february.html"],
+      "sourceRecord": "Time and Date states that February has 28 days in common years and 29 in leap years."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "id": "trivia:hummus-main-pulse",
+    "revision": 1,
+    "question": "Which pulses are puréed to make traditional hummus?",
+    "answer": "Chickpeas",
+    "acceptableAnswers": ["Chickpea", "Garbanzo beans", "Garbanzo bean"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/hummus"],
+      "sourceRecord": "Merriam-Webster defines hummus as a paste of puréed chickpeas, usually with sesame."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "id": "trivia:initial-letter-pronounced-word",
+    "revision": 1,
+    "question": "What is a word made from initial letters and pronounced as a word, such as NASA, called?",
+    "answer": "Acronym",
+    "acceptableAnswers": ["An acronym"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/acronym"],
+      "sourceRecord": "Merriam-Webster explains acronym formation from initial letters and distinguishes word pronunciation from initialisms."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "id": "trivia:thailand-currency-name",
+    "revision": 1,
+    "question": "What is the basic unit of currency in Thailand?",
+    "answer": "Baht",
+    "acceptableAnswers": ["Thai baht"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/baht"],
+      "sourceRecord": "Merriam-Webster identifies the baht as Thailand's basic monetary unit."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "id": "trivia:pdf-abbreviation-expansion",
+    "revision": 1,
+    "question": "What does PDF stand for in the name of the document file format?",
+    "answer": "Portable Document Format",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.adobe.com/acrobat/about-adobe-pdf.html"],
+      "sourceRecord": "Adobe, creator of PDF, expands the abbreviation as Portable Document Format."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "id": "trivia:eggs-simmered-shell-less-method",
+    "revision": 1,
+    "question": "What cooking method gently cooks an egg without its shell in simmering water?",
+    "answer": "Poaching",
+    "acceptableAnswers": ["Poach"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/poach"],
+      "sourceRecord": "Merriam-Webster defines poaching as cooking in simmering liquid."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "id": "trivia:feta-origin-country",
+    "revision": 1,
+    "question": "Feta cheese traditionally comes from which country?",
+    "answer": "Greece",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gov.uk/protected-food-drink-names/pheta-slash-feta"],
+      "sourceRecord": "UK government's protected-food register records Greece as feta's country of origin."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:gapless-pattern-shapes-term",
+    "revision": 1,
+    "question": "What is a pattern of shapes that completely covers a flat surface without gaps or overlaps called?",
+    "answer": "Tessellation",
+    "acceptableAnswers": ["A tessellation", "Tiling"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/tessellation"],
+      "sourceRecord": "Merriam-Webster defines geometric tessellation as covering a plane with figures without gaps or overlaps."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:allspice-single-berry-spice",
+    "revision": 1,
+    "question": "Which spice, despite its name, is made from dried berries of one tree rather than a mixture of spices?",
+    "answer": "Allspice",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/allspice"],
+      "sourceRecord": "Merriam-Webster identifies allspice as dried berries from the tree Pimenta dioica."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:closed-spaces-phobia-name",
+    "revision": 1,
+    "question": "What is the term for an intense fear of being in closed or narrow spaces?",
+    "answer": "Claustrophobia",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/claustrophobia"],
+      "sourceRecord": "Merriam-Webster's definition identifies claustrophobia as an abnormal fear of closed or narrow spaces."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:rabbit-hole-tree-loop-knot",
+    "revision": 1,
+    "question": "Which knot makes a fixed loop and is often taught with a rabbit emerging from a hole and going around a tree?",
+    "answer": "Bowline",
+    "acceptableAnswers": ["A bowline", "Bowline knot"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://prod-cms.scouts.org.uk/media/2709/scout-adventures-simple-knots-guide.pdf"
+      ],
+      "sourceRecord": "Scout Association's knot guide describes the bowline's non-slip loop and rabbit/hole/tree teaching phrase (PDF page 4)."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:gemstone-mass-unit",
+    "revision": 1,
+    "question": "What unit of mass equal to 0.2 grams is used for diamonds and other gemstones?",
+    "answer": "Carat",
+    "acceptableAnswers": ["Metric carat"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gia.edu/gia-about/4cs-carat"],
+      "sourceRecord": "Gemological Institute of America states that one metric carat is 0.2 grams."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:linen-source-plant",
+    "revision": 1,
+    "question": "Which plant supplies the fibres used to make linen?",
+    "answer": "Flax",
+    "acceptableAnswers": ["Flax plant"],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/linen"],
+      "sourceRecord": "Merriam-Webster defines linen as cloth or yarn made from flax."
+    }
+  },
+  {
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "id": "trivia:algebra-word-ultimate-language",
+    "revision": 1,
+    "question": "The mathematical word 'algebra' ultimately comes from which language?",
+    "answer": "Arabic",
+    "acceptableAnswers": [],
+    "review": {
+      "reviewedAt": "2026-10-22T12:48:38Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/algebra"],
+      "sourceRecord": "Merriam-Webster traces algebra through Medieval Latin to Arabic al-jabr."
+    }
+  }
+]

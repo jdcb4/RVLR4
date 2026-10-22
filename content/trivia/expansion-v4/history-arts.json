@@ -1,0 +1,632 @@
+[
+  {
+    "id": "trivia:egyptian-preserved-body-name",
+    "revision": 1,
+    "question": "What is a preserved body from ancient Egypt called?",
+    "answer": "Mummy",
+    "acceptableAnswers": ["Mummies"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://australian.museum/learn/cultures/international-collection/ancient-egyptian/the-origins-of-mummification-in-ancient-egypt/"
+      ],
+      "sourceRecord": "Australian Museum defines a mummy as a person or animal body preserved without decay."
+    }
+  },
+  {
+    "id": "trivia:medieval-armoured-horseman",
+    "revision": 1,
+    "question": "What is the usual name for a medieval European warrior who wore armour and fought on horseback?",
+    "answer": "Knight",
+    "acceptableAnswers": ["Knights"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://historiska.se/en/explore-history/history-hub/knights-in-the-middle-ages/"
+      ],
+      "sourceRecord": "Swedish History Museum describes medieval knights as noble warriors on horseback, wearing armour."
+    }
+  },
+  {
+    "id": "trivia:aboriginal-returning-throwing-tool",
+    "revision": 1,
+    "question": "Which traditional Aboriginal Australian throwing tool has some forms designed to return to the thrower?",
+    "answer": "Boomerang",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nma.gov.au/exhibitions/defining-symbols-australia/boomerang"],
+      "sourceRecord": "National Museum of Australia identifies boomerangs and explicitly says some, but not most, are designed to return."
+    }
+  },
+  {
+    "id": "trivia:early-locomotive-vapour-power",
+    "revision": 1,
+    "question": "In many early railway locomotives, what hot water vapour pushed the pistons to turn the wheels?",
+    "answer": "Steam",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://blog.railwaymuseum.org.uk/flying-scotsman-returns/"],
+      "sourceRecord": "National Railway Museum explains that steam moves locomotive pistons and makes the wheels turn."
+    }
+  },
+  {
+    "id": "trivia:cleopatra-roman-allies",
+    "revision": 1,
+    "question": "Which queen of ancient Egypt formed famous alliances with Julius Caesar and Mark Antony?",
+    "answer": "Cleopatra",
+    "acceptableAnswers": ["Cleopatra VII"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.globalegyptianmuseum.org/glossary.aspx?id=114"],
+      "sourceRecord": "Global Egyptian Museum identifies Cleopatra VII as queen of Egypt and describes her relationships with Caesar and Antony."
+    }
+  },
+  {
+    "id": "trivia:australian-november-commemoration",
+    "revision": 1,
+    "question": "Which Australian commemoration falls on 11 November each year?",
+    "answer": "Remembrance Day",
+    "acceptableAnswers": ["Armistice Day"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.awm.gov.au/commemoration/remembrance-day"],
+      "sourceRecord": "Australian War Memorial identifies Remembrance Day and explains that reflection takes place on 11 November each year."
+    }
+  },
+  {
+    "id": "trivia:wright-brothers-powered-flight",
+    "revision": 1,
+    "question": "Which brothers built and flew a powered aeroplane near Kitty Hawk in December 1903?",
+    "answer": "Wright brothers",
+    "acceptableAnswers": [
+      "Orville and Wilbur Wright",
+      "Wilbur and Orville Wright",
+      "The Wright brothers"
+    ],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:53:06.957Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.nasa.gov/history/120-years-ago-the-first-powered-flight-at-kitty-hawk/"
+      ],
+      "sourceRecord": "NASA describes Orville and Wilbur Wright's December 1903 powered flights at Kill Devil Hills near Kitty Hawk."
+    }
+  },
+  {
+    "id": "trivia:nightingale-lady-lamp",
+    "revision": 1,
+    "question": "Which nurse became known as the Lady with the Lamp during the Crimean War?",
+    "answer": "Florence Nightingale",
+    "acceptableAnswers": ["Nightingale"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nam.ac.uk/explore/florence-nightingale-lady-lamp"],
+      "sourceRecord": "National Army Museum names Florence Nightingale and explains that she acquired the nickname during her work at Scutari."
+    }
+  },
+  {
+    "id": "trivia:british-militant-voting-campaigners",
+    "revision": 1,
+    "question": "What name was given to militant British campaigners for women's voting rights in the early 1900s?",
+    "answer": "Suffragettes",
+    "acceptableAnswers": ["Suffragette"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.parliament.uk/about/living-heritage/transformingsociety/electionsvoting/womenvote/overview/campaign/"
+      ],
+      "sourceRecord": "UK Parliament distinguishes militant early twentieth-century suffragettes from peaceful suffragists."
+    }
+  },
+  {
+    "id": "trivia:pilgrims-atlantic-ship",
+    "revision": 1,
+    "question": "Which ship carried the Pilgrims across the Atlantic to New England in 1620?",
+    "answer": "Mayflower",
+    "acceptableAnswers": ["The Mayflower"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://plimoth.org/plan-your-visit/explore-our-sites/mayflower-ii"],
+      "sourceRecord": "Plimoth Patuxet Museums describes the original Mayflower and its 1620 Pilgrim voyage, distinguishing the modern reproduction."
+    }
+  },
+  {
+    "id": "trivia:great-fire-1666-city",
+    "revision": 1,
+    "question": "Which city was devastated by a Great Fire in September 1666?",
+    "answer": "London",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.londonmuseum.org.uk/schools-communities/schools/resources/the-great-fire-of-london/"
+      ],
+      "sourceRecord": "London Museum school resources identify London as the city whose great fire occurred in September 1666."
+    }
+  },
+  {
+    "id": "trivia:eureka-stockade-victorian-city",
+    "revision": 1,
+    "question": "Near which Victorian city did miners build the Eureka Stockade in 1854?",
+    "answer": "Ballarat",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nma.gov.au/defining-moments/resources/eureka-stockade"],
+      "sourceRecord": "National Museum of Australia places the miners, Eureka diggings and 1854 stockade at Ballarat in Victoria."
+    }
+  },
+  {
+    "id": "trivia:bell-telephone-patent",
+    "revision": 1,
+    "question": "Which inventor received a US patent for the telephone in March 1876?",
+    "answer": "Alexander Graham Bell",
+    "acceptableAnswers": ["Bell", "Alexander Bell"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://guides.loc.gov/chronicling-america-telephone-invention"],
+      "sourceRecord": "Library of Congress dates Alexander Graham Bell's telephone patent to 7 March 1876 and notes the dispute with Elisha Gray."
+    }
+  },
+  {
+    "id": "trivia:yuan-dynasty-founder",
+    "revision": 1,
+    "question": "Which Mongol ruler established China's Yuan dynasty, with Xanadu as an early capital?",
+    "answer": "Kublai Khan",
+    "acceptableAnswers": ["Kubilai Khan"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/1389"],
+      "sourceRecord": "UNESCO identifies Xanadu as Kublai Khan's capital and states that he established the Yuan dynasty from this base."
+    }
+  },
+  {
+    "id": "trivia:bayeux-1066-battle",
+    "revision": 1,
+    "question": "Which battle of 1066 is depicted in the Bayeux Tapestry?",
+    "answer": "Battle of Hastings",
+    "acceptableAnswers": ["Hastings", "The Battle of Hastings"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.bayeuxmuseum.com/en/the-bayeux-tapestry/discover-the-bayeux-tapestry/the_battle_of_hastings/"
+      ],
+      "sourceRecord": "Bayeux Museum explicitly identifies the Battle of Hastings in 1066 as the battle depicted in the embroidery."
+    }
+  },
+  {
+    "id": "trivia:haiti-independence-france",
+    "revision": 1,
+    "question": "Which Caribbean country won independence from France in 1804?",
+    "answer": "Haiti",
+    "acceptableAnswers": ["Republic of Haiti"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://history.state.gov/countries/haiti"],
+      "sourceRecord": "US Office of the Historian states that Haiti won independence from France in 1804."
+    }
+  },
+  {
+    "id": "trivia:paris-peace-germany-treaty",
+    "revision": 1,
+    "question": "Which treaty imposed reparations and military restrictions on Germany after the First World War?",
+    "answer": "Treaty of Versailles",
+    "acceptableAnswers": ["Versailles Treaty", "Versailles"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://history.state.gov/milestones/1914-1920/paris-peace"],
+      "sourceRecord": "US Office of the Historian identifies the Treaty of Versailles and describes restrictions on Germany's armed forces and reparations."
+    }
+  },
+  {
+    "id": "trivia:maori-crown-1840-agreement",
+    "revision": 1,
+    "question": "What treaty was first signed by Māori chiefs and representatives of the British Crown on 6 February 1840?",
+    "answer": "Treaty of Waitangi",
+    "acceptableAnswers": ["Te Tiriti o Waitangi", "Waitangi Treaty"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://nzhistory.govt.nz/the-treaty-of-waitangi-is-signed"],
+      "sourceRecord": "New Zealand Ministry for Culture and Heritage records the Treaty of Waitangi signing on 6 February 1840 and later signatures."
+    }
+  },
+  {
+    "id": "trivia:tenochtitlan-imperial-capital",
+    "revision": 1,
+    "question": "Tenochtitlan was the capital of which empire before the Spanish conquest?",
+    "answer": "Aztec Empire",
+    "acceptableAnswers": ["Aztecs", "The Aztec Empire"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://chssp.ucdavis.edu/resources/curriculum/lessons/tenochtitlan"],
+      "sourceRecord": "UC Davis California History-Social Science Project identifies Tenochtitlan as the capital of the Aztec Empire."
+    }
+  },
+  {
+    "id": "trivia:cinderella-lost-glass-slipper",
+    "revision": 1,
+    "question": "Which fairy-tale heroine leaves a glass slipper behind as she flees a royal ball?",
+    "answer": "Cinderella",
+    "acceptableAnswers": ["Cinderilla"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/cache/epub/29021/pg29021-images.html"],
+      "sourceRecord": "Perrault's tale in Project Gutenberg states that Cinderilla leaves one glass slipper behind while the prince follows her."
+    }
+  },
+  {
+    "id": "trivia:red-riding-hood-cloak",
+    "revision": 1,
+    "question": "Which fairy-tale girl wears a red hooded cloak and meets a wolf on her way to visit her grandmother?",
+    "answer": "Little Red Riding Hood",
+    "acceptableAnswers": ["Red Riding Hood"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/cache/epub/11592/pg11592-images.html"],
+      "sourceRecord": "The original story collection describes her red hooded cloak, grandmother visit and meeting with a wolf."
+    }
+  },
+  {
+    "id": "trivia:wax-coloured-drawing-sticks",
+    "revision": 1,
+    "question": "What are the coloured wax sticks children use for drawing called?",
+    "answer": "Crayons",
+    "acceptableAnswers": ["Crayon", "Wax crayons"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.crayola.com/faqs/what-is-the-crayola-crayons-manufacturing-process-and-basic-ingredients-faq"
+      ],
+      "sourceRecord": "Crayola explains that its crayons are primarily paraffin wax mixed with coloured pigment."
+    }
+  },
+  {
+    "id": "trivia:artist-own-likeness-name",
+    "revision": 1,
+    "question": "What is a picture an artist makes of themself called?",
+    "answer": "Self-portrait",
+    "acceptableAnswers": ["A self-portrait"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.npg.org.uk/schools-hub/art-explainer-what-is-a-self-portrait"],
+      "sourceRecord": "National Portrait Gallery's primary-school resource defines a self-portrait as art the artist makes of themselves."
+    }
+  },
+  {
+    "id": "trivia:neverland-boy-wont-grow",
+    "revision": 1,
+    "question": "Which boy in J. M. Barrie's stories can fly, lives in Neverland and refuses to grow up?",
+    "answer": "Peter Pan",
+    "acceptableAnswers": ["Peter"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/cache/epub/16/pg16-images.html"],
+      "sourceRecord": "Barrie's Peter and Wendy describes Peter, Neverland, flight and his refusal to grow up."
+    }
+  },
+  {
+    "id": "trivia:peter-rabbit-jacket-colour",
+    "revision": 1,
+    "question": "What colour is Peter Rabbit's jacket in Beatrix Potter's original tale?",
+    "answer": "Blue",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/files/14304/14304-h/14304-h"],
+      "sourceRecord": "The Tale of Peter Rabbit explicitly describes the jacket caught in the gooseberry net as blue with brass buttons."
+    }
+  },
+  {
+    "id": "trivia:pooh-owls-wood",
+    "revision": 1,
+    "question": "In A. A. Milne's Winnie-the-Pooh, what is the name of the wood where Owl lives?",
+    "answer": "Hundred Acre Wood",
+    "acceptableAnswers": ["The Hundred Acre Wood", "100 Acre Wood"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/cache/epub/67098/pg67098-images.html"],
+      "sourceRecord": "Milne's original text explicitly places Owl's home in the Hundred Acre Wood; the clue avoids assuming Pooh lives inside that wood."
+    }
+  },
+  {
+    "id": "trivia:paterson-mountain-horse-poem",
+    "revision": 1,
+    "question": "Which Banjo Paterson poem celebrates a young rider who pursues wild horses down a steep mountain?",
+    "answer": "The Man from Snowy River",
+    "acceptableAnswers": ["Man from Snowy River"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/cache/epub/213/pg213-images.html"],
+      "sourceRecord": "Paterson's poem describes the young rider descending the mountain after wild horses while the other riders watch."
+    }
+  },
+  {
+    "id": "trivia:namatjira-paint-medium",
+    "revision": 1,
+    "question": "Albert Namatjira is especially known for landscapes painted in which water-based medium?",
+    "answer": "Watercolour",
+    "acceptableAnswers": ["Watercolours", "Watercolour painting"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.portrait.gov.au/people/albert-namatjira-1902"],
+      "sourceRecord": "National Portrait Gallery discusses Namatjira's watercolour painting and his distinctive landscape style."
+    }
+  },
+  {
+    "id": "trivia:woven-pictorial-wall-hanging",
+    "revision": 1,
+    "question": "What is a pictorial wall hanging made by weaving coloured threads called?",
+    "answer": "Tapestry",
+    "acceptableAnswers": ["A tapestry"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.vam.ac.uk/articles/what-is-tapestry"],
+      "sourceRecord": "V&A describes tapestry as a woven textile technique used to produce pictorial wall hangings."
+    }
+  },
+  {
+    "id": "trivia:pointed-arch-cathedral-style",
+    "revision": 1,
+    "question": "Which medieval architectural style is known for pointed arches, rib vaults and flying buttresses?",
+    "answer": "Gothic",
+    "acceptableAnswers": ["Gothic architecture"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.vam.ac.uk/articles/the-gothic-style-an-introduction"],
+      "sourceRecord": "V&A identifies pointed arches, rib vaults and flying buttresses as characteristic features of Gothic architecture."
+    }
+  },
+  {
+    "id": "trivia:greek-winged-horse-name",
+    "revision": 1,
+    "question": "What is the name of the famous winged horse in Greek mythology?",
+    "answer": "Pegasus",
+    "acceptableAnswers": ["Pegasos"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.metmuseum.org/art/collection/search/195356"],
+      "sourceRecord": "The Metropolitan Museum of Art identifies Pegasus as the mythological winged horse associated with the muses."
+    }
+  },
+  {
+    "id": "trivia:christmas-carol-miser",
+    "revision": 1,
+    "question": "Which miser is visited by the ghosts of Christmas Past, Present and Yet to Come in Charles Dickens's A Christmas Carol?",
+    "answer": "Ebenezer Scrooge",
+    "acceptableAnswers": ["Scrooge"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/cache/epub/46/pg46-images.html"],
+      "sourceRecord": "Dickens's original text names Ebenezer Scrooge and depicts the three Christmas spirits visiting him."
+    }
+  },
+  {
+    "id": "trivia:detroit-industry-muralist",
+    "revision": 1,
+    "question": "Which Mexican artist painted the Detroit Industry murals in 1932–33?",
+    "answer": "Diego Rivera",
+    "acceptableAnswers": ["Rivera", "Diego M. Rivera"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://dia.org/collection/detroit-industry-murals/58537"],
+      "sourceRecord": "Detroit Institute of Arts attributes Detroit Industry Murals, dated 1932–1933, to Mexican artist Diego M. Rivera."
+    }
+  },
+  {
+    "id": "trivia:tolstoy-happy-families-opening",
+    "revision": 1,
+    "question": "Which Leo Tolstoy novel opens with the observation that happy families are alike but unhappy families differ?",
+    "answer": "Anna Karenina",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/cache/epub/1399/pg1399-images.html"],
+      "sourceRecord": "The Constance Garnett translation of Anna Karenina opens with the comparison between happy and unhappy families."
+    }
+  },
+  {
+    "id": "trivia:pilkington-three-girls-book",
+    "revision": 1,
+    "question": "Which Doris Pilkington book recounts three Aboriginal girls' escape from Moore River Native Settlement and their journey home?",
+    "answer": "Follow the Rabbit-Proof Fence",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.uqp.com.au/books/follow-the-rabbit-proof-fence"],
+      "sourceRecord": "Publisher UQP identifies the book and describes the three girls' actual escape from Moore River and journey back to their homelands."
+    }
+  },
+  {
+    "id": "trivia:pearl-earring-dutch-painter",
+    "revision": 1,
+    "question": "Which Dutch artist painted Girl with a Pearl Earring?",
+    "answer": "Johannes Vermeer",
+    "acceptableAnswers": ["Vermeer", "Jan Vermeer"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.mauritshuis.nl/en/our-collection/artworks/670-girl-with-a-pearl-earring"
+      ],
+      "sourceRecord": "Mauritshuis attributes Girl with a Pearl Earring to Johannes Vermeer and discusses his signature on the painting."
+    }
+  },
+  {
+    "id": "trivia:murasaki-shining-prince-novel",
+    "revision": 1,
+    "question": "Which Japanese novel by Murasaki Shikibu follows the life and loves of the Shining Prince?",
+    "answer": "The Tale of Genji",
+    "acceptableAnswers": ["Tale of Genji", "Genji monogatari"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.metmuseum.org/exhibitions/listings/2019/tale-of-genji"],
+      "sourceRecord": "The Metropolitan Museum of Art identifies The Tale of Genji, its author Murasaki Shikibu and its Shining Prince protagonist."
+    }
+  },
+  {
+    "id": "trivia:west-african-oral-historian-name",
+    "revision": 1,
+    "question": "What term describes a traditional West African storyteller and oral historian who may also sing?",
+    "answer": "Griot",
+    "acceptableAnswers": ["Griots"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:51:37.395Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://education.nationalgeographic.org/resource/storytelling-and-cultural-traditions/4th-grade/"
+      ],
+      "sourceRecord": "National Geographic Society defines griot as a West African storyteller and oral historian, and describes singing as part of the role."
+    }
+  }
+]

@@ -2,11 +2,11 @@
 
 ## Current milestone
 
-0.38.0 simplifies Trivia setup: headings sit above option groups, question counts are 10/20/30, and eight category toggles plus Select all/Clear all form a three-column grid. Start quiz stays in the fixed footer. Insufficient content shows a shortage alert without an availability count; no categories shows Choose at least one category. Correct and Incorrect use distinct green/red states, separate from the primary action colour, with Incorrect on the left and Correct on the right.
+0.39.1 expands the bundled Trivia bank to 300 questions (pack version 4), retaining 64px play controls. Trivia setup uses the layout introduced in 0.38.0: headings sit above option groups, question counts are 10/20/30, and eight category toggles plus Select all/Clear all form a three-column grid. Start quiz stays in the fixed footer. Insufficient content shows a shortage alert without an availability count; no categories shows Choose at least one category. Correct and Incorrect use distinct green/red states, separate from the primary action colour, with Incorrect on the left and Correct on the right.
 
 The first settings page of every game is temporary. Later setup and game progress remain durable. Returning or resetting to the first page removes its saved setup; older first-page snapshots are cleaned up without a resume chooser, and storage failures remain retryable. WWW, Hat and Imposter completion no longer stores a synthetic first-page setup. Trivia's completed score and recap remain saved until reset. Session schemas and existing active saves are unchanged.
 
-Cooperative Trivia retains no teams, optional writing only in reveal-at-end mode, the persisted Ready for the answers? handoff, exact-answer automatic marking and manual overrides. Revealed questions require a mark before advancing; expired unshown questions are excluded from the shared score and recap. The 30-question starter bank remains content pack version 2. WWW, Imposter and Trivia retain visible Easy/Medium/Hard buttons with allowed-tier shortage filling and Hard as the default. App Settings offers Kids mode for new games and Hat suggestions.
+Cooperative Trivia retains no teams, optional writing only in reveal-at-end mode, the persisted Ready for the answers? handoff, exact-answer automatic marking and manual overrides. Revealed questions require a mark before advancing; expired unshown questions are excluded from the shared score and recap. The original 150 questions remain unchanged; new quizzes draw from the expanded bank. WWW, Imposter and Trivia retain visible Easy/Medium/Hard buttons with allowed-tier shortage filling and Hard as the default. App Settings offers Kids mode for new games and Hat suggestions.
 
 The picker opens independent saved sessions. Five app-wide themes retain matching illustrated game artwork and the approved Recess cut-paper treatment. Settings and Info use separate header icons; appearance is stored independently of games. Settings → Show Trivia remains off by default. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
 
@@ -427,7 +427,6 @@ Browser review at 360x640 covered the complete Recess settings screen without sc
 
 Delivered `\\JNAS\Media\DropBox\RVLRY-0.38.0-settings.apk`; SHA-256 `8BE406A2892668642D6C714867454A100F7D13AE49652EAE03A34696BDA3A26C` matches `out/RVLRY-0.38.0-settings.apk`.
 
-
 ## Expanded Trivia bank and taller controls — 0.39.0, 22 October 2026
 
 Full verify passed: TypeScript, ESLint, 359 tests across 51 files and production build. A test-file import-order warning was fixed and its targeted lint rerun cleanly. Android assembly, two JVM checks (up-to-date), all 19 API-35 instrumentation tests and four separate snapshot/content force-stop recovery phases passed. The native fresh-quiz assertion now checks bundled pack 3. All device operations targeted emulator-5554; Pixel 10 acceptance remains unverified.
@@ -437,3 +436,12 @@ The bank contains 150 questions (55 easy, 51 medium, 44 hard; 76 Kids-suitable).
 Browser review at 360x640 covered Classic and Recess answer/mark controls: Correct, Incorrect and Next question each measure 64px tall and fit within the viewport, with visible Recess shadows. The scoped Impeccable detector reported no findings. Fallow retains 41 reviewed findings and 10 clone groups, with no suppressions. The existing Vite word-catalogue size advisory remains.
 
 Delivered `\\JNAS\Media\DropBox\RVLRY-0.39.0-trivia-bank.apk`, matching `out/RVLRY-0.39.0-trivia-bank.apk`. SHA-256: `D832A1A870D85B0AE21245CCE1D9A09532F63E033F33B09B5DDDF9B0F028D418`. Existing quizzes keep their selected copies; start a new quiz to draw from the expanded bank.
+
+
+## Trivia bank doubled — 0.39.1, 23 October 2026
+
+Full verify passed: TypeScript, ESLint, 360 tests across 51 files and production build. The complete pack-4 audit passes schema, IDs, normalised question identity, formatting and preservation of all 150 prior records. Four shared-number pairs were reviewed as distinct facts. Batch files exactly match the shipped additions. The bank has 300 questions (105 easy, 101 medium, 94 hard), including 150 Kids-suitable entries. Evidence and editorial disposition are in content/trivia/expansion-v4/.
+
+Android assembly, two native JVM checks (up-to-date), all 19 API-35 instrumentation tests and four separate snapshot/content force-stop recovery phases passed on emulator-5554. The fresh 30-question native flow confirms content pack 4. No physical device was targeted; Pixel 10 acceptance remains unverified. No UI, game rules or persistence code changed. Fallow retains the same 41 reviewed findings and 10 clone groups; no suppressions added. The existing Vite word-catalogue size advisory remains.
+
+Delivered `\\JNAS\Media\DropBox\RVLRY-0.39.1-trivia-300.apk`, SHA-256 `47ABC04FF34F0FC07FB29C79E537298B19814D0310644E1F4FA2A6BF3499205F`, matching local `out/RVLRY-0.39.1-trivia-300.apk`. Start a new quiz to use the expanded bank; saved quizzes keep their question copies.

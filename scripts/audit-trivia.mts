@@ -10,14 +10,25 @@ const pack = triviaPackSchema.parse(
 const original = triviaPackSchema.parse(
   JSON.parse(await readFile("content/trivia/original-pack-v2.json", "utf8")),
 );
-for (const question of original.questions) {
+const earlierAdditions = (
+  await Promise.all(
+    ["history-arts", "science-places", "screen-music-sport"].map(async (batch) =>
+      JSON.parse(await readFile(`content/trivia/${batch}.json`, "utf8")),
+    ),
+  )
+).flat();
+const previousQuestions = triviaPackSchema.parse({
+  ...original,
+  questions: [...original.questions, ...earlierAdditions],
+}).questions;
+for (const question of previousQuestions) {
   if (
     !isDeepStrictEqual(
       question,
       pack.questions.find((entry) => entry.id === question.id),
     )
   )
-    throw new Error(`Original record changed or missing: ${question.id}`);
+    throw new Error(`Prior record changed or missing: ${question.id}`);
 }
 for (const question of pack.questions) {
   for (const value of [question.question, question.answer, ...question.acceptableAnswers]) {
@@ -67,6 +78,7 @@ console.log(
       version: pack.version,
       total: pack.questions.length,
       originalPreserved: original.questions.length,
+      previousPreserved: previousQuestions.length,
       kids: pack.questions.filter((question) => question.kidAppropriate).length,
       categories: triviaCategories.map((category) => ({
         category,

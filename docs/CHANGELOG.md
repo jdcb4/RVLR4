@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.39.1 — 23 October 2026
+
+- Add another 150 source-checked Trivia questions across all eight categories, with 50 additions per difficulty and deliberate Kids coverage. Bundled content pack 4 now contains 300 records; all prior records remain unchanged.
+- Preserve the new accepted batches, subject plans and source evidence separately. Extend the repeatable audit and content tests to check preservation of the entire previous bank and balanced expansion coverage. Existing saved quizzes retain their question copies.
+
 ## 0.39.0 — 22 October 2026
 
 - Increase Trivia play actions and Correct/Incorrect controls from 48px to 64px, with extra footer spacing.
