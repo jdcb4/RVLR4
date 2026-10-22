@@ -11,11 +11,11 @@ When the user mentions a future idea that is out of scope for the current task, 
 Deferred; not part of the current implementation:
 
 - **When category:** years/dates associated with significant historical events or famous days.
-- **Game-like graphics:** further bespoke illustrations and game artwork beyond the five selectable visual themes shipped in 0.29.0.
+- **Game-like graphics:** further bespoke illustrations and game artwork beyond the five selectable visual themes shipped in 0.29.0. Three isolated proposals are ready for review in [the portable artwork study](design/RVLRY-graphics-proposals.html); production adoption awaits Joe's choice.
 
 ## Trivia game — requested 22 October 2026
 
-Deferred; roadmap only, not approved for implementation.
+Source discovery and high-level planning requested; implementation awaits decisions. See [Trivia discovery](TRIVIA_DISCOVERY.md).
 
 - **Format:** one presenter reads questions to the group; no pass-and-play handoffs.
 - **Question bank:** maintain a reusable bank of trivia questions and answers. Let the presenter choose how many questions to select for a session.
@@ -23,7 +23,7 @@ Deferred; roadmap only, not approved for implementation.
 - **Answer timing:** choose to reveal answers after each question or together at the end.
 - **Open decision:** whether participants write answers in the app or simply remember them.
 - **Categories:** choose a balanced set appropriate for the audience during planning. Initial candidates: general knowledge, history, geography, science and nature, arts and literature, film and television, music, and sport and games.
-- **Baseline content — Joe:** find the old trivia app he made so its questions can be reviewed and reused as the starting bank.
+- **Baseline content:** TriviaManager repo inspected; local QuickQuiz has 365 candidate entries and TriviaNightCreator has 50 demo questions. Historical Docker volumes and a preserved old cluster backup were identified; live contents remain unverified while Docker is stopped. These are ingestion candidates only, not approved questions.
 
 ## Android delivery follow-ups
 
