@@ -8,7 +8,7 @@ the Android conversion.
 
 - Work on `android-prototype`; do not push to the original web app's `dev`
   or `main`, run Railway deployment, or merge into those branches.
-- All three offline games are converted. Preserve independent native session keys and WWW version-1 compatibility; see docs/ANDROID.md and docs/PERSISTENCE.md.
+- All three offline games are converted. Preserve independent native game sessions and interruption durability. During prerelease, backward compatibility with existing saved games is optional: retain it when overhead is low or zero, but do not add complexity solely to preserve old saves. See docs/ANDROID.md and docs/PERSISTENCE.md.
 - React/Vite/Capacitor is the current runtime. Native SQLite snapshots store
   local game state; there is no runtime multiplayer server.
 - Historical multiplayer source is removed; do not reintroduce it into Android routes.

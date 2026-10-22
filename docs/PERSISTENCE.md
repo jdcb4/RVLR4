@@ -1,5 +1,11 @@
 # Device persistence
 
+## Prerelease compatibility policy
+
+Backward compatibility with saves from earlier app versions is optional during prerelease (Joe, 22 October 2026). Keep compatibility when overhead is low or zero; schema changes need not carry migrations or legacy support solely to retain old games. Document any save reset required by an update. This does not relax current-version interruption recovery, atomic saves, privacy or isolation between games. The compatibility details below describe the current implementation, not a requirement to preserve those formats indefinitely.
+
+## Current storage contract
+
 Each game owns a separate complete validated session through nativeSnapshotStore. The native RvlryDevice plugin atomically rotates current/previous checkpoints in SQLite; successful writes acknowledge only after transaction commit. Per-key reads, writes and removal share an ordered queue. No runtime server or network storage exists.
 
 | Key                            | Contents                                                                                                                                                      |
