@@ -39,3 +39,7 @@ The browser preview uses localStorage envelopes prefixed rvlry.snapshot.; it is 
 ## Retained validation code
 
 services/savedStates contains reusable nested rule validation and tested historical migration helpers. Hat uses its nested schema; Who What Where uses its setup/match schemas. Legacy browser-storage helpers remain where validation/regression tests require them, but old browser controllers and multiplayer credentials are not in Android routes. Do not reintroduce fallback-to-memory persistence as a successful durable save.
+
+## Trivia content foundation — 0.33.0
+
+Content packs use separate `rvlry-content.db` chunk rows rather than the 1 MiB session envelopes. Atomic full-synchronous transactions retain current and previous pack bodies independently for Trivia and words. Native compare-and-swap prevents competing installations from overwriting newer content. The TypeScript layer validates packs and retains the selected valid checkpoint during recovery. Browser previews use separate `rvlry.content.trivia` storage and are not evidence of native durability. See [TRIVIA_CONTENT.md](TRIVIA_CONTENT.md). No Trivia session key exists yet; gameplay integration must snapshot selected questions and progress independently.

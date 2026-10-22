@@ -61,13 +61,15 @@ try {
             $adb = Join-Path $env:ANDROID_HOME 'platform-tools\adb.exe'
             Invoke-CheckedCommand $adb @('install', '-r', 'android/app/build/outputs/apk/debug/app-debug.apk')
             Invoke-CheckedCommand $adb @('install', '-r', 'android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk')
-            foreach ($method in @('aWriteCheckpoint', 'bReadCheckpointAfterRestart')) {
-                Invoke-CheckedCommand $adb @('shell', 'am', 'force-stop', 'au.joed.rvlry')
-                $output = & $adb shell am instrument -w -e class "au.joed.rvlry.SnapshotProcessRecoveryTest#$method" 'au.joed.rvlry.test/androidx.test.runner.AndroidJUnitRunner'
-                $exitCode = $LASTEXITCODE
-                $output | Write-Output
-                if ($exitCode -ne 0 -or ($output -join "`n") -notmatch 'OK \(1 test\)') {
-                    throw "Native process recovery check failed: $method"
+            foreach ($recoveryClass in @('SnapshotProcessRecoveryTest', 'ContentProcessRecoveryTest')) {
+                foreach ($method in @('aWriteCheckpoint', 'bReadCheckpointAfterRestart')) {
+                    Invoke-CheckedCommand $adb @('shell', 'am', 'force-stop', 'au.joed.rvlry')
+                    $output = & $adb shell am instrument -w -e class "au.joed.rvlry.${recoveryClass}#$method" 'au.joed.rvlry.test/androidx.test.runner.AndroidJUnitRunner'
+                    $exitCode = $LASTEXITCODE
+                    $output | Write-Output
+                    if ($exitCode -ne 0 -or ($output -join "`n") -notmatch 'OK \(1 test\)') {
+                        throw "Native process recovery check failed: ${recoveryClass}#$method"
+                    }
                 }
             }
         }

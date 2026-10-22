@@ -1,6 +1,6 @@
 # Trivia discovery and decisions — 22 October 2026
 
-High-level proposal only. Joe requested source discovery and key decisions before a detailed implementation plan. No questions have been approved or imported, and no Trivia gameplay has been implemented.
+Joe approved the separate-corpus storage approach and implementation on 22 October 2026. The storage foundation is implemented in 0.33.0; see [TRIVIA_CONTENT.md](TRIVIA_CONTENT.md). No candidate questions have been approved or imported, and Trivia gameplay remains to be implemented.
 
 ## Confirmed first-version direction
 
@@ -11,15 +11,15 @@ High-level proposal only. Joe requested source discovery and key decisions befor
 - Content records should carry stable IDs, question, answer/acceptable variants, category, difficulty, kids suitability, provenance/review information and optional expiry. Expired questions must not be presented, including after a resume. Exact expiry handling belongs in the later detailed plan.
 - Ingestion should preserve source records, normalise formats, deduplicate, verify facts, assess audience/expiry, review and publish a versioned offline pack. Existing ACTIVE/status flags are not proof of approval. Global Kids mode should apply to the reviewed Trivia pool.
 
-Joe confirmed question-count/reveal choices, categories and the reviewed offline approach. Live question generation may be considered later, not for this version. Detailed implementation and production work have not been requested yet.
+Joe confirmed question-count/reveal choices, categories and the reviewed offline approach. Live question generation may be considered later, not for this version. Storage implementation is approved; game flow and content ingestion remain separate work.
 
-## Corpus storage proposal for discussion
+## Approved corpus storage direction
 
 Keep Trivia in its own question catalogue and independently versioned update pack, separate from the shared Who What Where/Hat/Imposter word catalogue. Use structured JSON for maintained sources and downloadable packs. Bundle an initial reviewed pack in the APK; install downloaded packs into dedicated native content tables, separate from saved-game snapshots. Do not put the whole corpus into the snapshot store's bounded session envelopes.
 
 Share one update workflow and manifest across word and Trivia packs, while retaining separate schemas, content versions and validation. The manifest can advertise newer versions of either pack independently. Prefer complete replacement packs initially: download, validate schema/checksum/unique IDs, then atomically activate; retain the last valid pack and offline bundled fallback on failure. No live server is needed to play.
 
-Use stable question IDs plus revisions so corrections and removals can be tracked without creating duplicates. Keep provenance/review history in the editorial source. A quiz saves its selected questions/answers and progress independently of pack replacement; expiry checks still apply before presenting an unshown question. The storage design is proposed, not implemented.
+Use stable question IDs plus revisions so corrections and removals can be tracked without creating duplicates. Keep provenance/review history in the editorial source. A quiz saves its selected questions/answers and progress independently of pack replacement; expiry checks still apply before presenting an unshown question. The catalogue schema, shared manifest/download validation, separate native content database, replacement/recovery service and publishing command are implemented. The bundled Trivia pack is deliberately empty pending editorial review; no download endpoint is configured. Session snapshots and gameplay integration follow with the game.
 
 ## Source findings
 

@@ -11,11 +11,11 @@ When the user mentions a future idea that is out of scope for the current task, 
 Deferred; not part of the current implementation:
 
 - **When category:** years/dates associated with significant historical events or famous days.
-- **Game-like graphics:** further bespoke illustrations and game artwork beyond the five selectable visual themes shipped in 0.29.0. Three isolated proposals are ready for review in [the portable artwork study](design/RVLRY-graphics-proposals.html); production adoption awaits Joe's choice.
+- **Game-like graphics:** further bespoke illustrations and game artwork beyond the five selectable visual themes shipped in 0.29.0. Five theme-mapped artwork families are ready for review in [the portable artwork study](design/RVLRY-graphics-proposals.html); production adoption remains separate from the artwork review.
 
 ## Trivia game — requested 22 October 2026
 
-Source discovery and high-level planning requested; implementation awaits decisions. See [Trivia discovery](TRIVIA_DISCOVERY.md).
+Storage approach approved and foundation implemented in 0.33.0. Gameplay and reviewed content ingestion are next. See [Trivia discovery](TRIVIA_DISCOVERY.md).
 
 - **Format:** one presenter reads questions to the group; no pass-and-play handoffs.
 - **Question bank:** maintain a reusable bank of trivia questions and answers. Let the presenter choose how many questions to select for a session.
@@ -23,7 +23,7 @@ Source discovery and high-level planning requested; implementation awaits decisi
 - **Answer timing:** choose to reveal answers after each question or together at the end.
 - **Answers and scoring:** optional written answers, self-marking and a manual scoreboard. Writing location (paper or in-app) still needs clarification during flow design.
 - **Categories:** confirmed general knowledge, history, geography, science and nature, arts and literature, film and television, music, and sport and games.
-- **Corpus updates:** propose a separate Trivia question pack with independent versions, sharing the word-pack update mechanism; see the discovery document for the storage proposal.
+- **Corpus updates:** separate Trivia storage, independent versions and shared manifest/download validation implemented; reviewed initial content, publisher endpoint and Settings/game integration remain. See [Trivia content](TRIVIA_CONTENT.md).
 - **Live question generation:** possible future extension; excluded from the first version.
 - **Baseline content:** TriviaManager repo inspected; local QuickQuiz has 365 candidate entries and TriviaNightCreator has 50 demo questions. Historical Docker volumes and a preserved old cluster backup were identified; live contents remain unverified while Docker is stopped. These are ingestion candidates only, not approved questions.
 

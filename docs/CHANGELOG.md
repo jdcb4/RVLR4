@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.33.0 — 22 October 2026
+
+- Implement the approved Trivia content-storage foundation: strict question/review/expiry schema, separate versioned JSON packs and dedicated native SQLite storage with atomic activation and last-valid-pack recovery.
+- Add shared word/Trivia manifest and bounded HTTPS download validation, full-file SHA-256 checks, stable question revision checks and an offline publishing command. No update endpoint is configured.
+- Keep all existing games and their content sources unchanged. Trivia gameplay and reviewed questions are not included; the bundled Trivia catalogue is explicitly empty.
+
 ## 0.32.0 — 22 October 2026
 
 - Add All/Easy/Medium/Hard difficulty selection to Who What Where and Imposter using catalogue ratings, with compact shared dropdowns. Defaults and legacy saves keep the full pool.

@@ -15,11 +15,13 @@ import org.json.JSONObject;
 public class RvlryDevicePlugin extends Plugin {
     private final ExecutorService storage = Executors.newSingleThreadExecutor();
     private SnapshotDatabase database;
+    private ContentDatabase contentDatabase;
 
     @Override
     public void load() {
         // Opening the database is deferred until the worker receives the first operation.
         database = new SnapshotDatabase(getContext().getApplicationContext());
+        contentDatabase = new ContentDatabase(getContext().getApplicationContext());
     }
 
     @PluginMethod
@@ -69,6 +71,55 @@ public class RvlryDevicePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void readContent(PluginCall call) {
+        storage.execute(() -> {
+            try {
+                String[] content = contentDatabase.read(contentString(call, "kind", false));
+                JSObject result = new JSObject();
+                result.put("current", content[0] == null ? JSONObject.NULL : content[0]);
+                result.put("previous", content[1] == null ? JSONObject.NULL : content[1]);
+                call.resolve(result);
+            } catch (IllegalArgumentException error) {
+                call.reject(error.getMessage(), "INVALID_ARGUMENT");
+            } catch (Exception error) {
+                call.reject("Unable to read installed content", "CONTENT_READ_FAILED");
+            }
+        });
+    }
+
+    @PluginMethod
+    public void installContent(PluginCall call) {
+        storage.execute(() -> {
+            try {
+                String kind = contentString(call, "kind", false);
+                String value = contentString(call, "value", false);
+                String expectedCurrent = contentString(call, "expectedCurrent", true);
+                if (call.getData().has("retainedPrevious")) {
+                    contentDatabase.install(kind, value, expectedCurrent, contentString(call, "retainedPrevious", true));
+                } else {
+                    contentDatabase.install(kind, value, expectedCurrent);
+                }
+                call.resolve();
+            } catch (ContentDatabase.ConflictException error) {
+                call.reject(error.getMessage(), "CONTENT_CONFLICT");
+            } catch (IllegalArgumentException error) {
+                call.reject(error.getMessage(), "INVALID_ARGUMENT");
+            } catch (Exception error) {
+                call.reject("Unable to install content", "CONTENT_INSTALL_FAILED");
+            }
+        });
+    }
+
+    private String contentString(PluginCall call, String name, boolean nullable) {
+        Object value = call.getData().opt(name);
+        if (nullable && value == JSONObject.NULL) return null;
+        if (!(value instanceof String)) {
+            throw new IllegalArgumentException(name + (nullable ? " must be a string or null" : " must be a string"));
+        }
+        return (String) value;
+    }
+
+    @PluginMethod
     public void setKeepAwake(PluginCall call) {
         setWindowFlag(call, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
@@ -97,7 +148,10 @@ public class RvlryDevicePlugin extends Plugin {
     @Override
     protected void handleOnDestroy() {
         // Drain committed/queued saves, then close SQLite on its owning worker.
-        storage.execute(() -> database.close());
+        storage.execute(() -> {
+            database.close();
+            contentDatabase.close();
+        });
         storage.shutdown();
     }
 }

@@ -7,6 +7,13 @@ interface SnapshotPair {
 }
 
 interface RvlryDevicePlugin {
+  readContent(options: { kind: "trivia" | "words" }): Promise<SnapshotPair>;
+  installContent(options: {
+    kind: "trivia" | "words";
+    value: string;
+    expectedCurrent: string | null;
+    retainedPrevious: string | null;
+  }): Promise<void>;
   read(options: { key: string }): Promise<SnapshotPair>;
   write(options: { key: string; value: string }): Promise<void>;
   remove(options: { key: string }): Promise<void>;

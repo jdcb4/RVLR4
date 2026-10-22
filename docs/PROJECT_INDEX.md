@@ -28,6 +28,7 @@ commands in [ANDROID.md](ANDROID.md); browser tests alone do not verify them.
 ## Active documentation
 
 - [Roadmap](ROADMAP.md) — future work only.
+- [Trivia content storage](TRIVIA_CONTENT.md) — implemented pack/schema/publishing contract; corpus and game integration pending.
 - [Trivia discovery](TRIVIA_DISCOVERY.md) — source findings and high-level decisions pending review; no game/content implementation yet.
 - [Android build and testing](ANDROID.md) — local toolchain, APK and device checks.
 - [Persistence](PERSISTENCE.md) — current Android save contract and historical browser saves.

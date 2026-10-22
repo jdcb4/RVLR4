@@ -12,6 +12,7 @@ export default tseslint.config(
       "dist",
       "build",
       "coverage",
+      ".tmp/**", // Research checkouts and disposable tooling are not application source.
       ".claude",
       ".turbo",
       ".wrangler",
