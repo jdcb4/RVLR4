@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.36.0 makes optional Trivia a cooperative quiz with shared written answers, answer reveals and no teams, marks or scores. Its new version-2 session starts fresh rather than loading earlier competitive Trivia saves. The 30-question starter bank remains content pack version 2. WWW, Imposter and Trivia offer visible Easy/Medium/Hard buttons: easy only, equal easy/medium, or equal shares of all three tiers, with allowed-tier shortage filling and Hard as the new default. App Settings offers Kids mode for new games and Hat suggestions.
+0.37.0 adds Correct/Incorrect self-marking, one shared score and a scrollable question recap to cooperative Trivia, with no teams. Reveal after each question has no answer writing; reveal at the end always offers an optional shared answer field. On reveal, an exact canonical-answer or alias match after trimming, lowercasing and collapsing whitespace is marked correct automatically; other answers require a manual mark. Marks can be overridden, and a revealed question needs a mark before advancing. Expired unshown questions are excluded from the score and recap. The new version-3 session starts fresh rather than loading earlier Trivia v1/v2 saves. The 30-question starter bank remains content pack version 2. WWW, Imposter and Trivia retain visible Easy/Medium/Hard buttons with allowed-tier shortage filling and Hard as the default. App Settings offers Kids mode for new games and Hat suggestions.
 
 The picker opens independent saved sessions. Five app-wide themes retain matching illustrated game artwork and the approved Recess cut-paper treatment. Settings and Info use separate header icons; appearance is stored independently of games. Settings → Show Trivia remains off by default. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
 
@@ -391,3 +391,11 @@ Fallow was reviewed: 42 dead-code findings and 10 clone groups remain. The two a
 
 Delivered `\\JNAS\Media\DropBox\RVLRY-0.36.0-cooperative-trivia.apk`; SHA-256 `4BEE637E6074C637B1B61A008218A479ED16E44E5A8AAD54FC85F753DA6AD449` matches `out/RVLRY-0.36.0-cooperative-trivia.apk`. Enable Settings → Show Trivia if hidden. Choose Hard and all categories for a full 30-question quiz from the starter bank.
 `pnpm android:test` also passed (two native JVM tests, up-to-date).
+
+## Shared Trivia marking — 0.37.0, 22 October 2026
+
+Full verify passed: TypeScript, ESLint, 340 tests across 51 files and production build. Android assembly, all 19 API-35 instrumentation tests and the separate snapshot/content force-stop recovery phases passed. Native coverage writes and restores an end-mode answer with different capitalisation and trailing spaces, confirms automatic Correct selection, overrides it both ways and checks the final score/recap. Domain/controller tests cover aliases, nonmatches, blank answers, required marks, expiry exclusions and failed-save retry. Pixel 10 acceptance remains unverified.
+
+Browser review at 360x640 covered both reveal modes, manual marking and a 10-question recap (5 correct, 5 incorrect). The recap scrolls independently while score and footer remain visible. The answer placeholder uses the theme's muted foreground for contrast. Impeccable's scoped detector reported no findings. Fallow was reviewed: 41 existing/retained dead-code findings and 10 clone groups; no suppressions added. The existing Vite catalogue-size advisory remains.
+
+Delivered `\\JNAS\Media\DropBox\RVLRY-0.37.0-trivia-scoring.apk`, SHA-256 `B679A45976B1D18CFB0BBA0701406C98293F899B5D65E7EF168B476C4A686AE1`, matching `out/RVLRY-0.37.0-trivia-scoring.apk`. Earlier Trivia saves start fresh under schema/key v3; other games are unaffected.

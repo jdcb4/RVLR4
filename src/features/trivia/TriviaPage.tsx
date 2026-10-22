@@ -1,3 +1,4 @@
+import { Check, X } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,6 +17,7 @@ import {
   nextTriviaQuestion,
   revealTriviaAnswer,
   setTriviaAnswer,
+  setTriviaMark,
   triviaCategoryLabels,
   type TriviaQuiz,
   type TriviaSettings,
@@ -95,18 +97,49 @@ export function TriviaPage() {
       />
     );
   } else if (quiz.phase === "results") {
-    const played = quiz.items.filter((item) => !item.excluded).length;
+    const played = quiz.items.filter((item) => !item.excluded);
+    const correct = played.filter((item) => item.mark === true).length;
     content = (
-      <section className="space-y-4">
+      <section className="flex min-h-0 flex-1 flex-col gap-3">
         <h2 className="text-typ-section-title font-semibold">Quiz complete</h2>
-        <p className="text-typ-muted text-muted-foreground">
-          {played} questions explored together.
+        <p className="text-typ-section-title font-semibold tabular-nums">
+          {correct} of {played.length} correct
         </p>
-        {played < quiz.items.length && (
+        {played.length < quiz.items.length && (
           <p className="text-typ-muted text-muted-foreground">
-            {quiz.items.length - played} expired questions were skipped before being shown.
+            {quiz.items.length - played.length} expired questions skipped.
           </p>
         )}
+        <ol
+          aria-label="Question recap"
+
+          className="min-h-0 flex-1 divide-y divide-border overflow-y-auto rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {quiz.items.map((item, index) => {
+            if (item.excluded) return null;
+            const MarkIcon = item.mark ? Check : X;
+            return (
+              <li key={item.question.id} className="flex gap-2 py-3 text-typ-muted">
+                <MarkIcon
+                  aria-hidden="true"
+                  className={`mt-0.5 size-5 shrink-0 ${item.mark ? "text-primary" : "text-destructive"}`}
+                />
+                <span className="sr-only">{item.mark ? "Correct" : "Incorrect"}</span>
+                <div className="min-w-0 space-y-1">
+                  <p className="break-words font-semibold">
+                    {index + 1}. {item.question.question}
+                  </p>
+                  <p className="break-words">{item.question.answer}</p>
+                  {item.writtenAnswer && (
+                    <p className="whitespace-pre-wrap break-words text-muted-foreground">
+                      Your answer: {item.writtenAnswer}
+                    </p>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
       </section>
     );
     footer = (
@@ -380,7 +413,6 @@ function TriviaQuestionView({
 }) {
   const item = quiz.items[quiz.cursor]!;
   const [answer, setAnswer] = useState(item.writtenAnswer);
-  const [showWriting, setShowWriting] = useState(Boolean(item.writtenAnswer));
   const atEnd = !quiz.items.slice(quiz.cursor + 1).some((next) => !next.excluded);
   const applyAnswer = (current: TriviaQuiz) => setTriviaAnswer(current, answer);
   return (
@@ -420,41 +452,50 @@ function TriviaQuestionView({
             </div>
           )}
         </>
-      ) : (
-        <div className="space-y-3">
-          <Button
-            variant="outline"
-            className="w-full"
-            aria-expanded={showWriting}
-            onClick={() => setShowWriting(!showWriting)}
-          >
-            {showWriting ? "Hide written answer" : "Write an answer (optional)"}
-          </Button>
-          {showWriting && (
-            <label className="block space-y-1">
-              <span className="block text-typ-ui font-semibold">Your answer</span>
-              <textarea
-                className={`${inputClass} w-full resize-y`}
-                rows={2}
-                maxLength={500}
-                value={answer}
-                onChange={(event) => {
-                  const text = event.target.value;
-                  setAnswer(text);
-                  onChange((current) =>
-                    current.items[current.cursor]?.question.id === item.question.id
-                      ? setTriviaAnswer(current, text)
-                      : current,
-                  );
-                }}
-              />
-            </label>
-          )}
-        </div>
-      )}
+      ) : quiz.settings.revealMode === "end" ? (
+        <label className="block space-y-1">
+          <span className="sr-only">Your answer</span>
+          <textarea
+                className={`${inputClass} w-full resize-y placeholder:text-muted-foreground`}
+            placeholder="Your answer (optional)"
+            disabled={blocked}
+            rows={2}
+            maxLength={500}
+            value={answer}
+            onChange={(event) => {
+              const text = event.target.value;
+              setAnswer(text);
+              onChange((current) =>
+                current.items[current.cursor]?.question.id === item.question.id
+                  ? setTriviaAnswer(current, text)
+                  : current,
+              );
+            }}
+          />
+        </label>
+      ) : null}
       <div className="mt-auto space-y-2 pt-2">
+        {item.revealed && (
+          <div role="group" aria-label="Mark your answer" className="grid grid-cols-2 gap-2">
+            {([true, false] as const).map((correct) => {
+              const MarkIcon = correct ? Check : X;
+              return (
+                <Button
+                  key={String(correct)}
+                  variant={item.mark === correct ? "default" : "outline"}
+                  aria-pressed={item.mark === correct}
+                  disabled={busy || blocked}
+                  onClick={() => onChange((current) => setTriviaMark(current, correct))}
+                >
+                  <MarkIcon aria-hidden="true" className="size-5" />
+                  {correct ? "Correct" : "Incorrect"}
+                </Button>
+              );
+            })}
+          </div>
+        )}
         <PrimaryFooterButton
-          disabled={busy || blocked}
+          disabled={busy || blocked || (item.revealed && item.mark === null)}
           label={
             busy
               ? "Saving…"

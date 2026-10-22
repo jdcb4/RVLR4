@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.37.0 — 22 October 2026
+
+- Add Correct/Incorrect self-marking to cooperative Trivia, with no teams, one shared score and a scrollable question recap. Revealed questions require a mark before advancing; marks can be overridden.
+- Remove answer writing from reveal-after-each mode. Reveal-at-end mode always offers an optional shared answer field; exact canonical-answer or acceptable-alias matches after trimming, lowercasing and collapsing whitespace are automatically marked Correct. Other answers need a manual mark.
+- Exclude expired unshown questions from score and recap. Store answers and marks in a new version-3 session; earlier Trivia v1/v2 saves do not resume after upgrading. Keep question pack version 2 and the 30-question starter bank.
+
 ## 0.36.0 — 22 October 2026
 
 - Make Trivia a cooperative quiz with one optional shared written answer per question. Remove teams, marking and scores while keeping both answer-reveal modes and interruption recovery.

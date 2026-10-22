@@ -15,7 +15,7 @@ Deferred; not part of the current implementation:
 
 ## Trivia game — requested 22 October 2026
 
-Gameplay and storage began in 0.35.0 behind a default-off Settings toggle. The current 0.36.0 flow is a cooperative quiz with optional shared written answers and no teams, marks or scores. See [Trivia content](TRIVIA_CONTENT.md).
+Gameplay and storage began in 0.35.0 behind a default-off Settings toggle. The current 0.37.0 cooperative flow has no teams, uses Correct/Incorrect marks, and ends with one shared score and a scrollable recap. Reveal-after-each mode has no writing; reveal-at-end mode always offers optional shared answers with exact normalised canonical/alias matches marked Correct automatically. Other answers need a manual mark, all marks can be overridden, and revealed questions require a mark before advancing. Expired unshown questions are excluded from score and recap. See [Trivia content](TRIVIA_CONTENT.md).
 
 - **Reviewed question corpus:** expand beyond the 30-question source-checked testing bank in 0.35.1; design historical-source ingestion and wider editorial review.
 - **Corpus updates:** configure the publisher endpoint and connect user-facing installation to the implemented separate Trivia pack storage and downloader.

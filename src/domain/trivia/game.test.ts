@@ -9,6 +9,7 @@ import {
   prepareTriviaQuiz,
   revealTriviaAnswer,
   setTriviaAnswer,
+  setTriviaMark,
   startTriviaQuiz,
   triviaSessionSchema,
   triviaSettingsSchema,
@@ -45,7 +46,7 @@ const start = (overrides: Partial<TriviaSettings> = {}, questions = [question(1)
     rng: () => 0.5,
   });
 const session = (quiz: TriviaQuiz) => ({
-  schemaVersion: 2,
+  schemaVersion: 3,
   savedAt: iso(now),
   settings: quiz.settings,
   quiz,
@@ -174,7 +175,7 @@ describe("Trivia rules and durable sessions", () => {
     quiz = prepareTriviaQuiz(quiz, now + 1);
     expect(quiz.items[0]?.question.id).toBe(shown);
     expect(quiz.items[0]?.excluded).toBe(false);
-    quiz = nextTriviaQuestion(revealTriviaAnswer(quiz), now + 1);
+    quiz = nextTriviaQuestion(setTriviaMark(revealTriviaAnswer(quiz), true), now + 1);
     expect(quiz.phase).toBe("results");
     expect(quiz.items[1]).toMatchObject({ shownAt: null, excluded: true, revealed: false });
     valid(quiz);
@@ -187,7 +188,7 @@ describe("Trivia rules and durable sessions", () => {
       cursor: 1,
       items: quiz.items.map((item, index) =>
         index === 0
-          ? { ...item, revealed: true }
+          ? { ...item, revealed: true, mark: true }
           : index === 1
             ? { ...item, question: { ...item.question, expiresAt: iso(now + 1) } }
             : item,
@@ -214,19 +215,28 @@ describe("Trivia rules and durable sessions", () => {
     valid(exhausted);
   });
 
-  it("requires reveal in each mode and locks the shared written answer after reveal", () => {
+  it("requires reveal and a manual mark in each mode without accepting written answers", () => {
     let quiz = start();
     expect(nextTriviaQuestion(quiz, now)).toBe(quiz);
-    quiz = setTriviaAnswer(quiz, "Optional written answer");
-    expect(quiz.items[0]?.writtenAnswer).toBe("Optional written answer");
+    expect(setTriviaMark(quiz, true)).toBe(quiz);
+    expect(setTriviaAnswer(quiz, "Written answer")).toBe(quiz);
+    expect(quiz.items[0]?.writtenAnswer).toBe("");
     quiz = revealTriviaAnswer(quiz);
+    expect(quiz.items[0]?.mark).toBeNull();
+    expect(nextTriviaQuestion(quiz, now)).toBe(quiz);
     expect(setTriviaAnswer(quiz, "Changed after reveal")).toBe(quiz);
     valid(quiz);
+    quiz = setTriviaMark(quiz, true);
+    expect(quiz.items[0]?.mark).toBe(true);
+    quiz = setTriviaMark(quiz, false);
+    expect(quiz.items[0]?.mark).toBe(false);
     quiz = nextTriviaQuestion(quiz, now);
-    quiz = nextTriviaQuestion(revealTriviaAnswer(quiz), now);
+    quiz = nextTriviaQuestion(setTriviaMark(revealTriviaAnswer(quiz), true), now);
     expect(quiz.phase).toBe("results");
     expect(nextTriviaQuestion(quiz, now)).toBe(quiz);
     expect(setTriviaAnswer(quiz, "Too late")).toBe(quiz);
+    expect(setTriviaMark(quiz, false)).toBe(quiz);
+    expect(quiz.items.map((item) => item.mark)).toEqual([false, true]);
     valid(quiz);
   });
 
@@ -243,10 +253,12 @@ describe("Trivia rules and durable sessions", () => {
     expect(quiz).toMatchObject({ phase: "answers", cursor: 0 });
     expect(quiz.items.map((item) => item.revealed)).toEqual([true, false]);
     expect(setTriviaAnswer(quiz, "Too late")).toBe(quiz);
+    expect(quiz.items[0]?.mark).toBeNull();
+    expect(nextTriviaQuestion(quiz, now)).toBe(quiz);
     valid(quiz);
-    quiz = nextTriviaQuestion(quiz, now);
+    quiz = nextTriviaQuestion(setTriviaMark(quiz, true), now);
     expect(quiz.items[1]).toMatchObject({ revealed: true, writtenAnswer: "Second answer" });
-    quiz = nextTriviaQuestion(quiz, now);
+    quiz = nextTriviaQuestion(setTriviaMark(quiz, false), now);
     expect(quiz.phase).toBe("results");
     valid(quiz);
   });
@@ -260,11 +272,63 @@ describe("Trivia rules and durable sessions", () => {
     expect(review).toMatchObject({ phase: "answers", cursor: 0 });
     expect(review.items[1]?.excluded).toBe(true);
     valid(review);
-    valid(nextTriviaQuestion(review, now + 1));
+    expect(review.items[1]?.mark).toBeNull();
+    expect(nextTriviaQuestion(review, now + 1)).toBe(review);
+    const results = nextTriviaQuestion(setTriviaMark(review, false), now + 1);
+    expect(results.phase).toBe("results");
+    valid(results);
+  });
+
+  it.each([
+    ["  aNSWER \t 1 \n", true],
+    ["  accepted \n ALIAS  ", true],
+    ["Answer 1!", null],
+    ["Anser 1", null],
+    ["Answer1", null],
+    ["Accepted-alias", null],
+    ["", null],
+    [" \t\n ", null],
+    ["Wrong answer", null],
+  ] as const)("defaults the revealed end-mode mark for %j to %s", (written, expected) => {
+    let quiz = start({ count: 1, revealMode: "end" }, [
+      question(1, { acceptableAnswers: ["Accepted alias"] }),
+    ]);
+    quiz = setTriviaAnswer(quiz, written);
+    expect(quiz.items[0]?.mark).toBeNull();
+    expect(setTriviaMark(quiz, true)).toBe(quiz);
+    quiz = nextTriviaQuestion(quiz, now);
+    expect(quiz.items[0]?.mark).toBe(expected);
+    expect(quiz.items[0]?.writtenAnswer).toBe(written);
+    valid(quiz);
+    if (expected === null) expect(nextTriviaQuestion(quiz, now)).toBe(quiz);
+    quiz = setTriviaMark(quiz, false);
+    expect(quiz.items[0]?.mark).toBe(false);
+    expect(revealTriviaAnswer(quiz)).toBe(quiz);
+    const restored = triviaSessionSchema.parse(JSON.parse(JSON.stringify(session(quiz)))).quiz!;
+    expect(restored.items[0]?.mark).toBe(false);
+    const completed = nextTriviaQuestion(restored, now);
+    expect(completed.phase).toBe("results");
+    valid(completed);
+  });
+
+  it("assigns exact-match defaults only as each end-mode answer is revealed", () => {
+    let quiz = start({ revealMode: "end" });
+    quiz = setTriviaAnswer(quiz, quiz.items[0]!.question.answer);
+    quiz = nextTriviaQuestion(quiz, now);
+    quiz = setTriviaAnswer(quiz, quiz.items[1]!.question.answer);
+    expect(quiz.items.map((item) => item.mark)).toEqual([null, null]);
+    quiz = nextTriviaQuestion(quiz, now);
+    expect(quiz.items.map((item) => item.mark)).toEqual([true, null]);
+    quiz = setTriviaMark(quiz, false);
+    quiz = nextTriviaQuestion(quiz, now);
+    expect(quiz.items.map((item) => item.mark)).toEqual([false, true]);
+    quiz = nextTriviaQuestion(quiz, now);
+    expect(quiz.phase).toBe("results");
+    valid(quiz);
   });
 
   it("bounds the shared written answer", () => {
-    const quiz = start();
+    const quiz = start({ revealMode: "end" });
     expect(setTriviaAnswer(quiz, "x".repeat(500)).items[0]?.writtenAnswer).toHaveLength(500);
     expect(() => setTriviaAnswer(quiz, "x".repeat(501))).toThrow("500");
   });
@@ -305,6 +369,26 @@ describe("Trivia rules and durable sessions", () => {
           index === 0 ? { ...item, writtenAnswer: "x".repeat(501) } : item,
         ),
       },
+      {
+        ...quiz,
+        items: quiz.items.map((item, index) => (index === 0 ? { ...item, mark: true } : item)),
+      },
+      {
+        ...quiz,
+        items: quiz.items.map((item, index) => (index === 1 ? { ...item, mark: false } : item)),
+      },
+      {
+        ...quiz,
+        items: quiz.items.map((item, index) =>
+          index === 0 ? { ...item, revealed: true, mark: "correct" } : item,
+        ),
+      },
+      {
+        ...quiz,
+        items: quiz.items.map((item, index) =>
+          index === 0 ? { ...item, writtenAnswer: "Not allowed in each mode" } : item,
+        ),
+      },
     ];
     variants.forEach((variant) =>
       expect(triviaSessionSchema.safeParse({ ...session(quiz), quiz: variant }).success).toBe(
@@ -317,7 +401,7 @@ describe("Trivia rules and durable sessions", () => {
         settings: { ...quiz.settings, revealMode: "end" },
       }).success,
     ).toBe(false);
-    expect(triviaSessionSchema.safeParse({ ...session(quiz), schemaVersion: 1 }).success).toBe(
+    expect(triviaSessionSchema.safeParse({ ...session(quiz), schemaVersion: 2 }).success).toBe(
       false,
     );
     expect(triviaSettingsSchema.safeParse({ ...quiz.settings, teams: ["Old team"] }).success).toBe(
@@ -325,15 +409,43 @@ describe("Trivia rules and durable sessions", () => {
     );
   });
 
+  it("rejects missing marks on reviewed answers and all marks on excluded questions", () => {
+    let quiz = start();
+    quiz = nextTriviaQuestion(setTriviaMark(revealTriviaAnswer(quiz), true), now);
+    const pastUnmarked = {
+      ...quiz,
+      items: quiz.items.map((item, index) => (index === 0 ? { ...item, mark: null } : item)),
+    };
+    expect(triviaSessionSchema.safeParse(session(pastUnmarked)).success).toBe(false);
+    quiz = nextTriviaQuestion(setTriviaMark(revealTriviaAnswer(quiz), false), now);
+    const completedUnmarked = {
+      ...quiz,
+      items: quiz.items.map((item, index) => (index === 1 ? { ...item, mark: null } : item)),
+    };
+    expect(triviaSessionSchema.safeParse(session(completedUnmarked)).success).toBe(false);
+    const excludedMarked = {
+      ...quiz,
+      items: quiz.items.map((item, index) =>
+        index === 1
+          ? { ...item, excluded: true, revealed: false, shownAt: null, mark: false }
+          : item,
+      ),
+    };
+    expect(triviaSessionSchema.safeParse(session(excludedMarked)).success).toBe(false);
+    valid(quiz);
+  });
+
   it("keeps ordinary 100-question quizzes within the native snapshot limit", () => {
     let quiz = start(
-      { count: 100 },
+      { count: 100, revealMode: "end" },
       Array.from({ length: 100 }, (_, index) => question(index)),
     );
     for (let index = 0; index < 100; index++) {
       quiz = setTriviaAnswer(quiz, "x".repeat(500));
-      quiz = nextTriviaQuestion(revealTriviaAnswer(quiz), now);
+      quiz = nextTriviaQuestion(quiz, now);
     }
+    for (let index = 0; index < 100; index++)
+      quiz = nextTriviaQuestion(setTriviaMark(quiz, index % 2 === 0), now);
     valid(quiz);
     expect(new TextEncoder().encode(JSON.stringify(session(quiz))).byteLength).toBeLessThan(
       1024 * 1024,

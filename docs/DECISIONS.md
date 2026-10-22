@@ -380,3 +380,9 @@ Implement the approved separately versioned Trivia JSON corpus with dedicated na
 Trivia is a shared newspaper-style quiz: keep one optional written answer per question and remove teams, marking and scores. Store cooperative sessions as schema version 2 under `trivia.device.v2`; ignore the competitive v1 session rather than adding a migration during prerelease. Question pack version 2 and its 30-question bank are unchanged.
 
 Use visible Easy/Medium/Hard buttons across WWW, Imposter and Trivia. Easy uses easy content only; Medium targets equal easy/medium shares; Hard targets equal shares of all three tiers. Fill shortages only within allowed tiers and existing category/Kids filters. Default new settings to Hard and interpret legacy `all` as Hard. This replaces the exact-tier selection and All dropdown decision above without adding dependencies.
+
+## 22 October 2026 — Cooperative Trivia self-marking
+
+Add Correct/Incorrect marks, one shared score and a scrollable question recap while keeping Trivia cooperative with no teams. Reveal-after-each mode omits answer writing; reveal-at-end mode always offers an optional shared answer field. On end-mode reveal, compare the written answer with the canonical answer and acceptable aliases after trimming, lowercasing and collapsing whitespace. Only exact matches become Correct automatically; other answers remain unmarked for the group to decide. Allow manual overrides and require a mark before advancing a revealed question. Exclude expired unshown questions from both score and recap.
+
+Store the nullable boolean mark with each selected question in schema version 3 under `trivia.device.v3`. Ignore previous v1/v2 sessions rather than adding prerelease migrations; other game saves and question pack version 2 are unaffected. Use the existing domain, UI and native snapshot architecture without dependencies.

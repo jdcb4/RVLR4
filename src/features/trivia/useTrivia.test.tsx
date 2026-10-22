@@ -7,6 +7,7 @@ import {
   nextTriviaQuestion,
   revealTriviaAnswer,
   setTriviaAnswer,
+  setTriviaMark,
   startTriviaQuiz,
   triviaSessionSchema,
 } from "@/domain/trivia/game";
@@ -32,7 +33,7 @@ vi.mock("@/services/deviceLifecycle", () => ({
   },
 }));
 
-const key = "trivia.device.v2";
+const key = "trivia.device.v3";
 const storageKey = `rvlry.snapshot.${key}`;
 const settings = () => ({ ...createTriviaSession().settings, count: 2 });
 const question = (id: number, extra: Partial<TriviaQuestion> = {}): TriviaQuestion => ({
@@ -136,7 +137,10 @@ describe("Trivia durable controller", () => {
 
   it("retains a failed checkpoint and blocks later queued edits until retry commits it", async () => {
     const hook = await mount();
-    await act(async () => hook.result.current.start(settings()));
+    await act(async () => {
+      await hook.result.current.start(settings());
+      await hook.result.current.changeQuiz(revealTriviaAnswer);
+    });
     const before = localStorage.getItem(storageKey);
     const write = vi
       .spyOn(snapshots, "writeSnapshot")
@@ -144,8 +148,8 @@ describe("Trivia durable controller", () => {
     let outcomes!: Promise<PromiseSettledResult<void>[]>;
     act(() => {
       outcomes = Promise.allSettled([
-        hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "First")),
-        hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "Blocked")),
+        hook.result.current.changeQuiz((quiz) => setTriviaMark(quiz, true)),
+        hook.result.current.changeQuiz((quiz) => setTriviaMark(quiz, false)),
       ]);
     });
     await act(async () => {
@@ -153,15 +157,15 @@ describe("Trivia durable controller", () => {
     });
     expect(localStorage.getItem(storageKey)).toBe(before);
     expect(hook.result.current.error).toBe("Disk full");
-    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswer).toBe("");
+    expect(hook.result.current.session?.quiz?.items[0]?.mark).toBeNull();
     expect(write).toHaveBeenCalledTimes(1);
     await act(async () => hook.result.current.retry());
     expect(hook.result.current.error).toBeNull();
-    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswer).toBe("First");
-    await act(async () =>
-      hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "After retry")),
-    );
-    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswer).toBe("After retry");
+    expect(hook.result.current.session?.quiz?.items[0]?.mark).toBe(true);
+    await act(async () => hook.result.current.changeQuiz((quiz) => setTriviaMark(quiz, false)));
+    expect(hook.result.current.session?.quiz?.items[0]?.mark).toBe(false);
+    const saved = await snapshots.readSnapshot(key, triviaSessionSchema);
+    expect(saved.value?.quiz?.items[0]?.mark).toBe(false);
     hook.unmount();
   });
 
@@ -228,7 +232,7 @@ describe("Trivia durable controller", () => {
     await act(async () => {
       await hook.result.current.resume();
       await hook.result.current.changeQuiz((current) =>
-        nextTriviaQuestion(revealTriviaAnswer(current)),
+        nextTriviaQuestion(setTriviaMark(revealTriviaAnswer(current), true)),
       );
     });
     expect(hook.result.current.session?.quiz?.phase).toBe("results");
@@ -263,7 +267,7 @@ describe("Trivia durable controller", () => {
 
   it("finishes already queued draft saves after leaving the page", async () => {
     const hook = await mount();
-    await act(async () => hook.result.current.start(settings()));
+    await act(async () => hook.result.current.start({ ...settings(), revealMode: "end" }));
     const gate = deferred();
     const originalWrite = snapshots.writeSnapshot;
     vi.spyOn(snapshots, "writeSnapshot").mockImplementationOnce(async (id, value) => {
@@ -280,6 +284,86 @@ describe("Trivia durable controller", () => {
     const saved = await snapshots.readSnapshot(key, triviaSessionSchema);
     expect(saved.value?.quiz?.items[0]?.writtenAnswer).toBe("Last draft");
     expect(setDeviceKeepAwake).toHaveBeenLastCalledWith(false);
+  });
+
+  it("restores exact-match defaults and manual overrides with the same shared score", async () => {
+    vi.mocked(loadTriviaCatalogue).mockResolvedValue(
+      content([
+        question(1, { acceptableAnswers: ["Accepted alias"] }),
+        question(2, { acceptableAnswers: ["Accepted alias"] }),
+      ]),
+    );
+    let hook = await mount();
+    await act(async () => {
+      await hook.result.current.start({ ...settings(), revealMode: "end" });
+      await hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "  ACCEPTED\t alias "));
+      await hook.result.current.changeQuiz(nextTriviaQuestion);
+      await hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "Wrong answer"));
+      await hook.result.current.changeQuiz(nextTriviaQuestion);
+    });
+    expect(hook.result.current.session?.quiz?.items.map((item) => item.mark)).toEqual([true, null]);
+    hook.unmount();
+    hook = await mount();
+    expect(hook.result.current.resumePending).toBe(true);
+    await act(async () => {
+      await hook.result.current.resume();
+      await hook.result.current.changeQuiz((quiz) => setTriviaMark(quiz, false));
+    });
+    hook.unmount();
+    hook = await mount();
+    expect(hook.result.current.session?.quiz?.items[0]?.mark).toBe(false);
+    await act(async () => {
+      await hook.result.current.resume();
+      await hook.result.current.changeQuiz(nextTriviaQuestion);
+    });
+    expect(hook.result.current.session?.quiz?.items[1]?.mark).toBeNull();
+    await act(async () => hook.result.current.changeQuiz(nextTriviaQuestion));
+    expect(hook.result.current.session?.quiz?.phase).toBe("answers");
+    await act(async () => {
+      await hook.result.current.changeQuiz((quiz) => setTriviaMark(quiz, true));
+      await hook.result.current.changeQuiz(nextTriviaQuestion);
+    });
+    expect(hook.result.current.session?.quiz?.phase).toBe("results");
+    hook.unmount();
+    hook = await mount();
+    const restored = hook.result.current.session?.quiz;
+    expect(restored?.phase).toBe("results");
+    expect(restored?.items.map((item) => item.mark)).toEqual([false, true]);
+    expect(restored?.items.filter((item) => item.mark === true)).toHaveLength(1);
+    expect(restored?.items[0]?.writtenAnswer).toBe("  ACCEPTED\t alias ");
+    hook.unmount();
+  });
+
+  it("serializes rapid manual mark and advance against the latest committed checkpoint", async () => {
+    const hook = await mount();
+    await act(async () => {
+      await hook.result.current.start(settings());
+      await hook.result.current.changeQuiz(revealTriviaAnswer);
+    });
+    const gate = deferred();
+    const originalWrite = snapshots.writeSnapshot;
+    vi.spyOn(snapshots, "writeSnapshot").mockImplementationOnce(async (id, value) => {
+      await gate.promise;
+      await originalWrite(id, value);
+    });
+    let marking!: Promise<void>;
+    let advancing!: Promise<void>;
+    act(() => {
+      marking = hook.result.current.changeQuiz((quiz) => setTriviaMark(quiz, true));
+      advancing = hook.result.current.changeQuiz(nextTriviaQuestion);
+    });
+    expect(hook.result.current.session?.quiz?.items[0]?.mark).toBeNull();
+    expect(hook.result.current.session?.quiz?.cursor).toBe(0);
+    await act(async () => {
+      gate.resolve();
+      await Promise.all([marking, advancing]);
+    });
+    expect(hook.result.current.session?.quiz?.cursor).toBe(1);
+    expect(hook.result.current.session?.quiz?.items[0]?.mark).toBe(true);
+    const saved = await snapshots.readSnapshot(key, triviaSessionSchema);
+    expect(saved.value?.quiz?.cursor).toBe(1);
+    expect(saved.value?.quiz?.items[0]?.mark).toBe(true);
+    hook.unmount();
   });
 
   it("preserves the existing quiz when Kids preferences fail and reports catalogue fallback separately", async () => {

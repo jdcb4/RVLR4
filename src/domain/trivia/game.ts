@@ -51,6 +51,7 @@ const quizSchema = z
             writtenAnswer: z.string().max(500),
             revealed: z.boolean(),
             excluded: z.boolean(),
+            mark: z.boolean().nullable(),
           })
           .strict(),
       )
@@ -89,12 +90,21 @@ const quizSchema = z
       ) {
         issue("Question does not match quiz settings.");
       }
-      if (item.excluded && (item.shownAt !== null || item.revealed || item.writtenAnswer !== "")) {
+      if (
+        item.excluded &&
+        (item.shownAt !== null || item.revealed || item.writtenAnswer !== "" || item.mark !== null)
+      ) {
         issue("Excluded questions cannot have played state.");
       }
-      if (item.shownAt === null && (item.revealed || item.writtenAnswer !== "")) {
+      if (
+        item.shownAt === null &&
+        (item.revealed || item.writtenAnswer !== "" || item.mark !== null)
+      ) {
         issue("Unshown questions cannot have answers.");
       }
+      if (!item.revealed && item.mark !== null) issue("Unrevealed answers cannot be marked.");
+      if (quiz.settings.revealMode === "each" && item.writtenAnswer !== "")
+        issue("Written answers are only available in end mode.");
       if (
         item.shownAt !== null &&
         item.question.expiresAt &&
@@ -106,7 +116,8 @@ const quizSchema = z
         if (
           index < quiz.cursor &&
           !item.excluded &&
-          (item.shownAt === null || (quiz.settings.revealMode === "each" && !item.revealed))
+          (item.shownAt === null ||
+            (quiz.settings.revealMode === "each" && (!item.revealed || item.mark === null)))
         )
           issue("Incomplete previous question.");
         if (index === quiz.cursor && (item.excluded || item.shownAt === null))
@@ -119,6 +130,8 @@ const quizSchema = z
         if (item.shownAt === null) issue("Unshown question after question phase.");
         if (item.revealed !== (quiz.phase === "results" || index <= quiz.cursor))
           issue("Invalid answer reveal order.");
+        if ((quiz.phase === "results" || index < quiz.cursor) && item.mark === null)
+          issue("Reviewed answers must be marked.");
       }
       if (quiz.phase === "answers" && index === quiz.cursor && item.excluded)
         issue("Cannot review an excluded question.");
@@ -133,7 +146,7 @@ const snapshotSize = (value: unknown) => new TextEncoder().encode(JSON.stringify
 
 export const triviaSessionSchema = z
   .object({
-    schemaVersion: z.literal(2),
+    schemaVersion: z.literal(3),
     savedAt: z.string().datetime(),
     settings: triviaSettingsSchema,
     quiz: quizSchema.nullable(),
@@ -155,7 +168,7 @@ export type TriviaSession = z.infer<typeof triviaSessionSchema>;
 
 export function createTriviaSession(): TriviaSession {
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     savedAt: new Date().toISOString(),
     settings: {
       count: 10,
@@ -170,7 +183,7 @@ export function createTriviaSession(): TriviaSession {
 function assertSaveSize(quiz: TriviaQuiz): TriviaQuiz {
   if (
     snapshotSize({
-      schemaVersion: 2,
+      schemaVersion: 3,
       savedAt: new Date().toISOString(),
       settings: quiz.settings,
       quiz,
@@ -228,6 +241,7 @@ export function startTriviaQuiz(
       writtenAnswer: "",
       revealed: false,
       excluded: false,
+      mark: null,
     })),
     cursor: 0,
     phase: "questions",
@@ -238,6 +252,17 @@ export function startTriviaQuiz(
   return assertSaveSize(prepareTriviaQuiz(quiz, now));
 }
 
+function revealWrittenAnswer(item: TriviaQuiz["items"][number]): TriviaQuiz["items"][number] {
+  const normalize = (text: string) => text.trim().toLowerCase().replace(/\s+/g, " ");
+  const answer = normalize(item.writtenAnswer);
+  const matches =
+    answer !== "" &&
+    [item.question.answer, ...item.question.acceptableAnswers].some(
+      (candidate) => normalize(candidate) === answer,
+    );
+  return { ...item, revealed: true, mark: matches ? true : null };
+}
+
 function finishQuestions(quiz: TriviaQuiz): TriviaQuiz {
   const cursor = quiz.items.findIndex((item) => item.shownAt !== null && !item.excluded);
   if (quiz.settings.revealMode === "end" && cursor >= 0) {
@@ -245,9 +270,7 @@ function finishQuestions(quiz: TriviaQuiz): TriviaQuiz {
       ...quiz,
       phase: "answers",
       cursor,
-      items: quiz.items.map((item, index) =>
-        index === cursor ? { ...item, revealed: true } : item,
-      ),
+      items: quiz.items.map((item, index) => (index === cursor ? revealWrittenAnswer(item) : item)),
     };
   }
   return { ...quiz, phase: "results", cursor: quiz.items.length };
@@ -298,10 +321,13 @@ export function revealTriviaAnswer(quiz: TriviaQuiz): TriviaQuiz {
 
 export function nextTriviaQuestion(quiz: TriviaQuiz, now = Date.now()): TriviaQuiz {
   if (quiz.phase === "results") return quiz;
+  const current = quiz.items[quiz.cursor];
   if (quiz.phase === "questions") {
-    if (quiz.settings.revealMode === "each" && !quiz.items[quiz.cursor]?.revealed) return quiz;
+    if (quiz.settings.revealMode === "each" && (!current?.revealed || current.mark === null))
+      return quiz;
     return prepareTriviaQuiz({ ...quiz, cursor: quiz.cursor + 1 }, now);
   }
+  if (!current?.revealed || current.mark === null) return quiz;
   const cursor = quiz.items.findIndex(
     (item, index) => index > quiz.cursor && item.shownAt !== null && !item.excluded,
   );
@@ -309,13 +335,19 @@ export function nextTriviaQuestion(quiz: TriviaQuiz, now = Date.now()): TriviaQu
   return {
     ...quiz,
     cursor,
-    items: quiz.items.map((item, index) => (index === cursor ? { ...item, revealed: true } : item)),
+    items: quiz.items.map((item, index) => (index === cursor ? revealWrittenAnswer(item) : item)),
   };
 }
 
 export function setTriviaAnswer(quiz: TriviaQuiz, text: string): TriviaQuiz {
   const current = quiz.items[quiz.cursor];
-  if (quiz.phase !== "questions" || !current || current.revealed) return quiz;
+  if (
+    quiz.phase !== "questions" ||
+    quiz.settings.revealMode !== "end" ||
+    !current ||
+    current.revealed
+  )
+    return quiz;
   if (text.length > 500) throw new Error("Written answers must be 500 characters or fewer.");
   return assertSaveSize({
     ...quiz,
@@ -323,4 +355,19 @@ export function setTriviaAnswer(quiz: TriviaQuiz, text: string): TriviaQuiz {
       index === quiz.cursor ? { ...item, writtenAnswer: text } : item,
     ),
   });
+}
+
+export function setTriviaMark(quiz: TriviaQuiz, mark: boolean): TriviaQuiz {
+  const current = quiz.items[quiz.cursor];
+  if (
+    quiz.phase === "results" ||
+    !current?.revealed ||
+    current.shownAt === null ||
+    current.excluded
+  )
+    return quiz;
+  return {
+    ...quiz,
+    items: quiz.items.map((item, index) => (index === quiz.cursor ? { ...item, mark } : item)),
+  };
 }
