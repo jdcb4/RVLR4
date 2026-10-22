@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.38.0 — 22 October 2026
+
+- Simplify Trivia setup with headings above the controls, 10/20/30-question presets and eight category toggle buttons plus Select all/Clear all in a three-column grid. Keep Start quiz in the fixed footer; show a shortage alert instead of an available-question count, and require at least one category.
+- Give Correct and Incorrect distinct green/red mark states while preserving Incorrect on the left and Correct on the right.
+- Keep the first settings page of every game temporary. Save later setup and game progress; returning or resetting to the first page removes its saved setup. Clean up older first-page snapshots without a resume chooser, with retry on storage failures. Completed WWW, Hat and Imposter games no longer store a synthetic first-page setup; Trivia's completed score and recap remain saved until reset.
+- Keep existing session schemas, active saves and content pack version 2.
+
 ## 0.37.1 — 22 October 2026
 
 - Place Trivia Correct on the right and Incorrect on the left.

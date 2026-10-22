@@ -17,7 +17,7 @@ import {
   setDeviceKeepAwake,
   subscribeDeviceActivity,
 } from "@/services/deviceLifecycle";
-import { readSnapshot, writeSnapshot } from "@/services/nativeSnapshotStore";
+import { readSnapshot, removeSnapshot, writeSnapshot } from "@/services/nativeSnapshotStore";
 
 const key = "trivia.device.v3";
 
@@ -115,6 +115,7 @@ class TriviaController {
         loadTriviaCatalogue(),
       ]);
       this.session = saved.value ?? createTriviaSession();
+      if (saved.value && !saved.value.quiz) await removeSnapshot(key);
       this.catalogue = content.pack.questions;
       this.packVersion = content.pack.version;
       this.warning = content.warning;
@@ -165,7 +166,8 @@ class TriviaController {
   private async commitPending() {
     const pending = this.pending;
     if (!pending) return;
-    await writeSnapshot(key, pending.session);
+    if (pending.session.quiz) await writeSnapshot(key, pending.session);
+    else await removeSnapshot(key);
     this.session = pending.session;
     this.pending = null;
     if (!this.session.quiz) this.resumePending = false;
@@ -181,7 +183,8 @@ class TriviaController {
     return this.enqueue(async () => {
       const session = this.current();
       if (session.quiz) throw new Error("Finish or reset this quiz before changing settings.");
-      await this.commit({ ...session, settings: captured });
+      this.session = triviaSessionSchema.parse({ ...session, settings: captured });
+      this.emit();
     });
   };
 

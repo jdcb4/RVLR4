@@ -93,14 +93,54 @@ async function mount() {
 }
 
 describe("Trivia durable controller", () => {
-  it("publishes only committed settings and serializes rapid answers against the latest save", async () => {
-    const hook = await mount();
-    const gate = deferred();
-    const originalWrite = snapshots.writeSnapshot;
-    const write = vi.spyOn(snapshots, "writeSnapshot").mockImplementationOnce(async (id, value) => {
-      await gate.promise;
-      await originalWrite(id, value);
+  it("keeps settings memory-only through visits and edits, and cleans old settings records", async () => {
+    const write = vi.spyOn(snapshots, "writeSnapshot");
+    let hook = await mount();
+    await act(async () => hook.result.current.saveSettings(settings()));
+    expect(hook.result.current.session?.settings.count).toBe(2);
+    expect(localStorage.getItem(storageKey)).toBeNull();
+    expect(write).not.toHaveBeenCalled();
+    hook.unmount();
+    await snapshots.writeSnapshot(key, { ...createTriviaSession(), settings: settings() });
+    write.mockClear();
+    hook = await mount();
+    expect(hook.result.current.resumePending).toBe(false);
+    expect(hook.result.current.session?.settings.count).toBe(2);
+    expect(localStorage.getItem(storageKey)).toBeNull();
+    expect(write).not.toHaveBeenCalled();
+    hook.unmount();
+  });
+
+  it("retries failed reset removal while retaining the quiz until deletion commits", async () => {
+    let hook = await mount();
+    await act(async () => hook.result.current.start(settings()));
+    const original = localStorage.getItem(storageKey);
+    hook.unmount();
+    const write = vi.spyOn(snapshots, "writeSnapshot");
+    const remove = vi.spyOn(snapshots, "removeSnapshot");
+    hook = await mount();
+    expect(hook.result.current.resumePending).toBe(true);
+    expect(localStorage.getItem(storageKey)).toBe(original);
+    expect(write).not.toHaveBeenCalled();
+    expect(remove).not.toHaveBeenCalled();
+    remove.mockRejectedValueOnce(new Error("Storage unavailable"));
+    await act(async () => {
+      await expect(hook.result.current.reset()).rejects.toThrow("Storage unavailable");
     });
+    expect(localStorage.getItem(storageKey)).toBe(original);
+    expect(hook.result.current.session?.quiz).not.toBeNull();
+    await act(async () => hook.result.current.retry());
+    expect(hook.result.current.session?.quiz).toBeNull();
+    expect(hook.result.current.resumePending).toBe(false);
+    expect(localStorage.getItem(storageKey)).toBeNull();
+    expect(write).not.toHaveBeenCalled();
+    hook.unmount();
+  });
+
+  it("keeps settings in memory and serializes rapid answers against the latest save", async () => {
+    const hook = await mount();
+    const originalWrite = snapshots.writeSnapshot;
+    const write = vi.spyOn(snapshots, "writeSnapshot");
     const updated = { ...settings(), revealMode: "end" as const };
     let saving!: Promise<void>;
     act(() => {
@@ -108,7 +148,6 @@ describe("Trivia durable controller", () => {
     });
     expect(hook.result.current.session?.settings.revealMode).toBe("each");
     await act(async () => {
-      gate.resolve();
       await saving;
       await hook.result.current.start(updated);
     });

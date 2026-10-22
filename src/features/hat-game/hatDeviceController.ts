@@ -50,6 +50,8 @@ export class HatDeviceController {
   private pauseEpoch = 0;
   private deviceActive = isDeviceActive();
   private replacing = false;
+  private pendingReplacement = false;
+  private hasSnapshot = false;
   private keepAwake = false;
   private warningTurn = "";
   private draftTimer: ReturnType<typeof setTimeout> | null = null;
@@ -122,11 +124,22 @@ export class HatDeviceController {
     this.cancelDraft();
     if (!this.loaded || this.hydrationFailed) return false;
     const record = {
-      ...(session.snapshot.session?.stage === "results" ? this.freshSetup(session) : session),
+      ...session,
       savedAt: new Date().toISOString(),
     };
     try {
-      await writeSnapshot(HAT_DEVICE_SESSION_KEY, record);
+      const resumable =
+        session.snapshot.session?.stage !== "results" &&
+        Boolean(
+          session.snapshot.session || !["landing", "settings"].includes(session.snapshot.step),
+        );
+      if (resumable) {
+        this.hasSnapshot = true;
+        await writeSnapshot(HAT_DEVICE_SESSION_KEY, record);
+      } else if (this.hasSnapshot) {
+        await removeSnapshot(HAT_DEVICE_SESSION_KEY);
+        this.hasSnapshot = false;
+      }
       this.session = { ...this.session, savedAt: record.savedAt };
       return true;
     } catch (error) {
@@ -160,18 +173,26 @@ export class HatDeviceController {
           HAT_DEVICE_SESSION_KEY,
           hatDeviceSessionSchema,
         );
-        this.loaded = true;
+        this.hasSnapshot = value !== null;
         this.hydrationFailed = false;
         this.storageError = "";
         this.notice = recovered ? "Recovered the previous saved checkpoint." : "";
-        this.savedGameAvailable = value !== null;
         const restored =
           value?.snapshot.session?.stage === "results" ? this.freshSetup(value) : value;
+        this.savedGameAvailable = Boolean(
+          restored &&
+          (restored.snapshot.session || !["landing", "settings"].includes(restored.snapshot.step)),
+        );
+        if (restored && !this.savedGameAvailable) {
+          await removeSnapshot(HAT_DEVICE_SESSION_KEY);
+          this.hasSnapshot = false;
+        }
+        this.loaded = true;
         this.install(
           restored
             ? {
                 ...restored,
-                paused: true,
+                paused: this.savedGameAvailable,
                 snapshot: {
                   ...restored.snapshot,
                   clueEntryRevealed: false,
@@ -232,6 +253,7 @@ export class HatDeviceController {
     this.error = "";
     this.install({ ...this.current(), snapshot });
     this.cancelDraft();
+    if (!snapshot.session && ["landing", "settings"].includes(snapshot.step)) return;
     this.draftTimer = setTimeout(() => {
       this.draftTimer = null;
       void this.save();
@@ -476,11 +498,13 @@ export class HatDeviceController {
     this.cancelDraft();
     this.saving = true;
     this.replacing = true;
+    this.pendingReplacement = true;
     this.pauseEpoch += 1;
     const epoch = this.pauseEpoch;
     const next = this.freshSetup(this.current());
     this.install({ ...this.current(), paused: true });
     if (await this.save(next)) {
+      this.pendingReplacement = false;
       this.savedGameAvailable = false;
       this.error = "";
       this.install({
@@ -495,6 +519,11 @@ export class HatDeviceController {
   };
   retrySave = async () => {
     if (this.saving) return;
+    if (this.pendingReplacement) {
+      this.storageError = "";
+      await this.startNewGame();
+      return;
+    }
     this.saving = true;
     this.emit();
     if (this.hydrationFailed) {

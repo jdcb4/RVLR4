@@ -2,7 +2,11 @@
 
 ## Current milestone
 
-0.37.0 adds Correct/Incorrect self-marking, one shared score and a scrollable question recap to cooperative Trivia, with no teams. Reveal after each question has no answer writing; reveal at the end always offers an optional shared answer field. On reveal, an exact canonical-answer or alias match after trimming, lowercasing and collapsing whitespace is marked correct automatically; other answers require a manual mark. Marks can be overridden, and a revealed question needs a mark before advancing. Expired unshown questions are excluded from the score and recap. The new version-3 session starts fresh rather than loading earlier Trivia v1/v2 saves. The 30-question starter bank remains content pack version 2. WWW, Imposter and Trivia retain visible Easy/Medium/Hard buttons with allowed-tier shortage filling and Hard as the default. App Settings offers Kids mode for new games and Hat suggestions.
+0.38.0 simplifies Trivia setup: headings sit above option groups, question counts are 10/20/30, and eight category toggles plus Select all/Clear all form a three-column grid. Start quiz stays in the fixed footer. Insufficient content shows a shortage alert without an availability count; no categories shows Choose at least one category. Correct and Incorrect use distinct green/red states, separate from the primary action colour, with Incorrect on the left and Correct on the right.
+
+The first settings page of every game is temporary. Later setup and game progress remain durable. Returning or resetting to the first page removes its saved setup; older first-page snapshots are cleaned up without a resume chooser, and storage failures remain retryable. WWW, Hat and Imposter completion no longer stores a synthetic first-page setup. Trivia's completed score and recap remain saved until reset. Session schemas and existing active saves are unchanged.
+
+Cooperative Trivia retains no teams, optional writing only in reveal-at-end mode, the persisted Ready for the answers? handoff, exact-answer automatic marking and manual overrides. Revealed questions require a mark before advancing; expired unshown questions are excluded from the shared score and recap. The 30-question starter bank remains content pack version 2. WWW, Imposter and Trivia retain visible Easy/Medium/Hard buttons with allowed-tier shortage filling and Hard as the default. App Settings offers Kids mode for new games and Hat suggestions.
 
 The picker opens independent saved sessions. Five app-wide themes retain matching illustrated game artwork and the approved Recess cut-paper treatment. Settings and Info use separate header icons; appearance is stored independently of games. Settings → Show Trivia remains off by default. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
 
@@ -57,8 +61,10 @@ USB debugging and approving the computer on the phone. Record the app, Android,
 WebView and font/display-scale versions/settings with feedback.
 
 1. Open in airplane mode and start Who What Where.
-2. Partially edit names/settings, switch apps and return. Then force-stop and
-   relaunch; Resume should restore the same setup step and saved entries.
+2. Edit the first settings page, then leave and reopen the game; it should open
+   settings directly without a resume chooser. Advance to roster setup, edit
+   names, switch apps, then force-stop and relaunch; Resume should restore that
+   later setup step and saved entries.
 3. Start a timed turn. Lock for longer than the turn duration, unlock, and Resume.
    Time should remain paused while away; no points or turns should advance.
 4. Force-stop during play and relaunch. Resume should keep scores/current word
@@ -128,13 +134,16 @@ for this version remains a user checkpoint.
 
 ## Current phone UX
 
-Who What Where opens directly to settings on first use. If a session exists,
+Who What Where opens directly to settings on first use. If later setup or a game exists,
 its game entry offers Resume or confirmed Start new game with the saved date/time.
 The chooser lives inside the selected game, not the hub. Returning to an active
 turn first opens the paused summary; a separate Resume turn starts the clock.
 
 Setup follows Settings → Teams → Review. Save team advances through the teams;
 the secondary footer names the previous team or Settings.
+The first settings page is temporary; advancing to Teams saves the setup.
+Returning to Settings removes that saved setup and leaves settings editable in
+the current visit. Save/remove failures offer retry before continuing.
 Review precedes starting the game. Handoff identifies the presenter and offers
 one named confirmation that starts the turn. A completed turn gets a word recap;
 a completed round adds standings before the next handoff. These presentation
@@ -407,3 +416,13 @@ Full verify passed (341 tests / 51 files, typecheck, ESLint and production build
 Recess browser review at 360x640 covered setup shadows, the focused answer input, the ready screen and answer controls. The scroll area now leaves 8px drawing room on both sides without narrowing content; focus outlines and offset shadows are visible. The scoped Impeccable detector reported no findings. The existing Vite catalogue-size advisory remains.
 
 Delivered `\\JNAS\Media\DropBox\RVLRY-0.37.1-trivia-flow.apk`; SHA-256 `266488EFF7287D9B08CB79C7A4840F7CBC707437B2ADFA66E6C3209C9FE0EE25` matches the local `out/RVLRY-0.37.1-trivia-flow.apk`.
+
+## Settings and save eligibility — 0.38.0, 22 October 2026
+
+Full verify passed: TypeScript, ESLint, 352 tests across 51 files and production build. Android debug assembly, two JVM checks, all 19 API-35 instrumentation tests and separate snapshot/content force-stop recovery phases passed. Controller tests cover temporary first-page edits, durable later setup, first-page return cleanup, legacy first-page cleanup and retryable failed deletion. Native flow checks the nine-button category group, fixed Trivia footer and fresh 30-question start. Active saves retain their schemas; completed Trivia score/recap remains saved.
+
+The first device attempt could not run because the earlier emulator was absent and the only connected hardware was below the app minimum API. Recreated RVLRY_API35 using the already-installed API-35 Play Store x86_64 image and Pixel 7 profile, booted headlessly, then reran with ANDROID_SERIAL=emulator-5554. The successful run and its recovery phases target that emulator; no physical-device acceptance is claimed.
+
+Browser review at 360x640 covered the complete Recess settings screen without scrolling and the distinct green/red mark controls. The scoped Impeccable detector reported no findings. Fallow retains 41 reviewed findings and 10 clone groups; no suppressions added. Vite retains the existing word-catalogue size advisory.
+
+Delivered `\\JNAS\Media\DropBox\RVLRY-0.38.0-settings.apk`; SHA-256 `8BE406A2892668642D6C714867454A100F7D13AE49652EAE03A34696BDA3A26C` matches `out/RVLRY-0.38.0-settings.apk`.

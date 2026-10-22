@@ -6,13 +6,9 @@ import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/Ga
 import { GameArtwork } from "@/components/GameArtwork";
 import { GameShell } from "@/components/GameShell";
 import { ModalDialog } from "@/components/ModalDialog";
-import { DifficultySelect } from "@/components/setup/DifficultySelect";
+import { OptionButton, OptionGroup } from "@/components/setup/OptionGroup";
 import { Button } from "@/components/ui/button";
-import {
-  isTriviaQuestionEligible,
-  triviaCategories,
-  type TriviaQuestion,
-} from "@/data/triviaSchema";
+import { isTriviaQuestionEligible, triviaCategories } from "@/data/triviaSchema";
 import {
   nextTriviaQuestion,
   revealTriviaAnswer,
@@ -40,6 +36,11 @@ export function TriviaPage() {
   const game = useTrivia();
   const navigate = useNavigate();
   const [confirmNew, setConfirmNew] = useState(false);
+  const [settingsDraft, setSettingsDraft] = useState<TriviaSettings | null>(null);
+  const preferences = useSyncExternalStore(subscribeContentPreferences, getContentPreferenceState);
+  useEffect(() => {
+    void initializeContentPreferences();
+  }, []);
   const { session, busy, error, resumePending } = game;
   const quiz = session?.quiz;
   const leave = useCallback(() => {
@@ -87,14 +88,51 @@ export function TriviaPage() {
       </div>
     );
   } else if (!quiz) {
+    const settings = settingsDraft ?? {
+      ...session.settings,
+      count: [10, 20, 30].includes(session.settings.count) ? session.settings.count : 10,
+    };
+    const eligibleCount = game.catalogue.filter(
+      (question) =>
+        settings.categories.includes(question.category) &&
+        isTriviaQuestionEligible(question, {
+          kidsMode: preferences.kidsMode,
+          difficulty: settings.difficulty,
+        }),
+    ).length;
+    const valid =
+      triviaSettingsSchema.safeParse(settings).success && [10, 20, 30].includes(settings.count);
     content = (
       <TriviaSetup
-        initial={session.settings}
-        questions={game.catalogue}
-        busy={busy}
-        blocked={!!error}
-        onChange={(settings) => void game.saveSettings(settings).catch(ignoreFailure)}
-        onStart={(settings) => void game.start(settings).catch(ignoreFailure)}
+        settings={settings}
+        onChange={setSettingsDraft}
+        insufficient={settings.count > eligibleCount}
+      />
+    );
+    if (preferences.error)
+      content = (
+        <>
+          {content}
+          <p role="alert" className="text-destructive">
+            {preferences.error}
+          </p>
+          <Button variant="outline" onClick={() => void initializeContentPreferences()}>
+            Retry Kids mode
+          </Button>
+        </>
+      );
+    footer = (
+      <PrimaryFooterButton
+        label="Start quiz"
+        disabled={
+          busy ||
+          !!error ||
+          !valid ||
+          !preferences.loaded ||
+          preferences.busy ||
+          settings.count > eligibleCount
+        }
+        onClick={() => void game.start(settings).catch(ignoreFailure)}
       />
     );
   } else if (quiz.phase === "ready") {
@@ -239,179 +277,91 @@ export function TriviaPage() {
 }
 
 function TriviaSetup({
-  initial,
-  questions,
-  busy,
-  blocked,
+  settings,
   onChange,
-  onStart,
+  insufficient,
 }: {
-  initial: TriviaSettings;
-  questions: TriviaQuestion[];
-  busy: boolean;
-  blocked: boolean;
+  settings: TriviaSettings;
   onChange: (settings: TriviaSettings) => void;
-  onStart: (settings: TriviaSettings) => void;
+  insufficient: boolean;
 }) {
-  const [draft, setDraft] = useState(initial);
-  const [custom, setCustom] = useState(![10, 20, 30].includes(initial.count));
-  const preferences = useSyncExternalStore(subscribeContentPreferences, getContentPreferenceState);
-  useEffect(() => {
-    void initializeContentPreferences();
-  }, []);
-  const eligibleCount = questions.filter(
-    (question) =>
-      draft.categories.includes(question.category) &&
-      isTriviaQuestionEligible(question, {
-        kidsMode: preferences.kidsMode,
-        difficulty: draft.difficulty,
-      }),
-  ).length;
-  const update = (patch: Partial<TriviaSettings>) => {
-    const next = { ...draft, ...patch };
-    setDraft(next);
-    const parsed = triviaSettingsSchema.safeParse(next);
-    if (parsed.success) onChange(parsed.data);
-  };
-  const valid = triviaSettingsSchema.safeParse(draft).success;
+  const update = (patch: Partial<TriviaSettings>) => onChange({ ...settings, ...patch });
+  const all = settings.categories.length === triviaCategories.length;
   return (
-    <section className="space-y-4">
-      <div className="space-y-1">
-        <h2 className="text-typ-section-title font-semibold">Set up your quiz</h2>
-        <p className="text-typ-muted text-muted-foreground">
-          Take your time and work out the answers together.
-        </p>
-      </div>
-      {questions.length === 0 && (
-        <div role="status" className="space-y-1 rounded-xl bg-semantic-muted-panel-bg p-3">
-          <h3 className="font-semibold">Questions are not available yet</h3>
-          <p className="text-typ-muted text-muted-foreground">
-            Add a reviewed question pack to play.
-          </p>
-        </div>
-      )}
-      <fieldset className="space-y-2">
-        <legend className="mb-2 text-typ-ui font-semibold">Questions</legend>
-        <div className="grid grid-cols-4 gap-2">
-          {[10, 20, 30].map((count) => (
-            <Button
-              key={count}
-              variant={!custom && draft.count === count ? "default" : "outline"}
-              aria-pressed={!custom && draft.count === count}
-              onClick={() => {
-                setCustom(false);
-                update({ count });
-              }}
-            >
-              {count}
-            </Button>
-          ))}
-          <Button
-            variant={custom ? "default" : "outline"}
-            aria-pressed={custom}
-            onClick={() => setCustom(true)}
+    <section className="space-y-3">
+      <h2 className="text-typ-section-title font-semibold">Set up your quiz</h2>
+      <OptionGroup label="Questions" optionsClassName="grid grid-cols-3 gap-2">
+        {[10, 20, 30].map((count) => (
+          <OptionButton
+            key={count}
+            selected={settings.count === count}
+            onClick={() => update({ count })}
           >
-            Custom
-          </Button>
-        </div>
-        {custom && (
-          <label className="flex items-center gap-3 text-typ-ui">
-            <span className="flex-1">Custom count (1–100)</span>
-            <input
-              className={`${inputClass} w-24`}
-              type="number"
-              min={1}
-              max={100}
-              value={draft.count || ""}
-              onChange={(event) => update({ count: Number(event.target.value) })}
-            />
-          </label>
-        )}
-      </fieldset>
-      <DifficultySelect
-        value={draft.difficulty}
-        onChange={(difficulty) => update({ difficulty })}
-      />
-      <details className="rounded-xl border border-border px-3 py-2">
-        <summary className="cursor-pointer py-1 text-typ-ui font-semibold">
-          Categories · {draft.categories.length} of {triviaCategories.length}
-        </summary>
-        <div className="mt-2">
-          {triviaCategories.map((category) => (
-            <label key={category} className="flex min-h-12 items-center gap-2 text-typ-ui">
-              <input
-                className="size-5 shrink-0 accent-primary"
-                type="checkbox"
-                checked={draft.categories.includes(category)}
-                onChange={(event) =>
-                  update({
-                    categories: event.target.checked
-                      ? [...draft.categories, category]
-                      : draft.categories.filter((value) => value !== category),
-                  })
-                }
-              />
-              <span>{triviaCategoryLabels[category]}</span>
-            </label>
-          ))}
-        </div>
-      </details>
-      <fieldset>
-        <legend className="mb-2 text-typ-ui font-semibold">Reveal answers</legend>
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant={draft.revealMode === "each" ? "default" : "outline"}
-            aria-pressed={draft.revealMode === "each"}
-            onClick={() => update({ revealMode: "each" })}
+            {count}
+          </OptionButton>
+        ))}
+      </OptionGroup>
+      <OptionGroup label="Difficulty" optionsClassName="grid grid-cols-3 gap-2">
+        {(["easy", "medium", "hard"] as const).map((difficulty) => (
+          <OptionButton
+            key={difficulty}
+            selected={(settings.difficulty === "all" ? "hard" : settings.difficulty) === difficulty}
+            onClick={() => update({ difficulty })}
           >
-            After each question
-          </Button>
-          <Button
-            variant={draft.revealMode === "end" ? "default" : "outline"}
-            aria-pressed={draft.revealMode === "end"}
-            onClick={() => update({ revealMode: "end" })}
+            {difficulty[0]!.toUpperCase() + difficulty.slice(1)}
+          </OptionButton>
+        ))}
+      </OptionGroup>
+      <OptionGroup
+        label="Categories"
+        optionsClassName="grid grid-cols-3 gap-2 [&>button]:h-12 [&>button]:px-1 [&>button]:py-1 [&>button]:text-typ-micro"
+      >
+        {triviaCategories.map((category) => (
+          <OptionButton
+            key={category}
+            selected={settings.categories.includes(category)}
+            onClick={() =>
+              update({
+                categories: settings.categories.includes(category)
+                  ? settings.categories.filter((value) => value !== category)
+                  : [...settings.categories, category],
+              })
+            }
           >
-            At the end
-          </Button>
-        </div>
-      </fieldset>
-      {!valid && (
+            {triviaCategoryLabels[category]}
+          </OptionButton>
+        ))}
+        <Button
+          variant="outline"
+          onClick={() => update({ categories: all ? [] : [...triviaCategories] })}
+        >
+          {all ? "Clear all" : "Select all"}
+        </Button>
+      </OptionGroup>
+      <OptionGroup label="Reveal answers" optionsClassName="grid grid-cols-2 gap-2">
+        <OptionButton
+          selected={settings.revealMode === "each"}
+          onClick={() => update({ revealMode: "each" })}
+        >
+          After each question
+        </OptionButton>
+        <OptionButton
+          selected={settings.revealMode === "end"}
+          onClick={() => update({ revealMode: "end" })}
+        >
+          At the end
+        </OptionButton>
+      </OptionGroup>
+      {settings.categories.length === 0 ? (
         <p role="alert" className="text-typ-muted text-destructive">
-          Choose 1 to 100 questions and at least one category.
+          Choose at least one category.
         </p>
-      )}
-      {questions.length > 0 && (
-        <p role="status" className="text-typ-muted text-muted-foreground">
-          {eligibleCount} questions available{preferences.kidsMode ? " in Kids mode" : ""}.{" "}
-          {draft.count > eligibleCount ? "Choose fewer questions or change the filters." : ""}
+      ) : insufficient ? (
+        <p role="alert" className="text-typ-muted text-destructive">
+          Not enough questions match these settings. Choose fewer questions or broaden your
+          selection.
         </p>
-      )}
-      {preferences.error && (
-        <div className="space-y-2">
-          <p role="alert" className="text-destructive">
-            {preferences.error}
-          </p>
-          <Button
-            variant="outline"
-            disabled={preferences.busy}
-            onClick={() => void initializeContentPreferences()}
-          >
-            Retry Kids mode
-          </Button>
-        </div>
-      )}
-      <PrimaryFooterButton
-        label={busy ? "Saving…" : "Start quiz"}
-        disabled={
-          busy ||
-          blocked ||
-          !valid ||
-          !preferences.loaded ||
-          preferences.busy ||
-          draft.count > eligibleCount
-        }
-        onClick={() => onStart(draft)}
-      />
+      ) : null}
     </section>
   );
 }
@@ -498,7 +448,9 @@ function TriviaQuestionView({
               return (
                 <Button
                   key={String(correct)}
-                  variant={item.mark === correct ? "default" : "outline"}
+                  variant="outline"
+                  className="trivia-mark"
+                  data-mark={correct ? "correct" : "incorrect"}
                   aria-pressed={item.mark === correct}
                   disabled={busy || blocked}
                   onClick={() => onChange((current) => setTriviaMark(current, correct))}

@@ -131,6 +131,31 @@
   scroll-margin-bottom: 9rem;
 }
 
+/* Marking is semantic feedback, independent of each theme's primary action colour. */
+.trivia-mark[data-mark="correct"] {
+  --mark-soft: var(--semantic-answer-correct-soft);
+  --mark-ink: var(--semantic-answer-correct-ink);
+  --mark-selected: var(--semantic-answer-correct-selected);
+}
+.trivia-mark[data-mark="incorrect"] {
+  --mark-soft: var(--semantic-answer-incorrect-soft);
+  --mark-ink: var(--semantic-answer-incorrect-ink);
+  --mark-selected: var(--semantic-answer-incorrect-selected);
+}
+.trivia-mark[data-mark] {
+  background: var(--mark-soft);
+  color: var(--mark-ink);
+  border: 2px solid var(--mark-ink);
+}
+.trivia-mark[data-mark][aria-pressed="true"] {
+  background: var(--mark-selected);
+  color: var(--semantic-answer-selected-ink);
+}
+.trivia-mark[data-mark]:hover:not(:disabled) {
+  outline: 1px solid var(--mark-ink);
+  outline-offset: 1px;
+}
+
 /* Accessibility: honour the OS reduced-motion preference. The confetti on
  * final results is purely decorative — silencing the falling animation
  * removes vestibular load without removing the elements themselves. */

@@ -114,6 +114,45 @@ describe("WWW device session durability and lifecycle", () => {
     vi.useRealTimers();
   });
 
+  it("keeps the first settings page ephemeral and clears saves when returning from team setup", async () => {
+    const controller = new WhoWhatWhereDeviceController();
+    await controller.hydrate();
+    controller.goToSettingsFromLanding();
+    await settle();
+    controller.updateSettings({
+      ...controller.getSnapshot().session.setup.settings,
+      totalRounds: 4,
+    });
+    await advance(400);
+    expect(await controller.leaveGame()).toBe(true);
+    expect(writeSnapshot).not.toHaveBeenCalled();
+    expect(removeSnapshot).not.toHaveBeenCalled();
+    expect(controller.getSnapshot().session.setup.settings.totalRounds).toBe(4);
+    await controller.resumeGame();
+    controller.goToTeamSetup();
+    await settle();
+    expect(device.saved).toMatchObject({ mode: "team", setup: { settings: { totalRounds: 4 } } });
+    controller.goBackFromTeamSetup();
+    await settle();
+    expect(device.saved).toBeNull();
+    expect(controller.getSnapshot().session.mode).toBe("settings");
+    expect(controller.getSnapshot().session.setup.settings.totalRounds).toBe(4);
+    expect(removeSnapshot).toHaveBeenCalledOnce();
+  });
+
+  it.each(["landing", "settings"] as const)(
+    "cleans legacy %s saves without offering resume",
+    async (mode) => {
+      device.saved = { ...createWhoWhatWhereDeviceSession(), mode, paused: true };
+      const controller = new WhoWhatWhereDeviceController();
+      await controller.hydrate();
+      expect(controller.getSnapshot().savedGameAvailable).toBe(false);
+      expect(controller.getSnapshot().session.paused).toBe(false);
+      expect(device.saved).toBeNull();
+      expect(writeSnapshot).not.toHaveBeenCalled();
+    },
+  );
+
   it("captures Kids mode once per match and keeps word settings through later turns and restoration", async () => {
     vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
     const controller = new WhoWhatWhereDeviceController();
@@ -356,7 +395,7 @@ describe("WWW device session durability and lifecycle", () => {
   it("keeps unsaved draft changes in memory behind a pause cover and retries the same state", async () => {
     const controller = new WhoWhatWhereDeviceController();
     await controller.hydrate();
-    controller.goToSettingsFromLanding();
+    controller.goToTeamSetup();
     await settle();
     vi.mocked(writeSnapshot).mockRejectedValueOnce(new Error("Disk is full"));
     controller.updateSettings({
@@ -369,7 +408,7 @@ describe("WWW device session durability and lifecycle", () => {
     expect(controller.getSnapshot().session.setup.settings.totalRounds).toBe(4);
     expect(await controller.leaveGame()).toBe(false);
     controller.goToTeamSetup();
-    expect(controller.getSnapshot().session.mode).toBe("settings");
+    expect(controller.getSnapshot().session.mode).toBe("team");
     await controller.retrySave();
     expect(controller.getSnapshot().storageError).toBe("");
     expect(controller.getSnapshot().session.paused).toBe(true);
@@ -497,11 +536,11 @@ describe("WWW device session durability and lifecycle", () => {
     const restored = new WhoWhatWhereDeviceController();
     await restored.hydrate();
     let finishWrite: (() => void) | undefined;
-    vi.mocked(writeSnapshot).mockImplementationOnce(
-      (_key, value) =>
+    vi.mocked(removeSnapshot).mockImplementationOnce(
+      () =>
         new Promise<void>((resolve) => {
           finishWrite = () => {
-            device.saved = structuredClone(value);
+            device.saved = null;
             resolve();
           };
         }),
@@ -519,7 +558,7 @@ describe("WWW device session durability and lifecycle", () => {
       session: { mode: "settings", match: null, paused: false, presentationStage: null },
     });
     expect(restored.getSnapshot().session.setup).toEqual(original.setup);
-    expect((device.saved as WhoWhatWhereDeviceSession).match).toBeNull();
+    expect(device.saved).toBeNull();
   });
 
   it("opens a saved active turn behind its paused summary until Resume turn is selected", async () => {
@@ -547,7 +586,7 @@ describe("WWW device session durability and lifecycle", () => {
     const original = structuredClone(device.saved) as WhoWhatWhereDeviceSession;
     const restored = new WhoWhatWhereDeviceController();
     await restored.hydrate();
-    vi.mocked(writeSnapshot).mockRejectedValueOnce(new Error("Disk is full"));
+    vi.mocked(removeSnapshot).mockRejectedValueOnce(new Error("Disk is full"));
     await restored.startOverFromPendingMatch();
     expect(restored.getSnapshot()).toMatchObject({
       savedGameAvailable: true,
@@ -557,7 +596,8 @@ describe("WWW device session durability and lifecycle", () => {
     expect(device.saved).toEqual(original);
     await restored.retrySave();
     await restored.resumeGame();
-    expect(restored.getSnapshot().session.match).toEqual(original.match);
+    expect(restored.getSnapshot().session.match).toBeNull();
+    expect(device.saved).toBeNull();
     expect(restored.getSnapshot().session.paused).toBe(false);
   });
 
@@ -566,11 +606,11 @@ describe("WWW device session durability and lifecycle", () => {
     controller.pauseGame();
     await settle();
     let finishWrite: (() => void) | undefined;
-    vi.mocked(writeSnapshot).mockImplementationOnce(
-      (_key, value) =>
+    vi.mocked(removeSnapshot).mockImplementationOnce(
+      () =>
         new Promise<void>((resolve) => {
           finishWrite = () => {
-            device.saved = structuredClone(value);
+            device.saved = null;
             resolve();
           };
         }),
@@ -581,13 +621,14 @@ describe("WWW device session durability and lifecycle", () => {
     device.activity?.(false);
     finishWrite?.();
     await replacing;
-    expect(writeSnapshot).toHaveBeenCalledTimes(writeCount + 1);
+    expect(writeSnapshot).toHaveBeenCalledTimes(writeCount);
+    expect(removeSnapshot).toHaveBeenCalledOnce();
     expect(controller.getSnapshot().session).toMatchObject({
       mode: "settings",
       match: null,
       paused: true,
     });
-    expect((device.saved as WhoWhatWhereDeviceSession).match).toBeNull();
+    expect(device.saved).toBeNull();
   });
 
   it("durably shows each recap before handoff and round completion before the next round", async () => {
@@ -657,7 +698,7 @@ describe("WWW device session durability and lifecycle", () => {
       presentationStage: null,
       match: { stage: "results" },
     });
-    expect((device.saved as WhoWhatWhereDeviceSession).match).toBeNull();
+    expect(device.saved).toBeNull();
   });
 
   it("explicitly ends a paused turn once without running the timer or counting another score", async () => {
@@ -698,7 +739,7 @@ describe("WWW device session durability and lifecycle", () => {
     expect(restored.getSnapshot().session.match).toEqual(legacy.match);
   });
 
-  it("retains the roster and settings after results, without resuming a completed match", async () => {
+  it("retains results in memory and clears the completed match from disk", async () => {
     const session = createWhoWhatWhereDeviceSession();
     const settings = {
       ...session.setup.settings,
@@ -721,11 +762,12 @@ describe("WWW device session durability and lifecycle", () => {
     controller.viewResults();
     await settle();
     expect(controller.getSnapshot().session.match?.stage).toBe("results");
-    expect((device.saved as WhoWhatWhereDeviceSession).match).toBeNull();
+    expect(device.saved).toBeNull();
     const restored = new WhoWhatWhereDeviceController();
     await restored.hydrate();
     expect(restored.getSnapshot().session.mode).toBe("settings");
-    expect(restored.getSnapshot().session.setup).toEqual({ ...session.setup, settings });
+    expect(controller.getSnapshot().session.setup).toEqual({ ...session.setup, settings });
+    expect(restored.getSnapshot().savedGameAvailable).toBe(false);
     expect(restored.getSnapshot().session.match).toBeNull();
   });
 

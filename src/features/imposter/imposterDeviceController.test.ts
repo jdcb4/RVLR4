@@ -69,6 +69,55 @@ afterEach(() => {
 });
 
 describe("Imposter durable device controller", () => {
+  it("keeps initial settings ephemeral and clears the saved roster when returning", async () => {
+    vi.useFakeTimers();
+    const controller = new ImposterDeviceController();
+    await controller.hydrate();
+    controller.updatePlayerCount(7);
+    controller.updateWordDifficulty("easy");
+    await vi.advanceTimersByTimeAsync(400);
+    expect(await controller.leave()).toBe(true);
+    expect(writeSnapshot).not.toHaveBeenCalled();
+    expect(removeSnapshot).not.toHaveBeenCalled();
+    controller.resume();
+    await controller.advanceSetup();
+    expect(device.saved?.snapshot).toMatchObject({
+      step: "roster",
+      playerCount: 7,
+      wordDifficulty: "easy",
+    });
+    await controller.back();
+    expect(device.saved).toBeNull();
+    expect(controller.getSnapshot().session.snapshot).toMatchObject({
+      step: "settings",
+      playerCount: 7,
+    });
+    expect(removeSnapshot).toHaveBeenCalledOnce();
+  });
+
+  it("cleans old settings records and preserves active chooser saves untouched", async () => {
+    device.saved = createImposterDeviceSession();
+    const first = new ImposterDeviceController();
+    await first.hydrate();
+    expect(first.getSnapshot().savedGameAvailable).toBe(false);
+    expect(device.saved).toBeNull();
+    await first.advanceSetup();
+    await first.advanceSetup();
+    await first.startRound();
+    const saved = structuredClone(device.saved);
+    vi.mocked(writeSnapshot).mockClear();
+    vi.mocked(removeSnapshot).mockClear();
+    const chooser = new ImposterDeviceController();
+    await chooser.hydrate();
+    chooser.updatePlayerCount(7);
+    chooser.pause();
+    expect(await chooser.leave()).toBe(true);
+    expect(chooser.getSnapshot().savedGameAvailable).toBe(true);
+    expect(device.saved).toEqual(saved);
+    expect(writeSnapshot).not.toHaveBeenCalled();
+    expect(removeSnapshot).not.toHaveBeenCalled();
+  });
+
   it("does not pause fresh setup when effects are replayed before hydration finishes", async () => {
     const controller = new ImposterDeviceController();
     const firstCleanup = controller.mount();
@@ -211,8 +260,7 @@ describe("Imposter durable device controller", () => {
     expect(controller.getSnapshot().session.snapshot.step).toBe("guideWarning");
     await controller.advanceGuide();
     expect(controller.getSnapshot().session.snapshot.step).toBe("results");
-    expect(device.saved?.snapshot.step).toBe("settings");
-    expect(device.saved?.snapshot.round).toBeNull();
+    expect(device.saved).toBeNull();
     await controller.startNew();
     expect(controller.getSnapshot().session.snapshot.step).toBe("settings");
   });
@@ -247,14 +295,14 @@ describe("Imposter durable device controller", () => {
     await restored.hydrate();
     expect(writeSnapshot).toHaveBeenCalledTimes(3);
     expect(restored.getSnapshot().session.savedAt).toBe(original!.savedAt);
-    vi.mocked(writeSnapshot).mockRejectedValueOnce(new Error("Unavailable"));
+    vi.mocked(removeSnapshot).mockRejectedValueOnce(new Error("Unavailable"));
     await restored.startNew();
     expect(restored.getSnapshot().session.snapshot.round).toEqual(original!.snapshot.round);
     expect(device.saved).toEqual(original);
     await restored.retry();
     restored.resume();
     expect(restored.getSnapshot().session.snapshot.step).toBe("settings");
-    expect(device.saved?.snapshot.round).toBeNull();
+    expect(device.saved).toBeNull();
   });
 
   it("does not write after failed hydration and requires explicit discard", async () => {
@@ -277,8 +325,10 @@ describe("Imposter durable device controller", () => {
     expect(controller.getSnapshot().session.snapshot.wordDifficulty).toBe("hard");
     controller.updateWordDifficulty("medium");
     await vi.advanceTimersByTimeAsync(400);
-    expect(device.saved?.snapshot.wordDifficulty).toBe("medium");
+    expect(device.saved).toBeNull();
+    expect(controller.getSnapshot().session.snapshot.wordDifficulty).toBe("medium");
     await controller.advanceSetup();
+    expect(device.saved?.snapshot.wordDifficulty).toBe("medium");
     await controller.advanceSetup();
     vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
     await controller.startRound();

@@ -303,9 +303,11 @@ public class AppRenderTest {
             awaitCondition(activity, "!!document.querySelector('dialog[open]')");
             evaluate(activity, "[...document.querySelectorAll('dialog[open] button')].find(b=>b.textContent.trim()==='Start new quiz').click()");
             awaitCondition(activity, "document.body.innerText.includes('Set up your quiz')");
-            evaluate(activity, "document.querySelector('details').open=true");
-            evaluate(activity, "document.querySelectorAll('input[type=checkbox]').forEach(box=>{if(!box.checked)box.click();})");
+            awaitCondition(activity, "[...document.querySelectorAll('fieldset')].some(group=>group.querySelector('legend')?.textContent==='Categories'&&group.querySelectorAll('button').length===9)");
+            evaluate(activity, "[...document.querySelectorAll('button')].find(button=>button.textContent.trim()==='Select all')?.click()");
+            awaitCondition(activity, "[...document.querySelectorAll('button')].some(button=>button.textContent.trim()==='Clear all') && !document.querySelector('input[type=checkbox]') && !document.querySelector('details')");
             clickButton(activity, "30");
+            awaitCondition(activity, "[...document.querySelectorAll('footer button')].some(button=>button.textContent.trim()==='Start quiz'&&!button.disabled)");
             clickButton(activity, "Start quiz");
             awaitCondition(activity, "document.body.innerText.includes('Question 1 of 30') && !document.querySelector('[role=alert]')");
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {

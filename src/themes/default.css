@@ -4,6 +4,13 @@
  * Components use Tailwind `semantic-*` utilities (see docs/THEMING.md).
  */
 :root {
+  --semantic-answer-correct-soft: #e1f2e5;
+  --semantic-answer-correct-ink: #205b35;
+  --semantic-answer-correct-selected: #28713f;
+  --semantic-answer-incorrect-soft: #fce4e4;
+  --semantic-answer-incorrect-ink: #922d36;
+  --semantic-answer-incorrect-selected: #a3303d;
+  --semantic-answer-selected-ink: #ffffff;
   --semantic-progress-current: #66518a;
   --semantic-progress-complete: #ded5eb;
   --semantic-progress-foreground: #ffffff;

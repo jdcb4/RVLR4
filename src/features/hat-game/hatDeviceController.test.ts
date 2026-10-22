@@ -134,6 +134,42 @@ describe("Hat native session ownership", () => {
     vi.useRealTimers();
   });
 
+  it("keeps settings edits in memory and clears a saved roster when returning to settings", async () => {
+    const controller = new HatDeviceController();
+    await controller.hydrate();
+    controller.updateSettings({ teamCount: 3, turnDurationSeconds: 60, skipsPerTurn: 2 });
+    await vi.advanceTimersByTimeAsync(400);
+    expect(await controller.leaveGame()).toBe(true);
+    expect(writeSnapshot).not.toHaveBeenCalled();
+    expect(removeSnapshot).not.toHaveBeenCalled();
+    await controller.resumeGame();
+    controller.beginTeams();
+    await settle();
+    expect(device.saved).toMatchObject({ snapshot: { step: "team", teamCount: 3 } });
+    controller.backTeam();
+    await settle();
+    expect(device.saved).toBeNull();
+    expect(controller.getSnapshot().session.snapshot).toMatchObject({
+      step: "settings",
+      teamCount: 3,
+    });
+    expect(removeSnapshot).toHaveBeenCalledOnce();
+  });
+
+  it.each(["landing", "settings"] as const)(
+    "cleans legacy %s saves without offering resume",
+    async (step) => {
+      const state = createHatDeviceSession();
+      device.saved = { ...state, snapshot: { ...state.snapshot, step } };
+      const controller = new HatDeviceController();
+      await controller.hydrate();
+      expect(controller.getSnapshot().savedGameAvailable).toBe(false);
+      expect(controller.getSnapshot().session.paused).toBe(false);
+      expect(device.saved).toBeNull();
+      expect(writeSnapshot).not.toHaveBeenCalled();
+    },
+  );
+
   it("flushes roster drafts with their exact setup position and keeps chooser timestamps untouched", async () => {
     const controller = new HatDeviceController();
     await controller.hydrate();
@@ -491,7 +527,7 @@ describe("Hat native session ownership", () => {
     expect(restored.getSnapshot().session.recap).toBe(false);
   });
 
-  it("finishes Charades through a final recap and saves fresh setup once results are viewed", async () => {
+  it("finishes Charades through a final recap and clears the save once results are viewed", async () => {
     const state = preparedSession();
     const started = applyHatGameAction(state.snapshot.session!, { type: "start-turn" });
     if ("error" in started || !started.activeTurn) throw new Error("Fixture failed");
@@ -516,10 +552,7 @@ describe("Hat native session ownership", () => {
     controller.advanceRecap();
     await settle();
     expect(controller.getSnapshot().session.snapshot.session?.stage).toBe("results");
-    expect(device.saved).toMatchObject({
-      snapshot: { step: "settings", session: null, clueSubmissions: {} },
-      remainingMs: null,
-    });
+    expect(device.saved).toBeNull();
   });
 
   it("retains an unavailable save without writing and supports deliberate discard", async () => {
@@ -570,11 +603,15 @@ describe("Hat native session ownership", () => {
     await controller.leaveGame();
     const match = controller.getSnapshot().session.snapshot.session;
     const saved = structuredClone(device.saved);
-    vi.mocked(writeSnapshot).mockRejectedValueOnce(new Error("Storage unavailable"));
+    vi.mocked(removeSnapshot).mockRejectedValueOnce(new Error("Storage unavailable"));
     await controller.startNewGame();
     expect(device.saved).toEqual(saved);
     expect(controller.getSnapshot().session.snapshot.session).toEqual(match);
     expect(controller.getSnapshot().storageError).toBe("Storage unavailable");
+    await controller.retrySave();
+    expect(device.saved).toBeNull();
+    expect(controller.getSnapshot().session.snapshot.step).toBe("settings");
+    expect(controller.getSnapshot().savedGameAvailable).toBe(false);
   });
 
   it("rejects unsupported versions and invalid timer, presenter, clue and setup references", () => {

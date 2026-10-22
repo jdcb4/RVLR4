@@ -41,6 +41,7 @@ export class ImposterDeviceController {
   private epoch = 0;
   private hydration: Promise<void> | null = null;
   private pending: ImposterDeviceSession | null = null;
+  private hasSnapshot = false;
   private draftTimer: ReturnType<typeof setTimeout> | null = null;
   private listeners = new Set<() => void>();
   private view = this.makeView();
@@ -117,8 +118,19 @@ export class ImposterDeviceController {
           IMPOSTER_DEVICE_SESSION_KEY,
           imposterDeviceSessionSchema,
         );
+        this.hasSnapshot = value !== null;
         this.session = value ?? createImposterDeviceSession();
-        this.savedGameAvailable = Boolean(value);
+        this.savedGameAvailable = Boolean(
+          value && !["settings", "results"].includes(value.snapshot.step),
+        );
+        if (value && !this.savedGameAvailable) {
+          await removeSnapshot(IMPOSTER_DEVICE_SESSION_KEY);
+          this.hasSnapshot = false;
+          this.session = {
+            ...value,
+            snapshot: { ...value.snapshot, step: "settings", round: null },
+          };
+        }
         this.roleVisible = false;
         this.hydrationFailed = false;
         this.storageError = "";
@@ -154,14 +166,16 @@ export class ImposterDeviceController {
     this.emit();
     try {
       const record = this.pending;
-      // Completed secrets are shown now; a cold launch opens the reusable setup.
-      const durable =
-        record.snapshot.step === "results"
-          ? { ...record, snapshot: { ...record.snapshot, step: "settings" as const, round: null } }
-          : record;
-      await writeSnapshot(IMPOSTER_DEVICE_SESSION_KEY, durable);
+      if (!["settings", "results"].includes(record.snapshot.step)) {
+        this.hasSnapshot = true;
+        await writeSnapshot(IMPOSTER_DEVICE_SESSION_KEY, record);
+      } else if (this.hasSnapshot) {
+        await removeSnapshot(IMPOSTER_DEVICE_SESSION_KEY);
+        this.hasSnapshot = false;
+      }
       this.session = record;
       this.pending = null;
+      if (["settings", "results"].includes(record.snapshot.step)) this.savedGameAvailable = false;
       this.storageError = "";
       return true;
     } catch (error) {
@@ -182,6 +196,7 @@ export class ImposterDeviceController {
     this.setupError = "";
     this.emit();
     this.cancelDraft();
+    if (snapshot.step === "settings" || snapshot.step === "landing") return;
     this.draftTimer = setTimeout(() => {
       this.draftTimer = null;
       void this.commit(this.session);

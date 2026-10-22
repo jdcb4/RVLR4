@@ -66,6 +66,8 @@ export class WhoWhatWhereDeviceController {
   private pauseEpoch = 0;
   private savedGameAvailable = false;
   private replacingSave = false;
+  private pendingReplacement = false;
+  private hasSnapshot = false;
   private view = this.makeView();
 
   private makeView(): SessionView {
@@ -132,23 +134,18 @@ export class WhoWhatWhereDeviceController {
   private async save(session = this.current()): Promise<boolean> {
     this.cancelDraft();
     if (!this.loaded || this.hydrationFailed) return false;
-    // Results remain on screen, while disk retains a fresh setup for the next game.
-    const record = {
-      ...session,
-      ...(session.match?.stage === "results"
-        ? {
-            match: null,
-            mode: "settings" as const,
-            teamStep: 0,
-            remainingMs: null,
-            paused: true,
-            presentationStage: null,
-          }
-        : {}),
-      savedAt: new Date().toISOString(),
-    };
+    const resumable =
+      session.match?.stage !== "results" &&
+      Boolean(session.match || !["landing", "settings"].includes(session.mode));
+    const record = { ...session, savedAt: new Date().toISOString() };
     try {
-      await writeSnapshot(WHO_WHAT_WHERE_SESSION_KEY, record);
+      if (resumable) {
+        this.hasSnapshot = true;
+        await writeSnapshot(WHO_WHAT_WHERE_SESSION_KEY, record);
+      } else if (this.hasSnapshot) {
+        await removeSnapshot(WHO_WHAT_WHERE_SESSION_KEY);
+        this.hasSnapshot = false;
+      }
       this.session = { ...this.session, savedAt: record.savedAt };
       return true;
     } catch (error) {
@@ -165,10 +162,10 @@ export class WhoWhatWhereDeviceController {
           WHO_WHAT_WHERE_SESSION_KEY,
           whoWhatWhereDeviceSessionSchema,
         );
+        this.hasSnapshot = value !== null;
         this.hydrationFailed = false;
         this.storageError = "";
         this.notice = recovered ? "Recovered the previous saved checkpoint." : "";
-        this.loaded = true;
         const restored =
           value?.match?.stage === "results"
             ? {
@@ -181,11 +178,16 @@ export class WhoWhatWhereDeviceController {
               }
             : value;
         this.savedGameAvailable = Boolean(
-          restored && (restored.mode !== "landing" || restored.match),
+          restored && (restored.match || !["landing", "settings"].includes(restored.mode)),
         );
+        if (restored && !this.savedGameAvailable) {
+          await removeSnapshot(WHO_WHAT_WHERE_SESSION_KEY);
+          this.hasSnapshot = false;
+        }
+        this.loaded = true;
         this.install(
           restored
-            ? { ...restored, paused: restored.mode !== "landing" || restored.match !== null }
+            ? { ...restored, paused: this.savedGameAvailable }
             : createWhoWhatWhereDeviceSession(),
         );
       } catch (error) {
@@ -239,6 +241,7 @@ export class WhoWhatWhereDeviceController {
     if (!this.canAct()) return;
     this.install(next);
     this.cancelDraft();
+    if (!next.match && ["landing", "settings"].includes(next.mode)) return;
     this.draftTimer = setTimeout(() => {
       this.draftTimer = null;
       void this.save();
@@ -502,6 +505,7 @@ export class WhoWhatWhereDeviceController {
     this.cancelDraft();
     this.saving = true;
     this.replacingSave = true;
+    this.pendingReplacement = true;
     this.pauseEpoch += 1;
     const pauseEpoch = this.pauseEpoch;
     const next: WhoWhatWhereDeviceSession = {
@@ -515,6 +519,7 @@ export class WhoWhatWhereDeviceController {
     };
     this.install({ ...this.current(), paused: true });
     if (await this.save(next)) {
+      this.pendingReplacement = false;
       this.savedGameAvailable = false;
       this.setupError = "";
       this.turnError = "";
@@ -531,6 +536,11 @@ export class WhoWhatWhereDeviceController {
 
   retrySave = async () => {
     if (this.saving) return;
+    if (this.pendingReplacement) {
+      this.storageError = "";
+      await this.startOverFromPendingMatch();
+      return;
+    }
     if (this.hydrationFailed) {
       this.saving = true;
       this.emit();
