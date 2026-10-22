@@ -2,7 +2,7 @@
 
 Standalone offline pass-and-play Android app, derived from RVLR4.
 
-Version 0.28.0 includes **Who What Where**, **Hat Game**, and **Imposter**, each with an independent local save. React/Vite/Capacitor renders the phone UI; a native SQLite plugin supplies durable checkpoints and lifecycle/privacy handling. No backend or multiplayer connection is required.
+Version 0.28.0 includes **Who What Where**, **Hat Game**, and **Imposter**, each with an independent local save. React/Vite/Capacitor renders the phone UI; a native SQLite plugin supplies durable checkpoints and lifecycle handling. No backend or multiplayer connection is required.
 
 Four offline design demos live in [docs/design/aesthetic-demos/index.html](docs/design/aesthetic-demos/index.html). They are isolated studies; the production aesthetic remains unchanged.
 

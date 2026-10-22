@@ -124,11 +124,6 @@ public class RvlryDevicePlugin extends Plugin {
         setWindowFlag(call, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    @PluginMethod
-    public void setPrivacy(PluginCall call) {
-        setWindowFlag(call, WindowManager.LayoutParams.FLAG_SECURE);
-    }
-
     private void setWindowFlag(PluginCall call, int flag) {
         Boolean enabled = call.getBoolean("enabled");
         if (enabled == null) {

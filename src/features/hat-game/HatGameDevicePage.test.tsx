@@ -22,7 +22,6 @@ vi.mock("@/services/deviceLifecycle", () => ({
     listener(true);
     return () => undefined;
   },
-  setDevicePrivacy: vi.fn(async () => undefined),
   setDeviceKeepAwake: vi.fn(async () => undefined),
 }));
 vi.mock("@/services/gameSoundEffects", () => ({

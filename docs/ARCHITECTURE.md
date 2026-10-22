@@ -8,7 +8,7 @@ React, Vite and Capacitor bundle a standalone offline application. Native uses h
 - Each device controller owns its complete validated session, draft state, privacy cover, transitions and save-error recovery. Do not force games with different privacy/rule requirements into a universal reducer.
 - `useDeviceController` binds one stable controller to React subscriptions and lifecycle cleanup.
 - `nativeSnapshotStore` is the single persistence boundary: per-key ordered reads/writes/removal, version validation, current/previous recovery, and explicit refusal to overwrite unknown versions.
-- `deviceLifecycle` deduplicates native/DOM events and serializes privacy/keep-awake requests.
+- `deviceLifecycle` deduplicates native/DOM events and serializes keep-awake requests.
 - `turnClock` calculates monotonic remaining time and adapts it to domain ISO deadlines. Background time never consumes a turn; restored active turns require explicit resume.
 - Shared GameShell, footer buttons, dialogs, roster inputs and Lucide icons provide phone UI primitives. Game-specific phase/reveal screens remain owned by the game.
 

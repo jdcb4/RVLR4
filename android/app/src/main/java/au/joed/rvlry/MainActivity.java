@@ -8,8 +8,7 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(RvlryDevicePlugin.class);
-        // Cover cold starts and task previews before JavaScript has initialized.
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        // Screenshots and recent-app previews are allowed throughout the app.
         super.onCreate(savedInstanceState);
     }
 

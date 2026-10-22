@@ -30,7 +30,6 @@ vi.mock("@/services/nativeSnapshotStore", () => ({
 }));
 vi.mock("@/services/deviceLifecycle", () => ({
   isDeviceActive: () => true,
-  setDevicePrivacy: vi.fn(async () => undefined),
   setDeviceKeepAwake: vi.fn(async () => undefined),
   subscribeDeviceActivity: (listener: (active: boolean) => void) => {
     device.activity = listener;

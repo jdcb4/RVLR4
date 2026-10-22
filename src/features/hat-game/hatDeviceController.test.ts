@@ -28,7 +28,6 @@ const device = vi.hoisted(() => ({
 }));
 vi.mock("@/services/deviceLifecycle", () => ({
   isDeviceActive: () => device.active,
-  setDevicePrivacy: vi.fn(async () => undefined),
   setDeviceKeepAwake: vi.fn(async () => undefined),
   subscribeDeviceActivity: (listener: (active: boolean) => void) => {
     device.activity = listener;

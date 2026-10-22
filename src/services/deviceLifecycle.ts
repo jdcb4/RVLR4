@@ -8,7 +8,6 @@ const listeners = new Set<ActivityListener>();
 let nativeActive = true;
 let cleanupActivity: (() => void) | null = null;
 let keepAwakeQueue = Promise.resolve();
-let privacyQueue = Promise.resolve();
 
 export const isDeviceActive = () => nativeActive && !document.hidden;
 
@@ -90,13 +89,5 @@ export function setDeviceKeepAwake(enabled: boolean): Promise<void> {
     }
   });
   keepAwakeQueue = result.catch(() => undefined);
-  return result;
-}
-
-export function setDevicePrivacy(enabled: boolean): Promise<void> {
-  const result = privacyQueue.then(async () => {
-    if (Capacitor.isNativePlatform()) await deviceBridge.setPrivacy({ enabled });
-  });
-  privacyQueue = result.catch(() => undefined);
   return result;
 }

@@ -18,7 +18,6 @@ interface RvlryDevicePlugin {
   write(options: { key: string; value: string }): Promise<void>;
   remove(options: { key: string }): Promise<void>;
   setKeepAwake(options: { enabled: boolean }): Promise<void>;
-  setPrivacy(options: { enabled: boolean }): Promise<void>;
 }
 
 export const deviceBridge = registerPlugin<RvlryDevicePlugin>("RvlryDevice");

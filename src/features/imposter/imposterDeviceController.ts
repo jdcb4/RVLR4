@@ -19,7 +19,6 @@ import { requireContentPreferences } from "@/services/contentPreference";
 import {
   isDeviceActive,
   setDeviceKeepAwake,
-  setDevicePrivacy,
   subscribeDeviceActivity,
 } from "@/services/deviceLifecycle";
 import { readSnapshot, removeSnapshot, writeSnapshot } from "@/services/nativeSnapshotStore";
@@ -135,10 +134,6 @@ export class ImposterDeviceController {
   };
 
   mount = () => {
-    void setDevicePrivacy(true).catch(() => {
-      this.notice = "Private roles may appear in the phone’s recent-apps preview.";
-      this.emit();
-    });
     void this.hydrate();
     const unsubscribe = subscribeDeviceActivity((active) => {
       this.active = active;

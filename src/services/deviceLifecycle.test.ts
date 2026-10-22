@@ -4,7 +4,7 @@ const mocks = vi.hoisted(() => ({
   native: false,
   addListener: vi.fn(),
   getState: vi.fn(),
-  bridge: { setKeepAwake: vi.fn(), setPrivacy: vi.fn() },
+  bridge: { setKeepAwake: vi.fn() },
 }));
 
 vi.mock("@capacitor/core", () => ({
@@ -44,7 +44,6 @@ beforeEach(() => {
     return { remove: vi.fn().mockResolvedValue(undefined) };
   });
   mocks.bridge.setKeepAwake.mockResolvedValue(undefined);
-  mocks.bridge.setPrivacy.mockResolvedValue(undefined);
 });
 
 describe("device lifecycle", () => {
@@ -62,9 +61,7 @@ describe("device lifecycle", () => {
     expect(listener).toHaveBeenCalledTimes(3);
     expect(mocks.addListener).not.toHaveBeenCalled();
     await api.setDeviceKeepAwake(true);
-    await api.setDevicePrivacy(true);
     expect(mocks.bridge.setKeepAwake).not.toHaveBeenCalled();
-    expect(mocks.bridge.setPrivacy).not.toHaveBeenCalled();
   });
 
   it("shares native listeners and stays inactive until both native and DOM are active", async () => {
@@ -163,13 +160,9 @@ describe("device lifecycle", () => {
   it("returns native failures to callers and allows later device operations", async () => {
     mocks.native = true;
     mocks.bridge.setKeepAwake.mockRejectedValueOnce(new Error("native failure"));
-    mocks.bridge.setPrivacy.mockRejectedValueOnce(new Error("privacy failure"));
     const api = await lifecycle();
     await expect(api.setDeviceKeepAwake(true)).rejects.toThrow("native failure");
     await api.setDeviceKeepAwake(false);
-    await expect(api.setDevicePrivacy(true)).rejects.toThrow("privacy failure");
-    await api.setDevicePrivacy(false);
     expect(mocks.bridge.setKeepAwake).toHaveBeenLastCalledWith({ enabled: false });
-    expect(mocks.bridge.setPrivacy).toHaveBeenLastCalledWith({ enabled: false });
   });
 });

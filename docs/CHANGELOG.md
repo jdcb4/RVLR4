@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.34.1 — 22 October 2026
+
+- Allow screenshots, screen recordings and recent-app previews throughout the app, including private words and roles. Remove the native secure-window flag and all game-controller calls that enabled it. Existing pause/conceal and keep-awake behavior stays intact.
+
 ## 0.34.0 — 22 October 2026
 
 - Apply all five approved game-artwork families to their matching themes: Tabletop/Classic, Paper/Recess, Engraved/Midnight Observatory, Timber/After-Hours Social and Ink/The Margin Note. Engraved WWW uses a map without the location pin.

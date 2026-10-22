@@ -3,6 +3,7 @@ package au.joed.rvlry;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
+import android.view.WindowManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -31,6 +32,9 @@ public class AppRenderTest {
         long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(20);
         do {
             if ("true".equals(evaluate(activity, expression))) {
+                InstrumentationRegistry.getInstrumentation().runOnMainSync(() ->
+                    assertTrue("Screenshots must remain allowed on every game screen",
+                        (activity.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_SECURE) == 0));
                 return;
             }
             Thread.sleep(100);

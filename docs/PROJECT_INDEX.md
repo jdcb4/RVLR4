@@ -4,7 +4,7 @@ The current deliverable is a standalone offline Android app with Who What Where,
 
 ## Active boundaries
 
-- `android/` — Capacitor Android host; native SQLite snapshots, privacy and keep-awake.
+- `android/` — Capacitor Android host; native SQLite snapshots and keep-awake.
 - `capacitor.config.ts` — application ID, bundled web assets and host configuration.
 - `src/app/` — standalone routing and Android Back dispatch.
 - `src/features/passnplay/` — prototype picker and app information.

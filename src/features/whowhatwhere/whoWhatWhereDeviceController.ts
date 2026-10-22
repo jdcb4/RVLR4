@@ -25,7 +25,6 @@ import { requireContentPreferences } from "@/services/contentPreference";
 import {
   isDeviceActive,
   setDeviceKeepAwake,
-  setDevicePrivacy,
   subscribeDeviceActivity,
 } from "@/services/deviceLifecycle";
 import { playGameSoundEffect } from "@/services/gameSoundEffects";
@@ -199,10 +198,6 @@ export class WhoWhatWhereDeviceController {
   };
 
   mount = () => {
-    void setDevicePrivacy(true).catch(() => {
-      this.notice = "Private content may appear in the phone’s recent-apps preview.";
-      this.emit();
-    });
     void this.hydrate();
     const unsubscribe = subscribeDeviceActivity((active) => {
       this.deviceActive = active;

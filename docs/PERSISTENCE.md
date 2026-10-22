@@ -26,7 +26,7 @@ WWW settings add `wordDifficulty` (all/easy/medium/hard) and a frozen `kidsMode`
 
 `app.appearance.v1` stores `{ schemaVersion: 1, theme }` independently of every game. The theme enum is validated and uses the same native current/previous snapshot store. Selection is shown only after commit; unsupported/corrupt records are preserved, and Settings offers a load retry rather than silently replacing them. Browser previews use the same localStorage envelope adapter as game sessions.
 
-## Recovery and privacy
+## Recovery and private-screen handoffs
 
 Validate before enabling writes. A corrupt current record may fall back to the valid previous record; repair preserves that validated checkpoint. Unsupported versions are retained with an explicit error. Failed writes stop play and offer retry. Replacement commits before discarding the old game; merely viewing a saved-game chooser does not update its timestamp.
 
@@ -43,3 +43,7 @@ services/savedStates contains reusable nested rule validation and tested histori
 ## Trivia content foundation — 0.33.0
 
 Content packs use separate `rvlry-content.db` chunk rows rather than the 1 MiB session envelopes. Atomic full-synchronous transactions retain current and previous pack bodies independently for Trivia and words. Native compare-and-swap prevents competing installations from overwriting newer content. The TypeScript layer validates packs and retains the selected valid checkpoint during recovery. Browser previews use separate `rvlry.content.trivia` storage and are not evidence of native durability. See [TRIVIA_CONTENT.md](TRIVIA_CONTENT.md). No Trivia session key exists yet; gameplay integration must snapshot selected questions and progress independently.
+
+## Screenshots (0.34.1)
+
+Screenshots, screen recording and Android recent-app previews are allowed throughout the app, including private words and roles, as requested by Joe. The native FLAG_SECURE setting and privacy bridge API have been removed. Background pause/conceal behavior and player handoff covers remain unchanged.

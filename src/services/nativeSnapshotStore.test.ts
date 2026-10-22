@@ -8,7 +8,6 @@ const mocks = vi.hoisted(() => ({
     write: vi.fn(),
     remove: vi.fn(),
     setKeepAwake: vi.fn(),
-    setPrivacy: vi.fn(),
   },
 }));
 

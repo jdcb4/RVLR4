@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-0.34.0 is the debug-signed three-game build with expanded curated word pools, five app-wide themes with matching illustrated game artwork and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. WWW and Imposter offer difficulty selection; app Settings offers Kids mode for new games and Hat suggestions. The separate Trivia content-storage foundation is implemented, with no reviewed questions or Trivia gameplay yet. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
+0.34.1 is the debug-signed three-game build with expanded curated word pools, five app-wide themes with matching illustrated game artwork and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. WWW and Imposter offer difficulty selection; app Settings offers Kids mode for new games and Hat suggestions. The separate Trivia content-storage foundation is implemented, with no reviewed questions or Trivia gameplay yet. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
 
 Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
@@ -41,8 +41,8 @@ and atomically rotate current/previous snapshots. Callers receive success after
 transaction commit. Keys and UTF-8 payload sizes are bounded (1 MiB per snapshot).
 The TypeScript owner serializes reads/writes/removal and validates payloads.
 
-Privacy window flags are enabled before web content loads; app screenshots and
-recent-app previews may therefore be blank. Native onPause releases keep-awake
+Screenshots and recent-app previews are allowed on all screens, including private
+roles and words. Native onPause releases keep-awake
 even if JavaScript is stalled. Back dispatches to the game before navigation;
 open dialogs consume Back first. Native backups are disabled for this prototype.
 Bridge logging is disabled to prevent saved clues/names appearing in debug logs.
@@ -356,3 +356,9 @@ The publisher command was checked with a disposable synthetic fixture, which was
 Browser review at 360x640 covered all five picker themes, WWW setup/handoff and active play; the 412x915 picker/settings check also had no horizontal overflow. Picker artwork remains centred left of text. Per-game display regions prevent adjacent illustrations from leaking through; live-turn artwork stays 28px in the existing header. Impeccable scoped scans were clean. Fallow retains 41 findings and nine clone groups, reviewed without suppression. Existing Vite catalogue-size advisory remains.
 
 APK: `out/RVLRY-0.34.0-artwork.apk` (18,440,631 bytes), copied and SHA-256 verified to `\\JNAS\Media\DropBox\RVLRY-0.34.0-artwork.apk`. SHA-256: `F731D0BE5861D3093F0A50BD8130D5CEF5AE53D2BD6734EEB71D09A97B320C57`. Install over the current prototype to retain saves and appearance preferences.
+
+## Screenshot protection removed — 22 October 2026
+
+0.34.1 / versionCode 19 passes full verify (273 tests / 43 files), Android assembly and all three targeted AppRenderTest/DeviceBridgeTest cases. Native flow assertions confirm FLAG_SECURE remains absent across picker/settings, all game flows and private role reveals; keep-awake release still passes. After instrumentation cleanup, the final APK was reinstalled on the emulator and an actual rendered app screenshot was captured and visually verified at out/screenshots-0.34.1.png. Pixel acceptance remains unverified.
+
+APK: `out/RVLRY-0.34.1-screenshots.apk`, copied/hash-verified to `\\JNAS\Media\DropBox\RVLRY-0.34.1-screenshots.apk`. SHA-256: `39D1C10D9E8ED3D845DC3F5D1A3FA5EF35D0102BCFA2E82BB1950E6639029C12`.

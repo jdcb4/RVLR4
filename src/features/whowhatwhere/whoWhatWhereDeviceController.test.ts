@@ -41,7 +41,6 @@ vi.mock("@/services/gameSoundEffects", () => ({ playGameSoundEffect: vi.fn() }))
 vi.mock("@/services/deviceLifecycle", () => ({
   isDeviceActive: () => device.active,
   setDeviceKeepAwake: vi.fn(async () => undefined),
-  setDevicePrivacy: vi.fn(async () => undefined),
   subscribeDeviceActivity: (listener: (active: boolean) => void) => {
     device.activity = listener;
     listener(device.active);
