@@ -5,12 +5,10 @@ import type { TriviaQuestion } from "@/data/triviaSchema";
 import type { TriviaQuiz, TriviaSettings } from "./game";
 import {
   createTriviaSession,
-  getTriviaScores,
   nextTriviaQuestion,
   prepareTriviaQuiz,
   revealTriviaAnswer,
   setTriviaAnswer,
-  setTriviaMark,
   startTriviaQuiz,
   triviaSessionSchema,
   triviaSettingsSchema,
@@ -47,7 +45,7 @@ const start = (overrides: Partial<TriviaSettings> = {}, questions = [question(1)
     rng: () => 0.5,
   });
 const session = (quiz: TriviaQuiz) => ({
-  schemaVersion: 1,
+  schemaVersion: 2,
   savedAt: iso(now),
   settings: quiz.settings,
   quiz,
@@ -59,12 +57,11 @@ describe("Trivia rules and durable sessions", () => {
   it("starts with independent default settings and validates the setup limits", () => {
     const first = createTriviaSession();
     const second = createTriviaSession();
-    first.settings.teams.push("Extra");
+    first.settings.categories.pop();
     expect(second.settings).toMatchObject({
       count: 10,
       revealMode: "each",
-      difficulty: "all",
-      teams: ["Team 1", "Team 2"],
+      difficulty: "hard",
     });
     expect(second.settings.categories).toHaveLength(8);
     expect(triviaSessionSchema.safeParse(second).success).toBe(true);
@@ -73,9 +70,6 @@ describe("Trivia rules and durable sessions", () => {
       settings({ count: 101 }),
       settings({ categories: [] }),
       settings({ categories: ["history", "history"] }),
-      settings({ teams: [] }),
-      settings({ teams: Array.from({ length: 9 }, () => "Team") }),
-      settings({ teams: ["x".repeat(41)] }),
     ]) {
       expect(triviaSettingsSchema.safeParse(input).success).toBe(false);
     }
@@ -98,12 +92,51 @@ describe("Trivia rules and durable sessions", () => {
     bank.forEach((item) => {
       item.answer = "Changed in replacement pack";
     });
-    input.teams[0] = "Changed team";
+    input.categories.pop();
     expect(quiz.items.every((item) => item.question.answer !== "Changed in replacement pack")).toBe(
       true,
     );
-    expect(quiz.settings.teams[0]).toBe("Team 1");
+    expect(quiz.settings.categories).toEqual(["general", "history"]);
     valid(quiz);
+  });
+
+  it("balances allowed difficulties before categories and validates cumulative selections", () => {
+    const bank = Array.from({ length: 36 }, (_, index) =>
+      question(index, {
+        difficulty: (["easy", "medium", "hard"] as const)[index % 3]!,
+        category: index < 18 ? "general" : "history",
+      }),
+    );
+    for (const difficulty of ["easy", "medium", "hard"] as const) {
+      const quiz = start({ count: 12, categories: ["general", "history"], difficulty }, bank);
+      const counts = ["easy", "medium", "hard"].map(
+        (rating) => quiz.items.filter((item) => item.question.difficulty === rating).length,
+      );
+      expect(counts).toEqual(
+        difficulty === "easy" ? [12, 0, 0] : difficulty === "medium" ? [6, 6, 0] : [4, 4, 4],
+      );
+      expect(quiz.items.filter((item) => item.question.category === "general")).toHaveLength(6);
+      valid(quiz);
+    }
+  });
+
+  it("fills missing difficulty shares from allowed questions without widening Medium", () => {
+    const bank = [
+      question(1),
+      question(2),
+      question(3),
+      question(4, { difficulty: "medium" }),
+      question(5, { difficulty: "hard" }),
+    ];
+    const quiz = start({ count: 4, difficulty: "medium" }, bank);
+    expect(quiz.items.map((item) => item.question.difficulty).sort()).toEqual([
+      "easy",
+      "easy",
+      "easy",
+      "medium",
+    ]);
+    valid(quiz);
+    expect(() => start({ count: 5, difficulty: "medium" }, bank)).toThrow("Only 4 eligible");
   });
 
   it("filters kids suitability, difficulty, category, expiry and duplicate identities without widening", () => {
@@ -181,47 +214,38 @@ describe("Trivia rules and durable sessions", () => {
     valid(exhausted);
   });
 
-  it("requires reveal in each mode, locks written answers and scores manual marks", () => {
+  it("requires reveal in each mode and locks the shared written answer after reveal", () => {
     let quiz = start();
     expect(nextTriviaQuestion(quiz, now)).toBe(quiz);
-    expect(setTriviaMark(quiz, 0, true)).toBe(quiz);
-    quiz = setTriviaAnswer(quiz, 0, "Optional written answer");
-    expect(quiz.items[0]?.writtenAnswers[0]).toBe("Optional written answer");
+    quiz = setTriviaAnswer(quiz, "Optional written answer");
+    expect(quiz.items[0]?.writtenAnswer).toBe("Optional written answer");
     quiz = revealTriviaAnswer(quiz);
-    expect(setTriviaAnswer(quiz, 0, "Changed after reveal")).toBe(quiz);
-    quiz = setTriviaMark(quiz, 0, true);
-    quiz = setTriviaMark(quiz, 1, false);
-    expect(getTriviaScores(quiz)).toEqual([1, 0]);
+    expect(setTriviaAnswer(quiz, "Changed after reveal")).toBe(quiz);
     valid(quiz);
     quiz = nextTriviaQuestion(quiz, now);
-    quiz = setTriviaMark(revealTriviaAnswer(quiz), 1, true);
-    quiz = nextTriviaQuestion(quiz, now);
+    quiz = nextTriviaQuestion(revealTriviaAnswer(quiz), now);
     expect(quiz.phase).toBe("results");
-    expect(getTriviaScores(quiz)).toEqual([1, 1]);
     expect(nextTriviaQuestion(quiz, now)).toBe(quiz);
-    expect(setTriviaMark(quiz, 1, null)).toBe(quiz);
+    expect(setTriviaAnswer(quiz, "Too late")).toBe(quiz);
     valid(quiz);
   });
 
-  it("retains all written answers in end mode, then reveals and marks one answer at a time", () => {
+  it("retains all written answers in end mode, then reveals one answer at a time", () => {
     let quiz = start({ revealMode: "end" });
-    quiz = setTriviaAnswer(quiz, 0, "First answer");
+    quiz = setTriviaAnswer(quiz, "First answer");
     expect(revealTriviaAnswer(quiz)).toBe(quiz);
     quiz = nextTriviaQuestion(quiz, now);
     expect(quiz.phase).toBe("questions");
     expect(quiz.items[0]?.revealed).toBe(false);
     valid(quiz);
-    quiz = setTriviaAnswer(quiz, 1, "Second answer");
+    quiz = setTriviaAnswer(quiz, "Second answer");
     quiz = nextTriviaQuestion(quiz, now);
     expect(quiz).toMatchObject({ phase: "answers", cursor: 0 });
     expect(quiz.items.map((item) => item.revealed)).toEqual([true, false]);
-    expect(setTriviaAnswer(quiz, 0, "Too late")).toBe(quiz);
-    quiz = setTriviaMark(quiz, 0, true);
-    quiz = setTriviaMark(quiz, 0, null);
-    expect(getTriviaScores(quiz)).toEqual([0, 0]);
+    expect(setTriviaAnswer(quiz, "Too late")).toBe(quiz);
     valid(quiz);
     quiz = nextTriviaQuestion(quiz, now);
-    expect(quiz.items[1]).toMatchObject({ revealed: true, writtenAnswers: ["", "Second answer"] });
+    expect(quiz.items[1]).toMatchObject({ revealed: true, writtenAnswer: "Second answer" });
     quiz = nextTriviaQuestion(quiz, now);
     expect(quiz.phase).toBe("results");
     valid(quiz);
@@ -239,12 +263,10 @@ describe("Trivia rules and durable sessions", () => {
     valid(nextTriviaQuestion(review, now + 1));
   });
 
-  it("bounds written answers and rejects unknown team indexes", () => {
+  it("bounds the shared written answer", () => {
     const quiz = start();
-    expect(setTriviaAnswer(quiz, 0, "x".repeat(500)).items[0]?.writtenAnswers[0]).toHaveLength(500);
-    expect(() => setTriviaAnswer(quiz, 0, "x".repeat(501))).toThrow("500");
-    expect(() => setTriviaAnswer(quiz, -1, "Answer")).toThrow("Unknown trivia team");
-    expect(() => setTriviaMark(quiz, 0.5, true)).toThrow("Unknown trivia team");
+    expect(setTriviaAnswer(quiz, "x".repeat(500)).items[0]?.writtenAnswer).toHaveLength(500);
+    expect(() => setTriviaAnswer(quiz, "x".repeat(501))).toThrow("500");
   });
 
   it("rejects corrupted dimensions, identities, references and progression in saved state", () => {
@@ -255,7 +277,9 @@ describe("Trivia rules and durable sessions", () => {
       { ...quiz, phase: "answers" },
       {
         ...quiz,
-        items: quiz.items.map((item, index) => (index === 0 ? { ...item, marks: [] } : item)),
+        items: quiz.items.map((item, index) =>
+          index === 0 ? { ...item, writtenAnswer: [] } : item,
+        ),
       },
       {
         ...quiz,
@@ -278,7 +302,7 @@ describe("Trivia rules and durable sessions", () => {
       {
         ...quiz,
         items: quiz.items.map((item, index) =>
-          index === 0 ? { ...item, marks: [true, null] } : item,
+          index === 0 ? { ...item, writtenAnswer: "x".repeat(501) } : item,
         ),
       },
     ];
@@ -290,18 +314,24 @@ describe("Trivia rules and durable sessions", () => {
     expect(
       triviaSessionSchema.safeParse({
         ...session(quiz),
-        settings: { ...quiz.settings, teams: ["Other", "Teams"] },
+        settings: { ...quiz.settings, revealMode: "end" },
       }).success,
     ).toBe(false);
+    expect(triviaSessionSchema.safeParse({ ...session(quiz), schemaVersion: 1 }).success).toBe(
+      false,
+    );
+    expect(triviaSettingsSchema.safeParse({ ...quiz.settings, teams: ["Old team"] }).success).toBe(
+      false,
+    );
   });
 
-  it("keeps ordinary 100-question eight-team games within the native snapshot limit", () => {
+  it("keeps ordinary 100-question quizzes within the native snapshot limit", () => {
     let quiz = start(
-      { count: 100, teams: Array.from({ length: 8 }, (_, index) => `Team ${String(index)}`) },
+      { count: 100 },
       Array.from({ length: 100 }, (_, index) => question(index)),
     );
     for (let index = 0; index < 100; index++) {
-      for (let team = 0; team < 8; team++) quiz = setTriviaAnswer(quiz, team, "x".repeat(500));
+      quiz = setTriviaAnswer(quiz, "x".repeat(500));
       quiz = nextTriviaQuestion(revealTriviaAnswer(quiz), now);
     }
     valid(quiz);

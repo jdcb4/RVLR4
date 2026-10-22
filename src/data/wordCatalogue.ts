@@ -3,6 +3,7 @@ import what from "./catalogue/what.json";
 import where from "./catalogue/where.json";
 import who from "./catalogue/who.json";
 import { type CatalogueEntry, type CatalogueGame, catalogueSchema } from "./catalogueSchema";
+import { isDifficultyAllowed } from "./difficulty";
 
 const catalogue = catalogueSchema.parse([...who, ...what, ...where, ...kids]);
 
@@ -24,8 +25,6 @@ export function getCatalogueForGame(
     (entry) =>
       entry.games.includes(game) &&
       (!options.kidsMode || entry.kidAppropriate) &&
-      (!options.difficulty ||
-        options.difficulty === "all" ||
-        entry.difficulty === options.difficulty),
+      isDifficultyAllowed(entry.difficulty, options.difficulty),
   );
 }

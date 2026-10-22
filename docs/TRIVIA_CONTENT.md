@@ -1,6 +1,6 @@
 # Trivia content storage
 
-Storage foundation shipped in 0.33.0; presenter-led gameplay ships in 0.35.0 behind Settings → Show Trivia (off by default). No discovered historical question bank has been imported. Version 2 of `src/data/trivia/bundled.json` supplies 30 newly written, source-checked starter questions for testing in app 0.35.1. Future publications must use a higher version.
+Storage foundation shipped in 0.33.0; optional gameplay shipped in 0.35.0 behind Settings → Show Trivia (off by default). In 0.36.0, Trivia is a cooperative quiz to discuss together, with one optional shared written answer per question and no teams, marking or scores. No discovered historical question bank has been imported. Version 2 of `src/data/trivia/bundled.json` still supplies the 30 newly written, source-checked starter questions introduced in 0.35.1. Future publications must use a higher version.
 
 ## Records and publishing
 
@@ -32,7 +32,9 @@ The `RvlryDevice` bridge exposes `readContent` and `installContent`. `rvlry-cont
 
 The browser development adapter uses `rvlry.content.trivia` and a single localStorage replacement; it is not evidence of native durability and is not a multi-tab transactional database. No game session keys are touched by content updates.
 
-Trivia saves selected question/answer copies, order, progress, reveal state, optional written answers and manual scores in `trivia.device.v1`. This keeps an in-progress quiz independent of pack replacement. Selection balances available categories without repeating questions. Expiry is rechecked before unshown questions, including on resume; expired unshown questions are excluded without replacement. Already shown questions retain their answer review. Insufficient pools block starting; Kids mode and difficulty are never silently widened. Team answers are optional, up to 500 characters each, and marking is manual. Quiz snapshots stay within the native 1 MiB limit; excessively large content or answers produce an explicit error.
+Trivia saves selected question/answer copies, order, progress, reveal state and optional shared written answers in `trivia.device.v2`, with `schemaVersion: 2`. This keeps an in-progress quiz independent of pack replacement. Competitive version-1 sessions are not loaded or migrated; upgrading to 0.36.0 starts a fresh Trivia session under the prerelease compatibility policy. Other games and content packs keep their own keys.
+
+Selection balances available categories without repeating questions. The visible Easy, Medium and Hard buttons select an easy-only pool, a 50:50 easy/medium mix, or an equal easy/medium/hard mix respectively. Where stock permits, tier counts differ by at most one; ties are random. Hard is the new default; legacy `all` settings mean Hard. Shortages are filled only from the selected mode's allowed tiers, without widening categories or Kids eligibility. Insufficient eligible pools block starting. Expiry is rechecked before unshown questions, including on resume; expired unshown questions are excluded without replacement. Already shown questions retain their answer review. Shared written answers are optional, up to 500 characters each, and lock when their answer is revealed. Quiz snapshots stay within the native 1 MiB limit; excessively large content or answers produce an explicit error.
 
 `app.features.v1` stores picker visibility independently of games and content. Turning Trivia off only hides its landing-page card; it does not delete saves or protect the route. New games use the current global Kids mode preference. Question installation and publisher configuration remain separate follow-up work.
 

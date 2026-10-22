@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.36.0 — 22 October 2026
+
+- Make Trivia a cooperative quiz with one optional shared written answer per question. Remove teams, marking and scores while keeping both answer-reveal modes and interruption recovery.
+- Store cooperative Trivia in a new version-2 session; earlier competitive Trivia saves do not resume after this update. Keep the 30-question starter bank and content pack version 2.
+- Replace difficulty dropdowns with Easy, Medium and Hard buttons. Easy uses easy content; Medium mixes easy/medium equally; Hard mixes all three tiers equally, filling shortages within allowed tiers and category/Kids filters. New setups default to Hard; legacy All settings use Hard.
+
 ## 0.35.1 — 22 October 2026
 
 - Bundle 30 newly authored, source-checked Trivia questions across all eight categories for testing, with difficulty ratings, answer variants and Kids mode suitability. Trivia pack version advances to 2; the default-off visibility toggle and existing quiz copies are preserved.

@@ -36,36 +36,38 @@ export function chooseWeightedCategory(
 }
 
 export function buildTurnDeck(
-  allWords: readonly WordEntry[],
+  allWords: readonly (WordEntry & { readonly difficulty?: DifficultyRating })[],
   settings: GameSettings,
   random = Math.random,
 ): TurnDeck {
+  const eligibleWords = allWords.filter((word) =>
+    isDifficultyAllowed(word.difficulty ?? "easy", settings.wordDifficulty),
+  );
   const availableCategories = settings.selectedCategories.filter((category) =>
-    allWords.some((word) => word.category === category),
+    eligibleWords.some((word) => word.category === category),
   );
   const category = chooseWeightedCategory(availableCategories, random);
-  const matchingWords = allWords.filter((word) => word.category === category);
+  const matchingWords = eligibleWords.filter((word) => word.category === category);
 
   if (matchingWords.length === 0) {
     throw new Error(`No words available for ${category}.`);
   }
 
-  const shuffled = shuffleWords(matchingWords, random).slice(0, 90);
+  const selected = selectDifficultyBalanced(
+    matchingWords.map((word) => ({ ...word, difficulty: word.difficulty ?? "easy" })),
+    90,
+    settings.wordDifficulty,
+    random,
+  ).map(({ word, category, hint }) => ({ word, category, hint }));
 
   return {
     category,
-    words: shuffled.slice(0, 30),
-    reserveWords: shuffled.slice(30, 90),
+    words: selected.slice(0, 30),
+    reserveWords: selected.slice(30, 90),
   };
 }
-
-function shuffleWords(words: readonly WordEntry[], random: () => number) {
-  const shuffled = [...words];
-
-  for (let index = shuffled.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(random() * (index + 1));
-    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex]!, shuffled[index]!];
-  }
-
-  return shuffled;
-}
+import {
+  type DifficultyRating,
+  isDifficultyAllowed,
+  selectDifficultyBalanced,
+} from "@/data/difficulty";

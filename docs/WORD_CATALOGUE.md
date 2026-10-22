@@ -32,7 +32,9 @@ Every canonical entry, including entries inherited from the original lists, has 
 - `medium`: familiar general culture, school knowledge or a well-known field; may require a useful clue.
 - `hard`: less widely recognised or more specialised, but still a meaningful playable answer. Hard does not justify adding random obscurities.
 
-Ratings are editorial estimates for the adult audience, not measured success rates. The existing gameplay `difficultyMode` is a legacy rule setting and is not this metadata. WWW and Imposter expose `wordDifficulty`: All keeps every rating, while Easy, Medium and Hard each select that exact rating. App-wide Kids mode intersects this selection with `kidAppropriate`, not only `kidTargeted`. Hat automatic suggestions also honour Kids mode; manually entered clues are unchanged. Empty intersections show an error, never an unfiltered fallback. Imposter currently has no Hard kids-suitable entries.
+Ratings are editorial estimates for the adult audience, not measured success rates. The existing gameplay `difficultyMode` is a legacy rule setting and is not this metadata. WWW and Imposter expose three `wordDifficulty` buttons: Easy uses easy entries only; Medium targets a 50:50 easy/medium mix; Hard targets equal easy/medium/hard shares. Where stock permits, tier counts differ by at most one; ties are random. Hard is the new default, and saved legacy `all` values mean Hard. Single draws choose uniformly among available allowed tiers, then uniformly within that tier. Shortage filling stays within the selected mode's allowed tiers.
+
+App-wide Kids mode intersects this selection with `kidAppropriate`, not only `kidTargeted`, and selected categories remain in force. Hat automatic suggestions also honour Kids mode; manually entered clues are unchanged. Empty eligible pools show an error, never an unfiltered fallback. Imposter has no hard-rated kids-suitable entries, so Hard Kids selection fills from its eligible easy/medium entries.
 
 ## Provenance and maintenance
 

@@ -9,15 +9,20 @@ export function OptionGroup({
   className,
   optionsClassName,
   inlineLayout = false,
+  disabled = false,
 }: {
   readonly label: string;
   readonly children: ReactNode;
   readonly className?: string;
   readonly optionsClassName?: string;
   readonly inlineLayout?: boolean;
+  readonly disabled?: boolean;
 }) {
   return (
-    <fieldset className={cn("grid min-w-0 gap-3", inlineLayout && "block", className)}>
+    <fieldset
+      disabled={disabled}
+      className={cn("grid min-w-0 gap-3", inlineLayout && "block", className)}
+    >
       <legend
         className={cn(
           "text-typ-ui font-semibold",

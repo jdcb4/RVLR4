@@ -1,5 +1,5 @@
 import type { ImposterSnapshot } from "@/domain/imposter/types";
-import { getImposterWordList } from "@/domain/imposter/wordList";
+import { chooseImposterWord } from "@/domain/imposter/wordList";
 import {
   concealImposterSnapshot,
   createImposterDeviceSession,
@@ -230,9 +230,13 @@ export class ImposterDeviceController {
     try {
       const { kidsMode } = await requireContentPreferences();
       if (!this.active || this.paused || epoch !== this.epoch) return;
+      const secretWord = chooseImposterWord(
+        { difficulty: this.session.snapshot.wordDifficulty, kidsMode },
+        Math.random,
+      );
       const result = startImposterRound(
         this.session.snapshot,
-        getImposterWordList({ difficulty: this.session.snapshot.wordDifficulty, kidsMode }),
+        secretWord === undefined ? [] : [secretWord],
         Math.random,
         "Unable to deal this round.",
         "No words match these settings. Choose another difficulty or change Kids mode in app settings.",

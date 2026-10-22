@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import type { DifficultyRating } from "@/data/difficulty";
 import { addDuplicateIssues, staticTextSchema } from "@/data/staticDataSchemas";
 import { getCatalogueForGame, type WordPoolOptions } from "@/data/wordCatalogue";
 
@@ -25,15 +26,13 @@ export const whoWhatWhereWordListSchema = z
     );
   });
 
-const words = whoWhatWhereWordListSchema.parse(
-  getCatalogueForGame("www").map(({ word, category, hint }) => ({ word, category, hint })),
-) satisfies readonly WordEntry[];
-
-export function getWhoWhatWhereWordList(options: WordPoolOptions = {}): readonly WordEntry[] {
-  if ((!options.difficulty || options.difficulty === "all") && !options.kidsMode) return words;
-  return getCatalogueForGame("www", options).map(({ word, category, hint }) => ({
+export function getWhoWhatWhereWordList(
+  options: WordPoolOptions = {},
+): readonly (WordEntry & { readonly difficulty: DifficultyRating })[] {
+  return getCatalogueForGame("www", options).map(({ word, category, hint, difficulty }) => ({
     word,
     category,
     hint,
+    difficulty,
   }));
 }

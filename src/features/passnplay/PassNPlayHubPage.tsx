@@ -74,7 +74,7 @@ export function PassNPlayHubPage() {
               ? [
                   {
                     title: "Trivia",
-                    description: "Read the questions. Find your champions.",
+                    description: "A quiz to enjoy together.",
                     path: "trivia",
                     Icon: IconTrivia,
                   },

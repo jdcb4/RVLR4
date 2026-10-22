@@ -270,11 +270,11 @@ describe("Imposter durable device controller", () => {
     expect(controller.getSnapshot().hydrationFailed).toBe(false);
   });
 
-  it("persists difficulty and uses its exact kids-safe pool only when dealing a new round", async () => {
+  it("persists difficulty and uses its allowed kids-safe tiers only when dealing a new round", async () => {
     vi.useFakeTimers();
     const controller = new ImposterDeviceController();
     await controller.hydrate();
-    expect(controller.getSnapshot().session.snapshot.wordDifficulty).toBe("all");
+    expect(controller.getSnapshot().session.snapshot.wordDifficulty).toBe("hard");
     controller.updateWordDifficulty("medium");
     await vi.advanceTimersByTimeAsync(400);
     expect(device.saved?.snapshot.wordDifficulty).toBe("medium");
@@ -321,13 +321,30 @@ describe("Imposter durable device controller", () => {
     await controller.advanceSetup();
     await controller.advanceSetup();
     vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
-    const words = vi.spyOn(wordLists, "getImposterWordList");
+    const words = vi.spyOn(wordLists, "chooseImposterWord").mockReturnValueOnce(undefined);
     const writes = vi.mocked(writeSnapshot).mock.calls.length;
     await controller.startRound();
-    expect(words).toHaveBeenCalledExactlyOnceWith({ difficulty: "hard", kidsMode: true });
+    expect(words).toHaveBeenCalledExactlyOnceWith(
+      { difficulty: "hard", kidsMode: true },
+      Math.random,
+    );
     expect(controller.getSnapshot().setupError).toContain("No words match these settings");
     expect(controller.getSnapshot().session.snapshot.round).toBeNull();
     expect(writeSnapshot).toHaveBeenCalledTimes(writes);
+  });
+
+  it("deals Hard Kids rounds from available lower tiers when no hard clues exist", async () => {
+    const controller = await setup();
+    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+    const random = vi.spyOn(Math, "random").mockReturnValue(0.75);
+    await controller.startRound();
+    const word = controller.getSnapshot().session.snapshot.round?.secretWord;
+    const entry = getCatalogueForGame("imposter", { kidsMode: true }).find(
+      (item) => item.word === word,
+    );
+    expect(entry).toMatchObject({ difficulty: "medium", kidAppropriate: true });
+    expect(controller.getSnapshot().setupError).toBe("");
+    expect(random).toHaveBeenCalled();
   });
 
   it("blocks repeat deals during preference loading and cancels when covered before generation", async () => {

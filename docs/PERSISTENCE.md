@@ -13,6 +13,7 @@ Each game owns a separate complete validated session through nativeSnapshotStore
 | whowhatwhere.device-session.v1 | Setup position, teams/settings, full match/deck, monotonic remaining time, pause cover and recap/round-complete presentation position.                        |
 | hat.device-session.v1          | Setup and private figure drafts/entry position, complete match/deck, phase/team/presenter, remaining time and recap position.                                 |
 | imposter.device-session.v1     | Setup/roster, once-generated secret and assignments, current private-reveal player and clue/discussion/final-reveal step. Visibility is always false on disk. |
+| trivia.device.v2               | Cooperative setup, selected question/answer copies and order, progress, reveal state and optional shared written answers; schemaVersion 2. |
 
 Who What Where version-1 compatibility is preserved: old records without presentationStage default to null. Tests load an installed-style active-turn envelope and prove its bytes remain unchanged while other games save or clear their own records.
 
@@ -22,7 +23,7 @@ Bundled catalogue metadata is not stored in game snapshots. Game adapters projec
 
 `app.content.v1` stores `{ schemaVersion: 1, kidsMode }` independently of themes and games. Defaults off only when no record exists; corrupt or unsupported preferences block new automatic selection until loading succeeds. Preference changes publish after durable commit; failed writes leave the last committed value active. A new pool waits for an outstanding preference write.
 
-WWW settings add `wordDifficulty` (all/easy/medium/hard) and a frozen `kidsMode` value captured when a match starts. Later turns use those saved settings; changing the app preference does not change an existing match. Legacy v1 settings default to all/false, independently of the retained legacy `difficultyMode` rule field. Imposter snapshots add `wordDifficulty`, defaulting old records to all; new deals read the global preference, while resumed secrets never regenerate. Hat suggestions read the preference per request and discard delayed results after edits or navigation; manual and already-submitted clues remain intact.
+WWW and Imposter settings use `wordDifficulty` with Easy, Medium and Hard selections; Hard is the new default, and legacy `all` values are accepted as Hard. Easy uses only easy entries, Medium targets equal easy/medium shares, and Hard targets equal easy/medium/hard shares, filling shortages only within allowed tiers and existing category/Kids filters. WWW freezes `kidsMode` when a match starts. Later turns use saved settings; changing the app preference does not change an existing match. Missing legacy Kids settings default to false, independently of the retained legacy `difficultyMode` rule field. New Imposter deals read the global preference, while resumed secrets never regenerate. Hat suggestions read the preference per request and discard delayed results after edits or navigation; manual and already-submitted clues remain intact.
 
 `app.appearance.v1` stores `{ schemaVersion: 1, theme }` independently of every game. The theme enum is validated and uses the same native current/previous snapshot store. Selection is shown only after commit; unsupported/corrupt records are preserved, and Settings offers a load retry rather than silently replacing them. Browser previews use the same localStorage envelope adapter as game sessions.
 
@@ -42,7 +43,9 @@ services/savedStates contains reusable nested rule validation and tested histori
 
 ## Trivia content foundation — 0.33.0
 
-Content packs use separate `rvlry-content.db` chunk rows rather than the 1 MiB session envelopes. Atomic full-synchronous transactions retain current and previous pack bodies independently for Trivia and words. Native compare-and-swap prevents competing installations from overwriting newer content. The TypeScript layer validates packs and retains the selected valid checkpoint during recovery. Browser previews use separate `rvlry.content.trivia` storage and are not evidence of native durability. See [TRIVIA_CONTENT.md](TRIVIA_CONTENT.md). Trivia gameplay uses the independent `trivia.device.v1` session key (0.35.0), including selected question copies, written answers, reveal state and marks. `app.features.v1` stores the default-off picker toggle; hiding Trivia preserves its save.
+Content packs use separate `rvlry-content.db` chunk rows rather than the 1 MiB session envelopes. Atomic full-synchronous transactions retain current and previous pack bodies independently for Trivia and words. Native compare-and-swap prevents competing installations from overwriting newer content. The TypeScript layer validates packs and retains the selected valid checkpoint during recovery. Browser previews use separate `rvlry.content.trivia` storage and are not evidence of native durability. See [TRIVIA_CONTENT.md](TRIVIA_CONTENT.md).
+
+Cooperative Trivia uses `trivia.device.v2` with `schemaVersion: 2` in 0.36.0. It stores selected question copies, shared written answers and reveal/progress state without teams, scores or marks. Earlier competitive `trivia.device.v1` sessions are ignored rather than migrated; users start a fresh quiz after upgrading. This deliberate prerelease reset does not affect other games or the independently versioned question pack. `app.features.v1` stores the default-off picker toggle; hiding Trivia preserves its current save.
 
 ## Screenshots (0.34.1)
 

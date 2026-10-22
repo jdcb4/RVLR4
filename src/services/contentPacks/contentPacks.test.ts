@@ -201,7 +201,7 @@ it("expiry is exclusive, evaluated again on resume, and combined with kids/diffi
     isTriviaQuestionEligible({ ...question, kidAppropriate: false }, { kidsMode: true }, end),
   ).toBe(false);
   expect(isTriviaQuestionEligible(question, { kidsMode: false, difficulty: "hard" }, end)).toBe(
-    false,
+    true,
   );
 });
 

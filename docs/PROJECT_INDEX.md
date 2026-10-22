@@ -11,8 +11,9 @@ The current deliverable is a standalone offline Android app with Who What Where,
 - `src/features/whowhatwhere/` — converted controller, full setup/game recovery and UI.
 - `src/services/nativeSnapshotStore.ts` — ordered validated saves and recovery.
 - `src/services/deviceLifecycle.ts` — native/DOM lifecycle coordination.
-- `src/domain/` — independent Who What Where, Hat and Imposter game rules.
+- `src/domain/` — independent Who What Where, Hat, Imposter and cooperative Trivia game rules.
 - `src/features/hat-game/`, `src/features/imposter/` — native session/controller/page conversions.
+- `src/features/trivia/` — optional cooperative quiz with shared answers and independent recovery.
 - `src/features/game-app-hooks/` — stable controller binding and bounded-history measurement.
 - `src/components/` — shared phone shell and UI.
 - `src/data/` — bundled words; downloadable packs are a later milestone.
@@ -29,7 +30,7 @@ commands in [ANDROID.md](ANDROID.md); browser tests alone do not verify them.
 
 - [Roadmap](ROADMAP.md) — future work only.
 - [Trivia content storage](TRIVIA_CONTENT.md) — implemented pack/schema/publishing contract; 30-question starter bank; wider corpus and publisher integration pending.
-- [Trivia discovery](TRIVIA_DISCOVERY.md) — source findings and ingestion candidates; no candidate bank approved.
+- [Trivia discovery](TRIVIA_DISCOVERY.md) — confirmed cooperative direction, source findings and ingestion candidates; no candidate bank approved.
 - [Android build and testing](ANDROID.md) — local toolchain, APK and device checks.
 - [Persistence](PERSISTENCE.md) — current Android save contract and historical browser saves.
 - [Word catalogue](WORD_CATALOGUE.md) — answer conventions, ratings, kids suitability and original-source provenance.

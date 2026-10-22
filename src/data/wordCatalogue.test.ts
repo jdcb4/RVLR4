@@ -7,6 +7,7 @@ import { getImposterWordList } from "@/domain/imposter/wordList";
 import { getWhoWhatWhereWordList } from "@/domain/whowhatwhere/wordList";
 
 import { type CatalogueEntry, catalogueIdentity, catalogueSchema } from "./catalogueSchema";
+import { isDifficultyAllowed } from "./difficulty";
 import originalHat from "./hatClueSuggestions.json";
 import originalImposter from "./imposterWords.json";
 import originalWww from "./whoWhatWhereWords.json";
@@ -35,7 +36,7 @@ describe("curated word catalogue", () => {
             all.filter(
               (entry) =>
                 (!kidsMode || entry.kidAppropriate) &&
-                (difficulty === "all" || entry.difficulty === difficulty),
+                isDifficultyAllowed(entry.difficulty, difficulty),
             ),
           );
         }
@@ -93,9 +94,14 @@ describe("curated word catalogue", () => {
     }
   });
 
-  it("projects only legacy payload fields into every game", () => {
+  it("keeps WWW selection ratings and projects display words into Hat and Imposter", () => {
     expect(getWhoWhatWhereWordList()).toEqual(
-      getCatalogueForGame("www").map(({ word, category, hint }) => ({ word, category, hint })),
+      getCatalogueForGame("www").map(({ word, category, hint, difficulty }) => ({
+        word,
+        category,
+        hint,
+        difficulty,
+      })),
     );
     expect(getHatClueSuggestions()).toEqual(getCatalogueForGame("hat").map(({ word }) => word));
     expect(getImposterWordList()).toEqual(getCatalogueForGame("imposter").map(({ word }) => word));

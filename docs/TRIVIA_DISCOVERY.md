@@ -2,11 +2,12 @@
 
 Joe approved the separate-corpus storage approach and implementation on 22 October 2026. The storage foundation is implemented in 0.33.0; see [TRIVIA_CONTENT.md](TRIVIA_CONTENT.md). No candidate questions have been approved or imported, and default-off Trivia gameplay is implemented in 0.35.0.
 
-## Confirmed first-version direction
+## Confirmed current direction — 0.36.0
 
-- One presenter uses the phone. Written answers are optional and users self-mark; include a manual scoreboard. Joe confirmed optional written answers inside the app. No automatic marking.
+- A group works through the quiz together, like a newspaper quiz over breakfast. One person may hold the phone; there are no teams, competitive scoring or marks. One optional shared written answer per question remains available. This supersedes the earlier presenter/team-answer and manual-scoreboard direction shipped in 0.35.0.
 - Select 10, 20, 30 or a custom number of questions from a reviewed offline bank, with balanced selected categories and no within-quiz duplicates. No runtime AI generation.
 - Reveal answers after each question or together at the end. Save question order, progress and reveal state across interruptions.
+- Use three visible difficulty buttons: Easy selects easy questions; Medium targets equal easy/medium shares; Hard targets equal easy/medium/hard shares. Fill shortages only within the selected tiers and current category/Kids filters. Hard is the default; legacy All means Hard.
 - Confirmed categories: General Knowledge; History; Geography; Science & Nature; Arts & Literature; Film & TV; Music; Sport & Games.
 - Content records should carry stable IDs, question, answer/acceptable variants, category, difficulty, kids suitability, provenance/review information and optional expiry. Expired questions must not be presented, including after a resume. Exact expiry handling belongs in the later detailed plan.
 - Ingestion should preserve source records, normalise formats, deduplicate, verify facts, assess audience/expiry, review and publish a versioned offline pack. Existing ACTIVE/status flags are not proof of approval. Global Kids mode should apply to the reviewed Trivia pool.

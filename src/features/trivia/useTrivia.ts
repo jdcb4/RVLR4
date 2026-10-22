@@ -19,7 +19,7 @@ import {
 } from "@/services/deviceLifecycle";
 import { readSnapshot, writeSnapshot } from "@/services/nativeSnapshotStore";
 
-const key = "trivia.device.v1";
+const key = "trivia.device.v2";
 
 /** One ordered owner: transforms always see the last acknowledged checkpoint. */
 class TriviaController {

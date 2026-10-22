@@ -70,7 +70,7 @@ function mount() {
 }
 function saved(revealMode: "each" | "end" = "each", count = 1) {
   const session = createTriviaSession();
-  const settings = { ...session.settings, count, revealMode, teams: ["Otters", "Owls"] };
+  const settings = { ...session.settings, count, revealMode };
   return {
     ...session,
     settings,
@@ -94,33 +94,24 @@ describe("Trivia phone flow", () => {
     expect(screen.queryByText(/Synthetic question/)).not.toBeInTheDocument();
   });
 
-  it("keeps saved content covered until Resume, persists optional writing, and self-marks", async () => {
+  it("keeps saved content covered until Resume and persists one shared optional answer", async () => {
     storage.value = saved();
     const user = userEvent.setup();
     mount();
     await screen.findByRole("heading", { name: "Your saved quiz" });
     expect(screen.queryByText(/Synthetic question/)).not.toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Resume" }));
-    await user.click(await screen.findByRole("button", { name: "Write answers here (optional)" }));
-    await user.type(screen.getByRole("textbox", { name: "Otters answer" }), "Our draft");
-    await waitFor(() => expect(storage.value?.quiz?.items[0]?.writtenAnswers[0]).toBe("Our draft"));
+    await user.click(await screen.findByRole("button", { name: "Write an answer (optional)" }));
+    await user.type(screen.getByRole("textbox", { name: "Your answer" }), "Our draft");
+    await waitFor(() => expect(storage.value?.quiz?.items[0]?.writtenAnswer).toBe("Our draft"));
     await user.click(await screen.findByRole("button", { name: "Reveal answer" }));
     expect(await screen.findByText(/Synthetic answer/)).toBeInTheDocument();
     expect(screen.getByText("Our draft")).toBeInTheDocument();
-    await user.click(
-      within(screen.getByRole("group", { name: "Mark Otters" })).getByRole("button", {
-        name: "Correct",
-      }),
-    );
-    await user.click(
-      within(screen.getByRole("group", { name: "Mark Owls" })).getByRole("button", {
-        name: "Incorrect",
-      }),
-    );
-    await user.click(screen.getByRole("button", { name: "See results" }));
+    expect(screen.queryByRole("button", { name: "Correct" })).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Finish quiz" }));
     expect(await screen.findByRole("heading", { name: "Quiz complete" })).toBeInTheDocument();
-    expect(screen.getByText("1 / 1")).toBeInTheDocument();
-    expect(screen.getByText("0 / 1")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "New quiz" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Back to games" })).toBeInTheDocument();
   });
 
   it("disables starting when the selected filters have too few eligible questions", async () => {
@@ -135,9 +126,9 @@ describe("Trivia phone flow", () => {
     await user.clear(count);
     await user.type(count, "1");
     await waitFor(() => expect(screen.getByRole("button", { name: "Start quiz" })).toBeEnabled());
-    await user.selectOptions(screen.getByRole("combobox", { name: "Difficulty" }), "hard");
-    await waitFor(() => expect(screen.getByRole("button", { name: "Start quiz" })).toBeDisabled());
-    expect(screen.getByText(/0 questions available/)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Medium" }));
+    await waitFor(() => expect(screen.getByRole("button", { name: "Start quiz" })).toBeEnabled());
+    expect(screen.getByText(/2 questions available/)).toBeInTheDocument();
   });
 
   it("waits until the last question to show end-reveal answers", async () => {
@@ -151,7 +142,7 @@ describe("Trivia phone flow", () => {
     await user.click(await screen.findByRole("button", { name: "Reveal answers" }));
     expect(await screen.findByText(/Synthetic answer/)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Next answer" }));
-    await user.click(screen.getByRole("button", { name: "See results" }));
+    await user.click(screen.getByRole("button", { name: "Finish quiz" }));
     expect(await screen.findByRole("heading", { name: "Quiz complete" })).toBeInTheDocument();
   });
 
@@ -169,6 +160,7 @@ describe("Trivia phone flow", () => {
     );
     expect(await screen.findByRole("heading", { name: "Set up your quiz" })).toBeInTheDocument();
     expect(storage.value?.quiz).toBeNull();
-    expect(screen.getByRole("textbox", { name: "Team 1" })).toHaveValue("Otters");
+    expect(screen.getByRole("button", { name: "Hard" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByRole("textbox", { name: /Team/ })).not.toBeInTheDocument();
   });
 });

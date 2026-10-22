@@ -1,30 +1,41 @@
 import { describe, expect, it } from "vitest";
 
+import { isDifficultyAllowed } from "@/data/difficulty";
 import { getCatalogueForGame } from "@/data/wordCatalogue";
 
 import { getWhoWhatWhereWordList } from "./wordList";
 
 describe("WWW word pool adapter", () => {
-  it("retains the full default pool and existing snapshot word shape", () => {
+  it("retains full default pool ratings until the turn deck is selected", () => {
     expect(getWhoWhatWhereWordList()).toEqual(
-      getCatalogueForGame("www").map(({ word, category, hint }) => ({ word, category, hint })),
+      getCatalogueForGame("www").map(({ word, category, hint, difficulty }) => ({
+        word,
+        category,
+        hint,
+        difficulty,
+      })),
     );
   });
 
   it.each(["all", "easy", "medium", "hard"] as const)(
-    "projects exact %s difficulty and Kids mode filters",
+    "projects allowed %s tiers and Kids mode filters",
     (difficulty) => {
       for (const kidsMode of [false, true]) {
         const options = { difficulty, kidsMode };
         const expected = getCatalogueForGame("www", options);
         expect(getWhoWhatWhereWordList(options)).toEqual(
-          expected.map(({ word, category, hint }) => ({ word, category, hint })),
+          expected.map(({ word, category, hint, difficulty }) => ({
+            word,
+            category,
+            hint,
+            difficulty,
+          })),
         );
         expect(expected.length).toBeGreaterThan(0);
         expect(expected.every((entry) => !kidsMode || entry.kidAppropriate)).toBe(true);
-        expect(
-          expected.every((entry) => difficulty === "all" || entry.difficulty === difficulty),
-        ).toBe(true);
+        expect(expected.every((entry) => isDifficultyAllowed(entry.difficulty, difficulty))).toBe(
+          true,
+        );
       }
     },
   );

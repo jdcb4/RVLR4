@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { catalogueIdentity } from "./catalogueSchema";
+import { isDifficultyAllowed } from "./difficulty";
 
 export const triviaCategories = [
   "general",
@@ -91,8 +92,6 @@ export function isTriviaQuestionEligible(
     Number.isFinite(now) &&
     (!question.expiresAt || now < Date.parse(question.expiresAt)) &&
     (!options.kidsMode || question.kidAppropriate) &&
-    (!options.difficulty ||
-      options.difficulty === "all" ||
-      question.difficulty === options.difficulty)
+    isDifficultyAllowed(question.difficulty, options.difficulty)
   );
 }

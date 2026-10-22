@@ -56,10 +56,9 @@ describe("Imposter device privacy flow", () => {
     const user = userEvent.setup();
     mount();
     await screen.findByRole("heading", { name: "Game settings" });
-    const difficulty = screen.getByRole("combobox", { name: "Difficulty" });
-    expect(difficulty).toHaveValue("all");
-    await user.selectOptions(difficulty, "medium");
-    expect(difficulty).toHaveValue("medium");
+    expect(screen.getByRole("button", { name: "Hard" })).toHaveAttribute("aria-pressed", "true");
+    await user.click(screen.getByRole("button", { name: "Medium" }));
+    expect(screen.getByRole("button", { name: "Medium" })).toHaveAttribute("aria-pressed", "true");
     await user.click(screen.getByRole("button", { name: "Continue to players" }));
     await user.click(screen.getByRole("button", { name: "Review players" }));
     expect(screen.getByText("Difficulty: Medium")).toBeInTheDocument();

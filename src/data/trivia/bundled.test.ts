@@ -19,6 +19,8 @@ it("supplies 30 unique sourced questions across every category and starts a full
   });
   expect(triviaSessionSchema.safeParse(session).success).toBe(true);
   expect(new Set(session.quiz.items.map((item) => item.question.id)).size).toBe(30);
+  expect(session.quiz.items.filter((item) => item.question.difficulty === "hard")).toHaveLength(4);
+  expect(session.quiz.items.every((item) => item.writtenAnswer === "")).toBe(true);
 });
 
 it("supports a default ten-question Kids quiz without widening suitability", () => {

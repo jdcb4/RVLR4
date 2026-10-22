@@ -14,4 +14,6 @@ Aim for one screen at default phone text size; preserve scroll access with keybo
 
 Aesthetic demos are isolated under docs/design/aesthetic-demos and are not runtime screen specifications.
 
-Trivia (optional): setup → questions with optional per-team written answers → reveal and self-mark after each question, or review all answers after the questions → scores. Restore/background returns to the saved quiz chooser. Settings → Show Trivia controls only picker visibility and defaults off. An empty or insufficient eligible bank prevents starting. Team rosters and long answer content retain scroll access.
+WWW, Imposter and Trivia difficulty controls show three buttons: Easy, Medium and Hard, with Hard selected for new setups. Easy uses easy content only, Medium mixes easy/medium equally and Hard mixes all three tiers equally. Shortage filling stays within allowed tiers and the existing category/Kids filters.
+
+Trivia (optional): cooperative setup → questions with one optional shared written answer → reveal after each question, or review all answers after the questions → completion. There are no teams, marks or scores. Restore/background returns to the saved quiz chooser. Settings → Show Trivia controls only picker visibility and defaults off. An empty or insufficient eligible bank prevents starting. Long questions and shared answers retain scroll access.

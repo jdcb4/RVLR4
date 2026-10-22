@@ -32,7 +32,7 @@ vi.mock("@/services/deviceLifecycle", () => ({
   },
 }));
 
-const key = "trivia.device.v1";
+const key = "trivia.device.v2";
 const storageKey = `rvlry.snapshot.${key}`;
 const settings = () => ({ ...createTriviaSession().settings, count: 2 });
 const question = (id: number, extra: Partial<TriviaQuestion> = {}): TriviaQuestion => ({
@@ -99,12 +99,12 @@ describe("Trivia durable controller", () => {
       await gate.promise;
       await originalWrite(id, value);
     });
-    const updated = { ...settings(), teams: ["A", "B"] };
+    const updated = { ...settings(), revealMode: "end" as const };
     let saving!: Promise<void>;
     act(() => {
       saving = hook.result.current.saveSettings(updated);
     });
-    expect(hook.result.current.session?.settings.teams).toEqual(["Team 1", "Team 2"]);
+    expect(hook.result.current.session?.settings.revealMode).toBe("each");
     await act(async () => {
       gate.resolve();
       await saving;
@@ -119,18 +119,18 @@ describe("Trivia durable controller", () => {
     let answer2!: Promise<void>;
     let answer3!: Promise<void>;
     act(() => {
-      answer1 = hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, 0, "A"));
-      answer2 = hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, 1, "B"));
-      answer3 = hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, 0, "Answer"));
+      answer1 = hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "A"));
+      answer2 = hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "B"));
+      answer3 = hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "Answer"));
     });
-    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswers).toEqual(["", ""]);
+    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswer).toBe("");
     await act(async () => {
       answerGate.resolve();
       await Promise.all([answer1, answer2, answer3]);
     });
-    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswers).toEqual(["Answer", "B"]);
+    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswer).toBe("Answer");
     const saved = await snapshots.readSnapshot(key, triviaSessionSchema);
-    expect(saved.value?.quiz?.items[0]?.writtenAnswers).toEqual(["Answer", "B"]);
+    expect(saved.value?.quiz?.items[0]?.writtenAnswer).toBe("Answer");
     hook.unmount();
   });
 
@@ -144,8 +144,8 @@ describe("Trivia durable controller", () => {
     let outcomes!: Promise<PromiseSettledResult<void>[]>;
     act(() => {
       outcomes = Promise.allSettled([
-        hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, 0, "First")),
-        hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, 1, "Blocked")),
+        hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "First")),
+        hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "Blocked")),
       ]);
     });
     await act(async () => {
@@ -153,18 +153,15 @@ describe("Trivia durable controller", () => {
     });
     expect(localStorage.getItem(storageKey)).toBe(before);
     expect(hook.result.current.error).toBe("Disk full");
-    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswers).toEqual(["", ""]);
+    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswer).toBe("");
     expect(write).toHaveBeenCalledTimes(1);
     await act(async () => hook.result.current.retry());
     expect(hook.result.current.error).toBeNull();
-    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswers).toEqual(["First", ""]);
+    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswer).toBe("First");
     await act(async () =>
-      hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, 1, "After retry")),
+      hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "After retry")),
     );
-    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswers).toEqual([
-      "First",
-      "After retry",
-    ]);
+    expect(hook.result.current.session?.quiz?.items[0]?.writtenAnswer).toBe("After retry");
     hook.unmount();
   });
 
@@ -275,13 +272,13 @@ describe("Trivia durable controller", () => {
     });
     let saving!: Promise<void>;
     act(() => {
-      saving = hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, 0, "Last draft"));
+      saving = hook.result.current.changeQuiz((quiz) => setTriviaAnswer(quiz, "Last draft"));
     });
     hook.unmount();
     gate.resolve();
     await saving;
     const saved = await snapshots.readSnapshot(key, triviaSessionSchema);
-    expect(saved.value?.quiz?.items[0]?.writtenAnswers[0]).toBe("Last draft");
+    expect(saved.value?.quiz?.items[0]?.writtenAnswer).toBe("Last draft");
     expect(setDeviceKeepAwake).toHaveBeenLastCalledWith(false);
   });
 

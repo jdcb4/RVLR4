@@ -42,10 +42,13 @@ describe("SettingsScreen", () => {
       selectedCategories: settings.selectedCategories.filter((category) => category !== "Who"),
     });
 
-    const difficulty = screen.getByRole("combobox", { name: "Difficulty" });
-    expect(within(difficulty).getAllByRole("option")).toHaveLength(4);
-    expect(difficulty).toHaveValue("all");
-    await user.selectOptions(difficulty, "medium");
+    const difficulty = screen.getByRole("group", { name: "Difficulty" });
+    expect(within(difficulty).getAllByRole("button")).toHaveLength(3);
+    expect(within(difficulty).getByRole("button", { name: "Hard" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await user.click(within(difficulty).getByRole("button", { name: "Medium" }));
     expect(onChange).toHaveBeenCalledWith({ ...settings, wordDifficulty: "medium" });
   });
 
@@ -75,7 +78,7 @@ describe("SettingsScreen", () => {
       skipLimit: 1,
       selectedCategories: ["What", "Who", "Where"],
       difficultyMode: "easy",
-      wordDifficulty: "all",
+      wordDifficulty: "hard",
       kidsMode: false,
       hints: { enabled: false, perTurnLimit: 0 },
     });

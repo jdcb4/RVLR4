@@ -10,7 +10,7 @@ vi.mock("@capacitor/core", () => ({
 }));
 
 it("hides Trivia by default and lets Settings show and hide its card without touching saves", async () => {
-  localStorage.setItem("rvlry.snapshot.trivia.device.v1", "existing quiz");
+  localStorage.setItem("rvlry.snapshot.trivia.device.v2", "existing quiz");
   render(
     <MemoryRouter>
       <PassNPlayHubPage />
@@ -34,5 +34,5 @@ it("hides Trivia by default and lets Settings show and hide its card without tou
   );
   fireEvent.click(screen.getByRole("button", { name: "Close dialog" }));
   expect(screen.queryByRole("link", { name: /Trivia/ })).not.toBeInTheDocument();
-  expect(localStorage.getItem("rvlry.snapshot.trivia.device.v1")).toBe("existing quiz");
+  expect(localStorage.getItem("rvlry.snapshot.trivia.device.v2")).toBe("existing quiz");
 });

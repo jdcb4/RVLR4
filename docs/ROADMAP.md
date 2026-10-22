@@ -15,7 +15,7 @@ Deferred; not part of the current implementation:
 
 ## Trivia game — requested 22 October 2026
 
-Gameplay and storage implemented in 0.35.0 behind a default-off Settings toggle. Optional answers are written in-app and self-marked. See [Trivia content](TRIVIA_CONTENT.md).
+Gameplay and storage began in 0.35.0 behind a default-off Settings toggle. The current 0.36.0 flow is a cooperative quiz with optional shared written answers and no teams, marks or scores. See [Trivia content](TRIVIA_CONTENT.md).
 
 - **Reviewed question corpus:** expand beyond the 30-question source-checked testing bank in 0.35.1; design historical-source ingestion and wider editorial review.
 - **Corpus updates:** configure the publisher endpoint and connect user-facing installation to the implemented separate Trivia pack storage and downloader.

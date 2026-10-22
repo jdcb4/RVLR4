@@ -153,8 +153,7 @@ public class AppRenderTest {
             evaluate(activity, "document.querySelector('a[href*=whowhatwhere]').click()");
             awaitCondition(activity, "document.body.innerText.includes('Game settings') && document.body.innerText.includes('Turn length') && document.body.innerText.includes('Categories')");
             System.out.println("RVLRY_RENDER_SETTINGS " + evaluate(activity, "JSON.stringify({href:location.href,text:document.body.innerText.slice(0,1000)})"));
-            awaitCondition(activity, "!!document.querySelector('select:enabled')");
-            evaluate(activity, "(()=>{const select=document.querySelector('select');Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value').set.call(select,'easy');select.dispatchEvent(new Event('change',{bubbles:true}));})()");
+            clickButton(activity, "Easy");
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(button => button.textContent.trim()==='Next: Team 1' && !button.disabled)");
             evaluate(activity, "[...document.querySelectorAll('button')].find(button => button.textContent.trim()==='Next: Team 1').click()");
             awaitCondition(activity, "document.body.innerText.includes('Team 1 of 2') && document.querySelectorAll('input').length >= 3");
@@ -212,8 +211,7 @@ public class AppRenderTest {
             evaluate(activity, "location.hash='/'");
             awaitCondition(activity, "!!document.querySelector('a[href*=imposter]')");
             evaluate(activity, "document.querySelector('a[href*=imposter]').click()");
-            awaitCondition(activity, "!!document.querySelector('select:enabled')");
-            evaluate(activity, "(()=>{const select=document.querySelector('select');Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value').set.call(select,'easy');select.dispatchEvent(new Event('change',{bubbles:true}));})()");
+            clickButton(activity, "Easy");
             clickButton(activity, "Continue to players");
             clickButton(activity, "Review players");
             clickButton(activity, "Deal roles");
@@ -244,17 +242,17 @@ public class AppRenderTest {
             // Synthetic question exists only in the disposable test database, never the shipped corpus.
             String triviaFixture = """
                 {"storageVersion":1,"revision":1,"savedAt":"2026-10-22T00:00:00.000Z","payload":{
-                  "schemaVersion":1,"savedAt":"2026-10-22T00:00:00.000Z",
-                  "settings":{"count":1,"categories":["general"],"revealMode":"each","difficulty":"all","teams":["Team 1","Team 2"]},
-                  "quiz":{"settings":{"count":1,"categories":["general"],"revealMode":"each","difficulty":"all","teams":["Team 1","Team 2"]},
+                  "schemaVersion":2,"savedAt":"2026-10-22T00:00:00.000Z",
+                  "settings":{"count":1,"categories":["general"],"revealMode":"each","difficulty":"all"},
+                  "quiz":{"settings":{"count":1,"categories":["general"],"revealMode":"each","difficulty":"all"},
                     "cursor":0,"phase":"questions","kidsMode":true,"packVersion":1,"items":[{
                       "question":{"id":"trivia:native-fixture","revision":1,"question":"Native fixture question?","answer":"Fixture answer",
                         "acceptableAnswers":[],"category":"general","difficulty":"easy","kidAppropriate":true,
                         "review":{"reviewedAt":"2026-10-22T00:00:00.000Z","reviewer":"Test fixture only","sources":["https://example.com"]}},
-                      "shownAt":"2026-10-22T00:00:00.000Z","writtenAnswers":["",""],"marks":[null,null],"revealed":false,"excluded":false}]}}}
+                      "shownAt":"2026-10-22T00:00:00.000Z","writtenAnswer":"","revealed":false,"excluded":false}]}}}
                 """;
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
-                saved.write("trivia.device.v1", triviaFixture);
+                saved.write("trivia.device.v2", triviaFixture);
             }
             evaluate(activity, "location.hash='/'");
             awaitCondition(activity, "!!document.querySelector('a[href*=whowhatwhere]')");
@@ -268,11 +266,11 @@ public class AppRenderTest {
             evaluate(activity, "document.querySelector('a[href*=trivia]').click()");
             clickButton(activity, "Resume");
             awaitCondition(activity, "document.body.innerText.includes('Native fixture question?')");
-            clickButton(activity, "Write answers here (optional)");
+            clickButton(activity, "Write an answer (optional)");
             evaluate(activity, "(()=>{const field=document.querySelector('textarea');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(field,'My saved answer');field.dispatchEvent(new Event('input',{bubbles:true}));})()");
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Reveal answer'&&!b.disabled)");
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
-                assertTrue("Written answer was not committed", saved.read("trivia.device.v1")[0].contains("My saved answer"));
+                assertTrue("Written answer was not committed", saved.read("trivia.device.v2")[0].contains("My saved answer"));
                 assertTrue("Visibility was not committed", saved.read("app.features.v1")[0].contains("\"triviaEnabled\":true"));
             }
             evaluate(activity, "location.reload()");
@@ -280,10 +278,9 @@ public class AppRenderTest {
             awaitCondition(activity, "document.querySelector('textarea')?.value==='My saved answer'");
             clickButton(activity, "Reveal answer");
             awaitCondition(activity, "document.body.innerText.includes('Fixture answer')");
-            clickButton(activity, "Correct");
-            clickButton(activity, "See results");
-            awaitCondition(activity, "document.body.innerText.includes('Quiz complete') && document.body.innerText.includes('1 / 1') && !document.querySelector('[role=alert]')");
-            System.out.println("RVLRY_NATIVE_TRIVIA_OK: visibility, saved quiz, written answer reload, reveal, marking, results");
+            clickButton(activity, "Finish quiz");
+            awaitCondition(activity, "document.body.innerText.includes('Quiz complete') && !document.querySelector('[role=alert]')");
+            System.out.println("RVLRY_NATIVE_TRIVIA_OK: visibility, saved quiz, written answer reload, reveal, cooperative completion");
 
             evaluate(activity, "location.hash='/'");
             awaitCondition(activity, "!!document.querySelector('a[href*=trivia]')");
@@ -303,7 +300,7 @@ public class AppRenderTest {
             clickButton(activity, "Start quiz");
             awaitCondition(activity, "document.body.innerText.includes('Question 1 of 30') && !document.querySelector('[role=alert]')");
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
-                String snapshot = saved.read("trivia.device.v1")[0];
+                String snapshot = saved.read("trivia.device.v2")[0];
                 assertTrue("Starter bank version not captured", snapshot.contains("\"packVersion\":2"));
                 assertTrue("Synthetic fixture must not appear in the real bank", !snapshot.contains("native-fixture"));
             }

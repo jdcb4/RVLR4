@@ -262,7 +262,7 @@ export function ImposterDevicePage() {
               <p className="text-typ-muted text-muted-foreground">
                 Difficulty:{" "}
                 {snapshot.wordDifficulty === "all"
-                  ? "All"
+                  ? "Hard"
                   : snapshot.wordDifficulty === "easy"
                     ? "Easy"
                     : snapshot.wordDifficulty === "medium"

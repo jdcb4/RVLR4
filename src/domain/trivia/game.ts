@@ -1,13 +1,13 @@
 import { z } from "zod";
 
 import { catalogueIdentity } from "@/data/catalogueSchema";
+import { isDifficultyAllowed, selectDifficultyBalanced } from "@/data/difficulty";
 import type { TriviaQuestion } from "@/data/triviaSchema";
 import {
   isTriviaQuestionEligible,
   triviaCategories,
   triviaQuestionSchema,
 } from "@/data/triviaSchema";
-import { shuffleWithRng } from "@/domain/imposter/round";
 
 export const triviaCategoryLabels: Record<TriviaQuestion["category"], string> = {
   general: "General knowledge",
@@ -26,7 +26,6 @@ export const triviaSettingsSchema = z
     categories: z.array(z.enum(triviaCategories)).min(1).max(triviaCategories.length),
     revealMode: z.enum(["each", "end"]),
     difficulty: z.enum(["all", "easy", "medium", "hard"]),
-    teams: z.array(z.string().trim().min(1).max(40)).min(1).max(8),
   })
   .strict()
   .superRefine((settings, context) => {
@@ -49,8 +48,7 @@ const quizSchema = z
           .object({
             question: triviaQuestionSchema,
             shownAt: z.string().datetime().nullable(),
-            writtenAnswers: z.array(z.string().max(500)).min(1).max(8),
-            marks: z.array(z.boolean().nullable()).min(1).max(8),
+            writtenAnswer: z.string().max(500),
             revealed: z.boolean(),
             excluded: z.boolean(),
           })
@@ -85,35 +83,17 @@ const quizSchema = z
       ids.add(item.question.id);
       questions.add(identity);
       if (
-        item.writtenAnswers.length !== quiz.settings.teams.length ||
-        item.marks.length !== quiz.settings.teams.length
-      ) {
-        issue("Team answers and marks must match the roster.");
-      }
-      if (
         !quiz.settings.categories.includes(item.question.category) ||
         (quiz.kidsMode && !item.question.kidAppropriate) ||
-        (quiz.settings.difficulty !== "all" &&
-          item.question.difficulty !== quiz.settings.difficulty)
+        !isDifficultyAllowed(item.question.difficulty, quiz.settings.difficulty)
       ) {
         issue("Question does not match quiz settings.");
       }
-      if (
-        item.excluded &&
-        (item.shownAt !== null ||
-          item.revealed ||
-          item.writtenAnswers.some(Boolean) ||
-          item.marks.some((mark) => mark !== null))
-      ) {
+      if (item.excluded && (item.shownAt !== null || item.revealed || item.writtenAnswer !== "")) {
         issue("Excluded questions cannot have played state.");
       }
-      if (
-        item.shownAt === null &&
-        (item.revealed ||
-          item.writtenAnswers.some(Boolean) ||
-          item.marks.some((mark) => mark !== null))
-      ) {
-        issue("Unshown questions cannot have answers or marks.");
+      if (item.shownAt === null && (item.revealed || item.writtenAnswer !== "")) {
+        issue("Unshown questions cannot have answers.");
       }
       if (
         item.shownAt !== null &&
@@ -122,8 +102,6 @@ const quizSchema = z
       ) {
         issue("Question was first shown after expiry.");
       }
-      if (!item.revealed && item.marks.some((mark) => mark !== null))
-        issue("Marks require a revealed answer.");
       if (quiz.phase === "questions") {
         if (
           index < quiz.cursor &&
@@ -155,7 +133,7 @@ const snapshotSize = (value: unknown) => new TextEncoder().encode(JSON.stringify
 
 export const triviaSessionSchema = z
   .object({
-    schemaVersion: z.literal(1),
+    schemaVersion: z.literal(2),
     savedAt: z.string().datetime(),
     settings: triviaSettingsSchema,
     quiz: quizSchema.nullable(),
@@ -177,14 +155,13 @@ export type TriviaSession = z.infer<typeof triviaSessionSchema>;
 
 export function createTriviaSession(): TriviaSession {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     savedAt: new Date().toISOString(),
     settings: {
       count: 10,
       categories: [...triviaCategories],
       revealMode: "each",
-      difficulty: "all",
-      teams: ["Team 1", "Team 2"],
+      difficulty: "hard",
     },
     quiz: null,
   };
@@ -193,7 +170,7 @@ export function createTriviaSession(): TriviaSession {
 function assertSaveSize(quiz: TriviaQuiz): TriviaQuiz {
   if (
     snapshotSize({
-      schemaVersion: 1,
+      schemaVersion: 2,
       savedAt: new Date().toISOString(),
       settings: quiz.settings,
       quiz,
@@ -237,26 +214,18 @@ export function startTriviaQuiz(
     throw new Error(
       `Only ${String(eligible.length)} eligible questions are available; ${String(settings.count)} requested. Adjust the quiz settings or install a reviewed question pack.`,
     );
-  const buckets = shuffleWithRng(settings.categories, rng).map((category) =>
-    shuffleWithRng(
-      eligible.filter((question) => question.category === category),
-      rng,
-    ),
+  const selected = selectDifficultyBalanced(
+    eligible,
+    settings.count,
+    settings.difficulty,
+    rng,
+    (question) => question.category,
   );
-  const selected: TriviaQuestion[] = [];
-  while (selected.length < settings.count) {
-    for (const bucket of buckets) {
-      const question = bucket.pop();
-      if (question) selected.push(question);
-      if (selected.length === settings.count) break;
-    }
-  }
   const quiz: TriviaQuiz = {
     items: selected.map((question) => ({
       question: structuredClone(question),
       shownAt: null,
-      writtenAnswers: settings.teams.map(() => ""),
-      marks: settings.teams.map(() => null),
+      writtenAnswer: "",
       revealed: false,
       excluded: false,
     })),
@@ -344,50 +313,14 @@ export function nextTriviaQuestion(quiz: TriviaQuiz, now = Date.now()): TriviaQu
   };
 }
 
-function checkTeam(quiz: TriviaQuiz, teamIndex: number): void {
-  if (!Number.isInteger(teamIndex) || teamIndex < 0 || teamIndex >= quiz.settings.teams.length)
-    throw new Error("Unknown trivia team.");
-}
-
-export function setTriviaAnswer(quiz: TriviaQuiz, teamIndex: number, text: string): TriviaQuiz {
-  checkTeam(quiz, teamIndex);
+export function setTriviaAnswer(quiz: TriviaQuiz, text: string): TriviaQuiz {
   const current = quiz.items[quiz.cursor];
   if (quiz.phase !== "questions" || !current || current.revealed) return quiz;
   if (text.length > 500) throw new Error("Written answers must be 500 characters or fewer.");
   return assertSaveSize({
     ...quiz,
     items: quiz.items.map((item, index) =>
-      index === quiz.cursor
-        ? {
-            ...item,
-            writtenAnswers: item.writtenAnswers.map((answer, team) =>
-              team === teamIndex ? text : answer,
-            ),
-          }
-        : item,
+      index === quiz.cursor ? { ...item, writtenAnswer: text } : item,
     ),
   });
-}
-
-export function setTriviaMark(
-  quiz: TriviaQuiz,
-  teamIndex: number,
-  mark: boolean | null,
-): TriviaQuiz {
-  checkTeam(quiz, teamIndex);
-  if (quiz.phase === "results" || !quiz.items[quiz.cursor]?.revealed) return quiz;
-  return assertSaveSize({
-    ...quiz,
-    items: quiz.items.map((item, index) =>
-      index === quiz.cursor
-        ? { ...item, marks: item.marks.map((value, team) => (team === teamIndex ? mark : value)) }
-        : item,
-    ),
-  });
-}
-
-export function getTriviaScores(quiz: TriviaQuiz): number[] {
-  return quiz.settings.teams.map((_, team) =>
-    quiz.items.reduce((score, item) => score + (item.marks[team] === true ? 1 : 0), 0),
-  );
 }

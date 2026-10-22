@@ -374,3 +374,9 @@ Implement the approved separately versioned Trivia JSON corpus with dedicated na
 **Reasoning:** Allows release before the reviewed corpus is large enough, without coupling live sessions to content updates. Existing SQLite snapshots, React UI and domain functions need no new dependency.
 
 **Rejected alternatives:** Route-level access controls and live question generation add no value for this low-risk offline feature. Unreviewed historical banks are not silently activated.
+
+## 22 October 2026 — Cooperative Trivia and mixed difficulty
+
+Trivia is a shared newspaper-style quiz: keep one optional written answer per question and remove teams, marking and scores. Store cooperative sessions as schema version 2 under `trivia.device.v2`; ignore the competitive v1 session rather than adding a migration during prerelease. Question pack version 2 and its 30-question bank are unchanged.
+
+Use visible Easy/Medium/Hard buttons across WWW, Imposter and Trivia. Easy uses easy content only; Medium targets equal easy/medium shares; Hard targets equal shares of all three tiers. Fill shortages only within allowed tiers and existing category/Kids filters. Default new settings to Hard and interpret legacy `all` as Hard. This replaces the exact-tier selection and All dropdown decision above without adding dependencies.

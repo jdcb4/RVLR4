@@ -25,7 +25,7 @@ export const createInitialImposterSnapshot = (
   step,
   playerCount: 6,
   imposterCount: defaultImposterCount(6),
-  wordDifficulty: "all",
+  wordDifficulty: "hard",
   players: createImposterPlayers(6, []),
   round: null,
 });

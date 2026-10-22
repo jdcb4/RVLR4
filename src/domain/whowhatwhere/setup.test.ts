@@ -21,7 +21,7 @@ describe("setup domain", () => {
     expect(settings.turnDurationSeconds).toBe(30);
     expect(settings.skipLimit).toBe(1);
     expect(settings.difficultyMode).toBe("easy");
-    expect(settings.wordDifficulty).toBe("all");
+    expect(settings.wordDifficulty).toBe("hard");
     expect(settings.kidsMode).toBe(false);
     expect(settings.hints).toEqual({ enabled: false, perTurnLimit: 0 });
   });

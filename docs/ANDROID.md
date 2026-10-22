@@ -2,7 +2,9 @@
 
 ## Current milestone
 
-0.35.1 is the debug-signed build with expanded curated word pools, five app-wide themes with matching illustrated game artwork and the approved Recess cut-paper treatment: Who What Where, Hat Game and Imposter. The picker opens independent saved sessions. Settings and Info use separate header icons. Settings offers Classic (the original UI), After-Hours Social, The Margin Note, Recess and Midnight Observatory; theme selection is stored independently of games. WWW and Imposter offer difficulty selection; app Settings offers Kids mode for new games and Hat suggestions. The separate Trivia content-storage foundation is implemented, with presenter-led Trivia available through Settings → Show Trivia (off by default), optional in-app answers, and 30 source-checked starter questions for testing. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
+0.36.0 makes optional Trivia a cooperative quiz with shared written answers, answer reveals and no teams, marks or scores. Its new version-2 session starts fresh rather than loading earlier competitive Trivia saves. The 30-question starter bank remains content pack version 2. WWW, Imposter and Trivia offer visible Easy/Medium/Hard buttons: easy only, equal easy/medium, or equal shares of all three tiers, with allowed-tier shortage filling and Hard as the new default. App Settings offers Kids mode for new games and Hat suggestions.
+
+The picker opens independent saved sessions. Five app-wide themes retain matching illustrated game artwork and the approved Recess cut-paper treatment. Settings and Info use separate header icons; appearance is stored independently of games. Settings → Show Trivia remains off by default. No update source is configured. Release signing, publisher setup and user-facing content installation remain future work.
 
 Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
@@ -378,3 +380,14 @@ APK: `out/RVLRY-0.34.1-screenshots.apk`, copied/hash-verified to `\\JNAS\Media\D
 307 tests across 49 files, typecheck, ESLint and production build passed. Android assembly, all 19 device tests and separate force-stop snapshot/content recovery phases passed. Native coverage now starts a fresh 30-question quiz from bundled pack version 2, in addition to answer-entry/reload and self-marking checks. A test-only dialog selector was corrected during verification; no gameplay workaround was needed. Real Pixel testing remains outstanding.
 
 Delivered `\\JNAS\Media\DropBox\RVLRY-0.35.1-trivia-questions.apk`, SHA-256 `DF771B51BB01EA5FC53C78425B48F81E34E13166951B995A32B323C84EFE30B5`, verified against the local APK. Enable Settings → Show Trivia if hidden. The bank has 30 questions, including 21 Kids-suitable questions; use all categories and all difficulties for a full 30-question quiz.
+
+## Cooperative Trivia and mixed difficulty — 0.36.0, 22 October 2026
+
+Full `pnpm run verify` passed (typecheck, ESLint, tests and production build). Android debug assembly, all 19 API-35 instrumentation tests and separate snapshot/content force-stop recovery phases passed. The native flow saves and restores one shared written answer, reveals it and completes the quiz without teams or scoring, then starts a fresh 30-question quiz. Earlier competitive Trivia sessions are intentionally not loaded; other game session keys are unchanged.
+
+Browser review at 360×640 covered Trivia setup, question, optional written answer and reveal, plus WWW settings with the visible three-choice difficulty control. These screens fit without horizontal overflow. Real Pixel 10 acceptance remains outstanding.
+
+Fallow was reviewed: 42 dead-code findings and 10 clone groups remain. The two additional export findings are the retained shuffle helper and the tested weighted-category helper after their callers changed; no suppressions were added. The existing Vite word-catalogue size advisory remains. Imposter currently has no hard-rated entries, so Hard safely mixes its available easy/medium tiers; shared selector tests also cover full three-tier banks, rounding and sparse pools.
+
+Delivered `\\JNAS\Media\DropBox\RVLRY-0.36.0-cooperative-trivia.apk`; SHA-256 `4BEE637E6074C637B1B61A008218A479ED16E44E5A8AAD54FC85F753DA6AD449` matches `out/RVLRY-0.36.0-cooperative-trivia.apk`. Enable Settings → Show Trivia if hidden. Choose Hard and all categories for a full 30-question quiz from the starter bank.
+`pnpm android:test` also passed (two native JVM tests, up-to-date).

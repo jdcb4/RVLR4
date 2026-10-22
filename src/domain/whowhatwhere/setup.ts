@@ -17,7 +17,7 @@ export function createDefaultSettings(): GameSettings {
     skipLimit: 1,
     selectedCategories: CATEGORIES,
     difficultyMode: "easy",
-    wordDifficulty: "all",
+    wordDifficulty: "hard",
     kidsMode: false,
     hints: {
       enabled: false,

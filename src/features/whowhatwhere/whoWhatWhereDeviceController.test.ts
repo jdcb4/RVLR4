@@ -23,6 +23,7 @@ const words = Array.from({ length: 20 }, (_, index) => ({
   word: `Test clue ${index}`,
   category: "What" as const,
   hint: `Hint ${index}`,
+  difficulty: "easy" as const,
 }));
 
 vi.mock("@/domain/whowhatwhere/wordList", () => ({
@@ -31,6 +32,7 @@ vi.mock("@/domain/whowhatwhere/wordList", () => ({
       word: `Test clue ${index}`,
       category: "What",
       hint: `Hint ${index}`,
+      difficulty: "easy",
     })),
   ),
 }));
