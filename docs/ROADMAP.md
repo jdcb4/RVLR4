@@ -21,8 +21,10 @@ Source discovery and high-level planning requested; implementation awaits decisi
 - **Question bank:** maintain a reusable bank of trivia questions and answers. Let the presenter choose how many questions to select for a session.
 - **Time-sensitive questions:** include an optional expiry date in the question schema. Questions with an expiry date must only be presented while current; exclude expired questions. Questions without an expiry date remain eligible.
 - **Answer timing:** choose to reveal answers after each question or together at the end.
-- **Open decision:** whether participants write answers in the app or simply remember them.
-- **Categories:** choose a balanced set appropriate for the audience during planning. Initial candidates: general knowledge, history, geography, science and nature, arts and literature, film and television, music, and sport and games.
+- **Answers and scoring:** optional written answers, self-marking and a manual scoreboard. Writing location (paper or in-app) still needs clarification during flow design.
+- **Categories:** confirmed general knowledge, history, geography, science and nature, arts and literature, film and television, music, and sport and games.
+- **Corpus updates:** propose a separate Trivia question pack with independent versions, sharing the word-pack update mechanism; see the discovery document for the storage proposal.
+- **Live question generation:** possible future extension; excluded from the first version.
 - **Baseline content:** TriviaManager repo inspected; local QuickQuiz has 365 candidate entries and TriviaNightCreator has 50 demo questions. Historical Docker volumes and a preserved old cluster backup were identified; live contents remain unverified while Docker is stopped. These are ingestion candidates only, not approved questions.
 
 ## Android delivery follow-ups
