@@ -7,7 +7,7 @@ import { ArrowLeft, ArrowRight, Check, ChevronRight, House, Info, RotateCcw, Set
 const here = new URL('./', import.meta.url);
 const root = new URL('../../../', here);
 const data = {};
-for (const name of ['paper', 'tabletop', 'engraved']) {
+for (const name of ['paper', 'tabletop', 'engraved', 'pub', 'bookclub']) {
   data[name] = `data:image/png;base64,${readFileSync(new URL(`${name}.png`, here)).toString('base64')}`;
 }
 const icons = Object.fromEntries(Object.entries({ ArrowLeft, ArrowRight, Check, ChevronRight, House, Info, RotateCcw, Settings, Trophy }).map(([name, Icon]) => [name, renderToStaticMarkup(React.createElement(Icon, { width: 22, height: 22, 'aria-hidden': true }))]));
