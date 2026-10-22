@@ -2,6 +2,7 @@ import { webcrypto } from "node:crypto";
 
 import { beforeEach, expect, it, vi } from "vitest";
 
+import bundled from "../../data/trivia/bundled.json";
 import { isTriviaQuestionEligible, triviaPackSchema } from "../../data/triviaSchema";
 import { checkContentUpdates, downloadContentPack } from "./download";
 import { contentManifestSchema, type PackDescriptor, sha256, validateDownload } from "./schema";
@@ -31,7 +32,7 @@ const question = {
 const pack = (version: number) => ({
   schemaVersion: 1,
   kind: "trivia",
-  version,
+  version: bundled.version + version,
   publishedAt: "2026-10-22T00:00:00.000Z",
   questions: [structuredClone(question)],
 });
@@ -65,7 +66,7 @@ beforeEach(() => {
 
 it("loads the curated starter bank from the APK without requiring a download", async () => {
   expect(await loadTriviaCatalogue()).toMatchObject({
-    pack: { version: 2 },
+    pack: { version: bundled.version },
     source: "bundled",
     warning: null,
   });
@@ -91,7 +92,9 @@ it("rejects truncated, altered and version-mismatched downloads without replacin
   const modified = new Uint8Array(bytes);
   modified[0] = 32;
   await expect(installTriviaPack(modified, descriptor)).rejects.toThrow("checksum");
-  await expect(installTriviaPack(bytes, { ...descriptor, version: 5 })).rejects.toThrow("version");
+  await expect(
+    installTriviaPack(bytes, { ...descriptor, version: bundled.version + 5 }),
+  ).rejects.toThrow("version");
   expect(localStorage.getItem(storageKey)).toBe(old);
 });
 
@@ -136,7 +139,10 @@ it("recovers previous content and preserves it when replacing a corrupt current 
   await install(pack(4));
   const pair = JSON.parse(localStorage.getItem(storageKey)!);
   localStorage.setItem(storageKey, JSON.stringify({ ...pair, current: "corrupt" }));
-  expect(await loadTriviaCatalogue()).toMatchObject({ source: "previous", pack: { version: 3 } });
+  expect(await loadTriviaCatalogue()).toMatchObject({
+    source: "previous",
+    pack: { version: bundled.version + 3 },
+  });
   await install(pack(5));
   expect(JSON.parse(localStorage.getItem(storageKey)!).previous).toBe(pair.previous);
 });
@@ -172,7 +178,7 @@ it("serializes competing installations so a slower old pack cannot replace a new
     installTriviaPack(older.bytes, older.descriptor),
   ]);
   expect(results.map((result) => result.status)).toEqual(["fulfilled", "rejected"]);
-  expect((await loadTriviaCatalogue()).pack.version).toBe(5);
+  expect((await loadTriviaCatalogue()).pack.version).toBe(bundled.version + 5);
 });
 
 it("passes the exact checkpoint to native CAS and does not acknowledge a failed native commit", async () => {
@@ -188,7 +194,7 @@ it("passes the exact checkpoint to native CAS and does not acknowledge a failed 
       retainedPrevious: prior.raw,
     }),
   );
-  expect((await loadTriviaCatalogue()).pack.version).toBe(3);
+  expect((await loadTriviaCatalogue()).pack.version).toBe(bundled.version + 3);
 });
 
 it("expiry is exclusive, evaluated again on resume, and combined with kids/difficulty filters", () => {

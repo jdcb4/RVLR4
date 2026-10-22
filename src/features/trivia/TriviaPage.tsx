@@ -440,7 +440,7 @@ function TriviaQuestionView({
           />
         </label>
       ) : null}
-      <div className="mt-auto space-y-2 pt-2">
+      <div className="mt-auto space-y-3 pb-2 pt-3 [&_button]:min-h-16">
         {item.revealed && (
           <div role="group" aria-label="Mark your answer" className="grid grid-cols-2 gap-2">
             {([false, true] as const).map((correct) => {

@@ -1,0 +1,752 @@
+[
+  {
+    "id": "trivia:shrek-creature-type",
+    "revision": 1,
+    "question": "What type of fairy-tale creature is Shrek?",
+    "answer": "Ogre",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://preview.universalpicturesathome.com/press-release/shrek-25th-anniversary-press-release"
+      ],
+      "sourceRecord": "Universal's Shrek press release identifies the character as an ogre."
+    }
+  },
+  {
+    "id": "trivia:paddington-home-country",
+    "revision": 1,
+    "question": "From which South American country does Paddington Bear come?",
+    "answer": "Peru",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.framestore.com/work/paddington-peru"],
+      "sourceRecord": "Film visual-effects creator Framestore says the Brown family accompanies Paddington back to Peru."
+    }
+  },
+  {
+    "id": "trivia:nemo-fish-type",
+    "revision": 1,
+    "question": "What kind of fish is Nemo in Finding Nemo?",
+    "answer": "Clownfish",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.pixar.com/finding-nemo"],
+      "sourceRecord": "Pixar identifies Marlin as a clownfish and Nemo as his son."
+    }
+  },
+  {
+    "id": "trivia:mary-poppins-flying-accessory",
+    "revision": 1,
+    "question": "What does Mary Poppins hold above her head as she flies down from the sky?",
+    "answer": "Umbrella",
+    "acceptableAnswers": ["An umbrella"],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://d23.com/this-day/mary-poppins-premieres/"],
+      "sourceRecord": "Disney's D23 describes Mary Poppins flying down on her umbrella in the 1964 film."
+    }
+  },
+  {
+    "id": "trivia:spongebob-home-fruit",
+    "revision": 1,
+    "question": "SpongeBob SquarePants lives in a house shaped like which fruit?",
+    "answer": "Pineapple",
+    "acceptableAnswers": ["A pineapple"],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.paramountpressexpress.com/nickelodeon/shows/spongebob-squarepants"],
+      "sourceRecord": "Paramount's official series synopsis says SpongeBob lives in a two-storey pineapple."
+    }
+  },
+  {
+    "id": "trivia:toothless-film-series",
+    "revision": 1,
+    "question": "Which film series follows Hiccup and his dragon friend Toothless?",
+    "answer": "How to Train Your Dragon",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://preview.universalpicturesathome.com/movies/how-to-train-your-dragon-2025"
+      ],
+      "sourceRecord": "Universal's film synopsis identifies Hiccup and Toothless in How to Train Your Dragon."
+    }
+  },
+  {
+    "id": "trivia:muppets-creator",
+    "revision": 1,
+    "question": "Which puppeteer created the Muppets?",
+    "answer": "Jim Henson",
+    "acceptableAnswers": ["Henson"],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.hensonfoundation.org/about-us/history-behind-the-jim-henson-foundation/"
+      ],
+      "sourceRecord": "The Jim Henson Foundation identifies Jim Henson as the creator of the Muppets."
+    }
+  },
+  {
+    "id": "trivia:lagaan-central-sport",
+    "revision": 1,
+    "question": "Which sport is at the heart of the Indian film Lagaan?",
+    "answer": "Cricket",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.bfi.org.uk/lists/best-cricket-films-first-xi"],
+      "sourceRecord": "BFI describes Lagaan's cricket challenge and three-day match."
+    }
+  },
+  {
+    "id": "trivia:jurassic-park-fossil-resin",
+    "revision": 1,
+    "question": "In Jurassic Park (1993), the mosquitoes carrying dinosaur blood are trapped in what fossilised resin?",
+    "answer": "Amber",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.fieldmuseum.org/blog/revisiting-jurassic-park-could-dinosaurs-really-be-cloned"
+      ],
+      "sourceRecord": "The Field Museum describes Jurassic Park's fictional cloning premise: mosquitoes preserved in amber."
+    }
+  },
+  {
+    "id": "trivia:wallace-gromit-animation-method",
+    "revision": 1,
+    "question": "What animation technique brings Wallace and Gromit's physical models to life one frame at a time?",
+    "answer": "Stop motion",
+    "acceptableAnswers": ["Stop-frame animation", "Stop-motion animation", "Claymation"],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.aardman.com/latest-news/2025/june/behind-the-craft-wallace-gromit-shot-on-iphone/"
+      ],
+      "sourceRecord": "Aardman's production account describes Wallace and Gromit stop-motion and stop-frame production."
+    }
+  },
+  {
+    "id": "trivia:spirited-away-heroine",
+    "revision": 1,
+    "question": "What is the first name of the girl who works in a spirit bathhouse in Spirited Away?",
+    "answer": "Chihiro",
+    "acceptableAnswers": ["Chihiro Ogino"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://gkids.com/films/spirited-away/"],
+      "sourceRecord": "Official distributor GKIDS identifies Chihiro and her work in a magical bathhouse."
+    }
+  },
+  {
+    "id": "trivia:citizen-kane-rosebud-object",
+    "revision": 1,
+    "question": "In Citizen Kane, what childhood object bears the name Rosebud?",
+    "answer": "Sledge",
+    "acceptableAnswers": ["Sled", "A sledge", "A sled"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://filmeducation.org/pdf/film/citkane.pdf"],
+      "sourceRecord": "Film Education's study guide, pages 16–17, states that Rosebud was young Charles Kane's sledge."
+    }
+  },
+  {
+    "id": "trivia:metropolis-director",
+    "revision": 1,
+    "question": "Who directed the 1927 silent science-fiction film Metropolis?",
+    "answer": "Fritz Lang",
+    "acceptableAnswers": ["Lang"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.moma.org/collection/works/299946"],
+      "sourceRecord": "MoMA's film collection record credits Metropolis (1927) to Fritz Lang."
+    }
+  },
+  {
+    "id": "trivia:truman-show-director",
+    "revision": 1,
+    "question": "Who directed The Truman Show (1998)?",
+    "answer": "Peter Weir",
+    "acceptableAnswers": ["Weir"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.paramount.com/movies/the-truman-show"],
+      "sourceRecord": "Paramount's official film synopsis credits director Peter Weir."
+    }
+  },
+  {
+    "id": "trivia:magnificent-seven-japanese-original",
+    "revision": 1,
+    "question": "Which 1960 western remade Akira Kurosawa's Seven Samurai?",
+    "answer": "The Magnificent Seven",
+    "acceptableAnswers": ["Magnificent Seven"],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.bfi.org.uk/lists/go-west-8-japanese-classics-western-films-inspired-them"
+      ],
+      "sourceRecord": "BFI identifies The Magnificent Seven (1960) as the western inspired by Seven Samurai."
+    }
+  },
+  {
+    "id": "trivia:piano-hammer-mechanism",
+    "revision": 1,
+    "question": "Which keyboard instrument makes sound by striking strings with hammers?",
+    "answer": "Piano",
+    "acceptableAnswers": ["The piano"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.yamaha.com/en/musical_instrument_guide/piano/index.html"],
+      "sourceRecord": "Yamaha's piano guide describes a keyboard instrument whose hammers strike strings."
+    }
+  },
+  {
+    "id": "trivia:conductor-directing-stick",
+    "revision": 1,
+    "question": "What is the stick an orchestra's conductor uses to direct the players called?",
+    "answer": "Baton",
+    "acceptableAnswers": ["A baton"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/baton"],
+      "sourceRecord": "Merriam-Webster's children's definition describes a baton as the stick with which a leader directs a band or orchestra."
+    }
+  },
+  {
+    "id": "trivia:trombone-sliding-tube",
+    "revision": 1,
+    "question": "Which brass instrument changes its notes using a long slide that moves in and out?",
+    "answer": "Trombone",
+    "acceptableAnswers": ["Slide trombone"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://hub.yamaha.com/winds/brass/the-brass-family-explained/"],
+      "sourceRecord": "Yamaha describes the slide trombone's manually extended and contracted tube."
+    }
+  },
+  {
+    "id": "trivia:music-silence-symbol",
+    "revision": 1,
+    "question": "In written music, what is a symbol telling a player to be silent for a set time called?",
+    "answer": "Rest",
+    "acceptableAnswers": ["A rest"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://static.pbslearningmedia.org/media/media_files/96f6934b-097e-4c64-8dc6-6714fd9d7887/6475d669-da25-45ae-8b59-766705b8ecd7.pdf"
+      ],
+      "sourceRecord": "Classical MPR's educational guide hosted by PBS defines rests as symbols indicating silence in music."
+    }
+  },
+  {
+    "id": "trivia:bts-country-of-origin",
+    "revision": 1,
+    "question": "From which country does the pop group BTS come?",
+    "answer": "South Korea",
+    "acceptableAnswers": ["Republic of Korea"],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://bts.ibighit.com/eng/profile/"],
+      "sourceRecord": "BIGHIT Music's official BTS profile identifies the group as South Korean."
+    }
+  },
+  {
+    "id": "trivia:1989-album-singer",
+    "revision": 1,
+    "question": "Which pop singer released the album 1989 in 2014?",
+    "answer": "Taylor Swift",
+    "acceptableAnswers": ["Swift"],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://corporate.target.com/press/release/2014/10/taylor-swift-s-exclusive-deluxe-version-of-1989,%E2%80%9D-now-available-at-target"
+      ],
+      "sourceRecord": "Target's 27 October 2014 release announcement identifies 1989 as Taylor Swift's fifth studio album."
+    }
+  },
+  {
+    "id": "trivia:reggae-country-of-origin",
+    "revision": 1,
+    "question": "Which Caribbean country gave rise to reggae music?",
+    "answer": "Jamaica",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://jncunesco.gov.jm/kingston-creative-city-of-music/"],
+      "sourceRecord": "Jamaica's National Commission for UNESCO identifies Kingston, Jamaica as the source of reggae among six genres."
+    }
+  },
+  {
+    "id": "trivia:beatles-home-city",
+    "revision": 1,
+    "question": "Which English city do the Beatles come from?",
+    "answer": "Liverpool",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://news.liverpool.ac.uk/2026/05/13/beatles-museum-to-open-on-seven-storey-site-and-rooftop-of-bands-last-gig/"
+      ],
+      "sourceRecord": "University of Liverpool's Beatles scholar describes the Beatles as four young Liverpudlians from south Liverpool."
+    }
+  },
+  {
+    "id": "trivia:jolene-album-performer",
+    "revision": 1,
+    "question": "Which country music star released the album Jolene in 1974?",
+    "answer": "Dolly Parton",
+    "acceptableAnswers": ["Parton"],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.dollyparton.com/album/jolene"],
+      "sourceRecord": "Dolly Parton's official album record dates her Jolene release to 4 February 1974."
+    }
+  },
+  {
+    "id": "trivia:four-seasons-composer",
+    "revision": 1,
+    "question": "Who composed the violin concertos known as The Four Seasons?",
+    "answer": "Antonio Vivaldi",
+    "acceptableAnswers": ["Vivaldi"],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.laphil.com/works/the-four-seasons"],
+      "sourceRecord": "LA Phil credits Antonio Vivaldi and discusses the four seasonal concertos."
+    }
+  },
+  {
+    "id": "trivia:kind-of-blue-trumpeter",
+    "revision": 1,
+    "question": "Which jazz trumpeter released the album Kind of Blue in 1959?",
+    "answer": "Miles Davis",
+    "acceptableAnswers": ["Davis"],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.milesdavis.com/albums/kind-of-blue/"],
+      "sourceRecord": "Miles Davis's official album record identifies Kind of Blue and its 1959 release."
+    }
+  },
+  {
+    "id": "trivia:fleetwood-mac-dreams-songwriter",
+    "revision": 1,
+    "question": "Which Fleetwood Mac singer wrote the song Dreams?",
+    "answer": "Stevie Nicks",
+    "acceptableAnswers": ["Nicks"],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.fleetwoodmacofficial.com/album/rumours"],
+      "sourceRecord": "Fleetwood Mac's official Rumours track listing credits Dreams to Stevie Nicks."
+    }
+  },
+  {
+    "id": "trivia:beethoven-ode-to-joy-symphony",
+    "revision": 1,
+    "question": "Which numbered Beethoven symphony includes the choral setting of Ode to Joy?",
+    "answer": "Ninth",
+    "acceptableAnswers": ["Nine", "9", "Symphony No. 9", "Beethoven's Ninth"],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.laphil.com/works/symphony-no-9-beethoven"],
+      "sourceRecord": "LA Phil's Ninth Symphony notes describe its choral finale and setting of Schiller's Ode to Joy."
+    }
+  },
+  {
+    "id": "trivia:clair-de-lune-composer",
+    "revision": 1,
+    "question": "Who composed the piano piece Clair de lune from Suite bergamasque?",
+    "answer": "Claude Debussy",
+    "acceptableAnswers": ["Debussy"],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.laphil.com/works/clair-de-lune-claude-debussy-k6cvatvv"],
+      "sourceRecord": "LA Phil credits Claude Debussy and identifies Clair de lune as a movement of his piano Suite bergamasque."
+    }
+  },
+  {
+    "id": "trivia:bohemian-rhapsody-original-album",
+    "revision": 1,
+    "question": "On which 1975 Queen album did Bohemian Rhapsody originally appear?",
+    "answer": "A Night at the Opera",
+    "acceptableAnswers": ["Night at the Opera"],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.hollywoodrecords.com/press/queen/"],
+      "sourceRecord": "Queen's record label describes Bohemian Rhapsody as part of 1975's A Night at the Opera."
+    }
+  },
+  {
+    "id": "trivia:chess-checkmate-piece",
+    "revision": 1,
+    "question": "In chess, which piece is trapped when a player is checkmated?",
+    "answer": "King",
+    "acceptableAnswers": ["The king"],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.chess.com/terms/chess-king"],
+      "sourceRecord": "Chess.com's instruction identifies the king as the piece that is checkmated."
+    }
+  },
+  {
+    "id": "trivia:basketball-scoring-target",
+    "revision": 1,
+    "question": "In basketball, what circular target must the ball pass through to score?",
+    "answer": "Hoop",
+    "acceptableAnswers": ["Basket", "Ring", "The hoop", "Basketball hoop"],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://assets.fiba.basketball/image/upload/documents-corporate-wabc-start-coaching-eng-facilitator-handbook.pdf"
+      ],
+      "sourceRecord": "FIBA's coaching handbook identifies the basket's ring or hoop, attached to the backboard."
+    }
+  },
+  {
+    "id": "trivia:badminton-feathered-projectile",
+    "revision": 1,
+    "question": "What is the feathered object hit by players in badminton called?",
+    "answer": "Shuttlecock",
+    "acceptableAnswers": ["Shuttle", "A shuttlecock"],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.yonex.com/news/badminton/30-years-of-excellence-the-yonex-shuttlecock/"
+      ],
+      "sourceRecord": "Shuttlecock manufacturer Yonex describes feathered shuttlecocks used at the All England badminton championships."
+    }
+  },
+  {
+    "id": "trivia:minecraft-exploding-mob",
+    "revision": 1,
+    "question": "Which Minecraft creature is famous for approaching players and exploding?",
+    "answer": "Creeper",
+    "acceptableAnswers": ["A creeper"],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://learn.microsoft.com/en-us/minecraft/creator/reference/source/vanillabehaviorpack_snippets/entities/creeper?view=minecraft-bedrock-stable"
+      ],
+      "sourceRecord": "Microsoft's official Minecraft creeper definition triggers an exploding component when its target is near."
+    }
+  },
+  {
+    "id": "trivia:swimming-insect-stroke",
+    "revision": 1,
+    "question": "Which of the four main swimming strokes is named after an insect?",
+    "answer": "Butterfly",
+    "acceptableAnswers": ["Butterfly stroke"],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.swimming.org/learntoswim/jargon-buster-for-swimming-terminology/"],
+      "sourceRecord": "Swim England lists front crawl, backstroke, butterfly and breaststroke as the four strokes."
+    }
+  },
+  {
+    "id": "trivia:zelda-tears-hero",
+    "revision": 1,
+    "question": "What is the name of the hero you play in The Legend of Zelda: Tears of the Kingdom?",
+    "answer": "Link",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.nintendo.com/en-gb/Games/Nintendo-Switch-games/The-Legend-of-Zelda-Tears-of-the-Kingdom-1576884.html"
+      ],
+      "sourceRecord": "Nintendo's official game page describes Link's abilities, journey and playable actions."
+    }
+  },
+  {
+    "id": "trivia:ashes-symbolic-vessel",
+    "revision": 1,
+    "question": "What type of small container is the famous symbol of the men's Ashes cricket rivalry?",
+    "answer": "Urn",
+    "acceptableAnswers": ["An urn", "Ashes urn"],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.lords.org/lords/our-history/the-ashes?aliaspath=/Lords/Our-History/The-Ashes&nl=morning-briefing&section=backStory?campaign_id%3D9&te=1"
+      ],
+      "sourceRecord": "MCC's history describes the small terracotta urn given to Ivo Bligh as a symbol of the Ashes."
+    }
+  },
+  {
+    "id": "trivia:netball-other-scoring-position",
+    "revision": 1,
+    "question": "In standard seven-a-side netball, which position can score goals besides Goal Shooter?",
+    "answer": "Goal Attack",
+    "acceptableAnswers": ["GA"],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://usanetball.org/rules"],
+      "sourceRecord": "USA Netball reproduces World Netball's rule that goals follow shots by Goal Shooter or Goal Attack."
+    }
+  },
+  {
+    "id": "trivia:tour-de-france-leader-colour",
+    "revision": 1,
+    "question": "What colour jersey does the overall leader of the Tour de France wear?",
+    "answer": "Yellow",
+    "acceptableAnswers": ["Yellow jersey"],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.letour.fr/en/the-jerseys-tour-de-france/the-yellow-jersey"],
+      "sourceRecord": "The Tour organiser identifies the yellow jersey with the general individual classification leader."
+    }
+  },
+  {
+    "id": "trivia:scrabble-q-tile-value",
+    "revision": 1,
+    "question": "In standard English-language Scrabble, how many points is the Q tile worth before bonuses?",
+    "answer": "Ten",
+    "acceptableAnswers": ["10", "Ten points"],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://hasbro-new.custhelp.com/app/answers/detail/a_id/55/~/what-is-the-total-face-value-of-all-the-scrabble-tiles%3F"
+      ],
+      "sourceRecord": "Hasbro's Scrabble tile-value table assigns Q ten points."
+    }
+  },
+  {
+    "id": "trivia:mens-rugby-world-cup-trophy",
+    "revision": 1,
+    "question": "What is the name of the trophy awarded to the men's Rugby World Cup winners?",
+    "answer": "Webb Ellis Cup",
+    "acceptableAnswers": ["The Webb Ellis Cup", "Webb Ellis Trophy"],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.world.rugby/news/637786/trofeos?lang=en"],
+      "sourceRecord": "World Rugby identifies the Webb Ellis Cup as the trophy presented to men's Rugby World Cup winners."
+    }
+  },
+  {
+    "id": "trivia:curling-stone-rock",
+    "revision": 1,
+    "question": "What type of rock are curling stones made from?",
+    "answer": "Granite",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://worldcurling.org/about/curling/"],
+      "sourceRecord": "World Curling describes curling stones as made of granite."
+    }
+  },
+  {
+    "id": "trivia:athletics-seven-event-contest",
+    "revision": 1,
+    "question": "Which athletics combined event includes seven disciplines over two days?",
+    "answer": "Heptathlon",
+    "acceptableAnswers": ["The heptathlon"],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://olympic.ca/sports/athletics/"],
+      "sourceRecord": "Canadian Olympic Committee's athletics guide lists seven heptathlon events split across two days."
+    }
+  },
+  {
+    "id": "trivia:chess-king-rook-special-move",
+    "revision": 1,
+    "question": "What is the chess move in which a king and rook both move in the same turn called?",
+    "answer": "Castling",
+    "acceptableAnswers": ["Castle"],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.chesskid.com/learn/articles/a-beginners-guide-to-castling"],
+      "sourceRecord": "FIDE Master Andy Lee's ChessKid lesson explains moving king and rook during castling, all in one move."
+    }
+  },
+  {
+    "id": "trivia:boccia-target-ball-name",
+    "revision": 1,
+    "question": "In the Paralympic sport boccia, what is the white target ball called?",
+    "answer": "Jack",
+    "acceptableAnswers": ["The jack", "Jack ball"],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:55Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldboccia.com/about-boccia/"],
+      "sourceRecord": "World Boccia calls the white target ball the jack."
+    }
+  }
+]

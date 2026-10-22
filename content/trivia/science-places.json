@@ -1,0 +1,740 @@
+[
+  {
+    "id": "trivia:butterfly-larval-stage",
+    "revision": 1,
+    "question": "What is the leaf-munching larval stage of a butterfly called?",
+    "answer": "Caterpillar",
+    "acceptableAnswers": ["A caterpillar", "Larva"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.amnh.org/explore/news-blogs/life-cycle-butterfly"],
+      "sourceRecord": "AMNH identifies caterpillars as butterfly larvae."
+    }
+  },
+  {
+    "id": "trivia:heart-pumps-blood",
+    "revision": 1,
+    "question": "Which organ pumps blood around the human body?",
+    "answer": "Heart",
+    "acceptableAnswers": ["The heart"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nhlbi.nih.gov/health/heart"],
+      "sourceRecord": "NHLBI states that the heart pumps blood through the body."
+    }
+  },
+  {
+    "id": "trivia:sun-object-type",
+    "revision": 1,
+    "question": "What kind of space object is our Sun?",
+    "answer": "Star",
+    "acceptableAnswers": ["A star", "Yellow dwarf", "Yellow dwarf star"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/sun/facts/"],
+      "sourceRecord": "NASA identifies the Sun as a yellow dwarf star."
+    }
+  },
+  {
+    "id": "trivia:water-solid-state-name",
+    "revision": 1,
+    "question": "What is the solid state of water called?",
+    "answer": "Ice",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.noaa.gov/education/resource-collections/freshwater/water-cycle"],
+      "sourceRecord": "NOAA describes ice as solid water in the water cycle."
+    }
+  },
+  {
+    "id": "trivia:steel-main-magnetic-metal",
+    "revision": 1,
+    "question": "Which magnetic metal is the main ingredient of ordinary steel?",
+    "answer": "Iron",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://periodic-table.rsc.org/element/26/iron",
+        "https://www.exploratorium.edu/snacks/curie-point"
+      ],
+      "sourceRecord": "RSC describes ordinary steel as iron with carbon; Exploratorium explains iron's attraction to magnets."
+    }
+  },
+  {
+    "id": "trivia:bats-echo-navigation",
+    "revision": 1,
+    "question": "Which flying mammals are known for finding insects by listening to echoes of their calls?",
+    "answer": "Bats",
+    "acceptableAnswers": ["Bat"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nps.gov/subjects/bats/echolocation.htm"],
+      "sourceRecord": "NPS explains bats' use of returning sound echoes to find insect prey."
+    }
+  },
+  {
+    "id": "trivia:puddle-water-vapour-process",
+    "revision": 1,
+    "question": "What process turns liquid water in a drying puddle into water vapour?",
+    "answer": "Evaporation",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.noaa.gov/education/resource-collections/freshwater/water-cycle"],
+      "sourceRecord": "NOAA explains that liquid water, including puddles, becomes water vapour through evaporation."
+    }
+  },
+  {
+    "id": "trivia:diamond-chemical-element",
+    "revision": 1,
+    "question": "A pure diamond is a crystalline form of which chemical element?",
+    "answer": "Carbon",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://periodic-table.rsc.org/element/6/carbon"],
+      "sourceRecord": "RSC lists diamond among carbon's pure forms."
+    }
+  },
+  {
+    "id": "trivia:shark-skeleton-material",
+    "revision": 1,
+    "question": "What flexible material forms a shark's skeleton instead of bone?",
+    "answer": "Cartilage",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://australian.museum/learn/animals/fishes/shark-myths-and-facts/"],
+      "sourceRecord": "Australian Museum identifies shark skeletons as cartilage rather than bone."
+    }
+  },
+  {
+    "id": "trivia:dna-twisted-ladder-name",
+    "revision": 1,
+    "question": "What two-word name describes DNA's familiar twisted-ladder shape?",
+    "answer": "Double helix",
+    "acceptableAnswers": ["A double helix"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.genome.gov/genetics-glossary/Double-Helix"],
+      "sourceRecord": "NHGRI defines double helix as DNA's two linked, winding strands."
+    }
+  },
+  {
+    "id": "trivia:venus-reverse-rotation",
+    "revision": 1,
+    "question": "Which rocky planet in our solar system rotates in the opposite direction to Earth?",
+    "answer": "Venus",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/venus/venus-facts/"],
+      "sourceRecord": "NASA explains Venus's backward rotation and rocky exterior."
+    }
+  },
+  {
+    "id": "trivia:aurora-green-light-element",
+    "revision": 1,
+    "question": "Which atmospheric element produces the green light in many auroras?",
+    "answer": "Oxygen",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://spaceplace.nasa.gov/aurora/en/"],
+      "sourceRecord": "NASA states that oxygen gives off green and red auroral light."
+    }
+  },
+  {
+    "id": "trivia:honeybee-food-location-dance",
+    "revision": 1,
+    "question": "What is the name of the honeybee dance that signals the direction and distance of a distant food source?",
+    "answer": "Waggle dance",
+    "acceptableAnswers": ["The waggle dance", "Wag-tail dance"],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://content.ces.ncsu.edu/honey-bee-dance-language"],
+      "sourceRecord": "NC State describes the waggle dance as signalling both direction and distance."
+    }
+  },
+  {
+    "id": "trivia:insulin-producing-organ",
+    "revision": 1,
+    "question": "Which organ produces the hormone insulin?",
+    "answer": "Pancreas",
+    "acceptableAnswers": ["The pancreas"],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.niddk.nih.gov/health-information/diabetes/overview/what-is-diabetes"
+      ],
+      "sourceRecord": "NIDDK identifies insulin as a hormone made by the pancreas."
+    }
+  },
+  {
+    "id": "trivia:ozone-layer-atmospheric-region",
+    "revision": 1,
+    "question": "In which layer of Earth's atmosphere is the protective ozone layer?",
+    "answer": "Stratosphere",
+    "acceptableAnswers": ["The stratosphere"],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.epa.gov/ozone-layer-protection/information-ozone-and-ozone-depletion"
+      ],
+      "sourceRecord": "EPA locates the concentrated ozone layer in the stratosphere."
+    }
+  },
+  {
+    "id": "trivia:italy-boot-shaped-peninsula",
+    "revision": 1,
+    "question": "Which European country's mainland is famously shaped like a boot?",
+    "answer": "Italy",
+    "acceptableAnswers": ["Italian Republic"],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://aguas.igme.es/igme/publica/tiac-02/ITALIA-I.pdf"],
+      "sourceRecord": "University of Cagliari paper hosted by IGME describes Italy's peninsula as boot-shaped."
+    }
+  },
+  {
+    "id": "trivia:south-pole-continent",
+    "revision": 1,
+    "question": "On which icy continent is the South Pole?",
+    "answer": "Antarctica",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nasa.gov/frequently-asked-questions-about-antarctica/"],
+      "sourceRecord": "NASA states that Antarctica covers Earth's South Pole."
+    }
+  },
+  {
+    "id": "trivia:australia-americas-ocean",
+    "revision": 1,
+    "question": "Which ocean lies between Australia and the Americas?",
+    "answer": "Pacific Ocean",
+    "acceptableAnswers": ["Pacific", "The Pacific Ocean"],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.cpc.ncep.noaa.gov/products/international/ocean_monitoring/pacific/PO_monitoring_fcsts/overview.html"
+      ],
+      "sourceRecord": "NOAA describes the Pacific extending from Asia and Australia to the Americas."
+    }
+  },
+  {
+    "id": "trivia:japan-red-disc-flag",
+    "revision": 1,
+    "question": "Which country's national flag has a red disc in the centre of a white background?",
+    "answer": "Japan",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.cao.go.jp/en/flag_anthem"],
+      "sourceRecord": "Japan's Cabinet Office specifies a centred red rising sun on a white flag."
+    }
+  },
+  {
+    "id": "trivia:bennelong-opera-house-city",
+    "revision": 1,
+    "question": "In which Australian city is the sail-shaped Opera House on Bennelong Point?",
+    "answer": "Sydney",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.sydneyoperahouse.com/our-story"],
+      "sourceRecord": "The Opera House's own story page shows its sails and gives Bennelong Point, Sydney as its address."
+    }
+  },
+  {
+    "id": "trivia:andes-western-south-america",
+    "revision": 1,
+    "question": "Which mountain range runs along the western side of South America?",
+    "answer": "Andes",
+    "acceptableAnswers": ["The Andes", "Andes Mountains"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://education.nationalgeographic.org/resource/south-america-physical-geography/"
+      ],
+      "sourceRecord": "National Geographic places the Andes along South America's far western edge."
+    }
+  },
+  {
+    "id": "trivia:venice-lagoon-canal-city",
+    "revision": 1,
+    "question": "Which Italian city is built on lagoon islands linked by canals including the Grand Canal?",
+    "answer": "Venice",
+    "acceptableAnswers": ["Venezia"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/394/"],
+      "sourceRecord": "UNESCO describes Venice's island city and canal network."
+    }
+  },
+  {
+    "id": "trivia:sahara-north-african-desert",
+    "revision": 1,
+    "question": "Which vast desert stretches across much of northern Africa, south of the Mediterranean coast?",
+    "answer": "Sahara",
+    "acceptableAnswers": ["Sahara Desert", "The Sahara"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://svs.gsfc.nasa.gov/14982/"],
+      "sourceRecord": "NASA's North Africa imagery identifies the Sahara south of the Atlas and Mediterranean region."
+    }
+  },
+  {
+    "id": "trivia:danube-river-outlet",
+    "revision": 1,
+    "question": "Into which sea does the River Danube flow?",
+    "answer": "Black Sea",
+    "acceptableAnswers": ["The Black Sea"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/588/"],
+      "sourceRecord": "UNESCO explicitly states that the Danube's waters flow into the Black Sea."
+    }
+  },
+  {
+    "id": "trivia:new-zealand-main-islands-strait",
+    "revision": 1,
+    "question": "Which strait separates New Zealand's North Island and South Island?",
+    "answer": "Cook Strait",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.greatjourneysnz.com/routes/interislander-cook-strait-crossing/"],
+      "sourceRecord": "The official Interislander route guide describes Cook Strait between the North and South Islands."
+    }
+  },
+  {
+    "id": "trivia:istanbul-continental-strait",
+    "revision": 1,
+    "question": "Which strait separates Istanbul's European and Asian sides?",
+    "answer": "Bosphorus",
+    "acceptableAnswers": ["Bosporus", "Bosphorus Strait", "Istanbul Strait"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://goturkiye.com/istanbul/bosphorus"],
+      "sourceRecord": "Türkiye's official tourism guide states that the Bosphorus divides Istanbul between Asia and Europe."
+    }
+  },
+  {
+    "id": "trivia:petra-modern-country",
+    "revision": 1,
+    "question": "In which present-day country is the rock-cut ancient city of Petra?",
+    "answer": "Jordan",
+    "acceptableAnswers": ["Hashemite Kingdom of Jordan"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/326/"],
+      "sourceRecord": "UNESCO's Petra listing identifies Jordan as the country."
+    }
+  },
+  {
+    "id": "trivia:atacama-desert-country",
+    "revision": 1,
+    "question": "The Atacama Desert lies mainly in the north of which South American country?",
+    "answer": "Chile",
+    "acceptableAnswers": ["Republic of Chile"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://chile.travel/zonas/norte-desierto-de-atacama-y-altiplano/"],
+      "sourceRecord": "Chile's official tourism guide locates the Atacama Desert in northern Chile."
+    }
+  },
+  {
+    "id": "trivia:kilimanjaro-country",
+    "revision": 1,
+    "question": "In which African country is Mount Kilimanjaro?",
+    "answer": "Tanzania",
+    "acceptableAnswers": ["United Republic of Tanzania"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/403/"],
+      "sourceRecord": "UNESCO lists Kilimanjaro National Park in the United Republic of Tanzania."
+    }
+  },
+  {
+    "id": "trivia:titicaca-border-lake",
+    "revision": 1,
+    "question": "Which major Andean lake straddles the border between Peru and Bolivia?",
+    "answer": "Lake Titicaca",
+    "acceptableAnswers": ["Titicaca"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.esa.int/Applications/Observing_the_Earth/Earth_from_Space_Lake_Titicaca"
+      ],
+      "sourceRecord": "ESA states that Lake Titicaca straddles the Peru–Bolivia border."
+    }
+  },
+  {
+    "id": "trivia:triangle-side-count",
+    "revision": 1,
+    "question": "How many sides does a triangle have?",
+    "answer": "Three",
+    "acceptableAnswers": ["3", "Three sides"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/triangle"],
+      "sourceRecord": "Merriam-Webster's kids definition gives three sides."
+    }
+  },
+  {
+    "id": "trivia:compass-north-direction",
+    "revision": 1,
+    "question": "On a standard magnetic compass, which direction does the red end of the needle point?",
+    "answer": "North",
+    "acceptableAnswers": ["Magnetic north"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:27:00Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.scouts.org.uk/activities/make-a-diy-compass/",
+        "https://www.merriam-webster.com/dictionary/compass"
+      ],
+      "sourceRecord": "Scouts identifies the red needle end as pointing north; Merriam-Webster specifies magnetic north."
+    }
+  },
+  {
+    "id": "trivia:bread-flour-grain",
+    "revision": 1,
+    "question": "Which cereal grain is milled to make conventional bread flour?",
+    "answer": "Wheat",
+    "acceptableAnswers": [],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.kingarthurbaking.com/blog/2025/03/05/what-is-bread-flour"],
+      "sourceRecord": "King Arthur Baking explains bread flour as flour milled from wheat."
+    }
+  },
+  {
+    "id": "trivia:origami-folding-material",
+    "revision": 1,
+    "question": "What material is folded into shapes in the Japanese craft of origami?",
+    "answer": "Paper",
+    "acceptableAnswers": [],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/origami"],
+      "sourceRecord": "Merriam-Webster defines origami as folding paper into shapes."
+    }
+  },
+  {
+    "id": "trivia:braille-reading-sense",
+    "revision": 1,
+    "question": "Which sense is used to read the raised dots of Braille with your fingers?",
+    "answer": "Touch",
+    "acceptableAnswers": ["Sense of touch"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.rnib.org.uk/living-with-sight-loss/education-and-learning/braille-tactile-codes/reading-braille/"
+      ],
+      "sourceRecord": "RNIB explains reading raised Braille dots using a light touch with the fingers."
+    }
+  },
+  {
+    "id": "trivia:chocolate-source-beans",
+    "revision": 1,
+    "question": "What beans are roasted and ground to make chocolate?",
+    "answer": "Cocoa beans",
+    "acceptableAnswers": ["Cacao beans", "Cocoa", "Cacao"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.kew.org/read-and-watch/kew-gardens-cacao-how-to-make-chocolate"],
+      "sourceRecord": "Kew's chocolate-making demonstration roasts and grinds cacao beans."
+    }
+  },
+  {
+    "id": "trivia:saffron-source-flower",
+    "revision": 1,
+    "question": "Saffron is harvested from the stigmas of which type of flower?",
+    "answer": "Crocus",
+    "acceptableAnswers": ["Saffron crocus", "Crocus sativus"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.rhs.org.uk/herbs/saffron"],
+      "sourceRecord": "RHS identifies saffron as the stigmas of Crocus sativus flowers."
+    }
+  },
+  {
+    "id": "trivia:roman-l-value",
+    "revision": 1,
+    "question": "What number does the Roman numeral L represent?",
+    "answer": "Fifty",
+    "acceptableAnswers": ["50"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.cimt.org.uk/sif/number/n7/interactive/s1.html"],
+      "sourceRecord": "CIMT's Roman-numeral table gives L as 50."
+    }
+  },
+  {
+    "id": "trivia:morse-dots-dashes-code",
+    "revision": 1,
+    "question": "Which code represents letters using sequences of dots and dashes?",
+    "answer": "Morse code",
+    "acceptableAnswers": ["Morse", "International Morse code"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Morse%20code"],
+      "sourceRecord": "Merriam-Webster defines Morse code using dots and dashes or long and short signals."
+    }
+  },
+  {
+    "id": "trivia:litre-millilitre-conversion",
+    "revision": 1,
+    "question": "How many millilitres are in one litre?",
+    "answer": "One thousand",
+    "acceptableAnswers": ["1000", "A thousand", "1000 millilitres", "One thousand millilitres"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nist.gov/pml/owm/si-units-volume"],
+      "sourceRecord": "NIST's volume conversion table gives 1000 mL as 1 L."
+    }
+  },
+  {
+    "id": "trivia:ampersand-symbol-name",
+    "revision": 1,
+    "question": "What is the name of the & symbol?",
+    "answer": "Ampersand",
+    "acceptableAnswers": ["An ampersand"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/ampersand"],
+      "sourceRecord": "Merriam-Webster defines ampersand as the & character standing for and."
+    }
+  },
+  {
+    "id": "trivia:kintsugi-repair-metal",
+    "revision": 1,
+    "question": "Which precious metal is powdered over repaired cracks in traditional Japanese kintsugi pottery?",
+    "answer": "Gold",
+    "acceptableAnswers": ["Powdered gold", "Gold powder"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.japanhouselondon.uk/read-and-watch/kintsugi/"],
+      "sourceRecord": "Japan House London describes kintsugi repairs finished with powdered gold."
+    }
+  },
+  {
+    "id": "trivia:calico-natural-fibre",
+    "revision": 1,
+    "question": "Which natural fibre is used to make calico fabric?",
+    "answer": "Cotton",
+    "acceptableAnswers": [],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/calico"],
+      "sourceRecord": "Merriam-Webster's British fabric definition identifies calico as cotton."
+    }
+  },
+  {
+    "id": "trivia:earl-grey-citrus-flavour",
+    "revision": 1,
+    "question": "Oil from which citrus fruit gives Earl Grey tea its characteristic flavour?",
+    "answer": "Bergamot",
+    "acceptableAnswers": ["Bergamot orange"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://twinings.com.au/blogs/all-about-tea/all-about-earl-grey-1"],
+      "sourceRecord": "Twinings Australia explains Earl Grey's bergamot oil and identifies bergamot as a citrus fruit."
+    }
+  },
+  {
+    "id": "trivia:robot-word-source-language",
+    "revision": 1,
+    "question": "From which language did English borrow the word 'robot'?",
+    "answer": "Czech",
+    "acceptableAnswers": ["Czech language"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:24:16Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.oxfordlearnersdictionaries.com/us/definition/english/robot"],
+      "sourceRecord": "Oxford gives robot's origin as Czech, from robota meaning forced labour."
+    }
+  }
+]

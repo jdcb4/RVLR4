@@ -1,6 +1,6 @@
 # Trivia content storage
 
-Storage foundation shipped in 0.33.0; optional gameplay shipped in 0.35.0 behind Settings → Show Trivia (off by default). In 0.37.0, Trivia is a cooperative quiz to discuss together, with no teams, Correct/Incorrect self-marking, one shared score and a scrollable question recap. Reveal-after-each mode has no writing; reveal-at-end mode always offers one optional shared answer field per question. No discovered historical question bank has been imported. Version 2 of `src/data/trivia/bundled.json` still supplies the 30 newly written, source-checked starter questions introduced in 0.35.1. Future publications must use a higher version.
+Storage foundation shipped in 0.33.0; optional gameplay shipped in 0.35.0 behind Settings → Show Trivia (off by default). In 0.37.0, Trivia is a cooperative quiz to discuss together, with no teams, Correct/Incorrect self-marking, one shared score and a scrollable question recap. Reveal-after-each mode has no writing; reveal-at-end mode always offers one optional shared answer field per question. No discovered historical question bank has been imported. Version 3 of `src/data/trivia/bundled.json` supplies 150 source-checked questions, including the original 30 starter questions unchanged. The original pack and the expansion strategy, category batches and source-review notes are retained under `content/trivia/`. Future publications must use a higher version.
 
 ## Records and publishing
 
@@ -51,3 +51,9 @@ TypeScript tests cover bundled fallback, isolation, full-byte validation, duplic
 The 30-question pack was newly authored for Joe's testing request, not imported from the historical candidate apps. Questions use Australian English, concise standalone wording and one unambiguous expected answer; numeric or commonly accepted name variants are explicit. Stable facts have no expiry. IDs and normalised question texts are checked for duplicates, and all eight categories are represented. The pack has 15 easy, 11 medium and 4 hard questions; 21 are Kids-suitable.
 
 Every question records the authoritative page used for its answer check and identifies the reviewer as `Codex source check`. This is an AI-assisted source review for a testing bank, not a claim of separate human editorial approval. Difficulty is an estimate for the intended audience; Kids suitability additionally considers familiarity for ages 8–12, rather than only absence of adult themes. Broader editorial ingestion remains roadmap work.
+
+## Expanded testing bank — 0.39.0
+
+The strategy in `content/trivia/STRATEGY.md` was established before generation. Separate category subject plans guide 120 additions, with five easy, five medium and five hard per category. Every addition records a supporting source checked by an AI-assisted reviewer. Difficulty and ages 8–12 familiarity are editorial estimates. Run `pnpm audit:trivia` to validate the pack, preserve the original 30 unchanged, check formatting and flag shared answers or similar questions for semantic review. Shared numeric answers are allowed when underlying facts differ. This audit cannot prove factual accuracy or detect every semantic duplicate.
+
+The bundled version increases independently to 3; existing quiz snapshots keep their selected question copies. Downloaded packs must have a newer version. No publisher endpoint or live generation is introduced. Trivia play and marking controls are 64px tall.

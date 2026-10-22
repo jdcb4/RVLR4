@@ -426,3 +426,14 @@ The first device attempt could not run because the earlier emulator was absent a
 Browser review at 360x640 covered the complete Recess settings screen without scrolling and the distinct green/red mark controls. The scoped Impeccable detector reported no findings. Fallow retains 41 reviewed findings and 10 clone groups; no suppressions added. Vite retains the existing word-catalogue size advisory.
 
 Delivered `\\JNAS\Media\DropBox\RVLRY-0.38.0-settings.apk`; SHA-256 `8BE406A2892668642D6C714867454A100F7D13AE49652EAE03A34696BDA3A26C` matches `out/RVLRY-0.38.0-settings.apk`.
+
+
+## Expanded Trivia bank and taller controls — 0.39.0, 22 October 2026
+
+Full verify passed: TypeScript, ESLint, 359 tests across 51 files and production build. A test-file import-order warning was fixed and its targeted lint rerun cleanly. Android assembly, two JVM checks (up-to-date), all 19 API-35 instrumentation tests and four separate snapshot/content force-stop recovery phases passed. The native fresh-quiz assertion now checks bundled pack 3. All device operations targeted emulator-5554; Pixel 10 acceptance remains unverified.
+
+The bank contains 150 questions (55 easy, 51 medium, 44 hard; 76 Kids-suitable). The original 30 are unchanged. The repeatable content audit passes, with its sole shared-answer pair (Six: insect legs/guitar strings) reviewed as distinct facts. Source evidence and editorial review are under content/trivia/. Automated selection tests cover balanced 10/20/30-question adult quizzes and full Kids quizzes without widening filters.
+
+Browser review at 360x640 covered Classic and Recess answer/mark controls: Correct, Incorrect and Next question each measure 64px tall and fit within the viewport, with visible Recess shadows. The scoped Impeccable detector reported no findings. Fallow retains 41 reviewed findings and 10 clone groups, with no suppressions. The existing Vite word-catalogue size advisory remains.
+
+Delivered `\\JNAS\Media\DropBox\RVLRY-0.39.0-trivia-bank.apk`, matching `out/RVLRY-0.39.0-trivia-bank.apk`. SHA-256: `D832A1A870D85B0AE21245CCE1D9A09532F63E033F33B09B5DDDF9B0F028D418`. Existing quizzes keep their selected copies; start a new quiz to draw from the expanded bank.

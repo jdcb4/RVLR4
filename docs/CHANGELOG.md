@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.39.0 — 22 October 2026
+
+- Increase Trivia play actions and Correct/Incorrect controls from 48px to 64px, with extra footer spacing.
+- Expand the independently versioned Trivia bank to 150 source-checked questions across eight categories. Add five easy, five medium and five hard questions per category, including a deliberately child-familiar subset. Preserve the original 30 records and archive separately.
+- Record editorial conventions and subject plans before drafting; add a repeatable schema, formatting, original-preservation and duplicate-candidate audit. Source checks are AI-assisted, with provenance per question.
+
 ## 0.38.0 — 22 October 2026
 
 - Simplify Trivia setup with headings above the controls, 10/20/30-question presets and eight category toggle buttons plus Select all/Clear all in a three-column grid. Keep Start quiz in the fixed footer; show a shortage alert instead of an available-question count, and require at least one category.

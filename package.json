@@ -1,6 +1,6 @@
 {
   "name": "rvlry-android",
-  "version": "0.38.0",
+  "version": "0.39.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.12.0",
@@ -21,6 +21,7 @@
     "test:coverage": "vitest run --coverage",
     "verify": "pnpm run typecheck && pnpm run lint && pnpm test && pnpm run build",
     "export:words": "tsx scripts/export-word-catalogue.mts",
+    "audit:trivia": "tsx scripts/audit-trivia.mts",
     "audit:names": "tsx scripts/audit-names.mts",
     "fallow:hygiene": "pnpm dlx fallow --no-cache --format human --only dead-code,dupes",
     "android:build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1",

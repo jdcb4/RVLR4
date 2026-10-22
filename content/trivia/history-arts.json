@@ -1,0 +1,502 @@
+[
+  {
+    "id": "trivia:scandinavian-longship-seafarers",
+    "revision": 1,
+    "question": "What name is given to the Scandinavian seafarers famous for travelling, trading and raiding in longships?",
+    "answer": "Vikings",
+    "acceptableAnswers": ["The Vikings", "Norsemen"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.jorvikvikingcentre.co.uk/the-vikings/where-did-they-come-from/"],
+      "sourceRecord": "JORVIK identifies the Vikings as Scandinavian seafarers who raided, traded and travelled in longships."
+    }
+  },
+  {
+    "id": "trivia:castle-lifting-bridge",
+    "revision": 1,
+    "question": "What is the name for a castle entrance bridge that can be raised over a moat?",
+    "answer": "Drawbridge",
+    "acceptableAnswers": ["A drawbridge"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.hevercastle.co.uk/news/hevers-drawbridge-rises-again/"],
+      "sourceRecord": "Hever Castle describes its drawbridge crossing the moat into the medieval gatehouse and being raised."
+    }
+  },
+  {
+    "id": "trivia:egypt-picture-writing",
+    "revision": 1,
+    "question": "What are the picture-like signs in ancient Egyptian writing called?",
+    "answer": "Hieroglyphs",
+    "acceptableAnswers": ["Hieroglyphics"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.globalegyptianmuseum.org/glossary.aspx?id=188"],
+      "sourceRecord": "The Global Egyptian Museum identifies hieroglyphs as the pictographic script of the ancient Egyptians."
+    }
+  },
+  {
+    "id": "trivia:rome-gladiator-amphitheatre",
+    "revision": 1,
+    "question": "Which famous ancient amphitheatre in Rome hosted gladiator contests?",
+    "answer": "Colosseum",
+    "acceptableAnswers": [
+      "The Colosseum",
+      "Flavian Amphitheatre",
+      "Flavian Amphitheater",
+      "Coliseum",
+      "The Coliseum"
+    ],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://colosseo.it/area/colosseo/"],
+      "sourceRecord": "The official Colosseum archaeological park describes the Flavian amphitheatre and its gladiatorial games."
+    }
+  },
+  {
+    "id": "trivia:study-past-material-remains",
+    "revision": 1,
+    "question": "What field studies past human life through objects and remains such as pottery, tools and buildings?",
+    "answer": "Archaeology",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.amnh.org/explore/ology/archaeology/what-is-archaeology"],
+      "sourceRecord": "AMNH defines archaeology as studying past life through what people left behind, including pottery, tools and buildings."
+    }
+  },
+  {
+    "id": "trivia:titanic-collision-object",
+    "revision": 1,
+    "question": "What did Titanic collide with in the North Atlantic before sinking in 1912?",
+    "answer": "Iceberg",
+    "acceptableAnswers": ["An iceberg"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.rmg.co.uk/stories/maritime-history/titanic-our-collection"],
+      "sourceRecord": "Royal Museums Greenwich records Titanic striking an iceberg on 14 April 1912."
+    }
+  },
+  {
+    "id": "trivia:mainz-movable-type-printer",
+    "revision": 1,
+    "question": "Which German printer developed the movable-metal-type system used for the Bible printed at Mainz around 1455?",
+    "answer": "Johannes Gutenberg",
+    "acceptableAnswers": ["Gutenberg", "Johann Gutenberg"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.loc.gov/exhibits/bibles/the-gutenberg-bible.html"],
+      "sourceRecord": "The Library of Congress credits Gutenberg with uniform interchangeable metal type and dates the Mainz Bible to about 1455."
+    }
+  },
+  {
+    "id": "trivia:montgomery-bus-seat-protest",
+    "revision": 1,
+    "question": "Which civil rights activist was arrested in Montgomery in December 1955 after refusing to give up her bus seat to a white passenger?",
+    "answer": "Rosa Parks",
+    "acceptableAnswers": ["Parks", "Rosa Louise Parks"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nps.gov/semo/learn/historyculture/rosa-parks.htm"],
+      "sourceRecord": "The US National Park Service identifies Rosa Parks and her 1 December 1955 refusal and arrest in Montgomery."
+    }
+  },
+  {
+    "id": "trivia:first-fleet-arrival-year",
+    "revision": 1,
+    "question": "In what year did the First Fleet arrive at Botany Bay?",
+    "answer": "1788",
+    "acceptableAnswers": ["Seventeen eighty-eight"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.library.gov.au/research/family-history/family-history-research-guide/convicts-research-guide"
+      ],
+      "sourceRecord": "The National Library of Australia dates the arrival of the First Fleet at Botany Bay to January 1788."
+    }
+  },
+  {
+    "id": "trivia:berlin-wall-open-year",
+    "revision": 1,
+    "question": "In what year were the Berlin Wall's border crossings opened to crowds of East Germans?",
+    "answer": "1989",
+    "acceptableAnswers": ["Nineteen eighty-nine"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.berlin.de/en/history/8482274-8619314-opening-and-fall-of-the-berlin-wall.en.html"
+      ],
+      "sourceRecord": "Berlin's official history dates the opening of the Wall's crossing points to the night of 9 November 1989."
+    }
+  },
+  {
+    "id": "trivia:inca-knotted-records",
+    "revision": 1,
+    "question": "Which South American empire used knotted cords called quipus to keep records?",
+    "answer": "Inca Empire",
+    "acceptableAnswers": ["Inca", "Incas", "The Incas", "The Inca Empire", "Inka Empire", "Inka"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.museolarco.org/en/exhibition/permanent-exhibition/online-exhibition/textiles-from-ancient-peru/inca-quipus/"
+      ],
+      "sourceRecord": "Museo Larco describes quipus as the Incas' principal information-recording system, using knotted cords."
+    }
+  },
+  {
+    "id": "trivia:napoleon-final-exile-island",
+    "revision": 1,
+    "question": "On which Atlantic island did Napoleon spend his final exile, from 1815 until his death in 1821?",
+    "answer": "Saint Helena",
+    "acceptableAnswers": ["St Helena", "Saint Helena Island"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.musee-armee.fr/ExpoNapoleonSainteHelene/doc/MA-napoleon-sainte-helene-livretEN.pdf"
+      ],
+      "sourceRecord": "The Musée de l'Armée exhibition timeline places Napoleon on Saint Helena from 1815 to his death on 5 May 1821."
+    }
+  },
+  {
+    "id": "trivia:mansa-musa-empire",
+    "revision": 1,
+    "question": "Mansa Musa, famed for his wealth and pilgrimage to Mecca, ruled which West African empire?",
+    "answer": "Mali Empire",
+    "acceptableAnswers": ["Mali", "The Mali Empire"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.metmuseum.org/pt/perspectives/visualizing-a-sahelian-past"],
+      "sourceRecord": "The Metropolitan Museum identifies Mansa Musa as Mali's emperor and discusses his wealth and pilgrimage."
+    }
+  },
+  {
+    "id": "trivia:terracotta-army-emperor",
+    "revision": 1,
+    "question": "The Terracotta Army was buried with which emperor, who first unified imperial China?",
+    "answer": "Qin Shi Huang",
+    "acceptableAnswers": ["Shi Huangdi", "Qin Shi Huangdi", "Ying Zheng", "Emperor Qin"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/441/"],
+      "sourceRecord": "UNESCO identifies Qin Shi Huang's mausoleum and the surrounding terracotta soldiers, and his unification of China in 221 BCE."
+    }
+  },
+  {
+    "id": "trivia:byzantine-istanbul-name",
+    "revision": 1,
+    "question": "What was Istanbul called when it was the capital of the Byzantine Empire?",
+    "answer": "Constantinople",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/356"],
+      "sourceRecord": "UNESCO describes Istanbul as the Eastern Roman capital and identifies its former Constantinople within the historic peninsula."
+    }
+  },
+  {
+    "id": "trivia:pinocchio-growing-feature",
+    "revision": 1,
+    "question": "In Carlo Collodi's story, which part of Pinocchio's face grows longer when he tells lies?",
+    "answer": "Nose",
+    "acceptableAnswers": ["His nose", "The nose"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/files/500/500-h/500-h.htm"],
+      "sourceRecord": "Chapter 17 of Collodi's original story describes Pinocchio's nose growing after lies."
+    }
+  },
+  {
+    "id": "trivia:paddington-sandwich-filling",
+    "revision": 1,
+    "question": "What sweet spread is Paddington Bear especially fond of in his sandwiches?",
+    "answer": "Marmalade",
+    "acceptableAnswers": ["Orange marmalade"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://paddingtonbearexperience.com/about-the-experience/33-windsor-gardens/"],
+      "sourceRecord": "The official Paddington Bear Experience identifies marmalade sandwiches as Paddington's favourite."
+    }
+  },
+  {
+    "id": "trivia:percy-jackson-godly-father",
+    "revision": 1,
+    "question": "In Rick Riordan's books, which Greek god is Percy Jackson's father?",
+    "answer": "Poseidon",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://rickriordan.com/character/poseidon-2/"],
+      "sourceRecord": "Rick Riordan's official character page explicitly identifies Poseidon as Percy's father."
+    }
+  },
+  {
+    "id": "trivia:lucy-narnia-furniture-entrance",
+    "revision": 1,
+    "question": "What piece of furniture does Lucy step through to first enter Narnia in C. S. Lewis's story?",
+    "answer": "Wardrobe",
+    "acceptableAnswers": ["A wardrobe", "The wardrobe"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.westmont.edu/westmont-news/wardrobe-returns-westmont-after-tour"],
+      "sourceRecord": "Westmont College's C. S. Lewis wardrobe exhibit describes the wardrobe as Lucy's ordinary entrance to Narnia."
+    }
+  },
+  {
+    "id": "trivia:mona-lisa-painter",
+    "revision": 1,
+    "question": "Which artist painted the Mona Lisa?",
+    "answer": "Leonardo da Vinci",
+    "acceptableAnswers": ["Leonardo", "Da Vinci"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.louvre.fr/en/explore/the-palace/from-the-mona-lisa-to-the-wedding-feast-at-cana"
+      ],
+      "sourceRecord": "The Louvre attributes the Mona Lisa to Leonardo da Vinci."
+    }
+  },
+  {
+    "id": "trivia:charlottes-web-animal",
+    "revision": 1,
+    "question": "In E. B. White's novel Charlotte's Web, what kind of animal is Charlotte?",
+    "answer": "Spider",
+    "acceptableAnswers": ["A spider", "Barn spider", "A barn spider"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.penguin.com.au/books/charlottes-web-9780241761656"],
+      "sourceRecord": "Penguin Books Australia's synopsis identifies Charlotte as a large grey spider."
+    }
+  },
+  {
+    "id": "trivia:japanese-five-seven-five-form",
+    "revision": 1,
+    "question": "Which short Japanese poetic form is commonly associated with a five-seven-five pattern?",
+    "answer": "Haiku",
+    "acceptableAnswers": ["A haiku"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://poets.org/glossary/haiku"],
+      "sourceRecord": "The Academy of American Poets describes haiku's traditional three-line five-seven-five pattern."
+    }
+  },
+  {
+    "id": "trivia:sydney-opera-house-architect",
+    "revision": 1,
+    "question": "Which Danish architect designed the Sydney Opera House?",
+    "answer": "Jørn Utzon",
+    "acceptableAnswers": ["Utzon"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.sydneyoperahouse.com/our-story/jorn-utzon"],
+      "sourceRecord": "The Sydney Opera House's official account attributes its winning design to Jørn Utzon."
+    }
+  },
+  {
+    "id": "trivia:frida-kahlo-country",
+    "revision": 1,
+    "question": "Painter Frida Kahlo, known for her self-portraits, came from which country?",
+    "answer": "Mexico",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.museofridakahlo.org.mx/wp/wp-content/uploads/2025/06/Comunicado-MFK-MDRA002-Comunicado-sobre-el-Legado-de-Frida-y-Diego_VF2.pdf"
+      ],
+      "sourceRecord": "The Frida Kahlo Museum's official statement identifies Kahlo as a Mexican artist."
+    }
+  },
+  {
+    "id": "trivia:don-quixote-mistaken-giants",
+    "revision": 1,
+    "question": "In Cervantes's Don Quixote, what structures does the title character famously mistake for giants?",
+    "answer": "Windmills",
+    "acceptableAnswers": ["Windmill", "The windmills"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/files/996/996-h/996-h.htm"],
+      "sourceRecord": "Part One, Chapter Eight explicitly identifies Don Quixote's supposed giants as windmills."
+    }
+  },
+  {
+    "id": "trivia:thinker-sculptor",
+    "revision": 1,
+    "question": "Which French sculptor created The Thinker?",
+    "answer": "Auguste Rodin",
+    "acceptableAnswers": ["Rodin", "François Auguste René Rodin"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.metmuseum.org/art/collection/search/191811"],
+      "sourceRecord": "The Metropolitan Museum's collection record attributes The Thinker to Auguste Rodin."
+    }
+  },
+  {
+    "id": "trivia:othello-deceiving-antagonist",
+    "revision": 1,
+    "question": "In Shakespeare's Othello, who deceives Othello into believing Desdemona is unfaithful?",
+    "answer": "Iago",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.rsc.org.uk/othello/key-moments"],
+      "sourceRecord": "The Royal Shakespeare Company describes Iago's deceptions and Emilia's revelation that Othello has been deceived by him."
+    }
+  },
+  {
+    "id": "trivia:dali-melting-watches-title",
+    "revision": 1,
+    "question": "What is the title of Salvador Dalí's 1931 painting featuring melting watches?",
+    "answer": "The Persistence of Memory",
+    "acceptableAnswers": ["Persistence of Memory"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.moma.org/collection/works/79018/"],
+      "sourceRecord": "MoMA's collection record names the 1931 painting and describes its limp watches."
+    }
+  },
+  {
+    "id": "trivia:things-fall-apart-author",
+    "revision": 1,
+    "question": "Who wrote the novel Things Fall Apart?",
+    "answer": "Chinua Achebe",
+    "acceptableAnswers": ["Achebe"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.penguinrandomhouse.co.za/product/things-fall-apart-5519011/"],
+      "sourceRecord": "Penguin Random House identifies Chinua Achebe as the author of Things Fall Apart."
+    }
+  },
+  {
+    "id": "trivia:ned-kelly-series-painter",
+    "revision": 1,
+    "question": "Which Australian artist painted the celebrated 1946–47 Ned Kelly series?",
+    "answer": "Sidney Nolan",
+    "acceptableAnswers": ["Nolan", "Sir Sidney Nolan"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-22T12:22:17Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://artgallery.wa.gov.au/whats-on/exhibitions/sidney-nolans-ned-kelly-series/"
+      ],
+      "sourceRecord": "The Art Gallery of Western Australia attributes the 1946–47 Ned Kelly series to Sidney Nolan."
+    }
+  }
+]
