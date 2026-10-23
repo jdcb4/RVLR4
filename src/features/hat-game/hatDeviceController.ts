@@ -358,10 +358,10 @@ export class HatDeviceController {
     this.error = "";
     this.emit();
     try {
-      const { kidsMode } = await requireContentPreferences();
+      const { simpleMode } = await requireContentPreferences();
       // Edits and navigation remain responsive while preferences load.
       if (!stillCurrent()) return;
-      const suggestions = getHatClueSuggestions({ kidsMode });
+      const suggestions = getHatClueSuggestions({ simpleMode });
       const existing = Object.values(snapshot.clueSubmissions).flatMap((entry) => entry.clues);
       const available = suggestions.filter((clue) => !existing.includes(clue));
       const suggestion = available[Math.floor(Math.random() * available.length)];

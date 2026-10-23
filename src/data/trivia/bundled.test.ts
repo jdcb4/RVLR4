@@ -21,7 +21,7 @@ it("supplies 600 unique sourced questions across every category and starts a ful
   const session = createTriviaSession();
   session.settings.count = 30;
   session.quiz = startTriviaQuiz(session.settings, pack.questions, {
-    kidsMode: false,
+    simpleMode: false,
     packVersion: pack.version,
   });
   expect(triviaSessionSchema.safeParse(session).success).toBe(true);
@@ -30,14 +30,14 @@ it("supplies 600 unique sourced questions across every category and starts a ful
   expect(session.quiz.items.every((item) => item.writtenAnswer === "")).toBe(true);
 });
 
-it("supports a default ten-question Kids quiz without widening suitability", () => {
+it("supports a default ten-question Simple mode quiz using easy questions", () => {
   const pack = triviaPackSchema.parse(raw);
   const quiz = startTriviaQuiz(createTriviaSession().settings, pack.questions, {
-    kidsMode: true,
+    simpleMode: true,
     packVersion: pack.version,
   });
   expect(quiz.items).toHaveLength(10);
-  expect(quiz.items.every((item) => item.question.kidAppropriate)).toBe(true);
+  expect(quiz.items.every((item) => item.question.difficulty === "easy")).toBe(true);
 });
 
 it("preserves the previous 150 records and their original expansion coverage", () => {
@@ -61,24 +61,18 @@ it("preserves the previous 150 records and their original expansion coverage", (
 });
 
 it.each(["easy", "medium", "hard"] as const)(
-  "supports a full Kids quiz at %s without widening filters",
+  "overrides %s with a full easy-only quiz in Simple mode",
   (difficulty) => {
     const pack = triviaPackSchema.parse(raw);
     const settings = { ...createTriviaSession().settings, count: 30, difficulty };
     const quiz = startTriviaQuiz(settings, pack.questions, {
-      kidsMode: true,
+      simpleMode: true,
       packVersion: pack.version,
     });
     expect(quiz.items).toHaveLength(30);
     expect(new Set(quiz.items.map((item) => item.question.id)).size).toBe(30);
-    expect(quiz.items.every((item) => item.question.kidAppropriate)).toBe(true);
-    const allowed =
-      difficulty === "easy"
-        ? ["easy"]
-        : difficulty === "medium"
-          ? ["easy", "medium"]
-          : ["easy", "medium", "hard"];
-    expect(quiz.items.every((item) => allowed.includes(item.question.difficulty))).toBe(true);
+    expect(quiz.settings.difficulty).toBe("easy");
+    expect(quiz.items.every((item) => item.question.difficulty === "easy")).toBe(true);
   },
 );
 
@@ -90,7 +84,7 @@ it.each([10, 20, 30])(
       const quiz = startTriviaQuiz(
         { ...createTriviaSession().settings, count, difficulty },
         pack.questions,
-        { kidsMode: false, packVersion: pack.version },
+        { simpleMode: false, packVersion: pack.version },
       );
       const tiers =
         difficulty === "easy"

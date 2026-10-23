@@ -6,9 +6,9 @@ Established before the October 2026 expansion. These rules apply to original ann
 
 Target broadly educated Australian adults, with a mix of international and Australian culture, everyday life, science, nature, geography, arts, history and sport. Do not equate education with specialist trivia. New sports names should have broad recognition; avoid padding with niche US leagues, local politicians or obscure celebrities. Prefer durable recognition over short-lived internet trends. The original source lists are retained verbatim, including their historical selection biases.
 
-Kids suitability means a plausible playable answer for ages **8–12**, not merely an inoffensive word. Use a separate `kidAppropriate` boolean: no adult-only sexual, drug/alcohol or graphic-violence themes; familiar objects, animals, places and age-appropriate characters are encouraged. Adult recognition difficulty and child suitability are independent. A false flag can mean unfamiliarity, not objectionable content. These are editorial judgements, not parental guarantees.
+The current adult release offers Simple mode for easy automatic words/questions, not a children's mode. It does not intersect selection with `kidAppropriate` or `kidTargeted`. Easy content can include alcohol, weapons and historical violence references; see the bounded [release content review](release/google-play/content-review.md). Difficulty is not a content rating or suitability guarantee.
 
-The targeted children's supplement uses `kidTargeted: true` for answers deliberately selected around children's interests and experiences, rather than adult general knowledge that happens to be suitable. Target ages remain 8–12. Prioritise playful, readily describable school/play experiences, familiar stories and games, creatures and imaginative adventures. Avoid merely adding obscure children's authors, minor characters or modifiers to existing answers. Hints use short, concrete language a child can understand. Every targeted entry must also be `kidAppropriate: true`; older entries default to non-targeted until individually curated. Adult difficulty remains independent.
+Historical child-selection metadata remains in the schema and published packs for provenance. `kidAppropriate` estimated playable familiarity for ages 8–12 and absence of adult sexual/drug/alcohol or graphic-violence themes; a false value can mean unfamiliarity. `kidTargeted` identifies the earlier deliberately children-first supplement and still implies `kidAppropriate: true`. These were editorial estimates, not parental guarantees or human certification. Their presence does not define the current app audience or an active filter; do not add child-marketing claims based on them.
 
 ## Display and identity
 
@@ -34,7 +34,7 @@ Every canonical entry, including entries inherited from the original lists, has 
 
 Ratings are editorial estimates for the adult audience, not measured success rates. The existing gameplay `difficultyMode` is a legacy rule setting and is not this metadata. WWW and Imposter expose three `wordDifficulty` buttons: Easy uses easy entries only; Medium targets a 50:50 easy/medium mix; Hard targets equal easy/medium/hard shares. Where stock permits, tier counts differ by at most one; ties are random. Hard is the new default, and saved legacy `all` values mean Hard. Single draws choose uniformly among available allowed tiers, then uniformly within that tier. Shortage filling stays within the selected mode's allowed tiers.
 
-App-wide Kids mode intersects this selection with `kidAppropriate`, not only `kidTargeted`, and selected categories remain in force. Hat automatic suggestions also honour Kids mode; manually entered clues are unchanged. Empty eligible pools show an error, never an unfiltered fallback. Imposter has no hard-rated kids-suitable entries, so Hard Kids selection fills from its eligible easy/medium entries.
+App-wide Simple mode overrides automatic selection to easy only for new WWW matches, new Imposter deals, Hat suggestions and new Trivia quizzes. Selected categories remain in force; shortage handling never widens beyond easy while Simple mode is on. With Simple off, each game's normal difficulty selection applies. Manually entered Hat clues and existing selected/dealt game content remain unchanged. Empty eligible pools show an error, never an unfiltered fallback.
 
 ## Provenance and maintenance
 
@@ -48,11 +48,11 @@ Automated checks must validate all fields, resolve every original source ID exac
 
 The October 2026 catalogue contains **4,797 canonical answers**: 3,804 inherited records representing all 4,159 original source entries, plus **993 new answers**. Cross-game reuse and alternate-name merges explain the difference between source and canonical counts. There are 1,638 kids-appropriate answers overall, including **557 additions**. Ratings total 1,791 easy, 2,232 medium and 774 hard.
 
-| Game | Original pool | Expanded playable pool |
-| --- | ---: | ---: |
-| Who What Where | 3,129 | 3,994 |
-| Hat Game | 1,018 | 1,214 |
-| Imposter | 12 | 279 |
+| Game           | Original pool | Expanded playable pool |
+| -------------- | ------------: | ---------------------: |
+| Who What Where |         3,129 |                  3,994 |
+| Hat Game       |         1,018 |                  1,214 |
+| Imposter       |            12 |                    279 |
 
 The expansion was assisted by three GPT-6-Luna high-reasoning agents, followed by coordinator review of aliases, homonyms, child recognition, stale hints and rating calibration. No external Gemini/OpenRouter API calls were needed. The original deep-trivia selections remain available and rated; the new selection emphasises breadth rather than further specialist padding.
 

@@ -4,38 +4,38 @@ import { Button } from "@/components/ui/button";
 import {
   getContentPreferenceState,
   initializeContentPreferences,
-  selectKidsMode,
+  selectSimpleMode,
   subscribeContentPreferences,
 } from "@/services/contentPreference";
 
-export function KidsModeSetting() {
-  const { kidsMode, loaded, busy, error } = useSyncExternalStore(
+export function SimpleModeSetting() {
+  const { simpleMode, loaded, busy, error } = useSyncExternalStore(
     subscribeContentPreferences,
     getContentPreferenceState,
   );
   return (
-    <section className="mt-3 border-b border-border pb-3" aria-label="Kids mode">
+    <section className="mt-3 border-b border-border pb-3" aria-label="Simple mode">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h3 id="kids-mode-label" className="text-typ-card-title font-semibold">
-            Kids mode
+          <h3 id="simple-mode-label" className="text-typ-card-title font-semibold">
+            Simple mode
           </h3>
-          <p id="kids-mode-description" className="text-typ-micro text-muted-foreground">
-            Ages 8–12 · new games and suggestions
+          <p id="simple-mode-description" className="text-typ-micro text-muted-foreground">
+            Easy words and questions · new games
           </p>
         </div>
         <Button
           type="button"
           role="switch"
-          aria-checked={kidsMode}
-          aria-labelledby="kids-mode-label"
-          aria-describedby="kids-mode-description"
+          aria-checked={simpleMode}
+          aria-labelledby="simple-mode-label"
+          aria-describedby="simple-mode-description"
           disabled={!loaded || busy}
-          variant={kidsMode ? "default" : "outline"}
+          variant={simpleMode ? "default" : "outline"}
           className="min-w-20 shrink-0"
-          onClick={() => void selectKidsMode(!kidsMode)}
+          onClick={() => void selectSimpleMode(!simpleMode)}
         >
-          {kidsMode ? "On" : "Off"}
+          {simpleMode ? "On" : "Off"}
         </Button>
       </div>
       {error && (
@@ -49,7 +49,7 @@ export function KidsModeSetting() {
           disabled={busy}
           onClick={() => void initializeContentPreferences()}
         >
-          Retry loading Kids mode
+          Retry loading Simple mode
         </Button>
       )}
     </section>

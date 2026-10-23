@@ -31,7 +31,7 @@ export function setActiveWordCatalogue(entries: readonly CatalogueEntry[]): void
 
 export type WordPoolOptions = {
   difficulty?: "all" | "easy" | "medium" | "hard";
-  kidsMode?: boolean;
+  simpleMode?: boolean;
 };
 
 export function getCatalogueForGame(
@@ -41,7 +41,6 @@ export function getCatalogueForGame(
   return activeCatalogue.filter(
     (entry) =>
       entry.games.includes(game) &&
-      (!options.kidsMode || entry.kidAppropriate) &&
-      isDifficultyAllowed(entry.difficulty, options.difficulty),
+      isDifficultyAllowed(entry.difficulty, options.simpleMode ? "easy" : options.difficulty),
   );
 }

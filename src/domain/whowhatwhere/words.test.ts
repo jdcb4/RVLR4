@@ -85,24 +85,30 @@ describe("WWW mixed difficulty turn deck", () => {
     },
   );
 
-  it("preserves category and Kids filtering in real catalogue draws, filling missing tiers", () => {
-    const options = { difficulty: "hard", kidsMode: true } as const;
-    const pool = getWhoWhatWhereWordList(options);
+  it("keeps real catalogue draws easy in Simple mode despite a Hard game setting", () => {
+    const options = { difficulty: "hard", simpleMode: true } as const;
+    const pool = getWhoWhatWhereWordList();
     const entries = getCatalogueForGame("www", options);
     const byWord = new Map(entries.map((entry) => [entry.word, entry]));
     const deck = buildTurnDeck(
       pool,
-      { ...createDefaultSettings(), wordDifficulty: "hard", selectedCategories: ["What"] },
+      {
+        ...createDefaultSettings(),
+        simpleMode: true,
+        wordDifficulty: "hard",
+        selectedCategories: ["What"],
+      },
       () => 0,
     );
     const words = [...deck.words, ...deck.reserveWords];
     expect(words).toHaveLength(90);
-    expect(words.every((entry) => byWord.get(entry.word)?.kidAppropriate)).toBe(true);
+    expect(words.every((entry) => byWord.get(entry.word)?.difficulty === "easy")).toBe(true);
     expect(words.every((entry) => entry.category === "What")).toBe(true);
     const counts = (list: readonly WordEntry[], rating: DifficultyRating) =>
       list.filter((entry) => byWord.get(entry.word)?.difficulty === rating).length;
     expect(counts(deck.words, "easy")).toBeGreaterThan(0);
-    expect(counts(deck.words, "medium")).toBeGreaterThan(0);
+    expect(counts(deck.words, "medium")).toBe(0);
+    expect(counts(deck.words, "hard")).toBe(0);
     expect(new Set(words.map((entry) => entry.word)).size).toBe(words.length);
   });
 

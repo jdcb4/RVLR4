@@ -28,8 +28,8 @@ describe("Imposter difficulty selection", () => {
     },
   );
 
-  it("fills missing Hard Kids stock from suitable easy and medium tiers", () => {
-    const options = { difficulty: "hard", kidsMode: true } as const;
+  it("overrides Hard with easy-only draws in Simple mode", () => {
+    const options = { difficulty: "hard", simpleMode: true } as const;
     const pool = getCatalogueForGame("imposter", options);
     expect(pool.some((entry) => entry.difficulty === "hard")).toBe(false);
     const chosen = [0.25, 0.75].map((tierRandom) => {
@@ -37,8 +37,8 @@ describe("Imposter difficulty selection", () => {
       const word = chooseImposterWord(options, () => random.shift()!);
       return pool.find((entry) => entry.word === word)!;
     });
-    expect(chosen.map((entry) => entry.difficulty)).toEqual(["easy", "medium"]);
-    expect(chosen.every((entry) => entry.kidAppropriate)).toBe(true);
+    expect(chosen.map((entry) => entry.difficulty)).toEqual(["easy", "easy"]);
+    expect(pool.some((entry) => !entry.kidAppropriate)).toBe(true);
   });
 
   it("honours the supplied RNG for word selection without repeating or padding the word bank", () => {

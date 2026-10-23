@@ -1,4 +1,10 @@
+import { useSyncExternalStore } from "react";
+
 import type { WordPoolOptions } from "@/data/wordCatalogue";
+import {
+  getContentPreferenceState,
+  subscribeContentPreferences,
+} from "@/services/contentPreference";
 
 import { OptionButton, OptionGroup } from "./OptionGroup";
 
@@ -13,7 +19,11 @@ export function DifficultySelect({
   readonly onChange: (value: Difficulty) => void;
   readonly disabled?: boolean;
 }) {
-  const selected = value === "all" ? "hard" : value;
+  const { simpleMode } = useSyncExternalStore(
+    subscribeContentPreferences,
+    getContentPreferenceState,
+  );
+  const selected = simpleMode ? "easy" : value === "all" ? "hard" : value;
   return (
     <OptionGroup
       label="Difficulty"
@@ -31,6 +41,7 @@ export function DifficultySelect({
         <OptionButton
           key={difficulty}
           selected={selected === difficulty}
+          disabled={simpleMode && difficulty !== "easy"}
           onClick={() => onChange(difficulty)}
         >
           {label}

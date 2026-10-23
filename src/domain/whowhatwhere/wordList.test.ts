@@ -18,10 +18,10 @@ describe("WWW word pool adapter", () => {
   });
 
   it.each(["all", "easy", "medium", "hard"] as const)(
-    "projects allowed %s tiers and Kids mode filters",
+    "projects allowed %s tiers and Simple mode filters",
     (difficulty) => {
-      for (const kidsMode of [false, true]) {
-        const options = { difficulty, kidsMode };
+      for (const simpleMode of [false, true]) {
+        const options = { difficulty, simpleMode };
         const expected = getCatalogueForGame("www", options);
         expect(getWhoWhatWhereWordList(options)).toEqual(
           expected.map(({ word, category, hint, difficulty }) => ({
@@ -32,7 +32,7 @@ describe("WWW word pool adapter", () => {
           })),
         );
         expect(expected.length).toBeGreaterThan(0);
-        expect(expected.every((entry) => !kidsMode || entry.kidAppropriate)).toBe(true);
+        expect(expected.every((entry) => !simpleMode || entry.difficulty === "easy")).toBe(true);
         expect(expected.every((entry) => isDifficultyAllowed(entry.difficulty, difficulty))).toBe(
           true,
         );

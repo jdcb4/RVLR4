@@ -96,7 +96,7 @@ export function TriviaPage() {
       (question) =>
         settings.categories.includes(question.category) &&
         isTriviaQuestionEligible(question, {
-          kidsMode: preferences.kidsMode,
+          simpleMode: preferences.simpleMode,
           difficulty: settings.difficulty,
         }),
     ).length;
@@ -107,6 +107,7 @@ export function TriviaPage() {
         settings={settings}
         onChange={setSettingsDraft}
         insufficient={settings.count > eligibleCount}
+        simpleMode={preferences.simpleMode}
       />
     );
     if (preferences.error)
@@ -117,7 +118,7 @@ export function TriviaPage() {
             {preferences.error}
           </p>
           <Button variant="outline" onClick={() => void initializeContentPreferences()}>
-            Retry Kids mode
+            Retry Simple mode
           </Button>
         </>
       );
@@ -280,10 +281,12 @@ function TriviaSetup({
   settings,
   onChange,
   insufficient,
+  simpleMode,
 }: {
   settings: TriviaSettings;
   onChange: (settings: TriviaSettings) => void;
   insufficient: boolean;
+  simpleMode: boolean;
 }) {
   const update = (patch: Partial<TriviaSettings>) => onChange({ ...settings, ...patch });
   const all = settings.categories.length === triviaCategories.length;
@@ -305,7 +308,14 @@ function TriviaSetup({
         {(["easy", "medium", "hard"] as const).map((difficulty) => (
           <OptionButton
             key={difficulty}
-            selected={(settings.difficulty === "all" ? "hard" : settings.difficulty) === difficulty}
+            selected={
+              (simpleMode
+                ? "easy"
+                : settings.difficulty === "all"
+                  ? "hard"
+                  : settings.difficulty) === difficulty
+            }
+            disabled={simpleMode && difficulty !== "easy"}
             onClick={() => update({ difficulty })}
           >
             {difficulty[0]!.toUpperCase() + difficulty.slice(1)}

@@ -56,7 +56,9 @@ describe("Android prototype home", () => {
     await user.click(information);
     const dialog = screen.getByRole("dialog", { name: "RVLRY" });
     expect(within(dialog).getByText(/By jdcb4\. Version/)).toBeInTheDocument();
-    expect(within(dialog).queryByText(/Check for new words/)).not.toBeInTheDocument();
+    expect(
+      within(dialog).queryByRole("button", { name: "Check for new words" }),
+    ).not.toBeInTheDocument();
     await user.click(within(dialog).getByRole("button", { name: "Close dialog" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(information).toHaveFocus();

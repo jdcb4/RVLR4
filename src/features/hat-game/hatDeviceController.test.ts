@@ -124,7 +124,7 @@ describe("Hat native session ownership", () => {
     vi.mocked(removeSnapshot).mockImplementation(async () => {
       device.saved = null;
     });
-    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: false });
+    vi.mocked(requireContentPreferences).mockResolvedValue({ simpleMode: false });
     vi.clearAllMocks();
   });
   afterEach(async () => {
@@ -242,33 +242,37 @@ describe("Hat native session ownership", () => {
     );
   });
 
-  it("uses the global kids preference for automatic suggestions while preserving manual and saved figures", async () => {
-    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+  it("uses easy automatic suggestions in Simple mode while preserving harder manual and saved figures", async () => {
+    vi.mocked(requireContentPreferences).mockResolvedValue({ simpleMode: true });
     const controller = await enteringClues();
-    const adultFigure = getCatalogueForGame("hat").find((entry) => !entry.kidAppropriate)!.word;
-    controller.updateClue(1, adultFigure);
+    const harderFigure = getCatalogueForGame("hat").find(
+      (entry) => entry.difficulty === "hard",
+    )!.word;
+    controller.updateClue(1, harderFigure);
     await controller.suggestClue(0);
     const clue = currentClues(controller)[0];
-    expect(getCatalogueForGame("hat", { kidsMode: true }).some(({ word }) => word === clue)).toBe(
+    expect(getCatalogueForGame("hat", { simpleMode: true }).some(({ word }) => word === clue)).toBe(
       true,
     );
-    expect(currentClues(controller)[1]).toBe(adultFigure);
+    expect(currentClues(controller)[1]).toBe(harderFigure);
     await controller.leaveGame();
     const restored = new HatDeviceController();
     await restored.hydrate();
     await restored.openSavedGame();
-    expect(currentClues(restored)[1]).toBe(adultFigure);
+    expect(currentClues(restored)[1]).toBe(harderFigure);
   });
 
-  it("allows adult suggestions when the global kids preference is off", async () => {
+  it("allows harder suggestions when Simple mode is off", async () => {
     const controller = await enteringClues();
     const suggestions = clueSuggestions.getHatClueSuggestions();
-    const adultFigure = getCatalogueForGame("hat").find((entry) => !entry.kidAppropriate)!.word;
+    const harderFigure = getCatalogueForGame("hat").find(
+      (entry) => entry.difficulty === "hard",
+    )!.word;
     vi.spyOn(Math, "random").mockReturnValue(
-      (suggestions.indexOf(adultFigure) + 0.5) / suggestions.length,
+      (suggestions.indexOf(harderFigure) + 0.5) / suggestions.length,
     );
     await controller.suggestClue(0);
-    expect(currentClues(controller)[0]).toBe(adultFigure);
+    expect(currentClues(controller)[0]).toBe(harderFigure);
   });
 
   it("surfaces preference failures without replacing a figure or drawing from an unfiltered pool", async () => {
@@ -300,7 +304,7 @@ describe("Hat native session ownership", () => {
 
   it("ignores repeated suggestion taps and does not overwrite edits while preferences load", async () => {
     const controller = await enteringClues();
-    let release: ((preferences: { kidsMode: boolean }) => void) | undefined;
+    let release: ((preferences: { simpleMode: boolean }) => void) | undefined;
     vi.mocked(requireContentPreferences).mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -311,7 +315,7 @@ describe("Hat native session ownership", () => {
     await controller.suggestClue(0);
     expect(requireContentPreferences).toHaveBeenCalledTimes(1);
     controller.updateClue(0, "My newer figure");
-    release?.({ kidsMode: true });
+    release?.({ simpleMode: true });
     await pending;
     expect(currentClues(controller)[0]).toBe("My newer figure");
     expect(controller.getSnapshot().error).toBe("");
@@ -322,7 +326,7 @@ describe("Hat native session ownership", () => {
     async (navigation) => {
       const controller = await enteringClues();
       for (let index = 0; index < 6; index += 1) controller.updateClue(index, `My figure ${index}`);
-      let release: ((preferences: { kidsMode: boolean }) => void) | undefined;
+      let release: ((preferences: { simpleMode: boolean }) => void) | undefined;
       vi.mocked(requireContentPreferences).mockImplementationOnce(
         () =>
           new Promise((resolve) => {
@@ -339,7 +343,7 @@ describe("Hat native session ownership", () => {
         controller.revealClues();
       }
       await settle();
-      release?.({ kidsMode: true });
+      release?.({ simpleMode: true });
       await pending;
       expect(controller.getSnapshot().session.snapshot.clueSubmissions).toEqual(before);
     },

@@ -53,38 +53,36 @@ describe("curated word catalogue", () => {
     expect(getWordCatalogue()).toBe(bundled);
     expect(Object.isFrozen(bundled)).toBe(true);
     expect(Object.isFrozen(bundled[0]!.games)).toBe(true);
-    expect(getHatClueSuggestions({ kidsMode: true })).toEqual(["Installed child figure"]);
+    expect(getHatClueSuggestions({ simpleMode: true })).toEqual(["Installed child figure"]);
     expect(getWhoWhatWhereWordList({ difficulty: "easy" }).map(({ word }) => word)).toEqual([
       "Installed child figure",
     ]);
     expect(getImposterWordList()).toEqual(["Installed adult figure"]);
-    expect(getCatalogueForGame("imposter", { kidsMode: true })).toEqual([]);
+    expect(getCatalogueForGame("imposter", { simpleMode: true })).toEqual([]);
     expect(() => setActiveWordCatalogue([{ ...sample, hint: "" }])).toThrow();
-    expect(getHatClueSuggestions({ kidsMode: true })).toEqual(["Installed child figure"]);
+    expect(getHatClueSuggestions({ simpleMode: true })).toEqual(["Installed child figure"]);
     setActiveWordCatalogue([]);
     expect(getWhoWhatWhereWordList()).toEqual([]);
     expect(getWordCatalogue()).toBe(bundled);
   });
 
-  it("intersects difficulty and kids suitability for every game's selection pool", () => {
+  it("overrides every game's difficulty with easy in Simple mode without filtering suitability", () => {
     for (const game of ["www", "hat", "imposter"] as const) {
       const all = getCatalogueForGame(game);
-      expect(getCatalogueForGame(game, { difficulty: "all", kidsMode: false })).toEqual(all);
+      expect(getCatalogueForGame(game, { difficulty: "all", simpleMode: false })).toEqual(all);
       for (const difficulty of ["all", "easy", "medium", "hard"] as const) {
-        for (const kidsMode of [false, true]) {
-          expect(getCatalogueForGame(game, { difficulty, kidsMode })).toEqual(
-            all.filter(
-              (entry) =>
-                (!kidsMode || entry.kidAppropriate) &&
-                isDifficultyAllowed(entry.difficulty, difficulty),
+        for (const simpleMode of [false, true]) {
+          expect(getCatalogueForGame(game, { difficulty, simpleMode })).toEqual(
+            all.filter((entry) =>
+              isDifficultyAllowed(entry.difficulty, simpleMode ? "easy" : difficulty),
             ),
           );
         }
       }
-      const kids = getCatalogueForGame(game, { kidsMode: true });
-      expect(kids.some((entry) => entry.kidTargeted)).toBe(true);
-      expect(kids.some((entry) => !entry.kidTargeted)).toBe(true);
-      expect(kids.length).toBeLessThan(all.length);
+      const simple = getCatalogueForGame(game, { simpleMode: true });
+      expect(simple.every((entry) => entry.difficulty === "easy")).toBe(true);
+      expect(simple.some((entry) => !entry.kidAppropriate)).toBe(true);
+      expect(simple.length).toBeLessThan(all.length);
     }
   });
   it("preserves the exact original inventories independently of display corrections", () => {

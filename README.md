@@ -2,9 +2,9 @@
 
 Standalone offline pass-and-play Android app, derived from RVLR4.
 
-Version 0.28.0 includes **Who What Where**, **Hat Game**, and **Imposter**, each with an independent local save. React/Vite/Capacitor renders the phone UI; a native SQLite plugin supplies durable checkpoints and lifecycle handling. No backend or multiplayer connection is required.
+Includes **Who What Where**, **Hat Game**, **Imposter** and cooperative **Trivia**, all visible on the picker with independent local saves. RVLRY is a free app for adults, with no ads or in-app purchases. Simple mode selects easy automatic words/questions for new play and makes no child-suitability promise. React/Vite/Capacitor renders the phone UI; a native SQLite plugin supplies durable checkpoints and lifecycle handling. No backend or multiplayer connection is required.
 
-Four offline design demos live in [docs/design/aesthetic-demos/index.html](docs/design/aesthetic-demos/index.html). They are isolated studies; the production aesthetic remains unchanged.
+Five app-wide themes are included. Four historical design demos live in [docs/design/aesthetic-demos/index.html](docs/design/aesthetic-demos/index.html); the current runtime uses shared theme-aware screens.
 
 ## Develop and verify
 
@@ -23,7 +23,7 @@ Use Android Studio with its bundled Java runtime and an Android SDK.
 
 See [Android build and phone testing](docs/ANDROID.md). The app ID is
 `au.joed.rvlry`. Debug APKs are for the initial phone test; release signing and
-friend distribution are a later gate. Do not push this Android branch to the
+Play distribution remain gated by the [release preparation checklist](docs/release/google-play/README.md). Do not push this Android branch to the
 original application's Railway-connected branches.
 
 ## Documentation

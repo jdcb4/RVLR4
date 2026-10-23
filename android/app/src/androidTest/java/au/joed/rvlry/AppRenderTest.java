@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.ExecutorService;
 import java.lang.reflect.Field;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -84,7 +86,7 @@ public class AppRenderTest {
         String path = "/artwork/" + sheet + ".png";
         awaitCondition(activity,
             "(()=>{const artwork=[...document.querySelectorAll('main [data-game-artwork]')];"
-            + "return artwork.length===3 && ['www','hat','imposter'].every(game=>{"
+            + "return artwork.length===4 && ['www','hat','imposter','trivia'].every(game=>{"
             + "const node=artwork.find(item=>item.dataset.gameArtwork===game);"
             + "if(!node)return false;const bounds=node.getBoundingClientRect();"
             + "const style=getComputedStyle(node);"
@@ -112,9 +114,9 @@ public class AppRenderTest {
         String key = "app.appearance.v1";
         try (SnapshotDatabase database = new SnapshotDatabase(context)) {
             String[] original = database.read(key);
-            String[] originalContent = database.read("app.content.v1");
+            String[] originalContent = database.read("app.content.v2");
             try {
-                database.write("app.content.v1", "{\"storageVersion\":1,\"revision\":1,\"savedAt\":\"2026-10-22T00:00:00.000Z\",\"payload\":{\"schemaVersion\":1,\"kidsMode\":true}}");
+                database.write("app.content.v2", "{\"storageVersion\":1,\"revision\":1,\"savedAt\":\"2026-10-22T00:00:00.000Z\",\"payload\":{\"schemaVersion\":2,\"simpleMode\":true}}");
                 database.write(key, "{\"storageVersion\":1,\"revision\":1,\"savedAt\":\"2026-10-22T00:00:00.000Z\",\"payload\":{\"schemaVersion\":1,\"theme\":\"observatory\"}}");
                 try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
                     AtomicReference<MainActivity> activity = new AtomicReference<>();
@@ -127,9 +129,9 @@ public class AppRenderTest {
                 database.remove(key);
                 if (original[1] != null) database.write(key, original[1]);
                 if (original[0] != null) database.write(key, original[0]);
-                database.remove("app.content.v1");
-                if (originalContent[1] != null) database.write("app.content.v1", originalContent[1]);
-                if (originalContent[0] != null) database.write("app.content.v1", originalContent[0]);
+                database.remove("app.content.v2");
+                if (originalContent[1] != null) database.write("app.content.v2", originalContent[1]);
+                if (originalContent[0] != null) database.write("app.content.v2", originalContent[0]);
             }
         }
     }
@@ -156,6 +158,7 @@ public class AppRenderTest {
             Field workerField = RvlryDevicePlugin.class.getDeclaredField("storage");
             workerField.setAccessible(true);
             worker = (ExecutorService) workerField.get(plugin);
+            awaitCondition(activity, "!!document.querySelector('a[href*=trivia]')");
             // Exercise the actual chooser and SQLite preference in the disposable database.
             evaluate(activity, "document.querySelector('[aria-label=Settings]').click()");
             awaitCondition(activity, "!!document.querySelector('[role=switch]:enabled')");
@@ -178,13 +181,14 @@ public class AppRenderTest {
             }
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
                 assertTrue(saved.read("app.appearance.v1")[0].contains("recess"));
-                assertTrue(saved.read("app.content.v1")[0].contains("\"kidsMode\":true"));
+                assertTrue(saved.read("app.content.v2")[0].contains("\"simpleMode\":true"));
             }
             evaluate(activity, "document.querySelector('[aria-label=\"Close dialog\"]').click()");
             evaluate(activity, "document.querySelector('a[href*=whowhatwhere]').click()");
             awaitCondition(activity, "document.body.innerText.includes('Game settings') && document.body.innerText.includes('Turn length') && document.body.innerText.includes('Categories')");
             System.out.println("RVLRY_RENDER_SETTINGS " + evaluate(activity, "JSON.stringify({href:location.href,text:document.body.innerText.slice(0,1000)})"));
             clickButton(activity, "Easy");
+            awaitCondition(activity, "[...document.querySelectorAll('button')].some(button=>button.textContent.trim()==='Easy'&&button.getAttribute('aria-pressed')==='true') && [...document.querySelectorAll('button')].filter(button=>['Medium','Hard'].includes(button.textContent.trim())).every(button=>button.disabled)");
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(button => button.textContent.trim()==='Next: Team 1' && !button.disabled)");
             evaluate(activity, "[...document.querySelectorAll('button')].find(button => button.textContent.trim()==='Next: Team 1').click()");
             awaitCondition(activity, "document.body.innerText.includes('Team 1 of 2') && document.querySelectorAll('input').length >= 3");
@@ -196,8 +200,13 @@ public class AppRenderTest {
             awaitCondition(activity, "document.body.innerText.includes('Pass to')");
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
                 String snapshot = saved.read("whowhatwhere.device-session.v1")[0];
-                assertTrue(snapshot.contains("\"kidsMode\":true"));
+                assertTrue(snapshot.contains("\"simpleMode\":true"));
                 assertTrue(snapshot.contains("\"wordDifficulty\":\"easy\""));
+                JSONArray pool = new JSONObject(snapshot).getJSONObject("payload").getJSONArray("wordPool");
+                assertTrue("Simple mode word pool was empty", pool.length() > 0);
+                for (int index = 0; index < pool.length(); index++) {
+                    assertTrue("Simple mode must capture only easy words", "easy".equals(pool.getJSONObject(index).getString("difficulty")));
+                }
             }
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(button => button.textContent.includes(', start turn') && !button.disabled)");
             evaluate(activity, "[...document.querySelectorAll('button')].find(button => button.textContent.includes(', start turn')).click()");
@@ -278,20 +287,20 @@ public class AppRenderTest {
                   "quiz":{"settings":{"count":1,"categories":["general"],"revealMode":"end","difficulty":"all"},
                     "cursor":0,"phase":"questions","kidsMode":true,"packVersion":1,"items":[{
                       "question":{"id":"trivia:native-fixture","revision":1,"question":"Native fixture question?","answer":"Fixture answer",
-                        "acceptableAnswers":[],"category":"general","difficulty":"easy","kidAppropriate":true,
+                        "acceptableAnswers":[],"category":"general","difficulty":"hard","kidAppropriate":false,
                         "review":{"reviewedAt":"2026-10-22T00:00:00.000Z","reviewer":"Test fixture only","sources":["https://example.com"]}},
                       "shownAt":"2026-10-22T00:00:00.000Z","writtenAnswer":"","revealed":false,"mark":null,"excluded":false}]}}}
                 """;
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
                 saved.write("trivia.device.v3", triviaFixture);
+                saved.write("app.features.v1", "{\"storageVersion\":1,\"revision\":1,\"savedAt\":\"2026-10-24T00:00:00.000Z\",\"payload\":{\"schemaVersion\":1,\"triviaEnabled\":false}}");
             }
             evaluate(activity, "location.hash='/'");
-            awaitCondition(activity, "!!document.querySelector('a[href*=whowhatwhere]')");
-            assertTrue("Trivia must be hidden by default", "true".equals(evaluate(activity, "!document.querySelector('a[href*=trivia]')")));
+            reloadPage(activity);
+            awaitCondition(activity, "!!document.querySelector('a[href*=trivia]')");
             evaluate(activity, "document.querySelector('[aria-label=Settings]').click()");
-            awaitCondition(activity, "!!document.querySelector('[aria-labelledby=trivia-enabled-label]:enabled')");
-            evaluate(activity, "document.querySelector('[aria-labelledby=trivia-enabled-label]').click()");
-            awaitCondition(activity, "document.querySelector('[aria-labelledby=trivia-enabled-label]:enabled')?.getAttribute('aria-checked')==='true'");
+            awaitCondition(activity, "!!document.querySelector('dialog[open]')");
+            assertTrue("Trivia visibility setting must be removed", "true".equals(evaluate(activity, "!document.body.innerText.includes('Show Trivia') && !document.querySelector('[aria-labelledby=trivia-enabled-label]')")));
             evaluate(activity, "document.querySelector('[aria-label=\"Close dialog\"]').click()");
             awaitCondition(activity, "!!document.querySelector('a[href*=trivia]')");
             evaluate(activity, "document.querySelector('a[href*=trivia]').click()");
@@ -301,7 +310,7 @@ public class AppRenderTest {
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Finish questions'&&!b.disabled)");
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
                 assertTrue("Written answer was not committed", saved.read("trivia.device.v3")[0].contains("fIXTURE ANSWER"));
-                assertTrue("Visibility was not committed", saved.read("app.features.v1")[0].contains("\"triviaEnabled\":true"));
+                assertTrue("Legacy preference must be ignored without modification", saved.read("app.features.v1")[0].contains("\"triviaEnabled\":false"));
             }
             reloadPage(activity);
             clickButton(activity, "Resume");
@@ -320,20 +329,24 @@ public class AppRenderTest {
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Correct'&&b.getAttribute('aria-pressed')==='true')");
             clickButton(activity, "Finish quiz");
             awaitCondition(activity, "document.body.innerText.includes('Quiz complete') && document.body.innerText.includes('1 of 1 correct') && document.querySelector('[aria-label=\"Question recap\"]')?.textContent.includes('Native fixture question?') && document.querySelector('[aria-label=\"Question recap\"]')?.textContent.includes('Fixture answer') && document.querySelector('[aria-label=\"Question recap\"]')?.textContent.includes('fIXTURE ANSWER') && !document.querySelector('[role=alert]')");
-            System.out.println("RVLRY_NATIVE_TRIVIA_OK: visibility, saved quiz, written answer reload, automatic mark, manual override, score and recap");
+            System.out.println("RVLRY_NATIVE_TRIVIA_OK: always available despite legacy disabled preference, saved quiz, written answer reload, automatic mark, manual override, score and recap");
 
+            try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
+                saved.write("app.features.v1", "corrupt");
+            }
             evaluate(activity, "location.hash='/'");
+            reloadPage(activity);
             awaitCondition(activity, "!!document.querySelector('a[href*=trivia]')");
             evaluate(activity, "document.querySelector('[aria-label=Settings]').click()");
-            awaitCondition(activity, "!!document.querySelector('[aria-labelledby=kids-mode-label]:enabled')");
-            evaluate(activity, "if(document.querySelector('[aria-labelledby=kids-mode-label]').getAttribute('aria-checked')==='true')document.querySelector('[aria-labelledby=kids-mode-label]').click()");
-            awaitCondition(activity, "document.querySelector('[aria-labelledby=kids-mode-label]:enabled')?.getAttribute('aria-checked')==='false'");
+            awaitCondition(activity, "!!document.querySelector('[aria-labelledby=simple-mode-label]:enabled')");
+            awaitCondition(activity, "document.querySelector('[aria-labelledby=simple-mode-label]:enabled')?.getAttribute('aria-checked')==='true'");
             evaluate(activity, "document.querySelector('[aria-label=\"Close dialog\"]').click()");
             evaluate(activity, "document.querySelector('a[href*=trivia]').click()");
             clickButton(activity, "Start new quiz");
             awaitCondition(activity, "!!document.querySelector('dialog[open]')");
             evaluate(activity, "[...document.querySelectorAll('dialog[open] button')].find(b=>b.textContent.trim()==='Start new quiz').click()");
             awaitCondition(activity, "document.body.innerText.includes('Set up your quiz')");
+            awaitCondition(activity, "[...document.querySelectorAll('button')].some(button=>button.textContent.trim()==='Easy'&&button.getAttribute('aria-pressed')==='true') && [...document.querySelectorAll('button')].filter(button=>['Medium','Hard'].includes(button.textContent.trim())).every(button=>button.disabled)");
             awaitCondition(activity, "[...document.querySelectorAll('fieldset')].some(group=>group.querySelector('legend')?.textContent==='Categories'&&group.querySelectorAll('button').length===9)");
             evaluate(activity, "[...document.querySelectorAll('button')].find(button=>button.textContent.trim()==='Select all')?.click()");
             awaitCondition(activity, "[...document.querySelectorAll('button')].some(button=>button.textContent.trim()==='Clear all') && !document.querySelector('input[type=checkbox]') && !document.querySelector('details')");
@@ -345,6 +358,13 @@ public class AppRenderTest {
                 String snapshot = saved.read("trivia.device.v3")[0];
                 assertTrue("Starter bank version not captured", snapshot.contains("\"packVersion\":5"));
                 assertTrue("Synthetic fixture must not appear in the real bank", !snapshot.contains("native-fixture"));
+                JSONObject quiz = new JSONObject(snapshot).getJSONObject("payload").getJSONObject("quiz");
+                assertTrue("New quiz must capture Simple mode", quiz.getBoolean("simpleMode"));
+                JSONArray items = quiz.getJSONArray("items");
+                for (int index = 0; index < items.length(); index++) {
+                    assertTrue("Simple mode must choose only easy questions", "easy".equals(items.getJSONObject(index).getJSONObject("question").getString("difficulty")));
+                }
+                assertTrue("Corrupt legacy preference must be ignored without modification", "corrupt".equals(saved.read("app.features.v1")[0]));
             }
             System.out.println("RVLRY_NATIVE_TRIVIA_STARTER_OK: new 30-question quiz from bundled version 5");
 

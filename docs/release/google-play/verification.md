@@ -1,6 +1,5 @@
 # Local verification receipt
 
-
 ## Android release preparation and pack 5 — 0.40.0, 23 October 2026
 
 Full verify passes: TypeScript, ESLint, 361 tests across 51 files and web build. The pack-5 audit preserves all 300 prior records unchanged, validates 600 unique question identities and resolves all 26 shared-answer/wording flags as distinct facts. New accepted arrays exactly match the 300 shipped additions, and every addition has a source-evidence row. Totals: 205 easy, 201 medium, 194 hard; 295 Kids-suitable. No historical candidate questions were imported.
@@ -12,3 +11,15 @@ Two native JVM checks remain green (up-to-date). The final API-35 emulator run p
 Delivery: `\\JNAS\Media\DropBox\RVLRY-0.40.0-trivia-600.apk`. SHA-256: `44C63225FCE4660E76E4883AB5E64D685CE025150FADAE9C69A1DDA46B47CDFF`. Start a new quiz to use the additions; existing quizzes keep their selected copies.
 
 The companion `RVLRY-0.40.0-android-release-prep.zip` contains draft store/policy materials, candidate icon, dependency inventory, audit receipt and an explicitly UNSIGNED AAB. AAB SHA-256: `E7B7803785EB79B949A1C4938CBE7B2E13FACD4957CCDAC6ED49141DD94863BE`. It is not installable or upload-ready. No production key, account registration, policy publication, store upload or public release was performed. See `docs/release/google-play/README.md` for remaining owner decisions and release gates; iOS is deferred.
+
+## Adult release preparation — 0.42.0, 24 October 2026
+
+Full verify passed: TypeScript, ESLint, 411 tests across 58 files and production build. Focused AppInfo tests/lint passed after its final error-copy cleanup. Fallow was reviewed: 40 retained findings and nine clone groups, with no new suppressions. The existing eager catalogue chunk advisory remains. Browser review at 360x640 confirmed the Simple mode control and locally loaded licence disclosure; privacy content is bundled offline.
+
+Android debug assembly, two JVM checks (up-to-date), all 20 API-35 instrumentation tests and four separate snapshot/content force-stop recovery phases passed on emulator-5554. New native assertions cover easy-only captured WWW/Trivia pools, disabled harder choices, always-visible Trivia and preservation of a legacy harder saved quiz while Simple mode is on. Emulator startup used the existing RVLRY_API35 AVD; no physical phone was targeted.
+
+The real signed AAB build passed, jarsigner verified its signature, and its certificate matches the recorded upload fingerprint. The archive contains native/Cordova licence notices (68,906 bytes), no source maps and no native .so libraries. Self-signed certificate/no-timestamp warnings are expected for this upload key. The key's encrypted 1Password recovery was exercised independently. No Play upload or registration occurred. Pixel 10 and Play-delivered install/update acceptance remain unverified.
+
+Privacy and support pages returned HTTP 200 at content.jboxgames.com/rvlry/privacy.html and support.html. Deployment 5b2a6028-ac6b-48f7-b057-961d47228f7e added only those pages. Live content validation still passes all hashes, schemas, CORS and unknown-path 404 for 4,797 words / 600 questions. Inbound support forwarding and public MX/SPF were verified; no test email or outbound send-as setup was performed.
+
+Delivery: RVLRY-0.42.0-simple-mode.apk in JNAS Media/DropBox, SHA-256 B4B13894C66C416C681E214CD53A73A0A6B592F094FB6CFE605B62B601B56E57. It retains prototype debug signing for installation over the previous prototype. The separate release kit contains the signed AAB, public certificate, notices and draft store materials; no private key/passwords. AAB SHA-256 DF9D89F44B87E266E2119E7B342CFC3292EACD4FB0994A6B0A90ADA103445CB3. A future Play installation uses a different signing identity and normally needs a fresh install.

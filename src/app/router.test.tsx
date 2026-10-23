@@ -26,6 +26,7 @@ describe("app routes", () => {
     ["/games/whowhatwhere", "Who What Where"],
     ["/games/hat", "Hat Game"],
     ["/games/imposter", "Imposter"],
+    ["/games/trivia", "Trivia"],
   ])("lazy-loads %s on direct navigation", async (path, heading) => {
     const memoryRouter = createMemoryRouter(appRoutes, { initialEntries: [path] });
     render(<RouterProvider router={memoryRouter} />);

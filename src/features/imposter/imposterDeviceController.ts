@@ -243,10 +243,10 @@ export class ImposterDeviceController {
     const epoch = this.epoch;
     this.emit();
     try {
-      const { kidsMode } = await requireContentPreferences();
+      const { simpleMode } = await requireContentPreferences();
       if (!this.active || this.paused || epoch !== this.epoch) return;
       const secretWord = chooseImposterWord(
-        { difficulty: this.session.snapshot.wordDifficulty, kidsMode },
+        { difficulty: this.session.snapshot.wordDifficulty, simpleMode },
         Math.random,
       );
       const result = startImposterRound(
@@ -254,7 +254,7 @@ export class ImposterDeviceController {
         secretWord === undefined ? [] : [secretWord],
         Math.random,
         "Unable to deal this round.",
-        "No words match these settings. Choose another difficulty or change Kids mode in app settings.",
+        "No words match these settings. Choose another difficulty or change Simple mode in app settings.",
       );
       this.setupError = result.error ?? "";
       if (result.snapshot) await this.transition(result.snapshot);

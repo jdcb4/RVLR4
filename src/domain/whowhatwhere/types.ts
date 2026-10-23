@@ -31,7 +31,7 @@ export type GameSettings = {
   readonly selectedCategories: readonly Category[];
   readonly difficultyMode: DifficultyMode;
   readonly wordDifficulty: NonNullable<WordPoolOptions["difficulty"]>;
-  readonly kidsMode: boolean;
+  readonly simpleMode: boolean;
   readonly hints: HintSettings;
 };
 

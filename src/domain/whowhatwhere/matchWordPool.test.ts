@@ -13,7 +13,7 @@ import { getWhoWhatWhereWordList } from "./wordList";
 describe("captured WWW match word pool", () => {
   it("samples every selected category and allowed difficulty without changing its inputs", () => {
     const settings = { ...createDefaultSettings(), wordDifficulty: "medium" as const };
-    const words = getWhoWhatWhereWordList({ difficulty: "medium", kidsMode: true });
+    const words = getWhoWhatWhereWordList({ difficulty: "medium" });
     const before = JSON.stringify(words);
     const pool = captureMatchWordPool(words, settings, () => 0.5);
     expect(matchWordPoolSchema.safeParse(pool).success).toBe(true);
@@ -38,6 +38,24 @@ describe("captured WWW match word pool", () => {
     expect(pool.every((word) => word.difficulty !== "hard")).toBe(true);
     expect(JSON.stringify(words)).toBe(before);
     expect(pool.every((word) => !words.includes(word))).toBe(true);
+  });
+
+  it("captures only easy words from a mixed pool when Simple mode overrides Hard", () => {
+    const settings = {
+      ...createDefaultSettings(),
+      wordDifficulty: "hard" as const,
+      simpleMode: true,
+    };
+    const words = getWhoWhatWhereWordList();
+    expect(new Set(words.map((word) => word.difficulty))).toEqual(
+      new Set(["easy", "medium", "hard"]),
+    );
+    const pool = captureMatchWordPool(words, settings, () => 0.5);
+    expect(pool.length).toBeGreaterThan(0);
+    expect(pool.every((word) => word.difficulty === "easy")).toBe(true);
+    expect(new Set(pool.map((word) => word.category))).toEqual(
+      new Set(settings.selectedCategories),
+    );
   });
 
   it("bounds large Unicode packs by UTF8 bytes and count while retaining every category", () => {

@@ -1,5 +1,5 @@
 import { ArrowLeft, Eye, EyeOff, Minus, Plus, RotateCcw } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { PrimaryFooterButton, SecondaryFooterButton } from "@/components/game/GameFooterButtons";
@@ -11,11 +11,19 @@ import { Button } from "@/components/ui/button";
 import { maxImpostersForPlayers } from "@/domain/imposter/round";
 import { useDeviceController } from "@/features/game-app-hooks/useDeviceController";
 import { ImposterDeviceController } from "@/features/imposter/imposterDeviceController";
+import {
+  getContentPreferenceState,
+  subscribeContentPreferences,
+} from "@/services/contentPreference";
 
 export function ImposterDevicePage() {
   const navigate = useNavigate();
   const { controller, view: game } = useDeviceController(() => new ImposterDeviceController());
   const [confirmNew, setConfirmNew] = useState(false);
+  const { simpleMode } = useSyncExternalStore(
+    subscribeContentPreferences,
+    getContentPreferenceState,
+  );
   const leave = useCallback(() => {
     void controller.leave().then((saved) => {
       if (saved) navigate("/");
@@ -261,13 +269,15 @@ export function ImposterDevicePage() {
               </p>
               <p className="text-typ-muted text-muted-foreground">
                 Difficulty:{" "}
-                {snapshot.wordDifficulty === "all"
-                  ? "Hard"
-                  : snapshot.wordDifficulty === "easy"
-                    ? "Easy"
-                    : snapshot.wordDifficulty === "medium"
-                      ? "Medium"
-                      : "Hard"}
+                {simpleMode
+                  ? "Easy"
+                  : snapshot.wordDifficulty === "all"
+                    ? "Hard"
+                    : snapshot.wordDifficulty === "easy"
+                      ? "Easy"
+                      : snapshot.wordDifficulty === "medium"
+                        ? "Medium"
+                        : "Hard"}
               </p>
               <ol className="divide-y divide-border">
                 {snapshot.players.map((player) => (

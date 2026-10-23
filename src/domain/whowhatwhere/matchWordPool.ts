@@ -46,7 +46,7 @@ export function captureMatchWordPool(
     selectDifficultyBalanced(
       words.filter((word) => word.category === category),
       limit,
-      settings.wordDifficulty,
+      settings.simpleMode ? "easy" : settings.wordDifficulty,
       random,
     ),
   );

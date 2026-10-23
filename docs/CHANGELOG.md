@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.42.0 — 24 October 2026
+
+- Replace Kids mode with global Simple mode: Easy-rated words/questions for new WWW, Imposter and Trivia games and Hat suggestions. Show effective Easy difficulty while enabled. Existing active games retain their selected content; child-suitability metadata remains editorial provenance only.
+- Make Trivia always available and remove its visibility switch, including legacy disabled preferences.
+- Add offline privacy information, support contact and packaged licence access under App information. Publish matching privacy/support pages and configure inbound support forwarding at rvlry@jboxgames.com.
+- Prepare a dedicated securely backed-up Android upload key and signed bundle workflow. Package native dependency attribution and Cordova's notice alongside JavaScript/font licences. RVLRY remains free with no ads or purchases; intended audience is adults. Play account setup, declarations and distribution testing remain owner release gates.
+
 ## 0.41.0 — 23 October 2026
 
 - Enable Settings → Check for new words for both word and Trivia catalogues, backed by a live stable HTTPS endpoint at content.jboxgames.com. Downloads are manual; gameplay remains offline.

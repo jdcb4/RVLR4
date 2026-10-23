@@ -1,5 +1,13 @@
 # Decisions
 
+## 24 October 2026 — Adult audience, Simple mode and release identity
+
+RVLRY targets adults, remains free without ads or purchases, and always exposes Trivia. Replace the runtime child-suitability filter with global Simple mode, selecting only Easy-rated content for new automatic draws. Keep kidAppropriate/kidTargeted in catalogue schemas as editorial provenance; neither drives runtime filtering. Simple mode is not an age rating or a suitability guarantee. Previously selected game content remains intact. Store the new preference independently under app.content.v2; ignore the retired app.content.v1 and app.features.v1 preferences without migration complexity.
+
+Use rvlry@jboxgames.com for public support, with Cloudflare inbound forwarding to the owner's verified mailbox. Use one shared policy source for offline app information and the public privacy page at https://content.jboxgames.com/rvlry/privacy.html. Retain independent provider network processing in the disclosure. This does not submit Play declarations or replace review of actual presentation/content against the intended audience.
+
+Prepare a dedicated RSA upload key outside the checkout with encrypted recovery material in 1Password, accessed by the signed-build helper through process-only secrets. The upload certificate is public; private keys and passwords never belong in git or release kits. Extend generated notices to include all resolved native coordinates, their Apache licence text and the upstream Cordova NOTICE. No runtime dependency changes.
+
 Durable architecture and tooling decisions for RVLRY. ADR-lite format: each entry is dated, names the decision, the reasoning, and any rejected alternatives.
 
 When adding a new entry, append to the bottom and keep the most recent decisions visible. Do not delete past decisions; supersede them with a new entry that links back.
@@ -392,7 +400,6 @@ Store the nullable boolean mark with each selected question in schema version 3 
 In 0.38.0, keep every game's first settings page in memory until the player advances to later setup or starts Trivia. Persist later setup and game progress with the existing game-owned controllers. Returning or resetting to the first page removes saved setup, and loading a valid older first-page snapshot cleans it up without a resume chooser. Keep failed cleanup/removal retryable through the same ordered snapshot owner. WWW, Hat and Imposter completion removes the saved game instead of writing a synthetic first-page setup; Trivia retains its completed score and recap until reset. This changes the persistence boundary without changing session schemas or resetting existing active saves.
 
 Use headings above Trivia options, only 10/20/30-question presets, and eight category toggles plus Select all/Clear all in a three-column grid. Keep Start quiz in GameShell's fixed footer. Replace the availability count with a shortage alert only when selection is insufficient, or a category prompt when none are selected. Use explicit green/red Correct/Incorrect mark states separate from primary actions, retaining Incorrect left and Correct right. These choices simplify setup and distinguish a self-mark from navigation without changing selection, scoring or content-pack contracts. No new dependencies.
-
 
 ## 23 October 2026 — Android release preparation
 

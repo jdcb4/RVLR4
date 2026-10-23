@@ -22,7 +22,7 @@ describe("setup domain", () => {
     expect(settings.skipLimit).toBe(1);
     expect(settings.difficultyMode).toBe("easy");
     expect(settings.wordDifficulty).toBe("hard");
-    expect(settings.kidsMode).toBe(false);
+    expect(settings.simpleMode).toBe(false);
     expect(settings.hints).toEqual({ enabled: false, perTurnLimit: 0 });
   });
 

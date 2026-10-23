@@ -60,10 +60,10 @@ const quizSchema = z
     cursor: z.number().int().min(0).max(100),
     phase: z.enum(["questions", "ready", "answers", "results"]),
     settings: triviaSettingsSchema,
-    kidsMode: z.boolean(),
+    simpleMode: z.boolean().default(false),
     packVersion: z.number().int().positive().safe(),
   })
-  .strict()
+  .strip()
   .superRefine((quiz, context) => {
     const issue = (message: string) => context.addIssue({ code: "custom", message });
     if (quiz.items.length !== quiz.settings.count) issue("Question count differs from settings.");
@@ -90,8 +90,10 @@ const quizSchema = z
       questions.add(identity);
       if (
         !quiz.settings.categories.includes(item.question.category) ||
-        (quiz.kidsMode && !item.question.kidAppropriate) ||
-        !isDifficultyAllowed(item.question.difficulty, quiz.settings.difficulty)
+        !isDifficultyAllowed(
+          item.question.difficulty,
+          quiz.simpleMode ? "easy" : quiz.settings.difficulty,
+        )
       ) {
         issue("Question does not match quiz settings.");
       }
@@ -207,9 +209,12 @@ function assertSaveSize(quiz: TriviaQuiz): TriviaQuiz {
 export function startTriviaQuiz(
   input: TriviaSettings,
   questions: readonly TriviaQuestion[],
-  options: { kidsMode: boolean; packVersion: number; now?: number; rng?: () => number },
+  options: { simpleMode: boolean; packVersion: number; now?: number; rng?: () => number },
 ): TriviaQuiz {
-  const settings = triviaSettingsSchema.parse(input);
+  const settings = triviaSettingsSchema.parse({
+    ...input,
+    difficulty: options.simpleMode ? "easy" : input.difficulty,
+  });
   const now = options.now ?? Date.now();
   const rng = options.rng ?? Math.random;
   const ids = new Set<string>();
@@ -220,7 +225,7 @@ export function startTriviaQuiz(
       !settings.categories.includes(question.category) ||
       !isTriviaQuestionEligible(
         question,
-        { kidsMode: options.kidsMode, difficulty: settings.difficulty },
+        { simpleMode: options.simpleMode, difficulty: settings.difficulty },
         now,
       ) ||
       ids.has(question.id) ||
@@ -254,7 +259,7 @@ export function startTriviaQuiz(
     cursor: 0,
     phase: "questions",
     settings,
-    kidsMode: options.kidsMode,
+    simpleMode: options.simpleMode,
     packVersion: z.number().int().positive().safe().parse(options.packVersion),
   };
   return assertSaveSize(prepareTriviaQuiz(quiz, now));
@@ -292,7 +297,7 @@ export function prepareTriviaQuiz(quiz: TriviaQuiz, now = Date.now()): TriviaQui
       !item.excluded &&
       isTriviaQuestionEligible(
         item.question,
-        { kidsMode: quiz.kidsMode, difficulty: quiz.settings.difficulty },
+        { simpleMode: quiz.simpleMode, difficulty: quiz.settings.difficulty },
         now,
       )
     ) {

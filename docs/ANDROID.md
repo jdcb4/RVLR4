@@ -2,15 +2,17 @@
 
 ## Current milestone
 
+0.42.0 replaces Kids mode with easy-only Simple mode, makes Trivia always available, and adds offline privacy/support/licence information. The dedicated upload key has a verified encrypted backup; the signed AAB verifies against its public certificate. Play account setup, declarations and Play-delivered testing remain pending.
+
 0.41.0 enables manual additive word/Trivia updates from the live content.jboxgames.com endpoint. Omitted records remain; removals require explicit permanent IDs. WWW captures a bounded match pool and compacts inaccessible historical recap copies to keep long games durable. See [Content updates](CONTENT_UPDATES.md).
 
 0.40.0 expands the bundled Trivia bank to 600 questions (pack version 5), retaining 64px play controls. Trivia setup uses the layout introduced in 0.38.0: headings sit above option groups, question counts are 10/20/30, and eight category toggles plus Select all/Clear all form a three-column grid. Start quiz stays in the fixed footer. Insufficient content shows a shortage alert without an availability count; no categories shows Choose at least one category. Correct and Incorrect use distinct green/red states, separate from the primary action colour, with Incorrect on the left and Correct on the right.
 
 The first settings page of every game is temporary. Later setup and game progress remain durable. Returning or resetting to the first page removes its saved setup; older first-page snapshots are cleaned up without a resume chooser, and storage failures remain retryable. WWW, Hat and Imposter completion no longer stores a synthetic first-page setup. Trivia's completed score and recap remain saved until reset. Session schemas and existing active saves are unchanged.
 
-Cooperative Trivia retains no teams, optional writing only in reveal-at-end mode, the persisted Ready for the answers? handoff, exact-answer automatic marking and manual overrides. Revealed questions require a mark before advancing; expired unshown questions are excluded from the shared score and recap. The previous 300 questions remain unchanged; new quizzes draw from the expanded bank. WWW, Imposter and Trivia retain visible Easy/Medium/Hard buttons with allowed-tier shortage filling and Hard as the default. App Settings offers Kids mode for new games and Hat suggestions.
+Cooperative Trivia retains no teams, optional writing only in reveal-at-end mode, the persisted Ready for the answers? handoff, exact-answer automatic marking and manual overrides. Revealed questions require a mark before advancing; expired unshown questions are excluded from the shared score and recap. The previous 300 questions remain unchanged; new quizzes draw from the expanded bank. WWW, Imposter and Trivia retain visible Easy/Medium/Hard buttons with allowed-tier shortage filling and Hard as the default. App Settings offers Simple mode, forcing easy automatic content for new WWW matches, Imposter deals, Hat suggestions and Trivia quizzes. This difficulty setting makes no child-suitability promise; manual Hat entries and existing selected content stay intact.
 
-The picker opens independent saved sessions. Five app-wide themes retain matching illustrated game artwork and the approved Recess cut-paper treatment. Settings and Info use separate header icons; appearance is stored independently of games. Settings → Show Trivia remains off by default. Settings → Check for new words now manually updates words and Trivia through the additive endpoint described in CONTENT_UPDATES.md. Guarded signed/unsigned App Bundle commands are available; production signing identity and Play publisher setup remain pending. See [Google Play preparation](release/google-play/README.md).
+The picker opens independent saved sessions. Five app-wide themes retain matching illustrated game artwork and the approved Recess cut-paper treatment. Settings and Info use separate header icons; appearance is stored independently of games. All four games, including Trivia, are always visible on the picker; the Show Trivia setting is retired. Settings → Check for new words now manually updates words and Trivia through the additive endpoint described in CONTENT_UPDATES.md. Guarded signed/unsigned App Bundle commands are available; the upload signing identity is prepared; Play publisher setup remains pending. See [Google Play preparation](release/google-play/README.md).
 
 Historical multiplayer, Draw & Guess, browser controllers and the old gallery are retired. Native flows use the same shared snapshot store, lifecycle services and compact phone shell.
 
@@ -442,7 +444,6 @@ Browser review at 360x640 covered Classic and Recess answer/mark controls: Corre
 
 Delivered `\\JNAS\Media\DropBox\RVLRY-0.39.0-trivia-bank.apk`, matching `out/RVLRY-0.39.0-trivia-bank.apk`. SHA-256: `D832A1A870D85B0AE21245CCE1D9A09532F63E033F33B09B5DDDF9B0F028D418`. Existing quizzes keep their selected copies; start a new quiz to draw from the expanded bank.
 
-
 ## Trivia bank doubled — 0.39.1, 23 October 2026
 
 Full verify passed: TypeScript, ESLint, 360 tests across 51 files and production build. The complete pack-4 audit passes schema, IDs, normalised question identity, formatting and preservation of all 150 prior records. Four shared-number pairs were reviewed as distinct facts. Batch files exactly match the shipped additions. The bank has 300 questions (105 easy, 101 medium, 94 hard), including 150 Kids-suitable entries. Evidence and editorial disposition are in content/trivia/expansion-v4/.
@@ -450,7 +451,6 @@ Full verify passed: TypeScript, ESLint, 360 tests across 51 files and production
 Android assembly, two native JVM checks (up-to-date), all 19 API-35 instrumentation tests and four separate snapshot/content force-stop recovery phases passed on emulator-5554. The fresh 30-question native flow confirms content pack 4. No physical device was targeted; Pixel 10 acceptance remains unverified. No UI, game rules or persistence code changed. Fallow retains the same 41 reviewed findings and 10 clone groups; no suppressions added. The existing Vite word-catalogue size advisory remains.
 
 Delivered `\\JNAS\Media\DropBox\RVLRY-0.39.1-trivia-300.apk`, SHA-256 `47ABC04FF34F0FC07FB29C79E537298B19814D0310644E1F4FA2A6BF3499205F`, matching local `out/RVLRY-0.39.1-trivia-300.apk`. Start a new quiz to use the expanded bank; saved quizzes keep their question copies.
-
 
 ## Android release preparation and pack 5 — 0.40.0, 23 October 2026
 
@@ -475,3 +475,15 @@ Android assembly and two JVM checks passed. All 20 API-35 emulator instrumentati
 The live endpoint https://content.jboxgames.com/rvlry/v1/manifest.json passed full downloaded checksums/schemas for 4,797 words and 600 questions, Android-origin CORS and unknown-path 404 checks. Browser Settings successfully checked the real endpoint. At 360x640, Classic/Recess update controls fit without horizontal overflow; the button is 48px tall and completion feedback scrolls into view. The scoped UI detector found no issues. The initial public versions match the bundle, so no new updates is the expected current result.
 
 Delivery: \\JNAS\Media\DropBox\RVLRY-0.41.0-content-updates.apk, 19,129,507 bytes. SHA-256: 26526DD5981F017043AC457FE6244D5E0A0B6453004981CEAE987477A5A375DB matches the local out/RVLRY-0.41.0-content-updates.apk. Install over the prototype to retain existing data. Public content hosting is live; this is not a Play Store release.
+
+## Adult release preparation — 0.42.0, 24 October 2026
+
+Full verify passed: TypeScript, ESLint, 411 tests across 58 files and production build. Focused AppInfo tests/lint passed after its final error-copy cleanup. Fallow was reviewed: 40 retained findings and nine clone groups, with no new suppressions. The existing eager catalogue chunk advisory remains. Browser review at 360x640 confirmed the Simple mode control and locally loaded licence disclosure; privacy content is bundled offline.
+
+Android debug assembly, two JVM checks (up-to-date), all 20 API-35 instrumentation tests and four separate snapshot/content force-stop recovery phases passed on emulator-5554. New native assertions cover easy-only captured WWW/Trivia pools, disabled harder choices, always-visible Trivia and preservation of a legacy harder saved quiz while Simple mode is on. Emulator startup used the existing RVLRY_API35 AVD; no physical phone was targeted.
+
+The real signed AAB build passed, jarsigner verified its signature, and its certificate matches the recorded upload fingerprint. The archive contains native/Cordova licence notices (68,906 bytes), no source maps and no native .so libraries. Self-signed certificate/no-timestamp warnings are expected for this upload key. The key's encrypted 1Password recovery was exercised independently. No Play upload or registration occurred. Pixel 10 and Play-delivered install/update acceptance remain unverified.
+
+Privacy and support pages returned HTTP 200 at content.jboxgames.com/rvlry/privacy.html and support.html. Deployment 5b2a6028-ac6b-48f7-b057-961d47228f7e added only those pages. Live content validation still passes all hashes, schemas, CORS and unknown-path 404 for 4,797 words / 600 questions. Inbound support forwarding and public MX/SPF were verified; no test email or outbound send-as setup was performed.
+
+Delivery: RVLRY-0.42.0-simple-mode.apk in JNAS Media/DropBox, SHA-256 B4B13894C66C416C681E214CD53A73A0A6B592F094FB6CFE605B62B601B56E57. It retains prototype debug signing for installation over the previous prototype. The separate release kit contains the signed AAB, public certificate, notices and draft store materials; no private key/passwords. AAB SHA-256 DF9D89F44B87E266E2119E7B342CFC3292EACD4FB0994A6B0A90ADA103445CB3. A future Play installation uses a different signing identity and normally needs a fresh install.

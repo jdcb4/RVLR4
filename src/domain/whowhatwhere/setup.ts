@@ -18,7 +18,7 @@ export function createDefaultSettings(): GameSettings {
     selectedCategories: CATEGORIES,
     difficultyMode: "easy",
     wordDifficulty: "hard",
-    kidsMode: false,
+    simpleMode: false,
     hints: {
       enabled: false,
       perTurnLimit: 0,

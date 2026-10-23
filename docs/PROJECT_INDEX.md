@@ -1,6 +1,6 @@
 # RVLRY Android project index
 
-The current deliverable is a standalone offline Android app with Who What Where, Hat Game, Imposter and optional Trivia. Each game has its own native durable session. The original multiplayer server/client and Draw & Guess are removed; git retains their history.
+The current deliverable is a standalone offline Android app for adults with Who What Where, Hat Game, Imposter and Trivia, all visible on the picker. Each game has its own native durable session. Simple mode selects easy automatic words/questions for new play; it makes no child-suitability promise. The app is free with no ads or in-app purchases. The original multiplayer server/client and Draw & Guess are removed; git retains their history.
 
 ## Active boundaries
 
@@ -13,7 +13,7 @@ The current deliverable is a standalone offline Android app with Who What Where,
 - `src/services/deviceLifecycle.ts` — native/DOM lifecycle coordination.
 - `src/domain/` — independent Who What Where, Hat, Imposter and cooperative Trivia game rules.
 - `src/features/hat-game/`, `src/features/imposter/` — native session/controller/page conversions.
-- `src/features/trivia/` — optional cooperative quiz with shared answers and independent recovery.
+- `src/features/trivia/` — cooperative quiz with shared answers and independent recovery.
 - `src/features/game-app-hooks/` — stable controller binding and bounded-history measurement.
 - `src/components/` — shared phone shell and UI.
 - `src/data/` — bundled words and Trivia; installed content merges through `src/services/contentPacks/`.
@@ -35,7 +35,7 @@ commands in [ANDROID.md](ANDROID.md); browser tests alone do not verify them.
 - [Google Play preparation](release/google-play/README.md) — draft listing/privacy materials, guarded bundle builds and remaining release gates.
 - [Android build and testing](ANDROID.md) — local toolchain, APK and device checks.
 - [Persistence](PERSISTENCE.md) — current Android save contract and historical browser saves.
-- [Word catalogue](WORD_CATALOGUE.md) — answer conventions, ratings, kids suitability and original-source provenance.
+- [Word catalogue](WORD_CATALOGUE.md) — answer conventions, difficulty/Simple selection, historical metadata and original-source provenance.
 - [Architecture](ARCHITECTURE.md) — Android entry point and retained legacy architecture.
 - [Decisions](DECISIONS.md), [Changelog](CHANGELOG.md), [Versioning](VERSIONING.md).
 - [Verification](VERIFICATION.md), [Screens](SCREENS.md), [Theming](THEMING.md),

@@ -49,7 +49,7 @@ beforeEach(() => {
   device.active = true;
   device.activity = null;
   device.saved = null;
-  vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: false });
+  vi.mocked(requireContentPreferences).mockResolvedValue({ simpleMode: false });
   vi.mocked(readSnapshot).mockImplementation(async () => ({
     value: device.saved,
     recovered: false,
@@ -227,7 +227,7 @@ describe("Imposter durable device controller", () => {
     await controller.startRound();
     const attempted = vi.mocked(writeSnapshot).mock.calls.at(-1)![1] as ImposterDeviceSession;
     const randomCalls = random.mock.calls.length;
-    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+    vi.mocked(requireContentPreferences).mockResolvedValue({ simpleMode: true });
     expect(controller.getSnapshot().storageError).toBe("Disk full");
     expect(controller.getSnapshot().session.snapshot.step).toBe("review");
     await controller.startRound();
@@ -318,7 +318,7 @@ describe("Imposter durable device controller", () => {
     expect(controller.getSnapshot().hydrationFailed).toBe(false);
   });
 
-  it("persists difficulty and uses its allowed kids-safe tiers only when dealing a new round", async () => {
+  it("persists difficulty and overrides it with easy only when dealing a new Simple mode round", async () => {
     vi.useFakeTimers();
     const controller = new ImposterDeviceController();
     await controller.hydrate();
@@ -330,10 +330,10 @@ describe("Imposter durable device controller", () => {
     await controller.advanceSetup();
     expect(device.saved?.snapshot.wordDifficulty).toBe("medium");
     await controller.advanceSetup();
-    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+    vi.mocked(requireContentPreferences).mockResolvedValue({ simpleMode: true });
     await controller.startRound();
     const originalRound = structuredClone(controller.getSnapshot().session.snapshot.round);
-    const pool = getCatalogueForGame("imposter", { difficulty: "medium", kidsMode: true });
+    const pool = getCatalogueForGame("imposter", { difficulty: "medium", simpleMode: true });
     expect(pool.length).toBeGreaterThan(0);
     expect(pool.some(({ word }) => word === originalRound?.secretWord)).toBe(true);
     vi.mocked(requireContentPreferences).mockRejectedValue(new Error("Unavailable preferences"));
@@ -351,10 +351,12 @@ describe("Imposter durable device controller", () => {
     const random = vi.spyOn(Math, "random");
     const writes = vi.mocked(writeSnapshot).mock.calls.length;
     vi.mocked(requireContentPreferences).mockRejectedValueOnce(
-      new Error("Kids mode could not be loaded. Retry in app settings before selecting new words."),
+      new Error(
+        "Simple mode could not be loaded. Retry in app settings before selecting new words.",
+      ),
     );
     await controller.startRound();
-    expect(controller.getSnapshot().setupError).toContain("Kids mode could not be loaded");
+    expect(controller.getSnapshot().setupError).toContain("Simple mode could not be loaded");
     expect(controller.getSnapshot().storageError).toBe("");
     expect(controller.getSnapshot().session.snapshot.step).toBe("review");
     expect(writeSnapshot).toHaveBeenCalledTimes(writes);
@@ -370,12 +372,12 @@ describe("Imposter durable device controller", () => {
     controller.updateWordDifficulty("hard");
     await controller.advanceSetup();
     await controller.advanceSetup();
-    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+    vi.mocked(requireContentPreferences).mockResolvedValue({ simpleMode: true });
     const words = vi.spyOn(wordLists, "chooseImposterWord").mockReturnValueOnce(undefined);
     const writes = vi.mocked(writeSnapshot).mock.calls.length;
     await controller.startRound();
     expect(words).toHaveBeenCalledExactlyOnceWith(
-      { difficulty: "hard", kidsMode: true },
+      { difficulty: "hard", simpleMode: true },
       Math.random,
     );
     expect(controller.getSnapshot().setupError).toContain("No words match these settings");
@@ -383,23 +385,23 @@ describe("Imposter durable device controller", () => {
     expect(writeSnapshot).toHaveBeenCalledTimes(writes);
   });
 
-  it("deals Hard Kids rounds from available lower tiers when no hard clues exist", async () => {
+  it("deals easy-only Simple mode rounds despite a Hard setting", async () => {
     const controller = await setup();
-    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+    vi.mocked(requireContentPreferences).mockResolvedValue({ simpleMode: true });
     const random = vi.spyOn(Math, "random").mockReturnValue(0.75);
     await controller.startRound();
     const word = controller.getSnapshot().session.snapshot.round?.secretWord;
-    const entry = getCatalogueForGame("imposter", { kidsMode: true }).find(
+    const entry = getCatalogueForGame("imposter", { simpleMode: true }).find(
       (item) => item.word === word,
     );
-    expect(entry).toMatchObject({ difficulty: "medium", kidAppropriate: true });
+    expect(entry).toMatchObject({ difficulty: "easy" });
     expect(controller.getSnapshot().setupError).toBe("");
     expect(random).toHaveBeenCalled();
   });
 
   it("blocks repeat deals during preference loading and cancels when covered before generation", async () => {
     const controller = await setup();
-    let resolve!: (value: { kidsMode: boolean }) => void;
+    let resolve!: (value: { simpleMode: boolean }) => void;
     vi.mocked(requireContentPreferences).mockImplementationOnce(
       () =>
         new Promise((done) => {
@@ -412,7 +414,7 @@ describe("Imposter durable device controller", () => {
     expect(controller.getSnapshot().saving).toBe(true);
     expect(requireContentPreferences).toHaveBeenCalledTimes(1);
     controller.pause();
-    resolve({ kidsMode: true });
+    resolve({ simpleMode: true });
     await start;
     expect(controller.getSnapshot().saving).toBe(false);
     expect(controller.getSnapshot().paused).toBe(true);

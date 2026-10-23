@@ -52,12 +52,12 @@ vi.mock("@/services/contentPacks/store", () => ({
   })),
 }));
 vi.mock("@/services/contentPreference", () => ({
-  requireContentPreferences: vi.fn(async () => ({ kidsMode: false })),
+  requireContentPreferences: vi.fn(async () => ({ simpleMode: false })),
   getContentPreferenceState: () => preferences,
   subscribeContentPreferences: () => () => undefined,
   initializeContentPreferences: vi.fn(async () => undefined),
 }));
-const preferences = { kidsMode: false, loaded: true, busy: false, error: null };
+const preferences = { simpleMode: false, loaded: true, busy: false, error: null };
 vi.mock("@/services/deviceLifecycle", () => ({
   isDeviceActive: () => true,
   setDeviceKeepAwake: vi.fn(async () => undefined),
@@ -77,10 +77,11 @@ function saved(revealMode: "each" | "end" = "each", count = 1) {
   return {
     ...session,
     settings,
-    quiz: startTriviaQuiz(settings, questions, { kidsMode: false, packVersion: 2, rng: () => 0 }),
+    quiz: startTriviaQuiz(settings, questions, { simpleMode: false, packVersion: 2, rng: () => 0 }),
   };
 }
 beforeEach(() => {
+  preferences.simpleMode = false;
   storage.value = null;
   storage.questions = [];
   vi.mocked(readSnapshot).mockClear();
@@ -89,6 +90,18 @@ beforeEach(() => {
 });
 
 describe("Trivia phone flow", () => {
+  it("shows Easy and disables harder choices in Simple mode while retaining all easy adult content", async () => {
+    preferences.simpleMode = true;
+    storage.questions = questions.map((question) => ({ ...question, kidAppropriate: false }));
+    mount();
+    await screen.findByRole("heading", { name: "Set up your quiz" });
+    const group = within(screen.getByRole("group", { name: "Difficulty" }));
+    expect(group.getByRole("button", { name: "Easy" })).toHaveAttribute("aria-pressed", "true");
+    expect(group.getByRole("button", { name: "Medium" })).toBeDisabled();
+    expect(group.getByRole("button", { name: "Hard" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Start quiz" })).toBeEnabled();
+  });
+
   it("explains the empty catalogue and disables starting without inventing questions", async () => {
     mount();
     await screen.findByRole("heading", { name: "Set up your quiz" });

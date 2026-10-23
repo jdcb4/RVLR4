@@ -20,7 +20,7 @@ export function chooseImposterWord(
   return selectDifficultyBalanced(
     getCatalogueForGame("imposter", options),
     1,
-    options.difficulty,
+    options.simpleMode ? "easy" : options.difficulty,
     rng,
   )[0]?.word;
 }

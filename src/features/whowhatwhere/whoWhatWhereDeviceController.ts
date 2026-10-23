@@ -187,7 +187,7 @@ export class WhoWhatWhereDeviceController {
             wordPool: captureMatchWordPool(
               getWhoWhatWhereWordList({
                 difficulty: settings.wordDifficulty,
-                kidsMode: settings.kidsMode,
+                simpleMode: settings.simpleMode,
               }),
               settings,
             ),
@@ -322,13 +322,13 @@ export class WhoWhatWhereDeviceController {
     this.setupError = "";
     this.emit();
     try {
-      const [{ kidsMode }, { getWhoWhatWhereWordList }] = await Promise.all([
+      const [{ simpleMode }, { getWhoWhatWhereWordList }] = await Promise.all([
         requireContentPreferences(),
         import("@/domain/whowhatwhere/wordList"),
       ]);
       if (this.session.paused || !this.deviceActive || this.pauseEpoch !== pauseEpoch) return;
-      const settings = { ...current.setup.settings, kidsMode };
-      const words = getWhoWhatWhereWordList({ difficulty: settings.wordDifficulty, kidsMode });
+      const settings = { ...current.setup.settings, simpleMode };
+      const words = getWhoWhatWhereWordList({ difficulty: settings.wordDifficulty, simpleMode });
       if (!words.some((word) => settings.selectedCategories.includes(word.category))) {
         this.setupError =
           "No words match these categories and word settings. Change the difficulty or categories.";

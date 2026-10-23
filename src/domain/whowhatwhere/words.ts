@@ -41,7 +41,10 @@ export function buildTurnDeck(
   random = Math.random,
 ): TurnDeck {
   const eligibleWords = allWords.filter((word) =>
-    isDifficultyAllowed(word.difficulty ?? "easy", settings.wordDifficulty),
+    isDifficultyAllowed(
+      word.difficulty ?? "easy",
+      settings.simpleMode ? "easy" : settings.wordDifficulty,
+    ),
   );
   const availableCategories = settings.selectedCategories.filter((category) =>
     eligibleWords.some((word) => word.category === category),
@@ -56,7 +59,7 @@ export function buildTurnDeck(
   const selected = selectDifficultyBalanced(
     matchingWords.map((word) => ({ ...word, difficulty: word.difficulty ?? "easy" })),
     90,
-    settings.wordDifficulty,
+    settings.simpleMode ? "easy" : settings.wordDifficulty,
     random,
   ).map(({ word, category, hint }) => ({ word, category, hint }));
 

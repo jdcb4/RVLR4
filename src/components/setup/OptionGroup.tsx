@@ -40,14 +40,17 @@ export function OptionButton({
   selected,
   children,
   onClick,
+  disabled = false,
 }: {
   readonly selected: boolean;
   readonly children: ReactNode;
   readonly onClick: () => void;
+  readonly disabled?: boolean;
 }) {
   return (
     <Button
       aria-pressed={selected}
+      disabled={disabled}
       className="h-auto min-h-11 min-w-11 flex-1 whitespace-normal"
       variant={selected ? "default" : "outline"}
       onClick={onClick}

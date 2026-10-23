@@ -203,7 +203,7 @@ class TriviaController {
       this.packVersion = content.pack.version;
       this.warning = content.warning;
       const quiz = startTriviaQuiz(captured, this.catalogue, {
-        kidsMode: preferences.kidsMode,
+        simpleMode: preferences.simpleMode,
         packVersion: this.packVersion,
       });
       await this.commit({ ...session, settings: quiz.settings, quiz }, true);

@@ -2,10 +2,10 @@ import { z } from "zod";
 
 import { readSnapshot, writeSnapshot } from "@/services/nativeSnapshotStore";
 
-const preferenceSchema = z.object({ schemaVersion: z.literal(1), kidsMode: z.boolean() });
-const key = "app.content.v1";
-type ContentState = { kidsMode: boolean; busy: boolean; loaded: boolean; error: string | null };
-let state: ContentState = { kidsMode: false, busy: false, loaded: false, error: null };
+const preferenceSchema = z.object({ schemaVersion: z.literal(2), simpleMode: z.boolean() });
+const key = "app.content.v2";
+type ContentState = { simpleMode: boolean; busy: boolean; loaded: boolean; error: string | null };
+let state: ContentState = { simpleMode: false, busy: false, loaded: false, error: null };
 const listeners = new Set<() => void>();
 let initializing: Promise<void> | null = null;
 let saving: Promise<void> | null = null;
@@ -33,10 +33,10 @@ export function initializeContentPreferences(): Promise<void> {
   initializing = (async () => {
     try {
       const saved = await readSnapshot(key, preferenceSchema);
-      update({ kidsMode: saved.value?.kidsMode ?? false, loaded: true });
+      update({ simpleMode: saved.value?.simpleMode ?? false, loaded: true });
     } catch {
       update({
-        error: "Kids mode could not be loaded. Retry in app settings before selecting new words.",
+        error: "Simple mode could not be loaded. Retry in app settings before selecting new words.",
       });
     } finally {
       update({ busy: false });
@@ -46,23 +46,23 @@ export function initializeContentPreferences(): Promise<void> {
   return initializing;
 }
 
-/** Selection cannot silently bypass an unreadable child-content preference. */
-export async function requireContentPreferences(): Promise<{ kidsMode: boolean }> {
+/** Selection waits for the last acknowledged difficulty preference. */
+export async function requireContentPreferences(): Promise<{ simpleMode: boolean }> {
   await initializeContentPreferences();
   if (saving) await saving;
-  if (!state.loaded) throw new Error(state.error ?? "Kids mode could not be loaded.");
-  return { kidsMode: state.kidsMode };
+  if (!state.loaded) throw new Error(state.error ?? "Simple mode could not be loaded.");
+  return { simpleMode: state.simpleMode };
 }
 
-export async function selectKidsMode(kidsMode: boolean): Promise<void> {
-  if (!state.loaded || state.busy || state.kidsMode === kidsMode) return;
+export async function selectSimpleMode(simpleMode: boolean): Promise<void> {
+  if (!state.loaded || state.busy || state.simpleMode === simpleMode) return;
   update({ busy: true, error: null });
   saving = (async () => {
     try {
-      await writeSnapshot(key, { schemaVersion: 1, kidsMode });
-      update({ kidsMode });
+      await writeSnapshot(key, { schemaVersion: 2, simpleMode });
+      update({ simpleMode });
     } catch {
-      update({ error: "Kids mode could not be saved. Please try again." });
+      update({ error: "Simple mode could not be saved. Please try again." });
     } finally {
       update({ busy: false });
       saving = null;

@@ -41,7 +41,7 @@ const settings = (overrides: Partial<TriviaSettings> = {}): TriviaSettings => ({
 });
 const start = (overrides: Partial<TriviaSettings> = {}, questions = [question(1), question(2)]) =>
   startTriviaQuiz(settings(overrides), questions, {
-    kidsMode: false,
+    simpleMode: false,
     packVersion: 2,
     now,
     rng: () => 0.5,
@@ -83,7 +83,7 @@ describe("Trivia rules and durable sessions", () => {
     );
     const input = settings({ count: 6, categories: ["general", "history"] });
     const quiz = startTriviaQuiz(input, bank, {
-      kidsMode: false,
+      simpleMode: false,
       packVersion: 2,
       now,
       rng: () => 0.5,
@@ -141,7 +141,7 @@ describe("Trivia rules and durable sessions", () => {
     expect(() => start({ count: 5, difficulty: "medium" }, bank)).toThrow("Only 4 eligible");
   });
 
-  it("filters kids suitability, difficulty, category, expiry and duplicate identities without widening", () => {
+  it("uses easy-only Simple mode with category, expiry and duplicate filters regardless of suitability", () => {
     const bank = [
       question(1),
       question(2, { kidAppropriate: false }),
@@ -152,19 +152,42 @@ describe("Trivia rules and durable sessions", () => {
       question(6, { question: "FIXTURE QUESTION 1!" }),
     ];
     expect(() =>
-      startTriviaQuiz(settings({ count: 2, categories: ["general"], difficulty: "easy" }), bank, {
-        kidsMode: true,
+      startTriviaQuiz(settings({ count: 3, categories: ["general"], difficulty: "hard" }), bank, {
+        simpleMode: true,
         packVersion: 2,
         now,
       }),
-    ).toThrow("Only 1 eligible");
+    ).toThrow("Only 2 eligible");
     const quiz = startTriviaQuiz(
-      settings({ count: 1, categories: ["general"], difficulty: "easy" }),
+      settings({ count: 2, categories: ["general"], difficulty: "hard" }),
       bank,
-      { kidsMode: true, packVersion: 2, now },
+      { simpleMode: true, packVersion: 2, now },
     );
-    expect(quiz.items[0]?.question.id).toBe("trivia:fixture-1");
+    expect(new Set(quiz.items.map((item) => item.question.id))).toEqual(
+      new Set(["trivia:fixture-1", "trivia:fixture-2"]),
+    );
+    expect(quiz.settings.difficulty).toBe("easy");
+    expect(quiz.items.some((item) => !item.question.kidAppropriate)).toBe(true);
+    valid(quiz);
     expect(() => start({}, [])).toThrow("Only 0 eligible");
+  });
+
+  it("preserves a legacy saved quiz's selected harder questions without applying a renamed child flag", () => {
+    const quiz = start({ difficulty: "hard" }, [
+      question(1, { difficulty: "hard" }),
+      question(2, { difficulty: "medium" }),
+    ]);
+    const { simpleMode: _simpleMode, ...legacy } = quiz;
+    const restored = triviaSessionSchema.parse({
+      ...session(quiz),
+      quiz: { ...legacy, kidsMode: true },
+    });
+    expect(restored.quiz?.simpleMode).toBe(false);
+    expect(restored.quiz?.items).toEqual(quiz.items);
+    expect(
+      triviaSessionSchema.safeParse({ ...session(quiz), quiz: { ...legacy, simpleMode: true } })
+        .success,
+    ).toBe(false);
   });
 
   it("rechecks exclusive expiry before each first presentation while retaining shown questions", () => {

@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { expect, it, vi } from "vitest";
+import { beforeEach, expect, it, vi } from "vitest";
 
 import { PassNPlayHubPage } from "./PassNPlayHubPage";
 
@@ -9,30 +9,39 @@ vi.mock("@capacitor/core", () => ({
   registerPlugin: () => ({}),
 }));
 
-it("hides Trivia by default and lets Settings show and hide its card without touching saves", async () => {
-  localStorage.setItem("rvlry.snapshot.trivia.device.v2", "existing quiz");
+beforeEach(() => localStorage.clear());
+
+const legacyDisabledPreference = JSON.stringify({
+  current: JSON.stringify({
+    storageVersion: 1,
+    revision: 1,
+    savedAt: "2026-10-24T00:00:00.000Z",
+    payload: { schemaVersion: 1, triviaEnabled: false },
+  }),
+  previous: null,
+});
+
+it.each([
+  ["no preference", null],
+  ["a legacy disabled preference", legacyDisabledPreference],
+  ["a corrupt legacy preference", "corrupt"],
+])("always shows Trivia with %s and offers no visibility setting", (_label, preference) => {
+  const preferenceKey = "rvlry.snapshot.app.features.v1";
+  const quizKey = "rvlry.snapshot.trivia.device.v3";
+  if (preference !== null) localStorage.setItem(preferenceKey, preference);
+  localStorage.setItem(quizKey, "existing quiz");
   render(
     <MemoryRouter>
       <PassNPlayHubPage />
     </MemoryRouter>,
   );
-  expect(screen.queryByRole("link", { name: /Trivia/ })).not.toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Settings" }));
-  const toggle = await screen.findByRole("switch", { name: "Show Trivia" });
-  await waitFor(() => expect(toggle).toBeEnabled());
-  fireEvent.click(toggle);
-  await waitFor(() => expect(toggle).toHaveAttribute("aria-checked", "true"));
-  fireEvent.click(screen.getByRole("button", { name: "Close dialog" }));
   expect(screen.getByRole("link", { name: /Trivia/ })).toHaveAttribute("href", "/games/trivia");
+  expect(screen.getAllByRole("link")).toHaveLength(4);
   fireEvent.click(screen.getByRole("button", { name: "Settings" }));
-  fireEvent.click(screen.getByRole("switch", { name: "Show Trivia" }));
-  await waitFor(() =>
-    expect(screen.getByRole("switch", { name: "Show Trivia" })).toHaveAttribute(
-      "aria-checked",
-      "false",
-    ),
-  );
+  expect(screen.queryByText(/Show Trivia/)).not.toBeInTheDocument();
+  expect(screen.queryByRole("switch", { name: /Trivia/ })).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Close dialog" }));
-  expect(screen.queryByRole("link", { name: /Trivia/ })).not.toBeInTheDocument();
-  expect(localStorage.getItem("rvlry.snapshot.trivia.device.v2")).toBe("existing quiz");
+  expect(screen.getByRole("link", { name: /Trivia/ })).toBeInTheDocument();
+  expect(localStorage.getItem(quizKey)).toBe("existing quiz");
+  expect(localStorage.getItem(preferenceKey)).toBe(preference);
 });

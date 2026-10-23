@@ -84,7 +84,7 @@ beforeEach(() => {
   localStorage.clear();
   device.activity = null;
   vi.mocked(loadTriviaCatalogue).mockResolvedValue(content());
-  vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: false });
+  vi.mocked(requireContentPreferences).mockResolvedValue({ simpleMode: false });
 });
 
 async function mount() {
@@ -94,6 +94,40 @@ async function mount() {
 }
 
 describe("Trivia durable controller", () => {
+  it.each(["disabled", "corrupt"])(
+    "starts and resumes a quiz independently of a %s legacy visibility preference",
+    async (legacy) => {
+      const preferenceKey = "rvlry.snapshot.app.features.v1";
+      const preference =
+        legacy === "corrupt"
+          ? "corrupt"
+          : JSON.stringify({
+              current: JSON.stringify({
+                storageVersion: 1,
+                revision: 1,
+                savedAt: "2026-10-24T00:00:00.000Z",
+                payload: { schemaVersion: 1, triviaEnabled: false },
+              }),
+              previous: null,
+            });
+      localStorage.setItem(preferenceKey, preference);
+      let hook = await mount();
+      await act(async () => hook.result.current.start(settings()));
+      const quiz = hook.result.current.session?.quiz;
+      expect(quiz?.items).toHaveLength(2);
+      hook.unmount();
+
+      hook = await mount();
+      expect(hook.result.current.resumePending).toBe(true);
+      await act(async () => hook.result.current.resume());
+      expect(hook.result.current.session?.quiz).toEqual(quiz);
+      expect(hook.result.current.resumePending).toBe(false);
+      expect(hook.result.current.error).toBeNull();
+      expect(localStorage.getItem(preferenceKey)).toBe(preference);
+      hook.unmount();
+    },
+  );
+
   it("keeps settings memory-only through visits and edits, and cleans old settings records", async () => {
     const write = vi.spyOn(snapshots, "writeSnapshot");
     let hook = await mount();
@@ -229,15 +263,26 @@ describe("Trivia durable controller", () => {
     hook.unmount();
   });
 
-  it("freezes Kids mode at selection, keeps game records independent and resets to saved settings", async () => {
+  it("freezes Simple mode at selection, keeps game records independent and resets to saved settings", async () => {
     const otherKey = "rvlry.snapshot.whowhatwhere.device-session.v1";
     localStorage.setItem(otherKey, "untouched original checkpoint");
-    vi.mocked(requireContentPreferences).mockResolvedValue({ kidsMode: true });
+    vi.mocked(requireContentPreferences).mockResolvedValue({ simpleMode: true });
+    vi.mocked(loadTriviaCatalogue).mockResolvedValue(
+      content([
+        question(1, { kidAppropriate: false }),
+        question(2, { kidAppropriate: false }),
+        question(3, { difficulty: "medium" }),
+        question(4, { difficulty: "hard" }),
+      ]),
+    );
     const hook = await mount();
     await act(async () => hook.result.current.start(settings()));
-    expect(hook.result.current.session?.quiz?.kidsMode).toBe(true);
+    expect(hook.result.current.session?.quiz?.simpleMode).toBe(true);
     expect(
-      hook.result.current.session?.quiz?.items.every((item) => item.question.kidAppropriate),
+      hook.result.current.session?.quiz?.items.every((item) => item.question.difficulty === "easy"),
+    ).toBe(true);
+    expect(
+      hook.result.current.session?.quiz?.items.every((item) => !item.question.kidAppropriate),
     ).toBe(true);
     expect(requireContentPreferences).toHaveBeenCalledTimes(1);
     await act(async () => hook.result.current.reset());
@@ -254,7 +299,7 @@ describe("Trivia durable controller", () => {
       expiresAt: new Date(now + 1000).toISOString(),
     }));
     await snapshots.readSnapshot(key, triviaSessionSchema);
-    const quiz = startTriviaQuiz(settings(), items, { kidsMode: false, packVersion: 2, now });
+    const quiz = startTriviaQuiz(settings(), items, { simpleMode: false, packVersion: 2, now });
     await snapshots.writeSnapshot(key, { ...createTriviaSession(), settings: quiz.settings, quiz });
     const hook = await mount();
     expect(hook.result.current.resumePending).toBe(true);
@@ -434,7 +479,7 @@ describe("Trivia durable controller", () => {
     hook.unmount();
   });
 
-  it("preserves the existing quiz when Kids preferences fail and reports catalogue fallback separately", async () => {
+  it("preserves the existing quiz when Simple mode preferences fail and reports catalogue fallback separately", async () => {
     vi.mocked(loadTriviaCatalogue).mockResolvedValue({
       ...content(),
       warning: "Installed Trivia content is unavailable. Using bundled content.",
@@ -443,13 +488,17 @@ describe("Trivia durable controller", () => {
     await act(async () => hook.result.current.start(settings()));
     const before = localStorage.getItem(storageKey);
     const savedQuiz = hook.result.current.session?.quiz;
-    vi.mocked(requireContentPreferences).mockRejectedValueOnce(new Error("Kids mode unavailable"));
+    vi.mocked(requireContentPreferences).mockRejectedValueOnce(
+      new Error("Simple mode unavailable"),
+    );
     await act(async () => {
-      await expect(hook.result.current.start(settings())).rejects.toThrow("Kids mode unavailable");
+      await expect(hook.result.current.start(settings())).rejects.toThrow(
+        "Simple mode unavailable",
+      );
     });
     expect(hook.result.current.session?.quiz).toBe(savedQuiz);
     expect(localStorage.getItem(storageKey)).toBe(before);
-    expect(hook.result.current.error).toBe("Kids mode unavailable");
+    expect(hook.result.current.error).toBe("Simple mode unavailable");
     expect(hook.result.current.warning).toContain("Using bundled content");
     hook.unmount();
   });

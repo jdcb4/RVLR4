@@ -62,7 +62,7 @@ describe("SettingsScreen", () => {
       selectedCategories: ["Who"],
       difficultyMode: "hard",
       wordDifficulty: "hard",
-      kidsMode: true,
+      simpleMode: true,
       hints: { enabled: true, perTurnLimit: 3 },
     };
     const onChange = vi.fn();
@@ -79,7 +79,7 @@ describe("SettingsScreen", () => {
       selectedCategories: ["What", "Who", "Where"],
       difficultyMode: "easy",
       wordDifficulty: "hard",
-      kidsMode: false,
+      simpleMode: false,
       hints: { enabled: false, perTurnLimit: 0 },
     });
   });

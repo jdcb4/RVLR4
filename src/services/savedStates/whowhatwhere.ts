@@ -32,7 +32,7 @@ const settings = z.object({
     .default([...defaults.selectedCategories]),
   difficultyMode: z.enum(["easy", "hard"]).default(defaults.difficultyMode),
   wordDifficulty: z.enum(["all", "easy", "medium", "hard"]).default("all"),
-  kidsMode: z.boolean().default(false),
+  simpleMode: z.boolean().default(false),
   hints: z
     .object({
       enabled: z.boolean().default(defaults.hints.enabled),

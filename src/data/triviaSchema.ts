@@ -100,13 +100,12 @@ export const triviaPackSchema = z
 /** Recheck before displaying an unshown question, including after resume. */
 export function isTriviaQuestionEligible(
   question: TriviaQuestion,
-  options: { kidsMode: boolean; difficulty?: "all" | TriviaQuestion["difficulty"] },
+  options: { simpleMode: boolean; difficulty?: "all" | TriviaQuestion["difficulty"] },
   now: number = Date.now(),
 ): boolean {
   return (
     Number.isFinite(now) &&
     (!question.expiresAt || now < Date.parse(question.expiresAt)) &&
-    (!options.kidsMode || question.kidAppropriate) &&
-    isDifficultyAllowed(question.difficulty, options.difficulty)
+    isDifficultyAllowed(question.difficulty, options.simpleMode ? "easy" : options.difficulty)
   );
 }

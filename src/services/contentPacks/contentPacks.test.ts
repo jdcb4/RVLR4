@@ -322,16 +322,19 @@ it("preserves every checkpoint when a merged catalogue exceeds the native 8 MiB 
   expect(localStorage.getItem(storageKey)).toBe(before);
 });
 
-it("expiry is exclusive, evaluated again on resume, and combined with kids/difficulty filters", () => {
+it("expiry is exclusive and Simple mode uses easy difficulty independently of suitability", () => {
   const current = { ...question, expiresAt: "2026-10-23T00:00:00.000Z" };
   const end = Date.parse(current.expiresAt);
-  expect(isTriviaQuestionEligible(current, { kidsMode: true }, end - 1)).toBe(true);
-  expect(isTriviaQuestionEligible(current, { kidsMode: true }, end)).toBe(false);
-  expect(isTriviaQuestionEligible(question, { kidsMode: true }, end + 9999)).toBe(true);
+  expect(isTriviaQuestionEligible(current, { simpleMode: true }, end - 1)).toBe(true);
+  expect(isTriviaQuestionEligible(current, { simpleMode: true }, end)).toBe(false);
+  expect(isTriviaQuestionEligible(question, { simpleMode: true }, end + 9999)).toBe(true);
   expect(
-    isTriviaQuestionEligible({ ...question, kidAppropriate: false }, { kidsMode: true }, end),
+    isTriviaQuestionEligible({ ...question, kidAppropriate: false }, { simpleMode: true }, end),
+  ).toBe(true);
+  expect(
+    isTriviaQuestionEligible({ ...question, difficulty: "medium" }, { simpleMode: true }, end),
   ).toBe(false);
-  expect(isTriviaQuestionEligible(question, { kidsMode: false, difficulty: "hard" }, end)).toBe(
+  expect(isTriviaQuestionEligible(question, { simpleMode: false, difficulty: "hard" }, end)).toBe(
     true,
   );
 });

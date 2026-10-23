@@ -1,32 +1,19 @@
 import { Settings } from "lucide-react";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { AppInfoHeaderButton, AppInfoOverlay } from "@/components/AppInfoOverlay";
 import { ContentUpdatesSetting } from "@/components/ContentUpdatesSetting";
 import { IconDisguise, IconTopHat, IconTrivia, IconWhoWhatWhere } from "@/components/icons";
-import { KidsModeSetting } from "@/components/KidsModeSetting";
 import { ModalDialog } from "@/components/ModalDialog";
-import { TriviaAvailabilitySetting } from "@/components/TriviaAvailabilitySetting";
+import { SimpleModeSetting } from "@/components/SimpleModeSetting";
 import { Button } from "@/components/ui/button";
-import {
-  getFeaturePreferenceState,
-  initializeFeaturePreferences,
-  subscribeFeaturePreferences,
-} from "@/services/featurePreference";
 import { ThemeChooser } from "@/themes/ThemeChooser";
 
 import packageJson from "../../../package.json";
 
 /** Each game owns an independent durable session. */
 export function PassNPlayHubPage() {
-  const { triviaEnabled } = useSyncExternalStore(
-    subscribeFeaturePreferences,
-    getFeaturePreferenceState,
-  );
-  useEffect(() => {
-    void initializeFeaturePreferences();
-  }, []);
   const [openDialog, setOpenDialog] = useState<"settings" | "info" | null>(null);
 
   return (
@@ -71,16 +58,12 @@ export function PassNPlayHubPage() {
               path: "imposter",
               Icon: IconDisguise,
             },
-            ...(triviaEnabled
-              ? [
-                  {
-                    title: "Trivia",
-                    description: "A quiz to enjoy together.",
-                    path: "trivia",
-                    Icon: IconTrivia,
-                  },
-                ]
-              : []),
+            {
+              title: "Trivia",
+              description: "A quiz to enjoy together.",
+              path: "trivia",
+              Icon: IconTrivia,
+            },
           ].map(({ title, description, path, Icon }) => (
             <Link
               key={path}
@@ -98,8 +81,7 @@ export function PassNPlayHubPage() {
       </section>
       {openDialog === "settings" && (
         <ModalDialog title="Settings" onClose={() => setOpenDialog(null)}>
-          <KidsModeSetting />
-          <TriviaAvailabilitySetting />
+          <SimpleModeSetting />
           <ThemeChooser />
           <ContentUpdatesSetting />
         </ModalDialog>
