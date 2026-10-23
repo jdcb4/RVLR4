@@ -1,6 +1,6 @@
 # Trivia content storage
 
-Storage foundation shipped in 0.33.0; optional gameplay shipped in 0.35.0 behind Settings → Show Trivia (off by default). In 0.37.0, Trivia is a cooperative quiz to discuss together, with no teams, Correct/Incorrect self-marking, one shared score and a scrollable question recap. Reveal-after-each mode has no writing; reveal-at-end mode always offers one optional shared answer field per question. No discovered historical question bank has been imported. Version 4 of `src/data/trivia/bundled.json` supplies 300 source-checked questions, preserving all 150 prior records unchanged. The original pack and the expansion strategy, category batches and source-review notes are retained under `content/trivia/`. Future publications must use a higher version.
+Storage foundation shipped in 0.33.0; optional gameplay shipped in 0.35.0 behind Settings → Show Trivia (off by default). In 0.37.0, Trivia is a cooperative quiz to discuss together, with no teams, Correct/Incorrect self-marking, one shared score and a scrollable question recap. Reveal-after-each mode has no writing; reveal-at-end mode always offers one optional shared answer field per question. No discovered historical question bank has been imported. Version 5 of `src/data/trivia/bundled.json` supplies 600 source-checked questions, preserving all 300 prior records unchanged. The original pack and the expansion strategy, category batches and source-review notes are retained under `content/trivia/`. Future publications must use a higher version.
 
 ## Records and publishing
 
@@ -61,3 +61,10 @@ The bundled version increases independently to 3; existing quiz snapshots keep t
 ## Second expansion — 0.39.1
 
 Pack 4 adds 150 questions: 50 easy, 50 medium and 50 hard. Six categories gain 19 records each, with Music and Sport & games gaining 18 each. The pre-draft allocation, subject checklists, accepted JSON batches and supporting source evidence are retained in `content/trivia/expansion-v4/`. Review applies the established Australian-audience, ages 8–12, spelling, alias and duplicate conventions. The audit now verifies all 150 prior records, including the separately archived original 30. No game rules, UI, saved-session format or update endpoint change. Existing quizzes keep their selected copies; start a new quiz to access the additions.
+
+
+## Third expansion — 0.40.0
+
+Pack 5 adds 300 questions: 100 easy, 100 medium and 100 hard. Every category gains 37 or 38 records. The pre-draft allocation, varied subject checklists, accepted JSON batches and opened-source evidence are retained in `content/trivia/expansion-v5/`. The coordinator reads each new question and resolves union audit flags; shared numbers, colours or aliases are retained only for distinct facts. At least eight additions per category target child-familiar easy material, with further familiar entries for ages 8–12.
+
+The repeatable audit now verifies all 300 prior records unchanged. Tests preserve each historical batch and exercise balanced adult quizzes and full Kids quizzes. New quizzes use pack 5; existing saved quizzes keep their selected copies. No historical candidate bank, live generation, publisher endpoint, game-rule or session-schema change is introduced.

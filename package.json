@@ -1,6 +1,6 @@
 {
   "name": "rvlry-android",
-  "version": "0.39.1",
+  "version": "0.40.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.12.0",
@@ -11,6 +11,7 @@
     "dev": "vite",
     "dev:client": "vite",
     "build": "tsc -b && vite build",
+    "build:release": "tsc -b && vite build --mode release",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "lint": "eslint .",
@@ -25,10 +26,13 @@
     "audit:names": "tsx scripts/audit-names.mts",
     "fallow:hygiene": "pnpm dlx fallow --no-cache --format human --only dead-code,dupes",
     "android:build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1",
+    "android:bundle": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task Bundle",
+    "android:bundle-unsigned": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task BundleUnsigned",
     "android:sync": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task Sync",
     "android:test": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task Test",
     "android:test-device": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task DeviceTest",
-    "publish:trivia": "tsx scripts/publish-trivia-pack.mts"
+    "publish:trivia": "tsx scripts/publish-trivia-pack.mts",
+    "export:notices": "tsx scripts/export-third-party-notices.mts"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",

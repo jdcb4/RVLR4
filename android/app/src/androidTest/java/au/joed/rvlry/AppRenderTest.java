@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.view.WindowManager;
+import android.webkit.WebView;
+import com.getcapacitor.WebViewListener;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -47,6 +49,35 @@ public class AppRenderTest {
         String expression = "[...document.querySelectorAll('button')].find(button => button.textContent.trim()==='" + label + "' && !button.disabled)";
         awaitCondition(activity, "!!(" + expression + ")");
         evaluate(activity, "(" + expression + ").click()");
+    }
+
+    private void reloadPage(MainActivity activity) throws Exception {
+        CountDownLatch loaded = new CountDownLatch(1);
+        WebViewListener listener = new WebViewListener() {
+            private boolean started;
+
+            @Override
+            public void onPageStarted(WebView view) {
+                if (view == activity.getBridge().getWebView()) started = true;
+            }
+
+            @Override
+            public void onPageLoaded(WebView view) {
+                if (started && view == activity.getBridge().getWebView()) loaded.countDown();
+            }
+        };
+        try {
+            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+                activity.getBridge().addWebViewListener(listener);
+                activity.getBridge().getWebView().reload();
+            });
+            // A JS evaluation dispatched while its document unloads may lose its callback.
+            // Wait for the real native navigation before checking the unchanged UI assertions.
+            assertTrue("Reloaded WebView did not finish loading", loaded.await(20, TimeUnit.SECONDS));
+        } finally {
+            InstrumentationRegistry.getInstrumentation().runOnMainSync(() ->
+                activity.getBridge().removeWebViewListener(listener));
+        }
     }
 
     private void awaitBundledArtwork(MainActivity activity, String theme, String sheet) throws Exception {
@@ -272,12 +303,12 @@ public class AppRenderTest {
                 assertTrue("Written answer was not committed", saved.read("trivia.device.v3")[0].contains("fIXTURE ANSWER"));
                 assertTrue("Visibility was not committed", saved.read("app.features.v1")[0].contains("\"triviaEnabled\":true"));
             }
-            evaluate(activity, "location.reload()");
+            reloadPage(activity);
             clickButton(activity, "Resume");
             awaitCondition(activity, "document.querySelector('textarea')?.value==='fIXTURE ANSWER   '");
             clickButton(activity, "Finish questions");
             awaitCondition(activity, "document.body.innerText.includes('Ready for the answers?')");
-            evaluate(activity, "location.reload()");
+            reloadPage(activity);
             awaitCondition(activity, "document.body.innerText.includes('Your saved quiz')");
             clickButton(activity, "Resume");
             awaitCondition(activity, "document.body.innerText.includes('Ready for the answers?')");
@@ -312,10 +343,10 @@ public class AppRenderTest {
             awaitCondition(activity, "document.body.innerText.includes('Question 1 of 30') && !document.querySelector('[role=alert]')");
             try (SnapshotDatabase saved = new SnapshotDatabase(context, testDatabase)) {
                 String snapshot = saved.read("trivia.device.v3")[0];
-                assertTrue("Starter bank version not captured", snapshot.contains("\"packVersion\":4"));
+                assertTrue("Starter bank version not captured", snapshot.contains("\"packVersion\":5"));
                 assertTrue("Synthetic fixture must not appear in the real bank", !snapshot.contains("native-fixture"));
             }
-            System.out.println("RVLRY_NATIVE_TRIVIA_STARTER_OK: new 30-question quiz from bundled version 4");
+            System.out.println("RVLRY_NATIVE_TRIVIA_STARTER_OK: new 30-question quiz from bundled version 5");
 
 
         } finally {

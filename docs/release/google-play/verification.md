@@ -1,0 +1,14 @@
+# Local verification receipt
+
+
+## Android release preparation and pack 5 — 0.40.0, 23 October 2026
+
+Full verify passes: TypeScript, ESLint, 361 tests across 51 files and web build. The pack-5 audit preserves all 300 prior records unchanged, validates 600 unique question identities and resolves all 26 shared-answer/wording flags as distinct facts. New accepted arrays exactly match the 300 shipped additions, and every addition has a source-evidence row. Totals: 205 easy, 201 medium, 194 hard; 295 Kids-suitable. No historical candidate questions were imported.
+
+The unsigned release AAB and debug APK both build. The debug APK uses the same fresh release-mode web assets as the AAB. Packaging checks confirm no source maps or signing certificate in the explicit unsigned AAB, and packaged JavaScript/font notices. The merged release manifest is non-debuggable, target API 36, minimum API 24, with backup disabled and INTERNET plus the app-local AndroidX signature permission. No native .so libraries are bundled. Both the helper and direct Gradle release task reject absent signing configuration. The real signed-key path remains unverified until a production upload identity is established. Full release lint passes with zero errors and 30 existing resource/toolchain/icon warnings, documented in the asset inventory. Fallow retains 41 reviewed findings and 10 clone groups; no suppressions. The existing Vite word-catalogue size advisory remains.
+
+Two native JVM checks remain green (up-to-date). The final API-35 emulator run passes all 19 instrumentation tests and all four separate snapshot/content force-stop recovery phases, including a fresh 30-question quiz from pack 5. Emulator-5554 was restarted headlessly when absent. The first attempt exited during a concurrent system WebView auto-update; the next exposed a JavaScript evaluation callback race immediately after page reload. Test-only reload synchronisation now observes native page-start/page-loaded events, preserving all DOM/save/marking assertions, and the full suite passed afterward with WebView 156.0.8078.47. No runtime workaround or timeout relaxation was introduced. Pixel 10 and Play-delivered release acceptance remain unverified.
+
+Delivery: `\\JNAS\Media\DropBox\RVLRY-0.40.0-trivia-600.apk`. SHA-256: `44C63225FCE4660E76E4883AB5E64D685CE025150FADAE9C69A1DDA46B47CDFF`. Start a new quiz to use the additions; existing quizzes keep their selected copies.
+
+The companion `RVLRY-0.40.0-android-release-prep.zip` contains draft store/policy materials, candidate icon, dependency inventory, audit receipt and an explicitly UNSIGNED AAB. AAB SHA-256: `E7B7803785EB79B949A1C4938CBE7B2E13FACD4957CCDAC6ED49141DD94863BE`. It is not installable or upload-ready. No production key, account registration, policy publication, store upload or public release was performed. See `docs/release/google-play/README.md` for remaining owner decisions and release gates; iOS is deferred.

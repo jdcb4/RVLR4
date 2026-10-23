@@ -1,12 +1,24 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('Build', 'Sync', 'Test', 'DeviceTest')]
+    [ValidateSet('Build', 'Sync', 'Test', 'DeviceTest', 'Bundle', 'BundleUnsigned')]
     [string]$Task = 'Build',
     [switch]$SkipWebBuild
 )
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
+$isBundle = $Task -in @('Bundle', 'BundleUnsigned')
+if ($isBundle -and $SkipWebBuild) { throw 'Release bundles require a fresh release web build.' }
+if ($Task -eq 'Bundle') {
+    $requiredSigning = @('RVLRY_UPLOAD_STORE_FILE', 'RVLRY_UPLOAD_STORE_PASSWORD', 'RVLRY_UPLOAD_KEY_ALIAS', 'RVLRY_UPLOAD_KEY_PASSWORD')
+    foreach ($name in $requiredSigning) {
+        if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($name))) {
+            throw "Release signing is not configured: missing $name. Use BundleUnsigned only for preparation."
+        }
+    }
+    if (-not (Test-Path -LiteralPath $env:RVLRY_UPLOAD_STORE_FILE -PathType Leaf)) { throw 'Upload keystore file not found.' }
+    $env:RVLRY_UPLOAD_STORE_FILE = (Resolve-Path -LiteralPath $env:RVLRY_UPLOAD_STORE_FILE).Path
+}
 
 # Prefer an explicit compatible JDK; Android Studio's bundled JDK is the local default.
 if (-not $env:JAVA_HOME) {
@@ -39,9 +51,10 @@ function Invoke-CheckedCommand {
 
 Push-Location $projectRoot
 try {
-    if ($Task -eq 'Build' -or $Task -eq 'Sync') {
+    if ($Task -eq 'Build' -or $Task -eq 'Sync' -or $isBundle) {
         if (-not $SkipWebBuild) {
-            Invoke-CheckedCommand 'pnpm' @('run', 'build')
+            if ($isBundle) { Invoke-CheckedCommand 'pnpm' @('run', 'build:release') }
+            else { Invoke-CheckedCommand 'pnpm' @('run', 'build') }
         }
         Invoke-CheckedCommand 'pnpm' @('exec', 'cap', 'sync', 'android')
     }
@@ -50,12 +63,34 @@ try {
             'Build' { ':app:assembleDebug' }
             'Test' { ':app:testDebugUnitTest' }
             'DeviceTest' { ':app:connectedDebugAndroidTest' }
+            'Bundle' { ':app:bundleRelease' }
+            'BundleUnsigned' { ':app:bundleRelease' }
         }
         Push-Location (Join-Path $projectRoot 'android')
         try {
-            Invoke-CheckedCommand '.\gradlew.bat' @('--no-daemon', $gradleTask)
+            $gradleArgs = @('--no-daemon', $gradleTask)
+            if ($Task -eq 'BundleUnsigned') { $gradleArgs += '-PrvlryUnsignedRelease=true' }
+            Invoke-CheckedCommand '.\gradlew.bat' $gradleArgs
         } finally {
             Pop-Location
+        }
+        if ($isBundle) {
+            $bundle = Join-Path $projectRoot 'android/app/build/outputs/bundle/release/app-release.aab'
+            Add-Type -AssemblyName System.IO.Compression.FileSystem
+            $archive = [System.IO.Compression.ZipFile]::OpenRead($bundle)
+            try {
+                if (@($archive.Entries | Where-Object FullName -Like '*.map').Count -gt 0) { throw 'Release bundle unexpectedly contains source maps.' }
+                $signatures = @($archive.Entries | Where-Object FullName -Match '^META-INF/[^/]+\.(RSA|DSA|EC)$')
+                if ($Task -eq 'Bundle' -and $signatures.Count -eq 0) { throw 'Signed bundle has no signing certificate.' }
+                if ($Task -eq 'BundleUnsigned' -and $signatures.Count -ne 0) { throw 'Unsigned preparation bundle unexpectedly has a signature.' }
+            } finally { $archive.Dispose() }
+            if ($Task -eq 'Bundle') {
+                Invoke-CheckedCommand (Join-Path $env:JAVA_HOME 'bin/jarsigner.exe') @('-verify', $bundle)
+                $certificate = & (Join-Path $env:JAVA_HOME 'bin/keytool.exe') -printcert -jarfile $bundle 2>&1
+                if ($LASTEXITCODE -ne 0 -or ($certificate -join "`n") -match 'CN=Android Debug') { throw 'Release certificate validation failed or a debug certificate was used.' }
+            }
+            Write-Output "Bundle prepared: $bundle"
+            if ($Task -eq 'BundleUnsigned') { Write-Output 'UNSIGNED preparation artifact; cannot be uploaded to Google Play.' }
         }
         if ($Task -eq 'DeviceTest') {
             $adb = Join-Path $env:ANDROID_HOME 'platform-tools\adb.exe'

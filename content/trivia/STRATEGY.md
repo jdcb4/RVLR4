@@ -33,3 +33,5 @@ Write original question wording from facts; do not copy trivia collections. Chec
 4. Save candidate subject plans and source evidence with the editorial batches; ship only accepted runtime records. Increment pack version, preserve existing IDs/revisions, and test coverage, Kids eligibility and balanced 10/20/30-question draws.
 
 The audit is repeatable; semantic judgement and source quality are not established by schema or string similarity alone.
+
+Pack 5 uses the allocation and pre-draft checklists in `expansion-v5/PLAN.md`: 300 additions, preserving the entire previous bank. Established editorial conventions remain in force.

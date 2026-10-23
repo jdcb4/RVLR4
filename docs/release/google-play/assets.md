@@ -1,0 +1,18 @@
+# Assets and rights inventory
+
+- Existing public/icon-512.png: 512×512 square PNG, visually reviewed as the RV monogram; copy unchanged into the review kit as candidate Play icon. Publisher approval/branding rights remain a release gate.
+- Phone screenshots: capture actual current app screens, using only fictional player names; include game picker, active WWW, a handoff or Hat/Imposter screen, Trivia and theme choice. Do not present a browser/design mockup as a captured native release. Final screenshots must match the submitted release and include no debug overlays.
+- Feature graphic: 1024×500 required Play graphic, still requires a final approved design. Existing in-game art can inform it; do not invent unsupported features or review badges.
+- Five theme PNG sheets: documented AI-generated proposal provenance in public/artwork/README.md. They are packaged locally. Confirm brand/IP rights and quality for the final release.
+- Fonts: Barlow Condensed, Bricolage Grotesque, Cinzel and Fraunces, with local OFL licence files in public/fonts.
+- JavaScript dependency inventory: generated from the lockfile via pnpm licenses; packaged notices under public/third-party-notices.txt. Build-tool-only packages may be included conservatively. This does not replace checking native Android transitive dependency notices.
+- Native dependencies: Capacitor and AndroidX inventory requires final licence/notice review against releaseRuntimeClasspath before submission. Platform framework permissions and SDK contributions must also be checked in the merged manifest.
+- Question text: source-supported original wording with editorial batches/evidence. Sources establish factual support, not independent human editorial approval. No historical TriviaManager/QuickQuiz questions imported. Review the original word catalogue's provenance/rights before public release.
+
+No final marketing artwork or screenshot approval is implied by the draft kit. Play asset requirements: https://support.google.com/googleplay/android-developer/answer/9866151
+
+Release lint follow-up: the initial full release lint reported no errors and 31 warnings. The manifest ordering warning is corrected; the final rerun reports zero errors and 30 warnings. Remaining warnings cover pinned Gradle currency, generated unused/version-qualified resources and existing launcher/splash bitmap density/shape/duplication. Review final launcher/adaptive icon and splash assets across Android launchers before submission; these warnings are not silently suppressed.
+
+Native inventory snapshot: `native-dependencies.json` records 50 selected external module coordinates from `releaseRuntimeClasspath` and locally cached POM/outer archive declarations. 49 declare Apache 2.0 directly; Guava's `listenablefuture:1.0` inherits it from the checked `guava-parent:26.0-android` POM. The list includes metadata/platform modules and is not a claim that every module contributes shipped bytecode. Capacitor local projects are covered separately by the JavaScript package inventory. Nested archive notices and final packaged notice retention remain to verify before submission.
+
+Reproduce the native coordinate inventory with Android Gradle `:app:dependencies --configuration releaseRuntimeClasspath`, then inspect the selected-version POM and JAR/AAR files in the local Gradle cache. This snapshot was checked on 23 October 2026; refresh after dependencies change.

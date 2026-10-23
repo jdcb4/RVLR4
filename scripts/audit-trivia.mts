@@ -17,9 +17,16 @@ const earlierAdditions = (
     ),
   )
 ).flat();
+const pack4Additions = (
+  await Promise.all(
+    ["history-arts", "science-places", "screen-music-sport"].map(async (batch) =>
+      JSON.parse(await readFile(`content/trivia/expansion-v4/${batch}.json`, "utf8")),
+    ),
+  )
+).flat();
 const previousQuestions = triviaPackSchema.parse({
   ...original,
-  questions: [...original.questions, ...earlierAdditions],
+  questions: [...original.questions, ...earlierAdditions, ...pack4Additions],
 }).questions;
 for (const question of previousQuestions) {
   if (

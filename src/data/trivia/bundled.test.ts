@@ -2,6 +2,9 @@ import { expect, it } from "vitest";
 
 import { createTriviaSession, startTriviaQuiz, triviaSessionSchema } from "@/domain/trivia/game";
 
+import pack4History from "../../../content/trivia/expansion-v4/history-arts.json";
+import pack4Science from "../../../content/trivia/expansion-v4/science-places.json";
+import pack4Screen from "../../../content/trivia/expansion-v4/screen-music-sport.json";
 import historyArts from "../../../content/trivia/history-arts.json";
 import original from "../../../content/trivia/original-pack-v2.json";
 import sciencePlaces from "../../../content/trivia/science-places.json";
@@ -9,9 +12,9 @@ import screenMusicSport from "../../../content/trivia/screen-music-sport.json";
 import { triviaCategories, triviaPackSchema } from "../triviaSchema";
 import raw from "./bundled.json";
 
-it("supplies 300 unique sourced questions across every category and starts a full-length quiz", () => {
+it("supplies 600 unique sourced questions across every category and starts a full-length quiz", () => {
   const pack = triviaPackSchema.parse(raw);
-  expect(pack.questions).toHaveLength(300);
+  expect(pack.questions).toHaveLength(600);
   expect(new Set(pack.questions.map((question) => question.category))).toEqual(
     new Set(triviaCategories),
   );
@@ -109,7 +112,11 @@ it("adds 150 fresh records with balanced tiers and category coverage", () => {
   const previousIds = new Set(
     [...original.questions, ...historyArts, ...sciencePlaces, ...screenMusicSport].map((q) => q.id),
   );
-  const additions = pack.questions.filter((q) => !previousIds.has(q.id));
+  const additions = [...pack4History, ...pack4Science, ...pack4Screen];
+  expect(pack.questions.filter((q) => additions.some((entry) => entry.id === q.id))).toEqual(
+    additions,
+  );
+  expect(additions.every((q) => !previousIds.has(q.id))).toBe(true);
   expect(additions).toHaveLength(150);
   for (const difficulty of ["easy", "medium", "hard"]) {
     expect(additions.filter((q) => q.difficulty === difficulty)).toHaveLength(50);
@@ -124,5 +131,34 @@ it("adds 150 fresh records with balanced tiers and category coverage", () => {
     for (const difficulty of ["easy", "medium", "hard"]) {
       expect(entries.filter((q) => q.difficulty === difficulty).length).toBeGreaterThanOrEqual(6);
     }
+  }
+});
+
+it("preserves all 300 prior records and adds 100 questions per tier with broad Kids coverage", () => {
+  const pack = triviaPackSchema.parse(raw);
+  const previous = [
+    ...original.questions,
+    ...historyArts,
+    ...sciencePlaces,
+    ...screenMusicSport,
+    ...pack4History,
+    ...pack4Science,
+    ...pack4Screen,
+  ];
+  const previousIds = new Set(previous.map((q) => q.id));
+  expect(pack.questions.filter((q) => previousIds.has(q.id))).toEqual(previous);
+  const additions = pack.questions.filter((q) => !previousIds.has(q.id));
+  expect(additions).toHaveLength(300);
+  for (const difficulty of ["easy", "medium", "hard"]) {
+    expect(additions.filter((q) => q.difficulty === difficulty)).toHaveLength(100);
+  }
+  for (const category of triviaCategories) {
+    const entries = additions.filter((q) => q.category === category);
+    expect(entries.length).toBeGreaterThanOrEqual(37);
+    expect(entries.length).toBeLessThanOrEqual(38);
+    expect(
+      entries.filter((q) => q.kidAppropriate && q.difficulty === "easy").length,
+    ).toBeGreaterThanOrEqual(8);
+    expect(entries.filter((q) => q.kidAppropriate).length).toBeGreaterThanOrEqual(10);
   }
 });

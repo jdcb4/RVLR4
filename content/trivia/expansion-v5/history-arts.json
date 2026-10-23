@@ -1,0 +1,1210 @@
+[
+  {
+    "id": "trivia:pharaoh-title",
+    "revision": 1,
+    "question": "What title is commonly used for the kings of ancient Egypt?",
+    "answer": "Pharaoh",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.metmuseum.org/-/media/files/learn/family-map-and-guides/middle-kingdom-family-guide.pdf"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#pharaoh-title"
+    }
+  },
+  {
+    "id": "trivia:china-defensive-wall",
+    "revision": 1,
+    "question": "What famous chain of walls and watchtowers was built across northern China to defend against invasions?",
+    "answer": "Great Wall of China",
+    "acceptableAnswers": ["Great Wall"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/438"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#china-defensive-wall"
+    }
+  },
+  {
+    "id": "trivia:sphinx-human-lion",
+    "revision": 1,
+    "question": "What is the name of the huge ancient statue at Giza with a human head and a lion's body?",
+    "answer": "Great Sphinx",
+    "acceptableAnswers": ["Sphinx", "Great Sphinx of Giza"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://egymonuments.gov.eg/en/monuments/the-great-sphinx/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#sphinx-human-lion"
+    }
+  },
+  {
+    "id": "trivia:pompeii-eruption",
+    "revision": 1,
+    "question": "Which ancient Roman city near Naples was buried by Mount Vesuvius in AD 79?",
+    "answer": "Pompeii",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://pompeiisites.org/en/pompeii-map/analysis/pompeii-after-the-eruption/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#pompeii-eruption"
+    }
+  },
+  {
+    "id": "trivia:english-archers-longbow",
+    "revision": 1,
+    "question": "What type of tall wooden bow, famously used by English archers, was recovered in large numbers from the Mary Rose?",
+    "answer": "Longbow",
+    "acceptableAnswers": ["English longbow"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://maryrose.org/discover/collections/the-weaponry-of-the-mary-rose/longbows-and-arrows/"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#english-archers-longbow"
+    }
+  },
+  {
+    "id": "trivia:cook-endeavour-command",
+    "revision": 1,
+    "question": "Who commanded the Endeavour when it reached Botany Bay in 1770?",
+    "answer": "James Cook",
+    "acceptableAnswers": ["Cook", "Captain Cook", "Captain James Cook"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.rmg.co.uk/stories/maritime-history/captain-james-cook-timeline"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#cook-endeavour-command"
+    }
+  },
+  {
+    "id": "trivia:anzac-day-date",
+    "revision": 1,
+    "question": "Which Australian day of commemoration is held on 25 April?",
+    "answer": "Anzac Day",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.awm.gov.au/commemoration/anzac-day/traditions"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#anzac-day-date"
+    }
+  },
+  {
+    "id": "trivia:transported-prisoners-term",
+    "revision": 1,
+    "question": "What were the prisoners sent to Australia from Britain and Ireland as punishment commonly called?",
+    "answer": "Convicts",
+    "acceptableAnswers": ["Convict"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nma.gov.au/defining-moments/resources/convict-transportation-peaks"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#transported-prisoners-term"
+    }
+  },
+  {
+    "id": "trivia:victoria-british-reign",
+    "revision": 1,
+    "question": "Which British queen reigned from 1837 to 1901 and married Prince Albert?",
+    "answer": "Queen Victoria",
+    "acceptableAnswers": ["Victoria"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.royal.uk/encyclopedia/victoria-r-1837-1901"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#victoria-british-reign"
+    }
+  },
+  {
+    "id": "trivia:anne-frank-diary",
+    "revision": 1,
+    "question": "Which Jewish girl wrote a famous diary while hiding from the Nazis in an Amsterdam annex?",
+    "answer": "Anne Frank",
+    "acceptableAnswers": ["Frank"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.annefrank.org/en/anne-frank/who-was-anne-frank/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#anne-frank-diary"
+    }
+  },
+  {
+    "id": "trivia:mandela-president-1994",
+    "revision": 1,
+    "question": "Which anti-apartheid leader became South Africa's president in 1994?",
+    "answer": "Nelson Mandela",
+    "acceptableAnswers": ["Mandela"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gov.za/mandela100/biography"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#mandela-president-1994"
+    }
+  },
+  {
+    "id": "trivia:gandhi-nonviolence",
+    "revision": 1,
+    "question": "Which Indian independence leader, often called the Mahatma, championed non-violent resistance to British rule?",
+    "answer": "Mahatma Gandhi",
+    "acceptableAnswers": ["Gandhi", "Mohandas Gandhi", "Mohandas Karamchand Gandhi"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.gandhi-manibhavan.org/gandhian-philosophy/philosophy-nonvoilence-viewonnonvoilence.html"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#gandhi-nonviolence"
+    }
+  },
+  {
+    "id": "trivia:hunter-gatherers-food",
+    "revision": 1,
+    "question": "What name describes early communities that obtained food by catching wild animals and collecting wild plants rather than farming?",
+    "answer": "Hunter-gatherers",
+    "acceptableAnswers": ["Hunter-gatherer"],
+    "category": "history",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://education.nationalgeographic.org/resource/hunter-gatherer-culture/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#hunter-gatherers-food"
+    }
+  },
+  {
+    "id": "trivia:sputnik-first-satellite",
+    "revision": 1,
+    "question": "What was the name of the Soviet satellite launched in 1957 that became Earth's first artificial satellite?",
+    "answer": "Sputnik 1",
+    "acceptableAnswers": ["Sputnik", "Sputnik I"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nasa.gov/image-article/sputnik-1/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#sputnik-first-satellite"
+    }
+  },
+  {
+    "id": "trivia:henry-viii-wives",
+    "revision": 1,
+    "question": "Which Tudor king of England is famous for having six wives?",
+    "answer": "Henry VIII",
+    "acceptableAnswers": ["Henry the Eighth", "King Henry VIII", "Henry 8"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.hrp.org.uk/hampton-court-palace/history-and-stories/henry-viii/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#henry-viii-wives"
+    }
+  },
+  {
+    "id": "trivia:boudica-iceni-revolt",
+    "revision": 1,
+    "question": "Which queen of the Iceni led a rebellion against Roman rule in Britain around AD 60?",
+    "answer": "Boudica",
+    "acceptableAnswers": ["Boudicca", "Boadicea"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldhistory.org/Boudicca/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#boudica-iceni-revolt"
+    }
+  },
+  {
+    "id": "trivia:silk-road-trade",
+    "revision": 1,
+    "question": "What name is given to the ancient network of trade routes linking China with Central Asia and the Mediterranean?",
+    "answer": "Silk Road",
+    "acceptableAnswers": ["Silk Roads"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.unesco.org/en/silk-roads/about-silk-roads"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#silk-road-trade"
+    }
+  },
+  {
+    "id": "trivia:ned-kelly-glenrowan",
+    "revision": 1,
+    "question": "Which Australian bushranger wore homemade armour during his last stand at Glenrowan in 1880?",
+    "answer": "Ned Kelly",
+    "acceptableAnswers": ["Kelly", "Edward Kelly"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://digital-classroom.nma.gov.au/defining-moments/ned-kellys-last-stand"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#ned-kelly-glenrowan"
+    }
+  },
+  {
+    "id": "trivia:churchill-wartime-pm",
+    "revision": 1,
+    "question": "Which British prime minister led the country from 1940 to 1945 during the Second World War?",
+    "answer": "Winston Churchill",
+    "acceptableAnswers": ["Churchill", "Sir Winston Churchill"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gov.uk/government/history/past-prime-ministers/winston-churchill"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#churchill-wartime-pm"
+    }
+  },
+  {
+    "id": "trivia:marie-antoinette-marriage",
+    "revision": 1,
+    "question": "Which Austrian-born queen of France was married to Louis XVI?",
+    "answer": "Marie Antoinette",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://en.chateauversailles.fr/discover/history/great-characters/marie-antoinette"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#marie-antoinette-marriage"
+    }
+  },
+  {
+    "id": "trivia:genghis-khan-temujin",
+    "revision": 1,
+    "question": "The Mongol leader born Temujin is better known by what title and name?",
+    "answer": "Genghis Khan",
+    "acceptableAnswers": ["Chinggis Khan", "Chingis Khan"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldhistory.org/Genghis_Khan/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#genghis-khan-temujin"
+    }
+  },
+  {
+    "id": "trivia:emancipation-lincoln-document",
+    "revision": 1,
+    "question": "What was the name of Lincoln's 1863 proclamation declaring enslaved people in the rebellious US states free?",
+    "answer": "Emancipation Proclamation",
+    "acceptableAnswers": ["The Emancipation Proclamation"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.archives.gov/exhibits/featured-documents/emancipation-proclamation"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#emancipation-lincoln-document"
+    }
+  },
+  {
+    "id": "trivia:black-death-medieval",
+    "revision": 1,
+    "question": "What name is commonly given to the plague pandemic that devastated Europe in the mid-14th century?",
+    "answer": "Black Death",
+    "acceptableAnswers": ["The Black Death"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldhistory.org/Black_Death/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#black-death-medieval"
+    }
+  },
+  {
+    "id": "trivia:bastille-storming",
+    "revision": 1,
+    "question": "Which Paris fortress and prison was stormed by a crowd on 14 July 1789?",
+    "answer": "Bastille",
+    "acceptableAnswers": ["The Bastille"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldhistory.org/Storming_of_the_Bastille/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#bastille-storming"
+    }
+  },
+  {
+    "id": "trivia:industrial-revolution-factories",
+    "revision": 1,
+    "question": "What historical transformation, beginning in the 18th century, saw machinery and factories increasingly replace hand production?",
+    "answer": "Industrial Revolution",
+    "acceptableAnswers": ["The Industrial Revolution", "First Industrial Revolution"],
+    "category": "history",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.sciencemuseumgroup.org.uk/sites/default/files/2025-09/Making-the-Modern-World-gallery-guide.pdf"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#industrial-revolution-factories"
+    }
+  },
+  {
+    "id": "trivia:hammurabi-law-code",
+    "revision": 1,
+    "question": "Which Babylonian king is famous for a law code carved on a stone monument in the 18th century BC?",
+    "answer": "Hammurabi",
+    "acceptableAnswers": ["King Hammurabi"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldhistory.org/hammurabi/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#hammurabi-law-code"
+    }
+  },
+  {
+    "id": "trivia:carthage-punic-wars",
+    "revision": 1,
+    "question": "Which North African city was Rome's great rival in the Punic Wars and was destroyed by the Romans in 146 BC?",
+    "answer": "Carthage",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/37/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#carthage-punic-wars"
+    }
+  },
+  {
+    "id": "trivia:ashoka-buddhism",
+    "revision": 1,
+    "question": "Which Mauryan emperor is known for promoting Buddhism after the bloody conquest of Kalinga?",
+    "answer": "Ashoka",
+    "acceptableAnswers": ["Ashoka the Great", "Asoka"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldhistory.org/Ashoka_the_Great/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#ashoka-buddhism"
+    }
+  },
+  {
+    "id": "trivia:ieyasu-shogunate-founder",
+    "revision": 1,
+    "question": "Which Japanese leader became shogun in 1603, founding the dynasty that ruled Japan until 1868?",
+    "answer": "Tokugawa Ieyasu",
+    "acceptableAnswers": ["Ieyasu"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldhistory.org/Tokugawa_Ieyasu/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#ieyasu-shogunate-founder"
+    }
+  },
+  {
+    "id": "trivia:medici-florence-family",
+    "revision": 1,
+    "question": "Which powerful banking family included Lorenzo the Magnificent and became major patrons of Renaissance Florence?",
+    "answer": "Medici",
+    "acceptableAnswers": ["The Medici", "Medici family", "House of Medici"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.getty.edu/vow/ULANFullDisplay?find=beck+leonhard&nation=&role=&subjectid=500114961"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#medici-florence-family"
+    }
+  },
+  {
+    "id": "trivia:tordesillas-world-division",
+    "revision": 1,
+    "question": "Which 1494 treaty divided overseas spheres of influence between Spain and Portugal along a line in the Atlantic?",
+    "answer": "Treaty of Tordesillas",
+    "acceptableAnswers": ["Tordesillas"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldhistory.org/Treaty_of_Tordesillas/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#tordesillas-world-division"
+    }
+  },
+  {
+    "id": "trivia:mary-seacole-crimea",
+    "revision": 1,
+    "question": "Which Jamaican-born woman cared for troops during the Crimean War and helped establish the British Hotel near Balaklava?",
+    "answer": "Mary Seacole",
+    "acceptableAnswers": ["Seacole", "Mary Jane Seacole"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.npg.org.uk/collections/search/portrait/mw84190/Mary-Seacole"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#mary-seacole-crimea"
+    }
+  },
+  {
+    "id": "trivia:zheng-he-ming-voyages",
+    "revision": 1,
+    "question": "Which Chinese admiral led seven major voyages to the Indian Ocean and beyond during the Ming dynasty?",
+    "answer": "Zheng He",
+    "acceptableAnswers": ["Cheng Ho"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://hk.history.museum/en/web/mh/exhibition/2006_past_07.html"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#zheng-he-ming-voyages"
+    }
+  },
+  {
+    "id": "trivia:hatshepsut-temple",
+    "revision": 1,
+    "question": "Which female pharaoh commissioned the great terraced mortuary temple at Deir el-Bahri near Luxor?",
+    "answer": "Hatshepsut",
+    "acceptableAnswers": [],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldhistory.org/hatshepsut/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#hatshepsut-temple"
+    }
+  },
+  {
+    "id": "trivia:catherine-russia-empress",
+    "revision": 1,
+    "question": "Which Russian empress took power after the overthrow of her husband Peter III in 1762?",
+    "answer": "Catherine the Great",
+    "acceptableAnswers": ["Catherine II", "Catherine II of Russia"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.worldhistory.org/Catherine_the_Great/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#catherine-russia-empress"
+    }
+  },
+  {
+    "id": "trivia:akbar-religious-tolerance",
+    "revision": 1,
+    "question": "Which Mughal emperor, who ruled from 1556 to 1605, is known for encouraging religious discussion and tolerance?",
+    "answer": "Akbar",
+    "acceptableAnswers": ["Akbar the Great"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.vam.ac.uk/articles/the-arts-of-the-mughal-empire/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#akbar-religious-tolerance"
+    }
+  },
+  {
+    "id": "trivia:suez-canal-opening",
+    "revision": 1,
+    "question": "Which Egyptian canal was formally opened in November 1869 after ten years of digging?",
+    "answer": "Suez Canal",
+    "acceptableAnswers": ["The Suez Canal"],
+    "category": "history",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.suezcanal.gov.eg/English/About/SuezCanal/Pages/CanalHistory.aspx"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#suez-canal-opening"
+    }
+  },
+  {
+    "id": "trivia:gruffalo-mouse-monster",
+    "revision": 1,
+    "question": "What is the name of the monster a clever mouse meets in Julia Donaldson's famous rhyming picture book set in a wood?",
+    "answer": "The Gruffalo",
+    "acceptableAnswers": ["Gruffalo"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.panmacmillan.com/authors/julia-donaldson/the-gruffalo/9781509845323"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#gruffalo-mouse-monster"
+    }
+  },
+  {
+    "id": "trivia:dog-man-comic-hero",
+    "revision": 1,
+    "question": "Which Dav Pilkey comic-book hero has a dog's head and a human body?",
+    "answer": "Dog Man",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.scholastic.com/site/dav-pilkey-books/dog-man-books/dog-man.html"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#dog-man-comic-hero"
+    }
+  },
+  {
+    "id": "trivia:seuss-cat-hat-author",
+    "revision": 1,
+    "question": "Which children's author wrote The Cat in the Hat?",
+    "answer": "Dr. Seuss",
+    "acceptableAnswers": ["Seuss", "Theodor Seuss Geisel", "Theodor Geisel"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.penguinrandomhouse.com/books/43141/the-cat-in-the-hat-by-dr-seuss/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#seuss-cat-hat-author"
+    }
+  },
+  {
+    "id": "trivia:harry-potter-scar-shape",
+    "revision": 1,
+    "question": "What shape is the scar on Harry Potter's forehead?",
+    "answer": "Lightning bolt",
+    "acceptableAnswers": ["Bolt of lightning", "Lightning"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.harrypotter.com/features/harry-potter-book-character-descriptions-versus-how-they-looked-in-the-films"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#harry-potter-scar-shape"
+    }
+  },
+  {
+    "id": "trivia:rapunzel-tower-hair",
+    "revision": 1,
+    "question": "Which fairy-tale girl lets down her long hair so that a visitor can climb up to her tower window?",
+    "answer": "Rapunzel",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/files/2591/2591-h/2591-h.htm"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#rapunzel-tower-hair"
+    }
+  },
+  {
+    "id": "trivia:goldilocks-bears-cottage",
+    "revision": 1,
+    "question": "Which fairy-tale girl visits the cottage of three bears?",
+    "answer": "Goldilocks",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.penguin.com.au/books/goldilocks-and-the-three-bears-9780141501253"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#goldilocks-bears-cottage"
+    }
+  },
+  {
+    "id": "trivia:tin-woodman-heart-wish",
+    "revision": 1,
+    "question": "In The Wonderful Wizard of Oz, which of Dorothy's companions wants the wizard to give him a heart?",
+    "answer": "Tin Woodman",
+    "acceptableAnswers": ["The Tin Woodman", "Tin Man", "The Tin Man"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/files/55/55-h/55-h.htm"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#tin-woodman-heart-wish"
+    }
+  },
+  {
+    "id": "trivia:bfg-name-meaning",
+    "revision": 1,
+    "question": "In Roald Dahl's book, what do the letters BFG stand for?",
+    "answer": "Big Friendly Giant",
+    "acceptableAnswers": ["The Big Friendly Giant"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.roalddahl.com/stories/the-bfg"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#bfg-name-meaning"
+    }
+  },
+  {
+    "id": "trivia:captain-underpants-krupp",
+    "revision": 1,
+    "question": "Which superhero does Principal Krupp become after George and Harold hypnotise him in Dav Pilkey's books?",
+    "answer": "Captain Underpants",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://clubs.scholastic.com/the-adventures-of-captain-underpants/9780545385664-rco-us.html"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#captain-underpants-krupp"
+    }
+  },
+  {
+    "id": "trivia:palette-paint-mixing",
+    "revision": 1,
+    "question": "What is the board an artist uses to hold and mix paint colours called?",
+    "answer": "Palette",
+    "acceptableAnswers": ["Artist's palette", "Paint palette"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.npg.org.uk/collections/explore/glossary-of-art-terms/palette"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#palette-paint-mixing"
+    }
+  },
+  {
+    "id": "trivia:sculpture-three-dimensions",
+    "revision": 1,
+    "question": "What kind of three-dimensional artwork can an artist carve from stone or cast in bronze?",
+    "answer": "Sculpture",
+    "acceptableAnswers": ["A sculpture"],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.getty.edu/education/for_teachers/curricula/sculpture/background1.html"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#sculpture-three-dimensions"
+    }
+  },
+  {
+    "id": "trivia:easel-canvas-support",
+    "revision": 1,
+    "question": "What is the upright frame that holds an artist's canvas while they paint called?",
+    "answer": "Easel",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/easel"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#easel-canvas-support"
+    }
+  },
+  {
+    "id": "trivia:eric-carle-caterpillar",
+    "revision": 1,
+    "question": "Who created the picture book The Very Hungry Caterpillar?",
+    "answer": "Eric Carle",
+    "acceptableAnswers": ["Carle"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.penguin.com.au/books/the-very-hungry-caterpillar-9780140569322"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#eric-carle-caterpillar"
+    }
+  },
+  {
+    "id": "trivia:minotaur-labyrinth-monster",
+    "revision": 1,
+    "question": "In Greek mythology, which creature with a bull's head and a human body lived in the Labyrinth on Crete?",
+    "answer": "Minotaur",
+    "acceptableAnswers": ["The Minotaur"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.metmuseum.org/art/collection/search/245585"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#minotaur-labyrinth-monster"
+    }
+  },
+  {
+    "id": "trivia:twelfth-night-twins",
+    "revision": 1,
+    "question": "Which Shakespeare comedy follows the twins Viola and Sebastian after they are separated by a shipwreck?",
+    "answer": "Twelfth Night",
+    "acceptableAnswers": ["12th Night"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.rsc.org.uk/twelfth-night/learning"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#twelfth-night-twins"
+    }
+  },
+  {
+    "id": "trivia:magic-pudding-albert",
+    "revision": 1,
+    "question": "Which Norman Lindsay children's book features an inexhaustible pudding named Albert?",
+    "answer": "The Magic Pudding",
+    "acceptableAnswers": ["Magic Pudding"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.sl.nsw.gov.au/stories/magic-pudding"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#magic-pudding-albert"
+    }
+  },
+  {
+    "id": "trivia:van-gogh-sunflowers",
+    "revision": 1,
+    "question": "Which Dutch artist painted the famous Sunflowers pictures in Arles in 1888 and 1889?",
+    "answer": "Vincent van Gogh",
+    "acceptableAnswers": ["Van Gogh"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nationalgallery.org.uk/paintings/vincent-van-gogh-sunflowers"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#van-gogh-sunflowers"
+    }
+  },
+  {
+    "id": "trivia:collage-stuck-materials",
+    "revision": 1,
+    "question": "What art technique creates a picture by sticking pieces of paper, fabric or other materials onto a surface?",
+    "answer": "Collage",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.npg.org.uk/collections/explore/glossary-of-art-terms/collage"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#collage-stuck-materials"
+    }
+  },
+  {
+    "id": "trivia:taj-mahal-white-stone",
+    "revision": 1,
+    "question": "What stone gives the Taj Mahal's main mausoleum its famous white appearance?",
+    "answer": "Marble",
+    "acceptableAnswers": ["White marble"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/252/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#taj-mahal-white-stone"
+    }
+  },
+  {
+    "id": "trivia:pseudonym-author-name",
+    "revision": 1,
+    "question": "What term means an invented name an author uses instead of their real name?",
+    "answer": "Pseudonym",
+    "acceptableAnswers": ["Pen name", "Nom de plume"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/pseudonym"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#pseudonym-author-name"
+    }
+  },
+  {
+    "id": "trivia:agatha-christie-detectives",
+    "revision": 1,
+    "question": "Which novelist created both Hercule Poirot and Miss Marple?",
+    "answer": "Agatha Christie",
+    "acceptableAnswers": ["Christie", "Dame Agatha Christie"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.agathachristie.com/about-christie"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#agatha-christie-detectives"
+    }
+  },
+  {
+    "id": "trivia:scheherazade-storyteller",
+    "revision": 1,
+    "question": "Who tells the king stories night after night in the framing tale of One Thousand and One Nights?",
+    "answer": "Scheherazade",
+    "acceptableAnswers": ["Shahrazad", "Sheherazade", "Shahrzad", "Shahrazade"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.gutenberg.org/files/3435/3435-h/3435-h.htm"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#scheherazade-storyteller"
+    }
+  },
+  {
+    "id": "trivia:archibald-portrait-prize",
+    "revision": 1,
+    "question": "Which Australian portrait-painting prize was first awarded in 1921 under a bequest from a Bulletin founder?",
+    "answer": "Archibald Prize",
+    "acceptableAnswers": ["Archibald", "The Archibald Prize"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.artgallery.nsw.gov.au/media/downloads/files/archibald11_sect1.pdf"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#archibald-portrait-prize"
+    }
+  },
+  {
+    "id": "trivia:douglas-adams-hitchhiker",
+    "revision": 1,
+    "question": "Who created The Hitchhiker's Guide to the Galaxy and its hapless traveller Arthur Dent?",
+    "answer": "Douglas Adams",
+    "acceptableAnswers": ["Adams"],
+    "category": "arts-literature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.panmacmillan.com/authors/douglas-adams/the-hitchhikers-guide-to-the-galaxy/9781529034523"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#douglas-adams-hitchhiker"
+    }
+  },
+  {
+    "id": "trivia:picasso-guernica-painting",
+    "revision": 1,
+    "question": "Which artist painted Guernica in response to the bombing of a Basque town during the Spanish Civil War?",
+    "answer": "Pablo Picasso",
+    "acceptableAnswers": ["Picasso", "Pablo Ruiz Picasso"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.museoreinasofia.es/en/collections/artwork/guernica-0/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#picasso-guernica-painting"
+    }
+  },
+  {
+    "id": "trivia:miles-franklin-debut",
+    "revision": 1,
+    "question": "Which Australian writer's debut novel My Brilliant Career was published in 1901?",
+    "answer": "Miles Franklin",
+    "acceptableAnswers": ["Franklin", "Stella Miles Franklin", "Stella Maria Sarah Miles Franklin"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.sl.nsw.gov.au/stories/miles-franklin"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#miles-franklin-debut"
+    }
+  },
+  {
+    "id": "trivia:langston-hughes-harlem",
+    "revision": 1,
+    "question": "Which American poet wrote Harlem, the poem about a deferred dream?",
+    "answer": "Langston Hughes",
+    "acceptableAnswers": ["Hughes"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://library.yale.edu/blog/work-progress-langston-hughes"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#langston-hughes-harlem"
+    }
+  },
+  {
+    "id": "trivia:persepolis-graphic-memoir",
+    "revision": 1,
+    "question": "What is the title of Marjane Satrapi's graphic memoir about growing up in Iran during the Islamic Revolution?",
+    "answer": "Persepolis",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.penguinrandomhouse.com/books/160890/persepolis-by-marjane-satrapi/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#persepolis-graphic-memoir"
+    }
+  },
+  {
+    "id": "trivia:journey-west-monkey-king",
+    "revision": 1,
+    "question": "Which classic Chinese novel follows the Monkey King, Sun Wukong, accompanying a monk in search of Buddhist scriptures?",
+    "answer": "Journey to the West",
+    "acceptableAnswers": ["Monkey"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.penguin.co.uk/books/195922/monkey-king-by-chengen-wu/9780143138938"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#journey-west-monkey-king"
+    }
+  },
+  {
+    "id": "trivia:garcia-marquez-solitude",
+    "revision": 1,
+    "question": "Which Colombian novelist wrote One Hundred Years of Solitude?",
+    "answer": "Gabriel García Márquez",
+    "acceptableAnswers": ["García Márquez", "Márquez"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.penguin.com.au/books/one-hundred-years-of-solitude-9780241968581"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#garcia-marquez-solitude"
+    }
+  },
+  {
+    "id": "trivia:matisse-paper-cutouts",
+    "revision": 1,
+    "question": "Which French artist turned to coloured-paper cut-outs in later life, using scissors to create bold compositions?",
+    "answer": "Henri Matisse",
+    "acceptableAnswers": ["Matisse"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.moma.org/calendar/exhibitions/1429"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#matisse-paper-cutouts"
+    }
+  },
+  {
+    "id": "trivia:gaudi-barcelona-architecture",
+    "revision": 1,
+    "question": "Which architect designed Park Güell and much of Barcelona's Sagrada Família basilica?",
+    "answer": "Antoni Gaudí",
+    "acceptableAnswers": ["Gaudí", "Antonio Gaudí"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/320/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#gaudi-barcelona-architecture"
+    }
+  },
+  {
+    "id": "trivia:odyssey-homecoming-epic",
+    "revision": 1,
+    "question": "Which ancient Greek epic tells of Odysseus's long voyage home to Ithaca after the Trojan War?",
+    "answer": "The Odyssey",
+    "acceptableAnswers": ["Odyssey"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.penguinrandomhouse.com/books/329524/the-odyssey-by-homer/"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#odyssey-homecoming-epic"
+    }
+  },
+  {
+    "id": "trivia:homegoing-generations",
+    "revision": 1,
+    "question": "Which Yaa Gyasi novel follows generations descended from the Ghanaian half-sisters Effia and Esi?",
+    "answer": "Homegoing",
+    "acceptableAnswers": [],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.arts.gov/initiatives/nea-big-read/homegoing"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#homegoing-generations"
+    }
+  },
+  {
+    "id": "trivia:turner-fighting-temeraire",
+    "revision": 1,
+    "question": "Who painted The Fighting Temeraire, showing an old warship being towed by a steam tug?",
+    "answer": "J. M. W. Turner",
+    "acceptableAnswers": ["Turner", "William Turner", "Joseph Mallord William Turner"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.nationalgallery.org.uk/paintings/joseph-mallord-william-turner-the-fighting-temeraire"
+      ],
+      "sourceRecord": "expansion-v5/history-arts-review.md#turner-fighting-temeraire"
+    }
+  },
+  {
+    "id": "trivia:huxley-brave-new-world",
+    "revision": 1,
+    "question": "Who wrote the dystopian novel Brave New World, first published in 1932?",
+    "answer": "Aldous Huxley",
+    "acceptableAnswers": ["Huxley"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.penguin.com.au/books/brave-new-world-9781784870140"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#huxley-brave-new-world"
+    }
+  },
+  {
+    "id": "trivia:linocut-printing-method",
+    "revision": 1,
+    "question": "What printmaking technique involves carving a design into a sheet of linoleum, inking the raised surface and pressing it onto paper?",
+    "answer": "Linocut",
+    "acceptableAnswers": ["Lino print", "Linoleum cut", "Lino printing", "Linoleum printing"],
+    "category": "arts-literature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:15:47.000Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nga.gov/educational-resources/printmaking-basics"],
+      "sourceRecord": "expansion-v5/history-arts-review.md#linocut-printing-method"
+    }
+  }
+]

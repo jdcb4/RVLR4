@@ -1,0 +1,2087 @@
+[
+  {
+    "id": "trivia:ratatouille-chef-rat",
+    "revision": 1,
+    "question": "What is the name of the rat who dreams of becoming a chef in Ratatouille?",
+    "answer": "Remy",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.pixar.com/ratatouille"
+      ]
+    }
+  },
+  {
+    "id": "trivia:coco-young-musician",
+    "revision": 1,
+    "question": "What is the first name of the young musician who visits the Land of the Dead in Coco?",
+    "answer": "Miguel",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.pixar.com/coco"
+      ]
+    }
+  },
+  {
+    "id": "trivia:brave-archer-princess",
+    "revision": 1,
+    "question": "What is the name of the red-haired princess and skilled archer in Brave?",
+    "answer": "Merida",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.pixar.com/brave"
+      ]
+    }
+  },
+  {
+    "id": "trivia:up-house-lifting-objects",
+    "revision": 1,
+    "question": "In Up, what does Carl attach to his house to lift it into the sky?",
+    "answer": "Balloons",
+    "acceptableAnswers": [
+      "Thousands of balloons"
+    ],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://movies.disney.com/up"
+      ]
+    }
+  },
+  {
+    "id": "trivia:zootopia-judy-animal",
+    "revision": 1,
+    "question": "What kind of animal is police officer Judy Hopps in Zootopia?",
+    "answer": "Rabbit",
+    "acceptableAnswers": [
+      "Bunny"
+    ],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://movies.disney.com/zootopia"
+      ]
+    }
+  },
+  {
+    "id": "trivia:lilo-stitch-island-setting",
+    "revision": 1,
+    "question": "In which US island state does Lilo befriend Stitch in the 2002 animated film?",
+    "answer": "Hawaii",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://movies.disney.com/lilo-stitch"
+      ]
+    }
+  },
+  {
+    "id": "trivia:moana-demigod-companion",
+    "revision": 1,
+    "question": "Which demigod accompanies Moana on her ocean voyage in the 2016 film?",
+    "answer": "Maui",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://movies.disney.com/moana"
+      ]
+    }
+  },
+  {
+    "id": "trivia:cars-leading-race-car",
+    "revision": 1,
+    "question": "What is the name of the race car who gets stranded in Radiator Springs in Cars?",
+    "answer": "Lightning McQueen",
+    "acceptableAnswers": [
+      "McQueen"
+    ],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.pixar.com/cars"
+      ]
+    }
+  },
+  {
+    "id": "trivia:sesame-street-cookie-loving-character",
+    "revision": 1,
+    "question": "Which Sesame Street character is especially famous for his love of cookies?",
+    "answer": "Cookie Monster",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://sesameworkshop.org/our-work/shows/sesame-street/sesame-street-characters/cookie-monster/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:octonauts-barnacles-animal",
+    "revision": 1,
+    "question": "What kind of bear is Captain Barnacles in The Octonauts?",
+    "answer": "Polar bear",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.octonauts.com/octonauts.html"
+      ]
+    }
+  },
+  {
+    "id": "trivia:mossy-bottom-mischievous-sheep",
+    "revision": 1,
+    "question": "What is the name of the mischievous animated sheep who leads the flock at Mossy Bottom Farm?",
+    "answer": "Shaun",
+    "acceptableAnswers": [
+      "Shaun the Sheep"
+    ],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.shaunthesheep.com/about/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:sonic-film-character-colour",
+    "revision": 1,
+    "question": "What colour is Sonic in the Sonic the Hedgehog films?",
+    "answer": "Blue",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:05:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.paramount.com/movies/sonic-the-hedgehog"
+      ]
+    }
+  },
+  {
+    "id": "trivia:back-future-time-machine-car",
+    "revision": 1,
+    "question": "What make of car does Doc Brown turn into a time machine in Back to the Future?",
+    "answer": "DeLorean",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.universalpicturesathome.com/movies/back-to-the-future"
+      ]
+    }
+  },
+  {
+    "id": "trivia:matrix-neo-actor",
+    "revision": 1,
+    "question": "Who plays Neo in the original 1999 film The Matrix?",
+    "answer": "Keanu Reeves",
+    "acceptableAnswers": [
+      "Reeves"
+    ],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.moma.org/calendar/events/11647"
+      ]
+    }
+  },
+  {
+    "id": "trivia:return-king-oscar-director",
+    "revision": 1,
+    "question": "Who won the directing Oscar for The Lord of the Rings: The Return of the King?",
+    "answer": "Peter Jackson",
+    "acceptableAnswers": [
+      "Jackson"
+    ],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.oscars.org/oscars/ceremonies/2004"
+      ]
+    }
+  },
+  {
+    "id": "trivia:titanic-1997-director",
+    "revision": 1,
+    "question": "Who directed Titanic, the 1997 film starring Kate Winslet and Leonardo DiCaprio?",
+    "answer": "James Cameron",
+    "acceptableAnswers": [
+      "Cameron"
+    ],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.paramount.com/movies/titanic"
+      ]
+    }
+  },
+  {
+    "id": "trivia:alien-ripley-performer",
+    "revision": 1,
+    "question": "Who plays Ellen Ripley in the 1979 film Alien?",
+    "answer": "Sigourney Weaver",
+    "acceptableAnswers": [
+      "Weaver"
+    ],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.20thcenturystudios.com/movies/alien"
+      ]
+    }
+  },
+  {
+    "id": "trivia:mamma-mia-song-catalogue",
+    "revision": 1,
+    "question": "Mamma Mia! features songs originally recorded by which Swedish pop group?",
+    "answer": "ABBA",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://abbasite.com/articles/mamma-mia-the-movie-2/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:jurassic-park-1993-director",
+    "revision": 1,
+    "question": "Who directed the original Jurassic Park film released in 1993?",
+    "answer": "Steven Spielberg",
+    "acceptableAnswers": [
+      "Spielberg"
+    ],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.universalpicturesathome.com/movies/jurassic-park"
+      ]
+    }
+  },
+  {
+    "id": "trivia:dune-desert-world",
+    "revision": 1,
+    "question": "What is the name of the desert planet central to the Dune films?",
+    "answer": "Arrakis",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://dunetheexperience.com/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:addams-daughter-first-name",
+    "revision": 1,
+    "question": "What is the first name of Morticia and Gomez Addams's daughter, played by Jenna Ortega in a Netflix series?",
+    "answer": "Wednesday",
+    "acceptableAnswers": [
+      "Wednesday Addams"
+    ],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.netflix.com/tudum/articles/wednesday-season-2-character-cast-guide"
+      ]
+    }
+  },
+  {
+    "id": "trivia:stranger-things-indiana-town",
+    "revision": 1,
+    "question": "In which fictional Indiana town do most of the events of Stranger Things take place?",
+    "answer": "Hawkins",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.netflix.com/tudum/articles/stranger-things-season-5-teaser"
+      ]
+    }
+  },
+  {
+    "id": "trivia:doctor-who-exterminate-enemies",
+    "revision": 1,
+    "question": "Which Doctor Who enemies are known for shouting 'Exterminate!'?",
+    "answer": "Daleks",
+    "acceptableAnswers": [
+      "Dalek"
+    ],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.doctorwho.tv/stories/dalek"
+      ]
+    }
+  },
+  {
+    "id": "trivia:star-wars-luke-jedi-teacher",
+    "revision": 1,
+    "question": "Which small Jedi Master trains Luke Skywalker in The Empire Strikes Back?",
+    "answer": "Yoda",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.starwars.com/databank/yoda"
+      ]
+    }
+  },
+  {
+    "id": "trivia:wizard-oz-dorothy-home-state",
+    "revision": 1,
+    "question": "In the 1939 film The Wizard of Oz, which US state is Dorothy's home?",
+    "answer": "Kansas",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.loc.gov/static/programs/national-film-preservation-board/documents/wizard_oz.pdf?loclr=blognsh"
+      ]
+    }
+  },
+  {
+    "id": "trivia:bicycle-thieves-director",
+    "revision": 1,
+    "question": "Who directed the Italian film Bicycle Thieves (1948)?",
+    "answer": "Vittorio De Sica",
+    "acceptableAnswers": [
+      "De Sica"
+    ],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.criterion.com/films/210-bicycle-thieves"
+      ]
+    }
+  },
+  {
+    "id": "trivia:rashomon-director",
+    "revision": 1,
+    "question": "Who directed Rashomon, the 1950 film that presents conflicting accounts of one incident?",
+    "answer": "Akira Kurosawa",
+    "acceptableAnswers": [
+      "Kurosawa"
+    ],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.criterion.com/films/307-rashomon"
+      ]
+    }
+  },
+  {
+    "id": "trivia:city-lights-tramp-performer",
+    "revision": 1,
+    "question": "Who plays the Little Tramp opposite a blind flower seller in City Lights (1931)?",
+    "answer": "Charlie Chaplin",
+    "acceptableAnswers": [
+      "Charles Chaplin",
+      "Chaplin"
+    ],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.charliechaplin.com/en/films/5-City-Lights"
+      ]
+    }
+  },
+  {
+    "id": "trivia:rear-window-protagonist-profession",
+    "revision": 1,
+    "question": "In Rear Window (1954), what is the injured main character's profession?",
+    "answer": "Photographer",
+    "acceptableAnswers": [
+      "Photojournalist"
+    ],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://player.bfi.org.uk/rentals/film/watch-rear-window-1954-online"
+      ]
+    }
+  },
+  {
+    "id": "trivia:everything-everywhere-best-actress",
+    "revision": 1,
+    "question": "Who won the Best Actress Oscar for Everything Everywhere All at Once?",
+    "answer": "Michelle Yeoh",
+    "acceptableAnswers": [
+      "Yeoh"
+    ],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.oscars.org/oscars/ceremonies/2023"
+      ]
+    }
+  },
+  {
+    "id": "trivia:roma-2018-city-setting",
+    "revision": 1,
+    "question": "In which city is Alfonso Cuarón's 2018 film Roma set?",
+    "answer": "Mexico City",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.criterion.com/films/30124-roma"
+      ]
+    }
+  },
+  {
+    "id": "trivia:pans-labyrinth-war-aftermath",
+    "revision": 1,
+    "question": "Pan's Labyrinth is set in the aftermath of which civil war?",
+    "answer": "Spanish Civil War",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.criterion.com/films/28948-pan-s-labyrinth"
+      ]
+    }
+  },
+  {
+    "id": "trivia:artist-2012-best-picture",
+    "revision": 1,
+    "question": "Which film won Best Picture at the 2012 Academy Awards?",
+    "answer": "The Artist",
+    "acceptableAnswers": [
+      "Artist"
+    ],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.oscars.org/oscars/ceremonies/2012"
+      ]
+    }
+  },
+  {
+    "id": "trivia:space-odyssey-computer-name",
+    "revision": 1,
+    "question": "What is the name of the malfunctioning computer in 2001: A Space Odyssey?",
+    "answer": "HAL 9000",
+    "acceptableAnswers": [
+      "HAL"
+    ],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.bfi.org.uk/lists/10-great-films-about-computers"
+      ]
+    }
+  },
+  {
+    "id": "trivia:third-man-score-instrument",
+    "revision": 1,
+    "question": "Which stringed instrument gives The Third Man (1949) its distinctive Anton Karas score?",
+    "answer": "Zither",
+    "acceptableAnswers": [],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.criterion.com/films/236-the-third-man"
+      ]
+    }
+  },
+  {
+    "id": "trivia:blade-runner-source-novelist",
+    "revision": 1,
+    "question": "Blade Runner (1982) was adapted from a novel by which science-fiction author?",
+    "answer": "Philip K. Dick",
+    "acceptableAnswers": [
+      "Philip Dick",
+      "Dick"
+    ],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.bfi.org.uk/features/blade-runner"
+      ]
+    }
+  },
+  {
+    "id": "trivia:in-mood-love-director",
+    "revision": 1,
+    "question": "Who directed the Hong Kong film In the Mood for Love (2000)?",
+    "answer": "Wong Kar-wai",
+    "acceptableAnswers": [
+      "Wong"
+    ],
+    "category": "film-tv",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:10:06Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.criterion.com/films/198-in-the-mood-for-love"
+      ]
+    }
+  },
+  {
+    "id": "trivia:trumpet-note-changing-controls",
+    "revision": 1,
+    "question": "What are the three finger-operated controls on a typical trumpet called?",
+    "answer": "Valves",
+    "acceptableAnswers": [
+      "Piston valves"
+    ],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.dallassymphony.org/community-education/dso-kids/listen-watch/instruments/trumpet/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:flute-sideways-wind-instrument",
+    "revision": 1,
+    "question": "Which familiar orchestral woodwind is held sideways and played by blowing across a hole, rather than through a reed?",
+    "answer": "Flute",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms-beginning-with-f/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:harp-plucked-triangular-instrument",
+    "revision": 1,
+    "question": "Which large string instrument has a triangular frame and strings that the player plucks by hand?",
+    "answer": "Harp",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.dallassymphony.org/community-education/dso-kids/listen-watch/instruments/harp/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:accordion-squeezed-bellows",
+    "revision": 1,
+    "question": "Which instrument has bellows squeezed between the player's hands, with buttons or a keyboard at the sides?",
+    "answer": "Accordion",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:tambourine-shaken-jingles",
+    "revision": 1,
+    "question": "Which handheld percussion instrument has a round frame fitted with small metal jingles?",
+    "answer": "Tambourine",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.dallassymphony.org/community-education/dso-kids/listen-watch/instruments/tambourine/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:triangle-metal-beater-instrument",
+    "revision": 1,
+    "question": "Which small percussion instrument is a three-sided metal bar struck with a metal beater?",
+    "answer": "Triangle",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.dallassymphony.org/community-education/dso-kids/listen-watch/instruments/triangle/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:harmonica-mouth-organ-name",
+    "revision": 1,
+    "question": "What is another name for the small wind instrument called a mouth organ?",
+    "answer": "Harmonica",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms-beginning-with-h/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:tuba-low-orchestral-brass",
+    "revision": 1,
+    "question": "Which large brass instrument, usually held upright on the player's lap, plays the lowest notes in a standard orchestra's brass section?",
+    "answer": "Tuba",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.dallassymphony.org/community-education/dso-kids/listen-watch/instruments/tuba/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:tempo-musical-speed-name",
+    "revision": 1,
+    "question": "What musical term means the speed at which a piece is played?",
+    "answer": "Tempo",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms-beginning-with-t/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:pitch-high-low-sound",
+    "revision": 1,
+    "question": "What musical word describes how high or low a note sounds?",
+    "answer": "Pitch",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms-beginning-with-p/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:song-repeated-section-name",
+    "revision": 1,
+    "question": "What is the repeated section of a pop song, often heard between verses, called?",
+    "answer": "Chorus",
+    "acceptableAnswers": [
+      "Refrain"
+    ],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms-beginning-with-c/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:solo-single-performer-piece",
+    "revision": 1,
+    "question": "What is a piece or passage of music for one performer called?",
+    "answer": "Solo",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms-beginning-with-s/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:double-bass-standing-string-instrument",
+    "revision": 1,
+    "question": "Which bowed string instrument is so large that its player usually stands or sits on a high stool?",
+    "answer": "Double bass",
+    "acceptableAnswers": [
+      "String bass",
+      "Contrabass"
+    ],
+    "category": "music",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.dallassymphony.org/community-education/dso-kids/listen-watch/instruments/double-bass/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:treble-clef-other-letter-name",
+    "revision": 1,
+    "question": "Which musical clef is also called the G clef?",
+    "answer": "Treble clef",
+    "acceptableAnswers": [
+      "Treble"
+    ],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms-beginning-with-t/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:bass-clef-low-notes",
+    "revision": 1,
+    "question": "Which clef is commonly paired with the treble clef to write the lower notes in piano music?",
+    "answer": "Bass clef",
+    "acceptableAnswers": [
+      "Bass"
+    ],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms-beginning-with-b/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:unaccompanied-singing-term",
+    "revision": 1,
+    "question": "What Italian term means singing without instrumental accompaniment?",
+    "answer": "A cappella",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:octave-diatonic-note-count",
+    "revision": 1,
+    "question": "Counting both ends, how many notes are in an octave of a major scale, such as C to the next C?",
+    "answer": "Eight",
+    "acceptableAnswers": [
+      "8"
+    ],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms-beginning-with-o/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:staccato-detached-note-instruction",
+    "revision": 1,
+    "question": "Which musical instruction tells a player to make notes short and detached?",
+    "answer": "Staccato",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.allclassical.org/glossary/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:crescendo-volume-instruction",
+    "revision": 1,
+    "question": "What musical term tells performers to gradually get louder?",
+    "answer": "Crescendo",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.allclassical.org/glossary/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:waltz-beats-per-bar",
+    "revision": 1,
+    "question": "How many beats are in a bar of a traditional waltz?",
+    "answer": "Three",
+    "acceptableAnswers": [
+      "3"
+    ],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.classicsforkids.com/musical-terms-beginning-with-w/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:cant-get-out-head-singer",
+    "revision": 1,
+    "question": "Which Australian singer is known for the hit Can't Get You Out of My Head?",
+    "answer": "Kylie Minogue",
+    "acceptableAnswers": [
+      "Kylie",
+      "Minogue"
+    ],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.nfsa.gov.au/collection/item/kylie-performs-cant-get-you-out-my-head-apollo"
+      ]
+    }
+  },
+  {
+    "id": "trivia:chandelier-australian-singer",
+    "revision": 1,
+    "question": "Which Australian singer released the 2014 hit Chandelier?",
+    "answer": "Sia",
+    "acceptableAnswers": [
+      "Sia Furler",
+      "Sia Kate Isobelle Furler"
+    ],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.grammy.com/artists/sia/15372/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:royals-singer",
+    "revision": 1,
+    "question": "Which New Zealand singer had her breakthrough hit with Royals?",
+    "answer": "Lorde",
+    "acceptableAnswers": [
+      "Ella Yelich-O'Connor"
+    ],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.grammy.com/artists/lorde/17976/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:ziggy-stardust-musical-persona",
+    "revision": 1,
+    "question": "Which singer created the Ziggy Stardust stage persona?",
+    "answer": "David Bowie",
+    "acceptableAnswers": [
+      "Bowie"
+    ],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.davidbowie.com/about"
+      ]
+    }
+  },
+  {
+    "id": "trivia:wuthering-heights-original-singer",
+    "revision": 1,
+    "question": "Which singer released the 1978 hit Wuthering Heights?",
+    "answer": "Kate Bush",
+    "acceptableAnswers": [
+      "Bush"
+    ],
+    "category": "music",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:14:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.officialcharts.com/songs/kate-bush-wuthering-heights/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:magic-flute-opera-composer",
+    "revision": 1,
+    "question": "Who composed the opera The Magic Flute?",
+    "answer": "Wolfgang Amadeus Mozart",
+    "acceptableAnswers": [
+      "Mozart",
+      "Wolfgang Mozart"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.eno.org/operas/the-magic-flute/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:brandenburg-concertos-composer",
+    "revision": 1,
+    "question": "Who composed the six Brandenburg Concertos?",
+    "answer": "Johann Sebastian Bach",
+    "acceptableAnswers": [
+      "Bach",
+      "J. S. Bach"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.laphil.com/works/brandenburg-concertos-complete"
+      ]
+    }
+  },
+  {
+    "id": "trivia:messiah-oratorio-composer",
+    "revision": 1,
+    "question": "Who composed the oratorio Messiah, which includes the Hallelujah chorus?",
+    "answer": "George Frideric Handel",
+    "acceptableAnswers": [
+      "Handel",
+      "George Frederick Handel",
+      "Georg Friedrich Handel"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.laphil.com/works/messiah"
+      ]
+    }
+  },
+  {
+    "id": "trivia:rite-spring-ballet-composer",
+    "revision": 1,
+    "question": "Who composed the music for the ballet The Rite of Spring?",
+    "answer": "Igor Stravinsky",
+    "acceptableAnswers": [
+      "Stravinsky"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://scottishballet.co.uk/discover/our-repertoire/the-rite-of-spring/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:three-tenors-italian-member",
+    "revision": 1,
+    "question": "Which Italian singer joined Plácido Domingo and José Carreras as the Three Tenors?",
+    "answer": "Luciano Pavarotti",
+    "acceptableAnswers": [
+      "Pavarotti"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.deccaclassics.com/en/catalogue/products/carreras-domingo-pavarotti-in-concertrome-1990-10957"
+      ]
+    }
+  },
+  {
+    "id": "trivia:smooth-guitarist-collaborator",
+    "revision": 1,
+    "question": "Which guitarist collaborated with singer Rob Thomas on the 1999 hit Smooth?",
+    "answer": "Carlos Santana",
+    "acceptableAnswers": [
+      "Santana"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.grammy.com/artists/carlos-santana/6774/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:peter-wolf-grandfather-instrument",
+    "revision": 1,
+    "question": "Which woodwind instrument represents the grandfather in Prokofiev's Peter and the Wolf?",
+    "answer": "Bassoon",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.laphil.com/works/peter-and-the-wolf"
+      ]
+    }
+  },
+  {
+    "id": "trivia:graceland-south-african-vocal-group",
+    "revision": 1,
+    "question": "Which South African vocal group sang with Paul Simon on his Graceland album?",
+    "answer": "Ladysmith Black Mambazo",
+    "acceptableAnswers": [
+      "Black Mambazo"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.mambazo.com/about"
+      ]
+    }
+  },
+  {
+    "id": "trivia:minute-waltz-composer",
+    "revision": 1,
+    "question": "Who composed the piano piece popularly known as the Minute Waltz?",
+    "answer": "Frédéric Chopin",
+    "acceptableAnswers": [
+      "Chopin",
+      "Fryderyk Chopin"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.laphil.com/works/14-waltzes"
+      ]
+    }
+  },
+  {
+    "id": "trivia:bjork-human-behaviour-album",
+    "revision": 1,
+    "question": "On which 1993 Björk album did Human Behaviour appear?",
+    "answer": "Debut",
+    "acceptableAnswers": [],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://music.apple.com/us/album/debut/300205427"
+      ]
+    }
+  },
+  {
+    "id": "trivia:fela-kuti-afrobeat-pioneer",
+    "revision": 1,
+    "question": "Which Nigerian bandleader, whose musician sons include Femi and Seun, pioneered Afrobeat?",
+    "answer": "Fela Kuti",
+    "acceptableAnswers": [
+      "Fela",
+      "Fela Anikulapo-Kuti"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://felakuti.com/us/about"
+      ]
+    }
+  },
+  {
+    "id": "trivia:vie-en-rose-french-singer",
+    "revision": 1,
+    "question": "Which French singer is famously associated with La Vie en rose?",
+    "answer": "Édith Piaf",
+    "acceptableAnswers": [
+      "Piaf"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://catalogue.bnf.fr/ark:/12148/cb46991880n"
+      ]
+    }
+  },
+  {
+    "id": "trivia:slumdog-millionaire-score-composer",
+    "revision": 1,
+    "question": "Who composed the Oscar-winning score for Slumdog Millionaire?",
+    "answer": "A. R. Rahman",
+    "acceptableAnswers": [
+      "Rahman",
+      "Allah Rakha Rahman"
+    ],
+    "category": "music",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:18:12Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.oscars.org/oscars/ceremonies/2009"
+      ]
+    }
+  },
+  {
+    "id": "trivia:football-handling-position",
+    "revision": 1,
+    "question": "Which soccer position is allowed to catch an opponent's shot inside their own penalty area?",
+    "answer": "Goalkeeper",
+    "acceptableAnswers": [
+      "Goalie",
+      "Keeper"
+    ],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.theifab.com/laws/latest/fouls-and-misconduct/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:relay-passed-object",
+    "revision": 1,
+    "question": "What short stick do runners pass to the next teammate in a relay race?",
+    "answer": "Baton",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.englandathletics.org/news/did-you-know-that-track-relays-have-changed-quite-a-lot-over-the-years/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:archery-shot-projectile",
+    "revision": 1,
+    "question": "What does an archer shoot from a bow towards a target?",
+    "answer": "Arrow",
+    "acceptableAnswers": [
+      "Arrows"
+    ],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.worldarchery.sport/sport"
+      ]
+    }
+  },
+  {
+    "id": "trivia:alpine-skiing-foot-equipment",
+    "revision": 1,
+    "question": "What pair of long boards is attached to the boots of an alpine skier?",
+    "answer": "Skis",
+    "acceptableAnswers": [
+      "A pair of skis"
+    ],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.nbcolympics.com/news/alpine-skiing-101-equipment"
+      ]
+    }
+  },
+  {
+    "id": "trivia:boxing-padded-hand-equipment",
+    "revision": 1,
+    "question": "What padded items do boxers wear on their hands during a bout?",
+    "answer": "Boxing gloves",
+    "acceptableAnswers": [
+      "Gloves"
+    ],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.iba.sport/about-iba/marketing/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:bicycle-foot-pushed-parts",
+    "revision": 1,
+    "question": "Which parts of a bicycle do you push round with your feet to make it move?",
+    "answer": "Pedals",
+    "acceptableAnswers": [
+      "Bicycle pedals"
+    ],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://wisconsindot.gov/Pages/safety/education/bike/bikeparts.aspx"
+      ]
+    }
+  },
+  {
+    "id": "trivia:swimming-face-up-stroke",
+    "revision": 1,
+    "question": "Which main competitive swimming stroke is swum facing upwards?",
+    "answer": "Backstroke",
+    "acceptableAnswers": [
+      "Back crawl"
+    ],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.swimming.org/justswim/getting-backstroke-right/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:hidden-fleet-coordinate-game",
+    "revision": 1,
+    "question": "Which board game has players call grid coordinates to find and sink an opponent's hidden fleet?",
+    "answer": "Battleship",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.marmaladegamestudio.com/games/battleship"
+      ]
+    }
+  },
+  {
+    "id": "trivia:draughts-twelve-men-board-game",
+    "revision": 1,
+    "question": "In which board game does each player begin with twelve men on the dark squares of an eight-by-eight board?",
+    "answer": "Draughts",
+    "acceptableAnswers": [
+      "Checkers",
+      "English draughts",
+      "English checkers"
+    ],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://wcdf.net/rules/rules_of_checkers_english.pdf"
+      ]
+    }
+  },
+  {
+    "id": "trivia:pokemon-electric-mouse-character",
+    "revision": 1,
+    "question": "Which famous yellow Pokémon is an Electric-type Mouse Pokémon?",
+    "answer": "Pikachu",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://sg.portal-pokemon.com/pokedex/0025/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:tetris-falling-block-puzzle",
+    "revision": 1,
+    "question": "Which classic video game involves fitting falling block shapes together to clear complete horizontal lines?",
+    "answer": "Tetris",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://tetris.com/about"
+      ]
+    }
+  },
+  {
+    "id": "trivia:rocket-league-football-vehicles",
+    "revision": 1,
+    "question": "What vehicles do players control to hit the ball in Rocket League?",
+    "answer": "Cars",
+    "acceptableAnswers": [
+      "Rocket-powered cars",
+      "Rocket cars"
+    ],
+    "category": "sport-games",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.rocketleague.com/?lang=en"
+      ]
+    }
+  },
+  {
+    "id": "trivia:cricket-wicket-stump-count",
+    "revision": 1,
+    "question": "How many upright stumps make up one cricket wicket?",
+    "answer": "Three",
+    "acceptableAnswers": [
+      "3"
+    ],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.icc-cricket.com/news/mens-test-match-clause-8-the-wickets"
+      ]
+    }
+  },
+  {
+    "id": "trivia:netball-standard-team-size",
+    "revision": 1,
+    "question": "How many players from a full netball team are on court at once in the standard game?",
+    "answer": "Seven",
+    "acceptableAnswers": [
+      "7"
+    ],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://netball.com.au/what-is-netball"
+      ]
+    }
+  },
+  {
+    "id": "trivia:rugby-union-standard-team-size",
+    "revision": 1,
+    "question": "What is the maximum number of players one team may have on the field in standard rugby union?",
+    "answer": "Fifteen",
+    "acceptableAnswers": [
+      "15"
+    ],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://passport.world.rugby/laws-of-the-game/laws-by-number/3-team/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:football-sending-off-card",
+    "revision": 1,
+    "question": "What colour card does a soccer referee show when sending a player off?",
+    "answer": "Red",
+    "acceptableAnswers": [
+      "Red card"
+    ],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.theifab.com/laws/latest/fouls-and-misconduct/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:tennis-zero-score-term",
+    "revision": 1,
+    "question": "What word means a score of zero in a standard tennis game?",
+    "answer": "Love",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.ustaflorida.com/youth-tennis/getting-started/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:golf-one-under-par-term",
+    "revision": 1,
+    "question": "In golf, what is a score of one stroke under par on a hole called?",
+    "answer": "Birdie",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://pgatourmedia.pgatourhq.com/static-assets/page/files/tours/2021/pgatour/barracudachampionship/scorecards/Scorecard.pdf"
+      ]
+    }
+  },
+  {
+    "id": "trivia:basketball-free-throw-points",
+    "revision": 1,
+    "question": "How many points is a successful free throw worth in basketball?",
+    "answer": "One",
+    "acceptableAnswers": [
+      "1",
+      "One point"
+    ],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://assets.fiba.basketball/image/upload/documents-corporate-wabc-start-coaching-eng-facilitator-handbook.pdf"
+      ]
+    }
+  },
+  {
+    "id": "trivia:volleyball-distinct-shirt-role",
+    "revision": 1,
+    "question": "What is the name of the defensive specialist in indoor volleyball who wears a shirt contrasting with their teammates'?",
+    "answer": "Libero",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.fivb.com/wp-content/uploads/2024/03/FIVB-Volleyball_Rules_2021_2024_pe.pdf"
+      ]
+    }
+  },
+  {
+    "id": "trivia:judo-country-of-origin",
+    "revision": 1,
+    "question": "In which country did the martial art judo originate?",
+    "answer": "Japan",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.ijf.org/country/jpn/news"
+      ]
+    }
+  },
+  {
+    "id": "trivia:squash-front-wall-low-strip",
+    "revision": 1,
+    "question": "What is the low strip at the bottom of a squash court's front wall called?",
+    "answer": "Tin",
+    "acceptableAnswers": [
+      "The tin"
+    ],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://cdn.dlgsc.wa.gov.au/sport-and-recreation/sports-dimensions-guide/squash"
+      ]
+    }
+  },
+  {
+    "id": "trivia:fencing-three-weapons-sport",
+    "revision": 1,
+    "question": "Foil, épée and sabre are weapons used in which sport?",
+    "answer": "Fencing",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.ausfencing.org/equipment/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:rowing-steering-crew-role",
+    "revision": 1,
+    "question": "What is the name of the crew member who steers and directs a rowing eight without rowing?",
+    "answer": "Coxswain",
+    "acceptableAnswers": [
+      "Cox"
+    ],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.rowpnra.org/pnra/rowing-basics/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:darts-professional-leg-start-score",
+    "revision": 1,
+    "question": "From what score does each player usually count down at the start of a standard professional darts leg?",
+    "answer": "Five hundred and one",
+    "acceptableAnswers": [
+      "501",
+      "Five hundred one"
+    ],
+    "category": "sport-games",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:29:27Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.pdc-europe.tv/turnierformate"
+      ]
+    }
+  },
+  {
+    "id": "trivia:sydney-2000-womens-400m-champion",
+    "revision": 1,
+    "question": "Which Australian runner won the women's 400 metres gold medal at the Sydney 2000 Olympics?",
+    "answer": "Cathy Freeman",
+    "acceptableAnswers": [
+      "Freeman"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:23:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.olympics.com.au/olympians/cathy-freeman/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:bradman-career-test-average",
+    "revision": 1,
+    "question": "What was Don Bradman's career Test batting average, to two decimal places?",
+    "answer": "99.94",
+    "acceptableAnswers": [
+      "Ninety-nine point nine four"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:25:22Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.cricket.com.au/news/3289631"
+      ]
+    }
+  },
+  {
+    "id": "trivia:bannister-sub-four-mile",
+    "revision": 1,
+    "question": "Who became the first person to run a mile in under four minutes in 1954?",
+    "answer": "Roger Bannister",
+    "acceptableAnswers": [
+      "Bannister",
+      "Sir Roger Bannister"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:23:48Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://lifelong-learning.ox.ac.uk/roger-bannisters-fourth-challenge/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:montreal-1976-perfect-ten-gymnast",
+    "revision": 1,
+    "question": "Which Romanian gymnast scored the first perfect ten in Olympic gymnastics at Montreal in 1976?",
+    "answer": "Nadia Comăneci",
+    "acceptableAnswers": [
+      "Comaneci"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:24:21Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.gymnastics.sport/site/athletes/atg_view.php"
+      ]
+    }
+  },
+  {
+    "id": "trivia:berlin-1936-four-golds-athlete",
+    "revision": 1,
+    "question": "Which US athlete won four gold medals at the Berlin Olympics in 1936?",
+    "answer": "Jesse Owens",
+    "acceptableAnswers": [
+      "Owens"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:24:52Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://usopm.org/jesse-owens/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:pele-three-world-cup-years",
+    "revision": 1,
+    "question": "Which Brazilian footballer won the men's FIFA World Cup in 1958, 1962 and 1970?",
+    "answer": "Pelé",
+    "acceptableAnswers": [],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:24:52Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://inside.fifa.com/organisation/news/ronaldo-presents-peles-wife-marcia-aoki-with-special-recognition-award"
+      ]
+    }
+  },
+  {
+    "id": "trivia:catan-game-creator",
+    "revision": 1,
+    "question": "Who created the board game Catan, originally published as The Settlers of Catan?",
+    "answer": "Klaus Teuber",
+    "acceptableAnswers": [
+      "Teuber"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:23:37Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.catan.com/about-us"
+      ]
+    }
+  },
+  {
+    "id": "trivia:rubiks-cube-inventor",
+    "revision": 1,
+    "question": "Who invented the familiar twisting cube puzzle with six coloured faces?",
+    "answer": "Ernő Rubik",
+    "acceptableAnswers": [
+      "Rubik"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:23:37Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://rubiks.com/history"
+      ]
+    }
+  },
+  {
+    "id": "trivia:contract-bridge-hand-size",
+    "revision": 1,
+    "question": "In contract bridge, how many cards is each player dealt at the start of a hand?",
+    "answer": "Thirteen",
+    "acceptableAnswers": [
+      "13"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:23:37Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.acbl.org/learn/"
+      ]
+    }
+  },
+  {
+    "id": "trivia:scrabble-all-seven-tile-bonus",
+    "revision": 1,
+    "question": "In standard English-language Scrabble, how many bonus points do you earn for playing all seven tiles in one turn?",
+    "answer": "Fifty",
+    "acceptableAnswers": [
+      "50",
+      "Fifty points"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:25:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://service.mattel.com/instruction-sheets/files/CJT11Scrabble%20Travel%20%5BEnglish%5D%5BUU1%5D.PDF"
+      ]
+    }
+  },
+  {
+    "id": "trivia:rugby-league-standard-tackle-set",
+    "revision": 1,
+    "question": "In rugby league, how many tackles are in a standard set before possession is handed over?",
+    "answer": "Six",
+    "acceptableAnswers": [
+      "6"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:25:41Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.intrl.sport/uploads/docs/International_Rugby_League_Laws_of_the_Game.pdf"
+      ]
+    }
+  },
+  {
+    "id": "trivia:snooker-black-ball-points",
+    "revision": 1,
+    "question": "In snooker, how many points is legally potting the black ball worth?",
+    "answer": "Seven",
+    "acceptableAnswers": [
+      "7"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:25:53Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://wpbsa.com/wp-content/uploads/Rulebook-Website-Updated-May-2022.pdf"
+      ]
+    }
+  },
+  {
+    "id": "trivia:marathon-official-kilometres",
+    "revision": 1,
+    "question": "What is the official marathon distance in kilometres?",
+    "answer": "42.195",
+    "acceptableAnswers": [
+      "42.195 kilometres",
+      "42.195 km",
+      "Forty-two point one nine five"
+    ],
+    "category": "sport-games",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:26:17Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://oscnewsletter.olympics.com/article/34/hidden-treasures_lang=en.html"
+      ]
+    }
+  }
+]

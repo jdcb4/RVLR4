@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.40.0 — 23 October 2026
+
+- Add 300 source-checked Trivia questions, with 100 per difficulty and deliberate Kids coverage across all eight categories. Pack 5 contains 600 questions; all 300 prior records remain unchanged and existing quizzes keep their copies.
+- Add guarded release App Bundle commands: explicit unsigned preparation or environment-supplied upload signing, with no debug-key fallback. Fresh release web builds omit source maps; package JavaScript and font notices with a repeatable export command.
+- Prepare draft Google Play listing, privacy/data-safety assessment, asset inventory and release gates. No production signing identity or store submission is created. Defer iOS at Joe's request.
+- Synchronise native reload tests with page-start/page-load events, preserving all UI and durability assertions after a WebView update exposed an evaluation-during-unload race.
+
 ## 0.39.1 — 23 October 2026
 
 - Add another 150 source-checked Trivia questions across all eight categories, with 50 additions per difficulty and deliberate Kids coverage. Bundled content pack 4 now contains 300 records; all prior records remain unchanged.

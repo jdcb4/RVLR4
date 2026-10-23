@@ -4,4 +4,4 @@ This branch produces a standalone APK, not a hosted site. Use the commands in [A
 
 Prototype APKs are debug-signed locally. Install a subsequent build over the existing application to preserve SQLite saves; uninstalling clears them. Keep app/native versions synchronized. Copy release artifacts to JNAS Media/DropBox and compare SHA-256 after copying. APKs and generated web assets stay outside git.
 
-A separately backed-up signing identity and release procedure are future work before wider distribution. Interactive design studies are ordinary offline HTML files with bundled assets; copy their complete folder or extract their ZIP before opening index.html.
+App Bundle commands and release materials are documented in [Google Play preparation](release/google-play/README.md). A separately backed-up upload identity and the remaining Console/real-device gates are required before public distribution. Interactive design studies are ordinary offline HTML files with bundled assets; copy their complete folder or extract their ZIP before opening index.html.

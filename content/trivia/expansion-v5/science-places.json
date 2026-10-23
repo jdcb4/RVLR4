@@ -1,0 +1,1815 @@
+[
+  {
+    "id": "trivia:mars-red-planet",
+    "revision": 1,
+    "question": "Which planet is often called the Red Planet?",
+    "answer": "Mars",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/mars/"],
+      "sourceRecord": "NASA identifies Mars as the Red Planet."
+    }
+  },
+  {
+    "id": "trivia:moon-earth-natural-satellite",
+    "revision": 1,
+    "question": "What is Earth's only natural satellite called?",
+    "answer": "Moon",
+    "acceptableAnswers": ["The Moon"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/moon/facts/"],
+      "sourceRecord": "NASA states that the Moon is Earth's only natural satellite."
+    }
+  },
+  {
+    "id": "trivia:spider-eight-walking-legs",
+    "revision": 1,
+    "question": "How many walking legs does a spider normally have?",
+    "answer": "Eight",
+    "acceptableAnswers": ["8"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/spider"],
+      "sourceRecord": "The dictionary specifies four pairs of walking legs."
+    }
+  },
+  {
+    "id": "trivia:penguin-emperor-king-birds",
+    "revision": 1,
+    "question": "What flightless seabirds include emperor and king species?",
+    "answer": "Penguins",
+    "acceptableAnswers": ["Penguin"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.antarctica.gov.au/about-antarctica/animals/penguins/"],
+      "sourceRecord": "The Australian Antarctic Program describes penguins as flightless birds and lists emperor and king penguins."
+    }
+  },
+  {
+    "id": "trivia:snail-spiral-shell",
+    "revision": 1,
+    "question": "What is the hard, spiral covering on a typical garden snail called?",
+    "answer": "Shell",
+    "acceptableAnswers": ["A shell", "Snail shell"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/snail"],
+      "sourceRecord": "The snail entry describes an external enclosing spiral shell."
+    }
+  },
+  {
+    "id": "trivia:bees-make-honey",
+    "revision": 1,
+    "question": "What sweet food do bees make from flower nectar?",
+    "answer": "Honey",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/honey"],
+      "sourceRecord": "Honey is made by bees from flower nectar."
+    }
+  },
+  {
+    "id": "trivia:thermometer-measures-temperature",
+    "revision": 1,
+    "question": "What instrument measures temperature?",
+    "answer": "Thermometer",
+    "acceptableAnswers": ["A thermometer"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/thermometer"],
+      "sourceRecord": "The dictionary identifies a thermometer as an instrument for determining temperature."
+    }
+  },
+  {
+    "id": "trivia:magnet-attracts-iron",
+    "revision": 1,
+    "question": "What object produces a magnetic field and can attract iron objects?",
+    "answer": "Magnet",
+    "acceptableAnswers": ["A magnet"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/magnet"],
+      "sourceRecord": "A magnet attracts iron and produces an external magnetic field."
+    }
+  },
+  {
+    "id": "trivia:rainbow-sunlight-raindrops",
+    "revision": 1,
+    "question": "What colourful arc can appear in the sky when sunlight passes through raindrops?",
+    "answer": "Rainbow",
+    "acceptableAnswers": ["A rainbow"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/rainbow"],
+      "sourceRecord": "A rainbow forms through refraction and reflection of sunlight in water droplets."
+    }
+  },
+  {
+    "id": "trivia:seeds-contain-plant-embryos",
+    "revision": 1,
+    "question": "What are the small structures containing plant embryos that gardeners sow to grow flowers called?",
+    "answer": "Seeds",
+    "acceptableAnswers": ["Seed"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/seed"],
+      "sourceRecord": "A flowering plant's seed contains an embryo and can germinate into a new plant."
+    }
+  },
+  {
+    "id": "trivia:bird-body-feathers",
+    "revision": 1,
+    "question": "What light structures form the outer covering of a bird's body?",
+    "answer": "Feathers",
+    "acceptableAnswers": ["Feather"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/feather"],
+      "sourceRecord": "The feather entry identifies the structures forming birds' external covering."
+    }
+  },
+  {
+    "id": "trivia:teeth-bite-chew",
+    "revision": 1,
+    "question": "What hard structures in your mouth bite and chew food?",
+    "answer": "Teeth",
+    "acceptableAnswers": ["Tooth"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/tooth"],
+      "sourceRecord": "Teeth are hard structures used to seize and chew food."
+    }
+  },
+  {
+    "id": "trivia:volcano-erupting-vent",
+    "revision": 1,
+    "question": "What do we call a vent in Earth's crust, often in a mountain, from which lava can erupt?",
+    "answer": "Volcano",
+    "acceptableAnswers": ["A volcano"],
+    "category": "science-nature",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/volcano"],
+      "sourceRecord": "A volcano is a vent releasing molten or hot rock, or the hill built from its ejected material."
+    }
+  },
+  {
+    "id": "trivia:mercury-nearest-sun",
+    "revision": 1,
+    "question": "Which planet orbits closest to the Sun?",
+    "answer": "Mercury",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/mercury/"],
+      "sourceRecord": "NASA identifies Mercury as the closest planet to the Sun."
+    }
+  },
+  {
+    "id": "trivia:condensation-water-vapour-liquid",
+    "revision": 1,
+    "question": "What process changes water vapour into liquid droplets on a cold surface?",
+    "answer": "Condensation",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/condensation"],
+      "sourceRecord": "Condensation converts vapour into a denser liquid or solid state, usually through cooling."
+    }
+  },
+  {
+    "id": "trivia:omnivore-plant-animal-diet",
+    "revision": 1,
+    "question": "What is an animal that eats both plant and animal food called?",
+    "answer": "Omnivore",
+    "acceptableAnswers": ["An omnivore"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/omnivore"],
+      "sourceRecord": "The omnivore entry explains diets containing both plants and animals."
+    }
+  },
+  {
+    "id": "trivia:dry-ice-carbon-dioxide",
+    "revision": 1,
+    "question": "Dry ice is the solid form of which gas?",
+    "answer": "Carbon dioxide",
+    "acceptableAnswers": ["CO2"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/dry%20ice"],
+      "sourceRecord": "The dry ice entry identifies it as solidified carbon dioxide."
+    }
+  },
+  {
+    "id": "trivia:kidneys-filter-blood",
+    "revision": 1,
+    "question": "Which pair of bean-shaped organs filters wastes and extra water from your blood to make urine?",
+    "answer": "Kidneys",
+    "acceptableAnswers": ["Kidney", "The kidneys"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.niddk.nih.gov/health-information/kidney-disease/kidneys-how-they-work"
+      ],
+      "sourceRecord": "NIDDK describes two bean-shaped kidneys filtering blood to remove wastes and excess water as urine."
+    }
+  },
+  {
+    "id": "trivia:pupil-iris-opening",
+    "revision": 1,
+    "question": "What is the name of the opening in the centre of the eye's iris?",
+    "answer": "Pupil",
+    "acceptableAnswers": ["The pupil"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/pupil"],
+      "sourceRecord": "The anatomical definition identifies the pupil as the aperture in the iris."
+    }
+  },
+  {
+    "id": "trivia:crab-shell-moulting",
+    "revision": 1,
+    "question": "What is the process called when a crab casts off its outer shell as it grows?",
+    "answer": "Moulting",
+    "acceptableAnswers": ["Molting", "Moult", "Molt", "Ecdysis"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/molt"],
+      "sourceRecord": "The molt entry describes shedding the outer covering and explicitly gives a growing crab shedding its shell."
+    }
+  },
+  {
+    "id": "trivia:mitochondria-cell-energy",
+    "revision": 1,
+    "question": "Which cell structures are often called its powerhouses because they generate most of its chemical energy?",
+    "answer": "Mitochondria",
+    "acceptableAnswers": ["Mitochondrion"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.genome.gov/genetics-glossary/Mitochondria"],
+      "sourceRecord": "NHGRI describes mitochondria as organelles generating most of a cell's chemical energy."
+    }
+  },
+  {
+    "id": "trivia:vertebrate-backbone-name",
+    "revision": 1,
+    "question": "What is the term for an animal with a backbone?",
+    "answer": "Vertebrate",
+    "acceptableAnswers": ["A vertebrate"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/vertebrate"],
+      "sourceRecord": "The vertebrate entry describes animals typically possessing a spinal column."
+    }
+  },
+  {
+    "id": "trivia:palaeontology-fossil-study",
+    "revision": 1,
+    "question": "What branch of science studies ancient life through fossils?",
+    "answer": "Palaeontology",
+    "acceptableAnswers": ["Paleontology"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/paleontology"],
+      "sourceRecord": "The dictionary defines palaeontology as studying past geological life from fossil remains."
+    }
+  },
+  {
+    "id": "trivia:solar-eclipse-moon-between",
+    "revision": 1,
+    "question": "What event occurs when the Moon passes between Earth and the Sun and blocks some or all of the Sun's face?",
+    "answer": "Solar eclipse",
+    "acceptableAnswers": ["A solar eclipse"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/eclipses/types/"],
+      "sourceRecord": "NASA explains that solar eclipses occur when the Moon passes between the Sun and Earth."
+    }
+  },
+  {
+    "id": "trivia:firefly-light-bioluminescence",
+    "revision": 1,
+    "question": "What is the term for light produced by chemical reactions inside living things, such as fireflies?",
+    "answer": "Bioluminescence",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/bioluminescence"],
+      "sourceRecord": "The dictionary defines light emitted by living organisms through internal chemical reactions, including fireflies."
+    }
+  },
+  {
+    "id": "trivia:light-year-distance-travel",
+    "revision": 1,
+    "question": "What unit of astronomical distance is the distance light travels in one year?",
+    "answer": "Light-year",
+    "acceptableAnswers": ["A light-year"],
+    "category": "science-nature",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/exoplanets/what-is-a-light-year/"],
+      "sourceRecord": "NASA defines a light-year as the distance light travels in one year."
+    }
+  },
+  {
+    "id": "trivia:doppler-effect-siren-pitch",
+    "revision": 1,
+    "question": "What effect explains why an approaching siren sounds higher-pitched than the same siren moving away?",
+    "answer": "Doppler effect",
+    "acceptableAnswers": ["The Doppler effect"],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Doppler%20effect"],
+      "sourceRecord": "The Doppler effect changes observed wave frequency when the source and observer move relative to each other."
+    }
+  },
+  {
+    "id": "trivia:stapes-stirrup-ear-bone",
+    "revision": 1,
+    "question": "Which bone in the middle ear is also called the stirrup?",
+    "answer": "Stapes",
+    "acceptableAnswers": ["The stapes", "Stapes bone"],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/stapes"],
+      "sourceRecord": "The stapes entry identifies a middle-ear bone also called the stirrup."
+    }
+  },
+  {
+    "id": "trivia:ammonite-coiled-fossil-shell",
+    "revision": 1,
+    "question": "What are the extinct marine molluscs known for coiled, chambered shell fossils called?",
+    "answer": "Ammonites",
+    "acceptableAnswers": ["Ammonite"],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/ammonite"],
+      "sourceRecord": "The ammonite entry describes extinct cephalopods with flat spiral shells divided into chambers."
+    }
+  },
+  {
+    "id": "trivia:mycelium-fungal-thread-network",
+    "revision": 1,
+    "question": "What is the network of thread-like filaments forming the main body of a fungus called?",
+    "answer": "Mycelium",
+    "acceptableAnswers": ["Mycelial network"],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/mycelium"],
+      "sourceRecord": "Mycelium is the mass of interwoven fungal hyphae forming the vegetative body."
+    }
+  },
+  {
+    "id": "trivia:nitrogen-air-majority",
+    "revision": 1,
+    "question": "Which gas makes up about 78 per cent of Earth's air by volume?",
+    "answer": "Nitrogen",
+    "acceptableAnswers": ["N2"],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://periodic-table.rsc.org/element/7/nitrogen"],
+      "sourceRecord": "The Royal Society of Chemistry states nitrogen makes up 78 per cent of air by volume."
+    }
+  },
+  {
+    "id": "trivia:giants-causeway-basalt",
+    "revision": 1,
+    "question": "What dark volcanic rock forms the columns of the Giant's Causeway in Northern Ireland?",
+    "answer": "Basalt",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/369/"],
+      "sourceRecord": "UNESCO identifies the Giant's Causeway columns as basalt and explains their volcanic origin."
+    }
+  },
+  {
+    "id": "trivia:mitosis-identical-nuclei",
+    "revision": 1,
+    "question": "What type of nuclear division normally produces two genetically identical daughter nuclei?",
+    "answer": "Mitosis",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.genome.gov/genetics-glossary/Mitosis"],
+      "sourceRecord": "NHGRI explains mitosis produces two identical nuclei in preparation for cell division."
+    }
+  },
+  {
+    "id": "trivia:isotopes-different-mass-numbers",
+    "revision": 1,
+    "question": "What do we call forms of the same chemical element whose atoms have different mass numbers?",
+    "answer": "Isotopes",
+    "acceptableAnswers": ["Isotope"],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/isotope"],
+      "sourceRecord": "Isotopes are atoms of one element with the same atomic number but differing atomic mass or mass number."
+    }
+  },
+  {
+    "id": "trivia:europa-2024-nasa-habitability-mission",
+    "revision": 1,
+    "question": "NASA launched a spacecraft in 2024 to study the habitability of which ocean-bearing moon of Jupiter?",
+    "answer": "Europa",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/jupiter/jupiter-moons/europa/"],
+      "sourceRecord": "NASA records the October 2024 launch of Europa Clipper to investigate Europa's habitability and subsurface ocean."
+    }
+  },
+  {
+    "id": "trivia:tardigrade-water-bear",
+    "revision": 1,
+    "question": "What microscopic eight-legged animal is also known as a water bear?",
+    "answer": "Tardigrade",
+    "acceptableAnswers": ["A tardigrade"],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/tardigrade"],
+      "sourceRecord": "The tardigrade entry describes microscopic invertebrates with four pairs of legs, also called water bears."
+    }
+  },
+  {
+    "id": "trivia:perihelion-nearest-sun-point",
+    "revision": 1,
+    "question": "What is the point in a planet's orbit at which it is closest to the Sun called?",
+    "answer": "Perihelion",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/perihelion"],
+      "sourceRecord": "Perihelion is the nearest point to the Sun in an orbiting body's path."
+    }
+  },
+  {
+    "id": "trivia:archimedes-buoyant-force-principle",
+    "revision": 1,
+    "question": "Whose principle states that an immersed body experiences an upward force equal to the weight of the fluid it displaces?",
+    "answer": "Archimedes",
+    "acceptableAnswers": [],
+    "category": "science-nature",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Archimedes'%20principle"],
+      "sourceRecord": "Archimedes' principle relates the apparent loss of weight of an immersed body to the weight of displaced fluid."
+    }
+  },
+  {
+    "id": "trivia:eiffel-tower-paris-city",
+    "revision": 1,
+    "question": "In which city does the Eiffel Tower stand?",
+    "answer": "Paris",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.toureiffel.paris/en/the-monument/history"],
+      "sourceRecord": "The tower's official history places its construction at the Paris World's Fair."
+    }
+  },
+  {
+    "id": "trivia:giant-panda-native-country",
+    "revision": 1,
+    "question": "Giant pandas are native to which Asian country?",
+    "answer": "China",
+    "acceptableAnswers": ["People's Republic of China"],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://nationalzoo.si.edu/animals/giant-panda"],
+      "sourceRecord": "The Smithsonian states that giant pandas are native to central China."
+    }
+  },
+  {
+    "id": "trivia:madrid-capital-country",
+    "revision": 1,
+    "question": "Madrid is the capital of which European country?",
+    "answer": "Spain",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Madrid"],
+      "sourceRecord": "The Madrid geographical entry identifies the city as Spain's capital."
+    }
+  },
+  {
+    "id": "trivia:nigeria-african-continent",
+    "revision": 1,
+    "question": "On which continent is Nigeria?",
+    "answer": "Africa",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Nigeria"],
+      "sourceRecord": "The Nigeria entry places the country in western Africa."
+    }
+  },
+  {
+    "id": "trivia:atlantic-americas-europe-africa",
+    "revision": 1,
+    "question": "Which ocean separates the Americas from Europe and Africa?",
+    "answer": "Atlantic Ocean",
+    "acceptableAnswers": ["Atlantic", "The Atlantic Ocean", "The Atlantic"],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Atlantic%20Ocean"],
+      "sourceRecord": "The geographical entry identifies the Atlantic as the ocean separating these continents."
+    }
+  },
+  {
+    "id": "trivia:loch-ness-scotland-country",
+    "revision": 1,
+    "question": "Loch Ness, famous for stories of a monster, is in which of the UK's four countries?",
+    "answer": "Scotland",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.visitscotland.com/things-to-do/nature-outdoors/lochs/ness"],
+      "sourceRecord": "VisitScotland places Loch Ness in the Scottish Highlands and discusses its monster legend."
+    }
+  },
+  {
+    "id": "trivia:hobart-tasmania-state",
+    "revision": 1,
+    "question": "Hobart is the capital of which Australian state?",
+    "answer": "Tasmania",
+    "acceptableAnswers": ["TAS"],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.discovertasmania.com.au/regions/hobart-and-south/hobart/"],
+      "sourceRecord": "Tourism Tasmania describes Hobart as Tasmania's capital."
+    }
+  },
+  {
+    "id": "trivia:queensland-brisbane-capital",
+    "revision": 1,
+    "question": "What is the capital city of Queensland?",
+    "answer": "Brisbane",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Brisbane"],
+      "sourceRecord": "The geographical definition identifies Brisbane as Queensland's capital."
+    }
+  },
+  {
+    "id": "trivia:island-water-surrounded-land",
+    "revision": 1,
+    "question": "What is a piece of land surrounded by water and smaller than a continent called?",
+    "answer": "Island",
+    "acceptableAnswers": ["An island", "Isle", "An isle"],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/island"],
+      "sourceRecord": "An island is land surrounded by water and smaller than a continent."
+    }
+  },
+  {
+    "id": "trivia:river-mouth-sea-lake",
+    "revision": 1,
+    "question": "What is the term for the place where a river flows into a sea or lake?",
+    "answer": "Mouth",
+    "acceptableAnswers": ["River mouth", "The mouth"],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/mouth"],
+      "sourceRecord": "The geographical sense of mouth is where a river enters a larger body of water."
+    }
+  },
+  {
+    "id": "trivia:north-pole-arctic-ocean",
+    "revision": 1,
+    "question": "Which geographical pole lies in the middle of the Arctic Ocean?",
+    "answer": "North Pole",
+    "acceptableAnswers": ["The North Pole"],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://pmel.noaa.gov/arctic-zone/faq.html"],
+      "sourceRecord": "NOAA states that the North Pole is in the middle of the Arctic Ocean."
+    }
+  },
+  {
+    "id": "trivia:beach-sand-pebble-shore",
+    "revision": 1,
+    "question": "What is a shore covered in sand or pebbles, where people often build sandcastles, called?",
+    "answer": "Beach",
+    "acceptableAnswers": ["A beach"],
+    "category": "geography",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/beach"],
+      "sourceRecord": "A beach is a shore covered with sand, gravel or larger rock fragments."
+    }
+  },
+  {
+    "id": "trivia:kathmandu-nepal-country",
+    "revision": 1,
+    "question": "Kathmandu is the capital of which Himalayan country?",
+    "answer": "Nepal",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Nepal"],
+      "sourceRecord": "The Nepal entry places the country in the Himalayas and names Kathmandu as its capital."
+    }
+  },
+  {
+    "id": "trivia:cologne-rhine-river",
+    "revision": 1,
+    "question": "Which major river flows through the German city of Cologne?",
+    "answer": "Rhine",
+    "acceptableAnswers": ["The Rhine", "Rhine River", "River Rhine", "Rhein"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.cologne-tourism.com/arts-culture/sights/detail/rhine-boulevard"],
+      "sourceRecord": "Cologne's official tourism organisation places the Rheinboulevard on the Rhine by the city's historic centre."
+    }
+  },
+  {
+    "id": "trivia:reykjavik-iceland-island-country",
+    "revision": 1,
+    "question": "Which North Atlantic island country has Reykjavík as its capital?",
+    "answer": "Iceland",
+    "acceptableAnswers": ["Republic of Iceland"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Iceland"],
+      "sourceRecord": "The Iceland entry locates the island southeast of Greenland and identifies Reykjavik as its capital."
+    }
+  },
+  {
+    "id": "trivia:amazon-andes-atlantic-course",
+    "revision": 1,
+    "question": "Which great South American river flows from the Peruvian Andes to the Atlantic in northern Brazil?",
+    "answer": "Amazon",
+    "acceptableAnswers": ["Amazon River", "The Amazon", "River Amazon"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Amazon"],
+      "sourceRecord": "The Amazon geographical definition describes its course from the Peruvian Andes to the Atlantic in northern Brazil."
+    }
+  },
+  {
+    "id": "trivia:himalayas-nepal-bhutan-range",
+    "revision": 1,
+    "question": "Which mountain range extends through Nepal and Bhutan?",
+    "answer": "Himalayas",
+    "acceptableAnswers": ["Himalaya", "The Himalayas", "Himalayan Mountains"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Himalayas"],
+      "sourceRecord": "The geographical entry includes Nepal and Bhutan in the Himalayan mountain system."
+    }
+  },
+  {
+    "id": "trivia:new-zealand-wellington-capital",
+    "revision": 1,
+    "question": "What is the capital city of New Zealand?",
+    "answer": "Wellington",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Wellington"],
+      "sourceRecord": "The geographical definition identifies Wellington as New Zealand's capital."
+    }
+  },
+  {
+    "id": "trivia:fjord-norway-steep-inlet",
+    "revision": 1,
+    "question": "What is the name for a long, narrow sea inlet between steep cliffs, of the kind Norway is famous for?",
+    "answer": "Fjord",
+    "acceptableAnswers": ["A fjord", "Fiord", "A fiord"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/fjord"],
+      "sourceRecord": "The fjord definition describes a narrow sea inlet between cliffs or steep slopes and gives Norway as an example."
+    }
+  },
+  {
+    "id": "trivia:etna-sicily-island",
+    "revision": 1,
+    "question": "On which Mediterranean island is Mount Etna?",
+    "answer": "Sicily",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/1427/"],
+      "sourceRecord": "UNESCO places Mount Etna on the eastern coast of Sicily."
+    }
+  },
+  {
+    "id": "trivia:portugal-western-iberia",
+    "revision": 1,
+    "question": "Which country occupies the western part of the Iberian Peninsula and has Lisbon as its capital?",
+    "answer": "Portugal",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Portugal"],
+      "sourceRecord": "The Portugal entry identifies its western Iberian location and capital Lisbon."
+    }
+  },
+  {
+    "id": "trivia:varanasi-ganges-river",
+    "revision": 1,
+    "question": "Which river, sacred in Hinduism, runs beside the Indian city of Varanasi?",
+    "answer": "Ganges",
+    "acceptableAnswers": ["Ganga", "The Ganges", "Ganges River", "River Ganges"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://varanasi.nic.in/"],
+      "sourceRecord": "Varanasi's district government discusses the Ganges in the city and its religious importance."
+    }
+  },
+  {
+    "id": "trivia:caspian-sea-inland-borders",
+    "revision": 1,
+    "question": "Which inland salt lake called a sea borders Russia, Kazakhstan, Turkmenistan, Iran and Azerbaijan?",
+    "answer": "Caspian Sea",
+    "acceptableAnswers": ["Caspian", "The Caspian Sea", "The Caspian"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Caspian%20Sea"],
+      "sourceRecord": "The Caspian Sea geographical definition calls it a salt lake and lists these surrounding countries."
+    }
+  },
+  {
+    "id": "trivia:bass-strait-tasmania-mainland",
+    "revision": 1,
+    "question": "Which strait separates Tasmania from mainland Australia?",
+    "answer": "Bass Strait",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Bass%20Strait"],
+      "sourceRecord": "The geographical entry describes Bass Strait as separating Tasmania and continental Australia."
+    }
+  },
+  {
+    "id": "trivia:nullarbor-wa-sa-plain",
+    "revision": 1,
+    "question": "What is the largely treeless plain crossing the border between Western Australia and South Australia called?",
+    "answer": "Nullarbor Plain",
+    "acceptableAnswers": ["Nullarbor", "The Nullarbor", "The Nullarbor Plain"],
+    "category": "geography",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Nullarbor%20Plain"],
+      "sourceRecord": "The Nullarbor entry describes a treeless plain in Western Australia and South Australia."
+    }
+  },
+  {
+    "id": "trivia:malacca-strait-malay-sumatra",
+    "revision": 1,
+    "question": "Which strait lies between the Malay Peninsula and the Indonesian island of Sumatra?",
+    "answer": "Strait of Malacca",
+    "acceptableAnswers": ["Malacca Strait", "Straits of Malacca"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Malacca,%20Strait%20of"],
+      "sourceRecord": "The geographical entry places the Strait of Malacca between the Malay Peninsula and Sumatra."
+    }
+  },
+  {
+    "id": "trivia:baikal-deepest-lake",
+    "revision": 1,
+    "question": "Which lake in Siberia is the world's deepest lake?",
+    "answer": "Lake Baikal",
+    "acceptableAnswers": ["Baikal"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/754/"],
+      "sourceRecord": "UNESCO describes Lake Baikal in southeast Siberia as the world's deepest lake."
+    }
+  },
+  {
+    "id": "trivia:african-union-addis-ababa",
+    "revision": 1,
+    "question": "In which Ethiopian city is the African Union's headquarters?",
+    "answer": "Addis Ababa",
+    "acceptableAnswers": ["Addis Abeba"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://au.int/en/about?page=1"],
+      "sourceRecord": "The African Union gives its headquarters address as Addis Ababa, Ethiopia."
+    }
+  },
+  {
+    "id": "trivia:thimphu-bhutan-country",
+    "revision": 1,
+    "question": "Thimphu is the capital of which landlocked Himalayan country?",
+    "answer": "Bhutan",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Bhutan"],
+      "sourceRecord": "The Bhutan geographical entry describes the landlocked Himalayan country and capital Thimphu."
+    }
+  },
+  {
+    "id": "trivia:sossusvlei-namibia-country",
+    "revision": 1,
+    "question": "In which African country is Sossusvlei, known for its desert dunes?",
+    "answer": "Namibia",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": [
+        "https://www.nwr.com.na/resorts/sesriem-campsite/",
+        "https://whc.unesco.org/en/list/1430/"
+      ],
+      "sourceRecord": "Namibia Wildlife Resorts places Sossusvlei in the Namib; UNESCO locates the Namib Sand Sea within Namibia."
+    }
+  },
+  {
+    "id": "trivia:adriatic-italy-balkans",
+    "revision": 1,
+    "question": "Which arm of the Mediterranean Sea lies between Italy and the Balkan Peninsula?",
+    "answer": "Adriatic Sea",
+    "acceptableAnswers": ["Adriatic", "The Adriatic", "The Adriatic Sea"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Adriatic%20Sea"],
+      "sourceRecord": "The Adriatic Sea geographical definition places it between Italy and the Balkan Peninsula."
+    }
+  },
+  {
+    "id": "trivia:atlas-morocco-tunisia-mountains",
+    "revision": 1,
+    "question": "Which mountain system stretches across north-western Africa from Morocco towards Tunisia?",
+    "answer": "Atlas Mountains",
+    "acceptableAnswers": ["Atlas", "The Atlas", "The Atlas Mountains"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Atlas%20Mountains"],
+      "sourceRecord": "The Atlas Mountains entry describes their extent from southwestern Morocco to northeastern Tunisia."
+    }
+  },
+  {
+    "id": "trivia:sahel-sahara-southern-belt",
+    "revision": 1,
+    "question": "What is the semi-arid belt immediately south of the Sahara called?",
+    "answer": "Sahel",
+    "acceptableAnswers": ["The Sahel"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Sahel"],
+      "sourceRecord": "The Sahel entry identifies it as the semidesert southern fringe of the Sahara."
+    }
+  },
+  {
+    "id": "trivia:yangtze-three-gorges-dam",
+    "revision": 1,
+    "question": "China's Three Gorges Dam spans which river?",
+    "answer": "Yangtze",
+    "acceptableAnswers": ["Yangtze River", "The Yangtze", "Chang Jiang"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://science.nasa.gov/earth/earth-observatory/three-gorges-dam-china-7769/"],
+      "sourceRecord": "NASA's Earth Observatory identifies the Yangtze as the river spanned by the Three Gorges Dam."
+    }
+  },
+  {
+    "id": "trivia:palk-strait-india-sri-lanka",
+    "revision": 1,
+    "question": "Which strait separates northern Sri Lanka from south-eastern India?",
+    "answer": "Palk Strait",
+    "acceptableAnswers": ["Palk"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/Palk%20Strait"],
+      "sourceRecord": "The geographical entry places Palk Strait between northern Sri Lanka and southeastern India."
+    }
+  },
+  {
+    "id": "trivia:baghdad-tigris-river",
+    "revision": 1,
+    "question": "Which river flows through Baghdad?",
+    "answer": "Tigris",
+    "acceptableAnswers": ["The Tigris", "Tigris River", "River Tigris"],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.unesco.org/en/creative-cities/baghdad"],
+      "sourceRecord": "UNESCO describes Baghdad as located along the Tigris River."
+    }
+  },
+  {
+    "id": "trivia:potala-palace-lhasa-city",
+    "revision": 1,
+    "question": "In which Tibetan city is the Potala Palace?",
+    "answer": "Lhasa",
+    "acceptableAnswers": [],
+    "category": "geography",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://whc.unesco.org/en/list/707/"],
+      "sourceRecord": "UNESCO's Potala Palace record places the complex in Lhasa."
+    }
+  },
+  {
+    "id": "trivia:scissors-two-cutting-blades",
+    "revision": 1,
+    "question": "What cutting tool has two blades that slide past each other when you squeeze its handles?",
+    "answer": "Scissors",
+    "acceptableAnswers": ["A pair of scissors"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/scissors"],
+      "sourceRecord": "The scissors definition describes a cutting instrument with two blades sliding past each other."
+    }
+  },
+  {
+    "id": "trivia:week-seven-days",
+    "revision": 1,
+    "question": "How many days are in one week?",
+    "answer": "Seven",
+    "acceptableAnswers": ["7"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/week"],
+      "sourceRecord": "The week entry specifies a seven-day cycle."
+    }
+  },
+  {
+    "id": "trivia:spoon-shallow-bowl-utensil",
+    "revision": 1,
+    "question": "What eating utensil has a small, shallow bowl and a handle, and is commonly used for soup?",
+    "answer": "Spoon",
+    "acceptableAnswers": ["A spoon"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/spoon"],
+      "sourceRecord": "The spoon definition describes a shallow bowl with a handle used for eating or cooking."
+    }
+  },
+  {
+    "id": "trivia:key-opens-lock",
+    "revision": 1,
+    "question": "What small object fits into a lock and turns to open it?",
+    "answer": "Key",
+    "acceptableAnswers": ["A key"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/key"],
+      "sourceRecord": "The key entry describes an instrument used to open a lock."
+    }
+  },
+  {
+    "id": "trivia:calendar-year-dates",
+    "revision": 1,
+    "question": "What chart shows the days, weeks and months of a year so you can look up dates?",
+    "answer": "Calendar",
+    "acceptableAnswers": ["A calendar"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/calendar"],
+      "sourceRecord": "The calendar entry describes a register of days in a year arranged by month and weekday."
+    }
+  },
+  {
+    "id": "trivia:helmet-protects-head",
+    "revision": 1,
+    "question": "What hard covering is worn to protect your head when riding a bicycle?",
+    "answer": "Helmet",
+    "acceptableAnswers": ["A helmet", "Bicycle helmet", "Bike helmet"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/helmet"],
+      "sourceRecord": "The helmet definition includes hard protective head coverings designed to resist impact."
+    }
+  },
+  {
+    "id": "trivia:rectangle-four-right-angles",
+    "revision": 1,
+    "question": "What four-sided shape has four right angles, with two longer sides and two shorter sides?",
+    "answer": "Rectangle",
+    "acceptableAnswers": ["A rectangle"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/rectangle"],
+      "sourceRecord": "A rectangle has all right angles; the entry particularly notes unequal adjacent sides."
+    }
+  },
+  {
+    "id": "trivia:popcorn-heated-maize-snack",
+    "revision": 1,
+    "question": "What snack is made by heating maize kernels until they burst open?",
+    "answer": "Popcorn",
+    "acceptableAnswers": [],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/popcorn"],
+      "sourceRecord": "The popcorn entry describes maize kernels bursting into a white starchy mass when heated."
+    }
+  },
+  {
+    "id": "trivia:yeast-raises-bread-dough",
+    "revision": 1,
+    "question": "What living ingredient is commonly added to bread dough to make it rise?",
+    "answer": "Yeast",
+    "acceptableAnswers": ["Baker's yeast"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/yeast"],
+      "sourceRecord": "The yeast entry identifies a fungus used as a leaven in baking."
+    }
+  },
+  {
+    "id": "trivia:sushi-vinegared-rice",
+    "revision": 1,
+    "question": "What Japanese food is based on vinegared rice and may include fish or vegetables?",
+    "answer": "Sushi",
+    "acceptableAnswers": [],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/sushi"],
+      "sourceRecord": "The sushi definition describes Japanese dishes with vinegar-dressed rice, seafood, vegetables and other ingredients."
+    }
+  },
+  {
+    "id": "trivia:chopsticks-paired-eating-sticks",
+    "revision": 1,
+    "question": "What pair of slender sticks is used to pick up food in many East Asian cuisines?",
+    "answer": "Chopsticks",
+    "acceptableAnswers": ["Chopstick", "A pair of chopsticks"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/chopsticks"],
+      "sourceRecord": "The chopstick entry describes paired slender sticks used to lift food to the mouth, chiefly in Asian countries."
+    }
+  },
+  {
+    "id": "trivia:wool-sheep-fibre",
+    "revision": 1,
+    "question": "What natural fibre is shorn from sheep and can be spun into yarn?",
+    "answer": "Wool",
+    "acceptableAnswers": ["Sheep's wool", "Sheep wool"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/wool"],
+      "sourceRecord": "The wool entry describes the thick curly undercoat especially of sheep and products made from it."
+    }
+  },
+  {
+    "id": "trivia:antonym-opposite-word",
+    "revision": 1,
+    "question": "What do we call a word with the opposite meaning to another word, such as 'hot' and 'cold'?",
+    "answer": "Antonym",
+    "acceptableAnswers": ["An antonym"],
+    "category": "general",
+    "difficulty": "easy",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/antonym"],
+      "sourceRecord": "An antonym is a word of opposite meaning."
+    }
+  },
+  {
+    "id": "trivia:cinnamon-bark-spice",
+    "revision": 1,
+    "question": "Which sweet-smelling brown spice is made from tree bark and sold as powder or curled sticks?",
+    "answer": "Cinnamon",
+    "acceptableAnswers": [],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/cinnamon"],
+      "sourceRecord": "The cinnamon entry describes aromatic dried bark, rolls or quills, and powdered spice."
+    }
+  },
+  {
+    "id": "trivia:tahini-sesame-paste",
+    "revision": 1,
+    "question": "What is the smooth paste made from ground sesame seeds called?",
+    "answer": "Tahini",
+    "acceptableAnswers": ["Tahina"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/tahini"],
+      "sourceRecord": "The dictionary defines tahini as a smooth sesame-seed paste."
+    }
+  },
+  {
+    "id": "trivia:kimchi-korean-fermented-vegetables",
+    "revision": 1,
+    "question": "What Korean dish is made from seasoned, fermented vegetables, often cabbage or radish?",
+    "answer": "Kimchi",
+    "acceptableAnswers": ["Kimchee"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/kimchi"],
+      "sourceRecord": "The kimchi definition describes Korean fermented vegetables, especially cabbage and radishes, with seasonings."
+    }
+  },
+  {
+    "id": "trivia:decimal-base-ten-system",
+    "revision": 1,
+    "question": "What is the usual name for the base-ten number system?",
+    "answer": "Decimal",
+    "acceptableAnswers": ["Decimal system", "Denary", "Denary system"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/decimal"],
+      "sourceRecord": "The decimal entry identifies a system based on ten."
+    }
+  },
+  {
+    "id": "trivia:anagram-rearranged-letters",
+    "revision": 1,
+    "question": "What do we call a word made by rearranging all the letters of another word, such as 'listen' becoming 'silent'?",
+    "answer": "Anagram",
+    "acceptableAnswers": ["An anagram"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/anagram"],
+      "sourceRecord": "An anagram is a word or phrase made by transposing another word or phrase's letters; the example was newly selected."
+    }
+  },
+  {
+    "id": "trivia:kilogram-thousand-grams",
+    "revision": 1,
+    "question": "What metric unit of mass equals one thousand grams?",
+    "answer": "Kilogram",
+    "acceptableAnswers": ["A kilogram", "Kilo", "Kg", "Kilogramme"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.nist.gov/comment/165141"],
+      "sourceRecord": "NIST explicitly describes a kilogram as a thousand grams."
+    }
+  },
+  {
+    "id": "trivia:euro-cash-introduced-2002",
+    "revision": 1,
+    "question": "Which shared European currency first appeared as banknotes and coins in January 2002?",
+    "answer": "Euro",
+    "acceptableAnswers": ["The euro"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.ecb.europa.eu/euro/intro/html/index.en.html"],
+      "sourceRecord": "The European Central Bank records the introduction of euro cash on 1 January 2002."
+    }
+  },
+  {
+    "id": "trivia:semaphore-two-hand-flags",
+    "revision": 1,
+    "question": "What signalling system uses two hand-held flags in different positions to represent letters?",
+    "answer": "Semaphore",
+    "acceptableAnswers": ["Flag semaphore"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/semaphore"],
+      "sourceRecord": "The semaphore entry describes visual signalling with two flags, one held in each hand, and shows an alphabet diagram."
+    }
+  },
+  {
+    "id": "trivia:vegan-animal-free-diet",
+    "revision": 1,
+    "question": "What word describes a diet that excludes all food from animals, including meat, eggs and dairy?",
+    "answer": "Vegan",
+    "acceptableAnswers": ["Vegan diet", "Veganism"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/vegan"],
+      "sourceRecord": "The vegan definition excludes food coming from animals, including meat, eggs and dairy."
+    }
+  },
+  {
+    "id": "trivia:allen-key-six-sided-tool",
+    "revision": 1,
+    "question": "What L-shaped hand tool has a six-sided shaft that fits into a matching recess in a screw head?",
+    "answer": "Allen key",
+    "acceptableAnswers": ["Hex key", "Allen wrench", "Hex wrench"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.collinsdictionary.com/dictionary/english/allen-key"],
+      "sourceRecord": "Collins identifies an Allen key as an L-shaped rod with hexagonal cross-section used in a recessed screw head."
+    }
+  },
+  {
+    "id": "trivia:ballot-paper-election",
+    "revision": 1,
+    "question": "What is the paper on which voters mark their choices in an election called?",
+    "answer": "Ballot",
+    "acceptableAnswers": ["Ballot paper", "A ballot", "A ballot paper"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/ballot"],
+      "sourceRecord": "The ballot entry describes a paper bearing election candidates or questions used to cast a secret vote."
+    }
+  },
+  {
+    "id": "trivia:compass-rose-map-directions",
+    "revision": 1,
+    "question": "What is the name of the direction diagram on a map that shows north, south, east and west?",
+    "answer": "Compass rose",
+    "acceptableAnswers": ["A compass rose"],
+    "category": "general",
+    "difficulty": "medium",
+    "kidAppropriate": true,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/compass%20rose"],
+      "sourceRecord": "A compass rose is a graduated circle printed on a chart to show direction."
+    }
+  },
+  {
+    "id": "trivia:sumac-tart-red-spice",
+    "revision": 1,
+    "question": "Which tart red spice used in Middle Eastern cooking is made from dried, ground berries?",
+    "answer": "Sumac",
+    "acceptableAnswers": ["Sumach"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/sumac"],
+      "sourceRecord": "The culinary definition identifies sumac as tart dried ground red berries used in Middle Eastern and Mediterranean cooking."
+    }
+  },
+  {
+    "id": "trivia:umami-savoury-taste",
+    "revision": 1,
+    "question": "What Japanese word names the savoury basic taste associated with glutamate?",
+    "answer": "Umami",
+    "acceptableAnswers": [],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/umami"],
+      "sourceRecord": "The umami entry identifies the rich meaty taste produced by compounds including glutamate; the term is Japanese."
+    }
+  },
+  {
+    "id": "trivia:velcro-french-velvet-hook-name",
+    "revision": 1,
+    "question": "Which fastening brand's name combines the French words for velvet and hook?",
+    "answer": "Velcro",
+    "acceptableAnswers": ["Velcro brand"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.velcro.com/original-thinking/our-timeline-of-innovation/"],
+      "sourceRecord": "The company's history explains VELCRO combines velour (velvet) and crochet (hook)."
+    }
+  },
+  {
+    "id": "trivia:rebus-picture-word-puzzle",
+    "revision": 1,
+    "question": "What is a puzzle that represents words or syllables using pictures whose names sound like them called?",
+    "answer": "Rebus",
+    "acceptableAnswers": ["A rebus"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/rebus"],
+      "sourceRecord": "The rebus entry describes pictures or symbols whose names represent the sounds of words or syllables."
+    }
+  },
+  {
+    "id": "trivia:diacritic-letter-marks",
+    "revision": 1,
+    "question": "What general term covers marks added to letters, such as accents, cedillas and umlauts?",
+    "answer": "Diacritic",
+    "acceptableAnswers": ["Diacritical mark", "Diacritics", "Diacritical marks"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/diacritic"],
+      "sourceRecord": "The diacritic entry describes a mark near or through a written character that changes its phonetic value."
+    }
+  },
+  {
+    "id": "trivia:troy-ounce-precious-metal-mass",
+    "revision": 1,
+    "question": "What unit used for precious metals has a mass of about 31.1 grams?",
+    "answer": "Troy ounce",
+    "acceptableAnswers": ["A troy ounce"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.royalmint.com/faqs/bullion/what-is-a-troy-ounce/"],
+      "sourceRecord": "The Royal Mint identifies a troy ounce as the precious-metal unit equal to approximately 31.1035 grams."
+    }
+  },
+  {
+    "id": "trivia:philately-stamp-study",
+    "revision": 1,
+    "question": "What is the name for the collection and study of postage stamps?",
+    "answer": "Philately",
+    "acceptableAnswers": [],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/philately"],
+      "sourceRecord": "The dictionary identifies philately as the collection and study of postage and imprinted stamps."
+    }
+  },
+  {
+    "id": "trivia:numismatics-coins-study",
+    "revision": 1,
+    "question": "What is the study or collection of coins, tokens and banknotes called?",
+    "answer": "Numismatics",
+    "acceptableAnswers": [],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/numismatics"],
+      "sourceRecord": "The numismatics entry describes the study or collection of coins, tokens and paper money."
+    }
+  },
+  {
+    "id": "trivia:dodecahedron-twelve-faces",
+    "revision": 1,
+    "question": "What is the name for a solid shape with twelve flat faces?",
+    "answer": "Dodecahedron",
+    "acceptableAnswers": ["A dodecahedron"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/dodecahedron"],
+      "sourceRecord": "A dodecahedron is a solid with twelve plane faces."
+    }
+  },
+  {
+    "id": "trivia:biscotti-twice-baked-italian-biscuits",
+    "revision": 1,
+    "question": "What are the crisp Italian biscuits whose name comes from 'baked twice' called?",
+    "answer": "Biscotti",
+    "acceptableAnswers": ["Biscotto"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/biscotti"],
+      "sourceRecord": "The biscotto entry identifies a crisp Italian biscuit and derives the word from bread baked twice."
+    }
+  },
+  {
+    "id": "trivia:truffle-underground-food-fungus",
+    "revision": 1,
+    "question": "What underground fruiting body of certain fungi is prized as a cooking ingredient?",
+    "answer": "Truffle",
+    "acceptableAnswers": ["A truffle", "Truffles"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/truffle"],
+      "sourceRecord": "The truffle entry describes an edible subterranean fruiting body of fungi."
+    }
+  },
+  {
+    "id": "trivia:pangram-every-alphabet-letter",
+    "revision": 1,
+    "question": "What is a sentence containing every letter of the English alphabet at least once called?",
+    "answer": "Pangram",
+    "acceptableAnswers": ["A pangram"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/pangram"],
+      "sourceRecord": "A pangram is a sentence containing all 26 English alphabet letters."
+    }
+  },
+  {
+    "id": "trivia:decanting-without-sediment",
+    "revision": 1,
+    "question": "What is the process of carefully pouring liquid off without disturbing the sediment at the bottom called?",
+    "answer": "Decanting",
+    "acceptableAnswers": ["Decantation", "Decant"],
+    "category": "general",
+    "difficulty": "hard",
+    "kidAppropriate": false,
+    "review": {
+      "reviewedAt": "2026-10-23T10:17:22Z",
+      "reviewer": "Codex source check",
+      "sources": ["https://www.merriam-webster.com/dictionary/decant"],
+      "sourceRecord": "The decant entry describes drawing off liquid without disturbing sediment or lower liquid layers."
+    }
+  }
+]
