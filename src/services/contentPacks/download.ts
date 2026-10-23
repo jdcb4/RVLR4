@@ -5,8 +5,8 @@ import {
   packDescriptorSchema,
 } from "./schema";
 
-// Set only when a reviewed, maintained publisher is available. No speculative endpoint.
-export const CONTENT_MANIFEST_URL: string | null = null;
+// Stable public address; hosting can move without changing the APK.
+export const CONTENT_MANIFEST_URL = "https://content.jboxgames.com/rvlry/v1/manifest.json";
 
 async function download(url: string, maxBytes: number): Promise<Uint8Array> {
   const parsed = new URL(url);
@@ -20,6 +20,7 @@ async function download(url: string, maxBytes: number): Promise<Uint8Array> {
       credentials: "omit",
       redirect: "error",
       cache: "no-store",
+      referrerPolicy: "no-referrer",
     });
     if (!response.ok || !response.body) throw new Error("Content download failed.");
     const length = response.headers.get("content-length");
@@ -52,7 +53,6 @@ async function download(url: string, maxBytes: number): Promise<Uint8Array> {
 }
 
 export async function checkContentUpdates() {
-  if (CONTENT_MANIFEST_URL === null) return { status: "unconfigured" as const };
   const bytes = await download(CONTENT_MANIFEST_URL, 64 * 1024);
   const manifest = contentManifestSchema.parse(
     JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes)),

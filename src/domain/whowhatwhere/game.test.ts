@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { whoWhatWhereDeviceSessionSchema } from "@/features/whowhatwhere/whoWhatWhereDeviceSession";
+
 import {
   correctWord,
   createMatch,
@@ -12,6 +14,7 @@ import {
   skipWord,
   startTurn,
 } from "./game";
+import { captureMatchWordPool } from "./matchWordPool";
 import { createDefaultSettings, createTeamSetups } from "./setup";
 import type { Category, WordEntry } from "./types";
 
@@ -67,7 +70,121 @@ describe("game domain", () => {
 
     expect(getCurrentWord(returned.activeTurn)?.word).toBe(skippedWord?.word.word);
     expect(returned.activeTurn?.currentWordSource).toBe("skipped");
+    expect(getCurrentWord(returned.activeTurn)?.hint).toBe(skippedWord?.word.hint);
+    expect(skippedWord?.word.hint).toMatch(/^Hint /);
+    expect(afterSkip.activeTurn?.wordHistory[0]?.word.hint).toBe(skippedWord?.word.hint);
+    expect(match.activeTurn?.wordQueue[0]?.hint).toMatch(/^Hint /);
   });
+
+  it("keeps the complete latest recap and counters while compacting aggregate history", () => {
+    const match = startTurn(
+      createMatch(createTeamSetups(2), createDefaultSettings()),
+      wordsFor("What"),
+      now,
+      () => 0,
+    );
+    const scored = correctWord(match, new Date("2026-05-05T10:00:01.000Z"));
+    const completed = endTurn(scored);
+    expect(completed.lastTurnSummary?.wordHistory[0]).toMatchObject({
+      word: match.activeTurn!.wordQueue[0]!,
+      status: "correct",
+      source: "main",
+      timestamp: "2026-05-05T10:00:01.000Z",
+    });
+    expect(completed.lastTurnSummary?.finalWord).toEqual(getCurrentWord(scored.activeTurn));
+    expect(completed.lastTurnSummary?.correctCount).toBe(1);
+    expect(completed.turnSummaries[0]).toEqual({
+      ...completed.lastTurnSummary,
+      wordHistory: [],
+      finalWord: null,
+    });
+    expect(getCurrentWord(scored.activeTurn)?.hint).toMatch(/^Hint /);
+  });
+
+  it.each(["unicode", "escaped"] as const)(
+    "keeps every checkpoint of a maximum-length %s game within the native 1 MiB envelope",
+    (encoding) => {
+      const settings = {
+        ...createDefaultSettings(),
+        teamCount: 4 as const,
+        totalRounds: 4 as const,
+        selectedCategories: ["What" as const],
+        skipLimit: -1 as const,
+      };
+      const teams = createTeamSetups(4).map((team, teamIndex) => ({
+        ...team,
+        name: `${teamIndex}${"界".repeat(23)}`,
+        players: Array.from({ length: 6 }, (_, playerIndex) => ({
+          ...team.players[0]!,
+          id: `${teamIndex}-${playerIndex}`,
+          name: `${teamIndex}-${playerIndex}${"界".repeat(21)}`,
+        })),
+      }));
+      // Three-byte Unicode stresses UTF-8; controls stress six-byte JSON escapes.
+      const character = encoding === "unicode" ? "界" : "\u0001";
+      const words = Array.from({ length: 2_000 }, (_, index) => ({
+        word: `${index}`.padEnd(80, character),
+        category: "What" as const,
+        hint: character.repeat(240),
+        difficulty: "easy" as const,
+      }));
+      const wordPool = captureMatchWordPool(words, settings, () => 0.5);
+      let match = createMatch(teams, settings);
+      let maxBytes = 0;
+      let maxEnvelope = "";
+      let revision = 0;
+      const checkCheckpoint = () => {
+        const raw = JSON.stringify({
+          storageVersion: 1,
+          revision: ++revision,
+          savedAt: now.toISOString(),
+          payload: {
+            schemaVersion: 1,
+            savedAt: now.toISOString(),
+            setup: { schemaVersion: 1, settings, teams },
+            mode: match.stage,
+            teamStep: 0,
+            match,
+            wordPool,
+            remainingMs: match.stage === "turn" ? 30_000 : null,
+            paused: true,
+            presentationStage: null,
+          },
+        });
+        const bytes = new TextEncoder().encode(raw).byteLength;
+        if (bytes > maxBytes) {
+          maxBytes = bytes;
+          maxEnvelope = raw;
+        }
+      };
+      for (let turn = 0; turn < 16; turn += 1) {
+        match = startTurn(match, wordPool, now, () => 0.5);
+        expect(match.lastTurnSummary).toBeNull();
+        checkCheckpoint();
+        if (encoding === "escaped") {
+          // Every clue can be skipped once and then replayed, doubling history.
+          for (let skip = 0; skip < 90; skip += 1) {
+            match = skipWord(match, now);
+            checkCheckpoint();
+          }
+        }
+        for (let guess = 0; guess < 90; guess += 1) {
+          match = correctWord(match, now);
+          checkCheckpoint();
+        }
+        expect(match.lastTurnSummary?.correctCount).toBe(90);
+        expect(match.lastTurnSummary?.wordHistory).toHaveLength(encoding === "escaped" ? 180 : 90);
+        expect(match.lastTurnSummary?.wordHistory[0]?.word.hint).toBe(character.repeat(240));
+      }
+      expect(match.stage).toBe("finalSummary");
+      expect(match.turnSummaries).toHaveLength(16);
+      expect(maxBytes).toBeLessThanOrEqual(1024 * 1024);
+      expect(
+        whoWhatWhereDeviceSessionSchema.safeParse(JSON.parse(maxEnvelope).payload).success,
+      ).toBe(true);
+    },
+    15_000,
+  );
 
   it("rotates teams, completes rounds, and builds tie results", () => {
     const settings = { ...createDefaultSettings(), totalRounds: 1 as const };

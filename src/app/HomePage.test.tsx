@@ -42,10 +42,8 @@ describe("Android prototype home", () => {
     const settings = screen.getByRole("button", { name: "Settings" });
     await user.click(settings);
     const dialog = screen.getByRole("dialog", { name: "Settings" });
-    expect(
-      within(dialog).getByRole("button", { name: /Check for new words.*not configured/ }),
-    ).toBeDisabled();
-    expect(within(dialog).getByText(/No internet connection is needed/)).toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Check for new words" })).toBeEnabled();
+    expect(within(dialog).getByText("Words and Trivia questions")).toBeInTheDocument();
     fireEvent(dialog, new Event("cancel", { cancelable: true }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(settings).toHaveFocus();

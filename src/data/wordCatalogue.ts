@@ -5,11 +5,28 @@ import who from "./catalogue/who.json";
 import { type CatalogueEntry, type CatalogueGame, catalogueSchema } from "./catalogueSchema";
 import { isDifficultyAllowed } from "./difficulty";
 
-const catalogue = catalogueSchema.parse([...who, ...what, ...where, ...kids]);
+function immutableCatalogue(entries: unknown): readonly CatalogueEntry[] {
+  const validated = catalogueSchema.parse(entries);
+  for (const entry of validated) {
+    Object.freeze(entry.aliases);
+    Object.freeze(entry.originalIds);
+    Object.freeze(entry.games);
+    Object.freeze(entry);
+  }
+  return Object.freeze(validated);
+}
+
+const catalogue = immutableCatalogue([...who, ...what, ...where, ...kids]);
+let activeCatalogue = catalogue;
 
 /** Metadata stays outside version-1 saved game payloads. */
 export function getWordCatalogue(): readonly CatalogueEntry[] {
   return catalogue;
+}
+
+/** Publish a complete validated pool after the installed pack has committed. */
+export function setActiveWordCatalogue(entries: readonly CatalogueEntry[]): void {
+  activeCatalogue = immutableCatalogue(entries);
 }
 
 export type WordPoolOptions = {
@@ -21,7 +38,7 @@ export function getCatalogueForGame(
   game: CatalogueGame,
   options: WordPoolOptions = {},
 ): readonly CatalogueEntry[] {
-  return catalogue.filter(
+  return activeCatalogue.filter(
     (entry) =>
       entry.games.includes(game) &&
       (!options.kidsMode || entry.kidAppropriate) &&

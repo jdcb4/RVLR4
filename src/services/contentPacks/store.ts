@@ -4,19 +4,23 @@ import { z } from "zod";
 import bundledTrivia from "../../data/trivia/bundled.json";
 import { triviaPackSchema } from "../../data/triviaSchema";
 import { deviceBridge } from "../nativeSnapshotStore";
+import { bundledWordsPack, mergeContentPacks, reconcileBundledPack } from "./merge";
 import {
   type ContentPack,
   type PackDescriptor,
   type PackKind,
   parsePack,
   validateDownload,
+  wordsPackSchema,
 } from "./schema";
 
 const pairSchema = z
   .object({ current: z.string().nullable(), previous: z.string().nullable() })
   .strict();
 type Pair = z.infer<typeof pairSchema>;
-const bundled = triviaPackSchema.parse(bundledTrivia);
+const bundledTriviaPack = triviaPackSchema.parse(bundledTrivia);
+const bundledPack = (kind: PackKind): ContentPack =>
+  kind === "trivia" ? bundledTriviaPack : bundledWordsPack;
 const key = (kind: PackKind) => `rvlry.content.${kind}`;
 
 async function readPair(kind: PackKind): Promise<Pair> {
@@ -34,7 +38,7 @@ function selectPack(pair: Pair, fallback: ContentPack) {
     if (raw === null) continue;
     try {
       const pack = parsePack(raw, fallback.kind);
-      if (pack.version >= fallback.version) return { pack, raw, source };
+      return { pack: reconcileBundledPack(fallback, pack), raw, source };
     } catch {
       /* Preserve rejected bytes; try the last valid pack, then bundled content. */
     }
@@ -42,27 +46,37 @@ function selectPack(pair: Pair, fallback: ContentPack) {
   return { pack: fallback, raw: null, source: "bundled" as const };
 }
 
-export async function loadTriviaCatalogue() {
+async function loadCatalogue(kind: PackKind) {
+  const bundled = bundledPack(kind);
+  const label = kind === "trivia" ? "Trivia" : "word";
   try {
-    const pair = await readPair("trivia");
+    const pair = await readPair(kind);
     const selected = selectPack(pair, bundled);
-    // Narrow the union at the validated public boundary.
-    const pack = triviaPackSchema.parse(selected.pack);
     return {
-      pack,
+      pack: selected.pack,
       source: selected.source,
       warning:
         selected.source !== "current" && pair.current !== null
-          ? "The installed Trivia pack could not be used. Using fallback content."
+          ? `The installed ${label} pack could not be used. Using fallback content.`
           : null,
     };
   } catch {
     return {
-      pack: triviaPackSchema.parse(bundledTrivia),
+      pack: parsePack(JSON.stringify(bundled), kind),
       source: "bundled" as const,
-      warning: "Installed Trivia content is unavailable. Using bundled content.",
+      warning: `Installed ${label} content is unavailable. Using bundled content.`,
     };
   }
+}
+
+export async function loadTriviaCatalogue() {
+  const result = await loadCatalogue("trivia");
+  return { ...result, pack: triviaPackSchema.parse(result.pack) };
+}
+
+export async function loadWordsCatalogue() {
+  const result = await loadCatalogue("words");
+  return { ...result, pack: wordsPackSchema.parse(result.pack) };
 }
 
 function highestVersion(pair: Pair, fallback: ContentPack): number {
@@ -90,51 +104,46 @@ function highestVersion(pair: Pair, fallback: ContentPack): number {
   return highest;
 }
 
-function checkQuestionRevisions(previous: ContentPack, next: ContentPack) {
-  if (previous.kind !== "trivia" || next.kind !== "trivia") return;
-  const old = new Map(previous.questions.map((question) => [question.id, question]));
-  for (const question of next.questions) {
-    const before = old.get(question.id);
-    if (
-      before &&
-      (question.revision < before.revision ||
-        (question.revision === before.revision &&
-          JSON.stringify(question) !== JSON.stringify(before)))
-    ) {
-      throw new Error(`Question ${question.id} changed without an increased revision.`);
-    }
-  }
-}
-
 let queue: Promise<unknown> = Promise.resolve();
 
-/** Complete replacement only; no saved-game key is read or modified. */
-export function installTriviaPack(bytes: Uint8Array, descriptor: PackDescriptor): Promise<void> {
+/** Atomically checkpoint the merged catalogue; game snapshots remain independent. */
+export function installContentPack(bytes: Uint8Array, descriptor: PackDescriptor): Promise<void> {
   // Capture caller-owned inputs before awaiting another install.
   const captured = new Uint8Array(bytes);
   const expected = { ...descriptor };
   const operation = queue.then(async () => {
-    if (expected.kind !== "trivia") throw new Error("Expected a Trivia pack.");
-    const { pack, raw } = await validateDownload(captured, expected);
-    const pair = await readPair("trivia"); // A failed read must not enable an overwrite.
+    const { pack } = await validateDownload(captured, expected);
+    const bundled = bundledPack(pack.kind);
+    const pair = await readPair(pack.kind); // A failed read must not enable an overwrite.
     if (pack.version <= highestVersion(pair, bundled))
       throw new Error("Only a newer content pack can be installed.");
     const previous = selectPack(pair, bundled);
-    checkQuestionRevisions(previous.pack, pack);
+    const merged = mergeContentPacks(previous.pack, pack);
+    // Merging can exceed the limit even when the downloaded batch itself fits.
+    const raw = JSON.stringify(merged);
+    parsePack(raw, pack.kind);
     const options = {
-      kind: "trivia" as const,
+      kind: pack.kind,
       value: raw,
       expectedCurrent: pair.current,
       retainedPrevious: previous.raw,
     };
     if (Capacitor.isNativePlatform()) await deviceBridge.installContent(options);
     else {
-      const latest = await readPair("trivia");
+      const latest = await readPair(pack.kind);
       if (latest.current !== pair.current)
         throw new Error("Content changed during installation. Retry.");
-      localStorage.setItem(key("trivia"), JSON.stringify({ current: raw, previous: previous.raw }));
+      localStorage.setItem(
+        key(pack.kind),
+        JSON.stringify({ current: raw, previous: previous.raw }),
+      );
     }
   });
   queue = operation.catch(() => undefined);
   return operation;
+}
+
+export function installTriviaPack(bytes: Uint8Array, descriptor: PackDescriptor): Promise<void> {
+  if (descriptor.kind !== "trivia") return Promise.reject(new Error("Expected a Trivia pack."));
+  return installContentPack(bytes, descriptor);
 }

@@ -3,6 +3,7 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { Link } from "react-router-dom";
 
 import { AppInfoHeaderButton, AppInfoOverlay } from "@/components/AppInfoOverlay";
+import { ContentUpdatesSetting } from "@/components/ContentUpdatesSetting";
 import { IconDisguise, IconTopHat, IconTrivia, IconWhoWhatWhere } from "@/components/icons";
 import { KidsModeSetting } from "@/components/KidsModeSetting";
 import { ModalDialog } from "@/components/ModalDialog";
@@ -100,13 +101,7 @@ export function PassNPlayHubPage() {
           <KidsModeSetting />
           <TriviaAvailabilitySetting />
           <ThemeChooser />
-          <div className="space-y-3 pt-3 text-typ-ui text-muted-foreground">
-            <p>Words are included on your phone. No internet connection is needed to play.</p>
-            <Button type="button" disabled variant="outline" className="w-full justify-start">
-              Check for new words — not configured yet
-            </Button>
-            <p>A word-update source will be added before the friends-testing release.</p>
-          </div>
+          <ContentUpdatesSetting />
         </ModalDialog>
       )}
       <AppInfoOverlay

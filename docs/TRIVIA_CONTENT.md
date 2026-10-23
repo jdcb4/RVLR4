@@ -6,7 +6,7 @@ Storage foundation shipped in 0.33.0; optional gameplay shipped in 0.35.0 behind
 
 `src/data/triviaSchema.ts` owns the strict schema. Each record has a stable `trivia:<slug>` ID, positive revision, question, answer, acceptable variants, optional explanation, one of eight agreed categories, easy/medium/hard difficulty, kids suitability, review timestamp/reviewer/source URLs and optional source-record reference. Editorial source archives and detailed review history remain separate from the runtime pack. These fields establish a review contract; schema validation cannot establish factual accuracy or substitute for human approval.
 
-IDs and normalised question texts must be unique within a pack. Answer variants must not repeat the primary answer or each other. Unicode, case, accents and punctuation are normalised only for duplicate comparison; displayed spelling is retained. Semantic duplicates still require editorial review. Corrections to an ID present in the selected previous pack must increase its revision. Removed records disappear from new selection; IDs must not be recycled in the editorial process, including after removal.
+IDs and normalised question texts must be unique within a pack. Answer variants must not repeat the primary answer or each other. Unicode, case, accents and punctuation are normalised only for duplicate comparison; displayed spelling is retained. Semantic duplicates still require editorial review. Corrections to an ID present in the selected previous pack must increase its revision. Only IDs explicitly listed in removedIds disappear from new selection; omitted records remain. Tombstones are permanent and IDs must not be recycled.
 
 `expiresAt` is an optional exclusive UTC timestamp, e.g. `2026-12-31T13:00:00.000Z`. Date-only values are rejected to avoid timezone ambiguity. Ingestion must convert an intended local expiry date explicitly. `isTriviaQuestionEligible` combines expiry, kids suitability and optional difficulty, and must be called before presenting any unshown question, including after resume. It uses device time; the offline app cannot establish trusted network time. Questions with no expiry remain eligible.
 
@@ -16,15 +16,15 @@ Publish locally after editorial review:
 pnpm publish:trivia <reviewed-pack.json> <output-directory> <https-base-url/>
 ```
 
-The command validates the complete pack, refuses empty publications, writes compact `trivia-vN.json` and a matching manifest with its exact byte length and SHA-256. It refuses to overwrite existing output versions and uploads nothing. Keep its output outside committed source (for example under `out/`). Add the descriptor to the publisher's shared manifest alongside the independent word descriptor when applicable. Full source verification/ingestion and hosting remain separate work.
+The command validates the complete pack, refuses empty publications, writes compact `trivia-vN.json` and a matching manifest with its exact byte length and SHA-256. It refuses to overwrite existing output versions and uploads nothing. Keep its output outside committed source (for example under `out/`). This single-pack command is an export utility. The maintained live publishing path is the cumulative ledger builder in [Content updates](CONTENT_UPDATES.md); use it to publish updates without losing earlier additions.
 
 ## Download and activation
 
-`src/services/contentPacks/` owns a shared version-1 manifest with at most one `trivia` and one `words` descriptor. Each has an independent positive version, HTTPS URL, byte length and lowercase full-payload SHA-256. The schema already recognises word packs using the existing catalogue schema, but the existing word-game adapters still use their bundled data. Word activation/UI integration is not implemented by this milestone.
+`src/services/contentPacks/` owns a shared version-1 manifest with at most one `trivia` and one `words` descriptor. Each has an independent positive version, HTTPS URL, byte length and lowercase full-payload SHA-256. Both kinds are now installed additively from Settings in 0.41.0; word-game adapters use installed content after local startup loading.
 
-`CONTENT_MANIFEST_URL` is null until a maintained publisher exists. Checking returns `unconfigured` without network access. Future Settings integration calls the bounded downloader, then the matching installation service. Downloads omit credentials, reject redirects, time out after 20 seconds and enforce 64 KiB manifests / 8 MiB packs while streaming. Use final HTTPS asset URLs, not redirecting Gist share links. HTTPS authenticates the publisher; the hash detects mismatched/corrupt payloads, not a compromised publisher. No signing infrastructure is introduced.
+The live URL, downloader limits, explicit-removal protocol, cumulative publisher and recovery behavior are documented in [Content updates](CONTENT_UPDATES.md). No game data is uploaded. Downloads are manual; gameplay works offline.
 
-Trivia installation verifies exact downloaded bytes, UTF-8, hash, schema, kind/version, duplicate identities and question revisions before writing. It rejects downgrades and unknown installed schema versions. Installation errors leave stored content intact. Load tries validated current, previous, then bundled content and reports fallback warnings for the future UI. Reads failing altogether block installation rather than treating storage as empty.
+Trivia installation verifies exact downloaded bytes, UTF-8, hash, schema, kind/version, duplicate identities and question revisions before writing. It rejects downgrades and unknown installed schema versions. Installation errors leave stored content intact. Load tries validated current, previous, then bundled content and reports fallback warnings to callers. Reads failing altogether block installation rather than treating storage as empty.
 
 ## Native durability and isolation
 
@@ -32,7 +32,7 @@ The `RvlryDevice` bridge exposes `readContent` and `installContent`. `rvlry-cont
 
 The browser development adapter uses `rvlry.content.trivia` and a single localStorage replacement; it is not evidence of native durability and is not a multi-tab transactional database. No game session keys are touched by content updates.
 
-Trivia saves selected question/answer copies, order, progress, reveal state, optional end-mode shared answers and nullable boolean marks in `trivia.device.v3`, with `schemaVersion: 3`. This keeps an in-progress quiz independent of pack replacement. Earlier version-1 and version-2 sessions are not loaded or migrated; upgrading to 0.37.0 starts a fresh Trivia quiz under the prerelease compatibility policy. Other games and content packs keep their own keys.
+Trivia saves selected question/answer copies, order, progress, reveal state, optional end-mode shared answers and nullable boolean marks in `trivia.device.v3`, with `schemaVersion: 3`. This keeps an in-progress quiz independent of catalogue updates. Earlier version-1 and version-2 sessions are not loaded or migrated; upgrading to 0.37.0 starts a fresh Trivia quiz under the prerelease compatibility policy. Other games and content packs keep their own keys.
 
 In 0.38.0, setup is a temporary draft until Start quiz commits the selected questions. Reset removes the quiz snapshot; valid older setup-only snapshots are cleaned up without a resume chooser, and failed removal is retryable. Completed score and recap remain saved until reset. The session schema, existing active quizzes and content pack version are unchanged.
 

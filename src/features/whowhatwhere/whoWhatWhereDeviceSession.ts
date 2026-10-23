@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { type MatchPoolWord, matchWordPoolSchema } from "@/domain/whowhatwhere/matchWordPool";
 import { createDefaultSettings, createTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState, TeamSetup } from "@/domain/whowhatwhere/types";
 import type { WhoWhatWhereAppMode } from "@/features/whowhatwhere/whoWhatWhereSingleplayerTransitions";
@@ -23,6 +24,8 @@ export type WhoWhatWhereDeviceSession = {
   readonly mode: WhoWhatWhereAppMode;
   readonly teamStep: number;
   readonly match: MatchState | null;
+  /** Captured at match creation; downloaded updates apply to the next match. */
+  readonly wordPool?: readonly MatchPoolWord[] | null | undefined;
   readonly remainingMs: number | null;
   readonly paused: boolean;
   /** The engine already points at the next team while the completed turn is reviewed. */
@@ -46,6 +49,7 @@ export const whoWhatWhereDeviceSessionSchema = z
     ]),
     teamStep: z.number().int().nonnegative(),
     match: whoWhatWhereMatchSchema.shape.match.nullable(),
+    wordPool: matchWordPoolSchema.nullable().optional(),
     remainingMs: z.number().finite().min(0).max(75_000).nullable(),
     paused: z.boolean(),
     presentationStage: z.enum(["recap", "roundComplete"]).nullable().default(null),
@@ -78,6 +82,7 @@ export function createWhoWhatWhereDeviceSession(): WhoWhatWhereDeviceSession {
     mode: "settings",
     teamStep: 0,
     match: null,
+    wordPool: null,
     remainingMs: null,
     paused: false,
     presentationStage: null,

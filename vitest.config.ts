@@ -12,6 +12,9 @@ export default defineConfig({
   },
   test: {
     environment: "jsdom",
+    // Catalogue and maximum-save stress tests are memory/CPU intensive.
+    // Bound parallel workers rather than relaxing their timeout/assertions.
+    maxWorkers: 4,
     globals: false,
     setupFiles: ["./src/tests/setupTests.ts"],
     exclude: [

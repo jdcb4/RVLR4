@@ -1,24 +1,63 @@
 import { z } from "zod";
 
-import { catalogueSchema } from "../../data/catalogueSchema";
+import { catalogueIdentity, catalogueSchema } from "../../data/catalogueSchema";
 import { triviaPackSchema } from "../../data/triviaSchema";
 
 export const MAX_PACK_BYTES = 8 * 1024 * 1024;
 const packKindSchema = z.enum(["trivia", "words"]);
 export type PackKind = z.infer<typeof packKindSchema>;
 
-const wordsPackSchema = z
+/** Canonical display spelling may change without changing its normalised identity. */
+export const wordId = (word: string) => `word:${catalogueIdentity(word)}`;
+
+export const wordsPackSchema = z
   .object({
     schemaVersion: z.literal(1),
     kind: z.literal("words"),
     version: z.number().int().positive().safe(),
     publishedAt: z.string().datetime(),
     entries: catalogueSchema,
+    removedIds: z
+      .array(
+        z
+          .string()
+          .refine(
+            (id) => /^word:[\p{L}\p{N}]+$/u.test(id) && wordId(id.slice(5)) === id,
+            "Use a normalised word: identity.",
+          ),
+      )
+      .max(20000)
+      .default([]),
   })
-  .strict();
+  .strict()
+  .superRefine((pack, context) => {
+    if (
+      pack.entries.some((entry) =>
+        [entry.word, ...entry.aliases].some((name) => !catalogueIdentity(name)),
+      )
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["entries"],
+        message: "Words and aliases need a non-empty normalised identity.",
+      });
+    }
+    const ids = new Set(pack.entries.map((entry) => wordId(entry.word)));
+    if (new Set(pack.removedIds).size !== pack.removedIds.length) {
+      context.addIssue({ code: "custom", path: ["removedIds"], message: "Duplicate removed ID." });
+    }
+    if (pack.removedIds.some((id) => ids.has(id))) {
+      context.addIssue({
+        code: "custom",
+        path: ["removedIds"],
+        message: "An ID cannot be upserted and removed in the same batch.",
+      });
+    }
+  });
 
 const contentPackSchema = z.union([triviaPackSchema, wordsPackSchema]);
 export type ContentPack = z.infer<typeof contentPackSchema>;
+export type WordsPack = z.infer<typeof wordsPackSchema>;
 
 export const packDescriptorSchema = z
   .object({

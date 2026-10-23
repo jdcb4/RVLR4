@@ -1,6 +1,6 @@
 {
   "name": "rvlry-android",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.12.0",
@@ -32,7 +32,11 @@
     "android:test": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task Test",
     "android:test-device": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/android-build.ps1 -Task DeviceTest",
     "publish:trivia": "tsx scripts/publish-trivia-pack.mts",
-    "export:notices": "tsx scripts/export-third-party-notices.mts"
+    "export:notices": "tsx scripts/export-third-party-notices.mts",
+    "content:build": "tsx scripts/build-content-endpoint.mts",
+    "content:check-deploy": "pnpm content:build && wrangler deploy --dry-run --config content-endpoint/wrangler.jsonc",
+    "content:deploy": "pnpm content:build && wrangler deploy --config content-endpoint/wrangler.jsonc",
+    "content:verify-live": "tsx scripts/check-content-endpoint.mts"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",
@@ -74,7 +78,8 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.69.0",
     "vite": "^6.4.3",
-    "vitest": "^3.2.7"
+    "vitest": "^3.2.7",
+    "wrangler": "4.152.0"
   },
   "pnpm": {
     "peerDependencyRules": {

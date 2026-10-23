@@ -16,7 +16,7 @@ The current deliverable is a standalone offline Android app with Who What Where,
 - `src/features/trivia/` — optional cooperative quiz with shared answers and independent recovery.
 - `src/features/game-app-hooks/` — stable controller binding and bounded-history measurement.
 - `src/components/` — shared phone shell and UI.
-- `src/data/` — bundled words; downloadable packs are a later milestone.
+- `src/data/` — bundled words and Trivia; installed content merges through `src/services/contentPacks/`.
 - `scripts/android-build.ps1` — repeatable build/test commands.
 
 ## Commands
@@ -29,7 +29,8 @@ commands in [ANDROID.md](ANDROID.md); browser tests alone do not verify them.
 ## Active documentation
 
 - [Roadmap](ROADMAP.md) — future work only.
-- [Trivia content storage](TRIVIA_CONTENT.md) — implemented pack/schema/publishing contract; 600-question bank and editorial audit; publisher integration pending.
+- [Content updates](CONTENT_UPDATES.md) — additive words/Trivia installation, stable public endpoint and cumulative publishing ledger.
+- [Trivia content storage](TRIVIA_CONTENT.md) — question schema, durable storage, 600-question bank and editorial audit.
 - [Trivia discovery](TRIVIA_DISCOVERY.md) — confirmed cooperative direction, source findings and ingestion candidates; no candidate bank approved.
 - [Google Play preparation](release/google-play/README.md) — draft listing/privacy materials, guarded bundle builds and remaining release gates.
 - [Android build and testing](ANDROID.md) — local toolchain, APK and device checks.

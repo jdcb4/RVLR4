@@ -14,9 +14,9 @@ The app does not send this gameplay information to the publisher or other player
 
 ## Collection, sharing and advertising
 
-The current app does not collect or share personal data off your device, sell personal data, display advertising, or include analytics or advertising SDKs. It does not request access to your contacts, microphone, camera or location. Fonts, artwork, words and trivia questions are bundled with the app.
+The app does not transmit gameplay data, sell personal data, display advertising, or include analytics or advertising SDKs. It does not request access to your contacts, microphone, camera or location. Fonts, artwork and initial word/Trivia catalogues are bundled with the app.
 
-The app declares internet permission for planned content updates, but no content-update endpoint is configured in this version. Playing the games does not require an internet connection. If future features change the app's data practices, this policy and the store declarations must be updated before those features are released.
+If you tap Check for new words, the app requests public word and Trivia update files from content.jboxgames.com, hosted by Cloudflare. The app sends no player names, answers, saved games, account identifiers or cookies with these requests. As with other HTTPS services, Cloudflare receives network information such as your IP address and request details to deliver and protect the service. Application request logging/Worker observability is disabled; provider-level processing and retention must be confirmed before publishing the final policy and Play declaration. Updates are manual, and playing does not require an internet connection.
 
 ## Children and shared play
 

@@ -52,34 +52,31 @@ const entrySchema = z
 
 export type CatalogueEntry = z.infer<typeof entrySchema>;
 
-export const catalogueSchema = z
-  .array(entrySchema)
-  .min(1)
-  .superRefine((entries, context) => {
-    const identities = new Map<string, number>();
-    const originals = new Map<string, number>();
-    entries.forEach((entry, index) => {
-      for (const name of [entry.word, ...entry.aliases]) {
-        const identity = catalogueIdentity(name);
-        const owner = identities.get(identity);
-        if (owner !== undefined && owner !== index) {
-          context.addIssue({
-            code: "custom",
-            message: `Answer/alias ${name} also belongs to entry ${owner}.`,
-            path: [index, "word"],
-          });
-        }
-        identities.set(identity, index);
+export const catalogueSchema = z.array(entrySchema).superRefine((entries, context) => {
+  const identities = new Map<string, number>();
+  const originals = new Map<string, number>();
+  entries.forEach((entry, index) => {
+    for (const name of [entry.word, ...entry.aliases]) {
+      const identity = catalogueIdentity(name);
+      const owner = identities.get(identity);
+      if (owner !== undefined && owner !== index) {
+        context.addIssue({
+          code: "custom",
+          message: `Answer/alias ${name} also belongs to entry ${owner}.`,
+          path: [index, "word"],
+        });
       }
-      for (const originalId of entry.originalIds) {
-        if (originals.has(originalId)) {
-          context.addIssue({
-            code: "custom",
-            message: `Original ${originalId} is assigned more than once.`,
-            path: [index, "originalIds"],
-          });
-        }
-        originals.set(originalId, index);
+      identities.set(identity, index);
+    }
+    for (const originalId of entry.originalIds) {
+      if (originals.has(originalId)) {
+        context.addIssue({
+          code: "custom",
+          message: `Original ${originalId} is assigned more than once.`,
+          path: [index, "originalIds"],
+        });
       }
-    });
+      originals.set(originalId, index);
+    }
   });
+});

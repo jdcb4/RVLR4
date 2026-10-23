@@ -5,8 +5,20 @@ import { beforeEach, expect, it, vi } from "vitest";
 import bundled from "../../data/trivia/bundled.json";
 import { isTriviaQuestionEligible, triviaPackSchema } from "../../data/triviaSchema";
 import { checkContentUpdates, downloadContentPack } from "./download";
-import { contentManifestSchema, type PackDescriptor, sha256, validateDownload } from "./schema";
-import { installTriviaPack, loadTriviaCatalogue } from "./store";
+import { bundledWordsPack } from "./merge";
+import {
+  contentManifestSchema,
+  type PackDescriptor,
+  sha256,
+  validateDownload,
+  wordId,
+} from "./schema";
+import {
+  installContentPack,
+  installTriviaPack,
+  loadTriviaCatalogue,
+  loadWordsCatalogue,
+} from "./store";
 
 const bridge = vi.hoisted(() => ({ native: false, readContent: vi.fn(), installContent: vi.fn() }));
 vi.mock("@capacitor/core", () => ({
@@ -17,7 +29,7 @@ vi.mock("@capacitor/core", () => ({
 const question = {
   id: "trivia:test-question",
   revision: 1,
-  question: "Which planet is known as the Red Planet?",
+  question: "Which planet does the synthetic content-update fixture identify?",
   answer: "Mars",
   acceptableAnswers: [],
   category: "science-nature" as const,
@@ -40,7 +52,7 @@ async function download(value: unknown) {
   const raw = JSON.stringify(value);
   const bytes = new TextEncoder().encode(raw);
   const descriptor: PackDescriptor = {
-    kind: "trivia",
+    kind: (value as { kind: PackDescriptor["kind"] }).kind,
     version: (value as { version: number }).version,
     url: "https://example.com/trivia.json",
     bytes: bytes.byteLength,
@@ -70,7 +82,15 @@ it("loads the curated starter bank from the APK without requiring a download", a
     source: "bundled",
     warning: null,
   });
-  expect(await checkContentUpdates()).toEqual({ status: "unconfigured" });
+  const fetch = vi.fn();
+  vi.stubGlobal("fetch", fetch);
+  await loadTriviaCatalogue();
+  expect(fetch).not.toHaveBeenCalled();
+  fetch.mockResolvedValue(new Response(JSON.stringify({ schemaVersion: 1, packs: [] })));
+  expect(await checkContentUpdates()).toEqual({
+    status: "available",
+    manifest: { schemaVersion: 1, packs: [] },
+  });
 });
 
 it("installs independently of word content and games, and reloads without shared mutable records", async () => {
@@ -78,8 +98,10 @@ it("installs independently of word content and games, and reloads without shared
   localStorage.setItem("rvlry.content.words", "word pack");
   await install(pack(3));
   const first = await loadTriviaCatalogue();
-  first.pack.questions[0]!.answer = "Changed by caller";
-  expect((await loadTriviaCatalogue()).pack.questions[0]!.answer).toBe("Mars");
+  first.pack.questions.find((entry) => entry.id === question.id)!.answer = "Changed by caller";
+  expect(
+    (await loadTriviaCatalogue()).pack.questions.find((entry) => entry.id === question.id)!.answer,
+  ).toBe("Mars");
   expect(localStorage.getItem("rvlry.snapshot.whowhatwhere.device-session.v1")).toBe("saved game");
   expect(localStorage.getItem("rvlry.content.words")).toBe("word pack");
 });
@@ -103,7 +125,7 @@ it("rejects duplicate questions, IDs, answer variants and unsupported schemas", 
   duplicate.questions.push({
     ...question,
     id: "trivia:another",
-    question: "Which planet is known as the RED planet!",
+    question: "Which planet does the synthetic content-update FIXTURE identify!",
   });
   expect(triviaPackSchema.safeParse(duplicate).success).toBe(false);
   duplicate.questions[1]!.question = "Something else?";
@@ -122,7 +144,7 @@ it("rejects duplicate questions, IDs, answer variants and unsupported schemas", 
   ).toBe(false);
 });
 
-it("requires newer packs and increased revisions for corrections while allowing removals", async () => {
+it("requires newer packs and increased revisions; omission retains records and explicit removal persists", async () => {
   await install(pack(3));
   await expect(install(pack(3))).rejects.toThrow("newer");
   const changed = pack(4);
@@ -131,7 +153,14 @@ it("requires newer packs and increased revisions for corrections while allowing 
   changed.questions[0]!.revision++;
   await install(changed);
   await install({ ...pack(5), questions: [] });
-  expect((await loadTriviaCatalogue()).pack.questions).toEqual([]);
+  expect(
+    (await loadTriviaCatalogue()).pack.questions.find((entry) => entry.id === question.id)?.answer,
+  ).toBe("Venus");
+  await install({ ...pack(6), questions: [], removedIds: [question.id] });
+  const result = (await loadTriviaCatalogue()).pack;
+  expect(result.questions.find((entry) => entry.id === question.id)).toBeUndefined();
+  expect(result.questions).toHaveLength(bundled.questions.length);
+  expect(result.removedIds).toContain(question.id);
 });
 
 it("recovers previous content and preserves it when replacing a corrupt current pack", async () => {
@@ -195,6 +224,102 @@ it("passes the exact checkpoint to native CAS and does not acknowledge a failed 
     }),
   );
   expect((await loadTriviaCatalogue()).pack.version).toBe(bundled.version + 3);
+});
+
+it("retains lower-version installed additions and tombstones after an APK bundle upgrade", async () => {
+  const raw = JSON.stringify({ ...pack(1), version: 1, removedIds: [bundled.questions[0]!.id] });
+  localStorage.setItem(storageKey, JSON.stringify({ current: raw, previous: null }));
+  const loaded = await loadTriviaCatalogue();
+  expect(loaded.source).toBe("current");
+  expect(loaded.warning).toBeNull();
+  expect(loaded.pack.version).toBe(bundled.version);
+  expect(loaded.pack.questions).toHaveLength(bundled.questions.length);
+  expect(loaded.pack.questions.some((entry) => entry.id === question.id)).toBe(true);
+  expect(loaded.pack.questions.some((entry) => entry.id === bundled.questions[0]!.id)).toBe(false);
+  await install({ ...pack(2), questions: [] });
+  const reloaded = (await loadTriviaCatalogue()).pack;
+  expect(reloaded.questions.some((entry) => entry.id === question.id)).toBe(true);
+  expect(reloaded.removedIds).toEqual([bundled.questions[0]!.id]);
+});
+
+it("installs word additions, corrections and removals independently with durable tombstones", async () => {
+  const addition = {
+    ...bundledWordsPack.entries[0]!,
+    word: "Synthetic content fixture alpha",
+    aliases: [],
+    originalIds: [],
+  };
+  const makeWords = (version: number, entries: unknown[], removedIds: string[] = []) => ({
+    schemaVersion: 1,
+    kind: "words",
+    version,
+    publishedAt: "2026-10-23T00:00:00.000Z",
+    entries,
+    removedIds,
+  });
+  const installWords = async (value: unknown) => {
+    const { bytes, descriptor } = await download(value);
+    await installContentPack(bytes, descriptor);
+  };
+  await install(pack(1));
+  const triviaBefore = localStorage.getItem(storageKey);
+  expect((await loadWordsCatalogue()).source).toBe("bundled");
+  await installWords(makeWords(2, [addition]));
+  expect((await loadWordsCatalogue()).pack.entries).toHaveLength(
+    bundledWordsPack.entries.length + 1,
+  );
+  const corrected = { ...addition, hint: "Updated description." };
+  await installWords(makeWords(3, [corrected]));
+  expect(
+    (await loadWordsCatalogue()).pack.entries.find((entry) => entry.word === addition.word)?.hint,
+  ).toBe("Updated description.");
+  await installWords(
+    makeWords(4, [], [wordId(addition.word), wordId(bundledWordsPack.entries[0]!.word)]),
+  );
+  const removed = (await loadWordsCatalogue()).pack;
+  expect(removed.entries).toHaveLength(bundledWordsPack.entries.length - 1);
+  expect(removed.removedIds).toHaveLength(2);
+  await installWords(makeWords(5, []));
+  expect((await loadWordsCatalogue()).pack.removedIds).toEqual(removed.removedIds);
+  await expect(installWords(makeWords(6, [addition]))).rejects.toThrow("cannot be restored");
+  await expect(installWords(makeWords(5, []))).rejects.toThrow("newer");
+  expect(localStorage.getItem(storageKey)).toBe(triviaBefore);
+});
+
+it("rejects final-pool word alias collisions before atomic storage changes", async () => {
+  const baseline = bundledWordsPack.entries[0]!;
+  const value = {
+    ...bundledWordsPack,
+    version: 2,
+    entries: [
+      {
+        ...baseline,
+        word: "Synthetic word collision fixture",
+        aliases: [baseline.word],
+        originalIds: [],
+      },
+    ],
+  };
+  const { bytes, descriptor } = await download(value);
+  await expect(installContentPack(bytes, descriptor)).rejects.toThrow("also belongs");
+  expect(localStorage.getItem("rvlry.content.words")).toBeNull();
+});
+
+it("preserves every checkpoint when a merged catalogue exceeds the native 8 MiB bound", async () => {
+  const largePack = (prefix: string, version: number) => ({
+    ...pack(version),
+    questions: Array.from({ length: 3400 }, (_, index) => ({
+      ...question,
+      id: `trivia:${prefix}-${index}`,
+      question: `Synthetic ${prefix} fixture number ${index}?`,
+      explanation: "x".repeat(1000),
+    })),
+  });
+  const prior = JSON.stringify(largePack("prior", 1));
+  localStorage.setItem(storageKey, JSON.stringify({ current: prior, previous: null }));
+  const before = localStorage.getItem(storageKey);
+  await expect(install(largePack("incoming", 2))).rejects.toThrow("8 MiB");
+  expect(localStorage.getItem(storageKey)).toBe(before);
 });
 
 it("expiry is exclusive, evaluated again on resume, and combined with kids/difficulty filters", () => {

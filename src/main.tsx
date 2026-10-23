@@ -7,14 +7,13 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
+import { initializeApp } from "@/app/initializeApp";
 import { router } from "@/app/router";
-import { initializeContentPreferences } from "@/services/contentPreference";
-import { initializeTheme } from "@/themes/themePreference";
 
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("Missing #root element");
 
-void Promise.all([initializeTheme(), initializeContentPreferences()]).then(() =>
+void initializeApp().then(() =>
   createRoot(rootEl).render(
     <StrictMode>
       <RouterProvider router={router} />

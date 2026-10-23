@@ -109,6 +109,8 @@ export function startTurn(
   return {
     ...match,
     stage: "turn",
+    // The previous recap has been dismissed; only aggregate counters are needed now.
+    lastTurnSummary: null,
     activeTurn: {
       startedAt,
       endsAt,
@@ -335,7 +337,13 @@ export function endTurn(match: MatchState): MatchState {
     wordHistory: activeTurn.wordHistory,
     finalWord,
   };
-  const turnSummaries = [...match.turnSummaries, lastTurnSummary];
+  // Only the latest recap displays clues. Aggregates need the counters alone,
+  // leaving room for the frozen catalogue and active deck in the native save.
+  const turnSummaries = [...match.turnSummaries, lastTurnSummary].map((summary) => ({
+    ...summary,
+    wordHistory: [],
+    finalWord: null,
+  }));
   const nextDescriberIndex = ((match.describerIndexes[team.id] ?? 0) + 1) % teamPlayers.length;
   let nextTeamIndex = match.teamIndex + 1;
   let nextRoundNumber = match.roundNumber;

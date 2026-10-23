@@ -399,3 +399,11 @@ Use headings above Trivia options, only 10/20/30-question presets, and eight cat
 Keep the existing Capacitor/React runtime and package ID while preparing Google Play distribution. iOS is deferred. Release AAB builds require four process-scoped upload-key variables or an explicit unsigned preparation flag; never use a debug-key fallback. The release Vite mode omits source maps and the helper refuses stale-web shortcuts for bundles. No signing secrets or release artifacts belong in git. Production key ownership/backup, publisher identity, policy hosting, audience declarations and Play testing remain release gates in `docs/release/google-play/README.md`. Local preparation does not submit or publish anything.
 
 JavaScript/font notices are generated from installed lockfile dependencies by `pnpm export:notices`. Native transitive notices still require a separate final release audit. No new runtime dependency is introduced.
+
+## 2026-10-23: additive public content updates
+
+Use a shared versioned manifest at https://content.jboxgames.com/rvlry/v1/manifest.json with separate words/Trivia streams. Omission never removes records; permanent explicit ID tombstones and final-pool identity validation prevent truncation and duplicates. Native SQLite checkpoints the merged catalogue independently of saved games. WWW freezes a bounded match pool so later updates cannot change active play. See CONTENT_UPDATES.md for protocol and publishing rules.
+
+Host approved public JSON using Cloudflare Workers Static Assets, without a backend database, auth or runtime Worker logic. Pin Wrangler 4.152.0 as deployment-only tooling; it is not included in the APK. Immutable publication baselines plus append-only reviewed batches rebuild cumulative packs reproducibly, independent of later APK source changes. Manual downloads send no gameplay data; release privacy materials now account for provider network metadata. Hosting can move behind the stable hostname without updating the APK.
+
+Maximum-save stress coverage runs with at most four Vitest workers to avoid CPU/memory contention against full catalogue parsing; assertions and timeout limits are unchanged. Completed WWW aggregate records retain statistics, while the visible latest recap and active replay clues retain full content. This avoids unbounded duplicate history beside the frozen pool.

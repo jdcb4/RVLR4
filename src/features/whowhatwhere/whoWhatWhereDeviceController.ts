@@ -7,6 +7,7 @@ import {
   skipWord,
   startTurn,
 } from "@/domain/whowhatwhere/game";
+import { captureMatchWordPool } from "@/domain/whowhatwhere/matchWordPool";
 import { reconcileTeamSetups } from "@/domain/whowhatwhere/setup";
 import type { GameSettings, MatchState, TeamSetup } from "@/domain/whowhatwhere/types";
 import {
@@ -166,17 +167,32 @@ export class WhoWhatWhereDeviceController {
         this.hydrationFailed = false;
         this.storageError = "";
         this.notice = recovered ? "Recovered the previous saved checkpoint." : "";
-        const restored =
+        let restored =
           value?.match?.stage === "results"
             ? {
                 ...value,
                 match: null,
+                wordPool: null,
                 remainingMs: null,
                 mode: "settings" as const,
                 teamStep: 0,
                 presentationStage: null,
               }
             : value;
+        if (restored?.match && !restored.wordPool) {
+          const { getWhoWhatWhereWordList } = await import("@/domain/whowhatwhere/wordList");
+          const settings = restored.match.settings;
+          restored = {
+            ...restored,
+            wordPool: captureMatchWordPool(
+              getWhoWhatWhereWordList({
+                difficulty: settings.wordDifficulty,
+                kidsMode: settings.kidsMode,
+              }),
+              settings,
+            ),
+          };
+        }
         this.savedGameAvailable = Boolean(
           restored && (restored.match || !["landing", "settings"].includes(restored.mode)),
         );
@@ -278,6 +294,7 @@ export class WhoWhatWhereDeviceController {
       mode,
       teamStep,
       match: null,
+      wordPool: null,
       remainingMs: null,
       presentationStage: null,
     });
@@ -326,6 +343,7 @@ export class WhoWhatWhereDeviceController {
         ...current,
         setup: { ...current.setup, settings },
         match: result.match,
+        wordPool: captureMatchWordPool(words, settings),
         remainingMs: null,
         mode: "ready",
         presentationStage: null,
@@ -347,16 +365,10 @@ export class WhoWhatWhereDeviceController {
     const expectedMatch = this.session.match;
     const pauseEpoch = this.pauseEpoch;
     try {
-      const { getWhoWhatWhereWordList } = await import("@/domain/whowhatwhere/wordList");
-      // Backgrounding or navigating while the bundled module loads cancels this action.
+      // Keep the transition asynchronous so lifecycle changes can cancel disclosure.
+      await Promise.resolve();
       if (this.session.paused || !this.deviceActive || this.session.match !== expectedMatch) return;
-      const match = startTurn(
-        expectedMatch,
-        getWhoWhatWhereWordList({
-          difficulty: expectedMatch.settings.wordDifficulty,
-          kidsMode: expectedMatch.settings.kidsMode,
-        }),
-      );
+      const match = startTurn(expectedMatch, this.session.wordPool ?? []);
       // Save the generated deck before a timer or private prompt becomes visible.
       const next = {
         ...this.current(),
@@ -513,6 +525,7 @@ export class WhoWhatWhereDeviceController {
       mode: "settings",
       teamStep: 0,
       match: null,
+      wordPool: null,
       remainingMs: null,
       paused: true,
       presentationStage: null,

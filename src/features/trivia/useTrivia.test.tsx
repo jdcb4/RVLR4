@@ -63,6 +63,7 @@ function content(items = questions()) {
       version: 2,
       publishedAt: "2026-01-01T00:00:00.000Z",
       questions: items,
+      removedIds: [],
     },
     source: "current" as const,
     warning: null,

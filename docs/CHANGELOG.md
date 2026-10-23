@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.41.0 — 23 October 2026
+
+- Enable Settings → Check for new words for both word and Trivia catalogues, backed by a live stable HTTPS endpoint at content.jboxgames.com. Downloads are manual; gameplay remains offline.
+- Merge additions and corrections without deleting omitted records. Validate duplicate identities, revisions, hashes and sizes, retain explicit removal tombstones, and commit independently through native SQLite with recovery checkpoints.
+- Load installed words before game creation and preserve running WWW matches with a bounded saved word pool. Existing selected Trivia questions, Hat decks and Imposter secrets remain unchanged.
+- Add a reproducible cumulative content publisher, immutable approved baselines, live endpoint checks and deployment configuration. Update release privacy materials for optional Cloudflare-hosted downloads.
+
 ## 0.40.0 — 23 October 2026
 
 - Add 300 source-checked Trivia questions, with 100 per difficulty and deliberate Kids coverage across all eight categories. Pack 5 contains 600 questions; all 300 prior records remain unchanged and existing quizzes keep their copies.

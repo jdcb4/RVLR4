@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { getHatClueSuggestions } from "@/domain/hat-game/clueSuggestions";
 import { getImposterWordList } from "@/domain/imposter/wordList";
@@ -11,7 +11,7 @@ import { isDifficultyAllowed } from "./difficulty";
 import originalHat from "./hatClueSuggestions.json";
 import originalImposter from "./imposterWords.json";
 import originalWww from "./whoWhatWhereWords.json";
-import { getCatalogueForGame, getWordCatalogue } from "./wordCatalogue";
+import { getCatalogueForGame, getWordCatalogue, setActiveWordCatalogue } from "./wordCatalogue";
 
 const sample: CatalogueEntry = {
   word: "Beyoncé",
@@ -26,6 +26,46 @@ const sample: CatalogueEntry = {
 };
 
 describe("curated word catalogue", () => {
+  afterEach(() => setActiveWordCatalogue(getWordCatalogue()));
+
+  it("activates validated copied entries for all adapters while preserving the bundled fallback", () => {
+    const bundled = getWordCatalogue();
+    const installed: CatalogueEntry[] = [
+      {
+        ...sample,
+        word: "Installed child figure",
+        aliases: [],
+        originalIds: [],
+        kidAppropriate: true,
+      },
+      {
+        ...sample,
+        word: "Installed adult figure",
+        aliases: [],
+        originalIds: [],
+        games: ["www", "hat", "imposter"],
+        difficulty: "hard",
+      },
+    ];
+    setActiveWordCatalogue(installed);
+    installed[0]!.word = "Caller changed its copy";
+    installed[0]!.games.push("imposter");
+    expect(getWordCatalogue()).toBe(bundled);
+    expect(Object.isFrozen(bundled)).toBe(true);
+    expect(Object.isFrozen(bundled[0]!.games)).toBe(true);
+    expect(getHatClueSuggestions({ kidsMode: true })).toEqual(["Installed child figure"]);
+    expect(getWhoWhatWhereWordList({ difficulty: "easy" }).map(({ word }) => word)).toEqual([
+      "Installed child figure",
+    ]);
+    expect(getImposterWordList()).toEqual(["Installed adult figure"]);
+    expect(getCatalogueForGame("imposter", { kidsMode: true })).toEqual([]);
+    expect(() => setActiveWordCatalogue([{ ...sample, hint: "" }])).toThrow();
+    expect(getHatClueSuggestions({ kidsMode: true })).toEqual(["Installed child figure"]);
+    setActiveWordCatalogue([]);
+    expect(getWhoWhatWhereWordList()).toEqual([]);
+    expect(getWordCatalogue()).toBe(bundled);
+  });
+
   it("intersects difficulty and kids suitability for every game's selection pool", () => {
     for (const game of ["www", "hat", "imposter"] as const) {
       const all = getCatalogueForGame(game);

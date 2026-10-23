@@ -24,9 +24,11 @@ const text = (max: number) =>
       "Use trimmed NFC text.",
     );
 
+const triviaIdSchema = z.string().regex(/^trivia:[a-z0-9][a-z0-9-]{0,79}$/u);
+
 export const triviaQuestionSchema = z
   .object({
-    id: z.string().regex(/^trivia:[a-z0-9][a-z0-9-]{0,79}$/u),
+    id: triviaIdSchema,
     revision: z.number().int().positive().safe(),
     question: text(600),
     answer: text(400),
@@ -63,6 +65,7 @@ export const triviaPackSchema = z
     version: z.number().int().positive().safe(),
     publishedAt: z.string().datetime(),
     questions: z.array(triviaQuestionSchema).max(20000),
+    removedIds: z.array(triviaIdSchema).max(20000).default([]),
   })
   .strict()
   .superRefine((pack, context) => {
@@ -80,6 +83,18 @@ export const triviaPackSchema = z
       ids.add(question.id);
       texts.add(identity);
     });
+    if (new Set(pack.removedIds).size !== pack.removedIds.length) {
+      context.addIssue({ code: "custom", path: ["removedIds"], message: "Duplicate removed ID." });
+    }
+    for (const id of pack.removedIds) {
+      if (ids.has(id)) {
+        context.addIssue({
+          code: "custom",
+          path: ["removedIds"],
+          message: "An ID cannot be upserted and removed in the same batch.",
+        });
+      }
+    }
   });
 
 /** Recheck before displaying an unshown question, including after resume. */

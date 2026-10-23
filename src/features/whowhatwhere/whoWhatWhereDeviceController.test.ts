@@ -227,6 +227,35 @@ describe("WWW device session durability and lifecycle", () => {
     });
   });
 
+  it("uses captured words across catalogue updates and restoration, then captures an updated new match", async () => {
+    const controller = await activeController();
+    const originalPool = controller.getSnapshot().session.wordPool;
+    expect(originalPool).toHaveLength(words.length);
+    const updated = words.map((word) => ({ ...word, word: `Updated ${word.word}` }));
+    vi.mocked(getWhoWhatWhereWordList).mockReturnValue(updated);
+    controller.endTurn();
+    await settle();
+    controller.advanceTurnRecap();
+    await settle();
+    const restored = new WhoWhatWhereDeviceController();
+    await restored.hydrate();
+    await restored.openSavedGame();
+    await restored.startNextTurn();
+    expect(restored.getSnapshot().session.wordPool).toEqual(originalPool);
+    expect(
+      restored
+        .getSnapshot()
+        .session.match?.activeTurn?.wordQueue.every(({ word }) => !word.startsWith("Updated")),
+    ).toBe(true);
+    expect(getWhoWhatWhereWordList).toHaveBeenCalledTimes(1);
+    await restored.startOverFromPendingMatch();
+    await restored.startNewMatch();
+    expect(
+      restored.getSnapshot().session.wordPool?.every(({ word }) => word.startsWith("Updated")),
+    ).toBe(true);
+    expect(getWhoWhatWhereWordList).toHaveBeenCalledTimes(2);
+  });
+
   it("keeps setup available when the filtered pool has no selected categories", async () => {
     const controller = new WhoWhatWhereDeviceController();
     await controller.hydrate();

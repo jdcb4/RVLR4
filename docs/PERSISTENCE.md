@@ -19,7 +19,7 @@ In 0.38.0, the first settings page of every game is temporary. Its edits stay in
 
 Who What Where version-1 compatibility is preserved: old records without presentationStage default to null. Tests load an installed-style active-turn envelope and prove its bytes remain unchanged while other games save or clear their own records.
 
-Bundled catalogue metadata is not stored in game snapshots. Game adapters project only the existing `{ word, category, hint }` or string values. Catalogue additions, canonical-name corrections and alias merges apply to newly generated content; a saved deck, submitted Hat clue or Imposter secret keeps its existing value when resumed.
+Catalogue provenance/aliases are not stored in game snapshots. In 0.41.0 WWW captures a bounded stripped word pool (word, category, hint, difficulty; at most 1,440 entries / 350 KiB) when a match starts and reuses it for all turns, independent of later content updates. Aggregate turn records retain statistics only; the latest recap keeps its full words/hints until the next turn starts. Active and skipped replay clues remain complete. This bounds whole-game saves rather than duplicating every historical deck. Maximum-length 16-turn native-envelope regression tests cover UTF-8/JSON escaping and skipped-then-corrected words. A saved Trivia quiz, submitted Hat clue/deck or Imposter secret keeps its existing value when resumed. See [Content updates](CONTENT_UPDATES.md) for separate catalogue storage, explicit removals and bundled-upgrade reconciliation.
 
 ## App preferences
 
