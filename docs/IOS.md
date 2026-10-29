@@ -8,6 +8,16 @@ unsigned device artifact; installation requires the tester to re-sign it.
 
 ## Codemagic
 
+Connected application: [RVLR4](https://codemagic.io/app/6ae3d7d2dcaaae6c9515f953/settings).
+Joe authorized the GitHub integration for this repository on 30 October 2026.
+The first [successful build](https://codemagic.io/app/6ae3d7d2dcaaae6c9515f953/build/6ae3d7f4efa74786046ee893)
+built commit `2884ac3` (0.43.0 / build 31) in 1m45s on Xcode 26.0.1.
+Shared checks, native SQLite tests and iPhone compilation passed. The downloaded
+12,024,589-byte IPA matches cloud SHA-256
+`61fbcc6ba05306e1f1429e2b7ba43829b3006b200e17f1aea56211ef24e03e89`.
+The local copy is `out/ios/RVLRY-0.43.0-unsigned.ipa`; phone installation and
+runtime acceptance are still pending. No API key or signing identity was created.
+
 1. Connect the Codemagic GitHub app to **jdcb4/RVLR4 only**. Its standard
    permissions include code read, checks/statuses/hooks write and email read.
 2. Add that repository to the **personal account**, select the Other/Capacitor

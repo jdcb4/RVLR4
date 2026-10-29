@@ -4,8 +4,11 @@ For iOS, the Codemagic workflow runs the shared checks, native Swift SQLite test
 and an unsigned iPhone build. See [IOS.md](IOS.md) for real-phone acceptance.
 The initial 0.43.0 local checks passed 413 Vitest tests, typecheck/lint/build,
 release iOS asset sync, Android unit-test task and debug APK assembly. No Android
-device was attached for instrumentation. Swift compilation and iPhone acceptance
-remain pending the first cloud build and tester installation. Fallow reported
+device was attached for instrumentation. Codemagic build #1 on 30 October 2026
+passed shared checks, native Swift SQLite tests and iPhone compilation with Xcode
+26.0.1 in 1m45s. The downloaded unsigned IPA passed ZIP integrity, version/platform,
+release-asset and cloud SHA-256 checks. iPhone installation and acceptance remain
+pending tester verification. Fallow reported
 41 dead-code/dependency findings and nine duplicate groups; the native Capacitor
 dependencies are required despite its JavaScript-only graph warning.
 
