@@ -9,7 +9,7 @@ export function NativeNavigation() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!Capacitor.isNativePlatform()) return;
+    if (Capacitor.getPlatform() !== "android") return;
     const listener = App.addListener("backButton", () => {
       const dialog = Array.from(document.querySelectorAll<HTMLDialogElement>("dialog[open]")).at(
         -1,

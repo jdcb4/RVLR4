@@ -1,0 +1,25 @@
+workflows:
+  ios-sideload:
+    name: RVLRY iOS sideload IPA
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    environment:
+      xcode: 26.0
+      node: 22.19.0
+    # Manual builds only. No signing credentials or Apple membership required.
+    scripts:
+      - name: Install locked dependencies
+        script: |
+          npm install --global pnpm@9.12.0
+          pnpm install --frozen-lockfile
+      - name: Verify shared app
+        script: pnpm run verify
+      - name: Test native SQLite contracts
+        script: bash ios/native-tests/run.sh
+      - name: Build unsigned iPhone IPA for re-signing
+        script: bash scripts/ios-build.sh
+    artifacts:
+      - out/ios/*.ipa
+      - out/ios/*.sha256
+      - out/ios/*.txt
+      - out/ios/*.log

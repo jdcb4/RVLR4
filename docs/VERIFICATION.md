@@ -1,5 +1,14 @@
 # Verification
 
+For iOS, the Codemagic workflow runs the shared checks, native Swift SQLite tests
+and an unsigned iPhone build. See [IOS.md](IOS.md) for real-phone acceptance.
+The initial 0.43.0 local checks passed 413 Vitest tests, typecheck/lint/build,
+release iOS asset sync, Android unit-test task and debug APK assembly. No Android
+device was attached for instrumentation. Swift compilation and iPhone acceptance
+remain pending the first cloud build and tester installation. Fallow reported
+41 dead-code/dependency findings and nine duplicate groups; the native Capacitor
+dependencies are required despite its JavaScript-only graph warning.
+
 Run `pnpm run verify` before behavior commits: TypeScript app/config checks, ESLint, Vitest and Vite production build. `pnpm run test:coverage` produces optional Istanbul coverage. Legacy server-only coverage targets were removed with the server, not disabled for surviving code.
 
 Run `pnpm android:build`, `pnpm android:test`, and `pnpm android:test-device` for native integration milestones. The latter requires an emulator or authorized phone. Browser-only tests do not prove Android durability. Follow the Pixel acceptance checklist in [ANDROID.md](ANDROID.md), including installing over an existing APK without uninstalling.

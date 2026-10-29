@@ -407,6 +407,22 @@ Keep the existing Capacitor/React runtime and package ID while preparing Google 
 
 JavaScript/font notices are generated from installed lockfile dependencies by `pnpm export:notices`. Native transitive notices still require a separate final release audit. No new runtime dependency is introduced.
 
+## 30 October 2026 — iOS sideload prototype and cloud build
+
+Joe approved an iOS port and Codemagic builds for a technically capable friend's
+sideload testing. This supersedes the earlier iOS deferral. Retain React/Vite and
+Capacitor, pin iOS to the existing 8.5.3 runtime, and implement the existing native
+bridge in Swift with system SQLite rather than introducing a storage dependency.
+Preserve independent sessions, atomic current/previous checkpoints, bounded
+content installs and lifecycle keep-awake release. Keep Android working on the
+same branch; no original web deployment or branch changes.
+
+Build unsigned iPhone device IPAs on Codemagic M2 with tester-side re-signing.
+No Apple developer membership, signing secrets or Codemagic API token are needed
+for this workflow. Builds are manual and time-limited; store distribution and
+automatic publication remain outside this task. See IOS.md for setup and phone
+acceptance, including the limits of macOS storage tests.
+
 ## 2026-10-23: additive public content updates
 
 Use a shared versioned manifest at https://content.jboxgames.com/rvlry/v1/manifest.json with separate words/Trivia streams. Omission never removes records; permanent explicit ID tombstones and final-pool identity validation prevent truncation and duplicates. Native SQLite checkpoints the merged catalogue independently of saved games. WWW freezes a bounded match pool so later updates cannot change active play. See CONTENT_UPDATES.md for protocol and publishing rules.

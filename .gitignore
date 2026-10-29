@@ -26,4 +26,7 @@ Thumbs.db
 *.keystore
 *.p12
 *.pfx
+*.ipa
+*.mobileprovision
+*.xcarchive/
 keystore.properties

@@ -4,6 +4,7 @@ The current deliverable is a standalone offline Android app for adults with Who 
 
 ## Active boundaries
 
+- `ios/` — Capacitor iOS host, native SQLite and keep-awake; sideload build workflow.
 - `android/` — Capacitor Android host; native SQLite snapshots and keep-awake.
 - `capacitor.config.ts` — application ID, bundled web assets and host configuration.
 - `src/app/` — standalone routing and Android Back dispatch.
@@ -28,6 +29,7 @@ commands in [ANDROID.md](ANDROID.md); browser tests alone do not verify them.
 
 ## Active documentation
 
+- [iOS builds and sideload testing](IOS.md) — Codemagic, unsigned IPA and phone acceptance.
 - [Roadmap](ROADMAP.md) — future work only.
 - [Content updates](CONTENT_UPDATES.md) — additive words/Trivia installation, stable public endpoint and cumulative publishing ledger.
 - [Trivia content storage](TRIVIA_CONTENT.md) — question schema, durable storage, 600-question bank and editorial audit.

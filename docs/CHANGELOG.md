@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.43.0 — 30 October 2026
+
+- Add an iOS Capacitor host with native SQLite session/content storage, checkpoint recovery and lifecycle-aware screen-awake control. Share the existing offline games and keep Android Back handling Android-only.
+- Add a manual Codemagic macOS workflow and repeatable unsigned iPhone IPA packaging for tester-side re-signing. Native SQLite regression tests run before packaging. No Apple signing credentials or store publishing are configured.
+- Document account connection, AltStore installation, refresh requirements and iPhone acceptance checks in IOS.md. Real-iPhone durability and sideload installation require tester verification.
+
 ## 0.42.0 — 24 October 2026
 
 - Replace Kids mode with global Simple mode: Easy-rated words/questions for new WWW, Imposter and Trivia games and Hat suggestions. Show effective Easy difficulty while enabled. Existing active games retain their selected content; child-suitability metadata remains editorial provenance only.

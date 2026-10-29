@@ -5,6 +5,9 @@ This project uses `MAJOR.MINOR.PATCH`.
 Version sources (must all match):
 
 - `package.json` (root)
+- `android/app/build.gradle` (`versionName`; increment `versionCode`)
+- `ios/App/App.xcodeproj/project.pbxproj` (both `MARKETING_VERSION` values;
+  both `CURRENT_PROJECT_VERSION` values match Android's build number)
 - any app-specific manifests if present (`app.json`, `manifest.json`, `wrangler.toml`, `electron-builder.yml`, etc.)
 
 ## Bump rules

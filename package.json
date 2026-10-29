@@ -1,6 +1,6 @@
 {
   "name": "rvlry-android",
-  "version": "0.42.0",
+  "version": "0.43.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.12.0",
@@ -36,12 +36,16 @@
     "content:build": "tsx scripts/build-content-endpoint.mts",
     "content:check-deploy": "pnpm content:build && wrangler deploy --dry-run --config content-endpoint/wrangler.jsonc",
     "content:deploy": "pnpm content:build && wrangler deploy --config content-endpoint/wrangler.jsonc",
-    "content:verify-live": "tsx scripts/check-content-endpoint.mts"
+    "content:verify-live": "tsx scripts/check-content-endpoint.mts",
+    "ios:sync": "pnpm run build:release && cap sync ios",
+    "ios:build": "bash scripts/ios-build.sh",
+    "ios:test": "bash ios/native-tests/run.sh"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",
     "@capacitor/app": "8.1.2",
     "@capacitor/core": "8.5.3",
+    "@capacitor/ios": "8.5.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cuelume": "0.2.2",

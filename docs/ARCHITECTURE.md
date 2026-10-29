@@ -1,9 +1,12 @@
-# Android architecture
+# Mobile architecture
 
 React, Vite and Capacitor bundle a standalone offline application. Native uses hash routing; browser previews use ordinary routes. There is no server or multiplayer runtime. The historical server and Draw & Guess were removed after an import audit; git preserves their history.
 
 ## Ownership
 
+- Android and iOS hosts implement the same `RvlryDevice` bridge. iOS uses a
+  programmatic scene with one custom Capacitor view controller and a serial Swift
+  SQLite owner. See [iOS build and acceptance](IOS.md).
 - Game domains own rules, decks, scoring and transitions. Hat, Imposter and Who What Where retain separate domain types.
 - Each device controller owns its complete validated session, draft state, privacy cover, transitions and save-error recovery. Do not force games with different privacy/rule requirements into a universal reducer.
 - `useDeviceController` binds one stable controller to React subscriptions and lifecycle cleanup.

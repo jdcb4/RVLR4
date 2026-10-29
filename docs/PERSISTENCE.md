@@ -6,6 +6,11 @@ Backward compatibility with saves from earlier app versions is optional during p
 
 ## Current storage contract
 
+From 0.43.0 the iOS host implements the same bridge and session envelopes using
+system SQLite on a serial native queue. Files are excluded from backup; keep-awake
+is released on inactivity. The iOS implementation needs its own phone acceptance
+checks; Android evidence does not establish iOS durability. See [IOS.md](IOS.md).
+
 Each game owns a separate complete validated session through nativeSnapshotStore. The native RvlryDevice plugin atomically rotates current/previous checkpoints in SQLite; successful writes acknowledge only after transaction commit. Per-key reads, writes and removal share an ordered queue. No runtime server or network storage exists.
 
 In 0.38.0, the first settings page of every game is temporary. Its edits stay in memory for the current visit; advancing to later setup saves the settings with that setup, while Trivia first saves when Start quiz commits its selected questions. Returning or resetting to the first page removes saved setup. Valid older first-page snapshots are cleaned up during loading and do not produce a resume chooser. Failed cleanup or removal blocks the transition and remains retryable. Existing session schemas and active saves are unchanged.

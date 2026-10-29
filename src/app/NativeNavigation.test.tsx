@@ -3,14 +3,17 @@ import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const native = vi.hoisted(() => ({
+  platform: "android",
+  listen: vi.fn(),
   back: () => {},
   remove: vi.fn(),
   minimize: vi.fn(),
 }));
-vi.mock("@capacitor/core", () => ({ Capacitor: { isNativePlatform: () => true } }));
+vi.mock("@capacitor/core", () => ({ Capacitor: { getPlatform: () => native.platform } }));
 vi.mock("@capacitor/app", () => ({
   App: {
     addListener: vi.fn((_event: string, callback: () => void) => {
+      native.listen(_event);
       native.back = callback;
       return Promise.resolve({ remove: native.remove });
     }),
@@ -23,9 +26,20 @@ import { NativeNavigation } from "@/app/NativeNavigation";
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  native.platform = "android";
 });
 
 describe("Android Back", () => {
+  it.each(["ios", "web"])("does not register Android navigation on %s", (platform) => {
+    native.platform = platform;
+    render(
+      <MemoryRouter>
+        <NativeNavigation />
+      </MemoryRouter>,
+    );
+    expect(native.listen).not.toHaveBeenCalled();
+    expect(native.minimize).not.toHaveBeenCalled();
+  });
   it("allows the game to consume Back before any navigation", () => {
     render(
       <MemoryRouter>

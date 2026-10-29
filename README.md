@@ -28,6 +28,7 @@ original application's Railway-connected branches.
 
 ## Documentation
 
+- [iOS port, Codemagic builds and sideload testing](docs/IOS.md) — unsigned IPA builds for tester-side signing; iPhone acceptance pending.
 - [Project index](docs/PROJECT_INDEX.md)
 - [Future work](docs/ROADMAP.md)
 - [Architecture](docs/ARCHITECTURE.md)

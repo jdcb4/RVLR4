@@ -22,6 +22,11 @@ the Android conversion.
 
 ## Working contract
 
+Joe approved an iOS port and Codemagic unsigned IPA builds on 30 October 2026.
+Keep both native hosts on `android-prototype`. Follow docs/IOS.md for the Swift
+bridge, cloud builds and tester-side signing. Match package/Android/iOS versions;
+never treat browser checks or a successful compile as iPhone durability evidence.
+
 Before changes read docs/PROJECT_INDEX.md, relevant canonical docs and package scripts. Prefer existing patterns. TypeScript strict, pnpm, React/Vite, Tailwind, Zod and Vitest remain established choices. Do not introduce auth, dependencies or framework changes without an explicit need and a docs/DECISIONS.md entry.
 
 Work on android-prototype only. Do not deploy Railway or push/merge the original web app branches. The multiplayer server/client and Draw & Guess have been retired from this standalone branch; git retains their history.
