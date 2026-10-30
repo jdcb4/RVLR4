@@ -24,6 +24,8 @@ Gameplay and storage began in 0.35.0 behind a default-off Settings toggle. The c
 
 - Complete Google Play release gates in [release preparation](release/google-play/README.md): publisher/account details, backed-up upload key, policy hosting, final assets and Play testing. Local AAB preparation is implemented.
 
-## Deferred platforms
+## Distribution direction — 30 October 2026
 
-- **iOS:** deferred at Joe's request on 23 October 2026; no iOS host or release work in the Android preparation.
+- **Current target:** Android, for simpler and cheaper distribution. APK remains the default export; Play Store preparation continues only within separately requested scope.
+- **Optional iOS testing:** native host and Codemagic unsigned IPA build are implemented and cloud-tested in 0.43.0. Export only when explicitly requested; phone installation/runtime acceptance remains pending. Standard process: [IOS.md](IOS.md).
+- **Eventual dual-store distribution:** publish on both Google Play and the Apple App Store. Apple account/signing, signed CI uploads, TestFlight, iPhone acceptance and store review preparation remain future work. This goal does not authorize cloud builds, spending or store submissions.

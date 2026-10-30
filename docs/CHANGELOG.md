@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.43.1 — 30 October 2026
+
+- Establish Android APK as the default export and Android as the current release target for cost and simplicity. iOS exports require an explicit request.
+- Retain the cloud-tested iOS export process as the standard optional distribution path; document artifact verification and the JNAS Media/Dropbox handoff. Record eventual Play Store and App Store distribution as future work. No new app build or export is produced by this documentation update.
+
 ## 0.43.0 — 30 October 2026
 
 - Add an iOS Capacitor host with native SQLite session/content storage, checkpoint recovery and lifecycle-aware screen-awake control. Share the existing offline games and keep Android Back handling Android-only.

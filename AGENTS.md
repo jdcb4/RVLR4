@@ -22,6 +22,13 @@ the Android conversion.
 
 ## Working contract
 
+Android APK is the default export. An unqualified build/export/distribution request
+means Android only; do not generate an IPA or trigger a Codemagic iOS build unless
+Joe explicitly requests an iOS export. Android is the current release target for
+cost and simplicity. Retain iOS as a documented, supported optional distribution
+path; eventual Play Store and App Store distribution is a roadmap goal, not
+authorization for store submission or additional cloud builds.
+
 Joe approved an iOS port and Codemagic unsigned IPA builds on 30 October 2026.
 Keep both native hosts on `android-prototype`. Follow docs/IOS.md for the Swift
 bridge, cloud builds and tester-side signing. Match package/Android/iOS versions;

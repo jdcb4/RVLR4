@@ -14,6 +14,11 @@ lint, tests, and a production web build.
 
 ## Android
 
+Android APK is the default export and current release target for simplicity and
+cost. iOS exports are available only on explicit request through the documented
+[Codemagic IPA process](docs/IOS.md). Eventual Play Store and App Store distribution
+is the long-term goal; store release preparation is separate from test exports.
+
 Use Android Studio with its bundled Java runtime and an Android SDK.
 
 - `pnpm android:build` builds web assets, syncs Capacitor, and builds a debug APK.

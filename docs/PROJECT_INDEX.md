@@ -22,6 +22,10 @@ The current deliverable is a standalone offline Android app for adults with Who 
 
 ## Commands
 
+Android APK is the default export. iOS exports require an explicit request;
+the maintained optional process is in [IOS.md](IOS.md). Both stores are a future
+distribution goal, with Android the current release target.
+
 See `package.json` and [README](../README.md). Run `pnpm run verify` for
 integrated TypeScript/UI regression checks. Run `pnpm android:build` for a
 fresh APK. Native storage/lifecycle checks additionally require the Android

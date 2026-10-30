@@ -1,5 +1,13 @@
 # iOS builds and sideload testing
 
+## Export policy
+
+This is the standard optional iOS distribution process. **Run an iOS export only
+when Joe explicitly requests one.** Default app builds/exports produce an Android
+APK; do not launch Codemagic or produce an IPA as a routine companion artifact.
+Android remains the current release target for simplicity and cost. Preserve this
+working iOS path for requested tests and eventual App Store preparation.
+
 The iOS port starts in 0.43.0 alongside the existing Android host on
 `android-prototype`. React, game rules, content and session schemas are shared.
 The iOS `RvlryDevice` implementation uses system SQLite and the same six bridge
@@ -26,6 +34,13 @@ runtime acceptance are still pending. No API key or signing identity was created
    manual build. There are no automatic triggers or publishing steps.
 4. Download `RVLRY-<version>-unsigned.ipa`, its SHA-256 file and `BUILD-INFO.txt`
    from the completed build's artifacts. Send the IPA to the tester yourself.
+
+For each requested export, verify the selected source commit, successful shared
+checks/native tests, iPhone device platform and synchronized app/native versions.
+Download and compare the IPA SHA-256 against the cloud checksum. When delivering
+to the standard NAS location, use `\\JNAS\Media\Dropbox` (not the separate
+`\\JNAS\DropBox` share) and verify the destination hash. Report phone acceptance
+as pending until the tester verifies installation, play and interruption recovery.
 
 The workflow uses macOS M2, Xcode 26.0 and Node 22.19.0, with pnpm 9.12.0 and a
 frozen dependency lockfile. Each run has a 45-minute cap. It runs `pnpm verify`,
@@ -92,6 +107,15 @@ tool, then check:
    interruptions and screen-awake only during active play.
 6. Online, manually check for new words/Trivia; return offline and resume games.
 7. Install a subsequent re-signed build over the app and confirm saves remain.
+
+## Future App Store distribution
+
+App Store distribution is an intended future channel, alongside Google Play.
+The current unsigned IPA workflow is for tester-side signing and is not a store
+submission workflow. Future work must establish Apple signing/account ownership,
+a signed archive/upload workflow, TestFlight and real-iPhone acceptance, and the
+store listing/privacy/review requirements applicable at that time. Do not start
+that work or publish automatically from this documented intention.
 
 ## References
 

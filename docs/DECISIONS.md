@@ -409,6 +409,13 @@ JavaScript/font notices are generated from installed lockfile dependencies by `p
 
 ## 30 October 2026 — iOS sideload prototype and cloud build
 
+Follow-up distribution preference: Android APK remains the default export and
+Android the current target because it is easier and cheaper. Unqualified export
+requests must not create an iOS build. Retain the implemented iOS host and manual
+Codemagic workflow as the standard opt-in channel, used only on explicit request.
+Eventual Google Play and App Store distribution is an intention recorded in the
+roadmap, not permission to start store publishing or recurring cloud builds.
+
 Joe approved an iOS port and Codemagic builds for a technically capable friend's
 sideload testing. This supersedes the earlier iOS deferral. Retain React/Vite and
 Capacitor, pin iOS to the existing 8.5.3 runtime, and implement the existing native
